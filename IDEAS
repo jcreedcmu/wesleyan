@@ -2,7 +2,9 @@
 
 #riehl-shulman
 
-Q: Reading ; What is the status of (2.2)? Is it an axiom
+Q: Reading riehl-shulman
+https://arxiv.org/abs/1705.07442
+What is the status of (2.2)? Is it an axiom
 in the system, or is it a provable property of the type system that
 merely happens to be written as an inference rule, i.e. like cut
 elimination?
@@ -91,3 +93,12 @@ Q: How can I git blame one line of a file?
 A:
 do like
 $ git blame Primitive.hs -L404,+1
+
+=== 2017.09.16
+
+#riehl-shulman
+
+Q: How redundant is rule 5 of figure 4? It seems like morally I can
+take the assumption that a == b and apply substitution to see
+a[s/t] == b[s/t] and then use transitivity from rule 4's f(s) = a[s/t].
+A: ???
