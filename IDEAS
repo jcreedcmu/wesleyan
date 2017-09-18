@@ -2,8 +2,8 @@
 
 #riehl-shulman
 
-Q: Reading riehl-shulman
-https://arxiv.org/abs/1705.07442
+Q: Reading
+[RS] https://arxiv.org/abs/1705.07442
 What is the status of (2.2)? Is it an axiom
 in the system, or is it a provable property of the type system that
 merely happens to be written as an inference rule, i.e. like cut
@@ -87,7 +87,8 @@ http://git.haskell.org/ghc.git/tree/refs/heads/master:/libraries/base/Control
 
 Q: Transportation to the vicinity of wesleyan?
 A: "Vermonter" amtrak + M-link bus maybe?
-Hotel situation looks real shitty.
+Hotel situation looks like a bummer.
+No, nevermind, looks like I can just get a ride up with dlicata@.
 
 Q: How can I git blame one line of a file?
 A:
@@ -101,4 +102,216 @@ $ git blame Primitive.hs -L404,+1
 Q: How redundant is rule 5 of figure 4? It seems like morally I can
 take the assumption that a == b and apply substitution to see
 a[s/t] == b[s/t] and then use transitivity from rule 4's f(s) = a[s/t].
+A: ???
+
+=== 2017.09.18
+
+Q: Ok, so where are the guts of cubical typechecking going on?
+A:
+try looking in
+agda//src/full/Agda/TypeChecking/Rules/Term.hs
+agda//src/full/Agda/TypeChecking/Rules/Builtin.hs
+agda//src/full/Agda/TypeChecking/Primitive.hs
+agda//src/full/Agda/TypeChecking/Telescope.hs
+
+Q: Is there a way to view all these haskell function docstrings in a nice way?
+A: ???
+
+Q: What are some examples of cubical programs?
+A:
+agda//test/Fail/Issue2650.agda
+agda//test/Fail/Issue2650.agda
+agda//test/Succeed/Issue2650.agda
+and also a goldmine of stuff in
+gh//Saizan/cubical-demo
+
+Q: What are the cubical primitives in
+agdalib//prim/Agda/Primitive.agda
+sorted by epistemic status?
+A:
+I definitely understand
+ I, i0, i1
+ primIMin
+ primIMax
+ primINeg
+ IsOne
+ itIsOne
+ IsOne1 -- These two are just asserting that
+ IsOne2 -- 1 v x = 1 and x v 1 = 1
+
+Q: What's the deal with
+<<<
+ primPOr : {a : Agda.Primitive.Level} (i j : I)
+      {A : .(IsOne (primIMax i j)) → Set a} →
+      (.(p : IsOne i) → A _) →
+      (.(p : IsOne j) → A _) → .(p : IsOne (primIMax i j)) → A p
+>>>
+?
+A: I think I vaguely understand it to be the realization of the disjunctive "systems" in
+[CCHM] https://arxiv.org/pdf/1611.02108.pdf
+which correspond to the disjunction elimination rules in [RS].
+
+Q: What's the deal with
+<<<
+ Partial : {a : Agda.Primitive.Level} (A : Set a) → I → Setω
+>>>
+?
+A:
+It's described as
+<<<
+"Partial A φ"  is a special version of "(φ = i1) → A"
+>>>
+in
+gh//Saizan/cubical-demo/blob/master/AIM_Demo/DemoPartial.agda
+which I think I kind of get.
+I believe
+<<<
+ PartialP : {a : Agda.Primitive.Level} (φ : I)
+      (A : .(o : IsOne φ) → Set a) →
+      Setω
+>>>
+is just the more dependent 'path-over' version of Partial, sorta? I
+see it used in the same file there.
+
+Q: What's the deal with
+<<<
+ primPFrom1 : {a : Agda.Primitive.Level} {A : I → Set a} →
+      A i1 → (i j : I) → .(IsOne i) → A (primIMax i j)
+>>>
+A: If I squint it just looks like it's sort of internalizing the fact
+that if I know i is already i1, then primIMax i j has to be i1 too, so
+I can lift something known to be at A i1 to A (primIMax i j). Maybe
+it's just making things definitionally equal that would otherwise be
+propositionally equal.
+
+Q: What's the deal with
+<<<
+ primComp : {a : I → Agda.Primitive.Level} (A : (i : I) → Set (a i))
+      (φ : I) →
+      ((i : I) → .(IsOne φ) → A i) → A i0 → A i1
+>>>
+A: This is the composition primitive from the paper.
+
+Q: Wait, I see other primitives still in
+gh//Saizan/cubical-demo/blob/master/Primitives.agda
+what's the deal with them?
+A:
+well, primPathPApply does exist in
+agda//src/full/Agda/TypeChecking/Primitive.hs
+due to
+agdac//b0596dde
+and CONID exists in
+agda//src/full/Agda/TypeChecking/Monad/Builtin.hs
+due to
+agdac//7a50bedf
+
+Q: Where is that in the agda repo?
+A:
+agda//src/data/lib/prim/Agda/Primitive.agda
+
+Q: What's going on with the primitive keyword?
+A: I guess it's just a way of grabbing primitive function values with the standard name, see
+agda//examples/Introduction/Built-in.agda
+(which doesn't appear to compile due to a change of the number of arguments of the Integer built-in?)
+
+Q: How is agda's version number spread througout other things?
+A: Well, I see commits like agdac//3ca28ee9 but I don't know if there's a
+script that achieves all these changes in a simple way.
+
+Q: What're some milestones in the history of editing the cubical code?
+A:
+agdac//e919f74e due to Andrea Vezzosi https://github.com/Saizan
+
+Q: What's the suffix .hs-boot for?
+A: Reifying cycles for mutuall recursive modules, see
+https://downloads.haskell.org/~ghc/7.0.3/docs/html/users_guide/separate-compilation.html
+and search for 'hs-boot'
+
+Q: What are all these moon-language operators I'm seeing everywhere like
+<@>, <#>, <..>, <@@>?
+A: They are in fact defined in
+agda//src/full/Agda/TypeChecking/Primitive.hs
+and some more are in
+agda//src/full/Agda/Utils/Functor.hs
+<$> is just an infix name for fmap, see
+http://git.haskell.org/ghc.git/blob_plain/refs/heads/master:/libraries/base/Data/Functor.hs
+
+Q: How do I think about what [CCHM] calls 'partial elements'?
+A: They're the things that are defined over the whole cube, but have
+particular known values at subpolyhedra of the cube?
+
+Q: What can I figure out about PrimitiveImpl?
+A: ???
+
+Q: How do I printf in haskell?
+A: trace, see
+https://wiki.haskell.org/Debugging
+
+Q: What's the deal with type IntervalView in
+agda//src/full/Agda/Syntax/Internal.hs
+A:
+It was last touched by
+agdac//6d78a1d4
+I surmise it's some sort of way of exposing some of the interval term structure...
+
+Q: What's going on with ignoreSharing in
+agda//src/full/Agda/TypeChecking/Monad/Builtin.hs
+?
+A:
+It's defined in
+agda//src/full/Agda/Syntax/Internal.hs
+and I would have named it, like, 'derefSharing' or something.
+
+Q: What's a bang mean in haskell datatype definitions?
+A: Strictness annotation, see
+https://stackoverflow.com/questions/993112/what-does-the-exclamation-mark-mean-in-a-haskell-declaration
+
+Q: What's an iota-redex, as mentioned in data Term comments in
+agda//src/full/Agda/Syntax/Internal.hs
+?
+A: Something to do with pattern matching, see
+https://github.com/agda/agda/issues/2276
+
+Q: What's something that triggers the checking in primPOr that the two overlapping definitions
+are consistent on their intersection?
+A:
+<<<
+{-# OPTIONS --cubical #-}
+module a where
+import Agda.Primitive
+open Agda.Primitive.CubicalPrimitives public
+
+data Two : Set where
+ 𝟙 𝟚 : Two
+
+x = primPOr i1 i1 {A = λ _ → Two} (λ _ → 𝟙) (λ _ → 𝟚)
+>>>
+gives an error as expected.
+
+Q: Why does
+(primPOr i0 i1 {A = λ _ → Two} (λ _ → 𝟚) (λ _ → 𝟙)) itIsOne
+give an error about being fully applied?
+A: ???
+
+Q: What's the commit that created builtin PATH?
+A: agdac//5e8aae7c
+
+Q: Why doesn't Category.agda of
+gh//Saizan/cubical-demo/blob/master/Category.agda
+at commit 12f3d8f3
+seem to compile at agdac//a67e5e2f?
+A: ???
+
+Q: How do I run agda from ghci so I can inspect things going on?
+A: ???
+
+Q: What's this syntax going on in
+<<<
+foo : ∀ i → Partial Bool (i ∨ ~ i)
+foo i (i = i1) = true
+foo i (i = i0) = false
+>>>
+in
+gh//Saizan/cubical-demo/blob/master/AIM_Demo/DemoPartial.agda
+?
 A: ???
