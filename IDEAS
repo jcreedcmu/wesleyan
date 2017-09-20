@@ -115,7 +115,21 @@ agda//src/full/Agda/TypeChecking/Primitive.hs
 agda//src/full/Agda/TypeChecking/Telescope.hs
 
 Q: Is there a way to view all these haskell function docstrings in a nice way?
-A: ???
+A:
+$ cabal install haddock
+$ cabal configure
+$ cabal haddock
+and generates into
+agda//dist/doc/html/Agda/index.html
+
+Q: Why didn't
+$ make haddock
+work?
+A:
+mysterious missing dependencies?
+
+# $ make haddock
+# doesn't work due to
 
 Q: What are some examples of cubical programs?
 A:
@@ -241,10 +255,11 @@ A: They're the things that are defined over the whole cube, but have
 particular known values at subpolyhedra of the cube?
 
 Q: What can I figure out about PrimitiveImpl?
-A: ???
+A:
+It's made of a Type and a PrimFun
 
 Q: How do I printf in haskell?
-A: trace, see
+A: Debug.Trace.trace, see
 https://wiki.haskell.org/Debugging
 
 Q: What's the deal with type IntervalView in
@@ -303,7 +318,10 @@ seem to compile at agdac//a67e5e2f?
 A: ???
 
 Q: How do I run agda from ghci so I can inspect things going on?
-A: ???
+A: cabal repl
+
+Q: Also can I just bash stuff into the prompt in *agda* in emacs?
+A: Yeah, seems like!
 
 Q: What's this syntax going on in
 <<<
@@ -314,4 +332,232 @@ foo i (i = i0) = false
 in
 gh//Saizan/cubical-demo/blob/master/AIM_Demo/DemoPartial.agda
 ?
+A: Seems like a pattern-matching elimination for values of the type
+IsOne?
+
+=== 2017.09.19
+
+Q: Where is this IsOne pattern elimination in the agda abstract syntax?
+A:
+I see a hint in the use of domFinite, and the comment in
+agda//src/full/Agda/Syntax/Common.hs about primIsOne
+this leads to looking at
+agda//src/full/Agda/TypeChecking/Rules/LHS/Split.hs
+which is a big mess.
+
+Q: Can I get any insight by just git blaming
+agda//src/full/Agda/Syntax/Abstract.hs
+A:
+Sure can! I see Vezzosi's agdac//c584e887 touching a thing called EqualP.
+yup,
+<<<
+  | EqualP Range [(Expr,Expr)]             -- ^ @i = i1@ i.e. cubical face lattice generator
+>>>
+in
+agda//src/full/Agda/Syntax/Concrete.hs
+
+Q: What's an interesting paper about internalizing dependent lambda calculus?
+A:
+"Outrageous but Meaningful Coincidences" McBride 2010, found in
+https://homotopytypetheory.org/2014/03/03/hott-should-eat-itself/
+
+Q: Wow, cabal repl is slow interactively. Even for editing text in
+readline. What do?
+A:
+put
+<<<
+:set -fobject-code
+>>>
+in the .ghci file
+http://chrisdone.com/posts/making-ghci-fast
+https://www.reddit.com/r/haskell/comments/3ddcrw/does_haskell_have_slow_iteration_times_are_those/
+
+Q: What do about the message
+Warning: Can't find file "dist-2.6.0/build/autogen/cabal_macros.h" in directories
+I see during cabal repl?
+A:
+Just
+$ ln -s dist dist-2.6.0
+as andreas abel recommends in
+http://agda.chalmers.narkive.com/4ACGqXHw/problems-configuring-haskell-mode-and-or-invoking-cabal-repl
+
+Q: More basic stuff about cabal?
+A: http://katychuang.com/cabal-guide/
+
+Q: What am I looking at trying to figure out how to typecheck a single expression from repl?
+A: agda//src/full/Agda/Syntax/Parser.hs
+
+Q: Where's MonadIO come from?
+A:
+<<<
+:info Control.Monad.IO.Class.MonadIO
+class Monad m => Control.Monad.IO.Class.MonadIO (m :: * -> *) where
+  Control.Monad.IO.Class.liftIO :: IO a -> m a
+  	-- Defined in ‘Control.Monad.IO.Class’
+instance Control.Monad.IO.Class.MonadIO PM
+  -- Defined in ‘Agda.Syntax.Parser’
+instance Control.Monad.IO.Class.MonadIO IO
+  -- Defined in ‘Control.Monad.IO.Class’
+>>>
+
+Q: What's it good for, vis-a-vis the PM type class?
+A: Lifting IO actions *into* PM, not injecting PM into IO. Boo.
+
+Q: Oh, but what do I want for that?
+A: runPMIO
+
+Q: How do I get ghci to show types
+A:
+either
+:type <expression>
+or
+:set +t
+(which I could do interactively or put in my .gchi)
+according to
+https://stackoverflow.com/questions/12659927/using-ghci-to-find-type
+
+Q: How do I get ghci to allow multi-line defns?
+A:
+:set +m
+<<<
+λ> let zzz :: Integer
+λ|     zzz = 2
+λ|
+zzz :: Integer
+λ>
+>>>
+https://stackoverflow.com/questions/2846050/how-to-define-a-function-in-ghci-across-multiple-lines
+ugh but then every single line expression requires a double-return
+:unset +m
+it is, then.
+
+Q: How do I parse a single expression?
+A:
+<<<
+import Agda.Syntax.Parser
+let runParse :: String -> IO (Either ParseError Agda.Syntax.Concrete.Expr, [ParseWarning]) ; runParse s = runPMIO (parse exprParser s)
+>>>
+
+Q: How can I create a primitive type?
+A: Can imitate Bool, did not gain much insight though.
+
+Q: How can I create a simple primitive typed constant?
 A: ???
+
+Q: How can I create a primitive typed constant that reduces?
+A: ???
+
+Q: Where did this *agda* buffer come from?
+Was it from haskell-session-change?
+A: ???
+
+Q: How do I run agda tests?
+A: well I can just do things like
+$ dist/build/agda/agda -i test test/Common/String.agda
+for some reason
+$ make test
+gives me errors
+
+Q: Oh, crumb, cabal build seems to clear whatever incremental state cabal repl has.
+I guess I should try to do stuff from inside repl. How do?
+A:
+I see
+parsePragmaOptions
+defined in
+agda//src/full/Agda/Interaction/Options.hs
+being called from
+agda//src/full/Agda/TypeChecking/Monad/Options.hs
+agda//src/full/Agda/Interaction/Imports.hs
+...
+red herring?
+Hmm.
+Well I can stick
+<<<
+  let argv     = ["-i", "/tmp", "/tmp/a.agda"]
+>>>
+in runAgda' in
+agda//src/full/Agda/Main.hs
+and that seems to 'work'.
+
+Q: What's a good solution for TAGS for haskell?
+A: ???
+
+Q: Why no builtin thing COLOR even after I define it?
+A:
+the error is
+NoSuchBuiltinName
+from
+agda//src/full/Agda/TypeChecking/Errors.hs
+which may have come from one of
+agda//src/full/Agda/TypeChecking/Monad/Builtin.hs
+agda//src/full/Agda/TypeChecking/Rules/Builtin.hs
+but probably the latter.
+
+Huh, it works after I add
+<<<
++  , (builtinColor              |-> BuiltinData tset [builtinRed])
+>>>
+in
+agda//src/full/Agda/TypeChecking/Rules/Builtin.hs
+to parallel bool.
+
+=== 2017.09.20
+
+Q: mortberg@'s explanation of cubical types?
+A:
+https://homotopytypetheory.org/2017/09/16/a-hands-on-introduction-to-cubicaltt/
+https://github.com/mortberg/cubicaltt/tree/master/lectures
+
+Q: induction-induction vs. induction-recursion?
+A:
+https://en.wikipedia.org/wiki/Induction-recursion
+https://ncatlab.org/homotopytypetheory/show/inductive-inductive+type
+http://cs.swan.ac.uk/~csfnf/papers/indind_finite.pdf
+https://ncatlab.org/nlab/show/inductive-inductive+type
+
+Q: dual of applicative and alternative?
+A: https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html
+people (more or less rightly) complaining about the intensity of the category theory involved on twitter at
+https://twitter.com/jb55/status/910293593851490304
+
+Q: Thread on hott mailing list from dlicata@ about how to prove univalence?
+A: https://groups.google.com/forum/#!msg/homotopytypetheory/j2KBIvDw53s/YTDK4D0NFQAJ
+
+Q: Where are haddock generated docs?
+A: /Users/jreed/.cabal/sandboxes/agda-build/agda/dist/doc/html/Agda/index.html
+
+Q: What's a concrete way to show off the non-fibrancy of II?
+A: ???
+
+Q: Where's the proof of
+<<<
+-- The reason we need to add <j> a is that we want the top-left point
+-- to be a, if we would have omitted it it would instead have been
+-- "transport (<_> A) a". We used to have a version of the system
+-- where this was the same as a, this relied on a property which we
+-- called "regularity". It was however proved by Dan Licata that this
+-- property is not preserved by the algorithm for composition for the
+-- universe, so we had to drop it and the user now has to give <j> a
+-- explicitly.
+>>>
+that I see in
+https://github.com/mortberg/cubicaltt/blob/master/lectures/lecture2.ctt
+A:
+https://groups.google.com/forum/#!msg/homotopytypetheory/oXQe5u_Mmtk/3HEDk5g5uq4J
+looks like a start, but ??? because I want to ask dan.
+
+Q: What's the relationship between the kan filling that
+dlicata@ talks about in
+"Cubical infinite-dimensional type theory"
+https://www.youtube.com/watch?v=lt8JgGRw7gg
+and the modern [CCHM] take?
+A: ???
+
+Q: What's a nice compact way of looking at J that I get after
+beta-reducing the one in mortberg@'s lecture notes?
+A:
+<<<
+myJ (A : U) (a : A) (P : (b : A) -> Path A a b -> U)
+  (d : P a (refl A a)) (b : A) (p : Path A a b) : P b p =
+  comp (<i> P (p @ i) (<j> p @ i /\ j)) d []
+>>>
