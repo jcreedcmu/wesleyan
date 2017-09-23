@@ -1,7 +1,5 @@
 === 2017.09.08
 
-#riehl-shulman
-
 Q: Reading
 [RS] https://arxiv.org/abs/1705.07442
 What is the status of (2.2)? Is it an axiom
@@ -10,42 +8,44 @@ merely happens to be written as an inference rule, i.e. like cut
 elimination?
 A: ???
 
-Q: In figure 3, why do premises \phi and \psi appear downstairs in the
+Q: In figure 3, why do premises φ and ψ appear downstairs in the
 fourth and fifth rules listed, when they already are assumed to follow
-from \Xi | \Phi?
+from Ξ | Φ?
 A: ???
 
 Q: In the third rule in figure 4, why isn't *s* constrained to somehow
-live in \psi?
+live in ψ?
 A: I guess it's because it's not that f needs something to live in a
 shape to accept it as an argument; it's that f can only give answers
-for things that live inside \psi. We're asking that s is defined on
+for things that live inside ψ. We're asking that s is defined on
 the whole cube I, and we can consider the restriction of the cube to
-\psi before feeding it to f. Thus, I might better ask:
+ψ before feeding it to f. Thus, I might better ask:
 
 Q: In the third rule in figure 4, why isn't s allowed to be defined
-merely on \psi? Why must it be defined on the whole cube I?
+merely on ψ? Why must it be defined on the whole cube I?
 A: Oh, I see --- it's because the arguments to the function are merely
 cube expressions, not general terms. There's no way to even specify a
 cube term that's something other than a tuple of projections.
 
 === 2017.09.09
 
-#riehl-shulman
-
-Q: How do Joyal disks [Joyal 97] lead to oo-categories?
+Q: How do Joyal disks [Joyal 97] lead to ∞-categories according to [RS]?
 A: ???
 
-Q: In Axiom 4.6, we're not making any additional assumption on
-t : I | \phi |- \psi
+Q: In [RS] Axiom 4.6, we're not making any additional assumption on
+t : I | φ |- ψ
 by saying it's a cofibration, right? My belief is that
-\psi is just a cofibration by being of that syntactic class.
+ψ is just a cofibration by being of that syntactic class.
 A: ???
 
 === 2017.09.10
 
-Q: Is the Finster-Mimram definition of weak omega-categories connected in a simple way to Joyal's theta-category?
-A: ???
+Q: Is the Finster-Mimram definition of weak omega-categories connected
+in a simple way to Joyal's theta-category?
+A: Probably can get a good sense by looking in
+http://cheng.staff.shef.ac.uk/guidebook/guidebook-new.pdf
+which I found from
+https://ncatlab.org/nlab/show/Theta+category
 
 === 2017.09.11
 
@@ -97,9 +97,7 @@ $ git blame Primitive.hs -L404,+1
 
 === 2017.09.16
 
-#riehl-shulman
-
-Q: How redundant is rule 5 of figure 4? It seems like morally I can
+Q: How redundant is rule 5 of figure 4 in [RS]? It seems like morally I can
 take the assumption that a == b and apply substitution to see
 a[s/t] == b[s/t] and then use transitivity from rule 4's f(s) = a[s/t].
 A: ???
@@ -559,5 +557,197 @@ A:
 <<<
 myJ (A : U) (a : A) (P : (b : A) -> Path A a b -> U)
   (d : P a (refl A a)) (b : A) (p : Path A a b) : P b p =
-  comp (<i> P (p @ i) (<j> p @ i /\ j)) d []
+  comp (<i> P (p @ i) (<j> p @ i ∧ j)) d []
 >>>
+
+=== 2017.09.21
+
+Q: What's an example of a monomorphism that's *not* a cofibration?
+What's special about face inclusions?
+A: ???
+
+Q: What do categories with (merely) weak equivalences allow?
+A: simplicial localization, see
+https://ncatlab.org/nlab/show/simplicial+localization
+there seem to be other constructions for subtypes of CwWE, namely
+model categories and homotopical categories, but I don't understand
+them yet.
+
+Q: What misconception did I just clear up about gluing in [CCHM]?
+A: It's not another thing that you have to define for every type, like
+composition is; it's a type constructor. A Glue-type is a type built
+out of a phi-restricted fragment of another type, plus some
+equivalence glue that is valid on the phi-restriction.
+
+Afterwards you define composition *on* glue-types, and composition
+*on* the universe is definable by using glue-types in the definition
+body.
+
+Q: Can I get any sort of interlibrary deals through wesleyan
+affiliation?
+A: ???
+
+Q: What should I make of the discussion on
+https://homotopytypetheory.org/2017/09/16/a-hands-on-introduction-to-cubicaltt/
+between shulman@ and mortberg@ about canonicity vs. many-models? I
+don't feel like I grasp what's at stake.
+A: ???
+
+Q: In [ShuFix] inbetween eqn 4.1 and eqn 4.2, it says
+♭(A → B) → ♭(♭A → ♭B)
+is obtainable. But surely also we can get
+♭(A → B) → (♭A → ♭B)
+I'd think, at least?
+A: ???
+
+Q: What's my thoughts on I prefer to think about the '2-categorical
+adjoint logic' stuff?
+A:
+
+I have judgmental *levels* L, typical element ℓ. I have corresponding
+syntactic classes of resources and frames, call them rℓ (variables ρℓ)
+and fℓ (variables φℓ). I have positive propositions Pℓ and negatives Nℓ.
+
+Then I have relations rℓ ▹ℓ fℓ, may henceforth elide the ℓ on ▹.
+
+If I'm to set up F ⊣ U and let's say with propositional functions
+F : Pν → Pτ and U : Nτ → Nν for {τ,ν} ⊆ L then I'm going to need
+a resource function f : rν → rτ
+
+so that (leaving off τ suffixes)
+
+F Pν1 [ρ1], F Pν2 [ρ2] |- F Pν3 [φ]
+
+translates to
+
+F Pν1 @ ρ1, F Pν2 @ ρ2, ∀ρ.(F Pν3 @ ρ)→(ρ ▹ φ) ⊢ ρ1 * ρ2 ▹ φ
+
+which inverts to (b.c. F Pν @ ρ = ∃ρν.(ρ = f ρν) ∧ (Pν @ ρν))
+Pν1 @ ρν1, Pν2 @ ρν2, ∀ρ.(F Pν3 @ ρ)→(ρ ▹ φ) ⊢ f(ρ1) * f(ρ2) ▹ φ
+which should be equal to
+Pν1 @ ρν1, Pν2 @ ρν2, ∀ρ.(F Pν3 @ ρ)→(ρ ▹ φ) ⊢ f(ρ1 * ρ2) ▹ φ
+and then I could focus and step to
+Pν1 @ ρν1, Pν2 @ ρν2 ⊢ F Pν3 @ f(ρ1 * ρ2)
+which is
+Pν1 @ ρν1, Pν2 @ ρν2 ⊢ ∃ρν.(f(ρ1 * ρ2) = f ρν) ∧ (Pν3 @ ρν)
+and I can choose
+Pν1 @ ρν1, Pν2 @ ρν2 ⊢ Pν3 @ ρ1 * ρ2
+and this all goes like I expect.
+
+To get focusing of F, I need a function u : fτ → fν with
+
+(f ρν) ▹ φt ≡ ρν ▹ (u φt)
+       τ         ν
+
+Ok, fine, but how do I rig up a triple adjunction? Negative and
+positive props are different. If I have F ⊣ U and V ⊣ H and arrange
+so that, ignoring focusing, (negative) U and (positive) V are somehow the same?
+
+In props:
+
+    Pν    Nν    Pν    Nν
+   F ↓ ⊣ U ↑ ≅ V ↑ ⊣ H ↓
+    Pτ    Nτ    Pτ    Nτ
+
+with functions
+
+    rν    fν    rν    fν
+   f ↓ ⊣ u ↑ ≅ v ↑ ⊣ h ↓
+    rτ    fτ    rτ    fτ
+
+Ok, let me just look at what I need to get, let's say, the interprovability
+
+U N ⊣⊢ V ↓ N
+
+for
+U N ⊢ V ↓ N
+I expand to
+U N [ρ] ⊢ V ↓ N [φ]
+∀ρν.((V ↓ N) @ ρν) → (ρν ▹ φν), ∀φν.((U N) @ φν) → (ρν ▹ φν) ⊢ ρν ▹ φν
+------------> need: ρν ≤ v (f ρν)
+∀ρν.((V ↓ N) @ ρν) → (ρν ▹ φν), ∀φν.((U N) @ φν) → (ρν ▹ φν) ⊢ v (f ρν) ▹ φν
+∀φν.((U N) @ φν) → (ρν ▹ φν) ⊢ (V ↓ N) @ v (f ρν)
+∀φν.((U N) @ φν) → (ρν ▹ φν) ⊢ ↓ N @ f ρν
+∀φν.((U N) @ φν) → (ρν ▹ φν), N @ φ ⊢ f ρν ▹ φ
+∀φν.((U N) @ φν) → (ρν ▹ φν), N @ φ ⊢ ρν ▹ u φ
+N @ φ ⊢ (U N) @ u φ
+N @ φ ⊢ N @ φ
+
+for
+V ↓ N ⊢ U N
+I expand to
+V ↓ N [ρν] ⊢ U N [φν]
+(V ↓ N) @ ρν, U N @ φν ⊢ ρν ▹ φν
+(↓ N) @ ρ, N @ φ ⊢ v ρ ▹ u φ
+∀φ.(N @ φ) → (ρ ▹ φ), N @ φ ⊢ v ρ ▹ u φ
+∀φ.(N @ φ) → (ρ ▹ φ), N @ φ ⊢ ρ ▹ h (u φ)
+∀φ.(N @ φ) → (ρ ▹ φ), N @ φ ⊢ ρ ▹ h (u φ)
+------------> need: φ ≤ h (u φ)
+∀φ.(N @ φ) → (ρ ▹ φ), N @ φ ⊢ ρ ▹ φ
+
+Ok, yeah, there's two sorts of adjunctions going on, call them ⊣▹ and
+⊣≤, and we have
+
+          ⊣▹
+       f ----> u
+       |       |
+    ⊣≤ |       | ⊣≤
+       ↓       ↓
+       v ----> h
+          ⊣▹
+
+ok, sure, so both u and v are the right adjoint of f, in two different
+ways; of course they should work out to be 'the same', since adjoints
+are unique up to isomorphism.
+
+Let's say I start with ⊢ v (f ρν) ▹ φν and I want to get to ⊢ ρν ▹ φν.
+I can do this immediately by appealing to the unit ρν ≤ v (f ρν),
+*or* I can transpose to ⊢ ρν ▹ u (h φν) and appealing to the counit
+u (h φν) ≤ φν.
+
+Similarly if I start with ⊢ ρ ▹ φ and I want to get to ⊢ ρ ▹ h (u φ).
+Can do directly with the unit φ ≤ h (u φ), or with the counit
+f (v ρ) ≤ ρ to get ⊢ f (v ρ) ▹ φ and then transposing.
+
+=== 2017.09.22
+
+Q: Why do I think that ♯L should clear the context of coherent
+assumptions? [Adj2] doesn't do that, and indeed I have a harder time
+convincing myself cut goes through with my version.
+A:
+I got to this by thinking through how
+Δ, Γ, ♯A[r] ⊢ C
+⇔
+Δ @ ρ₁, Γ @ ρ₂, ♯A @ ρ₃, C @ φ ⊢ f(ρ₁ * ρ₃), ρ₂ ▹ φ
+seems to require dropping the ρ₂ to get
+f(ρ₁ * ρ₃) ▹ φ
+and from there
+fρ₁ * fρ₃ ▹ φ
+fρ₁ * fρ₃ ▹ φ
+ρ₃ ▹ u(u(fρ₁ ⊸ φ))
+so I can unpack the ♯A @ ρ₃ to get
+Δ @ ρ₁, Γ @ ρ₂, A @ ρ', C @ φ ⊢ ρ₃ ▹ u(fρ₁ ⊸ φ)
+which is equivalent to
+Δ @ ρ₁, Γ @ ρ₂, A @ ρ', C @ φ ⊢ fρ₁ * fρ' ▹ φ
+...
+Ohhh this is all just a mistake. I can transform
+f(ρ₁ * ρ₃), ρ₂ ▹ φ
+to
+fρ₁ * fρ₃ ▹ ρ₂ ⊸ φ
+fρ₃ ▹ fρ₁ ⊸ ρ₂ ⊸ φ
+ffρ₃ ▹ fρ₁ ⊸ ρ₂ ⊸ φ
+ρ₃ ▹ uu(fρ₁ ⊸ ρ₂ ⊸ φ)
+which gives me
+Δ @ ρ₁, Γ @ ρ₂, A @ ρ', C @ φ ⊢ ρ' ▹ u(fρ₁ ⊸ ρ₂ ⊸ φ)
+or equivalently
+Δ @ ρ₁, Γ @ ρ₂, A @ ρ', C @ φ ⊢ fρ₁ * fρ' * ρ₂ ▹ φ
+
+Q: Reading [ShuFix], what's an example of a mono in Top that's not a subspace inclusion?
+A: Take
+I = [0,1)
+and map I into ℂ via
+λx.exp(2πxi)
+You get the unit circle, which as a subspace has a different topology from I.
+
+Q: No, this doesn't seem right. What do the brackets around P mean on page 15 of [ShuFix]?
+A: ???
