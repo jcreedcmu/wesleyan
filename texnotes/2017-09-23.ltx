@@ -39,7 +39,7 @@ $$m : p \to q$$
 
 $$
 \erule
-{\Gamma_0[\gamma_0] \prov A : \rtype_p \qquad \Gamma_0[\gamma_0 m] \subseteq \Gamma[\gamma] }
+{\Gamma[\gamma] \supseteq  \Gamma_0[\gamma_0 m] \qquad \Gamma_0[\gamma_0] \prov A : \rtype_p}
 {\Gamma[\gamma] \prov F_mA : \rtype_q}
 \qquad
 \erule
@@ -48,7 +48,7 @@ $$
 $$
 $$
 \erule
-{\Gamma_0[\gamma_0] \prov M : A_p \qquad \Gamma_0[\gamma_0 m] \subseteq \Gamma[\gamma] }
+{\Gamma[\gamma] \supseteq \Gamma_0[\gamma_0 m] \qquad \Gamma_0[\gamma_0] \prov M : A_p  }
 {\Gamma[\gamma]\prov F_mM : (F_mA)_q}
 \qquad
 \erule
@@ -62,8 +62,8 @@ $$
 { \Gamma[\gamma] \prov S : (F_m A)_q[n] > C_r}
 \qquad
 \erule
-{\Gamma[\gamma] \prov S : A_q[n] > C_r}
-{\Gamma[\gamma] \prov S : (U_m A)_p[mn] > C_r}
+{n \ge mn_0 \qquad \Gamma[\gamma] \prov S : A_q[n_0] > C_r}
+{\Gamma[\gamma] \prov S : (U_m A)_p[n] > C_r}
 $$
 
 $$

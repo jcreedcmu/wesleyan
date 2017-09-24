@@ -822,3 +822,57 @@ postulate
 term : a (c k (b k))
 term = b (c k (b k))
 >>>
+
+Q: Where did I put some notes about how 2-categorical modalities work
+in dependent types?
+A: /Users/jreed/wes/texnotes/2017-09-23.ltx
+
+=== 2017.09.24
+
+Q: What's a property I might want to pragmatically require for mode
+theories to make typechecking tractable?
+A:
+If a ∘ b = c, then
+(a) there exists a maximal a' such that a' ∘ b = c
+(b) there exists a maximal b' such that a ∘ b' = c
+where a 'maximal' morphism means one that is the most useful attached
+to an assumption. In the idempotent theory of 1 and r, I'm thinking of r ≥ 1,
+and indeed in that situation, I have a best solution (namely r) to both
+r ∘ ? = r
+? ∘ r = r
+and a unique solution (namely r) to both
+1 ∘ ? = r
+? ∘ 1 = r
+and a unique solution (namely 1) to both
+1 ∘ ? = 1
+? ∘ 1 = 1
+and no solution (which is ok) to both
+r ∘ ? = 1
+? ∘ r = 1
+
+Q: What do I make of [Fib2]?
+A: The main thing that strikes me is why go to all the effort of
+designing and proving coherent a system when you can just translate it
+away to FOL, but that's my bias showing.
+
+Q: What's going on with the embedding/encoding distinction in [Fib2]?
+A: ???
+
+Q: What are the implications of thinking about two-cells between mode morphisms
+(saying things like u ∘ f ≤ 1) and merely talking about preorders on 'terms'
+(saying things like ∀x . u(f(x)) ≤ x)
+A: ???
+
+Q: What am I getting out of reifying frames instead of what [Fib2] does, namely
+thinking of them as structures-with-a-hole?
+A: I guess greater uniformity of definition? My F rules look just like
+my U rules with different sorts. I can represent classical logic as a
+thing with frame constructors?
+
+Q: Is it still possible to carry out a focusing proof for every logic
+you can define in [Fib2]?
+A: I think maybe yes; because the moment you throw in ⊙, it's
+impossible not to allow the definition of residuals x ⊙ - and - ⊙ x
+which correspond to frame operations x ↣ - and x ↠ -. So control over
+frames (as opposed to abstractions) is what lets you define less
+focally good logics like queue logic.
