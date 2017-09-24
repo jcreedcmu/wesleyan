@@ -751,3 +751,74 @@ You get the unit circle, which as a subspace has a different topology from I.
 
 Q: No, this doesn't seem right. What do the brackets around P mean on page 15 of [ShuFix]?
 A: ???
+
+=== 2017.09.23
+
+Q: What is the essential reason why valid assumptions, and therefore
+boxed types, must depend only on valid things?
+A: Because when I clear the context, I can't strand them from the
+hypotheses they need to be valid.
+
+Imagine I have signature
+A : type
+B : A → type
+and try to prove
+a : A true, b : (B a) valid ⊢ ? : □ C
+I'll immediately try to construct, via □R,
+b : (B a) valid ⊢ ? : C
+which is nonsense.
+
+Q: How does this play out with categorified judgmental levels?
+A: Not 100% sure yet. Wonder if I want to think of the context as a
+graph whose edges are morphisms in the level category, or else maybe
+allow context annotations to have 'zeroes' in them. I could imagine an
+invariant something like
+
+If Γ[γ], x :_p A[m], Γ'[γ'] ⊢ J_q
+
+then for some γ₀ such that γ₀m ⊆ γ we have
+
+Γ[γ₀] ⊢ A : type_p
+
+A zero in Γ[γ₀] means 'weaken that variable away'
+A zero is ⊆ any morphism, but otherwise in γ₀m ⊆ γ everything has to agree.
+
+This is meant to make
+
+x :_p A[m]
+
+behave just like
+
+x :_q (F_m A) [id_q]
+
+Whose intro rules (for m : p → q) I imagine go something like
+
+Γ[γ₀] ⊢ A : type_p    γ₀m ⊆ γ
+-----------------------------
+Γ[γ] ⊢ F_m A : type_q
+
+Γ[γ₀] ⊢ M :_p A    γ₀m ⊆ γ
+---------------------------------
+Γ[γ] ⊢ F_m M :_q F_m A
+
+Q: What happens if I think of the context as a graph whose edges are labelled with morphisms?
+A: I think I want to require commutativity of every diagram implied by
+the graph? Or do I? My gut says it's probably required for some
+substitution theorem or something.
+
+Q: Is it possible for a neutral expression to have a type that
+involves the constant at the head?
+A: Sure, here's an example
+<<<
+module b where
+
+postulate
+  o : Set
+  a : o -> Set
+  b : (y : o) → a y
+  c : (y : o) → a y -> o
+  k : o
+
+term : a (c k (b k))
+term = b (c k (b k))
+>>>

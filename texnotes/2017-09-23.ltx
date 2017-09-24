@@ -1,0 +1,112 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rtype{\mathrm{type}}
+\def\rdom{\mathrm{dom}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rflat{\mathbf{Flat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbb{E}}
+\def\B{\mathbb{B}}
+\def\F{\mathbf{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\title{Notes on Bitopologies}
+\usepackage{diagrams}
+\author{Jason Reed}
+\begin{document}
+$$m : p \to q$$
+
+$$
+\erule
+{\Gamma_0[\gamma_0] \prov A : \rtype_p \qquad \Gamma_0[\gamma_0 m] \subseteq \Gamma[\gamma] }
+{\Gamma[\gamma] \prov F_mA : \rtype_q}
+\qquad
+\erule
+{\Gamma[\gamma m] \prov A : \rtype_q}
+{\Gamma[\gamma] \prov U_mA : \rtype_p}
+$$
+$$
+\erule
+{\Gamma_0[\gamma_0] \prov M : A_p \qquad \Gamma_0[\gamma_0 m] \subseteq \Gamma[\gamma] }
+{\Gamma[\gamma]\prov F_mM : (F_mA)_q}
+\qquad
+\erule
+{\Gamma[\gamma m] \prov M : A_q}
+{\Gamma[\gamma] \prov U_m M : (U_mA)_p }
+$$
+
+$$
+\erule
+{\Gamma[ \gamma] \prov S : A_p[mn] > C_r}
+{ \Gamma[\gamma] \prov S : (F_m A)_q[n] > C_r}
+\qquad
+\erule
+{\Gamma[\gamma] \prov S : A_q[n] > C_r}
+{\Gamma[\gamma] \prov S : (U_m A)_p[mn] > C_r}
+$$
+
+$$
+\erule
+{x : A_p[m] \in \Gamma[\gamma] \qquad  \Gamma[\gamma] \prov S : A_p[m] > C_q}
+{\Gamma[\gamma]\prov x \cdot S : C_q}
+$$
+
+$$
+\erule
+{}
+{\Gamma[\gamma]\prov () : C_q[\rid] > C_q}
+$$
+
+\def\rctx{\,\mathrm{ctx}}
+$$\erule
+{\prov \Gamma[\gamma]\rctx \qquad \Gamma[\gamma] \prov  F_m A : \rtype_q }
+{\prov \Gamma[\gamma], x : A_p[m]\rctx }
+$$
+
+I want to convince myself that if I know the judgment
+$\Gamma[\gamma] \prov S : A_p[n] > C_r$ is well formed --- the most important part of that being
+the claim that basically $\Gamma[\gamma] \prov F_n A : \rtype_r$, (for $n : p \to r$) then it's well-formed in any
+antecedent of a rule I might use.
+
+So what does that immediately give me? That $\Gamma_0[\gamma_0] \prov A : \rtype_p$
+ such that $\Gamma_0[\gamma_0 n] \subseteq \Gamma[\gamma]$.
+ \begin{itemize}
+ \item[Case:] $A_p = U_m A'$ for $m : p \to q$ and $A'_q$, and $n = mn_0$ for some $n_0 : q \to r$. Then we have
+$$\Gamma_0[\gamma_0] \prov U_m A' : \rtype_p$$
+$$\Gamma_0[\gamma_0 m n_0] \subseteq \Gamma[\gamma]$$
+and the former inverts into
+$$\Gamma_0[\gamma_0 m] \prov A' : \rtype_q$$
+hence $A'_q[n_0]$ is well-formed as required for the $UL$ rule.
+ \item[Case:] $A_p = F_m A'$ for $m : q \to p$ and $A'_q$. Then we have
+$$\Gamma_0[\gamma_0] \prov F_m A' : \rtype_p$$
+$$\Gamma_0[\gamma_0 n] \subseteq \Gamma[\gamma]$$
+and the former breaks into
+$$\Gamma_1[\gamma_1] \prov  A' : \rtype_q$$
+$$\Gamma_1[\gamma_1 m] \subseteq \Gamma_0[\gamma_0]$$
+hence
+$$\Gamma_1[\gamma_1 m n] \subseteq \Gamma_0[\gamma_0 n]  \subseteq \Gamma[\gamma]$$
+so $A'_q[mn]$  is well-formed as required for the $FL$ rule.
+ \end{itemize}
+
+\end{document}
