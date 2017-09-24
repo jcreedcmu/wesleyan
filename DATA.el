@@ -18,4 +18,7 @@
  ("Fib2"
   "http://dlicata.web.wesleyan.edu/pubs/lsr17multi/lsr17multi-ex.pdf"
   "A Fibrational Framework for Substructural and Modal Logics (extended version)")
-)
+ ("OrtonPitts"
+  "http://drops.dagstuhl.de/opus/volltexte/2016/6564/pdf/LIPIcs-CSL-2016-24.pdf"
+  "Axioms for Modelling Cubical Type Theory in a Topos")
+ )

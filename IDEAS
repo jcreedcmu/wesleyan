@@ -874,3 +874,6 @@ impossible not to allow the definition of residuals x ⊙ - and - ⊙ x
 which correspond to frame operations x ↣ - and x ↠ -. So control over
 frames (as opposed to abstractions) is what lets you define less
 focally good logics like queue logic.
+
+Q: What's that other paper dlicata@ thought would be an application of modalities?
+A: [OrtonPitts]
