@@ -2,7 +2,7 @@
  ("RS"
   "https://arxiv.org/pdf/1705.07442.pdf"
   "A type theory for synthetic $\infty$-categories")
- ("Joyal 97"
+ ("Joyal97"
   "https://ncatlab.org/nlab/files/JoyalThetaCategories.pdf"
   "Disks, Duality, and $\Theta$-categories"
   "https://ncatlab.org/nlab/show/Theta+category")

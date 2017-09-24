@@ -1,8 +1,6 @@
 === 2017.09.08
 
-Q: Reading
-[RS] https://arxiv.org/abs/1705.07442
-What is the status of (2.2)? Is it an axiom
+Q: What is the status of (2.2) in [RS]? Is it an axiom
 in the system, or is it a provable property of the type system that
 merely happens to be written as an inference rule, i.e. like cut
 elimination?
@@ -29,7 +27,7 @@ cube term that's something other than a tuple of projections.
 
 === 2017.09.09
 
-Q: How do Joyal disks [Joyal 97] lead to ∞-categories according to [RS]?
+Q: How do Joyal disks [Joyal97] lead to ∞-categories according to [RS]?
 A: ???
 
 Q: In [RS] Axiom 4.6, we're not making any additional assumption on
