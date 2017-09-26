@@ -40,21 +40,21 @@
 
 $$
 \erule
-{x : A_p \in \Gamma_g \qquad \gamma(x) \ge 1_p}
+{x : A_p \in \Gamma_g \qquad \gamma(x) \ge 1_p \using{\rid}}
 {\Gamma_g \prov_\gamma x : A_p}
 \qquad
 \erule
-{\prov \Gamma_g \rctx\qquad \Gamma_g \prov_\gamma A_p : \rtype_p }
+{\prov \Gamma_g \rctx\qquad \Gamma_g \prov_\gamma A_p : \rtype_p \using {\rctx,}}
 {\prov \Gamma_g, x : A^\gamma_p \rctx }
 $$
 
 $$
 \erule
-{\gamma \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p}
+{\gamma \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p\using F}
 {\Gamma_g \prov_\gamma (F^\phi_\mu A_p)_q : \rtype_q}
 \qquad
 \erule
-{\Gamma_g \prov_{\gamma \mu} A_q : \rtype_q}
+{\Gamma_g \prov_{\gamma \mu} A_q : \rtype_q\using U}
 {\Gamma_g \prov_\gamma (U_\mu A_q)_p : \rtype_p}
 $$
 $$
@@ -67,11 +67,11 @@ $$
 
 $$
 \erule
-{\gamma \ge  \xi \mu \qquad \xi \ge \phi \qquad  \Gamma_g \prov_\xi e : A_p }
+{\gamma \ge  \xi \mu \qquad \xi \ge \phi \qquad  \Gamma_g \prov_\xi e : A_p \using FR}
 {\Gamma_g \prov_\gamma F^\xi_\mu e :  (F^\phi_\mu A_p)_q }
 \qquad
 \erule
-{\Gamma_g \prov_{\gamma \mu} e : A_q}
+{\Gamma_g \prov_{\gamma \mu} e : A_q \using UR}
 {\Gamma_g \prov_\gamma U_\mu e : (U_\mu A)_p}
 $$
 
@@ -86,7 +86,7 @@ p& \rEquiv&p&\rEquiv&p
 
 $$
 \erule
-{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r}
+{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
 {\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
 $$
 
@@ -100,4 +100,39 @@ $$\Gamma_g, y: A_p^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y 
 and can weaken
 $$\Gamma_g, y: A_p^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
 so substitution gives me that $[F_\mu^{\phi,y \tri 1_p} y/x]C_r$ is well-formed I think.
+
+\vskip1em
+\hrule
+\vskip1em
+Suppose we're looking at
+$$
+\erule
+{\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p \using FR}
+{\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q }
+$$
+$$
+\erule
+{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
+{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
+$$
+
+
+$$
+\erule
+{
+\[
+\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p\using FR
+\justifies
+\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q
+\]
+\[
+\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma'}   e' : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL
+\justifies
+\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'}  \blet F_\mu y = x \bin e' : C_r
+\]
+}
+{
+\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'} [e/y]e' : [F_\mu^{\zeta} e/x]C_r
+}
+$$
 \end{document}
