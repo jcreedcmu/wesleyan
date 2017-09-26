@@ -877,3 +877,16 @@ focally good logics like queue logic.
 
 Q: What's that other paper dlicata@ thought would be an application of modalities?
 A: [OrtonPitts]
+
+=== 2017.09.25
+
+Q: What's something to look for in [ShuFix]?
+A: How exactly the properties of ♯ and ♭ on top of their modal nature
+get axiomatized.
+
+Q: To what extent can the same be done with ʃ?
+A: ???
+
+Q: What's a sensible tack on dependent modal stuff?
+A: To aggressively track how every type depends modally on its
+context.

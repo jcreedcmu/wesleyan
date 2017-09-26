@@ -1,0 +1,118 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rtype{\mathrm{type}}
+\def\rdom{\mathrm{dom}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rflat{\mathbf{Flat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbb{E}}
+\def\B{\mathbb{B}}
+\def\F{\mathbf{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\title{Notes on Bitopologies}
+\usepackage{diagrams}
+\author{Jason Reed}
+
+\begin{document}
+
+$$
+\erule
+{x : A_p \in \Gamma_\psi \qquad \gamma(x) \ge 1_p}
+{\Gamma_\psi \prov_\gamma x : A_p}
+\qquad
+\erule
+{\prov \Gamma_\psi \rctx\qquad \Gamma_\psi \prov_\gamma A_p : \rtype_p }
+{\prov \Gamma_\psi, x : A^\gamma_p \rctx }
+$$
+
+$$
+\erule
+{\gamma \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p}
+{\Gamma_\psi \prov_\gamma (F^\phi_mA_p)_q : \rtype_q}
+\qquad
+\erule
+{\Gamma_\psi \prov_{\gamma m} A_q : \rtype_q}
+{\Gamma_\psi \prov_\gamma (U_mA_q)_p : \rtype_p}
+$$
+$$
+\begin{diagram}
+  \psi & \rTo^\gamma & q\\
+\dTo<\phi&\Downarrow&\uTo>m\\
+p&\rEquiv&p
+\end{diagram}
+$$
+
+$$
+\erule
+{\gamma \ge  \xi m \qquad \xi \ge \phi \qquad  \Gamma_\psi \prov_\xi e : A_p }
+{\Gamma_\psi \prov_\gamma F^\xi_m e :  (F^\phi_mA_p)_q }
+\qquad
+\erule
+{\Gamma_\psi \prov_{\gamma m} e : A_q}
+{\Gamma_\psi \prov_\gamma U_m e : (U_mA)_p}
+$$
+
+\[
+\begin{diagram}
+\psi& \rEquiv&  \psi & \rTo^\gamma & q\\
+\dTo<\phi &\Leftarrow& \dTo~\xi&\Downarrow&\uTo>m\\
+p& \rEquiv&p&\rEquiv&p
+\end{diagram}
+\]
+
+$$
+\erule
+{\Gamma_\psi, y: A_p^{\phi}  \prov_{[ y\tri m / x]\gamma}   e : [F_m^{\zeta,y \tri 1_p} y/x]C_r}
+{\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  \blet F_m^\zeta y = x \bin e : C_r}
+$$
+$$\gamma : (\psi,q) \to r \qquad \phi : \psi \to p \qquad \xi : \psi \to q \qquad \zeta : \psi \to p$$
+Suppose
+$$\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma_\psi \prov_\xi (F^\phi_mA_p)_q : \rtype_q$$
+From the latter we know
+$$\xi \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p$$
+so the context is fine. Now we construct
+$$\Gamma_\psi, y: A_p^{\phi} \prov_{\zeta m, y \tri m} F_m^{\zeta,y\tri 1_p} y : (F_m^\phi A_p)_q$$
+and carry out substitution hopefully?
+
+\vfil\eject
+Alternative thought:
+
+$$
+\erule
+{\Gamma_\psi, y: A_p^{\phi}  \prov_{[ y\tri m / x]\gamma}   e : [F_m^{\phi,y \tri 1_p} y/x]C_r}
+{\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  \blet F_m y = x \bin e : C_r}
+$$
+
+Suppose
+$$\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma_\psi \prov_\xi (F^\phi_mA_p)_q : \rtype_q$$
+From the latter we know
+$$\xi \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p$$
+so the context is fine. Now we construct
+$$\Gamma_\psi, y: A_p^{\phi} \prov_{\phi m, y \tri m} F_m^{\phi,y\tri 1_p} y : (F_m^\phi A_p)_q$$
+
+\end{document}
