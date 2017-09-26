@@ -40,79 +40,64 @@
 
 $$
 \erule
-{x : A_p \in \Gamma_\psi \qquad \gamma(x) \ge 1_p}
-{\Gamma_\psi \prov_\gamma x : A_p}
+{x : A_p \in \Gamma_g \qquad \gamma(x) \ge 1_p}
+{\Gamma_g \prov_\gamma x : A_p}
 \qquad
 \erule
-{\prov \Gamma_\psi \rctx\qquad \Gamma_\psi \prov_\gamma A_p : \rtype_p }
-{\prov \Gamma_\psi, x : A^\gamma_p \rctx }
+{\prov \Gamma_g \rctx\qquad \Gamma_g \prov_\gamma A_p : \rtype_p }
+{\prov \Gamma_g, x : A^\gamma_p \rctx }
 $$
 
 $$
 \erule
-{\gamma \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p}
-{\Gamma_\psi \prov_\gamma (F^\phi_mA_p)_q : \rtype_q}
+{\gamma \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p}
+{\Gamma_g \prov_\gamma (F^\phi_\mu A_p)_q : \rtype_q}
 \qquad
 \erule
-{\Gamma_\psi \prov_{\gamma m} A_q : \rtype_q}
-{\Gamma_\psi \prov_\gamma (U_mA_q)_p : \rtype_p}
+{\Gamma_g \prov_{\gamma \mu} A_q : \rtype_q}
+{\Gamma_g \prov_\gamma (U_\mu A_q)_p : \rtype_p}
 $$
 $$
 \begin{diagram}
-  \psi & \rTo^\gamma & q\\
-\dTo<\phi&\Downarrow&\uTo>m\\
+  g & \rTo^\gamma & q\\
+\dTo<\phi&\Downarrow&\uTo>\mu\\
 p&\rEquiv&p
 \end{diagram}
 $$
 
 $$
 \erule
-{\gamma \ge  \xi m \qquad \xi \ge \phi \qquad  \Gamma_\psi \prov_\xi e : A_p }
-{\Gamma_\psi \prov_\gamma F^\xi_m e :  (F^\phi_mA_p)_q }
+{\gamma \ge  \xi \mu \qquad \xi \ge \phi \qquad  \Gamma_g \prov_\xi e : A_p }
+{\Gamma_g \prov_\gamma F^\xi_\mu e :  (F^\phi_\mu A_p)_q }
 \qquad
 \erule
-{\Gamma_\psi \prov_{\gamma m} e : A_q}
-{\Gamma_\psi \prov_\gamma U_m e : (U_mA)_p}
+{\Gamma_g \prov_{\gamma \mu} e : A_q}
+{\Gamma_g \prov_\gamma U_\mu e : (U_\mu A)_p}
 $$
 
 \[
 \begin{diagram}
-\psi& \rEquiv&  \psi & \rTo^\gamma & q\\
-\dTo<\phi &\Leftarrow& \dTo~\xi&\Downarrow&\uTo>m\\
+g& \rEquiv&  g & \rTo^\gamma & q\\
+\dTo<\phi &\Leftarrow& \dTo~\xi&\Downarrow&\uTo>\mu\\
 p& \rEquiv&p&\rEquiv&p
 \end{diagram}
 \]
 
-$$
-\erule
-{\Gamma_\psi, y: A_p^{\phi}  \prov_{[ y\tri m / x]\gamma}   e : [F_m^{\zeta,y \tri 1_p} y/x]C_r}
-{\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  \blet F_m^\zeta y = x \bin e : C_r}
-$$
-$$\gamma : (\psi,q) \to r \qquad \phi : \psi \to p \qquad \xi : \psi \to q \qquad \zeta : \psi \to p$$
-Suppose
-$$\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
-$$\Gamma_\psi \prov_\xi (F^\phi_mA_p)_q : \rtype_q$$
-From the latter we know
-$$\xi \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p$$
-so the context is fine. Now we construct
-$$\Gamma_\psi, y: A_p^{\phi} \prov_{\zeta m, y \tri m} F_m^{\zeta,y\tri 1_p} y : (F_m^\phi A_p)_q$$
-and carry out substitution hopefully?
-
-\vfil\eject
-Alternative thought:
 
 $$
 \erule
-{\Gamma_\psi, y: A_p^{\phi}  \prov_{[ y\tri m / x]\gamma}   e : [F_m^{\phi,y \tri 1_p} y/x]C_r}
-{\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  \blet F_m y = x \bin e : C_r}
+{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r}
+{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
 $$
 
 Suppose
-$$\Gamma_\psi, x:(F^\phi_mA_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
-$$\Gamma_\psi \prov_\xi (F^\phi_mA_p)_q : \rtype_q$$
+$$\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma_g \prov_\xi (F^\phi_\mu A_p)_q : \rtype_q$$
 From the latter we know
-$$\xi \ge  \phi m \qquad \Gamma_\psi \prov_\phi A_p : \rtype_p$$
+$$\xi \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p$$
 so the context is fine. Now we construct
-$$\Gamma_\psi, y: A_p^{\phi} \prov_{\phi m, y \tri m} F_m^{\phi,y\tri 1_p} y : (F_m^\phi A_p)_q$$
-
+$$\Gamma_g, y: A_p^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
+and can weaken
+$$\Gamma_g, y: A_p^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
+so substitution gives me that $[F_\mu^{\phi,y \tri 1_p} y/x]C_r$ is well-formed I think.
 \end{document}
