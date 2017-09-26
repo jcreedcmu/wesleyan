@@ -34,6 +34,7 @@
 \def\rbundle{\,\mathrm{bundle}}
 \def\mm{\mathsf{m}}
 \def\nn{\mathsf{n}}
+\def\without{\setminus}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \title{Notes on Bitopologies}
@@ -67,14 +68,14 @@ $$
 \subsubsection{Bundles}
 \fbox{$\Xi \prov \alpha \rbundle$}
 $$
-\erule{}{\Xi \prov \cdot \rbundle}\qquad
+\erule{\using bnil }{\Xi \prov \cdot \rbundle}\qquad
 \erule
-{\Xi \prov \beta  \rbundle \qquad  \alpha \mm \ge \beta}
+{\Xi \prov \beta  \rbundle \qquad  \alpha \mm \ge \beta \using bcons}
 { \Xi , x^\alpha \prov (\beta ,  x := \mm) \rbundle }
 $$
 $$
 \erule
-{\Xi \prov \beta  \rbundle }
+{\Xi \prov \beta  \rbundle \using bcons_0}
 { \Xi , x^\alpha \prov \beta  \rbundle }
 $$
 
@@ -157,23 +158,87 @@ $$
 \fbox{$\sigma(M^\mu)$} \fbox{$\sigma M$}
 \fbox{$\sigma(C^\gamma)$} \fbox{$\sigma C$}
 \fbox{$\sigma\Gamma$}
-\fbox{$[\nu / x]\alpha$}
-$$[N^\nu / x](M^\mu) = ([N^\nu / x]M)^{[\nu / x]\mu}$$
-$$[N^\nu / x](C^\gamma) = ([N^\nu / x]C)^{[\nu / x]\gamma}$$
+\fbox{$\alpha\without x$}
+\fbox{$\Xi \without x$}
+
+$$\cdot\without x = \cdot$$
+$$(\alpha, x := \mm)\without x = \alpha$$
+$$(\alpha, y := \nn)\without x = (\alpha\without x, y := \nn) $$
+$$(\Xi, y^\alpha)\without x = (\Xi \without x), y^{\alpha \without x}$$
+$$[N^\nu / x](M^\mu) = ([N^\nu / x]M)^{\mu \without x}$$
+$$[N^\nu / x](C^\gamma) = ([N^\nu / x]C)^{\gamma \without x}$$
 
 $$
 \erule
-{\Xi \prov \nu \rbundle \qquad \Xi, x^\alpha, \Xi' \prov \mu \rbundle \qquad \mu \ge_x \nu}
-{\Xi, \Xi' \prov [\nu/x]\mu \rbundle}
+{\Xi, x^\alpha, \Xi' \prov \mu \rbundle}
+{\Xi, (\Xi'\without x) \prov \mu\without x \rbundle}
 $$
 $$
 \erule
-{\Gamma \prov N^\nu : A^\alpha\qquad \Gamma, x:A^\alpha, \Gamma' \prov M^{\mu} : C^\gamma \qquad \mu \ge_x \nu\qquad \gamma \ge_x \nu \using sub}
+{\Gamma \prov N^\nu : A^\alpha\qquad \Gamma, x:A^\alpha, \Gamma' \prov M^{\mu} : C^\gamma \qquad \mu \ge \nu \mu(x) \qquad \gamma \ge \nu \gamma(x) \using sub}
 {\Gamma, [N^\nu / x]\Gamma' \prov [N^\nu / x] (M^\mu) : [N^\nu / x](C^\gamma)}
 $$
 
 
 \vfil\eject
+
+\begin{lemma}[Bundle Subtraction]
+$$
+\erule
+{\Xi, x^\alpha, \Xi' \prov \mu \rbundle}
+{\Xi, (\Xi'\without x) \prov \mu\without x \rbundle}
+$$
+\end{lemma}
+
+\begin{proof}
+By induction on the structure of $\Xi, x^\alpha, \Xi' \prov \mu \rbundle$.
+\begin{enumerate}
+\item[Case:]
+$$
+\erule{\using bnil }{\Xi, x^\alpha, \Xi' \prov \cdot \rbundle}
+$$
+Immediate.
+\item[Case:]
+$$
+\erule
+{\Xi \prov \mu_0  \rbundle \qquad  \alpha \mm \ge \mu_0 \using bcons}
+{ \Xi , x^\alpha \prov (\mu_0 ,  x := \mm) \rbundle }
+$$
+Here $\Xi' = \cdot$. Immediate from subderivation $\Xi \prov \mu_0  \rbundle$.
+\item[Case:]
+$$
+\erule
+{\Xi \prov \mu_0  \rbundle \using bcons_0}
+{ \Xi , x^\alpha \prov \mu_0  \rbundle }
+$$
+Here $\Xi' = \cdot$. Immediate from subderivation $\Xi \prov \mu_0  \rbundle$, and noticing that $x$ doesn't appear in $\mu_0$, hence $\mu_0 \without x = \mu_0$.
+\item[Case:]
+$$
+\erule
+{\Xi, x^\alpha, \Xi'_0  \prov \mu_0  \rbundle \qquad  \upsilon \mm \ge \mu_0 \using bcons}
+{ \Xi, x^\alpha, \Xi'_0 , y^\upsilon \prov (\mu_0 ,  y := \mm) \rbundle }
+$$
+Assuming the context is well-formed, we know
+$$\Xi, x^\alpha, \Xi'_0 \prov \upsilon \rbundle$$
+By the induction hypothesis on that we have
+$$\Xi, (\Xi'_0 \without x) \prov \upsilon \without x \rbundle$$
+We must show
+$$ \Xi,  (\Xi'_0 \without x) , y^{\upsilon \without x} \prov ((\mu_0 \without x),  y := \mm) \rbundle $$
+
+
+\item[Case:]
+
+$$
+\erule
+{\Xi, x^\alpha, \Xi'_0  \prov \mu_0  \rbundle \using bcons_0}
+{ \Xi, x^\alpha, \Xi'_0 , y^\upsilon \prov \mu_0  \rbundle }
+$$
+
+\end{enumerate}
+
+\cqed
+\end{proof}
+
 Suppose
 $$\Gamma, x:(F^\phi_\mm A)^\xi \prov_\gamma  C_r : \rtype_r$$
 $$\Gamma \prov_\xi (F^\phi_\mm A) : \rtype$$
