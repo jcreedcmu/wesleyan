@@ -32,7 +32,8 @@
 \def\rctx{\,\mathrm{ctx}}
 \def\rbctx{\,\mathrm{bctx}}
 \def\rbundle{\,\mathrm{bundle}}
-
+\def\mm{\mathsf{m}}
+\def\nn{\mathsf{n}}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \title{Notes on Bitopologies}
@@ -41,88 +42,149 @@
 
 \begin{document}
 
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Morphisms&$\mm$&$\cdots$\\
+  Bundles&$\alpha$&$\cdot \celse \alpha, x := \mm $\\
+  Bundle Contexts&$\Xi$&$\cdot \celse \Xi, x^\alpha $\\
+  Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A^\alpha $\\
+  Types&$A$&$ F^\alpha_\mm A \celse U_\mm A \celse \cdots $\\
+  Substitutions&$\sigma$&$N^\nu$\\
+\end{tabular}
+\]
+
+\subsubsection{Bundle Contexts}
+\fbox{$\prov \Xi \rbctx$}
 $$
 \erule
-{x : A^\alpha \in \Gamma \qquad \xi(x) \ge 1 \qquad \xi \ge \alpha \using{\rid}}
-{\Gamma \prov x^\xi : A^\alpha}
+{}
+{\prov \cdot \rbctx  }
 \qquad
-\erule
-{\prov \Gamma \rctx\qquad \Gamma \prov A^\alpha : \rtype \using {\rctx,}}
-{\prov \Gamma, x : A^\alpha \rctx }
-$$
-
-$$
-\erule
-{\alpha' \ge  \alpha \mu \qquad \Gamma \prov A^{\alpha} : \rtype\using F}
-{\Gamma \prov (F^{\alpha}_\mu A)^{\alpha'} : \rtype}
-\qquad
-\erule
-{\Gamma \prov A^{\alpha \mu} : \rtype\using U}
-{\Gamma \prov (U_\mu A)^{\alpha} : \rtype}
-$$
-
-$$
-\erule
-{(\nu'\tri \alpha') \ge  (\nu \tri \alpha) \mu
-\qquad  \Gamma \prov N^{ \nu} : A^{\alpha} \using FR}
-{\Gamma \prov (F^{ \nu}_\mu N)^{\nu'} :  (F^{\alpha}_\mu A)^{\alpha'} }
-$$
-
-$$
-\erule
-{\Gamma \prov_{\gamma \mu} M : A \using UR}
-{\Gamma \prov (U_\mu N)^\nu : (U_\mu A)^\alpha}
-$$
-
-
-
-$$
-\erule
-{\Gamma, y: A^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1} y/x]C_r \using FL}
-{\Gamma, x:(F^\phi_\mu A)^\xi \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
-$$
-
-Suppose
-$$\Gamma, x:(F^\phi_\mu A)^\xi \prov_\gamma  C_r : \rtype_r$$
-$$\Gamma \prov_\xi (F^\phi_\mu A) : \rtype$$
-From the latter we know
-$$\xi \ge  \phi \mu \qquad \Gamma \prov_\phi A : \rtype$$
-so the context is fine. Now we construct
-$$\Gamma, y: A^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1} y : (F_\mu^\phi A)$$
-and can weaken
-$$\Gamma, y: A^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1} y : (F_\mu^\phi A)$$
-so substitution gives me that $[F_\mu^{\phi,y \tri 1} y/x]C_r$ is well-formed I think.
-
-
-\vskip1em
-\hrule
-\vskip1em
-
-Some stuff that was thought about during discussion with mriley and dlicata:
-
-$$
 \erule
 {\prov \Xi \rbctx \qquad \Xi \prov \alpha \rbundle}
 {\prov \Xi, x : \alpha \rbctx  }
 $$
-
+\subsubsection{Bundles}
+\fbox{$\Xi \prov \alpha \rbundle$}
 $$
 \erule{}{\Xi \prov \cdot \rbundle}\qquad
 \erule
-{\Xi \prov \beta  \rbundle \qquad  \alpha \phi \ge \beta}
-{ \Xi , x : \alpha \prov (\beta ,  x := \phi) \rbundle }
+{\Xi \prov \beta  \rbundle \qquad  \alpha \mm \ge \beta}
+{ \Xi , x^\alpha \prov (\beta ,  x := \mm) \rbundle }
 $$
-
 $$
 \erule
 {\Xi \prov \beta  \rbundle }
-{ \Xi , x : \alpha \prov \beta  \rbundle }
+{ \Xi , x^\alpha \prov \beta  \rbundle }
 $$
-$$(x_1:A_1^{\alpha_1}, \ldots, x_n:A_n^{\alpha_n})^\ominus = $$
-$$(x_1:\alpha_1, \ldots, x_n:\alpha_n) $$
+
+\subsubsection{Erasure}
+\fbox{$\Gamma^\ominus \in \Xi$}
+$$(x_1:A_1^{\alpha_1}, \ldots, x_n:A_n^{\alpha_n})^\ominus = (x_1:\alpha_1, \ldots, x_n:\alpha_n) $$
+
+\subsubsection{Contexts}
+\fbox{$\prov \Gamma \rctx$}
 $$
 \erule
 {\prov \Gamma \rctx\qquad \Gamma \prov A^\alpha : \rtype \qquad \Gamma^\ominus \prov \alpha \rbundle \using {\rctx,}}
 {\prov \Gamma, x : A^\alpha \rctx }
 $$
+
+\subsubsection{Types}
+\fbox{$\Gamma\prov A^\alpha : \rtype$}
+$$
+\erule
+{\alpha' \ge  \alpha \mm \qquad \Gamma \prov A^{\alpha} : \rtype\using F}
+{\Gamma \prov (F^{\alpha}_\mm A)^{\alpha'} : \rtype}
+\qquad
+\erule
+{\Gamma \prov A^{\alpha \mm} : \rtype\using U}
+{\Gamma \prov (U_\mm A)^{\alpha} : \rtype}
+$$
+
+\subsubsection{Terms}
+\fbox{$\Gamma\prov N^\nu : A^\alpha$}
+
+$$
+\erule
+{x : A^\alpha \in \Gamma \qquad \xi(x) \ge 1  \using{\rid}}
+{\Gamma \prov x^\xi : A^\alpha}
+$$
+
+$$
+\erule
+{
+\nu' \ge \nu \mm
+\qquad  \Gamma \prov N^{ \nu} : A^{\alpha} \using FR}
+{\Gamma \prov (F^{ \nu}_\mm N)^{\nu'} :  (F^{\alpha}_\mm A)^{\alpha'} }
+$$
+
+$$
+\erule
+{\Gamma \prov M^{\nu \mm} : A^{\alpha \mm} \using UR}
+{\Gamma \prov (U_\mm N)^\nu : (U_\mm A)^\alpha}
+$$
+
+$$
+\erule
+{\Gamma, y: A^{\phi}  \prov_{[ y\tri \mm / x]\gamma}   e : [F_\mm^{\phi,y \tri 1} y/x]C_r \using FL}
+{\Gamma, x:(F^\phi_\mm A)^\xi \prov_\gamma  \blet F_\mm y = x \bin e : C_r}
+$$
+
+\subsubsection{Bundle Inequality}
+\fbox{$\alpha \ge \beta$}
+\fbox{$\alpha \ge_x \beta$}
+$$
+\erule
+{}
+{\cdot \ge \cdot}
+\qquad
+\erule
+{\alpha \ge \beta}
+{(\alpha, x := \mm) \ge \beta}
+\qquad
+\erule
+{\alpha \ge \beta \qquad \mm \ge \nn}
+{(\alpha, x := \mm) \ge (\beta, x := \nn)}
+$$
+$$
+\erule
+{\alpha \ge \beta \qquad \alpha \ge \alpha(x) \beta}
+{\alpha \ge_x \beta}
+$$
+
+\subsubsection{Substitution}
+\fbox{$\sigma(M^\mu)$} \fbox{$\sigma M$}
+\fbox{$\sigma(C^\gamma)$} \fbox{$\sigma C$}
+\fbox{$\sigma\Gamma$}
+\fbox{$[\nu / x]\alpha$}
+$$[N^\nu / x](M^\mu) = ([N^\nu / x]M)^{[\nu / x]\mu}$$
+$$[N^\nu / x](C^\gamma) = ([N^\nu / x]C)^{[\nu / x]\gamma}$$
+
+$$
+\erule
+{\Xi \prov \nu \rbundle \qquad \Xi, x^\alpha, \Xi' \prov \mu \rbundle \qquad \mu \ge_x \nu}
+{\Xi, \Xi' \prov [\nu/x]\mu \rbundle}
+$$
+$$
+\erule
+{\Gamma \prov N^\nu : A^\alpha\qquad \Gamma, x:A^\alpha, \Gamma' \prov M^{\mu} : C^\gamma \qquad \mu \ge_x \nu\qquad \gamma \ge_x \nu \using sub}
+{\Gamma, [N^\nu / x]\Gamma' \prov [N^\nu / x] (M^\mu) : [N^\nu / x](C^\gamma)}
+$$
+
+
+\vfil\eject
+Suppose
+$$\Gamma, x:(F^\phi_\mm A)^\xi \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma \prov_\xi (F^\phi_\mm A) : \rtype$$
+From the latter we know
+$$\xi \ge  \phi \mm \qquad \Gamma \prov_\phi A : \rtype$$
+so the context is fine. Now we construct
+$$\Gamma, y: A^{\phi} \prov_{\phi \mm, y \tri \mm} F_\mm^{\phi,y\tri 1} y : (F_\mm^\phi A)$$
+and can weaken
+$$\Gamma, y: A^{\phi} \prov_{\xi, y \tri \mm} F_\mm^{\phi,y\tri 1} y : (F_\mm^\phi A)$$
+so substitution gives me that $[F_\mm^{\phi,y \tri 1} y/x]C_r$ is well-formed I think.
+
+
+
 \end{document}
