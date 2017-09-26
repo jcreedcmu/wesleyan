@@ -1,0 +1,152 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rtype{\mathrm{type}}
+\def\rdom{\mathrm{dom}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rflat{\mathbf{Flat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbb{E}}
+\def\B{\mathbb{B}}
+\def\F{\mathbf{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\title{Notes on Bitopologies}
+\usepackage{diagrams}
+\author{Jason Reed}
+
+\begin{document}
+
+$$
+\erule
+{x : A_p \in \Gamma_g \qquad \gamma(x) \ge 1_p \using{\rid}}
+{\Gamma_g \prov_\gamma x : A_p}
+\qquad
+\erule
+{\prov \Gamma_g \rctx\qquad \Gamma_g \prov_\gamma A_p : \rtype_p \using {\rctx,}}
+{\prov \Gamma_g, x : A^\gamma_p \rctx }
+$$
+
+$$
+\erule
+{\gamma \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p\using F}
+{\Gamma_g \prov_\gamma (F^\phi_\mu A_p)_q : \rtype_q}
+\qquad
+\erule
+{\Gamma_g \prov_{\gamma \mu} A_q : \rtype_q\using U}
+{\Gamma_g \prov_\gamma (U_\mu A_q)_p : \rtype_p}
+$$
+$$
+\begin{diagram}
+  g & \rTo^\gamma & q\\
+\dTo<\phi&\Downarrow&\uTo>\mu\\
+p&\rEquiv&p
+\end{diagram}
+$$
+
+$$
+\erule
+{\gamma \ge  \xi \mu \qquad \xi \ge \phi \qquad  \Gamma_g \prov_\xi e : A_p \using FR}
+{\Gamma_g \prov_\gamma F^\xi_\mu e :  (F^\phi_\mu A_p)_q }
+\qquad
+\erule
+{\Gamma_g \prov_{\gamma \mu} e : A_q \using UR}
+{\Gamma_g \prov_\gamma U_\mu e : (U_\mu A)_p}
+$$
+
+\[
+\begin{diagram}
+g& \rEquiv&  g & \rTo^\gamma & q\\
+\dTo<\phi &\Leftarrow& \dTo~\xi&\Downarrow&\uTo>\mu\\
+p& \rEquiv&p&\rEquiv&p
+\end{diagram}
+\]
+
+
+$$
+\erule
+{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
+{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
+$$
+
+Suppose
+$$\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma_g \prov_\xi (F^\phi_\mu A_p)_q : \rtype_q$$
+From the latter we know
+$$\xi \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p$$
+so the context is fine. Now we construct
+$$\Gamma_g, y: A_p^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
+and can weaken
+$$\Gamma_g, y: A_p^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
+so substitution gives me that $[F_\mu^{\phi,y \tri 1_p} y/x]C_r$ is well-formed I think.
+
+\vskip1em
+\hrule
+\vskip1em
+Suppose we're looking at
+$$
+\erule
+{\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p \using FR}
+{\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q }
+$$
+$$
+\erule
+{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
+{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
+$$
+
+
+$$
+\erule
+{
+\[
+\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p\using FR
+\justifies
+\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q
+\]
+\[
+\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma'}   e' : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL
+\justifies
+\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'}  \blet F_\mu y = x \bin e' : C_r
+\]
+}
+{
+\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'} [e/y]e' : [F_\mu^{\zeta} e/x]C_r
+}
+$$
+
+
+If $\Gamma,x :A , \Gamma'\prov N : C$ and $\Gamma \prov M : A$ then
+$\Gamma, [M/x]\Gamma' \prov [M/x]N : [M/x]C$.
+
+If $\Gamma\prov N : C$ and $\Delta \prov \sigma:\Gamma$ then
+$\Delta \prov \sigma N : \sigma C$.
+
+Assume $\nu \ge \gamma$ and $\mu \ge \alpha$.
+
+If $\Gamma,x :A^\alpha , \Gamma'\prov N^\nu : C^\gamma$ and $\Gamma \prov M^\mu : A^\alpha$ then
+$\Gamma, [M/x]\Gamma' \prov [M^\mu/x](N^\nu) : [M^\mu/x](C^\gamma)$.
+
+
+\end{document}
