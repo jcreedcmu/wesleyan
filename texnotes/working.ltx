@@ -30,6 +30,9 @@
 \def\tri{\triangleright}
 \def\o{\circ}
 \def\rctx{\,\mathrm{ctx}}
+\def\rbctx{\,\mathrm{bctx}}
+\def\rbundle{\,\mathrm{bundle}}
+
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \title{Notes on Bitopologies}
@@ -40,113 +43,86 @@
 
 $$
 \erule
-{x : A_p \in \Gamma_g \qquad \gamma(x) \ge 1_p \using{\rid}}
-{\Gamma_g \prov_\gamma x : A_p}
+{x : A^\alpha \in \Gamma \qquad \xi(x) \ge 1 \qquad \xi \ge \alpha \using{\rid}}
+{\Gamma \prov x^\xi : A^\alpha}
 \qquad
 \erule
-{\prov \Gamma_g \rctx\qquad \Gamma_g \prov_\gamma A_p : \rtype_p \using {\rctx,}}
-{\prov \Gamma_g, x : A^\gamma_p \rctx }
+{\prov \Gamma \rctx\qquad \Gamma \prov A^\alpha : \rtype \using {\rctx,}}
+{\prov \Gamma, x : A^\alpha \rctx }
 $$
 
 $$
 \erule
-{\gamma \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p\using F}
-{\Gamma_g \prov_\gamma (F^\phi_\mu A_p)_q : \rtype_q}
+{\alpha' \ge  \alpha \mu \qquad \Gamma \prov A^{\alpha} : \rtype\using F}
+{\Gamma \prov (F^{\alpha}_\mu A)^{\alpha'} : \rtype}
 \qquad
 \erule
-{\Gamma_g \prov_{\gamma \mu} A_q : \rtype_q\using U}
-{\Gamma_g \prov_\gamma (U_\mu A_q)_p : \rtype_p}
-$$
-$$
-\begin{diagram}
-  g & \rTo^\gamma & q\\
-\dTo<\phi&\Downarrow&\uTo>\mu\\
-p&\rEquiv&p
-\end{diagram}
+{\Gamma \prov A^{\alpha \mu} : \rtype\using U}
+{\Gamma \prov (U_\mu A)^{\alpha} : \rtype}
 $$
 
 $$
 \erule
-{\gamma \ge  \xi \mu \qquad \xi \ge \phi \qquad  \Gamma_g \prov_\xi e : A_p \using FR}
-{\Gamma_g \prov_\gamma F^\xi_\mu e :  (F^\phi_\mu A_p)_q }
-\qquad
-\erule
-{\Gamma_g \prov_{\gamma \mu} e : A_q \using UR}
-{\Gamma_g \prov_\gamma U_\mu e : (U_\mu A)_p}
+{(\nu'\tri \alpha') \ge  (\nu \tri \alpha) \mu
+\qquad  \Gamma \prov N^{ \nu} : A^{\alpha} \using FR}
+{\Gamma \prov (F^{ \nu}_\mu N)^{\nu'} :  (F^{\alpha}_\mu A)^{\alpha'} }
 $$
 
-\[
-\begin{diagram}
-g& \rEquiv&  g & \rTo^\gamma & q\\
-\dTo<\phi &\Leftarrow& \dTo~\xi&\Downarrow&\uTo>\mu\\
-p& \rEquiv&p&\rEquiv&p
-\end{diagram}
-\]
+$$
+\erule
+{\Gamma \prov_{\gamma \mu} M : A \using UR}
+{\Gamma \prov (U_\mu N)^\nu : (U_\mu A)^\alpha}
+$$
+
 
 
 $$
 \erule
-{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
-{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
+{\Gamma, y: A^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1} y/x]C_r \using FL}
+{\Gamma, x:(F^\phi_\mu A)^\xi \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
 $$
 
 Suppose
-$$\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  C_r : \rtype_r$$
-$$\Gamma_g \prov_\xi (F^\phi_\mu A_p)_q : \rtype_q$$
+$$\Gamma, x:(F^\phi_\mu A)^\xi \prov_\gamma  C_r : \rtype_r$$
+$$\Gamma \prov_\xi (F^\phi_\mu A) : \rtype$$
 From the latter we know
-$$\xi \ge  \phi \mu \qquad \Gamma_g \prov_\phi A_p : \rtype_p$$
+$$\xi \ge  \phi \mu \qquad \Gamma \prov_\phi A : \rtype$$
 so the context is fine. Now we construct
-$$\Gamma_g, y: A_p^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
+$$\Gamma, y: A^{\phi} \prov_{\phi \mu, y \tri \mu} F_\mu^{\phi,y\tri 1} y : (F_\mu^\phi A)$$
 and can weaken
-$$\Gamma_g, y: A_p^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1_p} y : (F_\mu^\phi A_p)_q$$
-so substitution gives me that $[F_\mu^{\phi,y \tri 1_p} y/x]C_r$ is well-formed I think.
+$$\Gamma, y: A^{\phi} \prov_{\xi, y \tri \mu} F_\mu^{\phi,y\tri 1} y : (F_\mu^\phi A)$$
+so substitution gives me that $[F_\mu^{\phi,y \tri 1} y/x]C_r$ is well-formed I think.
+
 
 \vskip1em
 \hrule
 \vskip1em
-Suppose we're looking at
-$$
-\erule
-{\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p \using FR}
-{\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q }
-$$
-$$
-\erule
-{\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma}   e : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL}
-{\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_\gamma  \blet F_\mu y = x \bin e : C_r}
-$$
 
+Some stuff that was thought about during discussion with mriley and dlicata:
 
 $$
 \erule
-{
-\[
-\gamma \ge  \zeta \mu \qquad \zeta \ge \phi \qquad  \Gamma_g \prov_\zeta e : A_p\using FR
-\justifies
-\Gamma_g \prov_\gamma F^\zeta_\mu e :  (F^\phi_\mu A_p)_q
-\]
-\[
-\Gamma_g, y: A_p^{\phi}  \prov_{[ y\tri \mu / x]\gamma'}   e' : [F_\mu^{\phi,y \tri 1_p} y/x]C_r \using FL
-\justifies
-\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'}  \blet F_\mu y = x \bin e' : C_r
-\]
-}
-{
-\Gamma_g, x:(F^\phi_\mu A_p)^\xi_q \prov_{\gamma'} [e/y]e' : [F_\mu^{\zeta} e/x]C_r
-}
+{\prov \Xi \rbctx \qquad \Xi \prov \alpha \rbundle}
+{\prov \Xi, x : \alpha \rbctx  }
 $$
 
+$$
+\erule{}{\Xi \prov \cdot \rbundle}\qquad
+\erule
+{\Xi \prov \beta  \rbundle \qquad  \alpha \phi \ge \beta}
+{ \Xi , x : \alpha \prov (\beta ,  x := \phi) \rbundle }
+$$
 
-If $\Gamma,x :A , \Gamma'\prov N : C$ and $\Gamma \prov M : A$ then
-$\Gamma, [M/x]\Gamma' \prov [M/x]N : [M/x]C$.
-
-If $\Gamma\prov N : C$ and $\Delta \prov \sigma:\Gamma$ then
-$\Delta \prov \sigma N : \sigma C$.
-
-Assume $\nu \ge \gamma$ and $\mu \ge \alpha$.
-
-If $\Gamma,x :A^\alpha , \Gamma'\prov N^\nu : C^\gamma$ and $\Gamma \prov M^\mu : A^\alpha$ then
-$\Gamma, [M/x]\Gamma' \prov [M^\mu/x](N^\nu) : [M^\mu/x](C^\gamma)$.
-
-
+$$
+\erule
+{\Xi \prov \beta  \rbundle }
+{ \Xi , x : \alpha \prov \beta  \rbundle }
+$$
+$$(x_1:A_1^{\alpha_1}, \ldots, x_n:A_n^{\alpha_n})^\ominus = $$
+$$(x_1:\alpha_1, \ldots, x_n:\alpha_n) $$
+$$
+\erule
+{\prov \Gamma \rctx\qquad \Gamma \prov A^\alpha : \rtype \qquad \Gamma^\ominus \prov \alpha \rbundle \using {\rctx,}}
+{\prov \Gamma, x : A^\alpha \rctx }
+$$
 \end{document}
