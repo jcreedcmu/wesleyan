@@ -131,6 +131,8 @@ $$
 $$\Gamma, y: A^{\alpha} \prov y^{y:=1} : A^{\alpha}$$
 $$\Gamma, y: A^{\alpha} \prov (F^{y:=1}_\mm y)^{y:=m} : (F^\alpha_\mm A)^{\alpha'}$$
 $${\Gamma, x:(F^\alpha_\mm A)^{\alpha'} \prov   C^\gamma : \rtype}$$
+
+$${\Gamma, y : A^\alpha, x:(F^\alpha_\mm A)^{\alpha'} \prov   C^{\gamma, y := m\gamma(x)} : \rtype}$$
 $$
 \erule
 {\Gamma \prov N^\nu : A^\alpha\qquad \Gamma, x:A^\alpha, \Gamma' \prov M^{\mu} : C^\gamma \qquad \mu \ge \nu \mu(x) \qquad \gamma \ge \nu \gamma(x) \using sub}
@@ -138,18 +140,48 @@ $$
 $$
 \vskip1em\hrule
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-$$[y, \mm / x]\gamma = (\gamma \without x), y := \mm \gamma(x)$$
+$$[y \mm / x]\gamma = (\gamma \without x), y := \mm \gamma(x)$$
+
 $$
 \erule
-{\Gamma, y: A^{\alpha}  \prov   N^{ [y, \mm / x]\nu} : [F_\mm^{y := 1} y/x]C^{[y, \mm / x]\gamma} \using FL}
+{\Gamma, y: A^{\alpha}  \prov   N^{ [y \mm / x]\nu} : [F_\mm^{y := 1} y/x]C^{[y \mm / x]\gamma} \using FL}
 {\Gamma, x:(F^\alpha_\mm A)^{\alpha'} \prov  (\blet F_\mm y = x \bin N)^\nu : C^\gamma}
 $$
+
+%% $$
+%% \erule
+%% {\Gamma, y : A^\alpha \prov \rid_\Gamma : \Gamma \qquad \Gamma, y : A^\alpha \prov F_\mm^{y:=1} y : F^\alpha_\mm A}
+%% {\Gamma, y: A^{\alpha} \prov \rid_\Gamma [F_\mm^{y:=1} y / x] + [y\mm / x] : \Gamma, x : (F^\alpha_\mm A)}
+%% $$
 
 $$
 \erule
 {\Gamma \prov N^\nu : (U_\mm A)^\alpha \qquad \nu' \ge \nu \mm \qquad \alpha' \ge \alpha \mm \using U\mathcal E}
 {\Gamma \prov (\tilde U_\mm N)^{\nu'} : A^{\alpha'}}
 $$
+
+\subsubsection{Sigma}
+$$
+\erule
+{\Gamma \prov A^\alpha : \rtype \qquad \Gamma, x : A^\alpha \prov B^{\alpha, x := 1} : \rtype}
+{\Gamma \prov (\Sigma x \cn A . B)^\alpha : \rtype}
+\qquad
+\erule
+{\Gamma \prov M^\nu : A^\alpha \qquad \Gamma \prov N^\nu : [M/x]B^\nu \qquad \nu \ge \alpha}
+{\Gamma \prov (\langle M, N\rangle)^\nu : (\Sigma x \cn A . B)^\alpha}
+$$
+
+
+%% $$
+%% \erule
+%% {\Delta \prov \sigma : \Gamma\qquad \Delta \prov M^{\sigma \nu} : \sigma A^\alpha}
+%% {\Delta \prov (\sigma, M/x) : (\Gamma, x^\nu:A^\alpha)}
+%% \qquad
+%% \erule
+%% {\Delta \prov \sigma : \Gamma \qquad \Gamma \prov N^\nu : A^\alpha}
+%% {\Delta \prov \sigma N^{\sigma \nu} : \sigma A ^ {\sigma \alpha}}
+%% $$
+
 
 \subsubsection{Bundle Inequality}
 \fbox{$\alpha \ge \beta$}
