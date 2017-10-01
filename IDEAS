@@ -898,3 +898,369 @@ A: https://wesleyanedu.service-now.com/ess//incident_status.do
 
 Q: Does anything go wrong with totally decoupled term bundles from type bundles
 A: ???
+
+=== 2017.09.27
+
+Q: What's the dance we have to do to justify the type upstairs in $FL$ is well-formed?
+A:
+Something like
+<<<
+$$\Gamma, y: A^{\alpha} \prov y^{y:=1} : A^{\alpha}$$
+$$\Gamma, y: A^{\alpha} \prov (F^{y:=1}_\mm y)^{y:=m} : (F^\alpha_\mm A)^{\alpha'}$$
+$${\Gamma, x:(F^\alpha_\mm A)^{\alpha'} \prov   C^\gamma : \rtype}$$
+
+$${\Gamma, y : A^\alpha, x:(F^\alpha_\mm A)^{\alpha'} \prov   C^{\gamma, y := m\gamma(x)} : \rtype}$$
+$$
+\erule
+{\Gamma \prov N^\nu : A^\alpha\qquad \Gamma, x:A^\alpha, \Gamma' \prov M^{\mu} : C^\gamma \qquad \mu \ge \nu \mu(x) \qquad \gamma \ge \nu \gamma(x) \using sub}
+{\Gamma, [N^\nu / x]\Gamma' \prov [N^\nu / x] (M^\mu) : [N^\nu / x](C^\gamma)}
+$$
+>>>
+but I'm not super confident in this.
+
+=== 2017.09.28
+
+Q: In [RS] what's an example of a non-exponentiable map between categories?
+A: ???
+
+=== 2017.09.29
+
+Q: In [RS], looking at the extension type
+ ⟨ Π_{t : I | ψ} A |^φ_{t.a} ⟩
+is it possible for A's well-formedness to depend on ψ without actually
+mentioning t?
+
+(I'm trying to understand when exactly the notation
+⟨ { t : I | ψ } → A |^φ_{t.a} ⟩
+is justified, as defined at the end of section 2)
+A: ???
+
+Q: Where's avezzosi@'s agda implementation stuff for ♭?
+A: agdac//1f943c9 and agdac//154073c, the difference from branch parametric to branch flat.
+
+DONE: convinced IT to let me change my wesleyan account to jcreed@, I
+think.
+
+=== 2017.09.30
+
+Q: How to get Skim to open a pdf to a certain page?
+A:
+https://emacs.stackexchange.com/questions/30344/how-to-link-and-open-a-pdf-file-to-a-specific-page-skim-adobe
+links to org-mac.el at
+http://orgmode.org/worg/org-contrib/org-mac-link.html
+Or wait I can get by on the commandline with just
+$ open -a /Applications/Skim.app some.pdf
+and I don't even need to give a full path like I do with
+$ open /Applications/Skim.app --args `pwd`/some.pdf
+
+Q: How do I reload a file from applescript?
+A:
+$ osascript -e 'tell document "some.pdf" of application "Skim" to revert'
+
+
+Q: What's a particular fixing of notation for the cast of characters in a fibration
+that makes it look like a pullback?
+A:
+<<<
+π : ℰ → ℬ
+
+ x
+   φ   ψ
+     a   -f→   b
+ ↧π
+   ↧π
+ X   ↧π   ↧π   ↧π
+   Φ
+     A   -F→   B
+>>>
+
+"π is a fibration" = ∀ (A B : ℬ)(F : A → B)(b : π⁻¹ B) → ∃ (a : π⁻¹ A) (f : a → b) × f is cartesian.
+
+"f is cartesian" = ∀ (X : ℬ) (x : π⁻¹ X) (Φ : X → A) (ψ : π⁻¹ (F ∘ Φ) : x → b) → ∃! (φ : π⁻¹ Φ : x → a) × (f ∘ φ = ψ)
+
+
+Q: What does the bifibration situation look like for the mode 2-multicategory just being a monoid?
+A:
+<<<
+    Γ .
+     \  ' .
+      \     ' .
+    ↧  ↘        '↘
+        UA -----→ A
+        m
+    * .
+     \  ' . nm    ↧
+    n \     ' .
+       ↘        '↘
+        * ------→ *
+             m
+
+Γ ⊢[nm] A
+═════════
+Γ ⊢[n] UA
+
+    C ↖
+     ↖  ' .
+      \     ' .
+    ↧  \        '
+        FA ←----- A
+        m
+    * ↖
+     ↖  ' . mn    ↧
+    n \     ' .
+       \        '
+        * ←------ *
+             m
+
+A ⊢[mn] C
+═════════
+FA ⊢[n] C
+>>>
+
+=== 2017.10.01
+
+Q: How do I want to generalize the following?
+<<<
+Suppose I have a fibration
+    π
+𝔼 ────→ 𝔹
+
+I can also think of this as a single category ℂ living over the arrow category
+
+    p
+𝐄 ────→ 𝐁
+
+The objects in ℂ living over 𝐄 are the objects of 𝔼.
+The objects in ℂ living over 𝐁 are the objects of 𝔹.
+The arrows in ℂ living over 1_𝐄 are the arrows of 𝔼.
+The arrows in ℂ living over 1_𝐁 are the arrows of 𝔹.
+The remaining arrows in ℂ are pairs (E, b) where E is an object
+of 𝔼 and b is an arrow πE → B in 𝔹.
+
+Composition should be pretty clear. The interesting case is
+when we compose e : E1 → E2 upstairs with a transverse b : πE2 → B
+and the answer is (b ∘ πe) : πE1 → B
+
+In general, if F : ℂ → 𝔻 and p is an arrow in 𝔻, we say _ℂ has
+pullbacks along p_ if the pullback universal property holds like
+
+      X   →
+        ↘
+      ↓   E ─────→ E'
+          │        │
+          │        │
+          ↓        ↓
+          B ─────→ B'
+
+          over
+
+      𝐄   =
+        =
+      p   𝐄 ══════ 𝐄
+          │        │
+          p        p
+          ↓        ↓
+          𝐁 ══════ 𝐁
+>>>
+A: I think I just want to say: suppose F : ℂ → 𝔻 is a functor.
+We say a diagram in 𝔻 like
+
+                   B
+                   │
+                   │g
+                   ↓
+          C ─────→ D
+              f
+
+has an F-pullback if first of all there is a pullback in 𝔻
+
+               π₂
+         B×C ────→ B
+          │─┘      │
+        π₁│        │g
+          ↓        ↓
+          C ─────→ D
+              f
+
+And every ℂ-cospan over BCD has a universal cone over π₁,π₂?
+
+Q: So what's the definition of fibration given this idea?
+A:
+You start with your
+    π
+𝔼 ────→ 𝔹
+
+and construct from it ℂ ─F→ (𝐄 ─p→ 𝐁), and demand that p and 1_𝐁 have
+an F-pullback.
+
+Q: Is this the same as F 'creating the pullback of f and g'
+A: ???
+
+Q: Relevant links to this question?
+A:
+https://mathoverflow.net/questions/103065/what-is-the-correct-definition-of-creation-of-limits
+https://ncatlab.org/nlab/show/created+limit
+http://permalink.gmane.org/gmane.science.mathematics.categories/6644
+
+Q: Is the functor over 𝐄 ─p→ 𝐁 itself a fibration?
+A: Hmm maybe it's an opfibration. Given E, I can certainly lift along
+p to πE, where the requisite transverse arrow is 1_{πE}.
+
+          πE ←──── E
+
+          ↧        ↧
+
+          𝐁 ←───── 𝐄
+               p
+
+Yeah that would require all transverse arrows E → B to correspond to
+B-arrows that look like πE → B, which seems true.
+
+Q: Actually wait I'm not so sure about my definition in terms of
+F-pullbacks, now. It seems prima facie more general than the fibrancy
+condition. When I choose something over
+
+                   𝐄
+                   │
+                   p
+                   ↓
+          𝐁 ══════ 𝐁
+
+it's not just a 𝔹-morphism downstairs, and an *object* of 𝔼, it's a
+𝔹-morphism and a transverse morphism. Does being a fibration guarantee
+an F-pullback of _that_?
+A: Let's try. I start out with the data
+
+                   E'
+                   ↧
+                  πE'
+              b    ↓c'
+          B ─────→ B'
+
+Can I at least form the putative pullback square? Ugh, no, because c'
+is going the wrong way. Let's try reversing it?
+
+                   E'
+                   ↧
+                  πE'
+              b    ↑c'
+          B ─────→ B'
+
+Hmmm now I've got transverse morphism living over E ─p→ B is actually
+made up of a morphism B → πE not the other way around. I tried drawing
+the diagram
+
+          E ──e──→ E'
+          ↧        ↧
+         πE ─πe──→ πE'
+          ║        ↑c'
+          B ──b──→ B'
+
+which does seem to arise out of fibrancy but I can't seem to
+understand what composition in ℂ is anymore. Grr.
+
+---
+
+Ok, how about, desperate measures here, maybe 𝔻 is
+        p,q
+e ⟳ 𝐄 ─────→ 𝐁 ⟲ b
+
+with all of 𝔹 living over b instead of 1_𝐁, all of 𝔼 living over e
+instead of 1_𝐄 and
+
+b ∘ p = b ∘ q = q = p ∘ e = q ∘ e = q
+e ∘ e = e   b ∘ b = b
+
+The morphisms that live over p are just pairs (E, πE) with no real
+morphism content. A morphism that lives over q is what I was trying to
+define as a transverse morphism before, namely a triple (E, f, B) with
+f : πE → B.
+
+Now I think I want to consider the pullback of b against p, and I'm
+not even sure I can pull that off in this 𝔻. Or wait, maybe I can...
+
+              e
+          𝐄 ─────→ 𝐄
+          │─┘      │
+         p│        │p
+          ↓        ↓
+          𝐁 ─────→ 𝐁
+              b
+
+at least commutes. Is it a pullback? The only thing X can be is 𝐄. The
+only thing that the overall diagonal can be is q, because p doesn't
+factor through b. So the top input projection has to be e not 1_𝐄. The
+side input projection could be either p or q. But either of these has
+a unique solution:
+
+      𝐄   e
+        e
+      q   𝐄 ──e──→ 𝐄
+          │─┘      │
+          p        │p
+          ↓        ↓
+          𝐁 ─────→ 𝐁
+              b
+
+      𝐄   e
+        1
+      p   𝐄 ──e──→ 𝐄
+          │─┘      │
+          p        │p
+          ↓        ↓
+          𝐁 ─────→ 𝐁
+              b
+
+Ok, suppose fibrancy, to show pullbacks exist upstairs in ℂ. I've got
+
+                   E'
+
+                   ↧
+
+          B ──f──→ πE'
+
+living over
+
+                   𝐄
+                   │
+                   p
+                   ↓
+          𝐁 ──b──→ 𝐁
+
+and fibrancy gives me
+
+          E ──g──→ E'
+
+          ↧        ↧
+
+          B ──πg─→ πE'
+
+with πg = f and πE = B. This means the e-arrow g composed with the
+p-arrow for E' is the transverse arrow (E, πg, πE'), and so too is the
+composite of trivial p-arrow for E and the b-morphism πg. I think the
+more difficult case of checking that it's a pullback is the left input
+projection being q. So imagine
+
+      X        h
+                 ↘
+      ↧   E ──g──→ E'
+     πX
+      k   ↧        ↧
+        ↘
+          B ──f──→ B'
+
+living over
+
+      𝐄        e
+                 ↘
+          𝐄 ──e──→ 𝐄
+          │─┘      │
+      q   p        │p
+        ↘ ↓        ↓
+          𝐁 ─────→ 𝐁
+              b
+
+That is, we have a transverse k : πX → B in 𝔹 and an h : X → E' in 𝔼
+such that πh = f ∘ k. That's exactly what fibrancy wants to give us a
+unique arrow X → E over k satisfying the appropriate commutativities,
+I think.
