@@ -65,11 +65,13 @@ Q: More emacs advice about haskell dev?
 A:
 https://github.com/serras/emacs-haskell-tutorial/blob/master/tutorial.md
 
-Q: What's the thing I want to bind to M-.?
+Q: What's the go-to-definition thing I want to bind to M-.?
 A:
 haskell-mode-jump-to-def
 
-It seemed to take a long-ass time the first time I ran it, dunno why.
+Q: Why did it take so long the first time I ran it?
+A: Dunno, but someone else experienced a similar thing:
+https://blog.alainodea.com/en/article/490/haskell-intero-in-emacs-first-impressions-and-howto
 
 Q: Where are the sources to, like, the haskell base library including
 the prelude Control.Monad and everything?
@@ -230,7 +232,7 @@ script that achieves all these changes in a simple way.
 
 Q: What're some milestones in the history of editing the cubical code?
 A:
-agdac//e919f74e due to Andrea Vezzosi https://github.com/Saizan
+agdac//e919f74e due to avezzosi@ https://github.com/Saizan
 
 Q: What's the suffix .hs-boot for?
 A: Reifying cycles for mutuall recursive modules, see
@@ -344,7 +346,7 @@ which is a big mess.
 Q: Can I get any insight by just git blaming
 agda//src/full/Agda/Syntax/Abstract.hs
 A:
-Sure can! I see Vezzosi's agdac//c584e887 touching a thing called EqualP.
+Sure can! I see avezzosi@'s agdac//c584e887 touching a thing called EqualP.
 yup,
 <<<
   | EqualP Range [(Expr,Expr)]             -- ^ @i = i1@ i.e. cubical face lattice generator
@@ -374,7 +376,7 @@ I see during cabal repl?
 A:
 Just
 $ ln -s dist dist-2.6.0
-as andreas abel recommends in
+as andreasabel@ recommends in
 http://agda.chalmers.narkive.com/4ACGqXHw/problems-configuring-haskell-mode-and-or-invoking-cabal-repl
 
 Q: More basic stuff about cabal?
@@ -936,7 +938,7 @@ is justified, as defined at the end of section 2)
 A: ???
 
 Q: Where's avezzosi@'s agda implementation stuff for ♭?
-A: agdac//1f943c9 and agdac//154073c, the difference from branch parametric to branch flat.
+A: agdac//1f943c9 and agdac//154073c , the difference from branch parametric to branch flat.
 
 DONE: convinced IT to let me change my wesleyan account to jcreed@, I
 think.
@@ -1264,3 +1266,142 @@ That is, we have a transverse k : πX → B in 𝔹 and an h : X → E' in 𝔼
 such that πh = f ∘ k. That's exactly what fibrancy wants to give us a
 unique arrow X → E over k satisfying the appropriate commutativities,
 I think.
+
+Q: What's an example of noncofibrant spaces? I.e. map from 0 to the
+space is not a cofibration?
+A:
+https://lists.lehigh.edu/pipermail/algtop-l/2009q1/000332.html
+says
+
+one-point compactification of countably infinite discrete space
+warsaw circle
+
+but I'm not sure which notion of cofibration is supposed to be going
+on for them.
+
+=== 2017.10.02
+
+Q: Some stuff on model categories?
+A: http://etale.site/writing/model-cats-for-algebraists.pdf
+
+Q: Big ol book on topology and algebraic topology? Chapter 7 on
+cofibrations?
+A: http://groupoids.org.uk/pdffiles/topgrpds-e.pdf
+
+Q: What's an example of a Serre fibration (fibrant wrt CW complexes) that's not
+a Hurewicz fibration (fibrant wrt all spaces)?
+A: https://mathoverflow.net/questions/241575/serre-fibration-vs-hurewicz-fibration
+
+=== 2017.10.03
+
+Q: Does avezzosi@'s flat branch also have cubical stuff in it?
+A: Looks like yes.
+
+Q: How do I exercise composeRelevance in
+agda//src/full/Agda/Syntax/Common.hs
+?
+A:
+Well it gets called in
+agda//src/full/Agda/TypeChecking/Rewriting/NonLinMatch.hs
+which defines the typeclass PatternFrom with method patternFrom
+which gets called in
+agda//src/full/Agda/TypeChecking/Rewriting.hs
+in addRewriteRule which call comes after analyzing a Def from type
+DeclCont defined in
+agda//src/full/Agda/Auto/Syntax.hs
+and that Def comes from a variable core living in a TelV which is defined in
+agda//src/full/Agda/TypeChecking/Substitute.hs
+That data came out of the function telView defined in
+agda//src/full/Agda/TypeChecking/Telescope.hs
+
+Q: Why does branch-flat agda get hung up on
+{-# COMPILE GHC Level = type () #-}
+in
+agdalib//prim/Agda/Primitive.agda
+?
+
+Q: Well, where does {-# COMPILE GCH ... #-} come from?
+A: I don't see COMPILE in
+agda//src/full/Agda/Syntax/Parser/Lexer.x
+which is sort of worrying.
+
+Ugh it's not something to do with the pragma sharps, is it?
+A: Ohhh no, it's because
+/.cabal/share/x86_64-osx-ghc-7.10.3/Agda-2.6.0/lib/prim/Agda/
+is not properly in version control I think.
+
+Q: What's awesome in making sure I'm not going crazy?
+A: agda2-display-program-version
+displays the git commit it was compiled at, hallelujah.
+
+Q: Where does this get generated?
+A:
+agda//src/full/Agda/VersionCommit.hs
+
+Q: So what's going on with
+agda//src/data/lib/prim/Agda/Primitive.agda
+?
+A: Ah, a relatively recent commit agdac//d1e6a0d (which postdates
+avezzosi@'s commit) changed the format of these pragmas.
+
+Q: Where does agda look for Primitive.agda?
+A:
+Well, doing
+(setq agda2-program-args '("--no-default-libraries"))
+doesn't help.
+...
+Aha,
+agda//CHANGELOG.md (grep for Primitive.agda)
+says I want to set environment variable
+Agda_datadir
+
+Q: From the commandline, does
+$ export Agda_datadir=/Users/jreed/.cabal/sandboxes/agda-build/agda/src/data
+work?
+A: Yeah!
+
+Q: From elisp?
+A:
+(setenv "Agda_datadir" "/Users/jreed/.cabal/sandboxes/agda-build/agda/src/data")
+and restart the agda process.
+
+Q: Starting point for problems with jump-to-definition?
+A: https://stackoverflow.com/questions/28666113/goto-definition-in-emacs-haskell-mode
+
+Q: Where do agda compile logs go when I don't say --verbose?
+A: less +F /Users/jreed/.cabal/logs/Agda-2.6.0.log
+
+Q: What should I be using instead of cabal install?
+A: make install-bin I guess?
+
+=== 2017.10.04
+
+Q: What's Tom Leinster's aha moment about nerves of categories?
+A: https://golem.ph.utexas.edu/category/2008/01/mark_weber_on_nerves_of_catego.html
+
+Q: What's a case where being a fibrant object is nontrivial in a way I understand?
+A: The classical model structure on simplicial sets; being a fibrant
+object is the same as being a kan complex, i.e. having fillers for all
+horns.
+
+Q: What's the intuition for discrete fibrations?
+A: With my Grothendieck glasses on, a fibration of categories is like
+a functor ℂ^op → Cat, whereas a discrete fibration is like a functor
+ℂ^op → Set.
+
+Suppose π : 𝔻 → ℂ comes from the fibers of a presheaf. Then whenever
+we have D ∈ 𝔻 living over C2 and f : C1 → C2, there is a *unique* g
+living over f which tells us how to pull the object cod g (an element
+of the fiber over C2) back to the object dom g (an element of the
+fiber over C1). The fiber over an object is a discrete category from
+considering the identity arrows.
+
+Q: Do Street fibrations help me repair the idea from 2017.10.01?
+A: Hm, not that I can see, yet. If I say a 'transverse morphism'
+living over p is a ↦ followed by an iso, then I still can't
+post-compose on an arbitrary (i.e. non-iso) 𝔹-morphism.
+
+=== 2017.10.05
+
+Q: Where did I find something on nLab about a fibrationy generalization of profunctors?
+A: https://ncatlab.org/nlab/show/Grothendieck+fibration#twosided_version
