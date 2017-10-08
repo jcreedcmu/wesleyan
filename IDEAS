@@ -524,7 +524,7 @@ A: https://groups.google.com/forum/#!msg/homotopytypetheory/j2KBIvDw53s/YTDK4D0N
 Q: Where are haddock generated docs?
 A: /Users/jreed/.cabal/sandboxes/agda-build/agda/dist/doc/html/Agda/index.html
 
-Q: What's a concrete way to show off the non-fibrancy of II?
+Q: What's a concrete way to show off the non-fibrancy of 𝕀?
 A: ???
 
 Q: Where's the proof of
@@ -585,7 +585,8 @@ body.
 
 Q: Can I get any sort of interlibrary deals through wesleyan
 affiliation?
-A: ???
+A: I can VPN in and access acm dl at least.
+Anything else???
 
 Q: What should I make of the discussion on
 https://homotopytypetheory.org/2017/09/16/a-hands-on-introduction-to-cubicaltt/
@@ -594,11 +595,11 @@ don't feel like I grasp what's at stake.
 A: ???
 
 Q: In [ShuFix] inbetween eqn 4.1 and eqn 4.2, it says
-♭(A → B) → ♭(♭A → ♭B)
+(a) ♭(A → B) → ♭(♭A → ♭B)
 is obtainable. But surely also we can get
-♭(A → B) → (♭A → ♭B)
+(b) ♭(A → B) → (♭A → ♭B)
 I'd think, at least?
-A: ???
+A: derp, (a) is already stronger than (b).
 
 Q: What's my thoughts on I prefer to think about the '2-categorical
 adjoint logic' stuff?
@@ -856,10 +857,11 @@ designing and proving coherent a system when you can just translate it
 away to FOL, but that's my bias showing.
 
 Q: What's going on with the embedding/encoding distinction in [Fib2]?
+(search "A point of contrast with substructural logical frameworks")
 A: ???
 
 Q: What are the implications of thinking about two-cells between mode morphisms
-(saying things like u ∘ f ≤ 1) and merely talking about preorders on 'terms'
+(saying things like u ∘ f ≤ 1) versus merely talking about preorders on 'terms'
 (saying things like ∀x . u(f(x)) ≤ x)
 A: ???
 
@@ -1405,3 +1407,165 @@ post-compose on an arbitrary (i.e. non-iso) 𝔹-morphism.
 
 Q: Where did I find something on nLab about a fibrationy generalization of profunctors?
 A: https://ncatlab.org/nlab/show/Grothendieck+fibration#twosided_version
+
+Q: Where did I find a nice characterization of cartesian morphisms as pullbacks of homsets?
+A: http://maths.mq.edu.au/~street/Cicasm.pdf "Categories in categories, and size matters" Ross Street
+
+Q: So am I right that this whole business with comprehension
+categories or categories with families is to resolve the mismatch
+between syntax, where substitution is associative on the nose, and
+naive lccc semantics, where it's not? If we do synthetic,
+suitably-univalent category theory, do we get any wins here? Can we
+just do the naive lccc thing and get that substitution is associative
+up to a path?
+A: ???
+
+Q: What's a nice easy-going narrative of all this fibrationy stuff?
+A: http://www.cs.nott.ac.uk/~psxpc2/report-2013.pdf "Type Theory through Comprehension Categories"
+
+Q: What do nonfibration functors correspond to Grothendieck-wise?
+A: Functors from the base category 𝔹 into Prof instead of Cat; that is,
+the fibers are connected by profunctors (morphisms in Prof) rather
+than functors (morphisms in Cat)
+...
+More concretely, say I have F : 𝔼 → 𝔹. I want to think of this as a
+functor 𝔹^op → Prof. An object B in 𝔹 goes to its fiber F^*(B) like normal.
+A morphism f : B1 → B2 in 𝔹 should go to some profunctor F^*(B2) → F^*(B1), i.e.
+a functor F^*(B1)^op × F^*(B2) → Set. But that's easy; let it be the fiber over f.
+The object part is
+f♯(E1, E2) = { e : E1 → E2 ∈ 𝔼 | F E1 = B1, F E2 = B2, F e = f }
+and the arrow part on the first argument is
+<<<
+f♯(k : E1a → E1b over id_B1, E2) = (λ e . e ∘ k) :
+{ e : E1b → E2 ∈ 𝔼 | F e = f }
+→
+{ e : E1a → E2 ∈ 𝔼 | F e = f }
+>>>
+and the arrow part on the second argument is
+<<<
+f♯(E1, k : E2a → E2b over id_B2) = (λ e . k ∘ e) :
+{ e : E1 → E2a ∈ 𝔼 | F e = f }
+→
+{ e : E1 → E2b ∈ 𝔼 | F e = f }
+>>>
+I see now how it's critical that things live over the identity so the
+equation F e = f still holds after composition.
+
+Q: How do we make a representable profunctor?
+A:
+F : 𝔸 → 𝔹 becomes F♯ : 𝔸 × 𝔹^op → Set via
+F#(A, B) = 𝔹(B, F(A))
+F#(f : A1 → A2, B) = λg : 𝔹(B, F(A1)). Ff ∘ g
+F#(A, f : B1 → B2) = λg : 𝔹(B2, F(A)). g ∘ f
+
+Q: How do I VPN?
+A: http://www.wesleyan.edu/its/services/wireless/vpn.html
+
+Q: How do I do email forwarding?
+A: http://www.wesleyan.edu/its/services/accounts/desktop.html
+
+Q: Why can't I view e.g. http://exchange.blogs.wesleyan.edu/
+A: Had to be on VPN to make progress, but still can't read.
+"Topics related to Outlook and Entourage can be viewed by administrators only."
+
+Q: wesleyan webmail?
+A: https://owa.wesleyan.edu/owa/
+
+Q: What started making sense of ends and coends for me?
+A: https://ncatlab.org/nlab/show/extranatural+transformation
+
+Q: So where do I find the terms in a comprehension category?
+A: ???
+
+Q: What's the answer to the question about [RS] theorem 4.4 I asked Mike?
+A: I can find the question in my email by searching for
+<<<
+I'm taking another pass over this paper trying to digest as much as I
+can; really enjoying it. Here's a question that maybe has an easy
+answer. I'm just wondering if I'm misunderstanding something that
+should be obvious.
+>>>
+the answer I've generated for myself for now is
+<<<
+{-# OPTIONS --without-K #-}
+module a where
+
+open import HoTT
+
+pre : {A B : Set} (f : A → B) (b : B) → Set
+pre {A} {B} f b = Σ A (λ a → f a == b)
+
+lem : {A B C : Set} (f : A → B) (g : B → C) (c : C)
+  → pre (g ∘ f) c ≃ Σ (pre g c) (λ k → pre f (fst k))
+lem {A} {B} {C} f g c  = equiv into out zig zag where
+  into : pre (g ∘ f) c → Σ (pre g c) (λ k → pre f (fst k))
+  into (a , gfa/c) = ((f a) , gfa/c) , a , idp
+  out : Σ (pre g c) (λ k → pre f (fst k)) → pre (g ∘ f) c
+  out ((b , gb/c) , a , fa/b) = a , (ap g fa/b ∙ gb/c)
+  zig : (b : Σ (pre g c) (λ k → pre f (fst k))) → into (out b) == b
+  zig ((.(f a) , idp) , a , idp) = idp
+  zag : (a : pre (g ∘ f) c) → out (into a) == a
+  zag (a , gfa/c) = idp
+
+ext : {A B Q : Set} (f : A → B) (q : A → Q) → Set
+ext {A} {B} {Q} f q = Σ (B → Q) (λ h → h ∘ f == q)
+
+thm : {φ ψ χ X : Set} (f : φ → ψ) (g : ψ → χ) (q : φ → X)
+  → ext (g ∘ f) q ≃ Σ (ext f q) (λ k → ext g (fst k))
+thm f g q = lem (_∘ g) (_∘ f) q
+>>>
+which is to say, indeed, in the nondependent case, having a two-step
+extension is the same as having a one-step extension along the
+composite.
+
+=== 2017.10.06
+
+Q: What's a great early post ideas that fed into [RS]?
+A: https://golem.ph.utexas.edu/category/2012/06/directed_homotopy_type_theory.html
+
+Q: Stuff about stratified spaces that david corfield mentioned in the comments on that post?
+A:
+https://ocw.mit.edu/courses/mathematics/18-965-geometry-of-manifolds-fall-2004/lecture-notes/lecture12.pdf
+http://aimsciences.org/journals/pdfsnews.jsp?paperID=2468&mode=full
+https://ncatlab.org/nlab/show/poset-stratified+space#AFRshh
+
+Q: Where's the other post that I'm thinking of?
+A: Ah, it's by eriehl@:
+https://golem.ph.utexas.edu/category/2017/05/a_type_theory_for_synthetic_ca.html
+
+Q: What's the obstacle to constructing a subuniverse or something that
+is Segal, (with specifically the functions between types being the
+morphisms) if the universe as is isn't? Can't I just make a DHIT for
+this?
+A: Well... I realize I need the DHIT to include data for the way that
+functions actually do compose. In pseudo-Agda I might say something
+like
+<<<
+data Fset : Set₁ where
+  name : Set → Fset
+  mor : {A B : Set} (f : A → B) → hom (name A) (name B)
+  comp : {A B C : Set} (f : A → B) (g : B → C) → (mor f ∙ mor g) == mor (g ∘ f)
+>>>
+where ∙ denotes segal composition (which I guess I just kind of
+presume is freely generated — I guess by DHIT I mean 'segal HIT' or
+perhaps 'rezk HIT'?) , and ∘ denotes function composition. Or else
+constructing a DHIT doesn't presume segalness, and instead what I
+should be doing is throwing in an appropriate 2-simplex for each
+function composition, then *proving* somehow that the result is segal.
+
+=== 2017.10.07
+
+Q: Is there any sense in which a bifibration looks like a category of relations on top of a relation?
+A: Seems like it, yes.
+
+=== 2017.10.08
+
+Q: For type-checking, and therefore definitional-equality-checking in
+[RS]-world, can I get away with considering all finitely many
+disjunctive possibilities, as dlicata@ suggested?
+A: Yeah, I think maybe so; maybe this even obviates needing to think hard about η?
+I tend to thing that
+φ ∨ ψ ⊢ a ≡ rec^{φ,ψ}_∨(b, c) ⇐⇒ (ψ ∨ (a ≡ b)) ∧ (φ ∨ (a ≡ c))
+or maybe equivalently
+φ ∨ ψ ⊢ a ≡ rec^{φ,ψ}_∨(b, c) ⇐⇒ (φ ⇒ (a ≡ b)) ∧ (ψ ⇒ (a ≡ c))
+?
