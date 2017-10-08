@@ -1569,3 +1569,8 @@ I tend to thing that
 or maybe equivalently
 φ ∨ ψ ⊢ a ≡ rec^{φ,ψ}_∨(b, c) ⇐⇒ (φ ⇒ (a ≡ b)) ∧ (ψ ⇒ (a ≡ c))
 ?
+
+Q: What do I get out of that parametricity-via-bifibrations paper [JG] that dlicata@ mentioned?
+A: Not a whole lot yet; I think I'm in a position of somewhat greater
+generality by considering an arbitrary finite-product-preserving
+bifibration ℂ → 𝔻, for whatever that's worth.

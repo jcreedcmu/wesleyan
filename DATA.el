@@ -21,4 +21,7 @@
  ("OrtonPitts"
   "http://drops.dagstuhl.de/opus/volltexte/2016/6564/pdf/LIPIcs-CSL-2016-24.pdf"
   "Axioms for Modelling Cubical Type Theory in a Topos")
+ ("JG"
+  "https://personal.cis.strath.ac.uk/fredrik.nordvall-forsberg/papers/bifibparam_mfps2015.pdf"
+  "Bifibrational functorial semantics of parametric polymorphism")
  )
