@@ -1,0 +1,92 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rtype{\mathrm{type}}
+\def\rdom{\mathrm{dom}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rflat{\mathbf{Flat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbf{E}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\author{Jason Reed}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Relations via Bifibrations}
+Suppose we have a bifibration $p : \E \to \B$ that strictly preserves a choice
+of finite products on each category.
+We write the bifibration structure like this: if $R\in \E$,
+and $f : X \to pR$ is an arrow downstairs, then $\pi_f : f^* R \to R$
+is the arrow guaranteed by the fibration structure. If $g : pR \to Y$
+is an arrow downstairs, then $\iota_g : R \to \Sigma_g R$ is the arrow guaranteed
+by the opfibration structure.
+
+What's the identity relation on an object $B\in \B$? It's constructed like so:
+\[
+ \begin{tikzcd}
+\Sigma_\delta \pi^* \ar[d, mapsto] 1 & \ar[l] \pi^* 1 \ar[r] \ar[d, mapsto]
+ & 1 \ar[d, mapsto] \\
+B\x B & B \ar[r, "\pi" swap] \ar[l, "\delta"] & 1
+ \end{tikzcd}
+\]
+What's the composite of $R \mapsto A \x B$ and $S \mapsto B \x C$? First
+we form $R \x S \mapsto (A \x B) \x (B \x C)$, then do
+\[
+ \begin{tikzcd}
+\Sigma_\pi \delta^* (R \x S) \ar[d, mapsto]  & \ar[l] \delta^* (R\x S) \ar[r] \ar[d, mapsto]  & R\x S \ar[d, mapsto] \\
+A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
+ \end{tikzcd}
+\]
+
+\section{Embedding Categories}
+
+I have a category $\C$ in mind, whose objects are $\C_0$ and whose
+morphisms are $\C_1$, with domain and codomain
+maps
+\begin{tikzcd}[cramped] A \ar[r, "c", shift left] \ar[r, "d" swap, shift right] & B \end{tikzcd}.
+Let $\B$ be $(\FinSet/\C_0)^\op$.
+The objects of $\E$ are a choice of sets $Q, F, C$, morphisms $q : Q \to \C_1$, $f : Q+Q\to F$,
+$g: C \to F$, $f : F \to \C_0$, and $c : C \to \C_0$, such that
+\[
+\begin{tikzcd}
+ Q+Q \ar[dr, "{(d\o q, c\o q)}", bend right, swap]\ar[r, "f"] & F\ar[d, "n_f"] & C \ar[l, "c", swap]\ar[dl, bend left, "n_c"]\\
+&\C_0
+\end{tikzcd}
+\]
+\end{document}
