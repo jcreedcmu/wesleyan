@@ -79,14 +79,16 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
 I have a category $\C$ in mind, whose objects are $\C_0$ and whose
 morphisms are $\C_1$, with domain and codomain
 maps
-\begin{tikzcd}[cramped] A \ar[r, "c", shift left] \ar[r, "d" swap, shift right] & B \end{tikzcd}.
+\begin{tikzcd}[cramped] \C_1 \ar[r, "c", shift left] \ar[r, "d" swap, shift right] & \C_0 \end{tikzcd}.
 Let $\B$ be $(\FinSet/\C_0)^\op$.
-The objects of $\E$ are a choice of sets $Q, F, C$, morphisms $q : Q \to \C_1$, $f : Q+Q\to F$,
-$g: C \to F$, $f : F \to \C_0$, and $c : C \to \C_0$, such that
-\[
-\begin{tikzcd}
- Q+Q \ar[dr, "{(d\o q, c\o q)}", bend right, swap]\ar[r, "f"] & F\ar[d, "n_f"] & C \ar[l, "c", swap]\ar[dl, bend left, "n_c"]\\
-&\C_0
-\end{tikzcd}
-\]
+Observe that there is an inclusion $\iota$ of
+objects of $\FinSet/\C_1$ into objects of $\FinSet/\C_0$,
+by taking $q : Q \to \C_1$ to $(d\o q, c\o q) : Q + Q \to \C_0$.
+
+The objects of $\E$ are spans
+\begin{tikzcd}[cramped,sep=small]
+\iota Q \ar[from=r] & F & C \ar[from=l, swap]
+\end{tikzcd} in $\B$. The projection functor $p : \B \to \E$ takes
+such a span to its right leg $C$.
+
 \end{document}
