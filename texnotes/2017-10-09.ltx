@@ -26,6 +26,7 @@
 \def\rid{\mathrm{id}}
 \def\C{\mathbf{C}}
 \def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
 \def\B{\mathbf{B}}
 \def\F{\mathbb{F}}
 \def\H{\mathbf{H}}
@@ -48,6 +49,7 @@
   \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
   \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
 }
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \author{Jason Reed}
 \begin{document}
 
@@ -58,6 +60,90 @@
 % got this from
 % https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
 % ???
+
+\section{Easy Fibration Facts}
+\begin{lemma}
+If $f$ is an iso, (with inverse, say, $f^{-1}$) then
+\[
+ \begin{tikzcd}
+A \ar[d,mapsto]\ar[r,"f"] & B\ar[d,mapsto]\\
+pA \ar[r,"pf" swap] & pB\\
+ \end{tikzcd}
+\]
+is cartesian.
+\end{lemma}
+
+\begin{proof}
+Let $g, k$ be given in
+\[
+ \begin{tikzcd}
+X \ar[rd, "h" swap]\ar[rrd, "g"]\maps\\
+&A \maps\ar[r,"f" swap] &[4em] B\maps\\
+pX\ar[rd, "k" swap]\ar[rrd, "{pf \o k}"]\\
+&pA \ar[r,"pf" swap] & pB\\
+ \end{tikzcd}
+\]
+such that $pg = pf \o k$. We must find a unique $h$ over $k$ such that $fh = g$.
+But this must be $h = f^{-1} g$, and indeed can be, for we have
+\[p(f^{-1} g) = (pf^{-1})(pg) = (pf^{-1})(pf) k = k\]
+\cqed
+\end{proof}
+
+\begin{lemma}
+Any cartesian lifting of an iso is iso.
+\end{lemma}
+
+\begin{proof}
+Start with
+\[
+ \begin{tikzcd}
+A \ar[d,mapsto]\ar[r,"f"] & B\ar[d,mapsto]\\
+pA \ar[r,"g" swap] & pB\\
+ \end{tikzcd}
+\]
+and assume $g$ has an inverse $g^{-1}$. The inverse of $f$ is found by
+\[
+ \begin{tikzcd}
+B \ar[rd, "f^{-1}" swap]\ar[rrd, equals]\maps\\
+&A \maps\ar[r,"f" swap] &[4em] B\maps\\
+pB\ar[rd, "{g^{-1}}" swap]\ar[rrd, equals]\\
+&pA \ar[r,"g" swap] & pB\\
+ \end{tikzcd}
+\]
+
+By two-pullback lemma, this means $f^{-1}$ is a cartesian lift of $g^{-1}$. So we can
+repeat the argument to demonstrate that $f^{-1}$ has a right {\em and} left
+inverse, so they must be equal, hence $f$ is an iso.
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+Any cartesian lifting is unique up to isomorphism.
+\end{lemma}
+
+\begin{proof}
+\[
+ \begin{tikzcd}
+A_1 \ar[rd, dotted, shift right=0.5em]\ar[from=rd, dotted]\ar[rrd, "{f_1}"]\maps\\
+&A_2 \maps\ar[r,"{f_2}" swap] &[4em] B\maps\\
+pA\ar[rd, equal]\ar[rrd, "f"]\\
+&pA \ar[r,"f" swap] & pB\\
+ \end{tikzcd}
+\]
+Suppose $f_1$ and $f_2$ are cartesian over $f$. Then we get arrows back and forth between
+$A_1$ and $A_2$ that necessarily compose to the identity.
+\cqed
+\end{proof}
+\begin{lemma}
+The composition of two cartesian morphisms is again cartesian.
+\end{lemma}
+
+\begin{proof}
+Two-pullback lemma.
+\cqed
+\end{proof}
+
 
 \section{Relations via Bifibrations}
 Suppose we have a bifibration $p : \E \to \B$ that strictly preserves a choice
@@ -85,14 +171,59 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
  \end{tikzcd}
 \]
 
-\section{Embedding Categories}
+% These diagrams represent so far unsuccessful
+% attempts at understanding why functions compose to functions:
+
+%% \[
+%% \begin{tikzcd}
+%% \{(a,b,c) \st aRb, bSc\}\ar[rr, "\delta^*"]\ar[dr, "{\Sigma_\pi}" swap]\maps &&R \x S\ar[dr, "{\Sigma_\pi}"]\maps \\[1em]
+%% &Q\ar[from=rr, "{\Sigma_\pi}", pos=0.8, crossing over]&&A \x B \ar[dd, equal]\\[1em]
+%% A\x B \x C\ar[rr, "\delta", pos=0.8]\ar[dr,"\pi" swap]&&A\x B\x B\x C\ar[dr,"\pi"]\\[1em]
+%% &A\ar[from=rr,"\pi"]\ar[from=uu, mapsto, crossing over, shorten >= 2em, shorten <= 2em]&&A \times B\\
+%% \end{tikzcd}
+%% \]
+
+%% \[
+%%  \begin{tikzcd}
+%% R \x S \ar[from=rd, "f^{-1}"]\ar[from=rrd]\maps\\
+%% &A\x B \maps\ar[from=r,"{\Sigma_\pi}"] &[4em] R\x S\maps\\
+%% A\x B\x B\x C\ar[from=rd, "{g^{-1}}"]\ar[from=rrd]\\
+%% &A\x B \ar[from=r,"\pi"] & A\x B\x B\x C\\
+%%  \end{tikzcd}
+%% \]
+
+
+In order to have a well-behaved category of such bifibrations, we want to also require
+a specified full subcategory $\T \to \E$ of `trivial' objects of $\E$, such that
+\begin{itemize}
+\item If $T_1 \in \T$ and $T_1 \cong T_2 \in \E$, then $T_2 \in \T$.
+\item $1 \in \T$, the product of any two trivial objects is trivial.
+\item If $T\in \T$ and $f \in \B$, then $f^* T \in \T$.
+\end{itemize}
+
+ A morphism from one bifibration to another is a
+morphism triple $(t, e, b)$ such that
+\[
+ \begin{tikzcd}
+\T_1 \ar[r, "t"]\ar[d, hook]& \T_2\ar[d, hook]\\
+\E_1 \ar[r,"e"]\ar[d]& \E_2\ar[d]\\
+\B_1 \ar[r,"b" swap]& \B_2
+ \end{tikzcd}
+\]
+commutes, $e$ preserves cartesian and opcartesian morphisms, and $b$ and $e$ both preserve products.
+Let's call this the category of {\em relative cartesian bifibrations}.
+ {\color{red} I'm just using the word cartesian to mean `has/preserves
+   products', but there is apparently already a developed notion of
+   cartesian fibration which seems to mean something totally else.}
+\section{Embedding Cat in RelCartBif}
 
 
 I have a category $\C$ in mind, whose objects are $\C_0$ and whose
 morphisms are $\C_1$, with domain and codomain
 maps
 \begin{tikzcd}[cramped] \C_1 \ar[r, "d_0", shift left] \ar[r, "d_1" swap, shift right] & \C_0 \end{tikzcd}.
-We're going to define a cartesian bifibration $p : \E \to \B$.
+
+Let's derive an RCB from it. We need to figure out $p : \E \to \B$ and a subcategory $\T$ of $\E$.
 Let $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
 %% Observe that there is an inclusion $\iota$ of
 %% objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
@@ -101,7 +232,7 @@ Let $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
 \def\cmpr#1#2#3{{#1};{#2}\tri{#3}}
 \def\mkc#1{\Delta_{#1}}
 
-Let's define some syntax to build $\E$ out of:
+We're going to build $\E$ out of some syntactic expressions.
 \[
 \begin{tabular}{rc@{$\quad::=\quad$}l}
 Expressions&$e$&$x\celse f(e)$\\
@@ -111,12 +242,16 @@ Assignments&$\sigma$&$(\cdots  [e/x]\cdots)$\\
 Comprehensions&$K$&$\cmpr \Gamma E \sigma$\\
 \end{tabular}
 \]
-In the above, $f$ are morphisms in $\C_1$, and $A$ are objects in $\C_0$.
+In the above, $f$ are morphisms in $\C_1$, and $A$ are objects in
+$\C_0$. I'm eliding the typing rules for now because they are `mostly what
+you'd expect'.
 
 Suppose $B$ is a set $\{b_1, \ldots, b_n\}$.
-Let $\tau : B \to \C_0 \in \B$ be given.
-Define $\mkc\tau$ to be the context $x_{b_1} : \tau(b_1), \ldots, x_{b_n} : \tau(b_n)$.
+If $\tau : B \to \C_0 \in \B$, then we
+define $\mkc\tau$ to be the context $x_{b_1} : \tau(b_1), \ldots, x_{b_n} : \tau(b_n)$.
+We can regard a morphism $\phi : \tau \to \tau'$ as a substitution $\mkc\tau \prov \phi : \mkc{\tau'}$.
 
+\subsection{Defining the Total Category}
 An object of the category $\E$ over $\tau$ is a $\cmpr \Gamma E \sigma$
 such that $\Gamma \prov \sigma : \mkc\tau$.
 
@@ -128,10 +263,11 @@ such that $\Gamma \prov \sigma : \mkc\tau$.
 
 A morphism $(\cmpr \Gamma E \sigma) \to (\cmpr {\Gamma'}{E'}{\sigma'})$ over $\phi : \tau \to \tau'$
 is a substitution $\theta$ such that
-\[ (\mkc\tau \prov \phi : \mkc{\tau'}) \qquad \Gamma \prov \theta : \Gamma' \]
-\[ \Gamma, E \prov \theta E' \qquad \Gamma, E \prov \sigma \o \phi = \theta \o \sigma' : \mkc{\tau'}\]
+\[  \qquad \Gamma \prov \theta : \Gamma' \qquad
+ \Gamma, E \prov \theta E' \qquad \Gamma, E \prov \sigma \o \phi = \theta \o \sigma' : \mkc{\tau'}\]
 
-Step 0: Show that I can construct morphisms back and forth between different representations
+\subsection{Representing Composition}
+Construct morphisms back and forth between different representations
 of the composition
 \[
 a : A, b:B, b': B, c:C; b = b', b= f(a), c=g(b') \tri (a, c)
@@ -148,7 +284,7 @@ Backward, we pick
 \[\theta = [\alpha/a][f(\alpha)/b][f(\alpha)/b'][\gamma/c]\]
 and check that
 \[\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \prov  f(\alpha) = f(\alpha), f(\alpha)= f(\alpha), \gamma=g(f(\alpha)) \]
-Step 1: show that $p$ is a fibration.
+\subsection{Fibration}
 Let some $\phi : \tau' \to \tau$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
 The reindexing is $ \cmpr{\Gamma,\mkc{\tau'}} { E, \sigma = \phi} {\rid_{\mkc{\tau'}}}$.
 We need a morphism of this shape:
@@ -156,16 +292,25 @@ We need a morphism of this shape:
 It's the weakening substitution $\Gamma, \mkc{\tau'} \prov \rid_\Gamma : \Gamma$.
 
 
-Step 2: show that $p$ is an opfibration.
+\subsection{Opfibration}
 Let some $\phi : \tau \to \tau'$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
 The opreindexing is $\cmpr {\Gamma} {E} {\sigma \o \phi}$. The morphism
 $\cmpr {\Gamma} {E} {\sigma} \to \cmpr {\Gamma} {E} {\sigma \o \phi}$ that we need arises
 from setting $\theta = \rid_\Gamma$.
 
-Step 3: show that $p$ preserves products. It seems pretty clear that
+\subsection{Preserving Products}
+It seems pretty clear that
 $$\cmpr {\Gamma_1,\Gamma_2} {E_1,E_2} {\sigma_1,\sigma_2}$$
 is the product of $\cmpr {\Gamma_1} {E_1} {\sigma_1}$
 and $\cmpr {\Gamma_2} {E_2} {\sigma_2}$.
+
+\subsection{Trivial Subcategory}
+An object $T\in \E$ lives in $\T$ if it is isomorphic (in $\E$) to an object of the form
+$\Gamma; \cdot \prov \rid_\Gamma$.
+
+\subsection{Fullness of the Embedding}
+
+\subsection{Faithfulness of the Embedding}
 
 \section{Fancy Diagram That Is Nonetheless Wrong I Think}
 \[
