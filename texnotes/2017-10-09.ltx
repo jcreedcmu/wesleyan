@@ -85,6 +85,7 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
  \end{tikzcd}
 \]
 
+\vfil\eject
 \section{Embedding Categories}
 
 
@@ -92,15 +93,83 @@ I have a category $\C$ in mind, whose objects are $\C_0$ and whose
 morphisms are $\C_1$, with domain and codomain
 maps
 \begin{tikzcd}[cramped] \C_1 \ar[r, "d_0", shift left] \ar[r, "d_1" swap, shift right] & \C_0 \end{tikzcd}.
+We're going to define a cartesian bifibration $p : \E \to \B$.
 Let $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
-Observe that there is an inclusion $\iota$ of
-objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
-by taking $\theta : Q \to \C_1$ to $(d\o \theta, c\o \theta) : Q + Q \to \C_0$.
+%% Observe that there is an inclusion $\iota$ of
+%% objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
+%% by taking $\theta : Q \to \C_1$ to $(d\o \theta, c\o \theta) : Q + Q \to \C_0$.
 
-What is an object of the category $\E$? Intuitively, it's going to look like a formal set comprehension
+\def\cmpr#1#2#3{{#1};{#2}\tri{#3}}
+\def\mkc#1{\Delta_{#1}}
+
+Let's define some syntax to build $\E$ out of:
 \[
-\{(a, c) \st a \in A, b, b' \in B, c \in C, b = b', b = f(a), c = g(b')\}
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Expressions&$e$&$x\celse f(e)$\\
+Equations&$E$&$\cdot \celse E, (x_1 =  f(x_2))$\\
+Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
+Assignments&$\sigma$&$(\cdots  [e/x]\cdots)$\\
+Comprehensions&$K$&$\cmpr \Gamma E \sigma$\\
+\end{tabular}
 \]
+In the above, $f$ are morphisms in $\C_1$, and $A$ are objects in $\C_0$.
+
+Suppose $B$ is a set $\{b_1, \ldots, b_n\}$.
+Let $\tau : B \to \C_0 \in \B$ be given.
+Define $\mkc\tau$ to be the context $x_{b_1} : \tau(b_1), \ldots, x_{b_n} : \tau(b_n)$.
+
+An object of the category $\E$ over $\tau$ is a $\cmpr \Gamma E \sigma$
+such that $\Gamma \prov \sigma : \mkc\tau$.
+
+%% For example
+%% \[
+%% \{(a, c) \st a \in A, b, b' \in B, c \in C, b = b', b = f(a), c = g(b')\}
+%% \]
+
+
+A morphism $(\cmpr \Gamma E \sigma) \to (\cmpr {\Gamma'}{E'}{\sigma'})$ over $\phi : \tau \to \tau'$
+is a substitution $\theta$ such that
+\[ (\mkc\tau \prov \phi : \mkc{\tau'}) \qquad \Gamma \prov \theta : \Gamma' \]
+\[ \Gamma, E \prov \theta E' \qquad \Gamma, E \prov \sigma \o \phi = \theta \o \sigma' : \mkc{\tau'}\]
+
+Step 0: Show that I can construct morphisms back and forth between different representations
+of the composition
+\[
+a : A, b:B, b': B, c:C; b = b', b= f(a), c=g(b') \tri (a, c)
+\]
+\[
+\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \tri (\alpha, \gamma)
+\]
+Back and forth in both directions $\phi$ is the identity.
+Forward, we pick
+\[\theta = [a/\alpha][c/\gamma]\]
+and indeed
+\[a : A, b:B, b': B, c:C; b = b', b= f(a), c=g(b') \prov c = g(f(a))\]
+Backward, we pick
+\[\theta = [\alpha/a][f(\alpha)/b][f(\alpha)/b'][\gamma/c]\]
+and check that
+\[\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \prov  f(\alpha) = f(\alpha), f(\alpha)= f(\alpha), \gamma=g(f(\alpha)) \]
+Step 1: show that $p$ is a fibration.
+Let some $\phi : \tau' \to \tau$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
+
+Step 2: show that $p$ is an opfibration.
+Let some $\phi : \tau \to \tau'$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
+The opreindexing is just $\cmpr {\Gamma} {E} {\sigma \o \phi}$.
+
+Step 3: show that $p$ preserves products. It seems pretty clear that
+$$\cmpr {\Gamma_1,\Gamma_2} {E_1,E_2} {\sigma_1,\sigma_2}$$
+is the product of $\cmpr {\Gamma_1} {E_1} {\sigma_1}$
+and $\cmpr {\Gamma_2} {E_2} {\sigma_2}$.
+\end{document}
+
+%% \[
+%% \{(a, c) \st a \in A, b, b' \in B, c \in C, b = b', b = f(a), c = g(b')\}
+%% \]
+%% \[
+%% \{(a, c) \st a \in A, c \in C,  c = g(f(a))\}
+%% \]
+
+
 Formally, objects of $\E$ are spans
 \begin{tikzcd}[cramped,sep=small] \iota \theta \ar[from=r] & F & C \ar[from=l, swap] \end{tikzcd}
  in $\B$. The projection functor $p : \B \to \E$ takes
@@ -172,5 +241,3 @@ Q+Q \ar[rr, "f"] \ar[drr, "{(d_0q, d_1q)}" description] && F \ar[from=rr, "c" sw
 && && \C_0\\
 \end{tikzcd}
 \]
-
-\end{document}
