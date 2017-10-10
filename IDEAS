@@ -1594,3 +1594,22 @@ programmers by making them annotate how morphisms are preserved, how
 naturality squares are created, etc., but rather to discover the set
 of operations that preserve things things in a (to use the word
 informally) natural (one might say 'effortless') way.
+
+=== 2017.10.10
+
+Q: How make 2-cells in tikzcd?
+A:
+mshulman@ suggests
+<<<
+\def\twocell#1{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,from=\mynodeone,to=\mynodetwo]%
+}
+>>>
+in
+https://tex.stackexchange.com/questions/362743/2-cells-in-tikz-cd

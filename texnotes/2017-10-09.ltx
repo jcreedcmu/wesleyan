@@ -37,6 +37,17 @@
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \usepackage{tikz}
 \usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
 \author{Jason Reed}
 \begin{document}
 
@@ -101,6 +112,30 @@ In our example, this looks like a $\Sets/\C_0$-diagram
 & (A, B, C)
 \end{tikzcd}
 \]
+
+
+\[
+\begin{tikzcd}
+  Q \ar[r,"{\binl}"] \ar[d,"{\binr}" swap]  \twocell{dr}{"q" swap} & Q+Q \ar[d, "f"] \\
+  Q+Q \ar[r, "f" swap] & F
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+  Q \ar[r,"{\binl}"] \ar[d,"q" swap]   & Q+Q \ar[d, "{(d_0q, d_1q)}"] \\
+\C_1 \ar[r,"d_0" swap]& \C_0
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+Q\ar[rr, "\binl"]\ar[dr, "q" description]\ar[dd,"\binr" swap]&&Q+Q\ar[dr, "{(d_0q, d_1q)}"]\\
+&\C_1\ar[rr, "{d_0}", pos=0.2]\ar[dd, "{d_1}" swap, pos=0.2]&&\C_0\ar[dd, equal]\\
+Q+Q\ar[rr, crossing over, "f" swap, pos=0.8]\ar[dr,"{(d_0q, d_1q)}" swap]&&F\ar[from=uu, crossing over, "f", pos=0.8]\ar[dr]\\
+&\C_0\ar[rr, equal]&&\C_0\\
+\end{tikzcd}
+\]
+
+
 What's a morphism in $\E$? Some kind of mapping of renamings of elements in the output tuple. So a morphism
 from $\iota\theta \leftarrow F \to C$ to $\iota\theta' \leftarrow F' \to C'$ looks at first glance
 like an arrow $e : F \to F'$ in $(\Sets/\C_0)^\op$ together with $m : F' \to \C_1$ in $\Sets$ such that
