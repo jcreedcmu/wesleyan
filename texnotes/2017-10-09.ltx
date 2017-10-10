@@ -80,7 +80,7 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
 I have a category $\C$ in mind, whose objects are $\C_0$ and whose
 morphisms are $\C_1$, with domain and codomain
 maps
-\begin{tikzcd}[cramped] \C_1 \ar[r, "c", shift left] \ar[r, "d" swap, shift right] & \C_0 \end{tikzcd}.
+\begin{tikzcd}[cramped] \C_1 \ar[r, "d_0", shift left] \ar[r, "d_1" swap, shift right] & \C_0 \end{tikzcd}.
 Let $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
 Observe that there is an inclusion $\iota$ of
 objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
@@ -127,7 +127,7 @@ F \ar[d] \ar[from=r,"e" swap] & F' \ar[r,equal]\ar[d,"m",swap] & F' \ar[d]\\
 \]
 
 \[
-\begin{tikzcd}[sep=large]
+\begin{tikzcd}[sep=2.25em]
 Q+Q \ar[rr, "f"] \ar[drr, "{(d_0q, d_1q)}" description] && F \ar[from=rr, "c" swap] \ar[d]&& C \ar[dll]\\
  && \C_0 \ar[from=ddr, "d_0" description, pos=0.8]\\
 &Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "m_Q" description]  \ar[uul]&& F' \ar[d, "m_F" description] \ar[uul, crossing over, "e_F" description, pos=0.25] && C' \ar[ll, "c'" description] \ar[dll, "m_C" description] \ar[uul, "e_C" swap]\\
