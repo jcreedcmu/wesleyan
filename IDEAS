@@ -1613,3 +1613,13 @@ mshulman@ suggests
 >>>
 in
 https://tex.stackexchange.com/questions/362743/2-cells-in-tikz-cd
+
+Q: What else do I need to demand of a cartesian bifibration so that Cat has
+a full and faithful embedding in it?
+A: Something like a distinguished subcategory of the total category of
+the bifibration that consists of the "vertically iso" objects. With
+this I can detect that binary relations are functional (because the
+opreindexically obtained projection to the domain should then be iso
+in this sense) and since fibered maps from one bifibration to another
+will have to preserve opreindexing and also this subcategory, we'll
+have a functional relation in the output category also.

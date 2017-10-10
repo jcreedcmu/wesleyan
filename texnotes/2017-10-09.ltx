@@ -166,6 +166,20 @@ Step 3: show that $p$ preserves products. It seems pretty clear that
 $$\cmpr {\Gamma_1,\Gamma_2} {E_1,E_2} {\sigma_1,\sigma_2}$$
 is the product of $\cmpr {\Gamma_1} {E_1} {\sigma_1}$
 and $\cmpr {\Gamma_2} {E_2} {\sigma_2}$.
+
+\section{Fancy Diagram That Is Nonetheless Wrong I Think}
+\[
+\begin{tikzcd}[sep=2.25em]
+Q+Q \ar[rr, "f"] \ar[drr, "{(d_0q, d_1q)}" description] && F \ar[from=rr, "c" swap] \ar[d]&& C \ar[dll]\\
+ && \C_0 \ar[from=ddr, "d_0" description, pos=0.8]\\
+&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "m_Q" description]  \ar[uul]&& F' \ar[d, "m_F" description] \ar[uul, crossing over, "e_F" description, pos=0.25] && C' \ar[ll, "c'" description] \ar[dll, "m_C" description] \ar[uul, "e_C" swap]\\
+ &&& \C_1 \ar[ddr, "d_1" description, pos=0.2]\\
+&&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "{(d_0q', d_1q')}" description] \ar[from=uul, equal] && F' \ar[from=rr, "c'" description]
+ \ar[from=uul, crossing over, equal]\ar[d]&& C' \ar[dll]\ar[from=uul, equal]\\
+&& && \C_0\\
+\end{tikzcd}
+\]
+
 \end{document}
 
 %% \[
@@ -233,17 +247,5 @@ F \ar[d] \ar[from=r,"e" swap] & F' \ar[r,equal]\ar[d,"m",swap] & F' \ar[d]\\
 \begin{tikzcd}
 {(gf:a\mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
 & (A, C)
-\end{tikzcd}
-\]
-
-\[
-\begin{tikzcd}[sep=2.25em]
-Q+Q \ar[rr, "f"] \ar[drr, "{(d_0q, d_1q)}" description] && F \ar[from=rr, "c" swap] \ar[d]&& C \ar[dll]\\
- && \C_0 \ar[from=ddr, "d_0" description, pos=0.8]\\
-&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "m_Q" description]  \ar[uul]&& F' \ar[d, "m_F" description] \ar[uul, crossing over, "e_F" description, pos=0.25] && C' \ar[ll, "c'" description] \ar[dll, "m_C" description] \ar[uul, "e_C" swap]\\
- &&& \C_1 \ar[ddr, "d_1" description, pos=0.2]\\
-&&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "{(d_0q', d_1q')}" description] \ar[from=uul, equal] && F' \ar[from=rr, "c'" description]
- \ar[from=uul, crossing over, equal]\ar[d]&& C' \ar[dll]\ar[from=uul, equal]\\
-&& && \C_0\\
 \end{tikzcd}
 \]
