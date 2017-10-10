@@ -76,19 +76,66 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
 
 \section{Embedding Categories}
 
+
 I have a category $\C$ in mind, whose objects are $\C_0$ and whose
 morphisms are $\C_1$, with domain and codomain
 maps
 \begin{tikzcd}[cramped] \C_1 \ar[r, "c", shift left] \ar[r, "d" swap, shift right] & \C_0 \end{tikzcd}.
-Let $\B$ be $(\FinSet/\C_0)^\op$.
+Let $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
 Observe that there is an inclusion $\iota$ of
-objects of $\FinSet/\C_1$ into objects of $\FinSet/\C_0$,
-by taking $q : Q \to \C_1$ to $(d\o q, c\o q) : Q + Q \to \C_0$.
+objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
+by taking $\theta : Q \to \C_1$ to $(d\o \theta, c\o \theta) : Q + Q \to \C_0$.
 
-The objects of $\E$ are spans
-\begin{tikzcd}[cramped,sep=small]
-\iota Q \ar[from=r] & F & C \ar[from=l, swap]
-\end{tikzcd} in $\B$. The projection functor $p : \B \to \E$ takes
+What is an object of the category $\E$? Intuitively, it's going to look like a formal set comprehension
+\[
+\{(a, c) \st a \in A, b, b' \in B, c \in C, b = b', b = f(a), c = g(b')\}
+\]
+Formally, objects of $\E$ are spans
+\begin{tikzcd}[cramped,sep=small] \iota \theta \ar[from=r] & F & C \ar[from=l, swap] \end{tikzcd}
+ in $\B$. The projection functor $p : \B \to \E$ takes
 such a span to its right leg $C$.
+In our example, this looks like a $\Sets/\C_0$-diagram
+\[
+\begin{tikzcd}
+{(f:a\mapsto b)\atop(g : b' \mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, b, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, B, C)
+\end{tikzcd}
+\]
+What's a morphism in $\E$? Some kind of mapping of renamings of elements in the output tuple. So a morphism
+from $\iota\theta \leftarrow F \to C$ to $\iota\theta' \leftarrow F' \to C'$ looks at first glance
+like an arrow $e : F \to F'$ in $(\Sets/\C_0)^\op$ together with $m : F' \to \C_1$ in $\Sets$ such that
+\[
+\begin{tikzcd}
+F \ar[d] \ar[from=r,"e" swap] & F' \ar[r,equal]\ar[d,"m",swap] & F' \ar[d]\\
+\C_0 \ar[from=r,"d"] & \C_1 \ar[r,"c" swap]&\C_0
+\end{tikzcd}
+\]
+
+
+\[
+\begin{tikzcd}
+{(f:a\mapsto b)\atop(g : b' \mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, b, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, B, C)
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}
+{(gf:a\mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, C)
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}[sep=large]
+Q+Q \ar[rr, "f"] \ar[drr, "{(d_0q, d_1q)}" description] && F \ar[from=rr, "c" swap] \ar[d]&& C \ar[dll]\\
+ && \C_0 \ar[from=ddr, "d_0" description, pos=0.8]\\
+&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "m_Q" description]  \ar[uul]&& F' \ar[d, "m_F" description] \ar[uul, crossing over, "e_F" description, pos=0.25] && C' \ar[ll, "c'" description] \ar[dll, "m_C" description] \ar[uul, "e_C" swap]\\
+ &&& \C_1 \ar[ddr, "d_1" description, pos=0.2]\\
+&&Q'+Q' \ar[rr, crossing over, "f'" description] \ar[drr, "{(d_0q', d_1q')}" description] \ar[from=uul, equal] && F' \ar[from=rr, "c'" description]
+ \ar[from=uul, crossing over, equal]\ar[d]&& C' \ar[dll]\ar[from=uul, equal]\\
+&& && \C_0\\
+\end{tikzcd}
+\]
 
 \end{document}
