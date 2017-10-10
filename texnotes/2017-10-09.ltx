@@ -85,7 +85,6 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
  \end{tikzcd}
 \]
 
-\vfil\eject
 \section{Embedding Categories}
 
 
@@ -151,10 +150,17 @@ and check that
 \[\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \prov  f(\alpha) = f(\alpha), f(\alpha)= f(\alpha), \gamma=g(f(\alpha)) \]
 Step 1: show that $p$ is a fibration.
 Let some $\phi : \tau' \to \tau$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
+The reindexing is $ \cmpr{\Gamma,\mkc{\tau'}} { E, \sigma = \phi} {\rid_{\mkc{\tau'}}}$.
+We need a morphism of this shape:
+\[ (\cmpr{\Gamma,\mkc{\tau'}} { E, \sigma = \phi} {\rid_{\mkc{\tau'}}}) \to (\cmpr \Gamma E \sigma)\]
+It's the weakening substitution $\Gamma, \mkc{\tau'} \prov \rid_\Gamma : \Gamma$.
+
 
 Step 2: show that $p$ is an opfibration.
 Let some $\phi : \tau \to \tau'$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
-The opreindexing is just $\cmpr {\Gamma} {E} {\sigma \o \phi}$.
+The opreindexing is $\cmpr {\Gamma} {E} {\sigma \o \phi}$. The morphism
+$\cmpr {\Gamma} {E} {\sigma} \to \cmpr {\Gamma} {E} {\sigma \o \phi}$ that we need arises
+from setting $\theta = \rid_\Gamma$.
 
 Step 3: show that $p$ preserves products. It seems pretty clear that
 $$\cmpr {\Gamma_1,\Gamma_2} {E_1,E_2} {\sigma_1,\sigma_2}$$
