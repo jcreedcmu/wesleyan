@@ -171,26 +171,6 @@ A \x C &  \ar[l, "\pi" ] A \x B \x C \ar[r, "\delta" swap] & A \x B \x B \x C
  \end{tikzcd}
 \]
 
-% These diagrams represent so far unsuccessful
-% attempts at understanding why functions compose to functions:
-
-%% \[
-%% \begin{tikzcd}
-%% \{(a,b,c) \st aRb, bSc\}\ar[rr, "\delta^*"]\ar[dr, "{\Sigma_\pi}" swap]\maps &&R \x S\ar[dr, "{\Sigma_\pi}"]\maps \\[1em]
-%% &Q\ar[from=rr, "{\Sigma_\pi}", pos=0.8, crossing over]&&A \x B \ar[dd, equal]\\[1em]
-%% A\x B \x C\ar[rr, "\delta", pos=0.8]\ar[dr,"\pi" swap]&&A\x B\x B\x C\ar[dr,"\pi"]\\[1em]
-%% &A\ar[from=rr,"\pi"]\ar[from=uu, mapsto, crossing over, shorten >= 2em, shorten <= 2em]&&A \times B\\
-%% \end{tikzcd}
-%% \]
-
-%% \[
-%%  \begin{tikzcd}
-%% R \x S \ar[from=rd, "f^{-1}"]\ar[from=rrd]\maps\\
-%% &A\x B \maps\ar[from=r,"{\Sigma_\pi}"] &[4em] R\x S\maps\\
-%% A\x B\x B\x C\ar[from=rd, "{g^{-1}}"]\ar[from=rrd]\\
-%% &A\x B \ar[from=r,"\pi"] & A\x B\x B\x C\\
-%%  \end{tikzcd}
-%% \]
 
 
 In order to have a well-behaved category of such bifibrations, we want to also require
@@ -199,6 +179,7 @@ a specified full subcategory $\T \to \E$ of `trivial' objects of $\E$, such that
 \item If $T_1 \in \T$ and $T_1 \cong T_2 \in \E$, then $T_2 \in \T$.
 \item $1 \in \T$, the product of any two trivial objects is trivial.
 \item If $T\in \T$ and $f \in \B$, then $f^* T \in \T$.
+\item Any opcartesian morphism whose codomain is in $\T$ is split epi.
 \end{itemize}
 
  A morphism from one bifibration to another is a
@@ -312,6 +293,107 @@ $\Gamma; \cdot \prov \rid_\Gamma$.
 
 \subsection{Faithfulness of the Embedding}
 
+\section{Thoughts on Trivial Objects}
+
+I formerly thought I should specify explicitly which objects in the
+total category are trivial, i.e. behave like isomorphisms in the
+codomain bifibration. Now I'm thinking I can just characterize them internally.
+
+An object $Y \in \E$ over $B \in \B$ is {\em trivial} if for any $X\in \E$
+ over $A \in \B$, and any $f : A \to B$, there's a unique arrow $X \to Y$ over $f$.
+\[\begin{tikzcd}
+X \ar[d,mapsto]\ar[r,dotted]&Y\ar[d,mapsto]\\
+A \ar[r,"f" swap] &B
+\end{tikzcd}\]
+\begin{lemma}
+The trivial objects of the codomain fibration are exactly the objects
+of $\C^{\to}$ that are isomorphisms.
+\end{lemma}
+
+\begin{proof}
+\[\begin{tikzcd}
+X \ar[d, "x" swap]\ar[r,dotted, "{y^{-1}fx}"]&Y\ar[d, "y"]\\
+A \ar[r,"f" swap] &B
+\end{tikzcd}\]
+
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+If $T_1$ is trivial and $T_1 \cong T_2 \in \E$, then $T_2$ is trivial.
+\end{lemma}
+
+\begin{proof}
+\[\begin{tikzcd}
+X \ar[r, dotted, "{\iota^{-1} k}"] \ar[d, mapsto] & T_2 \ar[d, mapsto]\ar[r, "\iota", double]&T_1\ar[d, mapsto]\\
+A \ar[r, "f" swap] & B_2 \ar[r,"{p\iota}" swap, double] &B_1
+\end{tikzcd}\]
+where $k$ arises from
+\[\begin{tikzcd}
+X \ar[d, mapsto]\ar[r,dotted, "k"]&T_1\ar[d, mapsto]\\
+A \ar[r,"p\iota \o f" swap] &B_1
+\end{tikzcd}\]
+We can reason that $p(\iota^{-1} k) = p\iota^{-1} \o pk = p\iota^{-1} \o p\iota \o f = f$.
+
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+$1$ is trivial, and the product of any two trivial objects is trivial.
+\end{lemma}
+
+\begin{proof}
+Let $R \mapsto A$ and $S \mapsto B$ be given. Presented with
+\[\begin{tikzcd}
+X \ar[d, mapsto]\ar[r,dotted]&R \x S\ar[d, mapsto]\\
+E \ar[r,"g" swap] &A \times B
+\end{tikzcd}\]
+We can split up $g$ into its components, lift to $X \to R$ and $X \to
+S$, and pair together.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $Y$ is trivial and $g \in \B$, then $f^* Y$ is trivial.
+\end{lemma}
+
+\begin{proof}
+\[\begin{tikzcd}
+X \ar[r, dotted] \ar[rr, "k", bend left] \ar[d, mapsto]& f^*Y \ar[d, mapsto]\ar[r,"{\pi_g}"]&Y\ar[d, mapsto]\\
+A \ar[r, "f" swap]& B\ar[r,"g" swap] &C
+\end{tikzcd}\]
+From the fact that $Y$ is trivial, there is a unique $k$ over $gf$.
+From the fact that $\pi_g$ is cartesian, we can fill in $X \to f^*Y$.
+\cqed
+\end{proof}
+
+%% \begin{lemma}
+%% Any opcartesian morphism whose codomain is trivial is split epi.
+%% \end{lemma}
+
+%% \begin{proof}
+%% Well, the way I demonstrate this in the codomain bifibration is like so
+%% \[\begin{tikzcd}
+%%   Y \ar[from=dd, bend left=70, "i"] \ar[d, "y" swap]\ar[from=r,equal]&Y\ar[dd, "y"]
+%% & \ar[from=l, equal] Y \ar[dd, "gy"]\\
+%% C\ar[d,"g" swap]\\
+%%  B\ar[d,mapsto]\ar[from=r,"g", two heads] &C\ar[d,mapsto]&\ar[l,"yi", tail] B\ar[d,mapsto]\\
+%%  B\ar[from=r,"g", two heads] &C&\ar[l,"yi", tail] B\\
+%% \end{tikzcd}\]
+%% but I don't see how to generalize it. Let me try more directly:
+%% \[\begin{tikzcd}
+%% Y\maps\\
+%% & \Sigma_f Y \ar[ul] \maps\ar[from=r,"{k}"]&Y\ar[ull]\maps\\
+%% C\\
+%% & B\ar[from=r,"g"] \ar[ul] &C\ar[ull]
+%% \end{tikzcd}\]
+%% \cqed
+%% \end{proof}
+
+
+
 \section{Fancy Diagram That Is Nonetheless Wrong I Think}
 \[
 \begin{tikzcd}[sep=2.25em]
@@ -394,3 +476,26 @@ F \ar[d] \ar[from=r,"e" swap] & F' \ar[r,equal]\ar[d,"m",swap] & F' \ar[d]\\
 & (A, C)
 \end{tikzcd}
 \]
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+% These diagrams represent so far unsuccessful
+% attempts at understanding why functions compose to functions:
+
+%% \[
+%% \begin{tikzcd}
+%% \{(a,b,c) \st aRb, bSc\}\ar[rr, "\delta^*"]\ar[dr, "{\Sigma_\pi}" swap]\maps &&R \x S\ar[dr, "{\Sigma_\pi}"]\maps \\[1em]
+%% &Q\ar[from=rr, "{\Sigma_\pi}", pos=0.8, crossing over]&&A \x B \ar[dd, equal]\\[1em]
+%% A\x B \x C\ar[rr, "\delta", pos=0.8]\ar[dr,"\pi" swap]&&A\x B\x B\x C\ar[dr,"\pi"]\\[1em]
+%% &A\ar[from=rr,"\pi"]\ar[from=uu, mapsto, crossing over, shorten >= 2em, shorten <= 2em]&&A \times B\\
+%% \end{tikzcd}
+%% \]
+
+%% \[
+%%  \begin{tikzcd}
+%% R \x S \ar[from=rd, "f^{-1}"]\ar[from=rrd]\maps\\
+%% &A\x B \maps\ar[from=r,"{\Sigma_\pi}"] &[4em] R\x S\maps\\
+%% A\x B\x B\x C\ar[from=rd, "{g^{-1}}"]\ar[from=rrd]\\
+%% &A\x B \ar[from=r,"\pi"] & A\x B\x B\x C\\
+%%  \end{tikzcd}
+%% \]

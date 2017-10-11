@@ -1623,3 +1623,60 @@ opreindexically obtained projection to the domain should then be iso
 in this sense) and since fibered maps from one bifibration to another
 will have to preserve opreindexing and also this subcategory, we'll
 have a functional relation in the output category also.
+
+=== 2017.10.11
+
+Q: Can I characterize trivial objects upstairs in a product-preserving bifibration
+by saying that they are the locally terminal objects?
+A: Maybe. To be clear, I mean an object Y over A is trivial
+if for any other object X over A, there's a unique map X → Y over the identity.
+
+             !f
+          X ────→ Y
+          ┬       ┬
+          │       │
+          ↓       ↓
+          A ═════ A
+
+In the codomain bifibration, the trivial objects are the isomorphisms.
+If a morphism s in the arrow category is an iso, then we can compute the
+unique filler s⁻¹x.
+
+            s⁻¹x
+          X ────→ Y
+          │       │
+        x │       │ s
+          ↓       ↓
+          A ═════ A
+
+If an s is locally terminal, we can find its inverse via
+
+             s⁻¹
+          A ────→ Y
+          │       │
+        1 │       │ s
+          ↓       ↓
+          A ═════ A
+
+We know that s ∘ s⁻¹ = 1, what about the opposite?
+
+              s      s⁻¹
+          Y ────→ A ────→ Y
+          │       │       │
+        s │       │ 1     │ s
+          ↓       ↓       ↓
+          A ═════ A ═════ A
+
+Use the uniqueness in the the fact that s is locally terminal.
+
+Q: Oh wait, this notion doesn't seem stable up to ismorphism in 𝔼. What do?
+A: I think I can just generalize it to: Y over B is trivial if for any
+X over A and any g downstairs, there's a unique f over g.
+
+             !f
+          X ────→ Y
+          ┬       ┬
+          │       │
+          ↓       ↓
+          A ────→ B
+              g
