@@ -1680,3 +1680,11 @@ X over A and any g downstairs, there's a unique f over g.
           ↓       ↓
           A ────→ B
               g
+
+Q: Should I drop the condition that any opcartesian morphism whose
+codomain is trivial is split epi?
+A: I can't seem to prove it for the above notion of `trivial', though
+I can prove it in the codomain bifibration. It seem to inherently
+require upstairs morphisms leaking downstairs, which makes sense in
+the codomain bifibration, but won't when I have arbitrary relations
+upstairs and just the free product category downstairs.

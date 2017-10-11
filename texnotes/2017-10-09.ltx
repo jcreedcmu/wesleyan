@@ -369,29 +369,32 @@ From the fact that $\pi_g$ is cartesian, we can fill in $X \to f^*Y$.
 \cqed
 \end{proof}
 
-%% \begin{lemma}
-%% Any opcartesian morphism whose codomain is trivial is split epi.
-%% \end{lemma}
+I think this whole lemma doesn't go through:
+{\color{red}
+\begin{lemma}
+Any opcartesian morphism whose codomain is trivial is split epi.
+\end{lemma}
 
-%% \begin{proof}
-%% Well, the way I demonstrate this in the codomain bifibration is like so
-%% \[\begin{tikzcd}
-%%   Y \ar[from=dd, bend left=70, "i"] \ar[d, "y" swap]\ar[from=r,equal]&Y\ar[dd, "y"]
-%% & \ar[from=l, equal] Y \ar[dd, "gy"]\\
-%% C\ar[d,"g" swap]\\
-%%  B\ar[d,mapsto]\ar[from=r,"g", two heads] &C\ar[d,mapsto]&\ar[l,"yi", tail] B\ar[d,mapsto]\\
-%%  B\ar[from=r,"g", two heads] &C&\ar[l,"yi", tail] B\\
-%% \end{tikzcd}\]
-%% but I don't see how to generalize it. Let me try more directly:
-%% \[\begin{tikzcd}
-%% Y\maps\\
-%% & \Sigma_f Y \ar[ul] \maps\ar[from=r,"{k}"]&Y\ar[ull]\maps\\
-%% C\\
-%% & B\ar[from=r,"g"] \ar[ul] &C\ar[ull]
-%% \end{tikzcd}\]
-%% \cqed
-%% \end{proof}
+\begin{proof}
+Well, the way I demonstrate this in the codomain bifibration is like so
+\[\begin{tikzcd}
+  Y \ar[from=dd, bend left=70, "i"] \ar[d, "y" swap]\ar[from=r,equal]&Y\ar[dd, "y"]
+& \ar[from=l, equal] Y \ar[dd, "gy"]\\
+C\ar[d,"g" swap]\\
+ B\ar[d,mapsto]\ar[from=r,"g", two heads] &C\ar[d,mapsto]&\ar[l,"yi", tail] B\ar[d,mapsto]\\
+ B\ar[from=r,"g", two heads] &C&\ar[l,"yi", tail] B\\
+\end{tikzcd}\]
+but I don't see how to generalize it. Let me try more directly:
+\[\begin{tikzcd}
+Y\maps\\
+& \Sigma_f Y \ar[ul] \maps\ar[from=r,"{k}" ]&Y\ar[ull]\maps\\
+C\\
+& B\ar[from=r,"g"] \ar[ul] &C\ar[ull]
+\end{tikzcd}\]
 
+\cqed
+\end{proof}
+}
 
 
 \section{Fancy Diagram That Is Nonetheless Wrong I Think}
