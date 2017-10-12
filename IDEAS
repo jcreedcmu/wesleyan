@@ -1688,3 +1688,15 @@ I can prove it in the codomain bifibration. It seem to inherently
 require upstairs morphisms leaking downstairs, which makes sense in
 the codomain bifibration, but won't when I have arbitrary relations
 upstairs and just the free product category downstairs.
+
+=== 2017.10.12
+
+Q: What's a dead simple recharacterization of trivial objects?
+A: They're the objects for which the unique map into the terminal
+object is cartesian! This smells a lot like 'fibrant' objects, but I
+guess 'cartesian' is different from 'fibration'?
+
+Q: Are products of opcartesian squares again opcartesian?
+A: Not sure they are in general, but seems to be the case in the
+codomain bifibration over a category with products. Maybe I need to
+demand it. It seems like a kind of distributivity property.

@@ -41,9 +41,9 @@ B \ar[r, "\Delta" swap]& B\x B
 and I expect to find that one projection is an iso upstairs, and has an inverse.
 
 \begin{theorem}
-If $S \mapsto B$ is trivial, then the top arrow in
+If $S \mapsto B$ is trivial, then the top arrow $\pi_1 f$ in
 \[\begin{tikzcd}
-J \ar[d,mapsto]\ar[r, fib]
+J \ar[d,mapsto]\ar[r, fib, "f"]
 & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
 B \ar[r, "\Delta" swap]& B\x B \ar[r, "{\pi_1}" swap]& B
 \end{tikzcd}\]
@@ -59,13 +59,14 @@ is iso.
 \end{theorem}
 
 \begin{proof}
+We construct the inverse $z$ like so.
 \[\begin{tikzcd}
 J \ar[d,mapsto]\ar[r, "f", fib] \ar[from=rr, bend right=30, "z" swap] &
   R\x S \ar[d,mapsto] \ar[r,"{\pi_1}"]& R \ar[d, mapsto]\\
 B \ar[r, "\Delta" swap] \ar[rr, equal, bend right=30]  & B\x B \ar[r,"{\pi_1}" swap] & B
 \end{tikzcd}\]
-We construct the inverse $z$ like so. First we pair
-$\pair{\rid_{R\mapsto B}}{u} :(R\mapsto B)\to(R \x S \mapsto B)$
+ First we pair
+$\pair{\rid_{R}}{u} :(R\mapsto B)\to(R \x S \mapsto B)$
 where $u$ is the unique map
 $(R\mapsto B)\to(S \mapsto B)$ over $\rid_B$ guaranteed by
  $S\mapsto B$'s triviality. We get $z$ from the cartesianness of $f$:
@@ -112,17 +113,25 @@ The left one plainly commutes, and the right one commutes because $S\mapsto B$ i
 \cqed
 \end{proof}
 
+%%XXX don't think this is true?? Can't get back into the opreindexing, only out of it.
 %% \begin{lemma}
-%% Opreindexings of isomorphic objects in the same fiber are isomorphic.
+%% Products of opcartesian morphisms are opcartesian.
 %% \end{lemma}
 
 %% \begin{proof}
-%% \[\begin{tikzcd}
-%% &\Sigma_{f} Y \maps && \ar[ll, opfib] Y\\
-%% \Sigma_{f} X \maps && \ar[ll, opfib, crossing over] X\\
-%% &A&&B\ar[dl, equals]\ar[ll, "f", near end]\\
-%% A && \ar[ll,"f"] B \frommaps\\
-%% \end{tikzcd}\]
+%% \[
+%%  \begin{tikzcd}
+%% Z \ar[from=rd, "{h(f_1\x f_2)}" description]
+%%   \ar[from=rrrdd, "h", near start, swap, bend right=15] \maps\\
+%% &A_1 \x A_2 \ar[from=rd, "z", dotted]\ar[from=rrd, "{f_1\x f_2}" description, bend right=5]\\
+%%  C_1\x C_2\ar[rd, equal]\ar[from=rrrdd, "{g_1 \x g_2}", near start, swap, bend right=15]
+%% &&Z \maps\ar[from=r,"h" , opfib] &[2em] B_1 \x B_2\maps\\
+%% & C_1\x C_2\frommaps\ar[rd, equal, swap]
+%%   \ar[from=rrd, "{g_1 \x g_2}" description, near start, bend right=5]\\
+%% && C_1\x C_2 \ar[from=r,"{g_1 \x g_2}"] &  D_1\x D_2\\
+%%  \end{tikzcd}
+%% \]
+
 %% \cqed
 %% \end{proof}
 
@@ -133,7 +142,7 @@ If $R \mapsto A \x B$ and $S \mapsto B$, and we know $\Sigma_{\pi_1} R$ and $S$ 
 then the leftmost object in
 \[\begin{tikzcd}
 \Sigma_{\pi_1} J \ar[from=r, opfib, "g" swap]\ar[d,mapsto]
-  & J \arrow[dr, phantom, "\lrcorner", very near start]\ar[d,mapsto]\ar[r, fib, "f"]
+  & J \ar[d,mapsto]\ar[r, fib, "f"]
   & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
 A\ar[from=r, "{\pi_1}"]&A \x B \ar[r, "\Delta" swap]& (A \x B) \x B \ar[r, "{\pi_1}" swap]& A \x B
 \end{tikzcd}\]
@@ -157,7 +166,7 @@ R \ar[r, "u", dotted]\ar[d, mapsto]& S \ar[d, mapsto]\\
 A \x B\ar[r,"\pi" swap]& B\\
 \end{tikzcd}
 \]
-and chase the following diagram to produce $z$ and see that it is the required isomorphism.
+and chase the following diagram
 \[
  \begin{tikzcd}
 J \ar[rd, "{\pi_1f}" swap]\ar[rrrdd, "f", near end, bend left=15] \maps\\
@@ -168,7 +177,77 @@ A\x B\ar[rd, equal]\ar[rrrdd, "\Delta", near end, bend left=15]
 &&A\x B \ar[r,"\Delta" swap] & (A\x B)\x B\\
  \end{tikzcd}
 \]
+ to produce $z$ and see that it is the required isomorphism. \cqed
+\end{proof}
 
+Generalizing to the $C$ part of $S$ is a little trickier. I think I need Beck-Chevalley for it.
+
+\begin{theorem}
+If $R \mapsto B$ and $S \mapsto B \x C$, and we know $ R$ and $\Sigma_{\pi_1} S$ are trivial,
+then there is an isomorphism $Q \cong R$ in
+\[\begin{tikzcd}
+Q \ar[from=r, opfib, "g" swap]\ar[d, mapsto]
+  & J \ar[d,mapsto]\ar[r, fib, "f"]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+B \ar[from=r, "\pi_1"] & B \x C \ar[r, "\Delta" swap]& B \x (B \x C)  \ar[r, "{\pi_1}" swap]&  B
+\end{tikzcd}\]
+is an iso. Morally, I'm showing the red arrow in
+\[
+\begin{tikzcd}[column sep=1.5em]
+&&J\ar[dl, equal, red]\ar[dr]\\
+&R\ar[dl, equal, lightgray]\ar[dr]&&S\ar[dl, equal]\ar[dr]\\
+\color{lightgray}{A}&&B&&C
+\end{tikzcd}
+\]
+is an iso.
+\end{theorem}
+
+\begin{proof}
+%% I can get from $Q$ to $R$ by using $g$'s opcartesianness.
+%% \[\begin{tikzcd}
+%% R\maps\\
+%% & Q \ar[ul, dotted, "q"] \maps\ar[from=r,"{g}", opfib]&[2em] J\ar[ull, "\pi_1 f" swap]\maps\\
+%% B\\
+%% & B\ar[from=r,"{\pi_1}"] \ar[ul, equal] &B\x C\ar[ull, "{\pi_1}" swap]
+%% \end{tikzcd}\]
+%% %
+%% Then
+Beck-Chevalley lets me convert the fact that
+\[\begin{tikzcd}
+B\x C \ar[d, "\pi" swap]\ar[r, "\Delta"]\arrow[dr, phantom, "\lrcorner", pos=0]
+  & B \x (B \x C)\ar[d, "\pi"]\\
+B \ar[r, "\Delta" swap] & B \x B
+\end{tikzcd}\]
+into the existence of cartesian $k$ and opcartesian $h$ that make the diagram
+\[\begin{tikzcd}
+Q \ar[r, fib, "k"]\ar[d, mapsto]
+  & H \ar[d,mapsto]\ar[from=r, opfib, "h" swap]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+B \ar[r, "\Delta" swap] & B \x B \ar[from=r, "\pi"]& B \x (B \x C)  \ar[r, "{\pi_1}" swap]&  B
+\end{tikzcd}\]
+commute.
+%
+{\color{red}Assuming the product of opcartesian morphisms is opcartesian,} this actually looks like
+\[\begin{tikzcd}
+Q \ar[r, fib, "k"]\ar[d, mapsto]
+  & R\x \Sigma_{\pi_1} S \ar[d,mapsto]\ar[from=r, opfib, "{\rid_R \times {!}}" swap]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+B \ar[r, "\Delta" swap] & B \x B \ar[from=r, "\rid_B \times \pi"]& B \x (B \x C)  \ar[r, "{\pi_1}" swap]&  B
+\end{tikzcd}\]
+
+Now I can find $u$ the unique morphism $R \to \Sigma_{\pi_1}S$ over $\rid_B$, and
+extract $r$ from
+\[
+ \begin{tikzcd}
+Q \ar[rd, "{\pi_1 k}" swap]\ar[rrrdd, "k", near end, bend left=15, fib] \maps\\
+&R \ar[rd, "r" swap, dotted]\ar[rrd, "{\pair{\rid_{R}}{u}}" description, bend left=5]\maps\\
+ B\ar[rd, equal]\ar[rrrdd, "\Delta", near end, bend left=15]
+&&Q \maps\ar[r,"k" swap, fib] &[2em] R \x \Sigma_{\pi_1}S\maps\\
+& B\ar[rd, equal, swap]\ar[rrd, "\Delta", near end, bend left=5]\\
+&& B \ar[r,"\Delta" swap] &  B\x B\\
+ \end{tikzcd}
+\]
+and use the rest of the diagram to reason that $\pi_1 k$ is its inverse.
 \cqed
 \end{proof}
 
