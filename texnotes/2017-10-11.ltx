@@ -1,0 +1,182 @@
+\documentclass{article}
+\input{theorem}
+\usepackage{amssymb}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\x{\times}
+\def\o{\circ}
+\def\cn{{:}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+I want to show a certain analog of the fact that the `pullback of an iso is iso'.
+\[\begin{tikzcd}
+B \x_D C \ar[d,equal]\ar[r]\arrow[dr, phantom, "\lrcorner", pos=0]
+& B\ar[d,equal]\\
+C \ar[r]& D
+\end{tikzcd}\]
+
+If I have $C \mapsto D$ and $B \mapsto D$ and I know $B$ is trivial, how do I even form the pullback?
+I reindex across the diagonal:
+\[\begin{tikzcd}
+\Delta^*(C \times B) \ar[d,mapsto]\ar[r]
+& C\x B \ar[d,mapsto]\\
+D \ar[r, "\Delta" swap]& D\x D
+\end{tikzcd}\]
+and I expect to find that one projection is an iso upstairs, and has an inverse $z$:
+
+\[\begin{tikzcd}
+\Delta^*(C \times B) \ar[d,mapsto]\ar[r, "f"] \ar[from=rr, bend right=30, "z" swap] &
+  C\x B \ar[d,mapsto] \ar[r,"{\pi_1}"]& C \ar[d, mapsto]\\
+D \ar[r, "\Delta" swap] \ar[rr, equal, bend right=30]  & D\x D \ar[r,"{\pi_1}" swap] & D
+\end{tikzcd}\]
+
+How do we construct $z$? First we pair
+$\pair{\rid_{C\mapsto D}}{u} :(C\mapsto D)\to(C \x B \mapsto D)$
+where $u$ is the unique map
+$(C\mapsto D)\to(B \mapsto D)$ over $\rid_D$ guaranteed by
+ $B\mapsto D$'s triviality. We get $z$ from the cartesianness of $f$:
+\[
+ \begin{tikzcd}
+C \ar[rd, dotted, "z" swap]\ar[rrd, "{\pair{\rid_{C}}{u}}", bend left=5]\maps\\
+&\Delta^*(C \x B) \maps\ar[r,"f" swap] &[2em] C\x B\maps\\
+D\ar[rd, equal, swap]\ar[rrd, "\Delta", near end, bend left=5]\\
+&D \ar[r,"\Delta" swap] & D\x D\\
+ \end{tikzcd}
+\]
+%
+Can we show that $\pi_1 f z = \rid_C$? Yes, this is pretty easy;
+$\pi f z = \pi_1 \pair{\rid_C}{u} = \rid_C$.
+Can we show that $z \pi_1 f = \rid_{\Delta^*(C\x B)}$? Well, it suffices
+to show the topmost triangle commutes in
+\[
+ \begin{tikzcd}
+\Delta^*(C\x B) \ar[rd, "{\pi_1f}" swap]\ar[rrrdd, "f", near end, bend left=15] \maps\\
+&C \ar[rd, "z" swap]\ar[rrd, "{\pair{\rid_{C}}{u}}" description, bend left=5]\maps\\
+D\ar[rd, equal]\ar[rrrdd, "\Delta", near end, bend left=15]
+&&\Delta^*(C \x B) \maps\ar[r,"f" swap] &[2em] C\x B\maps\\
+&D\ar[rd, equal, swap]\ar[rrd, "\Delta", near end, bend left=5]\\
+&&D \ar[r,"\Delta" swap] & D\x D\\
+ \end{tikzcd}
+\]
+for then $z\pi_1 f$ must be the identity by uniqueness. But that triangle breaks up into two squares
+\[
+\begin{tikzcd}
+\Delta^*(C\x B)\ar[r, "f"]\ar[d,"\pi_1 f" swap]& C\times B\ar[d,"\pi_1"]\\
+C\ar[r,"\rid_C" swap]& C\\
+D\ar[r, "\Delta"]\ar[d,equals]& D \x D \ar[d, "\pi_1"]\\
+D\ar[r,equal]& D
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\Delta^*(C\x B)\ar[r, "f"]\ar[d,"\pi_1 f" swap]& C\times B\ar[d,"\pi_2"]\\
+C\ar[r,"u" swap]& B\\
+D\ar[r, "\Delta"]\ar[d,equals]& D \x D \ar[d, "\pi_2"]\\
+D\ar[r,equal]& D
+\end{tikzcd}
+\]
+The left one plainly commutes, and the right one commutes because $B\mapsto D$ is trivial.
+
+\end{document}
+
+%% \[
+%% \{(a, c) \st a \in A, b, b' \in B, c \in C, b = b', b = f(a), c = g(b')\}
+%% \]
+%% \[
+%% \{(a, c) \st a \in A, c \in C,  c = g(f(a))\}
+%% \]
+
+
+Formally, objects of $\E$ are spans
+\begin{tikzcd}[cramped,sep=small] \iota \theta \ar[from=r] & F & C \ar[from=l, swap] \end{tikzcd}
+ in $\B$. The projection functor $p : \B \to \E$ takes
+such a span to its right leg $C$.
+In our example, this looks like a $\Sets/\C_0$-diagram
+\[
+\begin{tikzcd}
+{(f:a\mapsto b)\atop(g : b' \mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, b, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, B, C)
+\end{tikzcd}
+\]
+
+
+\[
+\begin{tikzcd}
+  Q \ar[r,"{\binl}"] \ar[d,"{\binr}" swap]  \twocell{dr}{"q" swap} & Q+Q \ar[d, "f"] \\
+  Q+Q \ar[r, "f" swap] & F
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+  Q \ar[r,"{\binl}"] \ar[d,"q" swap]   & Q+Q \ar[d, "{(d_0q, d_1q)}"] \\
+\C_1 \ar[r,"d_0" swap]& \C_0
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+Q\ar[rr, "\binl"]\ar[dr, "q" description]\ar[dd,"\binr" swap]&&Q+Q\ar[dr, "{(d_0q, d_1q)}"]\\
+&\C_1\ar[rr, "{d_0}", pos=0.2]\ar[dd, "{d_1}" swap, pos=0.2]&&\C_0\ar[dd, equal]\\
+Q+Q\ar[rr, crossing over, "f" swap, pos=0.8]\ar[dr,"{(d_0q, d_1q)}" swap]&&F\ar[from=uu, crossing over, "f", pos=0.8]\ar[dr]\\
+&\C_0\ar[rr, equal]&&\C_0\\
+\end{tikzcd}
+\]
+
+
+What's a morphism in $\E$? Some kind of mapping of renamings of elements in the output tuple. So a morphism
+from $\iota\theta \leftarrow F \to C$ to $\iota\theta' \leftarrow F' \to C'$ looks at first glance
+like an arrow $e : F \to F'$ in $(\Sets/\C_0)^\op$ together with $m : F' \to \C_1$ in $\Sets$ such that
+\[
+\begin{tikzcd}
+F \ar[d] \ar[from=r,"e" swap] & F' \ar[r,equal]\ar[d,"m",swap] & F' \ar[d]\\
+\C_0 \ar[from=r,"d"] & \C_1 \ar[r,"c" swap]&\C_0
+\end{tikzcd}
+\]
+
+
+\[
+\begin{tikzcd}
+{(f:a\mapsto b)\atop(g : b' \mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, b, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, B, C)
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}
+{(gf:a\mapsto c)} \ar[dr, mapsto] \ar[r, mapsto] & (a, c) \ar[d, mapsto]\ar[from=r, mapsto] & (a, c) \ar[dl] \\
+& (A, C)
+\end{tikzcd}
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+% These diagrams represent so far unsuccessful
+% attempts at understanding why functions compose to functions:
+
+%% \[
+%% \begin{tikzcd}
+%% \{(a,b,c) \st aRb, bSc\}\ar[rr, "\delta^*"]\ar[dr, "{\Sigma_\pi}" swap]\maps &&R \x S\ar[dr, "{\Sigma_\pi}"]\maps \\[1em]
+%% &Q\ar[from=rr, "{\Sigma_\pi}", pos=0.8, crossing over]&&A \x B \ar[dd, equal]\\[1em]
+%% A\x B \x C\ar[rr, "\delta", pos=0.8]\ar[dr,"\pi" swap]&&A\x B\x B\x C\ar[dr,"\pi"]\\[1em]
+%% &A\ar[from=rr,"\pi"]\ar[from=uu, mapsto, crossing over, shorten >= 2em, shorten <= 2em]&&A \times B\\
+%% \end{tikzcd}
+%% \]
+
+%% \[
+%%  \begin{tikzcd}
+%% R \x S \ar[from=rd, "f^{-1}"]\ar[from=rrd]\maps\\
+%% &A\x B \maps\ar[from=r,"{\Sigma_\pi}"] &[4em] R\x S\maps\\
+%% A\x B\x B\x C\ar[from=rd, "{g^{-1}}"]\ar[from=rrd]\\
+%% &A\x B \ar[from=r,"\pi"] & A\x B\x B\x C\\
+%%  \end{tikzcd}
+%% \]
