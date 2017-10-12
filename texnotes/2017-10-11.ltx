@@ -218,7 +218,7 @@ B\x C \ar[d, "\pi" swap]\ar[r, "\Delta"]\arrow[dr, phantom, "\lrcorner", pos=0]
   & B \x (B \x C)\ar[d, "\pi"]\\
 B \ar[r, "\Delta" swap] & B \x B
 \end{tikzcd}\]
-into the existence of cartesian $k$ and opcartesian $h$ that make the diagram
+is a pullback into the existence of cartesian $k$ and opcartesian $h$ that make the diagram
 \[\begin{tikzcd}
 Q \ar[r, fib, "k"]\ar[d, mapsto]
   & H \ar[d,mapsto]\ar[from=r, opfib, "h" swap]
@@ -245,6 +245,68 @@ Q \ar[rd, "{\pi_1 k}" swap]\ar[rrrdd, "k", near end, bend left=15, fib] \maps\\
 &&Q \maps\ar[r,"k" swap, fib] &[2em] R \x \Sigma_{\pi_1}S\maps\\
 & B\ar[rd, equal, swap]\ar[rrd, "\Delta", near end, bend left=5]\\
 && B \ar[r,"\Delta" swap] &  B\x B\\
+ \end{tikzcd}
+\]
+and use the rest of the diagram to reason that $\pi_1 k$ is its inverse.
+\cqed
+\end{proof}
+
+\begin{theorem}
+If $R \mapsto A \x B$ and $S \mapsto B \x C$, and we know $\Sigma_{\pi_1} R$ and $\Sigma_{\pi_1} S$
+are trivial, then the leftmost object in
+\[\begin{tikzcd}[column sep=1.2em]
+\Sigma_{\pi_1} Q \ar[d,mapsto]\ar[from=r, opfib] & Q \ar[from=r, opfib, "g" swap]\ar[d,mapsto]
+  & J \ar[d,mapsto]\ar[r, fib, "f"]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+A \ar[from=r,"\pi_1"] & A\x B\ar[from=r, "{\pi}"]&A \x B \x C \ar[r, "\Delta" swap]& (A \x B) \x (B \x C) \ar[r, "{\pi_1}" swap]& A \x B
+\end{tikzcd}\]
+is trivial. Morally, I'm showing the red arrow in
+\[
+\begin{tikzcd}[column sep=1.5em]
+&&J\ar[dl, equal, red]\ar[dr]\\
+&R\ar[dl, equal, red]\ar[dr]&&S\ar[dl, equal]\ar[dr]\\
+A&&B&&C
+\end{tikzcd}
+\]
+is an iso.
+\end{theorem}
+
+\begin{proof}
+It suffices to show that $Q \cong R$ over $\rid_{A\x B}$, because we already know that $\Sigma_{\pi_1} R$
+is trivial, and the fact that opreindexings of isomorphic objects are isomorphic.
+Beck-Chevalley lets me convert the fact that
+\[\begin{tikzcd}
+A \x B\x C \ar[d, "\pi" swap]\ar[r, "\Delta"]\arrow[dr, phantom, "\lrcorner", pos=0]
+  & (A \x B) \x (B \x C)\ar[d, "\pi"]\\
+A\x B \ar[r, "\Delta" swap] & (A\x B) \x B
+\end{tikzcd}\]
+is a pullback into the existence of cartesian $k$ and opcartesian $h$ that make the diagram
+\[\begin{tikzcd}
+Q \ar[r, fib, "k"]\ar[d, mapsto]
+  & H \ar[d,mapsto]\ar[from=r, opfib, "h" swap]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+A\x B \ar[r, "\Delta" swap] & (A\x B) \x B \ar[from=r, "\pi"]& (A\x B) \x (B \x C)  \ar[r, "{\pi_1}" swap]&  A\x B
+\end{tikzcd}\]
+commute.
+%
+{\color{red}Assuming the product of opcartesian morphisms is opcartesian,} this actually looks like
+\[\begin{tikzcd}
+Q \ar[r, fib, "k"]\ar[d, mapsto]
+  & R\x \Sigma_{\pi_1} S \ar[d,mapsto]\ar[from=r, opfib, "{\rid_R \times {!}}" swap]
+  & R\x S \ar[d,mapsto] \ar[r, "{\pi_1}"]& R \ar[d,mapsto]\\
+A\x B \ar[r, "\Delta" swap] & (A\x B) \x B \ar[from=r, "\rid_{A\times B} \times \pi"]& (A\x B) \x (B \x C)  \ar[r, "{\pi_1}" swap]&  A\x B
+\end{tikzcd}\]
+
+Now I can find $u$ the unique morphism $R \to \Sigma_{\pi_1}S$ over $\rid_B$, and
+extract $r$ from
+\[
+ \begin{tikzcd}
+Q \ar[rd, "{\pi_1 k}" swap]\ar[rrrdd, "k", near end, bend left=15, fib] \maps\\
+&R \ar[rd, "r" swap, dotted]\ar[rrd, "{\pair{\rid_{R}}{u}}" description, bend left=5]\maps\\
+ A\x B\ar[rd, equal]\ar[rrrdd, "\Delta", near end, bend left=15]
+&&Q \maps\ar[r,"k" swap, fib] &[2em] R \x \Sigma_{\pi_1}S\maps\\
+& A\x B\ar[rd, equal, swap]\ar[rrd, "\Delta", near end, bend left=5]\\
+&& A\x B \ar[r,"\Delta" swap] &  (A\x B)\x B\\
  \end{tikzcd}
 \]
 and use the rest of the diagram to reason that $\pi_1 k$ is its inverse.
