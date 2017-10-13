@@ -1700,3 +1700,9 @@ Q: Are products of opcartesian squares again opcartesian?
 A: Not sure they are in general, but seems to be the case in the
 codomain bifibration over a category with products. Maybe I need to
 demand it. It seems like a kind of distributivity property.
+
+=== 2017.10.13
+
+Q: Is my characterization of categories as relational things actually
+a full embedding?
+A: Hm, maybe not. Need some kind of grading perhaps.

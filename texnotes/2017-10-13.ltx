@@ -94,7 +94,7 @@ We can regard a morphism $\phi : \tau \to \tau'$
 as a substitution $\mkc\tau \prov \phi : \mkc{\tau'}$.
 
 \subsubsection*{Typing Rules}
-None of these should not be surprising:
+None these should not be surprising:
 \[
 \erule
 {x : A\in \Gamma}
@@ -146,7 +146,8 @@ is a substitution $\theta$ such that
 for the usual definition of substitution composition, and some
 sensible definition of equality provability that lets you use
 equations in the context, refl/sym/trans, congruence under application
-of function symbols, and postulating that $g(f(e)) = (g\o f)(e)$ holds.
+of function symbols, and postulating that every $g(f(e)) = (g\o f)(e)$
+and $\rid(e) = e$ holds.
 
 \subsubsection*{Seeing that Composition Works Right}
 As a warm-up exercise, let's construct morphisms in $\E$ back and
@@ -215,7 +216,6 @@ the definition? It's a $\theta$ such that
 \]
 and consequently there is a unique solution for $\theta$, namely $\sigma \o \phi$.
 
-\vfil\eject
 \subsubsection*{Functional Relations}
 
 Pick an arbitrary two-element set $\{d, c\}$. A map $\{d \mapsto A, c \mapsto B\} \in \B$
@@ -270,5 +270,48 @@ expression in context $x:A$, it must be of the form $f_1(\cdots f_n(x))$ and
 therefore equal to $f_1 \o  \cdots \o f_n$.
 \cqed
 \end{proof}
+
+\subsection*{Defining the Total Category Semantically}
+Consider the category $P(\C)$ similar to $B = (\Sets/{\C_0})^\op$ whose
+objects are functions $B \to \C_0$ for some set $B$, and whose morphisms
+ $(\tau : B \to \C_0) \to (\tau' : B' \to \C_0)$
+ are pairs consisting of a function $\phi : B' \to B$ and a family of morphisms
+$(f_{b'} : \tau(\phi(b')) \to \tau'(b'))_{b' \in B'}$ in $\C$.
+
+This is the free category with products on $\C$, in contrast to $\B =
+P(\C_0)$, which embeds in it in an evident way.
+%% When $C$ is an object of $\C$ and $\tau : B \to \C_0$, we may speak of
+%% a $B$-indexed family $(f_b : C \to \tau(b))_{b\in B}$ of morphisms in
+%% $\C$ as being a {\em generalized morphism $C \dot\to \tau$}.
+
+Note that a size-1 object $C$ of $P(\C)$ is the same as an object of $\C$,
+and a morphism $C \to (\tau : B \to \C_0) \in P(\C)$ is essentially a
+$B$-indexed family $(f_b : C \to \tau(b))_{b\in B}$.
+
+A {\em sieve on $\tau$} is a subset $S$ of all the $P(\C)$-morphisms from any
+size-1 object into $\tau$, which must be closed under composition: if
+$(f_b : C \to \tau(b))_{b\in B} \in S$ and $g : D \to C$, then
+$(f_b \o g : D \to \tau(b))_{b\in B} \in S$.
+
+\vskip1em\hrule\vskip1em
+
+An object of the category $\E$ over $\tau'$ is a morphism $\xi : \tau \to \tau'\in P(\C_0)$
+together with a $P(\C)$-sieve $S$ on $\tau$.
+
+A morphism $(\xi_1 : \tau_1 \to \tau'_1, S_1) \to (\xi_2 : \tau_2 \to \tau'_2, S_2)$ is
+a pair of morphisms $\alpha : \tau_1 \to \tau_2$ and $\alpha' : \tau'_1 \to \tau'_2$ from $P(\C)$ such that
+\[
+\begin{tikzcd}
+\tau_1 \ar[r, "\alpha"] \ar[d, "\xi" swap] & \tau_2\ar[d, "\xi"]\\
+\tau'_1 \ar[r, "\alpha'" swap] & \tau'_2\\
+\end{tikzcd}
+\]
+and for any $\tau_\star \in S_1$, we have $\alpha \tau_\star \in S_2$.
+
+The opreindexing $(\xi : \tau \to \tau', S)$ along $\phi : \tau' \to \tau''$ is
+\[
+d
+\]
+
 
 \end{document}
