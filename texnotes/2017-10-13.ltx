@@ -1,0 +1,274 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+I have a category $\C$ in mind, whose morphisms and objects are
+\begin{tikzcd}[cramped] \C_1 \ar[r, "d_0", shift left] \ar[r, "d_1" swap, shift right] & \C_0 \end{tikzcd}.
+I want to derive a cartesian monoidal bifibration from it.
+
+\subsubsection*{The Base Category}
+Let the base category be $\B$ be $(\Sets/{\C_0})^\op$, the free cartesian category on $\C_0$.
+%% Observe that there is an inclusion $\iota$ of
+%% objects of $\Sets/\C_1$ into objects of $\Sets/\C_0$,
+%% by taking $\theta : Q \to \C_1$ to $(d\o \theta, c\o \theta) : Q + Q \to \C_0$.
+
+\subsubsection*{Syntax}
+\def\cmpr#1#2#3{{#1};{#2}\tri{#3}}
+\def\mkc#1{\Delta_{#1}}
+
+I'm going to build $\E$ out of some syntactic expressions. I might be
+being sloppy here about finiteness of various things; not worrying
+about it for the moment.
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
+Expressions&$e$&$x\celse f(e)$\\
+Equations&$E$&$\cdot \celse E, (e_1 =  e_2)$\\
+Substitutions&$\sigma$&$\cdot \celse \sigma [e/x]$\\
+Comprehension&$K$&$\cmpr \Gamma E \sigma$\\
+\end{tabular}
+\]
+In the above, $f$ are morphisms in $\C_1$, and $A$ are objects in
+$\C_0$. If $B$ is a set $\{b_1, \ldots, b_n\}$, and $\tau : B \to \C_0 \in \B$, then we
+define $\mkc\tau$ to be the context $x_{b_1} : \tau(b_1), \ldots, x_{b_n} : \tau(b_n)$.
+We can regard a morphism $\phi : \tau \to \tau'$
+as a substitution $\mkc\tau \prov \phi : \mkc{\tau'}$.
+
+\subsubsection*{Typing Rules}
+None of these should not be surprising:
+\[
+\erule
+{x : A\in \Gamma}
+{\Gamma \prov x : A}
+\qquad
+\erule
+{f : A \to B \in \C \qquad \Gamma \prov e : A}
+{\Gamma \prov f(e) : B}
+\]
+\[
+\erule
+{}
+{\Gamma \prov \cdot \rok}
+\qquad
+\erule
+{\Gamma \prov E \rok \qquad \Gamma \prov e_1 : A\qquad \Gamma \prov e_2 : A}
+{\Gamma \prov E, (e_1  = e_2) \rok}
+\]
+\[
+\erule
+{}
+{\Gamma \prov \cdot : \Gamma'}
+\qquad
+\erule
+{\Gamma \prov \sigma : \Gamma' \qquad \Gamma \prov e : A}
+{\Gamma \prov \sigma[e/x] : \Gamma', x : A}
+\]
+\[
+\erule
+{\Gamma \prov E \rok \qquad \Gamma \prov \sigma : \mkc{\tau}}
+{(\cmpr \Gamma E \sigma) \rok_\tau}
+\]
+The intuition for the meaning of $\cmpr \Gamma E \sigma$ is that it's like a set comprehension
+\[\{ \sigma \st \Gamma . E \}\]
+i.e. ``All the tuples $\sigma$ you can make by choosing a value for every variable in $\Gamma$
+such that all equations in $E$ are true'', the way that
+you'd write
+\[\{(a, b) \st a \in A, b \in B, f(a) = b\}\]
+for the graph of a function.
+
+\subsubsection*{The Total Category}
+An object of the category $\E$ over $\tau$ is a $\cmpr \Gamma E \sigma$
+such that $\prov (\cmpr \Gamma E \sigma) \rok_\tau$.
+A morphism $(\cmpr \Gamma E \sigma) \to (\cmpr {\Gamma'}{E'}{\sigma'})$ over $\phi : \tau \to \tau'$
+is a substitution $\theta$ such that
+\[ \Gamma \prov \theta : \Gamma'
+\qquad \Gamma; E \prov \theta E'
+\qquad \Gamma; E \prov \sigma \o \phi = \theta \o \sigma' : \mkc{\tau'}\]
+for the usual definition of substitution composition, and some
+sensible definition of equality provability that lets you use
+equations in the context, refl/sym/trans, congruence under application
+of function symbols, and postulating that $g(f(e)) = (g\o f)(e)$ holds.
+
+\subsubsection*{Seeing that Composition Works Right}
+As a warm-up exercise, let's construct morphisms in $\E$ back and
+forth between different representations of the composition of two
+morphisms $f : A \to B$ and $g : B \to C$ in $\C$. The two representations are:
+\[
+\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \tri (\alpha, \gamma)
+\]
+\[
+a : A, b:B, b': B, c:C; b = b', b= f(a), c=g(b') \tri (a, c)
+\]
+The first is the canonical representation of the morphism $g\o f$ as an object of $\E$.
+The second is what we'd expect to get out of taking the canonical representations of $g$ and $f$
+and composing them by doing the (op)reindexing dance.
+
+Back and forth in both directions $\phi$ is the identity.
+In the backward direction, we pick
+\[\theta = [a/\alpha][c/\gamma]\]
+and indeed
+\[a : A, b:B, b': B, c:C; b = b', b= f(a), c=g(b') \prov c = g(f(a))\]
+Forward, we pick
+\[\theta = [\alpha/a][f(\alpha)/b][f(\alpha)/b'][\gamma/c]\]
+and check that
+\[\alpha : A, \gamma : C ; \gamma = g(f(\alpha)) \prov  f(\alpha) = f(\alpha), f(\alpha)= f(\alpha), \gamma=g(f(\alpha)) \]
+
+\subsubsection*{Fibration Structure}
+Let some $\phi : \tau' \to \tau$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
+Define the reindexing to be $ \cmpr{\Gamma,\mkc{\tau'}} { E, \sigma = \phi} {\rid_{\mkc{\tau'}}}$.
+We need a morphism of this shape:
+\[ (\cmpr{\Gamma,\mkc{\tau'}} { E, \sigma = \phi} {\rid_{\mkc{\tau'}}}) \to (\cmpr \Gamma E \sigma)\]
+(where $\sigma = \phi$ is the evident abbreviation for a list of equations as
+long as the common length of $\sigma$ and $\phi$)
+The answer is just the weakening substitution
+$\Gamma, \mkc{\tau'} \prov \rid_\Gamma : \Gamma$.
+
+\subsubsection*{Opfibration Structure}
+Let some $\phi : \tau \to \tau'$ be given, and a $\cmpr \Gamma E \sigma$ over $\tau$.
+Define the opreindexing to be $\cmpr {\Gamma} {E} {\sigma \o \phi}$. The morphism
+$\cmpr {\Gamma} {E} {\sigma} \to \cmpr {\Gamma} {E} {\sigma \o \phi}$ that we need arises
+from setting $\theta = \rid_\Gamma$.
+
+%% \subsubsection*{Preserving Products}
+%% It seems pretty clear that
+%% \[\cmpr {\Gamma_1,\Gamma_2} {E_1,E_2} {\sigma_1,\sigma_2}\]
+%% is the product of $\cmpr {\Gamma_1} {E_1} {\sigma_1}$
+%% and $\cmpr {\Gamma_2} {E_2} {\sigma_2}$.
+
+\subsubsection*{Trivial Objects}
+Let some $\tau' \in \B$ be given. A trivial object $\cmpr{\Gamma'}{E'}{\sigma'}$ over $\tau'$ is one
+such that\footnote{The definition I gave for trivial object in general in a bifibration
+was an $E' \in \E$ over $B' \in \B$ such that $! : E' \to 1$ is
+cartesian; this is the same thing as demanding that for any $E$ over
+$B$ and any morphism $b : B \to B'$ there's a unique morphism $E \to
+E'$ over $b$}
+ for any $\cmpr{\Gamma}{E}{\sigma}$ and any morphism $\phi : \tau \to \tau'$,
+there is a unique $\theta : (\cmpr{\Gamma}{E}{\sigma}) \to (\cmpr{\Gamma'}{E'}{\sigma'})$ over $\phi$.
+
+
+A concrete example of a trivial object over $\tau'$ is $\mkc{\tau'}; \cdot \prov \rid_{\mkc{\tau'}}$.
+For what is a morphism $(\cmpr{\Gamma}{E}{\sigma}) \to (\cmpr{\Gamma'}{E'}{\sigma'})$, unpacking
+the definition? It's a $\theta$ such that
+\[
+ \Gamma \prov \theta : \mkc{\tau'}
+\qquad \Gamma; E \prov \cdot
+\qquad \Gamma; E \prov \sigma \o \phi = \theta  : \mkc{\tau'}
+\]
+and consequently there is a unique solution for $\theta$, namely $\sigma \o \phi$.
+
+\vfil\eject
+\subsubsection*{Functional Relations}
+
+Pick an arbitrary two-element set $\{d, c\}$. A map $\{d \mapsto A, c \mapsto B\} \in \B$
+is read as specifying that the domain of some morphism in $\C$ is $A$, and its codomain is $B$.
+An object in $\E$ over
+$\{d \mapsto A, c \mapsto B\}$ is a mere binary relation on $A \x B$
+until we verify that it's functional; say  $\cmpr \Gamma E \sigma$ is functional
+when coreindexing across the evident map
+ $\pi : \{d \mapsto A, c \mapsto B\} \to \{d \mapsto A\} \in \B$  yields a trivial object.
+This means taking $\sigma$, which is of the form $[e_c / x_c][e_d / x_d]$, and just
+projecting out the codomain, leaving $[e_d/x_d]$.
+
+\begin{lemma}
+If $\cmpr \Gamma E {[e_d / x_d]}$ over $\{d \mapsto A\}$ is trivial,
+then $\cmpr \Gamma E {[e_c / x_c][e_d / x_d]}$ over $\{d \mapsto A, c \mapsto B\}$
+is isomorphic (in $\E$) to $\cmpr {x : A}{\cdot}{[f(x) / x_c][x / x_d]}$ for
+some $f\in \C_1$.
+In other words, we can extract from a functional binary relation
+precisely which morphism in $\C$ it represents.
+\end{lemma}
+
+\begin{proof}
+Because $\cmpr \Gamma E {[e_d / x_d]}$ is trivial, and because of the univeral property of
+cartesian morphisms, we know it's isomorphic to
+$\cmpr {x : A} {\cdot} {[x / x_d]}$. So let $\theta$ and $\theta^{-1}$ be given such that
+\[
+ \Gamma \prov \theta : (x : A)
+\qquad \Gamma; E \prov \cdot
+\qquad \Gamma; E \prov e_d = \theta(x)  : A
+\]
+\[
+ x : A \prov \theta^{-1} : \Gamma
+\qquad x : A; \cdot \prov \theta^{-1} E
+\qquad x : A;  \cdot \prov x = \theta^{-1} (e_d) : A
+\]
+and we need to find substitutions $\zeta$ and $\zeta^{-1}$ such that
+\[
+\begin{tabular}{l@{$\qquad$}l@{$\qquad$}l}
+$ \Gamma \prov \zeta : (x : A)$&
+$\Gamma; E \prov \cdot$&
+$\Gamma; E \prov e_d = \zeta(x)  : A$\\
+&&$\Gamma; E \prov e_c = \zeta(f(x)) : B$\\
+$ x:A \prov \zeta^{-1} : \Gamma$&
+$x:A; \cdot \prov \zeta^{-1} E$&
+$x:A; \cdot \prov x = \zeta^{-1}(e_d)  : A$\\
+&&$x:A; \cdot \prov f(x) = \zeta^{-1}(e_c) : B$\\
+\end{tabular}
+\]
+We can simply reuse $\zeta = \theta$ and $\zeta^{-1} = \theta^{-1}$, getting $f$
+from inspecting $\theta^{-1}(e_c)$ and observing that since it is a well-typed
+expression in context $x:A$, it must be of the form $f_1(\cdots f_n(x))$ and
+therefore equal to $f_1 \o  \cdots \o f_n$.
+\cqed
+\end{proof}
+
+\end{document}
