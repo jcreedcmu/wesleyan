@@ -49,6 +49,16 @@
   \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
   \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
 }
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \author{Jason Reed}
 \begin{document}
@@ -73,7 +83,7 @@ Suppose every naturality square of $\eta$ is a pushout
 A \ar[r, "f"] \ar[d, "\eta_A" swap] \ar[dr, phantom, "\ulcorner", very near end]
   & B\ar[d, "\eta_B"] \ar[ddr, "h", bend left]\\
 \sharp A \ar[r, "\sharp f" swap] \ar[drr, "g" swap, bend right]
-  & \sharp B \ar[dr, dotted, "k" description, pos=0.4]\\
+  & \sharp B \ar[dr, dotted, "k" description]\\
 &&X
 \end{tikzcd}
 \]
@@ -106,7 +116,7 @@ A relation is {\em trivial} when it's a fibrational reindexing of the empty
 0 \ar[r, "!"] \ar[d, "\eta_0" swap] \ar[dr, phantom, "\ulcorner", very near end]
   & A\ar[d, "\eta_A"] \ar[ddr, "h", bend left]\\
 \sharp 0 \ar[r, "\sharp !" swap] \ar[dr, "\zeta_0" swap, bend right]
-  & \sharp A \ar[dr, "\tau_h" description, pos=0.4]\\
+  & \sharp A \ar[dr, "\tau_h" description]\\
 &0\ar[r, "!" swap]&X
 \end{tikzcd}
 \]
@@ -132,13 +142,167 @@ So we might as well define a trivial relation as one that factors through $\ep_A
 
 \subsubsection*{Functional Relations}
 A synthetic binary relation is a map $\sharp 2 \to X$. Such a relation is functional
-if projection to its first argument yields a trivial relation, i.e. there exists an $x$
+if projection to its first argument yields a trivial relation, i.e. there exists an $d$
 \[
 \begin{tikzcd}
 \sharp 1 \ar[d, "!" swap] \ar[r, "\sharp \binl"] & \sharp 2, \ar[d, "R"]\\
-1 \ar[r, "x" swap] & X
+1 \ar[r, "d" swap] & X
+\end{tikzcd}
+\]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% The following is true, just not that interesting,
+%%%% and it's messing up my pagebreaks:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Of course whenever this happens, I know $d$ is precisely $R \eta \binl$, since I can chase the diagram
+%% \[
+%% \begin{tikzcd}
+%% 1 \ar[r, "\binl"] \ar[d, "\eta"] \ar[dd, bend right, "\rid_1" swap] & 2 \ar[d, "\eta"]\\
+%% \sharp 1 \ar[d, "!"] \ar[r, "\sharp \binl"] & \sharp 2, \ar[d, "R"]\\
+%% 1 \ar[r, "d" swap] & X
+%% \end{tikzcd}
+%% \]
+\subsubsection*{Composition}
+For an integer $n$, I'm going to assume $n = \{0, \ldots, n-1\}$, and
+I'm going to write the function $f : n \to X$ as
+$$[f(0)f(1)\cdots f(n-1)]$$
+Let $x, y, z \in X$ be given.
+Suppose I have $R, S : \sharp 2 \to X$ such that $R\eta = [xy]$
+and $S \eta = [yz]$. We form their composition by first taking
+the pushout copair $k = ([xyz], (R, S) \o \kappa_{2,2})$,
+and then composing to get $R ; S = k \circ \sharp[02]$.
+
+\[
+\begin{tikzcd}
+&[2em]&[2em]\sharp 2 \ar[ddd, bend left=50, "{k \circ \sharp[02]}"]\\
+4 \ar[r, "{[0112]}"] \ar[d, "\eta_4" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & 3\ar[d, "\eta_3"] \ar[ddr, "{[xyz]}", near end, bend left]\\
+\sharp 4 \ar[r, "{\sharp [0112]}" swap] \ar[dr, "\kappa_{2,2}" swap, bend right]
+  & \sharp 3 \ar[from=uur, crossing over, "{\sharp [02]}", near start]
+             \ar[dr, dotted, "k" description]\\
+&\sharp 2 + \sharp 2 \ar[r, "{(R,S)}" swap]& X
 \end{tikzcd}
 \]
 
+\begin{lemma}
+A composition of functions is a function, i.e.
+if $R \sharp \binl$ is trivial, and $S \sharp \binl$ is trivial,
+then $(R;S) \sharp \binl$ is trivial.
+\end{lemma}
+Don't know how to do the above yet. Let's try simpler examples first.
 
+\subsubsection*{Joins with Trivial Relations}
+
+
+Let's say we have two unary relations $R, S : \sharp 1 \to X$ such that $R \eta = S \eta = [x]$,
+and $S$ factors through $1$ as $[x]!$.
+Then we want to show that $k$ is equal to $R$ in
+
+\[
+\begin{tikzcd}
+2 \ar[r, "{[00]}"] \ar[d, "\eta_2" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & 1\ar[d, "\eta_1"] \ar[ddr, "{[x]}", near end, bend left]\\
+\sharp 2 \ar[r, "{\sharp [00]}" swap] \ar[dr, "\kappa_{1,1}" swap, bend right]
+  & \sharp 1
+             \ar[dr, dotted, "k" description]\\
+&\sharp 1 + \sharp 1 \ar[r, "{(R,S)}" swap]& X
+\end{tikzcd}
+\]
+I'm only missing $\star$ in
+\[
+\begin{tikzcd}[column sep=4em, row sep=2em]
+\sharp 2 \ar[r, "\sharp !"] \ar[d, "\kappa_{1,1}" swap] \ar[dr, phantom, "\star", pos=0.15]
+  & \sharp 1 \ar[d, "R"]\\
+\sharp 1 + \sharp 1 \ar[ur, "{(\rid,\,{\eta !})}" description] \ar[r, "{(R, S)}" swap]
+  & X \\
+\end{tikzcd}
+\]
+and I think I need some more general property of $\kappa$ to obtain that, analogous
+to the preservation of opcartesian morphisms by products.
+
+\subsubsection*{Realizing I Don't Really Have Pushouts}
+I don't think I can ignore the 2-categorical structure going on here.
+What I really have, I think, is, given an $h$ and a $g$ that make the outer
+square commute, I get a $k$ such that $k\eta_B = h$ and an $\alpha : k(\sharp f) \imp g$.
+The 'uniqueness' property is that for any $k' : \sharp B \to X$ and $\alpha' : k' (\sharp f) \imp g$
+where $k \eta_B = h$, then there's a unique 2-cell $\beta : k' \imp k$ such that
+$\alpha \o (\beta * \sharp f) = \alpha'$.
+\[
+\begin{tikzcd}
+A \ar[r, "f"] \ar[d, "\eta_A" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & B \twocellswap{ddr}{equal} \ar[d, "\eta_B"] \ar[ddr, "h", bend left]\\
+\sharp A \twocell{drr}{"\alpha"} \ar[r, "\sharp f" swap] \ar[drr, "g"{swap}, bend right]
+  & \sharp B  \ar[dr, dotted, "k" description]\\
+&&X
+\end{tikzcd}
+\]
+
+\subsubsection*{Another Idea}
+
+Can I get away with imagining that the naturality square for $\sharp$ is not literally
+a pushout, but a morphism away from one?
+\[
+\begin{tikzcd}
+A \ar[rr, "f"] \ar[dd, "\eta_A" swap]
+  && B  \ar[dd, lightgray] \ar[dl, "\eta_B"] \ar[dddr, "h", bend left]\\
+&\sharp B \ar[dr, "\xi_f"] \\
+\sharp A  \ar[rr, lightgray] \ar[ur, "\sharp f" swap] \ar[drrr, "g"{swap}, bend right]
+  && \sharp A +_A B  \ar[dr, dotted, "k" description]\\
+&&&X
+\end{tikzcd}
+\]
+
+The idea here is that $k$ is unique such that $k\xi_f \sharp f = g$
+and $k \xi_f \eta_B = h$.
+
+Can we reiterate the reasoning about trivial objects? Here's the general setup:
+\[
+\begin{tikzcd}
+0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, "h", bend left]\\
+&\sharp A \ar[dr, "\xi_!"] \\
+\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+  && \sharp 0 +_0 A  \ar[dr, dotted, "\tau_h" description]\\
+&&0 \ar[r, "!" swap]&X
+\end{tikzcd}
+\]
+
+And then defining $\ep_A = \tau_{\rid_A}$ yields
+\[
+\begin{tikzcd}
+0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left]\\
+&\sharp A \ar[dr, "\xi_!"] \\
+\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+  && \sharp 0 +_0 A  \ar[dr, dotted, "\ep_A" description]\\
+&&0 \ar[r, "!" swap]&A
+\end{tikzcd}
+\]
+And the larger picture for trying to trivialize $h : A \to X$ is
+\[
+\begin{tikzcd}
+0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left] \ar[ddddrr, bend left, "h"]\\
+&\sharp A \ar[dr, "\xi_!"] \\
+\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+  && \sharp 0 +_0 A  \ar[dr, "\ep_A" description]\\
+&&0 \ar[r, "!" swap] \ar[drr, "!" swap, bend right=20] &A \ar[dr, "h"]\\
+&&&&X
+\end{tikzcd}
+\]
+So yeah, I think it works; being trivial is still about factoring through something, in
+this case $\ep_A \xi_!$.
+
+\subsubsection*{Joins With This Idea}
+
+Oof, I don't see how I can do much with
+\[
+\begin{tikzcd}
+2 \ar[rr, "!"] \ar[dd, "\eta_2" swap]
+  && 1  \ar[dd, lightgray] \ar[dl, "\eta_1"] \ar[dddr, "{[x]}", bend left]\\
+&\sharp 1 \ar[dr, "\xi_!"] \\
+\sharp 2  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\kappa_{1,1}"{swap}, bend right=22]
+  && \sharp 2 +_2 1  \ar[dr, dotted, "k" description]\\
+&&\sharp 1 + \sharp 1 \ar[r, "{(R, S)}" swap]&X
+\end{tikzcd}
+\]
 \end{document}
