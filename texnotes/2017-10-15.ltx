@@ -1,0 +1,144 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+Suppose I have a functor $\sharp$ and natural transformations
+\[\eta_A : A \to  \sharp A\qquad
+\kappa_{A, B} : \sharp(A + B) \to \sharp A + \sharp B
+\qquad \zeta_A : \sharp 0 \to 0\]
+
+Suppose every naturality square of $\eta$ is a pushout
+\[
+\begin{tikzcd}
+A \ar[r, "f"] \ar[d, "\eta_A" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & B\ar[d, "\eta_B"] \ar[ddr, "h", bend left]\\
+\sharp A \ar[r, "\sharp f" swap] \ar[drr, "g" swap, bend right]
+  & \sharp B \ar[dr, dotted, "k" description, pos=0.4]\\
+&&X
+\end{tikzcd}
+\]
+and that $\eta$ and $\kappa$ are compatible
+\[
+\begin{tikzcd}
+A+B \ar[d,"\eta_{A+B}" swap] \ar[dr, "\eta_A + \eta_B"]\\
+\sharp(A + B) \ar[r, "\kappa_{A,B}" swap] & \sharp A + \sharp B
+\end{tikzcd}
+\]
+
+\subsubsection*{Reasoning about 0}
+If $\zeta$ is natural, then it almost looks like it ought to be the case that
+$\sharp 0 \cong 0$, but I can't verify the triangle $\star$, only the bottom
+right triangle, and the overall square.
+\[
+\begin{tikzcd}
+\sharp 0 \ar[dr, phantom, "\star", very near start] \ar[d,"\zeta_{0}" swap]  \ar[r, "\sharp ! = \rid_{\sharp 0}"] & \sharp 0 \ar[d, "\zeta_0"]\\
+ 0 \ar[r, "!" swap] \ar[ur, "!" description] &   0
+\end{tikzcd}
+\]
+
+\subsubsection*{Trivial Relations}
+
+A {\em synthetic relation} of arity $A$ is a map $\sharp A \to X$.
+A relation is {\em trivial} when it's a fibrational reindexing of the empty
+ relation $\sharp 0 \to 0 \to X$.
+\[
+\begin{tikzcd}
+0 \ar[r, "!"] \ar[d, "\eta_0" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & A\ar[d, "\eta_A"] \ar[ddr, "h", bend left]\\
+\sharp 0 \ar[r, "\sharp !" swap] \ar[dr, "\zeta_0" swap, bend right]
+  & \sharp A \ar[dr, "\tau_h" description, pos=0.4]\\
+&0\ar[r, "!" swap]&X
+\end{tikzcd}
+\]
+All trivial relations can be generated from reindexings of the identity. Define
+ $\ep_A = \tau_{\rid_A} : \sharp A \to A$, and observe that $\tau_h = h \ep_A$
+for any $h : A \to X$.
+\[
+\begin{tikzcd}
+0 \ar[r, "!"] \ar[d, "\eta_0" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & A \ar[ddr, equal, bend left=25] \ar[d, "\eta_A" description] \ar[dddrr, "h", bend left]\\
+\sharp 0 \ar[r, "\sharp !" swap] \ar[ddr, "\zeta_0" swap, bend right]
+  & \sharp A \ar[dr, "\ep_A" description]\\
+&&A \ar[dr, "h" description]\\
+&0 \ar[ur, "!"] \ar[rr, "!" swap]&&X
+\end{tikzcd}
+\]
+That is, $\ep_A$ is {\em defined} as being the pushout copairing of $\rid_A$ and $!\zeta_0$.
+We can then note that $h \ep_A$ {\em is} (by uniqueness) the pushout copairing of $h$
+and $!\zeta_0$, because $h \ep_A \eta_A = h$, and $h \ep_A (\sharp!) = !\zeta_0$.
+
+So we might as well define a trivial relation as one that factors through $\ep_A$.
+
+
+\subsubsection*{Functional Relations}
+A synthetic binary relation is a map $\sharp 2 \to X$. Such a relation is functional
+if projection to its first argument yields a trivial relation, i.e. there exists an $x$
+\[
+\begin{tikzcd}
+\sharp 1 \ar[d, "!" swap] \ar[r, "\sharp \binl"] & \sharp 2, \ar[d, "R"]\\
+1 \ar[r, "x" swap] & X
+\end{tikzcd}
+\]
+
+
+\end{document}

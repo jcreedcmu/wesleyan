@@ -1706,3 +1706,31 @@ demand it. It seems like a kind of distributivity property.
 Q: Is my characterization of categories as relational things actually
 a full embedding?
 A: Hm, maybe not. Need some kind of grading perhaps.
+
+=== 2017.10.15
+
+Q: What agda did I start writing for relational things?
+A:
+<<<
+{-# OPTIONS --without-K #-}
+module b where
+
+open import HoTT
+
+
+bd : Set → Set₁
+bd X = Σ Set (λ A → A → X)
+
+postulate
+  fib : {X : Set} → bd X → Set
+  hom : {A B X : Set} {g : B → X} {f : A → B} → fib (B , g) → fib (A , g ∘ f) → Set
+
+module _ {A B X : Set} (g : B → X) (f : A → B) where
+  postulate
+    reidx : fib (A , g ∘ f) → fib (B , g)
+    opidx : fib (B , g) → fib (A , g ∘ f)
+    reidx-hom : (t : fib (A , g ∘ f)) → hom (reidx t) t
+    opidx-hom : (t : fib (B , g)) → hom t (opidx t)
+>>>
+
+=== 2017.10.15
