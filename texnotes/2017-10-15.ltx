@@ -223,7 +223,7 @@ to the preservation of opcartesian morphisms by products.
 I don't think I can ignore the 2-categorical structure going on here.
 What I really have, I think, is, given an $h$ and a $g$ that make the outer
 square commute, I get a $k$ such that $k\eta_B = h$ and an $\alpha : k(\sharp f) \imp g$.
-The 'uniqueness' property is that for any $k' : \sharp B \to X$ and $\alpha' : k' (\sharp f) \imp g$
+The `uniqueness' property is that for any $k' : \sharp B \to X$ and $\alpha' : k' (\sharp f) \imp g$
 where $k \eta_B = h$, then there's a unique 2-cell $\beta : k' \imp k$ such that
 $\alpha \o (\beta * \sharp f) = \alpha'$.
 \[
@@ -236,73 +236,124 @@ A \ar[r, "f"] \ar[d, "\eta_A" swap] \ar[dr, phantom, "\ulcorner", very near end]
 \end{tikzcd}
 \]
 
-\subsubsection*{Another Idea}
+%% \subsubsection*{Another Idea}
 
-Can I get away with imagining that the naturality square for $\sharp$ is not literally
-a pushout, but a morphism away from one?
+%% Can I get away with imagining that the naturality square for $\sharp$ is not literally
+%% a pushout, but a morphism away from one?
+%% \[
+%% \begin{tikzcd}
+%% A \ar[rr, "f"] \ar[dd, "\eta_A" swap]
+%%   && B  \ar[dd, lightgray] \ar[dl, "\eta_B"] \ar[dddr, "h", bend left]\\
+%% &\sharp B \ar[dr, "\xi_f"] \\
+%% \sharp A  \ar[rr, lightgray] \ar[ur, "\sharp f" swap] \ar[drrr, "g"{swap}, bend right]
+%%   && \sharp A +_A B  \ar[dr, dotted, "k" description]\\
+%% &&&X
+%% \end{tikzcd}
+%% \]
+
+%% The idea here is that $k$ is unique such that $k\xi_f \sharp f = g$
+%% and $k \xi_f \eta_B = h$.
+
+%% Can we reiterate the reasoning about trivial objects? Here's the general setup:
+%% \[
+%% \begin{tikzcd}
+%% 0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+%%   && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, "h", bend left]\\
+%% &\sharp A \ar[dr, "\xi_!"] \\
+%% \sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+%%   && \sharp 0 +_0 A  \ar[dr, dotted, "\tau_h" description]\\
+%% &&0 \ar[r, "!" swap]&X
+%% \end{tikzcd}
+%% \]
+
+%% And then defining $\ep_A = \tau_{\rid_A}$ yields
+%% \[
+%% \begin{tikzcd}
+%% 0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+%%   && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left]\\
+%% &\sharp A \ar[dr, "\xi_!"] \\
+%% \sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+%%   && \sharp 0 +_0 A  \ar[dr, dotted, "\ep_A" description]\\
+%% &&0 \ar[r, "!" swap]&A
+%% \end{tikzcd}
+%% \]
+%% And the larger picture for trying to trivialize $h : A \to X$ is
+%% \[
+%% \begin{tikzcd}
+%% 0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
+%%   && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left] \ar[ddddrr, bend left, "h"]\\
+%% &\sharp A \ar[dr, "\xi_!"] \\
+%% \sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
+%%   && \sharp 0 +_0 A  \ar[dr, "\ep_A" description]\\
+%% &&0 \ar[r, "!" swap] \ar[drr, "!" swap, bend right=20] &A \ar[dr, "h"]\\
+%% &&&&X
+%% \end{tikzcd}
+%% \]
+%% So yeah, I think it works; being trivial is still about factoring through something, in
+%% this case $\ep_A \xi_!$.
+
+%% \subsubsection*{Joins With This Idea}
+
+%% Oof, I don't see how I can do much with
+%% \[
+%% \begin{tikzcd}
+%% 2 \ar[rr, "!"] \ar[dd, "\eta_2" swap]
+%%   && 1  \ar[dd, lightgray] \ar[dl, "\eta_1"] \ar[dddr, "{[x]}", bend left]\\
+%% &\sharp 1 \ar[dr, "\xi_!"] \\
+%% \sharp 2  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\kappa_{1,1}"{swap}, bend right=22]
+%%   && \sharp 2 +_2 1  \ar[dr, dotted, "k" description]\\
+%% &&\sharp 1 + \sharp 1 \ar[r, "{(R, S)}" swap]&X
+%% \end{tikzcd}
+%% \]
+
+\subsubsection*{When do I have 2-cells?}
+
+I kind of want to say that I'm only concerned about 2-categorical
+structure {\em on arrows out of $\sharp$}. Which is a weirdly
+co-Kleisli-categorical thing to say for a straight-ahead monad.
+
+But this is predicated on the idea that I can distinguish $\sharp$'ed things from not
+$\sharp$'ed things, which is iffy so far.
+
+\subsubsection*{Trivial Objects with 2-cells}
+
+
 \[
 \begin{tikzcd}
-A \ar[rr, "f"] \ar[dd, "\eta_A" swap]
-  && B  \ar[dd, lightgray] \ar[dl, "\eta_B"] \ar[dddr, "h", bend left]\\
-&\sharp B \ar[dr, "\xi_f"] \\
-\sharp A  \ar[rr, lightgray] \ar[ur, "\sharp f" swap] \ar[drrr, "g"{swap}, bend right]
-  && \sharp A +_A B  \ar[dr, dotted, "k" description]\\
-&&&X
+0 \ar[r, "!"] \ar[d, "\eta_0" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & A \ar[ddr, equal, bend left=25] \ar[d, "\eta_A" description] \ar[dddrr, "h", bend left]\\
+\sharp 0 \twocell{drr}{} \ar[r, "\sharp !" swap] \ar[ddr, "\zeta_0" swap, bend right]
+  & \sharp A \ar[dr, "\ep_A" description]\\
+&&A \ar[dr, "h" description]\\
+&0 \ar[ur, "!"] \ar[rr, "!" swap]&&X
 \end{tikzcd}
 \]
+At least I can say that $h\ep_A$ is isomorphic, as a 1-cell, to $\tau_h$, because
+$h\ep_A(\sharp !)$ does admit a 2-cell down to $! \zeta_0$ by whiskering the
+given 2-cell with $h$.
 
-The idea here is that $k$ is unique such that $k\xi_f \sharp f = g$
-and $k \xi_f \eta_B = h$.
-
-Can we reiterate the reasoning about trivial objects? Here's the general setup:
+So for joins against a trivial relation, the thing I need instead of $\star$ above, is a 2-cell
 \[
-\begin{tikzcd}
-0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
-  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, "h", bend left]\\
-&\sharp A \ar[dr, "\xi_!"] \\
-\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
-  && \sharp 0 +_0 A  \ar[dr, dotted, "\tau_h" description]\\
-&&0 \ar[r, "!" swap]&X
+\begin{tikzcd}[column sep=4em, row sep=2em]
+\sharp 2 \ar[r, "\sharp !"] \ar[d, "\kappa_{1,1}" swap] \ar[dr, phantom, "\Downarrow", pos=0.25]
+  & \sharp 1 \\
+\sharp 1 + \sharp 1 \ar[ur, "{(\rid,\,{\eta !})}" description, bend right=25] & \
 \end{tikzcd}
 \]
-
-And then defining $\ep_A = \tau_{\rid_A}$ yields
+I think it generally makes sense for
 \[
-\begin{tikzcd}
-0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
-  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left]\\
-&\sharp A \ar[dr, "\xi_!"] \\
-\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
-  && \sharp 0 +_0 A  \ar[dr, dotted, "\ep_A" description]\\
-&&0 \ar[r, "!" swap]&A
+\begin{tikzcd}[column sep=4em, row sep=2em]
+\sharp (A + B) \ar[r, "{\sharp (a, b)}"] \ar[d, "\kappa_{A, B}" swap] \ar[dr, phantom, "\Downarrow", pos=0.25]
+  & \sharp C \\
+\sharp A + \sharp B \ar[ur, "{(\sharp a , \sharp b)}" swap, bend right=25] & \
 \end{tikzcd}
 \]
-And the larger picture for trying to trivialize $h : A \to X$ is
+to exist, though it's not an isomorphism. I can instantiate it
+with $a,b$ both $\rid_1$, and then I think
+that I should probably have a (unique, even?) 2-cell
 \[
-\begin{tikzcd}
-0 \ar[rr, "!"] \ar[dd, "\eta_0" swap]
-  && A  \ar[dd, lightgray] \ar[dl, "\eta_A"] \ar[dddr, equal, bend left] \ar[ddddrr, bend left, "h"]\\
-&\sharp A \ar[dr, "\xi_!"] \\
-\sharp 0  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\zeta_0"{swap}, bend right=20]
-  && \sharp 0 +_0 A  \ar[dr, "\ep_A" description]\\
-&&0 \ar[r, "!" swap] \ar[drr, "!" swap, bend right=20] &A \ar[dr, "h"]\\
-&&&&X
-\end{tikzcd}
-\]
-So yeah, I think it works; being trivial is still about factoring through something, in
-this case $\ep_A \xi_!$.
-
-\subsubsection*{Joins With This Idea}
-
-Oof, I don't see how I can do much with
-\[
-\begin{tikzcd}
-2 \ar[rr, "!"] \ar[dd, "\eta_2" swap]
-  && 1  \ar[dd, lightgray] \ar[dl, "\eta_1"] \ar[dddr, "{[x]}", bend left]\\
-&\sharp 1 \ar[dr, "\xi_!"] \\
-\sharp 2  \ar[rr, lightgray] \ar[ur, "\sharp !" swap] \ar[drr, "\kappa_{1,1}"{swap}, bend right=22]
-  && \sharp 2 +_2 1  \ar[dr, dotted, "k" description]\\
-&&\sharp 1 + \sharp 1 \ar[r, "{(R, S)}" swap]&X
+\begin{tikzcd}[column sep=4em, row sep=2em]
+\sharp 1 + \sharp 1 \ar[r, "{(\rid, \rid)}", pos=0.47, bend left] \ar[r, bend right, "{(\rid, \eta !)}" swap, pos=0.47] \twocell{r}{} & \sharp 1
 \end{tikzcd}
 \]
 \end{document}
