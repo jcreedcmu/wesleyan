@@ -1734,3 +1734,24 @@ module _ {A B X : Set} (g : B → X) (f : A → B) where
 >>>
 
 === 2017.10.15
+
+Q: What other agda false start did I have before realizing that
+η-naturality is merely some laxer kind of 2-categorical pushout?
+A:
+<<<
+postulate
+  ♯ : Set → Set
+  η : {A : Set} → A → ♯ A
+  ♯F : {A B : Set} → (A → B) → ♯ A → ♯ B
+  ♯nat : {A B : Set} {f : A → B} → (a : A) → ♯F f (η a) == η (f a)
+  ♯+ : {A B : Set} → ♯ (A ⊔ B) → ♯ A ⊔ ♯ B
+  ♯push : {A B X : Set} (f : A → B) (g : ♯ A → X) (h : B → X) → h ∘ f == g ∘ η → ♯ B → X
+  ♯push1 : {A B X : Set} {f : A → B} {g : ♯ A → X} {h : B → X} {p : h ∘ f == g ∘ η}
+    → ♯push f g h p ∘ ♯F f == g
+  ♯push2 : {A B X : Set} {f : A → B} {g : ♯ A → X} {h : B → X} {p : h ∘ f == g ∘ η}
+    → ♯push f g h p ∘ η == h
+  ♯pushu : {A B X : Set} {f : A → B} {g : ♯ A → X} {h : B → X} {p : h ∘ f == g ∘ η}
+    {z : ♯ B → X}
+    → z ∘ ♯F f == g → z ∘ η == h → z == ♯push f g h p
+  ♯compat : {A B : Set} → ♯+ ∘ η {A ⊔ B} == {!!}
+>>>
