@@ -1755,3 +1755,14 @@ postulate
     → z ∘ ♯F f == g → z ∘ η == h → z == ♯push f g h p
   ♯compat : {A B : Set} → ♯+ ∘ η {A ⊔ B} == {!!}
 >>>
+
+=== 2017.10.16
+
+Q: Any progress on thinking about agda-ization of stuff?
+A: Yeah, I returned to dealing with the fibers over a function as an
+explicit set, and made some progress that way.
+
+Q: What's the same as a heteromorphism in a bifibration?
+A: If f : A → B and P lives over A and Q lives over B,
+then either a morphism Σ_f P → Q (over id_B) or a morphism
+P → f^* Q (over id_A) is just as good as a morphism over f.
