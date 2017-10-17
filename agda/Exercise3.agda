@@ -85,7 +85,7 @@ t~ g h = transport (λ z → fib (cpf g h ∘ z)) (λ= b1k1~b2k2)
 {- 5. Do the last bit of 'interesting' work, invoking pushk1-lem: -}
 jointriv4 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h)) →
   transport fib (cpf-eq g) (copair R (push inl S)) == t~ g h (pushk1 R S)
-jointriv4 g h R S = ? -- jointriv5 g h R S ∙ ! (ap (t~ g h) (pushk1-lem g h R S))
+jointriv4 g h R S = {!!} -- jointriv5 g h R S ∙ ! (ap (t~ g h) (pushk1-lem g h R S))
 
 {- 4. We descend into the parts that matter,
       and use the fact that p : push inl S == triv g. -}
