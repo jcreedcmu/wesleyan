@@ -16,19 +16,8 @@ zef B ()
 zpf-eq : {A X : Set} (f : A → X) → zef X == f ∘ (zef A)
 zpf-eq f = λ= (λ ())
 
-zpf-aeq : {A X : Set} (f g : ⊥ → X) → f == g
+zpf-aeq : {X : Set} (f g : ⊥ → X) → f == g
 zpf-aeq f g = λ= (λ ())
-
---  -- (zpf-eq (cpf f g)) = (zpf-eq (inr ∘ (cpf f g)))
-
--- -- pull (zef (A ⊔ B)) (transport fib (zpf-eq (cpf f g)) zero) ==
--- --      pull (inr ∘ zef B) (transport fib (zpf-eq g) zero)
--- zpf-eq2 : {A X D : Set} (ff : A → X) (gg : X → Y) (C : (X : Set) (ff : A → X) (zf : ⊥ → X) (zfe : zef → D)
---   → C ff (zef X)
--- -- e.g. ff = cpf f g
--- --      gg = inl
--- -- → zpf-eq ff == zpf-eq (gg ∘ ff)
--- zpf-eq2
 
 
 cpf-eq : {A1 A2 B X : Set}  {c1 : A1 → X} {c2 : A2 → X} (d : X → B)
@@ -106,14 +95,14 @@ postulate
   zero : {B : Set} → fib (zef B)
   -- this is the UMP of the terminal object in a category living over (Sets/X)^op
   zero= : {B X : Set}  (d : X → B) (S : fib d)
-    → is-contr (S ≤ pull (zef X) (transport fib (zpf-eq d) zero))
+    → is-contr (S ≤ pull (zef X) (transport fib (zpf-aeq (zef B) (d ∘ (zef X))) zero))
 
-zero=s : {B X : Set}  {d : X → B} (S : fib d) → S ≤ pull (zef X) (transport fib (zpf-eq d) zero)
+zero=s : {B X : Set}  {d : X → B} (S : fib d) → S ≤ pull (zef X) (transport fib (zpf-aeq (zef B) (d ∘ zef X)) zero)
 zero=s {d = d} S = zero= d S .fst
 
 -- trivial element of fiber
 triv : {A X : Set} (f : A → X) → fib f
-triv {A} {X} f = pull (zef A) (transport fib (zpf-eq f) zero)
+triv {A} {X} f = pull (zef A) (transport fib (zpf-aeq (zef X) (f ∘ zef A)) zero)
 
 sing : {X : Set} (x : X) → (⊤ → X)
 sing x tt = x
@@ -135,52 +124,46 @@ module E1 where
     jointriv2 : join f R (triv f) ≤ R
     jointriv2 = ≤t jointriv2a (≤=r (pull-act0 R))
 
--- C = A ⊔ B
--- h = cpf f g : C → X
--- k = inr : B → C
--- zef B : ⊥ → B
--- zef C : ⊥ → C
-
--- zpf-eq h : zef X == h ∘ (zef C)
-
--- zpf-eq h : zef X == h ∘ (zef C)
--- zpf-eq (h ∘ k) : zef X == h ∘ k ∘ (zef B)
-
-
-concrete : {B C X : Set} (h : C → X) (k : B → C)
-  → pull (zef C) (transport fib (zpf-eq h) zero) ==
-    pull (k ∘ zef B) (transport fib (zpf-eq (h ∘ k)) zero)
--- concrete : pull (zef (A ⊔ B)) (transport fib (zpf-eq (cpf f g)) zero) ≤
---      pull (inr ∘ zef B) (transport fib (zpf-eq g) zero)
-concrete {B} {C} {X} h k = {!zpf-eq (h ∘ k)!}
 
 module E2 where
-  -- product of two relations over the same support
   pullf : {A B : Set} → (A ⊔ B) ⊔ B → (A ⊔ B)
   pullf = cpf idn inr
 
   cpf-lem : {A B X : Set} (f : A → X) (g : B → X) → cpf (cpf f g) g == cpf f g ∘ (cpf idn inr)
   cpf-lem {A} {B} f g = cpf-eq (cpf f g)
 
+  -- join of two relations over overlapping support
   join : {A B X : Set} {f : A → X} {g : B → X} (R : fib (cpf f g)) (S : fib g) → fib (cpf f g)
   join {f = f} {g} R S = pull pullf (transport fib (cpf-lem f g) (copair R S))
 
   jointriv : {A B X : Set} (f : A → X) (g : B → X) (R : fib (cpf f g))
     → push inl R == triv f
     → push inl (join R (triv g)) == triv f
-  jointriv {A} {B} f g R p = ap (push inl) (! lem1) ∙ p where
+  jointriv {A} {B} {X} f g R p = ap (push inl) (! lem1) ∙ p where
     from1 : (R ≤ pull idn R) × (R ≤ pull inr (triv g)) → (R ≤ join R (triv g))
     from1 = –> (copair= {c1 = idn} {c2 = inr} (cpf f g) R (triv g) R)
 
     froma : R ≤ pull idn R
     froma = ≤=r (! (pull-act0 R))
 
-    from2 : pull (inr ∘ zef B) (transport fib (zpf-eq g) zero) ≤ pull inr (triv g)
-    from2 = ≤=r (pull-act2 inr (zef B) (transport fib (zpf-eq g) zero))
+    zeg : zef X == cpf f g ∘ inr ∘ zef B
+    zeg = zpf-aeq (zef X) (g ∘ (zef B))
 
+    zecpf : zef X == cpf f g ∘ zef (A ⊔ B)
+    zecpf = zpf-aeq (zef X) (cpf f g ∘ zef (A ⊔ B))
 
-    from3 : pull (zef (A ⊔ B)) (transport fib (zpf-eq (cpf f g)) zero) ≤ pull (inr ∘ zef B) (transport fib (zpf-eq g) zero)
-    from3 = ≤=r (concrete (cpf f g) inr)
+    from2 : pull (inr ∘ zef B) (transport fib zeg zero) ≤ pull inr (triv g)
+    from2 = ≤=r (pull-act2 inr (zef B) (transport fib zeg zero))
+
+    lconcrete : {C X : Set} (d : C → X) (m q : ⊥ → C) →
+      pull {f = d} m (transport fib (zpf-aeq (zef X) (d ∘ m)) zero) ==
+      pull {f = d} q (transport fib (zpf-aeq (zef X) (d ∘ q)) zero)
+    lconcrete {X = X} d m q = ap (λ t → pull t (transport fib (zpf-aeq (zef X) (d ∘ t)) zero)) (zpf-aeq m q)
+
+    from3 :
+      pull (zef (A ⊔ B)) (transport fib zecpf zero) ≤
+      pull (inr ∘ zef B) (transport fib zeg zero)
+    from3 = ≤=r (lconcrete (cpf f g) (zef (A ⊔ B)) (inr ∘ zef B))
 
     fromb : R ≤ pull inr (triv g)
     fromb =  ≤t (zero=s R) (≤t from3 from2)
@@ -188,8 +171,11 @@ module E2 where
     fromlem : R ≤ join R (triv g)
     fromlem = from1 (froma , fromb)
 
+    to1 : join R (triv g) ≤ pull idn R
+    to1 =  <– (copair= (cpf f g) R (triv g) (join R (triv g))) (≤r (join R (triv g))) .fst
+
     tolem : join R (triv g) ≤ R
-    tolem = {!!}
+    tolem = ≤t to1 (≤=r (pull-act0 R))
 
     lem1 : R == join R (triv g)
     lem1 = ≤anti R (join R (triv g)) fromlem tolem
