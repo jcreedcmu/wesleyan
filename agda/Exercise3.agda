@@ -14,46 +14,61 @@ cpf-lem {B} {C} g h = cpf-eq (cpf g h)
 join : {B C X : Set} {g : B → X} {h : C → X} (R : fib g) (S : fib (cpf g h)) → fib (cpf g h)
 join {g = g} {h} R S = pull pullf (transport fib (cpf-lem g h) (copair R S))
 
+{- A preview of the theorem we prove at the bottom is:
+
 jointriv : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
   → push inl S == triv g
   → push inl (join R S) == R
-jointriv {A} {B} {X} f g R p = {!!}
---   from1 : (R ≤ pull idn R) × (R ≤ pull inr (triv g)) → (R ≤ join R (triv g))
---   from1 = –> (copair= {c1 = idn} {c2 = inr} (cpf f g) R (triv g) R)
 
---   froma : R ≤ pull idn R
---   froma = ≤=r (! (pull-act0 R))
+The square we'll want to apply the beck-chevalley condition to is
 
---   zeg : zef X == cpf f g ∘ inr ∘ zef B
---   zeg = zpf-aeq (zef X) (g ∘ (zef B))
+                cart
+     B ⊔ C → X --------> B ⊔ (B ⊔ C) → X
+          | _|           |
+   opcart |              | opcart
+          |              |
+          v              v
+       B → X ---------> B ⊔ B → X
+                cart
 
---   zecpf : zef X == cpf f g ∘ zef (A ⊔ B)
---   zecpf = zpf-aeq (zef X) (cpf f g ∘ zef (A ⊔ B))
+so the assignment to the arguments of the postulate is
+f := cpf g h, plus the b1, k1, b2, k2 below:
+-}
 
---   from2 : pull (inr ∘ zef B) (transport fib zeg zero) ≤ pull inr (triv g)
---   from2 = ≤=r (pull-act2 inr (zef B) (transport fib zeg zero))
+module _ {B C : Set} where
+  b1 : B ⊔ (B ⊔ C) → (B ⊔ C)
+  b1 = pullf
+  k1 : B ⊔ B → B ⊔ (B ⊔ C)
+  k1 = cpf inl (inr ∘ inl)
+  b2 : B → B ⊔ C
+  b2 = inl
+  k2 : B ⊔ B → B
+  k2 = cpf idn idn
 
---   lconcrete : {C X : Set} (d : C → X) (m q : ⊥ → C) →
---     pull {f = d} m (transport fib (zpf-aeq (zef X) (d ∘ m)) zero) ==
---     pull {f = d} q (transport fib (zpf-aeq (zef X) (d ∘ q)) zero)
---   lconcrete {X = X} d m q = ap (λ t → pull t (transport fib (zpf-aeq (zef X) (d ∘ t)) zero)) (zpf-aeq m q)
+  -- The b's and k's commute appropriately:
+  b1k1~b2k2 : (x : B ⊔ B) → b1 (k1 x) == b2 (k2 x)
+  b1k1~b2k2 (inl _) = idp
+  b1k1~b2k2 (inr _) = idp
 
---   from3 :
---     pull (zef (A ⊔ B)) (transport fib zecpf zero) ≤
---     pull (inr ∘ zef B) (transport fib zeg zero)
---   from3 = ≤=r (lconcrete (cpf f g) (zef (A ⊔ B)) (inr ∘ zef B))
+jointriv2 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
+  → push inl S == triv g
+  → pull (k2 {C = C})
+      (transport (λ z → fib (cpf g h ∘ z)) (λ= b1k1~b2k2)
+       (push k1 (transport fib (cpf-lem g h) (copair R S))))
+      == R
+jointriv2  = {!!}
+{- 2. We transform the goal with beck-chevalley... -}
 
---   fromb : R ≤ pull inr (triv g)
---   fromb =  ≤t (zero=s R) (≤t from3 from2)
+jointriv1 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
+  → push inl S == triv g
+  → push inl (pull {f = cpf g h} pullf (transport fib (cpf-lem g h) (copair R S))) == R
+jointriv1 {B} {C} g h R S p =
+  beck-chevalley {k1 = k1} (λ= b1k1~b2k2) (transport fib (cpf-lem g h) (copair R S))
+  ∙ jointriv2 g h R S p
+{- 1. We expand the definition of join... -}
 
---   fromlem : R ≤ join R (triv g)
---   fromlem = from1 (froma , fromb)
-
---   to1 : join R (triv g) ≤ pull idn R
---   to1 =  <– (copair= (cpf f g) R (triv g) (join R (triv g))) (≤r (join R (triv g))) .fst
-
---   tolem : join R (triv g) ≤ R
---   tolem = ≤t to1 (≤=r (pull-act0 R))
-
---   lem1 : R == join R (triv g)
---   lem1 = ≤anti R (join R (triv g)) fromlem tolem
+jointriv : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
+  → push inl S == triv g
+  → push inl (join R S) == R
+jointriv g h R S p = jointriv1 g h R S p
+{- 0. This part of the story can be read backwards... -}

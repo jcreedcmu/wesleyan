@@ -101,25 +101,25 @@ zero=s : {B X : Set}  {d : X → B} (S : fib d) → S ≤ triv d
 zero=s {d = d} S = zero= d S .fst
 
 {-
-One can start at *, and proceed to f ∘ g2 in two different ways;
+One can start at *, and proceed to f ∘ b2 in two different ways;
 we postulate that they're equal.
 
                 pull
-          f -----------> f ∘ g1
+          f -----------> f ∘ b1
           |             *|
      push |              | push
           |              |
           v              v
-        f ∘ g2 ------->  f ∘ g1 ∘ k1 = f ∘ g2 ∘ k2
+        f ∘ b2 ------->  f ∘ b1 ∘ k1 = f ∘ b2 ∘ k2
                 pull
 -}
 
 postulate
   beck-chevalley : {A B1 B2 K X : Set}
     {f : A → X}
-    {g1 : B1 → A} {g2 : B2 → A}
+    {b1 : B1 → A} {b2 : B2 → A}
     {k1 : K → B1} {k2 : K → B2}
-    → (p : g1 ∘ k1 == g2 ∘ k2)
-    → (R : fib (f ∘ g1))
-    → push {f = f} g2 (pull {f = f} g1 R) ==
-    pull {f = f ∘ g2} k2 (coe (ap (λ z → fib (f ∘ z)) p) (push {f = f ∘ g1} k1 R))
+    → (p : b1 ∘ k1 == b2 ∘ k2)
+    → (R : fib (f ∘ b1))
+    → push {f = f} b2 (pull {f = f} b1 R) ==
+    pull {f = f ∘ b2} k2 (coe (ap (λ z → fib (f ∘ z)) p) (push {f = f ∘ b1} k1 R))
