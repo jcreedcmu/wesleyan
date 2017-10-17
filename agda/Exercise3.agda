@@ -3,6 +3,7 @@ module Exercise3 where
 
 open import HoTT hiding (_≤_ ; S)
 open import Relational
+import Exercise1
 
 pullf : {B C : Set} → B ⊔ (B ⊔ C) → (B ⊔ C)
 pullf = cpf inl idn
@@ -50,25 +51,48 @@ module _ {B C : Set} where
   b1k1~b2k2 (inl _) = idp
   b1k1~b2k2 (inr _) = idp
 
+-- Here's a lemma that I think will hinge on products preserving
+-- opcartesian morphisms
+jointriv4 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h)) →
+  transport fib (cpf-eq g) (copair R (push inl S))
+  == (transport (λ z → fib (cpf g h ∘ z)) (λ= b1k1~b2k2)
+     (push k1 (transport fib (cpf-eq (cpf g h)) (copair R S))))
+jointriv4 = {!!}
+
+{- 4. We descend into the parts that matter,
+      and use the fact that p : push inl S == triv g. -}
+jointriv3 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
+  → push inl S == triv g
+  → Exercise1.join g R (triv g) ==
+      pull (cpf idn idn)
+      (transport (λ z → fib (( cpf g h) ∘ z)) (λ= b1k1~b2k2)
+       (push k1 (transport fib (cpf-eq (cpf g h)) (copair R S))))
+jointriv3 g h R S p =
+  ap (pull (cpf idn idn))
+    (ap (λ z → transport fib (cpf-eq g) (copair R z)) (! p) ∙ jointriv4 g h R S)
+
+{- 3. We take advantage of the work we already did in Exercise1 -}
 jointriv2 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
   → push inl S == triv g
   → pull (k2 {C = C})
       (transport (λ z → fib (cpf g h ∘ z)) (λ= b1k1~b2k2)
-       (push k1 (transport fib (cpf-lem g h) (copair R S))))
+       (push k1 (transport fib (cpf-eq (cpf g h)) (copair R S))))
       == R
-jointriv2  = {!!}
-{- 2. We transform the goal with beck-chevalley... -}
+jointriv2 {B} {C} g h R S p = ! (Exercise1.jointriv g R ∙ jointriv3 g h R S p)
 
+{- 2. We transform the goal with beck-chevalley, and expand
+      cpf-lem g h -β-> cpf-eq (cpf g h). -}
 jointriv1 : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
   → push inl S == triv g
   → push inl (pull {f = cpf g h} pullf (transport fib (cpf-lem g h) (copair R S))) == R
 jointriv1 {B} {C} g h R S p =
   beck-chevalley {k1 = k1} (λ= b1k1~b2k2) (transport fib (cpf-lem g h) (copair R S))
   ∙ jointriv2 g h R S p
-{- 1. We expand the definition of join... -}
 
+{- 1. We expand the definition of join... -}
 jointriv : {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h))
   → push inl S == triv g
   → push inl (join R S) == R
 jointriv g h R S p = jointriv1 g h R S p
+
 {- 0. This part of the story can be read backwards... -}
