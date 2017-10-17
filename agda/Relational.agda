@@ -127,3 +127,6 @@ postulate
 postulate
   copair-pres-push : {A B1 B2 X : Set} (f : A → X) (g1 : B1 → A) (g2 : B2 → A) (R : fib f)
     → push (cpf g1 g2) R == coe (ap fib (cpf-eq f)) (copair (push g1 R) (push g2 R))
+
+  -- copair-pres-push : {A1 A2 B1 B2 X : Set} (f1 : A1 → X) (f2 : A2 → X) (g1 : B1 → A1) (g2 : B2 → A2) (R1 : fib f1) (R2 : fib f2)
+  --   → push (cpf (inl ∘ g1) (inr ∘ g2)) R == coe (ap fib ?) (copair (push g1 R1) (push g2 R2))
