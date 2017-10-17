@@ -123,3 +123,7 @@ postulate
     → (R : fib (f ∘ b1))
     → push {f = f} b2 (pull {f = f} b1 R) ==
     pull {f = f ∘ b2} k2 (coe (ap (λ z → fib (f ∘ z)) p) (push {f = f ∘ b1} k1 R))
+
+postulate
+  copair-pres-push : {A B1 B2 X : Set} (f : A → X) (g1 : B1 → A) (g2 : B2 → A) (R : fib f)
+    → push (cpf g1 g2) R == coe (ap fib (cpf-eq f)) (copair (push g1 R) (push g2 R))
