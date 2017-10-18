@@ -1766,3 +1766,9 @@ Q: What's the same as a heteromorphism in a bifibration?
 A: If f : A → B and P lives over A and Q lives over B,
 then either a morphism Σ_f P → Q (over id_B) or a morphism
 P → f^* Q (over id_A) is just as good as a morphism over f.
+
+=== 2017.10.17
+
+Q: What's a better way to prove equalities of equalities of functions
+from a coproduct?
+A: ???

@@ -16,12 +16,14 @@ zef B ()
 zpf-aeq : {X : Set} (f g : ⊥ → X) → f == g
 zpf-aeq f g = λ= (λ ())
 
+cpf-eq0 :  {A1 A2 B X : Set}  {c1 : A1 → X} {c2 : A2 → X} (d : X → B)
+  (z : A1 ⊔ A2) → cpf (d ∘ c1) (d ∘ c2) z == d (cpf c1 c2 z)
+cpf-eq0 d (inl x) = idp
+cpf-eq0 d (inr x) = idp
+
 cpf-eq : {A1 A2 B X : Set}  {c1 : A1 → X} {c2 : A2 → X} (d : X → B)
   → cpf (d ∘ c1) (d ∘ c2) == d ∘ cpf c1 c2
-cpf-eq {A1} {A2} {c1 = c1} {c2} d = λ= cpf-eq0 where
-  cpf-eq0 : (z : A1 ⊔ A2) → cpf (d ∘ c1) (d ∘ c2) z == d (cpf c1 c2 z)
-  cpf-eq0 (inl x) = idp
-  cpf-eq0 (inr x) = idp
+cpf-eq {A1} {A2} {c1 = c1} {c2} d = λ= (cpf-eq0 d)
 
 postulate
   -- fiber over every function
@@ -128,6 +130,7 @@ postulate
   -- copair-pres-push : {A B1 B2 X : Set} (f : A → X) (g1 : B1 → A) (g2 : B2 → A) (R : fib f)
   --   → push (cpf g1 g2) R == coe (ap fib (cpf-eq f)) (copair (push g1 R) (push g2 R))
 
+
   copair-pres-push : {A1 A2 B1 B2 X : Set}
     (f1 : A1 → X)  (f2 : A2 → X)
     (g1 : B1 → A1) (g2 : B2 → A2)
@@ -135,3 +138,30 @@ postulate
     → push (cpf (inl ∘ g1) (inr ∘ g2)) (copair R1 R2) ==
       transport fib (cpf-eq (cpf f1 f2))
         (copair (push g1 R1) (push g2 R2))
+
+--  transport (λ z → fib (z ∘ k1)) (cpf-eq (cpf g h)) (push k1 (copair R S))
+
+push-transport :
+  {A B X : Set}
+  {f f' : A → X} (g : B → A) (R : fib f) (feq : f == f')
+  → push g (transport fib feq R) ==
+    transport (λ z → fib (z ∘ g)) feq (push g R)
+push-transport g R idp = idp
+
+transport-sub :
+  {A B : Set} {b1 b2 : B} (P : A → Set) (q : B → A) (eq : b1 == b2) (thing : P (q b1))
+  → (transport (P ∘ q) eq thing) == transport P (ap q eq) thing
+transport-sub P q idp thing = idp
+
+transport-lem : {A : Set} (P : A → Set) {a1 a2 a3 a4 : A} (thing : P a1)
+  (e1 : a1 == a2) (e2 : a2 == a3) (e3 : a3 == a4) (e4 : a1 == a4) →
+  e1 ∙ e2 ∙ e3 == e4 →
+  transport P e4 thing == transport P e3 (transport P e2 (transport P e1 thing))
+transport-lem P thing idp idp idp .idp idp = idp
+
+postulate
+  cp-eq-helper : {A B C : Set} (f1 f2 : A ⊔ B → C) (p q : f1 == f2)
+    → ((a : A) → (ap (λ x → x (inl a)) p) == (ap (λ x → x (inl a)) q))
+    → ((b : B) → (ap (λ x → x (inr b)) p) == (ap (λ x → x (inr b)) q))
+    → p == q
+-- cp-eq-helper f1 f2 p q ml mr = {!!}
