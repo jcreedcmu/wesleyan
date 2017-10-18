@@ -7,8 +7,11 @@
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\lpar{\bindnasrepma}
 \def\lamp{\binampersand}
-\def\bpush{\mathrel\mathbf{push}}
-\def\bpull{\mathrel\mathbf{pull}}
+\def\bpush{\mathbf{push}}
+\def\push{\circ}
+\def\func#1{\overline{#1}}
+\def\bpull{\mathbf{pull}}
+\def\btriv{\mathbf{triv}}
 \def\bunpack{\mathrel\mathbf{unpack}}
 \def\bas{\mathrel\mathbf{as}}
 \newarrow {Equiv} =====
@@ -236,34 +239,21 @@ $$x : \sharp\phi \prov \bpull_f(x.M / y.N)\ \sharp(\blet \sharp z = x \bin f) \l
 
 \vfil\eject
 \section{Vector-Centric Approach}
-\subsection*{Syntax}
-\[
-\begin{tabular}{rc@{$\quad::=\quad$}l}
-Shape Vectors&$v$&$n \celse v,v \celse \sharp n $\\
-Types&$A$&$?$\\
-Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
-\end{tabular}
-\]
-We take as definitionally equal $n + m$ and $n, m$.
 
 \subsection*{Judgments}
-$$\Gamma \prov_v \bar M : \bar A$$
-A jugdment
-$$\Gamma \prov_{v_1,v_2} M : A$$
-always is of the form
-$$\Gamma \prov_{v_1,v_2} M_1,M_2 : A_1,A_2$$
-i.e. these rule are essentially invertible
+Wait maybe I can just treat
+$$\Gamma \prov M : A$$
+$$\Gamma; \sharp n \prov M : A$$
+\subsection*{$\sharp$-Substitution}
+There is a syntactic substitution-esque operation $M[i]$ with admissible rule
 \[
 \erule
-{\Gamma; {v_1} \prov  M_1 : A_1 \qquad
-\Gamma; {v_2} \prov M_2 : A_2}
-{\Gamma; {v_1,v_2} \prov M_1,M_2 : A_1,A_2}
-\qquad
-\erule
-{}
-{\Gamma \prov_{\cdot} \cdot : \cdot}
+{\Gamma; {\sharp n} \prov  M : A \qquad i < n}
+{\Gamma \prov  M[i] : A[i]}
 \]
-furthermore
+\subsection*{Typing}
+\subsubsection*{Mix}
+There's some `mix' rules like
 \[
 \erule
 {\Gamma; {\sharp n_1} \prov  M_1 : A \qquad
@@ -272,47 +262,58 @@ furthermore
 \qquad
 \erule
 {}
-{\Gamma \prov_{\sharp 0} I : A}
+{\Gamma; {\sharp 0} \prov I : A}
 \]
-There is a syntactic operation $M[i]$ with admissible rule
+with substitution
 \[
-\erule
-{\Gamma; {\sharp n} \prov  M : A \qquad i < n}
-{\Gamma \prov  M[i] : A[i]}
+(M_1 \merge M_2)[i]  \equiv  \cases{ M_1[i] & $i < n_1$ \cr M_2[i-n_1] & otherwise.}
 \]
-we have
-\[
-\erule
-{\Gamma; {\sharp n_1} \prov  M_1 : A \qquad
-\Gamma; {\sharp n_2} \prov M_2 : A \qquad i < n_1 + n_2}
-{(M_1 \merge M_2)[i]  \equiv  \cases{ M_1[i] & $i < n_1$ \cr M_2[i-n_1] & otherwise.}}
-\]
-
+\subsubsection*{Push}
 Push (opreindexing, composition with map) works like
 \[
 \erule
 {\Gamma; {\sharp m} \prov  M : A \qquad f : n \to m}
-{\Gamma; {\sharp n} \prov M[f] : A}
+{\Gamma; {\sharp n} \prov M \push f : A}
 \]
-with
+with substitution
+\[
+(M \push f)[i] \equiv M[f(i)]
+\]
+\subsubsection*{Pull}
+Pull (reindexing, 2-pushout) works like
 \[
 \erule
-{\Gamma; {\sharp m} \prov  M : A \qquad f : n \to m \qquad i < n}
-{M[f][i] \equiv M[f(i)]}
-\]
-Pull (reindexing, 2-pullback) works like
-\[
-\erule
-{\Gamma; {\sharp n} \prov  N : A\qquad \Gamma; m \prov \bar M : A \qquad f : n \to m
-\qquad M_{f(i)} \equiv N[i]}
+{\Gamma; {\sharp n} \prov  N : A\qquad \Gamma \prov \bar M^m : \bar A^m \qquad f : n \to m
+\qquad {A_{f(i)} \equiv A[i] \atop M_{f(i)} \equiv N[i]}}
 {\Gamma; {\sharp m} \prov \bpull_f(\bar M, N) : A}
 \]
-with
+with substitution
+$$ {(\bpull_f(\bar M, N))[i] \equiv M_i} $$
+
+\section{Examples}
+Given $\Gamma; \sharp 2 \prov R : A$
+and $\Gamma; \sharp 2 \prov S : A$, with $R[1] \equiv S[0]$, I can form
+$$\Gamma; \sharp 4 \prov R \merge S : A$$
+$$\Gamma; \sharp 3 \prov \bpull_{\func{0112}}(R[0], S[0], S[1], R \merge S) : A$$
+$$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}}(R[0], S[0], S[1], R \merge S)) \push \func{02} : A$$
+
+\subsection*{Trivial Objects}
+A special case of the $\bpull$ rule is
 \[
 \erule
-{\Gamma; {\sharp n} \prov  N : A\qquad \Gamma; m \prov \bar M : A \qquad f : n \to m
-\qquad M_{f(i)} \equiv N[i]}
-{(\bpull_f(\bar M, N))[i] \equiv M_i}
+{\Gamma; {\sharp 0} \prov  I : A\qquad \Gamma \prov \bar M^m : \bar A^m \qquad f : 0 \to m}
+{\Gamma; {\sharp m} \prov \bpull_f(\bar M, N) : A}
 \]
+and so we write
+
+
+\subsubsection*{Excercise 1}
+
+Given $\Gamma; \sharp 1 \prov R : A$
+and $\Gamma; \sharp 1 \prov S : A$, with $R[0] \equiv S[0] \equiv a : A$, I can form
+$$\Gamma; \sharp 2 \prov R \merge S : A$$
+$$\Gamma; \sharp 1 \prov \bpull_{\func{00}}(a, R \merge S) : A$$
+
+
 
 \end{document}
