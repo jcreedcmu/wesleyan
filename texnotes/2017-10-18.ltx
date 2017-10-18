@@ -3,10 +3,12 @@
 \input{prooftree}
 \usepackage{stmaryrd}
 \input{linear}
+\def\merge{\star}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\lpar{\bindnasrepma}
 \def\lamp{\binampersand}
-\def\bpush{\mathbf{push}}
+\def\bpush{\mathrel\mathbf{push}}
+\def\bpull{\mathrel\mathbf{pull}}
 \def\bunpack{\mathrel\mathbf{unpack}}
 \def\bas{\mathrel\mathbf{as}}
 \newarrow {Equiv} =====
@@ -23,7 +25,7 @@
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\rtype{\mathrm{type}}
-\def\bpull{\mathbf{pull}}
+
 \def\rset{\mathbf{Set}}
 \def\rcat{\mathbf{Cat}}
 \def\rid{\mathrm{id}}
@@ -75,7 +77,7 @@
 % https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
 % ???
 
-
+\section{First Attempt at a Language}
 \subsection*{Syntax}
 \[
 \begin{tabular}{rc@{$\quad::=\quad$}l}
@@ -232,5 +234,85 @@ $$y : \psi \prov \bpull_f(x.M / y.N)\ (\sharp y) \equiv N$$
 but we merely get a 2-cell
 $$x : \sharp\phi \prov \bpull_f(x.M / y.N)\ \sharp(\blet \sharp z = x \bin f) \le M$$
 
+\vfil\eject
+\section{Vector-Centric Approach}
+\subsection*{Syntax}
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Shape Vectors&$v$&$n \celse v,v \celse \sharp n $\\
+Types&$A$&$?$\\
+Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
+\end{tabular}
+\]
+We take as definitionally equal $n + m$ and $n, m$.
+
+\subsection*{Judgments}
+$$\Gamma \prov_v \bar M : \bar A$$
+A jugdment
+$$\Gamma \prov_{v_1,v_2} M : A$$
+always is of the form
+$$\Gamma \prov_{v_1,v_2} M_1,M_2 : A_1,A_2$$
+i.e. these rule are essentially invertible
+\[
+\erule
+{\Gamma; {v_1} \prov  M_1 : A_1 \qquad
+\Gamma; {v_2} \prov M_2 : A_2}
+{\Gamma; {v_1,v_2} \prov M_1,M_2 : A_1,A_2}
+\qquad
+\erule
+{}
+{\Gamma \prov_{\cdot} \cdot : \cdot}
+\]
+furthermore
+\[
+\erule
+{\Gamma; {\sharp n_1} \prov  M_1 : A \qquad
+\Gamma; {\sharp n_2} \prov M_2 : A}
+{\Gamma; {\sharp (n_1 + n_2)} \prov M_1 \merge M_2 : A}
+\qquad
+\erule
+{}
+{\Gamma \prov_{\sharp 0} I : A}
+\]
+There is a syntactic operation $M[i]$ with admissible rule
+\[
+\erule
+{\Gamma; {\sharp n} \prov  M : A \qquad i < n}
+{\Gamma \prov  M[i] : A[i]}
+\]
+we have
+\[
+\erule
+{\Gamma; {\sharp n_1} \prov  M_1 : A \qquad
+\Gamma; {\sharp n_2} \prov M_2 : A \qquad i < n_1 + n_2}
+{(M_1 \merge M_2)[i]  \equiv  \cases{ M_1[i] & $i < n_1$ \cr M_2[i-n_1] & otherwise.}}
+\]
+
+Push (opreindexing, composition with map) works like
+\[
+\erule
+{\Gamma; {\sharp m} \prov  M : A \qquad f : n \to m}
+{\Gamma; {\sharp n} \prov M[f] : A}
+\]
+with
+\[
+\erule
+{\Gamma; {\sharp m} \prov  M : A \qquad f : n \to m \qquad i < n}
+{M[f][i] \equiv M[f(i)]}
+\]
+Pull (reindexing, 2-pullback) works like
+\[
+\erule
+{\Gamma; {\sharp n} \prov  N : A\qquad \Gamma; m \prov \bar M : A \qquad f : n \to m
+\qquad M_{f(i)} \equiv N[i]}
+{\Gamma; {\sharp m} \prov \bpull_f(\bar M, N) : A}
+\]
+with
+\[
+\erule
+{\Gamma; {\sharp n} \prov  N : A\qquad \Gamma; m \prov \bar M : A \qquad f : n \to m
+\qquad M_{f(i)} \equiv N[i]}
+{(\bpull_f(\bar M, N))[i] \equiv M_i}
+\]
 
 \end{document}
