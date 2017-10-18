@@ -103,7 +103,7 @@ pushk2-lem :
   {B C X : Set} (g : B → X) (h : C → X) (R : fib g) (S : fib (cpf g h)) →
   pushk2 R S == pushk3 R S
 pushk2-lem {B} {C} {X} g h R S =
-   ap (t~2 g h) (copair-pres-push g (cpf g h) idn inl R S)
+   ap (t~2 g h) (prod-pres-push g (cpf g h) idn inl R S)
 
 {- use transport-sub here: -}
 pushk3-lem :

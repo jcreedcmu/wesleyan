@@ -126,12 +126,10 @@ postulate
     → push {f = f} b2 (pull {f = f} b1 R) ==
     pull {f = f ∘ b2} k2 (coe (ap (λ z → fib (f ∘ z)) p) (push {f = f ∘ b1} k1 R))
 
+-- products preserve push
+
 postulate
-  -- copair-pres-push : {A B1 B2 X : Set} (f : A → X) (g1 : B1 → A) (g2 : B2 → A) (R : fib f)
-  --   → push (cpf g1 g2) R == coe (ap fib (cpf-eq f)) (copair (push g1 R) (push g2 R))
-
-
-  copair-pres-push : {A1 A2 B1 B2 X : Set}
+  prod-pres-push : {A1 A2 B1 B2 X : Set}
     (f1 : A1 → X)  (f2 : A2 → X)
     (g1 : B1 → A1) (g2 : B2 → A2)
     (R1 : fib f1)  (R2 : fib f2)
@@ -139,7 +137,7 @@ postulate
       transport fib (cpf-eq (cpf f1 f2))
         (copair (push g1 R1) (push g2 R2))
 
---  transport (λ z → fib (z ∘ k1)) (cpf-eq (cpf g h)) (push k1 (copair R S))
+--  convenience lemmas:
 
 push-transport :
   {A B X : Set}
@@ -158,10 +156,3 @@ transport-lem : {A : Set} (P : A → Set) {a1 a2 a3 a4 : A} (thing : P a1)
   e1 ∙ e2 ∙ e3 == e4 →
   transport P e4 thing == transport P e3 (transport P e2 (transport P e1 thing))
 transport-lem P thing idp idp idp .idp idp = idp
-
-postulate
-  cp-eq-helper : {A B C : Set} (f1 f2 : A ⊔ B → C) (p q : f1 == f2)
-    → ((a : A) → (ap (λ x → x (inl a)) p) == (ap (λ x → x (inl a)) q))
-    → ((b : B) → (ap (λ x → x (inr b)) p) == (ap (λ x → x (inr b)) q))
-    → p == q
--- cp-eq-helper f1 f2 p q ml mr = {!!}
