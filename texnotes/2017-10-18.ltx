@@ -12,7 +12,6 @@
 \def\func#1{\overline{#1}}
 \def\bpull{\mathbf{pull}}
 \def\btriv{\mathbf{triv}}
-\def\bunpack{\mathrel\mathbf{unpack}}
 \def\bas{\mathrel\mathbf{as}}
 \newarrow {Equiv} =====
 \def\FinSet{\mathbf{FinSet}}
@@ -80,168 +79,7 @@
 % https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
 % ???
 
-\section{First Attempt at a Language}
-\subsection*{Syntax}
-\[
-\begin{tabular}{rc@{$\quad::=\quad$}l}
-Finite Types&$n$&$0 \celse 1 \celse 2 \celse \cdots$\\
-Relation Types&$\rho$&$0 \celse \sharp n \celse \rho + \rho$\\
-Types&$A$&$(r : \rho) \to A \celse (i:n) \to A \celse (r : \sharp n) \to_{\bar N} A\celse \cdots$\\
-Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
-Rel. Contexts&$\gamma$&$\cdot \celse \gamma, r :\rho$\\
-\end{tabular}
-\]
-$\bar N = \langle N_0, \ldots, N_{n-1} \rangle$
-
 \subsection*{Judgments}
-$$\Gamma \prov M : A$$
-$$\gamma \prov e : \rho$$
-$$\gamma \prov e \cc \rho$$
-\subsection*{Typing Rules}
-\[
-\erule
-{\using hyp}
-{\gamma, r : \rho \prov r :  \rho}
-\qquad
-\erule
-{\gamma \prov e :  \rho \using weak}
-{\gamma \prov e \cc  \rho}
-\qquad
-\erule
-{\gamma \prov e \cc  \rho \using \sharp I}
-{\gamma \prov \sharp e : \sharp \rho}
-\]
-\[
-\erule
-{\gamma \prov e : \sharp n \qquad \forall j . \gamma  \prov e_j : \rho\using \sharp E}
-{\gamma \prov \bunpack e \bas \langle e_0, \ldots, e_{n-1} \rangle \cc \rho}
-\qquad
-\erule
-{j \in [0,n-1]}
-{\gamma \prov \underline j : n}
-\]
-
-
-
-
-
-
-
-\subsubsection*{Finite Function Types}
-\[
-\erule
-{\Gamma \prov M : (i:n) \to A \qquad j \in [0,n-1]
-\using n E }
-{\Gamma \prov M\ \underline j : [\underline j/i]A}
-\]
-\[
-\erule
-{\forall j . \Gamma \prov M_j : [\underline j/i]A
-\using n I }
-{\Gamma \prov \langle M_0, \ldots, M_{n-1} \rangle : (i:n) \to A}
-\]
-
-\[
-\erule
-{\using n \beta}
-{ \langle M_0, \ldots, M_{n-1} \rangle \ \underline j \equiv M_j }
-\]
-
-\subsubsection*{Relational Function Types}
-\[
-\erule
-{\Gamma \prov M : (r:\rho) \to A \qquad \Gamma^- \prov e : \rho
-\using \rho E }
-{\Gamma \prov M\ e : [e/r]A}
-\]
-\[
-\erule
-{\Gamma, r : \rho \prov M : A
-\using \rho I }
-{\Gamma \prov \lambda r . M : (r:\rho) \to A}
-\]
-
-\[
-\erule
-{\using \rho \beta}
-{ (\lambda r . M) \ e \equiv [e/r]M }
-\]
-
-
-\subsubsection*{Extension Types}
-\[
-\erule
-{\Gamma \prov M : (r : \sharp n) \to_{\bar N} A \qquad \Gamma^- \prov e : \sharp n
-\using ExE}
-{\Gamma \prov  M \ e: [e/r]A}
-\]
-\[
-\erule
-{\Gamma \prov N_j : [\sharp \underline j/r] A  \qquad \Gamma, r : \sharp n \prov M : A\qquad
-[\sharp \underline j / r] M \equiv N_j
-\using ExI}
-{\Gamma \prov \lambda r . M : (r : \sharp n) \to_{\bar N} A}
-\]
-\[
-\erule
-{\Gamma \prov M : (r : \sharp n) \to_{\bar N} A
-\using Ex \beta'}
-{ (\lambda r . M) \ (\sharp \underline j) \equiv N_j }
-\]
-
-\subsubsection*{Pull and Push}
-\[
-\erule
-{
-\Gamma, x : \sharp m \prov  M : A
-\qquad
-{
-\forall j \in [0,n-1].\atop
-\Gamma \prov  N_j : [\sharp \underline j / x]A
-}
-\qquad
-{
-\Gamma^- \prov e_0, \ldots, e_{m-1} : n
-\atop
-\forall k \in [0,m-1] . [\sharp \underline k / x]M \equiv N_{e_k}
-}
-}
-{\Gamma  \prov \bpull_e (x.M / \bar N) : (r : \sharp n) \to A}
-\]
-
-\vskip1em \hrule\vskip1em
-I kind of imagine that I have a functor $\sharp$ and natural transformation
-\[\eta_A : A \to  \sharp A\qquad
-% \kappa_{A, B} : \sharp(A + B) \to \sharp A + \sharp B
-% \qquad \zeta_A : \sharp 0 \to 0
-\]
-
-and in a diagram
-\[
-\begin{tikzcd}
-\phi \ar[r, "f"] \ar[d, "\eta_\phi" swap] \ar[dr, phantom, "\ulcorner", very near end]
-  & \psi\ar[d, "\eta_\psi"] \ar[ddr, "h", bend left]\\
-\sharp \phi \ar[r, "\sharp f" swap] \ar[drr, "g" swap, bend right]
-  & \sharp \psi \ar[dr, dotted, "k" description]\\
-&&X
-\end{tikzcd}
-\]
-given $h$ and $g$ such that $h \o f \equiv g \eta_\phi$, I get a $k$
-such that $k \o \eta_\psi \equiv h$, and $k \o \sharp f \le g$.
-
-The naturality of $\eta$ is the $\eta$-law $(\blet \sharp z = \sharp z \bin f) \equiv \sharp f$
-for some $f : z : \phi \prov \psi$.
-
-We do have a reduction
-$$y : \psi \prov \bpull_f(x.M / y.N)\ (\sharp y) \equiv N$$
-but we merely get a 2-cell
-$$x : \sharp\phi \prov \bpull_f(x.M / y.N)\ \sharp(\blet \sharp z = x \bin f) \le M$$
-
-\vfil\eject
-\section{Vector-Centric Approach}
-
-\subsection*{Judgments}
-Wait maybe I can just treat
 $$\Gamma \prov M : A$$
 $$\Gamma; \sharp n \prov M : A$$
 \subsection*{$\sharp$-Substitution}
@@ -301,19 +139,74 @@ $$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}}(R[0], S[0], S[1], R \merge S)) \p
 A special case of the $\bpull$ rule is
 \[
 \erule
-{\Gamma; {\sharp 0} \prov  I : A\qquad \Gamma \prov \bar M^m : \bar A^m \qquad f : 0 \to m}
-{\Gamma; {\sharp m} \prov \bpull_f(\bar M, N) : A}
+{\Gamma; {\sharp 0} \prov  I : A\qquad \Gamma \prov \bar M^m : A }
+{\Gamma; {\sharp m} \prov \bpull_{\func\cdot}(\bar M, I) : A}
 \]
-and so we write
+and so we define the abbreviation
+$\btriv(\bar M) = \bpull_f(\bar M, I) : A$.
 
+{\color{red} Oh no, what's the dependent version of this?}
 
+{\color{gray} Oh, wait, maybe it's fine; I think it's
+\[
+\erule
+{\Gamma; {\sharp 0} \prov  I : B\qquad \Gamma \prov \bar M^m : \bar A^m }
+{\Gamma; {\sharp m} \prov \bpull_{\func\cdot}(\bar M, I) : \bpull_{\func\cdot}(\bar A, B)}
+\]
+The general version is actually maybe
+\[
+\erule
+{\Gamma; {\sharp n} \prov  N : B\qquad \Gamma \prov \bar M^m : \bar A^m \qquad f : n \to m
+\qquad {A_{f(i)} \equiv B[i] \atop M_{f(i)} \equiv N[i]}}
+{\Gamma; {\sharp m} \prov \bpull_f(\bar M, N) : \bpull_f(\bar A , B)}
+\]
+\[
+\erule
+{\Gamma; {\sharp n} \prov  B : \rtype\qquad \Gamma \prov \bar A^m : \rtype \qquad f : n \to m
+\qquad A_{f(i)} \equiv B[i]}
+{\Gamma; {\sharp m} \prov  \bpull_f(\bar A , B) : \rtype}
+\]
+\[ \erule{}{\bpull_f(\langle B, \ldots, B\rangle, B) \equiv B }\]
+}
 \subsubsection*{Excercise 1}
 
 Given $\Gamma; \sharp 1 \prov R : A$
 and $\Gamma; \sharp 1 \prov S : A$, with $R[0] \equiv S[0] \equiv a : A$, I can form
 $$\Gamma; \sharp 2 \prov R \merge S : A$$
 $$\Gamma; \sharp 1 \prov \bpull_{\func{00}}(a, R \merge S) : A$$
+Suppose $S = \btriv(a)$. How do we know that
+$\bpull_{\func{00}}(a, R \merge \btriv(a)) \equiv R$?
 
+\subsubsection*{Beck-Chevalley Condition}
+Suppose we have a commutative square of functions on finite sets:
+\[
+\begin{tikzcd}
+n \ar[r, "f"] \ar[d, "h" swap]& m \ar[d, "g"]\\
+p \ar[r, "k" swap] & q
+\end{tikzcd}
+\]
+And some $\Gamma \prov \bar Q : \bar A$ and $\bar M : \bar B$
+ such that $B_{f(i)} \equiv A_{k(h(i))}$ and
+$M_{f(i)} \equiv Q_{k(h(i))}$ for all $i < n$.
 
+Start with $\Gamma; \sharp p \prov P : C$. Form
+\[
+\erule
+{\Gamma; {\sharp p} \prov  P : C\qquad \Gamma \prov \bar Q^q : \bar A^q \qquad k : p \to q
+\qquad {A_{k(i)} \equiv C[i] \atop Q_{k(i)} \equiv P[i]}}
+{\Gamma; {\sharp q} \prov \bpull_k(\bar Q, P) : C}
+\]
+then form $\Gamma; \sharp m \prov (\bpull_k(\bar Q, P)) \push g : C \push g$.
+In the other direction, form $\Gamma; \sharp n \prov P \push h : A$ then form
+\[
+\erule
+{\Gamma; {\sharp n} \prov  P \push h : C \push h\qquad \Gamma \prov \bar M^m : \bar B^m \qquad f : n \to m
+\qquad {B_{f(i)} \equiv C[h(i)] \atop M_{f(i)} \equiv P[h(i)]}}
+{\Gamma; {\sharp m} \prov \bpull_f(\bar M, P \push h) : B}
+\]
 
+Well clearly I'm fucking up all the dependent types involved, but something like
+$$\bpull_k(\bar Q, P) \push g \equiv \bpull_f(\bar M, P \push h)$$
+ should hold under suitable
+conditions on the $\bar M$ and $\bar Q$ matching up.
 \end{document}
