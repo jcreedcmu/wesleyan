@@ -1,0 +1,236 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\def\bunpack{\mathrel\mathbf{unpack}}
+\def\bas{\mathrel\mathbf{as}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\bpull{\mathbf{pull}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\cc{\mathrel{\mathring :}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\subsection*{Syntax}
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Finite Types&$n$&$0 \celse 1 \celse 2 \celse \cdots$\\
+Relation Types&$\rho$&$0 \celse \sharp n \celse \rho + \rho$\\
+Types&$A$&$(r : \rho) \to A \celse (i:n) \to A \celse (r : \sharp n) \to_{\bar N} A\celse \cdots$\\
+Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
+Rel. Contexts&$\gamma$&$\cdot \celse \gamma, r :\rho$\\
+\end{tabular}
+\]
+$\bar N = \langle N_0, \ldots, N_{n-1} \rangle$
+
+\subsection*{Judgments}
+$$\Gamma \prov M : A$$
+$$\gamma \prov e : \rho$$
+$$\gamma \prov e \cc \rho$$
+\subsection*{Typing Rules}
+\[
+\erule
+{\using hyp}
+{\gamma, r : \rho \prov r :  \rho}
+\qquad
+\erule
+{\gamma \prov e :  \rho \using weak}
+{\gamma \prov e \cc  \rho}
+\qquad
+\erule
+{\gamma \prov e \cc  \rho \using \sharp I}
+{\gamma \prov \sharp e : \sharp \rho}
+\]
+\[
+\erule
+{\gamma \prov e : \sharp n \qquad \forall j . \gamma  \prov e_j : \rho\using \sharp E}
+{\gamma \prov \bunpack e \bas \langle e_0, \ldots, e_{n-1} \rangle \cc \rho}
+\qquad
+\erule
+{j \in [0,n-1]}
+{\gamma \prov \underline j : n}
+\]
+
+
+
+
+
+
+
+\subsubsection*{Finite Function Types}
+\[
+\erule
+{\Gamma \prov M : (i:n) \to A \qquad j \in [0,n-1]
+\using n E }
+{\Gamma \prov M\ \underline j : [\underline j/i]A}
+\]
+\[
+\erule
+{\forall j . \Gamma \prov M_j : [\underline j/i]A
+\using n I }
+{\Gamma \prov \langle M_0, \ldots, M_{n-1} \rangle : (i:n) \to A}
+\]
+
+\[
+\erule
+{\using n \beta}
+{ \langle M_0, \ldots, M_{n-1} \rangle \ \underline j \equiv M_j }
+\]
+
+\subsubsection*{Relational Function Types}
+\[
+\erule
+{\Gamma \prov M : (r:\rho) \to A \qquad \Gamma^- \prov e : \rho
+\using \rho E }
+{\Gamma \prov M\ e : [e/r]A}
+\]
+\[
+\erule
+{\Gamma, r : \rho \prov M : A
+\using \rho I }
+{\Gamma \prov \lambda r . M : (r:\rho) \to A}
+\]
+
+\[
+\erule
+{\using \rho \beta}
+{ (\lambda r . M) \ e \equiv [e/r]M }
+\]
+
+
+\subsubsection*{Extension Types}
+\[
+\erule
+{\Gamma \prov M : (r : \sharp n) \to_{\bar N} A \qquad \Gamma^- \prov e : \sharp n
+\using ExE}
+{\Gamma \prov  M \ e: [e/r]A}
+\]
+\[
+\erule
+{\Gamma \prov N_j : [\sharp \underline j/r] A  \qquad \Gamma, r : \sharp n \prov M : A\qquad
+[\sharp \underline j / r] M \equiv N_j
+\using ExI}
+{\Gamma \prov \lambda r . M : (r : \sharp n) \to_{\bar N} A}
+\]
+\[
+\erule
+{\Gamma \prov M : (r : \sharp n) \to_{\bar N} A
+\using Ex \beta'}
+{ (\lambda r . M) \ (\sharp \underline j) \equiv N_j }
+\]
+
+\subsubsection*{Pull and Push}
+\[
+\erule
+{
+\Gamma, x : \sharp m \prov  M : A
+\qquad
+{
+\forall j \in [0,n-1].\atop
+\Gamma \prov  N_j : [\sharp \underline j / x]A
+}
+\qquad
+{
+\Gamma^- \prov e_0, \ldots, e_{m-1} : n
+\atop
+\forall k \in [0,m-1] . [\sharp \underline k / x]M \equiv N_{e_k}
+}
+}
+{\Gamma  \prov \bpull_e (x.M / \bar N) : (r : \sharp n) \to A}
+\]
+
+\vskip1em \hrule\vskip1em
+I kind of imagine that I have a functor $\sharp$ and natural transformation
+\[\eta_A : A \to  \sharp A\qquad
+% \kappa_{A, B} : \sharp(A + B) \to \sharp A + \sharp B
+% \qquad \zeta_A : \sharp 0 \to 0
+\]
+
+and in a diagram
+\[
+\begin{tikzcd}
+\phi \ar[r, "f"] \ar[d, "\eta_\phi" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  & \psi\ar[d, "\eta_\psi"] \ar[ddr, "h", bend left]\\
+\sharp \phi \ar[r, "\sharp f" swap] \ar[drr, "g" swap, bend right]
+  & \sharp \psi \ar[dr, dotted, "k" description]\\
+&&X
+\end{tikzcd}
+\]
+given $h$ and $g$ such that $h \o f \equiv g \eta_\phi$, I get a $k$
+such that $k \o \eta_\psi \equiv h$, and $k \o \sharp f \le g$.
+
+The naturality of $\eta$ is the $\eta$-law $(\blet \sharp z = \sharp z \bin f) \equiv \sharp f$
+for some $f : z : \phi \prov \psi$.
+
+We do have a reduction
+$$y : \psi \prov \bpull_f(x.M / y.N)\ (\sharp y) \equiv N$$
+but we merely get a 2-cell
+$$x : \sharp\phi \prov \bpull_f(x.M / y.N)\ \sharp(\blet \sharp z = x \bin f) \le M$$
+
+
+\end{document}
