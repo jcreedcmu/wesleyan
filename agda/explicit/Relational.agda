@@ -79,7 +79,7 @@ postulate
     (R ≤ pull g S) ≃ (push g R ≤ S)
 
   -- copairing
-  copair : {A1 A2 B : Set} {f1 : A1 → B} {f2 : A2 → B}
+  copair : {A1 A2 X : Set} {f1 : A1 → X} {f2 : A2 → X}
     (R1 : fib f1) (R2 : fib f2) → fib (cpf f1 f2)
   -- this is the UMP of the product in a category living over (Sets/X)^op
   -- where heteromorphisms --- nonvertical morphisms in the total category ---

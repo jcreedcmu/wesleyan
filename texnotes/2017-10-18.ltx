@@ -2,6 +2,7 @@
 \input{theorem}
 \input{prooftree}
 \usepackage{stmaryrd}
+\usepackage{alltt}
 \input{linear}
 \def\merge{\star}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -209,4 +210,102 @@ Well clearly I'm fucking up all the dependent types involved, but something like
 $$\bpull_k(\bar Q, P) \push g \equiv \bpull_f(\bar M, P \push h)$$
  should hold under suitable
 conditions on the $\bar M$ and $\bar Q$ matching up.
+
+\vfil\eject
+\section{Thinking}
+In the general bifibration world, I have {\bf objects downstairs} with products,
+and {\bf objects upstairs} with products, and
+the operation of {\bf pushing} (i.e. opfibration reindexing) and I demand that
+the product of opcartesian morphisms is opcartesian.
+
+In the slightly more specific bifibration world, I'm going to take my
+downstairs category to be specifically $(\FinSet / X)^\op$ for some
+chosen base type $X$ which, in point of fact, {\em can} vary, but I'm
+going to restrict attention to the special case where leave it fixed.
+The bifibration I'm describing is the fact that {\em this particular
+  set $X$} has an internal relation structure. The objects downstairs
+are maps e.g. $f : A \to X, g : B \to X$ and a morphism $f \to g$ is a
+map $h : B \to A$ that makes the triangle commute. The product of $f$
+and $g$ is the copairing $(f, g) : A + B \to X$; projections are
+coproduct injections.
+
+When I have $R_1 \mapsto f_1$ and $R_2 \mapsto f_2$, I simply postulate the
+existence of some product $R_1 \x R_2$ of $R_1$ and $R_2$ over $f_1\times f_2 = (f_1, f_2)$. This is
+\begin{alltt}
+  copair : \{A1 A2 X : Set\} \{f1 : A1 \(\to\) X\} \{f2 : A2 \(\to\) X\}
+    (R1 : fib f1) (R2 : fib f2) \(\to\) fib (cpf f1 f2)
+\end{alltt}
+in agda. To be a product, it should be the case that for any other $g : B \to X$ and $S\mapsto g$,
+we should have that
+a pair of maps $S \to R_1, S \to R_2$ should correspond isomorphically to a map $S \to R_1 \x R_2$.
+\[
+\begin{tikzcd}
+S \ar[rr] \ar[d] \ar[drr]&& R_2 \ar[from=d]\\
+R_1 \ar[from=rr] && R_1 \x R_2 \\
+B \ar[from=rr, "c_2" swap] \ar[from=d, "c_1"] \ar[ddr, "d" description, near start]
+  && A_2 \ar[d] \ar[ddl]\\[2em]
+A_1 \ar[rr, crossing over] \ar[dr]
+  && A_1 + A_2 \ar[dl] \ar[ull, crossing over, "{(c_1, c_2)}" description]\\
+& X
+\end{tikzcd}
+\]
+In agda this is
+{
+\small
+\begin{alltt}
+  copair= : \{A1 A2 B X : Set\}  \{c1 : A1 \(\to\) B\} \{c2 : A2 \(\to\) B\} (d : B \(\to\) X)
+    (R1 : fib (d \(\o\) c1)) (R2 : fib (d \(\o\) c2)) (S : fib d)
+    \(\to\) (S \(\le\) pull c1 R1) \(\x\) (S \(\le\) pull c2 R2) \(\cong\)
+      (S \(\le\) pull (cpf c1 c2) (transport fib (cpf-eq d) (copair R1 R2)))
+\end{alltt}
+}
+
+Ok, now suppose I have $f_1 : R_1 \to S_1$ and $f_2 : R_2 \to S_2$ upstairs,
+living over $c_1 : A_1 \to B_1$ and $c_2 : A_2 \to B_2$ respectively, which
+actually means that I have inequalities $R_1 \le \bpull\ c_1\ S_1$ and
+$R_2 \le \bpull\ c_2\ S_2$ in agda-land.
+I should be able to form
+$f_1 \times f_2 = \pair{f_1 \pi_1}{f_2 \pi_2} : R_1 \times R_2 \to S_1 \times S_2$.
+Wait a minute, this seems like not what I'm after. This line of thinking will result
+in an equality of morphisms upstairs, which is not the type of {\tt prod-pres-push} at all.
+
+Let's instead start from this thought: the {\tt push} of the product of a pair of objects
+should be the product of the {\tt push}es. In general a push looks like
+\[
+\begin{tikzcd}
+R \ar[rr] && \mathtt{push}\ R\\
+A \ar[from=rr, "g" swap] \ar[dr,"f" swap]&& B \ar[dl]\\
+& X
+\end{tikzcd}
+\]
+so we want to stare at the diagram
+\[
+\begin{tikzcd}
+R_1 \x R_2 \ar[rr] && \mathtt{push}\ (g_1+g_2)\ (R_1 \x R_2)\\
+A_1 + A_2 \ar[from=rr, "g_1 + g_2" swap] \ar[dr,"{(f_1, f_2)}" swap]&& B_1 + B_2 \ar[dl, "{(g_1 f_1, g_2 f_2)}"]\\
+& X
+\end{tikzcd}
+\]
+and arrive at
+$$\mathtt{push}\ (g_1+g_2)\ (R_1 \x R_2) = \mathtt{push}\ g_1\ R_1 \x \mathtt{push}\ g_2\ R_2$$
+and this is exactly what we say
+{\small
+\begin{alltt}
+  prod-pres-push : \{A1 A2 B1 B2 X : Set\}
+    (f1 : A1 \(\to\) X)  (f2 : A2 \(\to\) X)
+    (g1 : B1 \(\to\) A1) (g2 : B2 \(\to\) A2)
+    (R1 : fib f1)  (R2 : fib f2)
+    \(\to\) push (cpf (inl \(\o\) g1) (inr \(\o\) g2)) (copair R1 R2) ==
+      transport fib (cpf-eq (cpf f1 f2))
+        (copair (push g1 R1) (push g2 R2))
+\end{alltt}}
+\noindent in agda.
+
+What do I make of this in a world where `$R$ lives over $f : A \to X$' means
+`$R$ is a map $\sharp A \to X$ such that $R \o \eta_A = f$'?
+Oh, it just looks like
+$$(R_1 \merge R_2)[g_1 + g_2] = R_1[g_1] \star R_2[g_2]$$
+Nice! All the stray $\binl$ and $\binr$ dangling out there are just about
+turning two functions $g_1: n_1 \to m_1, g_2 : n_2 \to m_2$ into a single function
+$g_1+g_2 : (n_1+m_1) \to (n_2 + m_2)$.
 \end{document}
