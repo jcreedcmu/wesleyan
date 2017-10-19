@@ -196,9 +196,45 @@ $$
 {\bpull_k(\bar Q, P) \push g \equiv \bpull_f(\bar M, P \push h)}
 $$
 
+\subsubsection*{Push and Pull are Functorial}
+$$
+\erule
+{}
+{N\push \rid \equiv N}
+\qquad
+\erule
+{}
+{N\push {f \o g} \equiv N\push f \push g}
+$$
+
+
+%% \[
+%% \erule
+%% {
+%% \[
+%% \Gamma; { \sharp n} \prov  N : A\qquad \Gamma \prov \bar M^m : A \qquad f : n \to m
+%% \qquad {\forall j < n . M_{f(j)} \equiv N[j]}
+%% \djust
+%% \qquad\qquad\qquad \Gamma \prov \bar P^p : A \qquad g : m \to p
+%% \qquad {\forall k < m . P_{g(k)} \equiv M_k}
+%% \]
+%% }
+%% {\Gamma; { \sharp p} \prov \bpull_g(\bar P^p, \bpull_f(\bar M^m, N)) : A}
+%% \]
+
+
+$$
+\erule
+{}
+{\bpull_\rid (\bar M, N) \equiv N}
+\qquad
+\erule
+{}
+{\bpull_g(\bar P^p, \bpull_f(\bar M^m, N)) \equiv \bpull_{g \o f}(\bar P^p, N)}
+$$
 
 \subsubsection*{Mix Preserves Push}
-If $f_1 : n_1 \to m_1$ $f_2 : n_2 \to m_2$, define $(f_1, f_2) : n_1 + n_2 \to m_1 + m_2$
+If $f_1 : n_1 \to m_1$ $f_2 : n_2 \to m_2$, define $f_1 + f_2 : n_1 + n_2 \to m_1 + m_2$
 by
 $$(f_1, f_2)(i) = \cases{f_1(i)&$i<n_1$ \cr f_2(i-n_1) + m_1  &otherwise.}$$
 Then we assert
@@ -207,7 +243,7 @@ $$
 {\[ \Gamma; \sharp m_1 \prov M_1 : A \djust  \Gamma; \sharp m_2 \prov M_2 : A\]
 \quad
 \[f_1 : n_1 \to m_1 \djust f_2 : n_2 \to m_2\]}
-{(M_1 \merge M_2)\push{f_1 , f_2} \equiv M_1\push{f_1} \merge M_2 \push {f_2}}
+{(M_1 \merge M_2)\push{f_1 + f_2} \equiv M_1\push{f_1} \merge M_2 \push {f_2}}
 $$
 
 \subsubsection*{Trivial Objects}
@@ -233,7 +269,7 @@ $$
 {M \equiv N}
 $$
 but maybe it ought to be propositional not definitional equality?
-\subsubsection*{Inequality for Pull}
+\subsubsection*{Inequality Adjunction}
 Suppose $\Gamma; \sharp m \prov P : A$ and all the premises of the $\bpull$ rule, i.e.
 \[
 \Gamma; { \sharp n} \prov  N : A\qquad \Gamma \prov \bar M^m : A \qquad f : n \to m
@@ -276,16 +312,49 @@ Note we get triangle inequalities
 \end{prooftree}
 \]
 
-
+\subsubsection*{Universal Property of Product}
+If $f_1 : n_1 \to m$ $f_2 : n_2 \to m$, define $(f_1 , f_2) : n_1 + n_2 \to m$
+by
+$$(f_1, f_2)(i) = \cases{f_1(i)&$i<n_1$ \cr f_2(i-n_1)   &otherwise.}$$
+Then if we assume
+\[\Gamma; \sharp m \prov S : A
+\quad
+\Gamma; \sharp n_1 \prov R_1 : A
+\quad
+\Gamma; \sharp n_2 \prov R_2 : A
+\]
+we assert
+$$
+\begin{prooftree}
+S \push {f_1} \le  R_1 \qquad S \push {f_2} \le R_2
+\Justifies
+S \push {(f_1, f_2)} \le  (R_1 \star R_2)
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\justifies
+S\push {\func \cdot} \le  I
+\end{prooftree}
+$$
+We could have equivalently phrased these in terms of $\bpull$; doing this for $I$
+is useful as it shows
+$$
+\erule{}
+{S \le \btriv(\bar M) }
+$$
+It's useful to pull out as separate facts the projections
+$$(R_1 \star R_2) \push{\binl_{n_1, n_2}} \le R_1 \qquad (R_1 \star R_2)\push{\binr_{n_1, n_2}} \le R_2$$
+where $\binl_{n_1, n_2}$ is the evident partial identity function $n_1 \to n_1 + n_2$,
+and $\binr_{n_1, n_2}$ is $(\lambda i . i + n_1) : n_2 \to n_1 + n_2$.
 \section{Examples}
-We write concrete functions $f : n \to m$ as $\func{f(0)\ldots f(n-1)}$.
+We write concrete functions $f : n \to m$ as $\func{f(0)\ldots f(n-1)}_m$.
 
 \subsubsection*{Composition}
 Given $\Gamma; \sharp 2 \prov R : A$
 and $\Gamma; \sharp 2 \prov S : A$, with $R[0] \equiv a, R[1] \equiv b \equiv S[0], S[1] \equiv c$ for some $a,b,c : A$, I can form
 $$\Gamma; \sharp 4 \prov R \merge S : A$$
-$$\Gamma; \sharp 3 \prov \bpull_{\func{0112}}(a, b, c, R \merge S) : A$$
-$$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}}(a, b, c, R \merge S)) \push {\func{02}} : A$$
+$$\Gamma; \sharp 3 \prov \bpull_{\func{0112}_3}(a, b, c, R \merge S) : A$$
+$$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}_3}(a, b, c, R \merge S)) \push {\func{02}_3} : A$$
 
 %% \subsubsection*{More General Composition}
 %% Abusing notation even harder,
@@ -300,9 +369,37 @@ $$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}}(a, b, c, R \merge S)) \push {\fun
 Given $\Gamma; \sharp 1 \prov R : A$
 and $\Gamma; \sharp 1 \prov S : A$, with $R[0] \equiv S[0] \equiv a : A$, I can form
 $$\Gamma; \sharp 2 \prov R \merge S : A$$
-$$\Gamma; \sharp 1 \prov \bpull_{\func{00}}(a, R \merge S) : A$$
-Suppose $S = \btriv(a)$. How do we know that
-$\bpull_{\func{00}}(a, R \merge \btriv(a)) \equiv R$?
+$$\Gamma; \sharp 1 \prov \bpull_{\func{00}_1}(a, R \merge S) : A$$
+
+\begin{lemma}
+$\bpull_{\func{00}_1}(a, R \merge \btriv(a)) \equiv R$?
+\end{lemma}
+
+\begin{proof}
+First we show $R \le \bpull_{\func{00}_1}(a, R \merge \btriv(a))$.
+
+By adjunction this is the same as
+$$R\push{\func{00}_1} \le R \merge \btriv(a)$$
+which in turn is the same as proving both of
+$$R\push{\func{0}_2} \le R $$
+$$R\push{\func{0}_2} \le  \btriv(a)$$
+which follow from reflexivity and the fact that $\btriv$ is terminal.
+
+Next we show $\bpull_{\func{00}_1}(a, R \merge \btriv(a)) \le R$.
+
+We have $(R \merge \btriv(a)) \push {\func 0_2} \le R $ by projection, hence
+$R \merge \btriv(a)  \le \bpull_{\func 0_2}(a, R)$ by adjunction.
+We have
+$$\bpull_{\func{00}_1}(a, R \merge \btriv(a)) \push {\func{00}_1} \le R \merge \btriv(a)$$
+by triangle inequality, so by transitivity
+$$\bpull_{\func{00}_1}(a, R \merge \btriv(a)) \push {\func{00}_1} \le \bpull_{\func 0_2}(a, R)$$
+by adjunction once more
+$$\bpull_{\func{00}_1}(a, R \merge \btriv(a)) \push {\func{00}_1} \push{\func 0_2} \le R$$
+by functoriality of push
+$$\bpull_{\func{00}_1}(a, R \merge \btriv(a))  \le R$$
+as required.
+\cqed
+\end{proof}
 
 
 \end{document}
