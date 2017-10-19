@@ -1772,3 +1772,15 @@ P → f^* Q (over id_A) is just as good as a morphism over f.
 Q: What's a better way to prove equalities of equalities of functions
 from a coproduct?
 A: ???
+
+=== 2017.10.18
+
+Q: Can I get away with relatively few judgmental additions?
+A: Yeah, just Γ ; ♯ n ⊢ M : A seems to capture everything I need for
+composition and functionality.
+
+=== 2017.10.19
+
+Q: Do I want to represent ♯ variables explicitly?
+A: Maybe not; it does make push look very natural, but it involves
+inventing names for so many more things.
