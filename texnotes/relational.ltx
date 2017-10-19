@@ -1,0 +1,308 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{alltt}
+\input{linear}
+\def\merge{\star}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\def\push#1{\sem{#1}}
+\def\func#1{\overline{#1}}
+\def\bpull{\mathbf{pull}}
+\def\btriv{\mathbf{triv}}
+\def\bas{\mathrel\mathbf{as}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\cc{\mathrel{\mathring :}}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\title{A Type Theory of Internal Relations}
+\author{Jason Reed}
+\begin{document}
+
+\maketitle
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Motivation}
+An equivalence is a function whose fibers are contractible; but a
+function is just a relation whose `fibers' in the other direction are
+contractible. We reason that homotopy type theory is to directed
+homotopy type theory, as directed homotopy type theory is to some kind
+of theory of internal relation-like objects in types. We hope to
+recover a directed theory by being able to internally express
+something like the `contractible fiber' condition that makes a
+relation functional.
+
+What is an $n$-ary (proof-relevant) relation? A choice of $n$ sets
+$A_1, \ldots, A_n$ and the relation data itself
+$A_1 \to \cdots \to A_n \to U$. Equivalently, a map $A : n \to U$
+and a map $R : (\Pi a \cn n . A\ a) \to U$. We imagine that there is a way
+of taking a `more cohesive' version $\sharp n$ of $n$, that represents $n$-ary relations in
+that there is an equivalence
+$$(\sharp n \to U) \cong \Sigma A \cn (n \to U) . (\Pi a \cn n . A\ a) \to U$$
+and for any $B\in U$ there is an injection
+ $$\eta_B : B \to \sharp B$$
+such that in the equivalence above, the first projection from
+$\Sigma A \cn (n \to U) . (\Pi a \cn n . A\ a) \to U$ corresponds to postcomposition
+of something in $\sharp n \to U$ with $\eta_n$.
+
+We can then set about investigating how we think other maps $\sharp n \to
+B$ ought to be have for typical types $B$.
+
+\section{Language}
+\subsection{Judgments}
+In addition to the usual
+$$\Gamma \prov M : A$$
+we're going to add a judgment
+$$\Gamma; \sharp n \prov M : A$$
+There is not a general type-former $\sharp$, just a judgmental gadget that lets
+us use a single anonymous variable of type $\sharp n$.
+
+\subsection{Substitution}
+
+We're going to assert a substitution theorem which will need to be
+proved for all term formers that we introduce. The
+substitution operation is written $[i]$ where $i$ is a number.
+The operation substitutes the number $i$ for the anonymous variable
+of a $\sharp$ judgment.
+The theorem is
+
+\[
+\erule
+{\Gamma; \sharp n \prov  M : A \qquad i < n}
+{\Gamma \prov  M[i] : A}
+\]
+\subsection{Typing}
+I need to provide better intuition for these operations in terms of
+concrete examples with relations as database tables or something.
+
+\subsubsection*{Push}
+There is an operation called `pushing' (opreindexing, composition with with a map)
+that is like a suspended explicit substitution of a function for a $\sharp$-variable.
+Specifically, $M \sem f$ is like replacing the
+ anonymous variable (call it $\square$) of $M$ with $f(\square)$.
+\[
+\erule
+{\Gamma; {\sharp m} \prov  M : A \qquad f : n \to m}
+{\Gamma; {\sharp n} \prov M\sem{f}  : A}
+\]
+with substitution
+\[
+M\sem{f}[i] = M[f(i)]
+\]
+
+\subsubsection*{Pull}
+There is an operation called `pulling' (reindexing, lax 2-pushout) that works like
+\[
+\erule
+{\Gamma; { \sharp n} \prov  N : A\qquad \Gamma \prov \bar M^m : A \qquad f : n \to m
+\qquad {\forall j < n . M_{f(j)} \equiv N[j]}}
+{\Gamma; { \sharp m} \prov \bpull_f(\bar M^m, N) : A}
+\]
+($\bar M^m$ denotes a list of $M$s with length $m$) with substitution
+$$ {(\bpull_f(\bar M^m, N))[i] = M_i} $$
+\subsubsection*{Mix}
+There's some rules that remind me of `mix' in linear logic:
+\[
+\erule
+{\Gamma; {v_1 : \sharp n_1} \prov  M_1 : A \qquad
+\Gamma; {v_2 : \sharp n_2} \prov M_2 : A}
+{\Gamma; {v : \sharp (n_1 + n_2)} \prov M_1 \merge M_2 : A}
+\qquad
+\erule
+{}
+{\Gamma; {v : \sharp 0} \prov I : A}
+\]
+with substitution
+\[
+(M_1 \merge M_2)[i/v]  =  \cases{ M_1[i/v_1] & $i < n_1$ \cr M_2[i-n_1/v_2] & otherwise.}
+\]
+I think $\merge$ is definitionally associative (but not commutative) with unit $I$.
+
+\subsubsection*{Beck-Chevalley Condition}
+Suppose we have a commutative square of functions on finite sets:
+\[
+\begin{tikzcd}
+n \ar[r, "f"] \ar[d, "h" swap]& m \ar[d, "g"]\\
+p \ar[r, "k" swap] & q
+\end{tikzcd}
+\]
+Then
+$$
+\erule
+{\Gamma; \sharp p \prov P : A
+\qquad
+\[\Gamma \prov \bar Q^q : A \djust \Gamma \prov \bar M^m : A\]\qquad
+\forall i < n . M_{f(i)} \equiv Q_{k(h(i))}}
+{\bpull_k(\bar Q, P) \push g \equiv \bpull_f(\bar M, P \push h)}
+$$
+
+
+\subsubsection*{Mix Preserves Push}
+If $f_1 : n_1 \to m_1$ $f_2 : n_2 \to m_2$, define $(f_1, f_2) : n_1 + n_2 \to m_1 + m_2$
+by
+$$(f_1, f_2)(i) = \cases{f_1(i)&$i<n_1$ \cr f_2(i-n_1) + m_1  &otherwise.}$$
+Then we assert
+$$
+\erule
+{\[ \Gamma; \sharp m_1 \prov M_1 : A \djust  \Gamma; \sharp m_2 \prov M_2 : A\]
+\quad
+\[f_1 : n_1 \to m_1 \djust f_2 : n_2 \to m_2\]}
+{(M_1 \merge M_2)\push{f_1 , f_2} \equiv M_1\push{f_1} \merge M_2 \push {f_2}}
+$$
+
+\subsubsection*{Trivial Objects}
+A special case of the $\bpull$ rule is
+\[
+\erule
+{\Gamma; {\sharp 0} \prov  I : A\qquad \Gamma \prov \bar M^m : A }
+{\Gamma; {\sharp m} \prov \bpull_{\func\cdot}(\bar M, I) : A}
+\]
+and so we define the abbreviation
+$\btriv(\bar M) = \bpull_{\func\cdot}(\bar M, I) : A$.
+
+\subsection{Inequality}
+We have some 2-cell-like data between pairs of derivations of the
+ form $\Gamma; \sharp n \prov M : A$. Write this as
+$$\Gamma; \sharp n \prov M \le N : A$$
+
+\subsubsection*{Univalence/antisymmetry}
+I want to assert something like
+$$
+\erule
+{\Gamma; \sharp n \prov M \le N : A \qquad \Gamma; \sharp n \prov N \le M : A}
+{M \equiv N}
+$$
+but maybe it ought to be propositional not definitional equality?
+\subsubsection*{Inequality for Pull}
+Suppose $\Gamma; \sharp m \prov P : A$ and all the premises of the $\bpull$ rule, i.e.
+\[
+\Gamma; { \sharp n} \prov  N : A\qquad \Gamma \prov \bar M^m : A \qquad f : n \to m
+\qquad {\forall j < n . M_{f(j)} \equiv N[j]}
+\]
+and $P[i] \equiv M_i$ for all $i$.
+Then we postulate an adjunction
+\[
+\begin{prooftree}
+P \push f \le N \Justifies
+ P \le \bpull_f(\bar M^m, N)
+\end{prooftree}
+\]
+which can be visualized in the pushout-esque commutative diagram
+\[
+\begin{tikzcd}
+n \ar[r, "f"] \ar[d, "{[\cdot]}" swap] \ar[dr, phantom, "\ulcorner", very near end]
+  &[2em] m \twocellswap{ddr}{equal} \ar[d, "{[\cdot]}"] \ar[ddr, "\bar M", bend left]\\[2em]
+\sharp n \twocell{drr}{"\alpha"} \ar[r, "\sharp f" swap] \ar[drr, "N"{swap}, bend right]
+  & \sharp m
+    \ar[dr, dotted, "\bpull" description, bend left]
+    \ar[dr,  "P" description, bend right]
+    \twocellswap{dr}{"\beta" swap}
+    \\[2em]
+&&[2em]A
+\end{tikzcd}
+\]
+Where $\alpha$ is the 2-cell on top of the adjunction, and $\beta$ is the 2-cell below.
+
+Note we get triangle inequalities
+\[
+\begin{prooftree}
+\justifies
+\bpull_f(\bar M^m, N) \push f \le N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\justifies
+ P \le \bpull_f(\bar M^m, P\push f)
+\end{prooftree}
+\]
+
+
+\section{Examples}
+We write concrete functions $f : n \to m$ as $\func{f(0)\ldots f(n-1)}$.
+
+\subsubsection*{Composition}
+Given $\Gamma; \sharp 2 \prov R : A$
+and $\Gamma; \sharp 2 \prov S : A$, with $R[0] \equiv a, R[1] \equiv b \equiv S[0], S[1] \equiv c$ for some $a,b,c : A$, I can form
+$$\Gamma; \sharp 4 \prov R \merge S : A$$
+$$\Gamma; \sharp 3 \prov \bpull_{\func{0112}}(a, b, c, R \merge S) : A$$
+$$\Gamma; \sharp 2 \prov (\bpull_{\func{0112}}(a, b, c, R \merge S)) \push {\func{02}} : A$$
+
+%% \subsubsection*{More General Composition}
+%% Abusing notation even harder,
+%% Given $\Gamma; \sharp (m+n) \prov R : A$
+%% and $\Gamma; \sharp (n+p) \prov S : A$, with $\func{R[ n]} \equiv \func{S[ n]}$, I can form
+%% $$\Gamma; \sharp (m+n+n+p) \prov R \merge S : A$$
+%% $$\Gamma; \sharp (m+n+p) \prov \bpull_{\func{mnnp}}(\func{R[m]}, \func{S[n]}, \func{S[p]}, R \merge S) : A$$
+%% $$\Gamma; \sharp (m+p) \prov (\bpull_{\func{mnnp}}(\func{R[m]}, \func{S[n]}, \func{S[p]}, R \merge S)) \push {\func{mp}} : A$$
+
+\subsubsection*{Exercise 1}
+
+Given $\Gamma; \sharp 1 \prov R : A$
+and $\Gamma; \sharp 1 \prov S : A$, with $R[0] \equiv S[0] \equiv a : A$, I can form
+$$\Gamma; \sharp 2 \prov R \merge S : A$$
+$$\Gamma; \sharp 1 \prov \bpull_{\func{00}}(a, R \merge S) : A$$
+Suppose $S = \btriv(a)$. How do we know that
+$\bpull_{\func{00}}(a, R \merge \btriv(a)) \equiv R$?
+
+
+\end{document}
