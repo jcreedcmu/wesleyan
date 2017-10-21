@@ -1820,3 +1820,9 @@ notationally obvious reduction I can make, but I do expect to be able to assert
 to be isomorphic to
 
 (2) Γ; [y/x]E ▹ [y/x]σ
+
+=== 2017.10.21
+
+Q: How on earth am I supposed to prove semantically that the walking
+$n$-ary relation behaves correctly? I feel dumb not being able to.
+A: ???
