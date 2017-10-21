@@ -144,6 +144,69 @@ P(n) \ar[r, "\iota" swap, hook] & \R_n
 \]
 where $\iota$ is the evident inclusion.
 
+
+
+Suppose I have a opfibration $f_1 : a_1 \to b_1, f_2 : a_2 \to b_2$ over $F_1, G_1 : A \to B$.
+\section{Lemmas}
+\begin{lemma}
+Every opfibration embeds into a codomain-ish opfibration such that
+the embedding is a pullback square.
+\end{lemma}
+
+\begin{proof}
+Let $p : \E \to \B$ be given. Let's construct the category $\E:\B$.
+Its objects are the objects of $\B$ plus the objects of $\E$.
+Its morphisms $E \to E$
+Its morphisms $E \to B$ are all the $e$-morphisms $E \to E'$ such that $pE' = B$.
+Its morphisms $B \to B$ are identities.
+
+
+
+%% It has for morphisms from $[e_1, E_1, b_1]: E'_1 \to B_1$ to
+%% $[e_2, E_2, b_2]: E'_2 \to B_2$ the triples $(e', e, b)$ such that
+%% \[
+%% \begin{tikzcd}
+%% E_1' \ar[r, "e'"] \ar[d, "e_1"] &E_2' \ar[d, "e_2"]\\
+%% E_1 \ar[r, "e"]& E_2 \\
+%% \end{tikzcd}
+%% \qquad
+%% \begin{tikzcd}
+%% pE_1 \ar[r, "pe"] \ar[d, "b_1"] &pE_2 \ar[d, "b_2"]\\
+%% B_1 \ar[r, "b"]& B_2 \\
+%% \end{tikzcd}
+%% \]
+%% commute.
+Then we claim
+\[
+\begin{tikzcd}
+E \ar[r] \ar[d] &B' \ar[d]\\
+B \ar[r, equal]& B \\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+B_1 \ar[r] \ar[d] &B_2 \ar[d]\\
+B \ar[r, equal]& B \\
+\end{tikzcd}
+\]
+An object of $(\E : \B)^\Delta$ is a pair of $B \in \B$ and $f : (E : B)^\to$
+such that $\cod f = B$; i.e. a diagonal morphism $E \to B$ or a $B$-morphism $B_0 \to B$.
+\[
+\begin{tikzcd}
+\E \ar[d, "p" swap] \ar[r, "h_1"] &(\E :\B)^\Delta \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, "h_2"] \ar[d, "\cod" description]
+  & (\E:\B)^\to \ar[d, "\cod"] \\
+\B\ar[r, "1" swap] &\B \ar[r, "k" swap] & \E:\B\\
+\end{tikzcd}
+\]
+is a pullback, where $h$ takes $E$ to $[\rid_{E}, E, \rid_{pE}]$,
+and $k$ takes $B$ to $B$.
+
+Suppose $\C$ is a category and $F : \C \to (\E : \B)^\Delta$
+and $G : \C \to \B$ are functors, such that
+$\cod \o F = k \o G$. So $F(C)$ is a diagonal morphism;
+the universal map takes $C$ to the domain of that morphism.
+\cqed
+\end{proof}
+
 \section{Exercises}
 
 \begin{lemma}
@@ -168,6 +231,8 @@ P(n) \ar[rr, bend right, "P(F_0)" swap] \ar[r, "\iota" swap, hook] & \R_n \ar[ur
 \end{tikzcd}
 \]
 {\color{red} XXX WRONG The dotted arrow is produced by the universal property of $\R_n$?}
+
+
 \cqed
 \end{proof}
 
@@ -175,9 +240,9 @@ P(n) \ar[rr, bend right, "P(F_0)" swap] \ar[r, "\iota" swap, hook] & \R_n \ar[ur
 Suppose I have a category $\C$ with finite products and I have a pullback
 \[
 \begin{tikzcd}
- M(\C) \ar[rr, bend left] \ar[rd, phantom, very near start, "\lrcorner"]
-\ar[r, ""] \ar[d, "\del" swap]  & \C^\to\ar[d, "\cod"]\ar[r, dotted]  & M_1 \ar[d, "\del_M"]\\
-P(n) \ar[rr, bend right, "P(f)" swap] \ar[r, "\iota" swap, hook] & \C  & P(M_0)
+ M(\C) \ar[rrr, bend left] \ar[rd, phantom, very near start, "\lrcorner"]
+\ar[r, ""] \ar[d, "\del" swap]  & \C^\to\ar[d, "\cod"] & & M_1 \ar[d, "\del_M"]\\
+P(n) \ar[rrr, bend right, "P(f)" swap] \ar[r, "\iota" swap, hook] & \C \ar[r] & M_1 : P(M_0) & P(M_0)
 \end{tikzcd}
 \]
 
@@ -222,7 +287,65 @@ P(n)
 \end{tikzcd}
 \]
 
+
 What's $Q$? Its objects are the objects of $M_1$ and $P(M_0)$.
 We write $[m]$ for an object derived from an object $m \in M_1$.
 An object $m \in M_1$ becomes an arrow of $Q$ from $[m] \to \del m$
+
+
+\section{WTF}
+
+Ok, what's going on? I want to find `the free thing in the category of
+opfibrations' that has some property. I want to suspect that it looks
+something like a codomain opfibration most of the time.
+
+Like: what's the free opfibration with a chosen element $X$ upstairs
+over a chosen element $Y$ downstairs?
+
+\[
+\begin{tikzcd}
+ \E_1 \ar[rrr, bend left, dotted] \ar[rd, phantom, very near start, "\lrcorner"]
+\ar[r, "e"] \ar[d, "p_1" swap]  & \C^\to\ar[d, "\cod"] & & \E_2 \ar[d, "p_2"]\\
+\B_1 \ar[rrr, bend right, "b" swap] \ar[r, "h"]
+    & \C \ar[r, "k"] & \E_2 : \B_2 & \B_2 \ar[l, hook]
+\end{tikzcd}
+\]
+objects of $\E_1$ are pairs $(B_1, (f : C \to  h(B_1)))$. We have that
+$k(h(B_1)) = b(B_1)$.
+
+So $k$ sends an object of $\E_1$ to $b(B_1)$.
+
+We can hope that $k \o \dom$ is always in $E_2$, and that's what we pick?
+
+\section{WTF2}
+
+How about something easier; Let's just prove the free mesh on a set
+functions correctly.
+
+Mesh morphisms out of the free $c$-mesh on a set $X$
+correspond to a set function $X \to M_0$.
+\[
+\begin{tikzcd}
+ P(X)^\to \ar[r, "F_1"]\ar[d, "\cod" swap] & M_1 \ar[d, "\del"]\\
+ P(X) \ar[r, "F_0" swap] & M_0
+\end{tikzcd}
+\]
+Suffices that they correspond to product-preserving functors $P(X) \to M_0$
+because we just lean on the freeness of $P$ after that.
+
+\subsection{Suffices to show}
+Let $(M_0, M_1, \del)$ be a mesh. Mesh morphisms from
+the codomain opfibration on a category $\C$ with finite products
+to $(M_0, M_1, \del)$
+correspond to finite-product-preserving functors $\C \to M_0$.
+\[
+\begin{tikzcd}
+ \C^\to \ar[r, "F_1"]\ar[d, "\cod" swap] & M_1 \ar[d, "\del"]\\
+ \C \ar[r, "F_0" swap] & M_0
+\end{tikzcd}
+\]
+So let an $F_0$ be given, we then have to construct $F_1$.
+Given $f : C \to D \in \C$ we want to find $f^\star \in M_1$ such that
+$\del f^\star = F_0 D$. But $\del$ is a fibration,
+so we can pull along $F_0C \to F_0 D$ to get exactly the arrow in $M_1$ we need.
 \end{document}
