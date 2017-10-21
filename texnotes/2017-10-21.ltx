@@ -80,7 +80,7 @@ Let $L(\C)$ be the free finitely complete category on a category $\C$.
 \subsubsection*{Meshes}
 A {\em mesh} $M$ is
 \begin{itemize}
-\item a set $M_0$ (of `objects/types')
+\item a category with finite products $M_0$ (of `objects/types')
 \item a category with finite products $M_1$ (of `morphisms/relations')
 \item a bifibration $\del_M : M_1 \to P(M_0)$ (`domain/boundary')
 \end{itemize}
@@ -93,7 +93,7 @@ name of the mesh itself.
 \subsubsection*{Mesh Morphisms}
 A mesh morphism $M \to N$ is
 \begin{itemize}
-\item a set function $M_0 \to N_0$
+\item a finite product preserving functor $F_0 : M_0 \to N_0$
 \item a finite product, cartesian morphism, and opcartesian morphism-preserving
 functor $F_1 : M_1 \to N_1$
 \end{itemize}
@@ -101,19 +101,25 @@ such that
 \[
 \begin{tikzcd}
 M_1 \ar[r, "F_1"] \ar[d, "\del_M" swap]  & N_1\ar[d, "\del_N"] \\
-P(M_0) \ar[r, "P(F_0)" swap] & P(N_0)
+M_0 \ar[r, "F_0" swap] & N_0
 \end{tikzcd}
 \]
 
-\subsubsection*{Free Mesh on a Set}
+\subsubsection*{Cartesian Meshes}
 
-The free mesh on a set $X$ is the codomain bifibration
+A c-mesh is a mesh for which the base category is $P(X)$ for some set $X$.
+A c-mesh morphism is one for which the functor between base categories
+arises as $P(f)$ for some set function $f$.
+
+\subsubsection*{Free C-Mesh on a Set}
+
+The free $c$-mesh on a set $X$ is the codomain bifibration
 $\begin{tikzcd}[cramped] P(X)^\to \ar[r, "\cod"]& P(X)\end{tikzcd}$.
 
 
-\subsubsection*{Free Mesh on a Category}
+\subsubsection*{Free C-Mesh on a Category}
 
-To construct the free mesh $M(\C)$ on a category $\C$, take the pullback
+To construct the free c-mesh $M(\C)$ on a category $\C$, take the pullback
 
 \[
 \begin{tikzcd}
@@ -125,11 +131,11 @@ P(\C_0) \ar[r, "\iota" swap, hook] & L(\C)
 
 where $\iota$ is the evident inclusion.
 
-\subsubsection*{Free Mesh on a single $n$-ary Relation}
+\subsubsection*{Free C-Mesh on a single $n$-ary Relation}
 
 Let $\R_n$ be the free finitely complete category with $n+1$ objects $A_0, \ldots, A_{n-1}, R$ and one morphism
 $\theta : R \to A_0 \times \cdots \times A_{n-1}$.
-The free mesh $\sharp n$ on a single $n$-ary relation is given by the pullback
+The free c-mesh $\sharp n$ on a single $n$-ary relation is given by the pullback
 \[
 \begin{tikzcd}
 \sharp n \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, ""] \ar[d, "\del" swap]  & \R_n^\to\ar[d, "\cod"] \\
@@ -165,4 +171,58 @@ P(n) \ar[rr, bend right, "P(F_0)" swap] \ar[r, "\iota" swap, hook] & \R_n \ar[ur
 \cqed
 \end{proof}
 
+\section{Generally}
+Suppose I have a category $\C$ with finite products and I have a pullback
+\[
+\begin{tikzcd}
+ M(\C) \ar[rr, bend left] \ar[rd, phantom, very near start, "\lrcorner"]
+\ar[r, ""] \ar[d, "\del" swap]  & \C^\to\ar[d, "\cod"]\ar[r, dotted]  & M_1 \ar[d, "\del_M"]\\
+P(n) \ar[rr, bend right, "P(f)" swap] \ar[r, "\iota" swap, hook] & \C  & P(M_0)
+\end{tikzcd}
+\]
+
+I want to think that $M(\C)$ is somehow the best approximation of $\C$ as a c-mesh.
+
+Under what circumstances can I lift $P(f)$? For each object
+ $m_0 \times \cdots \times m_{n-1}$ in $P(n)$ and each
+$C \to D_{m_0} \times \cdots \times D_{m_{n-1}}$ in $\C$,
+I need to produce an object of $M_1$ over $f(m_0) \times \cdots f(m_{n-1})$.
+
+Might as well let $n$ be 1. For each basic object $m$ in $P(n)$,
+and each $C \to D_m$ in $\C$, I need to produce an object of $M_1$ over
+$f(m)$.
+\section{More Specifically}
+Given an object $X$ of $M_1$ over $x\in M_0$, construct an
+$F_1 : \sharp 1 \to M_1$ over $P(x) : P(1) \to P(M_0)$.
+\[
+\begin{tikzcd}
+\sharp 1 \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, ""] \ar[d, "\del" swap]  & \R_1^\to\ar[d, "\cod"]  & M_1 \ar[d, "\del_M"]\\
+P(1) \ar[rr, bend right, "P(x)" swap] \ar[r, "\iota" swap, hook] & \R_1 \ar[ur, dotted] & P(M_0)
+\end{tikzcd}
+\]
+
+$\R_1$ is the free category with finite products
+ on two objects $R$ and $Z$ and a morphism $R \to Z$.
+
+\[
+\begin{tikzcd}
+\sharp n
+    \ar[rd, phantom, very near start, "\lrcorner"]
+    \ar[r, ""]
+    \ar[d, "\del" swap]
+  & \R_n^\to\ar[d, "\cod"] \ar[r, dotted]
+  & Q^\to \ar[from=r] \ar[d, "\cod"]
+  & M_1 \ar[ld, phantom, very near start, "\llcorner"] \ar[d, "\del_M"]
+\\
+P(n)
+    \ar[r, "\iota" swap, hook]
+  & \R_n \ar[r, dotted]
+  & Q \ar[from=r, "\iota"]
+  & P(M_0)
+\end{tikzcd}
+\]
+
+What's $Q$? Its objects are the objects of $M_1$ and $P(M_0)$.
+We write $[m]$ for an object derived from an object $m \in M_1$.
+An object $m \in M_1$ becomes an arrow of $Q$ from $[m] \to \del m$
 \end{document}
