@@ -1,0 +1,150 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{More Remedial Bifibration Facts}
+Let $\C$ be a category with finite limits. Let another
+product-preserving bifibration $(\E, \B, p)$ satisfying the
+Beck-Chevalley condition be given. Cartesian morphisms from the
+codomain bifibration on $\C$ to $p$ correspond to
+finite-product-preserving functors $\C \to \B$.
+\[
+\begin{tikzcd}
+ \C^\to \ar[r, "F"]\ar[d, "\cod" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "G" swap] & \B
+\end{tikzcd}
+\]
+Let  $G$ be given. We have to construct $F$. Let's do the object part first. Given
+$f : C \to D \in \C$ we want to find $E \in \E$ over $G D$.
+We use the fact that $p$ is a bifibration to obtain $E$ like so:
+\[\begin{tikzcd}
+E \ar[from=r, opfib, "opcart" swap]\ar[d, mapsto]
+  & E' \ar[d,mapsto]\ar[r, fib, "cart"]
+  & 1 \ar[d, mapsto]\\
+GD \ar[from=r, "G f"] & GC \ar[r, "!" swap]& 1\\
+\end{tikzcd}\]
+
+%% Does $F$ preserve cartesian morphisms? Well, we haven't given its arrow part yet,
+%% so let's do it in such a way that it does.
+A  morphism in $\C^\to$ over $d : D_1 \to D_2$ is a square in $\C$
+\[
+\begin{tikzcd}
+ C_1
+\ar[r, "c"]\ar[d, "f_1" swap] & C_2 \ar[d, "f_2"]\\
+ D_1 \ar[r, "d" swap] & D_2
+\end{tikzcd}
+\]
+%% The object part of $F$ we've defined so far builds up
+%% \[
+%% \begin{tikzcd}
+%% E_1 \ar[from=r, opfib, "opcart" swap]\ar[d, mapsto]
+%%   & E'_1 \ar[d,mapsto]\ar[r, fib, "cart"]
+%%   & 1 \ar[d, mapsto]\\
+%% GD_1 \ar[from=r, "G f_1"] & GC_1 \ar[r, "!" swap]& 1\\
+%% \end{tikzcd}
+%% \qquad
+%% \begin{tikzcd}
+%% E_2 \ar[from=r, opfib, "opcart" swap]\ar[d, mapsto]
+%%   & E'_2 \ar[d,mapsto]\ar[r, fib, "cart"]
+%%   & 1 \ar[d, mapsto]\\
+%% GD_2 \ar[from=r, "G f_2"] & GC_2 \ar[r, "!" swap]& 1\\
+%% \end{tikzcd}
+%% \]
+and we define the arrow part of $F$ to be the unique morphism
+guaranteed by the opcartesian morphism $E_1' \to E_1$ over $Gf_1$ in
+\[
+\begin{tikzcd}
+E_1 \ar[ddr, dotted, "F\pair c d"]\ar[from=rr, opfib]\mapt  && E_1' \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
+&&&&1\mapt\\[-1.5em]
+&E_2 \ar[from=rr, opfib, crossing over] &&E_2' \ar[ur, fib] \mapt\\
+GD_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GC_1 \ar[ddr, "Gc" swap] \ar[drr, "!", near start]\\[-1.5em]
+&&&&1\\[-1.5em]
+&GD_2 \ar[from=rr, "Gf_2"]\frommapt&&GC_2 \ar[ur, "!" swap]\\
+\end{tikzcd}
+\]
+By Beck-Chevalley, this morphism is cartesian when the
+square in $\C$ is a pullback.
+
+
+\end{document}
