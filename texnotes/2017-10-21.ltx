@@ -1,0 +1,168 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rid{\mathrm{id}}
+\def\C{\mathbf{C}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\F{\mathbb{F}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Definitions}
+Let $P(X)$ be the free category with finite products on a set $X$.
+Let $L(\C)$ be the free finitely complete category on a category $\C$.
+
+\subsubsection*{Meshes}
+A {\em mesh} $M$ is
+\begin{itemize}
+\item a set $M_0$ (of `objects/types')
+\item a category with finite products $M_1$ (of `morphisms/relations')
+\item a bifibration $\del_M : M_1 \to P(M_0)$ (`domain/boundary')
+\end{itemize}
+such that $\del_M$ preserves finite products, and satisfies Beck-Chevalley,
+and the product of opcartesian morphisms is opcartesian.
+
+We may sometimes when unambiguous treat name of a mesh's total category $M_1$ as the
+name of the mesh itself.
+
+\subsubsection*{Mesh Morphisms}
+A mesh morphism $M \to N$ is
+\begin{itemize}
+\item a set function $M_0 \to N_0$
+\item a finite product, cartesian morphism, and opcartesian morphism-preserving
+functor $F_1 : M_1 \to N_1$
+\end{itemize}
+such that
+\[
+\begin{tikzcd}
+M_1 \ar[r, "F_1"] \ar[d, "\del_M" swap]  & N_1\ar[d, "\del_N"] \\
+P(M_0) \ar[r, "P(F_0)" swap] & P(N_0)
+\end{tikzcd}
+\]
+
+\subsubsection*{Free Mesh on a Set}
+
+The free mesh on a set $X$ is the codomain bifibration
+$\begin{tikzcd}[cramped] P(X)^\to \ar[r, "\cod"]& P(X)\end{tikzcd}$.
+
+
+\subsubsection*{Free Mesh on a Category}
+
+To construct the free mesh $M(\C)$ on a category $\C$, take the pullback
+
+\[
+\begin{tikzcd}
+M(\C) \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, ""] \ar[d, "\del" swap]  & L(\C)^\to\ar[d, "\cod"] \\
+P(\C_0) \ar[r, "\iota" swap, hook] & L(\C)
+\end{tikzcd}
+\]
+
+
+where $\iota$ is the evident inclusion.
+
+\subsubsection*{Free Mesh on a single $n$-ary Relation}
+
+Let $\R_n$ be the free finitely complete category with $n+1$ objects $A_0, \ldots, A_{n-1}, R$ and one morphism
+$\theta : R \to A_0 \times \cdots \times A_{n-1}$.
+The free mesh $\sharp n$ on a single $n$-ary relation is given by the pullback
+\[
+\begin{tikzcd}
+\sharp n \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, ""] \ar[d, "\del" swap]  & \R_n^\to\ar[d, "\cod"] \\
+P(n) \ar[r, "\iota" swap, hook] & \R_n
+\end{tikzcd}
+\]
+where $\iota$ is the evident inclusion.
+
+\section{Exercises}
+
+\begin{lemma}
+Let $F_0 : n \to M_0$ be given.
+Mesh morphisms
+$$(F_0, F_1) : \sharp n \to (M_0, M_1, \del_M)$$
+correspond bijectively to objects in $M_1$
+ over $F_0(0) \times \cdots \times F_0(n-1)$.
+\end{lemma}
+
+\begin{proof}
+Given $F_1 : \sharp n \to M_1$, then
+$$F_1 (\theta, (F_0(0) \times \cdots \times F_0(n-1)))$$
+is the required element of the fiber.
+Conversely, given an object $X$ of $M_1$ over
+$(F_0(0) \times \cdots \times F_0(n-1))$.
+Want to construct an $F_1 : \sharp n \to M_1$.
+\[
+\begin{tikzcd}
+\sharp n \ar[rd, phantom, very near start, "\lrcorner"] \ar[r, ""] \ar[d, "\del" swap]  & \R_n^\to\ar[d, "\cod"]  & M_1 \ar[d, "\del_M"]\\
+P(n) \ar[rr, bend right, "P(F_0)" swap] \ar[r, "\iota" swap, hook] & \R_n \ar[ur, dotted] & P(M_0)
+\end{tikzcd}
+\]
+{\color{red} XXX WRONG The dotted arrow is produced by the universal property of $\R_n$?}
+\cqed
+\end{proof}
+
+\end{document}

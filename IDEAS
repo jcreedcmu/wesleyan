@@ -1784,3 +1784,39 @@ composition and functionality.
 Q: Do I want to represent ♯ variables explicitly?
 A: Maybe not; it does make push look very natural, but it involves
 inventing names for so many more things.
+
+=== 2017.10.20
+
+Q: But wait, what is ♯n semantically?
+A: It's a perfectly sensible thing! The category I want to interpret
+into has (let's call them) 'meshes' for objects and 'mesh morphisms'
+for arrows. A mesh is a choice of set M0, category M1, and a
+(sufficiently-well-behaved) bifibration ∂ : M1 → (FinSet/M0)^op.
+Well-behaved probably at least means: preserves products, products of
+opcartesian morphisms are opcartesian, Beck-Chevalley holds.
+
+A mesh morphism (M0, M1, ∂M) → (N0, N1, ∂N) is a functor F1 : M1 → N1
+and a set function F0 : M0 → N0 such that the obvious square commutes,
+and F1 probably has to preserve products and bifibration structure
+appropriately.
+
+♯n is the 'free mesh on an n-ary relation'. Its M0 is n. Its M1 has
+for objects comprehensions Γ; E ▹ σ that I described in
+texnotes//2017-10-13.ltx .
+
+Except here E can have only relation symbols and equalities in it.
+
+Q: Since I know all morphisms upstairs in ♯n are variable-for-variable
+substitutions, can I say anything special about how 'pull' (fibration
+reindexing) works?
+A: Let some φ : τ' → τ be given (τ, τ' are morphisms in the base
+category, i.e. m → n and m' → n, with φ actually being a function m →
+m' because of the ^op) and suppose we have a Γ; E ▹ σ over τ. The
+reindexing is Γ, Δ_{τ'}; E, σ = φ ▹ id_{Δ_{τ'}} over τ'. Hmm. No
+notationally obvious reduction I can make, but I do expect to be able to assert
+
+(1) Γ, x : A; E, x = y ▹ σ
+
+to be isomorphic to
+
+(2) Γ; [y/x]E ▹ [y/x]σ
