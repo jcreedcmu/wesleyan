@@ -107,7 +107,7 @@ GD \ar[from=r, "G f"] & GC \ar[r, "!" swap]& 1\\
 
 %% Does $F$ preserve cartesian morphisms? Well, we haven't given its arrow part yet,
 %% so let's do it in such a way that it does.
-A  morphism in $\C^\to$ over $d : D_1 \to D_2$ is a square in $\C$
+A  morphism in $\C^\to$ over $d : D_1 \to D_2$ is a square in $\C$, fitting into the diagram
 \[
 \begin{tikzcd}
  C_1
@@ -115,36 +115,43 @@ A  morphism in $\C^\to$ over $d : D_1 \to D_2$ is a square in $\C$
  D_1 \ar[r, "d" swap] & D_2
 \end{tikzcd}
 \]
-%% The object part of $F$ we've defined so far builds up
-%% \[
-%% \begin{tikzcd}
-%% E_1 \ar[from=r, opfib, "opcart" swap]\ar[d, mapsto]
-%%   & E'_1 \ar[d,mapsto]\ar[r, fib, "cart"]
-%%   & 1 \ar[d, mapsto]\\
-%% GD_1 \ar[from=r, "G f_1"] & GC_1 \ar[r, "!" swap]& 1\\
-%% \end{tikzcd}
-%% \qquad
-%% \begin{tikzcd}
-%% E_2 \ar[from=r, opfib, "opcart" swap]\ar[d, mapsto]
-%%   & E'_2 \ar[d,mapsto]\ar[r, fib, "cart"]
-%%   & 1 \ar[d, mapsto]\\
-%% GD_2 \ar[from=r, "G f_2"] & GC_2 \ar[r, "!" swap]& 1\\
-%% \end{tikzcd}
-%% \]
-and we define the arrow part of $F$ to be the unique morphism
+It is worth noting that we can fit this diagram into a larger diagram
+\[
+\begin{tikzcd}
+C_1 \ar[ddr, "c"]\ar[from=rr, opfib, equal]\ar[ddd, "f_1" swap]  && C_1 \ar[ddr, fib, "c" description] \ar[drr, fib]\ar[ddd, equal]\\[-1.5em]
+&&&&1\ar[ddd, equal]\\[-1.5em]
+&C_2 \ar[from=rr, opfib, crossing over, equal] &&C_2 \ar[ur, fib] \\
+D_1 \ar[ddr, "d" swap]\ar[from=rr, "f_1", near start]  && C_1 \ar[ddr, "c" swap] \ar[drr, near start]\\[-1.5em]
+&&&&1\\[-1.5em]
+&D_2 \ar[from=rr, "f_2"]\ar[from=uuu, crossing over, "f_2" swap, near start]&&C_2 \ar[from=uuu, crossing over, equal]\ar[ur]\\
+\end{tikzcd}
+\]
+where certain cartesian and opcartesian morphisms in $\C^\to$ are marked.
+Preservation of cartesian and opcartesian morphisms
+by $F$  forces us into choosing to define the arrow
+part of $F$ to be the unique morphism
 guaranteed by the opcartesian morphism $E_1' \to E_1$ over $Gf_1$ in
 \[
 \begin{tikzcd}
 E_1 \ar[ddr, dotted, "F\pair c d"]\ar[from=rr, opfib]\mapt  && E_1' \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
 &&&&1\mapt\\[-1.5em]
 &E_2 \ar[from=rr, opfib, crossing over] &&E_2' \ar[ur, fib] \mapt\\
-GD_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GC_1 \ar[ddr, "Gc" swap] \ar[drr, "!", near start]\\[-1.5em]
+GD_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GC_1 \ar[ddr, "Gc" swap] \ar[drr, near start]\\[-1.5em]
 &&&&1\\[-1.5em]
-&GD_2 \ar[from=rr, "Gf_2"]\frommapt&&GC_2 \ar[ur, "!" swap]\\
+&GD_2 \ar[from=rr, "Gf_2"]\frommapt&&GC_2 \ar[ur]\\
 \end{tikzcd}
 \]
 By Beck-Chevalley, this morphism is cartesian when the
-square in $\C$ is a pullback.
+square in $\C$ is a pullback, so F preserves cartesian morphisms.
+
+Also $F$ preserves opcartesian morphisms; for the
+square in $\C$ is opcartesian when $c$ is iso. When $Gc$ is iso,
+showing that $F\pair c d$ is opcartesian follows from
+two-pullback-lemma-like reasoning on the opcartesian morphisms above
+$Gf_1$ and $Gf_2$.
+
+Showing that $F$ preserves limits probably requires knowing that
+limits preserve fibration junk.
 
 
 \end{document}
