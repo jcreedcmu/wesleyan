@@ -4,6 +4,7 @@
 \usepackage{stmaryrd}
 \input{linear}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\lpar{\bindnasrepma}
 \def\lamp{\binampersand}
@@ -24,18 +25,20 @@
 \def\rtype{\mathrm{type}}
 \def\rset{\mathbf{Set}}
 \def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
 \def\rid{\mathrm{id}}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
+\def\J{\mathbf{J}}
 \def\R{\mathbf{R}}
 \def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
 \def\T{\mathbf{T}}
 \def\B{\mathbf{B}}
 \def\M{\mathbf{M}}
-\def\F{\mathbb{F}}
 \def\H{\mathbf{H}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
@@ -95,6 +98,9 @@ finite-limit-preserving functors $\C \to \B$.
  \C \ar[r, "G" swap] & \B
 \end{tikzcd}
 \]
+We claim the codomain mesh is the {\em free mesh on the functor $G$}.
+That is, we can uniquely recover $F$ after forgetting down to $G$.
+
 Let  $G$ be given. We have to construct $F$. Let's do the object part first. Given
 $f : C \to D \in \C$ we want to find $E \in \E$ over $G D$.
 We use the fact that $p$ is a bifibration to obtain $E$ like so:
@@ -153,5 +159,227 @@ $Gf_1$ and $Gf_2$.
 Showing that $F$ preserves limits probably requires knowing that
 limits preserve fibration junk.
 
+\section{Embedding a Mesh in a Pullback}
 
+Suppose I have a mesh $(\E, \B, p)$. There's a pattern in which
+I know a particular $\C, \M$, and $m$, I know a way $n$ of getting into
+$\B$, and I want to find $(\E^+, \B^+, p^+)$ to make a pullback square on
+the right in
+\[
+\begin{tikzcd}
+\cdot \ar[r] \ar[rrr, bend left, dotted, "\bar n"] \ar[d] \pbck& \C^\to \ar[d, "\cod" swap]\ar[r, dotted, "\bar\epsilon"]&\E^+
+\ar[from=r, "e" swap]\ar[d, "p^+" swap] & \E \ar[dl, phantom, pos=0, "\llcorner"]\ar[d, "p"]\\
+\M \ar[r, "m" swap]\ar[rrr, bend right, "n" swap]&\C \ar[r, "\epsilon" swap] &\B^+ \ar[from=r, "b"] & \B
+\end{tikzcd}
+\]
+so that I can find $\epsilon$ that lets me lift $n$ to $\bar n$.
+
+I need $\B^+$ to include $\B$, and for the fibers over the copy of
+$\B$ in it to look exactly like $\E$. But also (for the $\epsilon$ I
+have in mind) $\B^+$ needs to include objects of $\E$, and synthetic
+`diagonal' arrows stretching from $\E$-objects to $\B$-objects. The
+running example I have in my head is $\R_n$ containing an arrow
+$\theta : R \to A_0 \x \cdots \x A_{n-1}$, where $R$ is meant to
+correspond to an object of $\E$ over a big product in $\B$.
+
+%% So objects of $\B^+$ are objects of $\B$ and $\E$, and its morphisms
+%% are at least those of $\B$ and diagonal arrows $[E, b] : E \to B$
+%% where $b : pE \to B$. Possibly I want to go as far as $[e, E, b] : E'
+%% \to B$ where $e : E' \to E$ and $b : pE \to B$, but I want to hold off
+%% on any generalization until I strictly need it.
+
+So objects of $\B^+$ are objects of $\B$ and $\E$, and its morphisms
+are those of $\B$ and $\E$ and diagonal arrows $[e, E, b] : E' \to B$ where $e : E' \to E$ and $b : pE \to B$.
+
+
+%% What's the fiber over an object? I know for $\B$ that it must be
+%% exactly $\E$, for otherwise the pullback isn't going to give me what I
+%% want. I need to understand the fiber over an object $E$, then, and how
+%% pull and push work. Some sketching on paper suggested that it might be something
+%% like the pair of a span $E_1 \leftarrow E \to E_2$ together with another
+%% object $E'$ over $pE$.
+
+%% \def\trip#1#2#3#4#5{\begin{tikzcd}[ampersand replacement=\&,cramped]#1 \&\ar[l, "{#2}" swap]#3\ar[r, "{#4}"] \&#5\end{tikzcd}}
+%% If I pull $E'$ over $pE$ back across the `vertical diagonal' morphism
+%% $[\rid_E, E, \rid_{pE}]$, I claim I get the pair $(E = E = E, E')$.
+%% If I pull $\trip{E_1}fEg{E_2}$
+
+What's the fiber over an object $X$ in $\B^+$? I'm going to hope it's
+something like `an arrow of $\B^+$ whose codomain is $X$'. For $X \in \B$,
+I want to constrain it to only
+morphisms $[\rid_E, E, \rid_{pE}]$ where $pE = X$; that is, a choice of $E$ over $X$.
+Hm this is already making me think I need to identify $[e \o e_0, E_2, b]$ with
+$[e_0, E_1, b \o pe)]$ when $e_0 : E_0 \to E_1, e : E_1 \to E_2$, and $b : E_2 \to B$.
+
+Hmm, I know how to compose arrows in $\B^+$ but do I know how to compute pullbacks?
+Pullback of arrows within $\E$ or $\B$ is fine, but sometimes I'm presented with
+the pullback of $[e, E, b : (E \to B)] : E' \to B$ with $b' : B' \to B$.
+
+\subsubsection*{Oh, Right}
+
+I definitely need finite limits to exist in $\B^+$ for anything to work. So
+let $\Delta$ be a new name for
+the thing I defined above (both categories plus diagonal morphisms)
+and then
+I pretty much need $\B^+$ to be {\em something} like
+$L(\Delta)$, the free finitely complete category on $\Delta$,
+except I want to preserve the finite limits already in $\E$ and $\B$.
+
+What's an object of $L(\Delta)$? A diagram $\J \to \Delta$ where $\J$ is a finite category.
+What's a morphism of $L(\Delta)$? A diagram
+\[
+\begin{tikzcd}
+\J_1 \ar[from=dr, bend right=50] \ar[d] &\ \twocellswap{dl}{"\alpha" swap, near start}\\
+\Delta& \J_2 \ar[l]\\
+\end{tikzcd}
+\]
+So $\B^+$ is defined by the coequalizer
+\[
+\begin{tikzcd}
+\E + \B \ar[r, "{(\iota, \iota)}" swap] &[3em] \Delta \ar[d, hook]\\
+L(\E) + L(\B) \ar[r, "{(L(\iota), L(\iota))}" swap] \ar[u, "{\lim_{\E} + \lim_{\B}}"]  & L(\Delta)\ar[r, two heads] &\B^+
+\end{tikzcd}
+\]
+
+\subsubsection*{Sanity Check}
+Want to build the free finitely complete category on $\E$, then
+demand that all its limits are replicated. We should end up with exactly $\E$.
+\[
+\begin{tikzcd}
+ &[3em] \E \ar[d, hook, "\iota" description] & \C\\
+L(\E)  \ar[r, equal] \ar[ur, "{\lim_{\E}}"]  & L(\E)\ar[r, two heads, "\lim_\E" swap] \ar[ur, "c"]
+  &\E \ar[u, dotted]
+\end{tikzcd}
+\]
+$L$'s property is that for functor $F: \E \to U\C$
+there's a unique finitely continuous $\bar F : L(\E) \to \C$
+such that $\bar F \iota = F$. So call $\lim_E = \bar \rid$; it's the unique
+morphism $L(\E) \to \E$ such that $\lim_E \o \iota = \rid$.
+
+Let $c$ be given, assume $c = c \iota \lim_\E$. Then there is a $\E \to \C$
+that fits the dotted, it's $c \iota$. If there were another $x : \E \to \C$
+such that $x \lim_E = c$, then $x = x \lim_E \iota = c \iota$.
+
+\subsubsection*{Generally, for Coequalizers}
+\[
+\begin{tikzcd}
+ & S \ar[d, "m" description, hook] \ar[dr, equal]\\
+B  \ar[r, equal] \ar[ur, "{e}", two heads]  & B\ar[r, two heads, "e" swap] \ar[dr, "c" swap]
+  &S \ar[d, dotted]\\
+&&C
+\end{tikzcd}
+\]
+When $(e, m)$ are splitting of the identity, the coequalizer of $m \o e$ and
+the identity is $e$.
+
+For $ce$ is a valid filler of the dotted line. Suppose $x$ were a valid
+filler of the dotted line. Then $xf = c$. $xfe = ce$.
+
+\subsubsection*{Returning from that Digression}
+
+Ok, so we have $\B^+$ defined by
+\[
+\begin{tikzcd}
+\E + \B \ar[r, "{(\iota, \iota)}" swap] &[3em] \Delta \ar[d, hook]\\
+L(\E) + L(\B) \ar[r, "{(L(\iota), L(\iota))}" swap] \ar[u, "{\lim_{\E} + \lim_{\B}}"]  & L(\Delta)\ar[r, two heads] &\B^+
+\end{tikzcd}
+\]
+
+What's going on inside $\E^+$? I want it to kind of behave like a codomain
+mesh. So fibration reindexing should look like a pullback - an actual pullback
+in $\B^+$. For an object of $E$ over $B$, we should have
+\[
+\begin{tikzcd}
+b^* E \ar[r, fib] \ar[d] \pbck & E\ar[d, "\Delta"]\\
+B_1 \ar[r]  & B_2
+\end{tikzcd}
+\]
+Are we yet imposing this pullback square on the limits of $L(\Delta)$?
+I don't believe we are. How 'bout opreindexing? Do we get the commutativity
+\[
+\begin{tikzcd}
+ E \ar[from=r, opfib, double] \ar[d, "\Delta_E" swap]  & E\ar[dd, "\Delta_E"]\\
+B_2 \ar[d, "f" swap]\\
+B_1 \ar[from=r, "f"]  & B_2
+\end{tikzcd}
+\]
+What does that even mean? Something like that the object $\Delta_{\Sigma_f E}$ is
+the same as $f \o \Delta_E$.
+\subsubsection*{Another Fresh Start}
+I think I may have an explicit description of $\B^+$.
+Let $\F$ be the fiberwise free finitely complete category on the fibers of $\E$ over
+$\B$, accepting the fact that this blows away the limits already in $\E$. Call this
+new product and fiberwise unit $\tensor$ and $I_B$ respectively. Because $\F$
+is constructed fiberwise, there is a canonical $q : \F \to \B$ derived from the
+original $p : \E \to \B$. I think I can claim that $q$ is also a fibration?
+
+The objects of $\B^+$ are objects of $\B$ and objects of $\F$, with
+$I_1$ identified with $1$.
+The morphisms within $\B$ and $\F$ are what you expect. The diagonal
+morphisms $F' \to B$ are of the form $[(f : F' \to F), F, (b : pF \to B)]$.
+We compute pullback of general morphisms in $\F$ by appealing to pullback
+in the data constituting $\F$, and to the fibration structure on $p$.
+\[
+\begin{tikzcd}[column sep=0.75em, row sep=0.75em]
+\cdot \bpbck \ar[rr]\ar[dd] && \cdot \bpbck \ar[rr]\ar[dd] && \cdot \bpbck \ar[rr]\ar[dd] && F'_2 \ar[dd] \\
+&\F&&\F&&\F\\
+\cdot \bpbck \ar[rr]\ar[dd] && \pi_1^* F_1 \tensor \pi_2^* F_2 \bpbck \ar[rr]\ar[dd] && \pi_2^*F_2 \bpbck \ar[rr]\ar[dd, "\Delta"] && F_2 \ar[dd, "\Delta"] \\
+&\F&&&&c\\
+\cdot \bpbck \ar[rr]\ar[dd] && \pi_1^* F_1 \bpbck \ar[rr, "\Delta" swap]\ar[dd] && B_1\x_B B_2 \bpbck \ar[rr, "\pi_2" swap]\ar[dd, "\pi_1"] && B_2 \ar[dd, "b_2"] \\
+&\F&&c&&\B\\
+F'_1 \ar[rr] && F_1 \ar[rr, "\Delta" swap] && B_1 \ar[rr, "b_1" swap] && B  \\
+\\
+\end{tikzcd}
+\]
+
+For $\E^+$ I want to have something like codomain mesh, but I only
+want to include over $\B$ the diagonal morphisms, and then only those
+morphisms that have `no interesting $\F$ stuff'. And in order to
+recover (something equivalent to) $\E \to \B$ by pullback I need to
+know that every such morphism is equivalent to one with `no
+interesting $\B$ stuff' also.
+
+I specifically claim that
+\(
+\begin{tikzcd}
+F \ar[r,"\Delta"] & B_1 \ar[r, "b"] & B_2
+\end{tikzcd}
+\)
+should be isomorphic (in the arrow category, or what remains of it after
+I cut it down) to
+\(
+\begin{tikzcd}
+\Sigma_b F \ar[r,"\Delta"]  & B_2
+\end{tikzcd}
+\).
+From
+\[
+\begin{tikzcd}
+ F \ar[r, opfib, "\iota"] \ar[d, mapsto]  & \Sigma_b F\ar[d, mapsto]\\
+B_1 \ar[r, "b" swap]&B_2\\
+\end{tikzcd}
+\]
+in the original mesh we get
+\[
+\begin{tikzcd}
+ F \ar[r, opfib, "\iota"] \ar[d, "\Delta" swap]  & \Sigma_b F\ar[dd, "\Delta"]\\
+B_1 \ar[d, "b" swap]\\
+B_2 \ar[r, double]  & B_2
+\end{tikzcd}
+\]
+So I try to invoke opcartesianness of $\iota$ to get an inverse...
+\[\begin{tikzcd}
+F\maps\\
+& \Sigma_b F \ar[ul] \maps\ar[from=r,"{\iota}", opfib ]&F\ar[ull]\maps\\
+B_1\\
+& B_2\ar[from=r,"b"] \ar[ul, red, "???"] &B_1\ar[ull]
+\end{tikzcd}\]
+...but this isn't looking good. How 'bout by fiat I just say that over $\B$ I have
+no interesting $\F$ stuff {\em and} no interesting $\B$ stuff and I just do
+opreindexing as opreindexing in $\E \to \B$.
+
+The only thing left I'm worried about defining is the push of an $F$-object
+across a general diagonal morphism, yeah? But I can just use the projection to
+turn $F$-morphism followed by $\Delta$ into a $\Delta$ followed by a $b$,
+and then repair the $\Delta$ back to being a simple $\Delta$ with opreindexing again.
 \end{document}

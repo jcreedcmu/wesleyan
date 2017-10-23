@@ -1826,3 +1826,19 @@ to be isomorphic to
 Q: How on earth am I supposed to prove semantically that the walking
 $n$-ary relation behaves correctly? I feel dumb not being able to.
 A: ???
+
+=== 2017.10.22
+
+Q: How do I draw extra tikz stuff after a commutative diagramon is laid out?
+A:
+https://tex.stackexchange.com/questions/394922/draw-an-ellipse-in-tikz-cd-around-diagram
+
+Q: Why am I getting weird problems in tikz-cd inside a \def?
+A:
+https://tex.stackexchange.com/questions/253207/creating-a-new-command-for-commutative-squares
+
+=== 2017.10.23
+
+Q: What gives me a shred of hope about reasoning about bifibrations?
+A: That the free `glom E and B together' bifibration maybe seems to
+exist after all, and admits a somewhat explicit description.
