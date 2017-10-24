@@ -1,0 +1,275 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{Trying to Understand the Walking Relation}
+Suppose we have a functor $F : \C \to \D$, and say $L$ is the free finite
+cocompletion functor. Define $\M$ by the pullback
+\[
+\begin{tikzcd}
+\M \ar[r] \ar[d] \pbck & (L\D)^\to \ar[d, "\cod"]\\
+L\C \ar[r, "LF" swap] & L\D
+\end{tikzcd}
+\]
+Consider the example where $\C$ is the $n$-element set, and $\D$ is the $n$-legged
+span category $\pi_i : R \to i$. Given a mesh morphism
+\[
+\begin{tikzcd}
+\M \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
+L\C \ar[r, "m_0" swap] & \B
+\end{tikzcd}
+\]
+we can extract some data in $\E$. Note that we only really need to define
+$m : \C \to \B$ and then $m_0 = m \o {\lim}$. (Conversely, $m = m_0 \o \eta$)
+Define $B_i  := m(i)$. There's an object
+$$\theta : R \to \prod_i i \in (L\D)^\to$$
+so $E = m_1(\theta, \prod_i i)$ is an object in $\E$ over $\prod_i B_{i}$.
+We claim that a choice of an object over $\prod_i B_{i}$
+uniquely determines everything $m_1$ must do.
+
+Why's that? Let's examine what an object of $M$ looks like in general. It's
+a morphism from one finite limit diagram in $\D$ to another, but the
+one in the codomain has to actually come from a diagram $\C$.
+
+Let's take one example of an object, with $n=3$:
+\[
+\begin{tikzpicture}
+[total/.style={circle,text=blue,draw=blue!50,fill=blue!20,thick, inner sep=0pt,minimum size=6mm},
+base/.style={circle,draw=black!50,fill=black!20,thick, inner sep=0pt,minimum size=4mm},
+>=stealth]
+\node (s1) at (0.5,3.4) [base] {$2$} ;
+\node (s2) at (0,1.7) [total] {$R$} ;
+\node (s3) at (1,0) [total] {$R$} ;
+\node (d2) at (3,3) [base] {$2$};
+\node (d0) at (3,2) [base] {$0$};
+\node (d1) at (3,1) [base] {$1$};
+\node (d1b) at (3,0) [base] {$1$};
+\draw [->] (s2) to[bend right=10] node[auto] {$\pi_0$} (d0);
+\draw [->] (s1) to[bend right=10] node[auto] {$\rid$} (d2);
+\draw [->] (s2) to[bend right=10] node[fill=white] {$\pi_1$}  (d1);
+\draw [->] (s3) to[bend right=10] node[auto] {$\pi_1$}  (d1b);
+\end{tikzpicture}
+\qquad\qquad
+\begin{tikzpicture}
+[total/.style={circle,text=red,draw=red!50,fill=red!20,thick, inner sep=0pt,minimum size=6mm},
+base/.style={circle,text=dgreen,draw=dgreen!50,fill=dgreen!20,thick, inner sep=1pt,minimum size=4mm},
+lildot/.style={circle,fill=black,minimum size=1mm, inner sep=0pt},
+>=stealth]
+\node (s1) at (0.5,3.4) [base] {$B_2$} ;
+\node (s2) at (0,1.7) [total] {$E$} ;
+\node (s3) at (1,0) [total] {$E$} ;
+\node (d2) at (3,3) [base] {$B_2$};
+\node (d0) at (3,2) [base] {$B_0$};
+\node (d1) at (3,1) [base] {$B_1$};
+\node (d1b) at (3,0) [base] {$B_1$};
+\node (s10)  at ([shift={(0.5, 0)}]s1) [lildot] {};
+\foreach \which in {2,3}
+ \foreach \pos in {0,1,2}
+  \node (s\which\pos)  at ([shift={(0.5, 0.25 + -0.25 * \pos)}]s\which) [lildot] {};
+\draw [->] (s20) to[bend right=10] node {} (d0);
+\draw [->] (s10) to[bend right=10] node {} (d2);
+\draw [->] (s21) to[bend right=10] node {}  (d1);
+\draw [->] (s31) to[bend right=10] node {}  (d1b);
+\end{tikzpicture}
+\]
+What does this map to in $\E$? We take the product of two copies of $E$,
+to get $E \x E$ over $(\prod_i B_i) \x (\prod_i B_i)$.
+We pull along a projection to
+$B_2 \x (\prod_i B_i) \x (\prod_i B_i)$ and
+push along the swizzling morphism implied by the diagram to get
+an object over $B_2 \x B_0 \x B_1 \x B_1$.
+
+\vskip 1em \hrule \vskip 1em
+
+Let's carefully generalize this bit by bit. Suppose there's a second object in $\D$:
+to make it look like
+\[
+\begin{tikzcd}
+&R\ar[dl]\ar[d]\ar[dr] & S\ar[dl]\ar[d]\\
+0&1&2
+\end{tikzcd}
+\]
+
+Now what's the data we ask for? An object $E_R$ over $\prod_i B_i$, and an object
+$E_S$ over $B_1 \x B_2$, yeah?
+\[
+\begin{tikzpicture}
+[total/.style={circle,text=blue,draw=blue!50,fill=blue!20,thick, inner sep=0pt,minimum size=6mm},
+base/.style={circle,draw=black!50,fill=black!20,thick, inner sep=0pt,minimum size=4mm},
+>=stealth]
+\node (s1) at (0.5,3.4) [base] {$2$} ;
+\node (s2) at (0,1.7) [total] {$R$} ;
+\node (s3) at (1,0) [total] {$S$} ;
+\node (d2) at (3,3) [base] {$2$};
+\node (d0) at (3,2) [base] {$0$};
+\node (d1) at (3,1) [base] {$1$};
+\node (d1b) at (3,0) [base] {$1$};
+\draw [->] (s2) to[bend right=10] node[auto] {$\pi_0$} (d0);
+\draw [->] (s1) to[bend right=10] node[auto] {$\rid$} (d2);
+\draw [->] (s2) to[bend right=10] node[fill=white] {$\pi_1$}  (d1);
+\draw [->] (s3) to[bend right=10] node[auto] {$\pi_1$}  (d1b);
+\end{tikzpicture}
+\qquad\qquad
+\begin{tikzpicture}
+[total/.style={circle,text=red,draw=red!50,fill=red!20,thick, inner sep=0pt,minimum size=6mm},
+base/.style={circle,text=dgreen,draw=dgreen!50,fill=dgreen!20,thick, inner sep=1pt,minimum size=4mm},
+lildot/.style={circle,fill=black,minimum size=1mm, inner sep=0pt},
+>=stealth]
+\node (s1) at (0.5,3.4) [base] {$B_2$} ;
+\node (s2) at (0,1.7) [total] {$E_R$} ;
+\node (s3) at (1,0) [total] {$E_S$} ;
+\node (d2) at (3,3) [base] {$B_2$};
+\node (d0) at (3,2) [base] {$B_0$};
+\node (d1) at (3,1) [base] {$B_1$};
+\node (d1b) at (3,0) [base] {$B_1$};
+\node (s10)  at ([shift={(0.5, 0)}]s1) [lildot] {};
+\foreach \which in {2}
+ \foreach \pos in {0,1,2}
+  \node (s\which\pos)  at ([shift={(0.5, 0.25 + -0.25 * \pos)}]s\which) [lildot] {};
+\foreach \pos in {1,2}
+ \node (s3\pos)  at ([shift={(0.5, 0.25 + -0.25 * \pos)}]s3) [lildot] {};
+\draw [->] (s20) to[bend right=10] node {} (d0);
+\draw [->] (s10) to[bend right=10] node {} (d2);
+\draw [->] (s21) to[bend right=10] node {}  (d1);
+\draw [->] (s31) to[bend right=10] node {}  (d1b);
+\end{tikzpicture}
+\]
+How do we construct the appropriate object of $\E$? We take a product $E_R \x E_S$,
+pull to $B_2 \x (\prod_i B_i) \x (B_1 \x B_2)$, then push to $B_2 B_0 B_1 B_1$.
+
+This line of reasoning makes me think that I was supposed to, all
+along, be providing data $E_0, E_1, E_2$ over $B_0, B_1, B_2$ for 0, 1, 2.
+I can think that, but (and this is crucially {\em because they're in the image of $F$})
+they're required to be certain canonical things that I get
+by pulling from the terminal object.
+
+\vskip 1em \hrule \vskip 1em
+
+Ok, so I guess I'm supposed to provide as data a functor $T: \D \to \E$, then.
+
+For an object $D\in \D$, what in $\B$ is $T(D)$ supposed to live over?
+Recall that the slice over a functor $D/F$ is defined as having for
+objects pairs of an object $C \in \C$ and a morphism $D \to FC$.
+There is a functor $\cod_{D/F} : D/F \to \C$. Think of this functor
+as a limit diagram in $\C$. Then there is a functor $\cod_{\dash/F} : \D \to L\C$.
+We then require both squares in
+\[
+\begin{tikzcd}
+\C\ar[d, "F" swap]\ar[r, "m"]& \B\ar[d, "p^*"] \ar[dd, bend left=50, equal]\\
+\D \ar[r, "T" ] \ar[d, "\cod_{\dash/F}" swap] &\E\ar[d, "p" ]\\
+L\C\ar[r, "m_0" swap]  & \B
+\end{tikzcd}
+\]
+where $p^*$ is the taking every object $B$ to $!^* 1$ over $B$.
+Given an object in $\M$, which is a natural transformation
+\[
+\begin{tikzcd}
+\J_1 \ar[from=r, "k" swap] \ar[d, "j_1" swap] &\J_2 \ar[d, "j_2"]\twocellswap{dl}{"\alpha" swap, near start}\\
+\D& \C \ar[l, "F"]
+\end{tikzcd}
+\]
+Where $\J_1, \J_2$ are finite categories.
+
+We want to get from `diagram in $\D$' to `object in $\E$ over the limit of $\C$
+in $\D$ itself'
+\end{document}
+
+%% \tikz \fill[orange] (1ex,1ex) circle (1ex);
+%% \begin{tikzpicture}[scale=3]
+%% \draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+%% \draw (-1.5,0) -- (1.5,0);
+%% \draw (0,-1.5) -- (0,1.5);
+%% \draw (0,0) circle (1cm);
+%% \draw (3mm,0mm) arc (0:30:3mm);
+%% \end{tikzpicture}
+
+%% \begin{tikzpicture}[>=stealth]
+%% \draw [<<->] (0,0) -- +(1,0) -- +(1,1) node [right]{$x$} -- +(0.5,1);
+%% \end{tikzpicture}
