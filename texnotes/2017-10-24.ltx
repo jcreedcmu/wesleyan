@@ -90,26 +90,29 @@
 
 
 \section{Trying to Understand the Walking Relation}
-Suppose we have a functor $F : \C \to \D$, and say $L$ is the free finite
-cocompletion functor. Define $\M$ by the pullback
+All categories we consider below are required to be finitely complete, and all functors
+must preserve finite limits.
+
+Suppose we have a functor $F : \C \to \D$. Define $\M$ by the pullback
 \[
 \begin{tikzcd}
-\M \ar[r] \ar[d] \pbck & (L\D)^\to \ar[d, "\cod"]\\
-L\C \ar[r, "LF" swap] & L\D
+\M \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
-Consider the example where $\C$ is the $n$-element set, and $\D$ is the $n$-legged
+Consider the example where $\C$ is the free finitely complete category
+on the $n$-element set, and $\D$ is the free finitely complete category
+on the $n$-legged
 span category $\pi_i : R \to i$. Given a mesh morphism
 \[
 \begin{tikzcd}
 \M \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
-L\C \ar[r, "m_0" swap] & \B
+\C \ar[r, "m_0" swap] & \B
 \end{tikzcd}
 \]
-we can extract some data in $\E$. Note that we only really need to define
-$m : \C \to \B$ and then $m_0 = m \o {\lim}$. (Conversely, $m = m_0 \o \eta$)
+we can extract some data in $\E$.
 Define $B_i  := m(i)$. There's an object
-$$\theta : R \to \prod_i i \in (L\D)^\to$$
+$$\theta : R \to \prod_i i \in \D^\to$$
 so $E = m_1(\theta, \prod_i i)$ is an object in $\E$ over $\prod_i B_{i}$.
 We claim that a choice of an object over $\prod_i B_{i}$
 uniquely determines everything $m_1$ must do.
@@ -168,7 +171,7 @@ an object over $B_2 \x B_0 \x B_1 \x B_1$.
 
 \vskip 1em \hrule \vskip 1em
 
-Let's carefully generalize this bit by bit. Suppose there's a second object in $\D$:
+Let's carefully generalize this bit by bit. Suppose there's a second object in $\D$
 to make it look like
 \[
 \begin{tikzcd}
@@ -232,34 +235,36 @@ by pulling from the terminal object.
 
 \vskip 1em \hrule \vskip 1em
 
-Ok, so I guess I'm supposed to provide as data a functor $T: \D \to \E$, then.
-
-For an object $D\in \D$, what in $\B$ is $T(D)$ supposed to live over?
-Recall that the slice over a functor $D/F$ is defined as having for
+The provided data is a functor $T: \D \to \E$.
+$D/F$ is defined as having for
 objects pairs of an object $C \in \C$ and a morphism $D \to FC$.
-There is a functor $\cod_{D/F} : D/F \to \C$. Think of this functor
-as a limit diagram in $\C$. Then there is a functor $\cod_{\dash/F} : \D \to L\C$.
-We then require both squares in
+There is a functor $\cod : D/F \to \C$. Think of this functor
+as a limit diagram in $\C$. If we generalize over objects in $\D$,
+and take the limit of each diagram, we can form a functor $\tilde F : \D \to \C$.
+We can also define a functor $p^* : \B \to \E$,
+taking $B$ to $!^* 1$ over $B$.
+We then require of $T$ that
 \[
 \begin{tikzcd}
-\C\ar[d, "F" swap]\ar[r, "m"]& \B\ar[d, "p^*"] \ar[dd, bend left=50, equal]\\
-\D \ar[r, "T" ] \ar[d, "\cod_{\dash/F}" swap] &\E\ar[d, "p" ]\\
-L\C\ar[r, "m_0" swap]  & \B
+\C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "m_0" swap]  & \B
 \end{tikzcd}
 \]
-where $p^*$ is the taking every object $B$ to $!^* 1$ over $B$.
-Given an object in $\M$, which is a natural transformation
-\[
-\begin{tikzcd}
-\J_1 \ar[from=r, "k" swap] \ar[d, "j_1" swap] &\J_2 \ar[d, "j_2"]\twocellswap{dl}{"\alpha" swap, near start}\\
-\D& \C \ar[l, "F"]
-\end{tikzcd}
-\]
-Where $\J_1, \J_2$ are finite categories.
+An object of $\M$ is an arrow $d : D \to F C \in \D$.
+By assumption, $Td : TD \to p^* m_0 C$. That means $pTd : pTD \to m_0 C$.
+We can opreindex to obtain $\Sigma_{pT d} (TD)$ over $m_0 C$.
 
-We want to get from `diagram in $\D$' to `object in $\E$ over the limit of $\C$
-in $\D$ itself'
 \end{document}
+
+%% An object in $\M$ is a natural transformation
+%% \[
+%% \begin{tikzcd}
+%% \J_1 \ar[from=r, "k" swap] \ar[d, "j_1" swap] &\J_2 \ar[d, "j_2"]\twocellswap{dl}{"\alpha" swap, near start}\\
+%% \D& \C \ar[l, "F"]
+%% \end{tikzcd}
+%% \]
+%% Where $\J_1, \J_2$ are finite categories.
 
 %% \tikz \fill[orange] (1ex,1ex) circle (1ex);
 %% \begin{tikzpicture}[scale=3]
