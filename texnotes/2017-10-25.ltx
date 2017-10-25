@@ -1,0 +1,262 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rspan{\mathbf{Sp}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{Example Functors}
+
+Let's list some possible functors $F : \C \to \D$ out of which I imagine constructing
+\[
+\begin{tikzcd}
+\M_F \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+\[
+\begin{tabular}{ll}
+Relation&$L(n) \to L(\pi_i : R \to n)$\\
+Category&$L(\C_0) \to L(\C)$\\
+Set&$L(X) \to L(X)$\\
+Extra Object&$L(x) \to L(x, y)$\\
+Domain&$L(x) \to L(f : x \to y)$\\
+Codomain&$L(y) \to L(f : x \to y)$\\
+Category $\b2$&$L(x, y) \to L(x \to y)$\\
+Category $\rspan$&$L(R, x, y) \to L(x \leftarrow R \to y)$\\
+\end{tabular}
+\]
+
+What is already a counterexample to the idea that $\tilde F F$ is the identity?
+The `extra arrow functor. For $\tilde F F x = x \x y$.
+
+Do I really believe
+\[
+\begin{tikzcd}
+\C\ar[d, "F" swap]\ar[r, "G"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "H" swap]  &\E
+\end{tikzcd}
+\quad\Longrightarrow\quad
+\begin{tikzcd}
+\D \ar[r, "H" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "G" swap]  & \B
+\end{tikzcd}
+\]
+for $\b2$? No, I don't think so. For I can have
+\[
+\begin{tikzcd}
+L(x, y)\ar[d, hook]\ar[r, "{x\mapsto S_x, y\mapsto S_y}"]&[3em] \rset\ar[d, "\rid"] \\
+L(x \to y) \ar[r, "f\mapsto S_f"  swap]  &\rset^\to
+\end{tikzcd}
+\]
+and yet not
+\[
+\begin{tikzcd}
+L(x \to y) \ar[r, "f \mapsto S_f"]  &[3em]\rset^\to\\
+L(x, y)\ar[from=u, "{x \mapsto x \x y \atop f \mapsto \pi}" swap]\ar[r, "{x\mapsto S_x, y\mapsto S_y}" swap]& \rset\ar[from=u, "\rid"]
+\end{tikzcd}
+\]
+(for merely consider $x$ in the top left; it gets mapped to $S_x \x S_y$ or just $S_x$
+depending on the path.
+
+\div
+
+Let's think about $\rspan$.
+Given an $m_1$ and an $m_0$, we can pick out $\tilde F$ and $\phi$ as a way
+of generating an element of $\M_F$, to obtain a functor from $L(\rspan)$ to $\E$.
+Let's examine how this functor is special.
+
+Let's spell out what $\tilde F$ is doing. Given $R$, it produces $R \x x \x y$,
+otherwise it produces the same object. Given $f_x : R \to x$, it emits
+$\pi : R \x x \x y \to x$ and
+likewise with $y$. What's $\phi$ doing? Given $R$, it produces
+the arrow $\langle \rid, f_x, f_y\rangle : R \to R \x x \x y$, otherwise
+it produces identity arrows.
+
+How do I think of $m$, then? It takes, e.g. $f_y$ to
+\[
+\begin{tikzcd}
+R\ar[d, "{\langle \rid, f_x, f_y\rangle}" swap]\ar[r, "f_y"]& y\ar[d, equal]\\
+R \x x \x y \ar[r, "\pi" swap]\ar[d, mapsto] & y\ar[d, mapsto]\\
+R \x x \x y \ar[r, "\pi" swap] & y
+\end{tikzcd}
+\]
+an arrow in $\M_F$ over $\pi$ in $L(\rspan_0)$.
+
+I notice that the essential data that needs to be extracted lies in the output
+of $m$ on the object $R$ pushed to $R \x x$ (this contains the data of the image
+of the functional relation $f_x$ in $\E$) and the corresponding thing for $y$.
+What I know about this data is that if I further pushed either one of them to
+just $R$, I'd have a trivial object.
+
+Okay, this seems like conceptual progress. Recall that $\tilde F \dashv F$.
+This means that I have a counit $\ep : \tilde F F \to \rid_{\C}$. Given an object
+$C \in \C$, if we take it to $FC \in \D$, take it to $TFC \in \E$ (where it is
+over $m_0 \tilde F FC$) {\color{blue}
+push it to some object over $m_0 C$,  {\em then} it should be
+the trivial object over $m_0 C$.}
+
+\[
+\begin{tikzcd}
+\M_F \pbck \ar[dr, dotted] \ar[ddd]\ar[rrr]&&& L(\rspan)^\to \ar[dl, "\bar T" description]\ar[ddd, "\cod"]\\
+&\E \ar[r] \ar[d, "p" swap] \pbck & \E\//\B \ar[d, "p^+"]\\
+&\B \ar[r, "p^*" swap] & \E\\
+L(\rspan_0) \ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&L(\rspan)\ar[ul, "T" description]
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}
+L(\rspan) \ar[rrrd, bend left=10, "\phi"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, "m" description]\\
+&\M_F \pbck \ar[dr, "m_1" description] \ar[ddd]\ar[rr]&& L(\rspan)^\to \ar[ddd, "\cod"]\\
+&&\E  \ar[d, "p" swap] \\
+&&\B \\
+&L(\rspan_0) \ar[ur, "m_0" description]\ar[rr, "F" swap]&&L(\rspan)
+\end{tikzcd}
+\]
+
+\div
+
+New attempt:
+
+If you have a pullback square,
+\[
+\begin{tikzcd}
+P \pbck \ar[r]\ar[d, shift left]\ar[from=d, "\ell h", shift left, gray]
+&B \ar[d, shift left, "k"]\ar[from=d, "h", shift left, gray]
+\\
+A \ar[r, "a" swap]&C
+\end{tikzcd}
+\]
+and $h$ is a section of $k$, then there exists a section $\ell h$,
+defined by pullback-pairing $\rid_A$ with $h\o a$.
+
+\begin{lemma}
+Suppose we have a $T$ such that
+\[
+\begin{tikzcd}
+\C \ar[r, "F" swap] \ar[d, "\ell T"] \ar[dd, bend right=60, equal, gray]
+ &\D  \ar[d, "T"] \ar[dd, bend right=60, equal, gray]
+ &\C \ar[r, "m_0" swap] \ar[d, "\ell p^*"] \ar[dd, bend right=60, equal, gray]
+ &\B \ar[d, "p^*"] \ar[dd, bend right=60, equal, gray]
+\\
+\E_{m_0\tilde F F} \ar[r]\pbck \ar[d, shift left]
+ & \E_{m_0 \tilde F}\ar[r]\pbck \ar[d, shift left]
+ & \E_{m_0} \ar[r] \pbck \ar[d, shift left]
+ & \E \ar[d, "p", shift left]
+\\
+\C \ar[r, "F" swap]
+ &\D \ar[r, "\tilde F" swap]
+ &\C \ar[r, "m_0" swap]
+ &\B
+\end{tikzcd}
+\]
+
+and
+\[
+\begin{tikzcd}
+\C\ar[r, equal]  & \C\\
+\E_{m_0\tilde F F} \ar[from=u, "\ell T" swap ] \ar[r, "\Sigma_{m_0\ep}" swap]
+  &\E_{m_0}\ar[from=u, "\ell p^*"  ]
+\end{tikzcd}
+\]
+where $\ep : \tilde F F \to \rid_\C$ arises from the adjunction $\tilde F \dashv F$.
+
+Then there's a morphism $\M_F \to \E$.
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\end{document}
