@@ -150,14 +150,14 @@ depending on the path.
 \div
 
 Let's think about $\rspan$.
-Given an $m_1$ and an $m_0$, we can pick out $\tilde F$ and $\phi$ as a way
+Given an $m_1$ and an $m_0$, we can pick out $\tilde F$ and $\eta$ as a way
 of generating an element of $\M_F$, to obtain a functor from $L(\rspan)$ to $\E$.
 Let's examine how this functor is special.
 
 Let's spell out what $\tilde F$ is doing. Given $R$, it produces $R \x x \x y$,
 otherwise it produces the same object. Given $f_x : R \to x$, it emits
 $\pi : R \x x \x y \to x$ and
-likewise with $y$. What's $\phi$ doing? Given $R$, it produces
+likewise with $y$. What's $\eta$ doing? Given $R$, it produces
 the arrow $\langle \rid, f_x, f_y\rangle : R \to R \x x \x y$, otherwise
 it produces identity arrows.
 
@@ -195,7 +195,7 @@ L(\rspan_0) \ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&L(\rspan)\ar[ul, "T" 
 
 \[
 \begin{tikzcd}
-L(\rspan) \ar[rrrd, bend left=10, "\phi"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, "m" description]\\
+L(\rspan) \ar[rrrd, bend left=10, "\eta"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, "m" description]\\
 &\M_F \pbck \ar[dr, "m_1" description] \ar[ddd]\ar[rr]&& L(\rspan)^\to \ar[ddd, "\cod"]\\
 &&\E  \ar[d, "p" swap] \\
 &&\B \\
@@ -219,7 +219,70 @@ A \ar[r, "a" swap]&C
 and $h$ is a section of $k$, then there exists a section $\ell h$,
 defined by pullback-pairing $\rid_A$ with $h\o a$.
 
-\begin{lemma}
+\div
+\vfil\eject
+We say a $T : \D \to \E$ is over $m_0$ when
+\[
+\begin{tikzcd}
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "m_0" swap]  & \B
+\end{tikzcd}
+\]
+A functor $T : \D \to \E$ over $m_0$ is called {\em sufficiently trivial}
+if for any $C\in \C$, pushing $TF C$ along
+$m_0 \ep_C : m_0 \tilde F F C \to m_0 C$ yields a trivial object in $\E$.
+
+\begin{lemma}[The Easy Direction, Warm-up]
+If $h$ arises in
+\[
+\begin{tikzcd}
+\D \ar[dr, blue, "h" description] \ar[drr, "\eta", bend left]
+\ar[ddr, "\tilde F" swap, bend right]\\
+&\M_F \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+&\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+then $h$ (which lies over $\rid_\C$) is sufficiently trivial.
+\end{lemma}
+
+\begin{proof}
+We need to show that for any $C$, pushing (in the mesh $\M_F \to \C$)
+$hFC$ along $\ep_C : \tilde F F C \to C$ yields a trivial object
+in $\M_F$, i.e. an isomorphism from $\C$. But the real content of
+$h$ is just the arrow $\eta_{FC} : F C \to F \tilde F F C$. And pushing
+along $\ep_C$ yields $F\ep_C \o \eta_{FC}$, but that's the identity
+by triangle equalities!
+ \cqed
+\end{proof}
+
+\begin{lemma}[The Easy Direction]
+Suppose we have a mesh morphism
+\[
+\begin{tikzcd}
+\M_F \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
+\C \ar[r, "m_0" swap] & \B
+\end{tikzcd}
+\]
+If we define $T = m_1 h$ where $h$ comes from
+\[
+\begin{tikzcd}
+\D \ar[dr, blue, "h" description] \ar[drr, "\eta", bend left]
+\ar[ddr, "\tilde F" swap, bend right]\\
+&\M_F \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+&\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+then $T$ (which lies over $m_0$) is sufficiently trivial.
+\end{lemma}
+
+\begin{proof}
+Follows from previous lemma
+because $m_1$ has to preserve cartesian and opcartesian
+morphisms.
+ \cqed
+\end{proof}
+
+\begin{lemma}[The Hard Direction]
 Suppose we have a $T$ such that
 \[
 \begin{tikzcd}
