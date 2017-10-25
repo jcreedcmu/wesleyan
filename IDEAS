@@ -1842,3 +1842,20 @@ https://tex.stackexchange.com/questions/253207/creating-a-new-command-for-commut
 Q: What gives me a shred of hope about reasoning about bifibrations?
 A: That the free `glom E and B together' bifibration maybe seems to
 exist after all, and admits a somewhat explicit description.
+
+=== 2017.10.24
+
+Q: Nope, wrong again. I was relying on the free complete category functor
+preserving limits, which of course it doesn't. What can I do?
+A: Oh wait I can `glom 𝔼 and 𝔹 together' by putting *𝔼* in the base,
+and putting something like 𝔼^→ up top; except constrained to only include
+the stuff over the identity.
+
+Q: Then is 𝔼 → 𝔹 a pullback of that?
+A: Yes, I think so, along p^*.
+
+=== 2017.10.25
+
+Q: What happens if I iterate that construction, starting from a
+codomain fibration?
+A: Looks like I get simplices in the base category!

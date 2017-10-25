@@ -357,6 +357,25 @@ and $G(\tilde F y) = p(H(y))$.
 What is $\tilde F$? Given $y\in \D$, return $1$. Given $x\in \D$, return $x\in \C$.
 
 So yes, $G(x) = p H (x)$ and $G(1) = p(H(1))$. {\color{red} but this is not the direction we need...}
+
+Can I prove $\Leftarrow$ for particular $F$s?
+Let's take $F : L(\{x, y\}) \to L(\{f : x \to y\})$, and set $\E = \rset^\to$ and $\B =\rset$.
+We can compute
+$\tilde F x = x \x y$ and $\tilde F y = y$.
+So $G$ has to set $x$ to some set $S_x$ and $y$ to some set $S_y$.
+This constrains what $H$ can do: it has to send $x$ to a set function into
+$S_x \x S_y$, and it has to send $y$ into a set function into $S_y$.
+Furthermore it has to send $f$ to a commutative square
+\[
+\begin{tikzcd}
+X \ar[r ] \ar[d] &S_x \x S_y\ar[d, "\pi" ]\\
+Y\ar[r]  & S_y
+\end{tikzcd}
+\]
+But $H$ could still pick $X$ and $Y$ to be, like, singletons and
+choose distinguished elements of $S_x$ and $S_y$. This isn't nearly
+constrained enough to establish $\Leftarrow$.
+
 \vskip 1em \hrule \vskip 1em
 
 
