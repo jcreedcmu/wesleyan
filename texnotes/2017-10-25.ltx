@@ -283,7 +283,33 @@ morphisms.
 \end{proof}
 
 \begin{lemma}[The Hard Direction]
-Suppose we have a $T$ such that
+Suppose we have a sufficiently trivial $T$ over $m_0$.
+Then there's a morphism $\M_F \to \E$, for which `the easy direction'
+gives us back our $T$.
+\end{lemma}
+\begin{proof}
+I want to build the required morphism from the pullback property in the inner
+square in
+\[
+\begin{tikzcd}
+\M_F  \ar[dr, dotted] \ar[ddd]\ar[rrr]&&& \D^\to \ar[dl, "\bar U" description]\ar[ddd, "\cod"]\\
+&\E \ar[r] \ar[d, "p" swap] \pbck & \E\//\B \ar[d, "p^+"]\\
+&\B \ar[r, "p^*"] & \E\\
+\C \ar[urr, "T^?" swap]\ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&\D\ar[ul, "U" description]
+\end{tikzcd}
+\]
+but I don't know how yet.
+
+Given that an object in $\M_F$ is a morphism $d : D \to FC$, I know I can
+hit $d$ with $T$, yielding $Td : TD \to TFC$ which by assumption is
+the same as $TD \to m_0 \tilde F F C$. So I can push the codomain along $m_0\ep_C$
+to get an object $E$ over $m_0 C$, as required, apparently.
+
+\cqed
+\end{proof}
+
+
+\section{Stranded Diagrams}
 \[
 \begin{tikzcd}
 \C \ar[r, "F" swap] \ar[d, "\ell T"] \ar[dd, bend right=60, equal, gray]
@@ -311,15 +337,5 @@ and
   &\E_{m_0}\ar[from=u, "\ell p^*"  ]
 \end{tikzcd}
 \]
-where $\ep : \tilde F F \to \rid_\C$ arises from the adjunction $\tilde F \dashv F$.
-
-Then there's a morphism $\M_F \to \E$.
-\end{lemma}
-
-\begin{proof}
-
-\cqed
-\end{proof}
-
 
 \end{document}
