@@ -324,13 +324,53 @@ Given $m_1 : \M_F \to \E$, first note that there is a natural transformation
 $\phi : \rid_\D \to F \tilde F$.  Then chase the diagram
 \[
 \begin{tikzcd}
-\D \ar[rrrd, bend left=10, "\phi"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, dotted]\\
+\D \ar[rrrd, bend left=10, "\phi"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, "m" description]\\
 &\M_F \pbck \ar[dr, "m_1" description] \ar[ddd]\ar[rr]&& \D^\to \ar[ddd, "\cod"]\\
 &&\E  \ar[d, "p" swap] \\
 &&\B \\
 &\C \ar[ur, "m_0" description]\ar[rr, "F" swap]&&\D
 \end{tikzcd}
 \]
+
+Let $C$ be given. Is $mFC$ a trivial object in $\M_F$? It consists
+of $\phi : FC \to F(\tilde F FC)$. It lives over $\tilde F F C$.
+
+Ok, so for the case that $\C = L(x_1, x_2)$ and
+$\D = L(R \to x_1, x_2)$, can I convert an $m_1 : \M_F \to\E$ into a $\D \to \E$ such
+that
+\[
+\begin{tikzcd}
+\C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "T" swap]  &\E
+\end{tikzcd}
+\]
+holds.
+
+What's a census of $\M_F$? Arrows $x_1^{m_1} x_2^{m_2} R^r \to x_1^{n_1} x_2^{n_2}$.
+Hm, I think I should already know that $m_1$ takes arrows in $\C$ to trivial stuff:
+\[
+\begin{tikzcd}
+\C^\to \ar[rrrd, bend left=10, "F^\to"] \ar[dddd, bend right=50, "\cod" swap] \ar[d, "h"]\\
+\M_F \pbck \ar[dr, "m_1" description] \ar[ddd]\ar[rrr]&&& \D^\to \ar[ddd, "\cod"]\\
+&\E  \ar[from=d, "p^*" swap] \\
+&\B  \\
+\C \ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&\D
+\end{tikzcd}
+\]
+Given a $\rid : C \to C \in \C^\to$, it yields an arrow $FC \to FC \in \D^\to$
+in $\M_F$. Want to show this is a trivial object in $\M_F$. What's it over? $C_2$.
+If we pull $(1 \to 1)$ over $1$ back in $\D^\to$, along $! : FC \to 1$ we do get $\rid : FC \to FC$.
+\vskip 1em \hrule \vskip 1em
+
+ What's $m_1$? Something that takes $\delta : D \to FC \in \D$
+to objects of $\E$. Given an object $D \in \D$, I can find the limit $\tilde F D$
+of $\{C^\delta \st \delta : D \to F C\}$ in $\C$.
+The arrow $\phi$ from $D \to F \tilde F D$ is the unit of the adjunction
+$\tilde F \dashv F$.
+I have to make a cone by making arrows $D \to FC^\delta$, but that's exactly $\delta$.
+So the arrow I feed into $m_1$ is $\phi_D: D \to F(\tilde F D)$.
+In my example $\phi_x : x \to x \x y = \pair{\rid_x}{f}$ and $\phi_y : y \to y = \rid_y$.
+
 \cqed
 \end{proof}
 
