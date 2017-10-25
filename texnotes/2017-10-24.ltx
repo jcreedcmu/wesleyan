@@ -298,7 +298,7 @@ Pull in $p^+$ is pullback in $\E$.
 \end{proof}
 
 \begin{lemma}
-T such that
+$T$ such that
 \[
 \begin{tikzcd}
 \C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
@@ -310,6 +310,8 @@ correspond to mesh morphisms from $\M_F$ to $\E$ over $m_0$.
 \end{lemma}
 
 \begin{proof}
+Given $T$, we can compute $\bar T$ because $\cod : \D^\to \to \D$ is the free mesh on $\D$,
+and chase the diagram
 \[
 \begin{tikzcd}
 \M_F \pbck \ar[dr, dotted] \ar[ddd]\ar[rrr]&&& \D^\to \ar[dl, "\bar T" description]\ar[ddd, "\cod"]\\
@@ -318,7 +320,104 @@ correspond to mesh morphisms from $\M_F$ to $\E$ over $m_0$.
 \C \ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&\D\ar[ul, "T" description]
 \end{tikzcd}
 \]
+Given $m_1 : \M_F \to \E$, first note that there is a natural transformation
+$\phi : \rid_\D \to F \tilde F$.  Then chase the diagram
+\[
+\begin{tikzcd}
+\D \ar[rrrd, bend left=10, "\phi"] \ar[ddddr, bend right=10, "\tilde F" swap] \ar[dr, dotted]\\
+&\M_F \pbck \ar[dr, "m_1" description] \ar[ddd]\ar[rr]&& \D^\to \ar[ddd, "\cod"]\\
+&&\E  \ar[d, "p" swap] \\
+&&\B \\
+&\C \ar[ur, "m_0" description]\ar[rr, "F" swap]&&\D
+\end{tikzcd}
+\]
+\cqed
+\end{proof}
 
+\begin{conjecture}
+\[
+\begin{tikzcd}
+\C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "T" swap]  &\E
+\end{tikzcd}
+\quad\Longleftrightarrow\quad
+\begin{tikzcd}
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "m_0" swap]  & \B
+\end{tikzcd}
+\]
+
+\end{conjecture}
+
+\begin{proof}[Suggestive Proof Sketch]
+An interesting special case is when $m_0$ and $T$ are both the identity, and
+$F$ is $p^*$.
+Then we're just claiming that $\tilde {p^*} = p$.
+Let's take an even specialer special case of $p$ being $\cod$.
+\[
+\begin{tikzcd}
+\B^\to \ar[r, equal] \ar[d, "\tilde {p^*}" swap] &\B^\to\ar[d, "p" ]\\
+\B\ar[r, equal]  & \B
+\end{tikzcd}
+\]
+What's $p^*$? It takes $B\in \B$ to the pullback of $B \to 1$ with $1 \to 1$, yielding $\rid : B \to B$. What's $\tilde{p^*}$? For each $b : B_1 \to B_2$, there's a functor
+ $\cod : b/p^* \to \B$ that's a diagram we want to take the limit of.
+What are the objects in this diagram? For each
+\[
+\begin{tikzcd}
+B_1 \ar[rr, "b"] \ar[dr, "b_1" swap] &&B_2\ar[dl, "b_2" ]\\
+&B
+\end{tikzcd}
+\]
+we throw in a copy of $B$ named $B^{b_1, b_2}$. If there is a morphism $\bar b$ such that
+\[
+\begin{tikzcd}
+B_1 \ar[rr, "b"]
+\ar[dr, "b_1" ]
+\ar[ddr, "\bar b_1" swap] &&
+B_2
+\ar[dl, "b_2" swap]
+\ar[ddl, "\bar b_2" ]
+\\
+&B \ar[d, "\bar b" description, pos=0.35]\\[1.5em]
+&\bar B
+\end{tikzcd}
+\]
+then we throw in the morphism $\bar b$ between $B^{b_1,b_2}$ and $\bar B^{\bar b_1,\bar b_2}$
+
+But in this situation, there is a copy of $B_2$ that dominates the
+limit: it is $B_2^{b, \rid}$. Given another $B^{b_1, b_2}$, then its own
+$b_2$ constitutes an arrow
+arrow from $B_2^{b, \rid}$ to it:
+\[
+\begin{tikzcd}
+B_1 \ar[rr, "b"]
+\ar[dr, "b" ]
+\ar[ddr, " b_1" swap] &&
+B_2
+\ar[dl, equal]
+\ar[ddl, " b_2" ]
+\\
+&B_2 \ar[d, "b_2" description, pos=0.35]\\[1.5em]
+& B
+\end{tikzcd}
+\]
+%% \[
+%% \begin{tikzcd}
+%% \C\ar[dd, "F" swap]\ar[rrr, "m_0"]&&& \B\ar[dd, "p^*"]\ar[dl, double] \\
+%% &\C\ar[from=dl, "\tilde F" description]\ar[r, "m_0"]&\B\ar[from=dr, "p" description]\\
+%% \D \ar[rrr, "T" swap]  &&&\E
+%% \end{tikzcd}
+%% \]
+%% \[
+%% \begin{tikzcd}
+%% \D\ar[dd, "\tilde F" swap]\ar[rrr, "T"]&&& \E\ar[dd, "p"]\ar[from=dl, "p^*" description] \\
+%% &\C\ar[ul, "F" description]\ar[r, "m_0" swap]&\B\ar[dr, double]\\
+%% \C \ar[rrr, "m_0" swap]  &&&\B
+%% \end{tikzcd}
+%% \]
+
+So $B_2$, the codomain of $b$, is the limit.
 \cqed
 \end{proof}
 
