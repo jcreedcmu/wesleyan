@@ -334,22 +334,64 @@ $\phi : \rid_\D \to F \tilde F$.  Then chase the diagram
 \cqed
 \end{proof}
 
-\begin{conjecture}
+\begin{lemma}
 \[
 \begin{tikzcd}
-\C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
-\D \ar[r, "T" swap]  &\E
+\C\ar[d, "F" swap]\ar[r, "G"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "H" swap]  &\E
 \end{tikzcd}
-\quad\Longleftrightarrow\quad
+\quad\Longrightarrow\quad
 \begin{tikzcd}
-\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
-\C\ar[r, "m_0" swap]  & \B
+\D \ar[r, "H" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "G" swap]  & \B
 \end{tikzcd}
 \]
+For any (finite-limit-preserving) functors $F, G, H$, and any mesh $p$.
+\end{lemma}
 
-\end{conjecture}
+\begin{proof}
+Let $\C$ be $L(\{x\})$ and $\D$ be $L(\{x, y\})$.
+Suppose $H(x) = p^* G(x)$. Then show $G(\tilde F x) = p(H(x))$
+and $G(\tilde F y) = p(H(y))$.
 
-\begin{proof}[Suggestive Proof Sketch]
+What is $\tilde F$? Given $y\in \D$, return $1$. Given $x\in \D$, return $x\in \C$.
+
+So yes, $G(x) = p H (x)$ and $G(1) = p(H(1))$. {\color{red} but this is not the direction we need...}
+\vskip 1em \hrule \vskip 1em
+
+
+{\color{Gray}
+$\Longrightarrow$:
+Let $D\in \D$ be given. What's the limit diagram, call it $\Delta$,
+in $\C$ look like? For each
+morphism $\delta : D \to FC$ in $\D$, we throw in a copy of $C$ into the digram,
+call it $C^\delta$. For each triangle
+\[
+\begin{tikzcd}
+&D\ar[dl, "\delta_1" swap]\ar[dr, "\delta_2"]\\
+C_1 \ar[rr, "c" swap] &&C_2
+\end{tikzcd}
+\]
+we throw in $c : C^{\delta_1} \to C^{\delta_2}$.
+
+Let's consider
+$p^* G \Delta = HF \Delta$. It has objects $HFC^{\delta}$ and morphisms
+$HFc : HFC^{\delta_1} \to HFC^{\delta_2}$. We can make a cone over this
+diagram out of
+$HD$ and projections $\{ H \delta : HD \to HFC^\delta \st \delta : D \to FC \in \D \}$.
+
+We want to claim this is the terminal cone over $p^*G\Delta$.
+For let $E \in \E$ and $\ep_\delta : E \to p^*GC^\delta$ such that
+the appropriate things commute.
+
+If we hit this again with $p$ we get $pHD$ and projections
+$$\{ pH \delta : pHD \to GC^\delta \st \delta : D \to FC \in \D \}$$
+
+We want to claim this is the terminal cone over $G\Delta$.
+For let $B \in \B$ and $\beta_\delta : B \to GC^\delta$ such that
+the appropriate things commute.
+\vskip 1em \hrule \vskip 1em
+
 An interesting special case is when $m_0$ and $T$ are both the identity, and
 $F$ is $p^*$.
 Then we're just claiming that $\tilde {p^*} = p$.
@@ -402,6 +444,23 @@ B_2
 & B
 \end{tikzcd}
 \]
+
+So $B_2$, the codomain of $b$, is the limit.
+}
+\cqed
+\end{proof}
+
+\end{document}
+%% \[
+%% \begin{tikzcd}
+%% \E \pbck \ar[dd, "p" swap] \ar[r] &\E \// \B\ar[r, "\beta"] \ar[d, "\alpha" description] \pbck & \B_0\ar[d, "\rid"]\\
+%% &\E^\to \ar[r, "p^\to" swap] \ar[d, "\cod" description] & \B^\to %\ar[d, "\cod"]
+%% \\
+%% \B\ar[r, "p^*" swap]&\E % \ar[r, "p" swap]&\B
+%% \end{tikzcd}
+%% \]
+
+
 %% \[
 %% \begin{tikzcd}
 %% \C\ar[dd, "F" swap]\ar[rrr, "m_0"]&&& \B\ar[dd, "p^*"]\ar[dl, double] \\
@@ -414,19 +473,5 @@ B_2
 %% \D\ar[dd, "\tilde F" swap]\ar[rrr, "T"]&&& \E\ar[dd, "p"]\ar[from=dl, "p^*" description] \\
 %% &\C\ar[ul, "F" description]\ar[r, "m_0" swap]&\B\ar[dr, double]\\
 %% \C \ar[rrr, "m_0" swap]  &&&\B
-%% \end{tikzcd}
-%% \]
-
-So $B_2$, the codomain of $b$, is the limit.
-\cqed
-\end{proof}
-
-\end{document}
-%% \[
-%% \begin{tikzcd}
-%% \E \pbck \ar[dd, "p" swap] \ar[r] &\E \// \B\ar[r, "\beta"] \ar[d, "\alpha" description] \pbck & \B_0\ar[d, "\rid"]\\
-%% &\E^\to \ar[r, "p^\to" swap] \ar[d, "\cod" description] & \B^\to %\ar[d, "\cod"]
-%% \\
-%% \B\ar[r, "p^*" swap]&\E % \ar[r, "p" swap]&\B
 %% \end{tikzcd}
 %% \]
