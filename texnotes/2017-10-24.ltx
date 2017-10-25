@@ -12,7 +12,7 @@
 \newarrow {Equiv} =====
 \def\FinSet{\mathbf{FinSet}}
 \def\x{\times}
-\def\o{\comp}
+\def\o{\mathrel\comp}
 \def\ups#1{#1^G}
 \def\dns#1{#1^B}
 \def\rsn{\ \mathsf{sn}}
@@ -93,10 +93,10 @@
 All categories we consider below are required to be finitely complete, and all functors
 must preserve finite limits.
 
-Suppose we have a functor $F : \C \to \D$. Define $\M$ by the pullback
+Suppose we have a functor $F : \C \to \D$. Define $\M_F$ by the pullback
 \[
 \begin{tikzcd}
-\M \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\M_F \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
 \C \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
@@ -106,7 +106,7 @@ on the $n$-legged
 span category $\pi_i : R \to i$. Given a mesh morphism
 \[
 \begin{tikzcd}
-\M \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
+\M_F \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
 \C \ar[r, "m_0" swap] & \B
 \end{tikzcd}
 \]
@@ -251,30 +251,83 @@ We then require of $T$ that
 \C\ar[r, "m_0" swap]  & \B
 \end{tikzcd}
 \]
-An object of $\M$ is an arrow $d : D \to F C \in \D$.
+An object of $\M_F$ is an arrow $d : D \to F C \in \D$.
 By assumption, $Td : TD \to p^* m_0 C$. That means $pTd : pTD \to m_0 C$.
 We can opreindex to obtain $\Sigma_{pT d} (TD)$ over $m_0 C$.
 
-\end{document}
+\section{Trying to recover the nice pullback argument I thought I smelled earlier}
+\def\//{\mathop{/\!\!/}}
+Let $\E \// \B$ be the `fiberwise arrow category over $\B$', the pullback
+\[
+\begin{tikzcd}
+\E \// \B\ar[r, "\beta"] \ar[d, "\alpha" swap] \pbck & \B_0\ar[d, "\rid"]\\
+\E^\to \ar[r, "p^\to" swap]  & \B^\to %\ar[d, "\cod"]
+\end{tikzcd}
+\]
 
-%% An object in $\M$ is a natural transformation
+
 %% \[
 %% \begin{tikzcd}
-%% \J_1 \ar[from=r, "k" swap] \ar[d, "j_1" swap] &\J_2 \ar[d, "j_2"]\twocellswap{dl}{"\alpha" swap, near start}\\
-%% \D& \C \ar[l, "F"]
+%% \E\//\B \ar[r, tail, "\iota"] & \E^\to
+%%  \ar[r, "p^\to", shift right, swap]
+%%  \ar[r, "p\,\o\,\dom", shift left] &[3em] \B^\to
 %% \end{tikzcd}
 %% \]
-%% Where $\J_1, \J_2$ are finite categories.
+\begin{lemma}
+Let $p^+$ be ${\cod} \o \alpha : \E \// \B \to \E$. Then $p^+$ is a mesh.
+\end{lemma}
 
-%% \tikz \fill[orange] (1ex,1ex) circle (1ex);
-%% \begin{tikzpicture}[scale=3]
-%% \draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
-%% \draw (-1.5,0) -- (1.5,0);
-%% \draw (0,-1.5) -- (0,1.5);
-%% \draw (0,0) circle (1cm);
-%% \draw (3mm,0mm) arc (0:30:3mm);
-%% \end{tikzpicture}
+\begin{proof}
+This looks like a huge amount of details to check. Push in $p^+$ works by
+appealing to push in $p$ to move back over an identity morphism in $\B$.
+Pull in $p^+$ is pullback in $\E$.
+\cqed
+\end{proof}
 
-%% \begin{tikzpicture}[>=stealth]
-%% \draw [<<->] (0,0) -- +(1,0) -- +(1,1) node [right]{$x$} -- +(0.5,1);
-%% \end{tikzpicture}
+\begin{lemma}
+\[
+\begin{tikzcd}
+\E \ar[r] \ar[d, "p" swap] \pbck & \E\//\B \ar[d, "p^+"]\\
+\B \ar[r, "p^*" swap] & \E
+\end{tikzcd}
+\]
+\end{lemma}
+
+\begin{proof}
+\cqed
+\end{proof}
+
+\begin{lemma}
+T such that
+\[
+\begin{tikzcd}
+\C\ar[d, "F" swap]\ar[r, "m_0"]& \B\ar[d, "p^*"] \\
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "m_0" swap]  & \B
+\end{tikzcd}
+\]
+correspond to mesh morphisms from $\M_F$ to $\E$ over $m_0$.
+\end{lemma}
+
+\begin{proof}
+\[
+\begin{tikzcd}
+\M_F \pbck \ar[dr, dotted] \ar[ddd]\ar[rrr]&&& \D^\to \ar[dl, "\bar T" description]\ar[ddd, "\cod"]\\
+&\E \ar[r] \ar[d, "p" swap] \pbck & \E\//\B \ar[d, "p^+"]\\
+&\B \ar[r, "p^*" swap] & \E\\
+\C \ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&\D\ar[ul, "T" description]
+\end{tikzcd}
+\]
+
+\cqed
+\end{proof}
+
+\end{document}
+%% \[
+%% \begin{tikzcd}
+%% \E \pbck \ar[dd, "p" swap] \ar[r] &\E \// \B\ar[r, "\beta"] \ar[d, "\alpha" description] \pbck & \B_0\ar[d, "\rid"]\\
+%% &\E^\to \ar[r, "p^\to" swap] \ar[d, "\cod" description] & \B^\to %\ar[d, "\cod"]
+%% \\
+%% \B\ar[r, "p^*" swap]&\E % \ar[r, "p" swap]&\B
+%% \end{tikzcd}
+%% \]
