@@ -284,28 +284,60 @@ morphisms.
 
 \begin{lemma}[The Hard Direction]
 Suppose we have a sufficiently trivial $T$ over $m_0$.
-Then there's a morphism $\M_F \to \E$, for which `the easy direction'
+Then there's a mesh morphism $\M_F \to \E$, for which `the easy direction'
 gives us back our $T$.
 \end{lemma}
 \begin{proof}
-I want to build the required morphism from the pullback property in the inner
-square in
+I don't know how to do this is a slick diagrammatic way, yet, but here's an explicit
+construction.
+
+An object in $\M_F$ is a morphism $d:D \to FC \in \D$.
+This corresponds
+via the adjunction $\tilde F \dashv F$
+to an arrow $\bar d : \tilde F D \to C \in \C$.
+Note that if we hit the domain of $d$ with $T$ we get $TD\in \E$ lying over
+$pTD = m_0\tilde F D$.
+Push this object along $m_0 \bar d$ to get the required object in $\E$ over $m_0 C$.
+
+Now suppose we have an arrow in $\M_F$, which is a diagram
 \[
 \begin{tikzcd}
-\M_F  \ar[dr, dotted] \ar[ddd]\ar[rrr]&&& \D^\to \ar[dl, "\bar U" description]\ar[ddd, "\cod"]\\
-&\E \ar[r] \ar[d, "p" swap] \pbck & \E\//\B \ar[d, "p^+"]\\
-&\B \ar[r, "p^*"] & \E\\
-\C \ar[urr, "T^?" swap]\ar[ur, "m_0" description]\ar[rrr, "F" swap]&&&\D\ar[ul, "U" description]
+D_1 \ar[d, "d_1" swap]\ar[r, "d"]& D_2\ar[d, "d_2"]\\
+FC_1 \ar[r, "Fc" swap]& FC_2
 \end{tikzcd}
 \]
-but I don't know how yet.
+We get the required morphism over $c$ from the opcartesian property of the domain's
+construction.
+\[
+\begin{tikzcd}
+m_1 d_1 \ar[dr, dotted]\ar[from=rr, opfib]\ar[dd, mapsto]  && TD_1  \ar[dd, mapsto]\\
+&m_1 d_2 \ar[from=rr, opfib, crossing over] &&TD_2  \\
+m_0C_1 \ar[dr, "c" swap]\ar[from=rr, "m_0\bar d_1", near start]  && m_0\tilde FD_1 \ar[dr, "m_0\tilde F d"] \\
+&m_0C_2 \ar[from=rr, "m_0 \bar d_2"]\ar[from=uu, crossing over, mapsto]&&m_0\tilde FD_2 \ar[from=uu, crossing over, mapsto]\\
+\end{tikzcd}
+\]
 
-Given that an object in $\M_F$ is a morphism $d : D \to FC$, I know I can
-hit $d$ with $T$, yielding $Td : TD \to TFC$ which by assumption is
-the same as $TD \to m_0 \tilde F F C$. So I can push the codomain along $m_0\ep_C$
-to get an object $E$ over $m_0 C$, as required, apparently.
+At this stage I think I'm convinced we have a commutative square
+\[
+\begin{tikzcd}
+\M_F \ar[r, "m_1"] \ar[d]  & \E \ar[d, "p"]\\
+\C \ar[r, "m_0" swap] & \B
+\end{tikzcd}
+\]
+but we need to show that $m_1$ preserves cartesian and opcartesian morphisms.
+What's a cartesian morphism in $\M_F$? A pullback
+\[
+\begin{tikzcd}
+D_1 \pbck \ar[d, "d_1" swap]\ar[r, "d"]& D_2\ar[d, "d_2"]\\
+FC_1 \ar[r, "Fc" swap]& FC_2
+\end{tikzcd}
+\]
+Oh, wait, this is resembling the proof I had earlier. I want to show that
+there's a cartesian morphism living over $m_0\tilde F d$. How can I use
+the fact that $T$ is sufficiently trivial here?
 
-\cqed
+
+{\color{red} I think I'm better off wholesale copying the proof from earlier and trying to generalize it step by step}
 \end{proof}
 
 
