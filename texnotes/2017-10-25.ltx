@@ -81,6 +81,7 @@
 \definecolor{fib}{HTML}{ff7f00}
 \definecolor{opfib}{HTML}{007fff}
 \definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
 
 \begin{document}
 
@@ -221,39 +222,17 @@ defined by pullback-pairing $\rid_A$ with $h\o a$.
 
 \div
 \vfil\eject
-We say a $T : \D \to \E$ is over $m_0$ when
+We say a $T : \D \to \E$ is over $\beta$ when
 \[
 \begin{tikzcd}
 \D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
-\C\ar[r, "m_0" swap]  & \B
+\C\ar[r, "\beta" swap]  & \B
 \end{tikzcd}
 \]
-A functor $T : \D \to \E$ over $m_0$ is called {\em sufficiently trivial}
+A functor $T : \D \to \E$ over $\beta$ is called {\em sufficiently trivial}
 if for any $C\in \C$, pushing $TF C$ along
-$m_0 \ep_C : m_0 \tilde F F C \to m_0 C$ yields a trivial object in $\E$.
+$\beta \ep_C : \beta \tilde F F C \to \beta C$ yields a trivial object in $\E$.
 
-\begin{lemma}[The Easy Direction, Warm-up]
-If $h$ arises in
-\[
-\begin{tikzcd}
-\D \ar[dr, blue, "h" description] \ar[drr, "\eta", bend left]
-\ar[ddr, "\tilde F" swap, bend right]\\
-&\M_F \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
-&\C \ar[r, "F" swap] & \D
-\end{tikzcd}
-\]
-then $h$ (which lies over $\rid_\C$) is sufficiently trivial.
-\end{lemma}
-
-\begin{proof}
-We need to show that for any $C$, pushing (in the mesh $\M_F \to \C$)
-$hFC$ along $\ep_C : \tilde F F C \to C$ yields a trivial object
-in $\M_F$, i.e. an isomorphism from $\C$. But the real content of
-$h$ is just the arrow $\eta_{FC} : F C \to F \tilde F F C$. And pushing
-along $\ep_C$ yields $F\ep_C \o \eta_{FC}$, but that's the identity
-by triangle equalities!
- \cqed
-\end{proof}
 
 \begin{lemma}[The Easy Direction]
 Suppose we have a mesh morphism
@@ -393,7 +372,8 @@ Ff \ar[from=r, opfib]\ar[d, mapsto]
   & 1 \ar[d, mapsto]\\
 GD \ar[from=r, "G f"] & GC \ar[r, "!" swap]& 1\\
 \end{tikzcd}\]
-Given a moprhism
+
+Given a morphism
 \[
 \begin{tikzcd}
  C_1
@@ -419,11 +399,104 @@ Two-pullback-lemma reasoning lets us deduce that $F$ preserves opcartesian morph
 \cqed
 \end{proof}
 
-Define $\Pi \in L(n)$ to be $0\x\cdots \x (n-1)$. Let $\rho$ be the evident
-arrow $ R \to  \Pi$ in $L(\pi_i : R \to n)$.
+%% Define $\Pi \in L(n)$ to be $0\x\cdots \x (n-1)$. Let $\rho$ be the evident
+%% arrow $ R \to  \Pi$ in $L(\pi_i : R \to n)$.
+
+\div
+
+A functor $T : \D \to \E$ is `over $\beta$' when
+\[
+\begin{tikzcd}
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "\beta" swap]  & \B
+\end{tikzcd}
+\]
+%% A functor $T$ over $\beta$ is {\em sufficiently trivial}
+%% when, for any $C\in \C$, pushing $TF C$ along
+%% $\beta \ep_C : \beta \tilde F F C \to \beta C$ yields a trivial object in $\E$.
+
+A functor $T$ over $\beta$ is said to be {\em sufficiently cartesian}
+if for any pullback square
+\[
+\begin{tikzcd}
+ D_1\pbck
+\ar[r, "d"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
+ FC_1 \ar[r, "Fc" swap] & FC_2
+\end{tikzcd}
+\]
+any $\mu$ over $\beta c$ that makes the top square commute in
+\[
+\begin{tikzcd}
+E_1 \ar[dr, "\mu" description, fib]\ar[from=rr, opfib]\maps  && {TD_1} \ar[dr,  "Td"]\maps\\
+&E_2 \ar[from=rr, opfib, crossing over] &&{TD_2}  \maps\\
+\beta C_1 \ar[dr, "\beta c" swap]\ar[from=rr, "\beta \bar f_1" swap, near start]  && \beta \tilde F D_1 \ar[dr, "\beta \tilde F d"]\\
+&\beta C_2 \ar[from=rr, "\beta \bar f_2"]\frommaps&&\beta \tilde F D_2 \\
+\end{tikzcd}
+\]
+must be cartesian.
+
+%% \begin{lemma}[Sufficient Triviality Lemma]
+%% Suppose we have a situation like
+%% \[
+%% \begin{tikzcd}
+%% \D  \ar[dr, "{(\tilde F, \eta)}" description] \ar[drr, "\eta", bend left]
+%% \ar[ddr, "\tilde F" swap, bend right]\\
+%% &\M \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+%% &\C \ar[r, "F" swap] & \D
+%% \end{tikzcd}
+%% \]
+%% Then $(\tilde F, \eta)$ (over $\rid_\C$) is sufficiently trivial.
+%% \end{lemma}
+
+%% \begin{proof}
+%% Abbreviate $h := (\tilde F, \eta)$.
+%% We need to show that for any $C$, pushing (in the mesh $\M \to \C$)
+%% $hFC$ along $\ep_C : \tilde F F C \to C$ yields a trivial object
+%% in $\M$, i.e. $F$ applied to an isomorphism from $\C$. But the real content of
+%% $hFC$ is the arrow $\eta_{FC} : F C \to F \tilde F F C$, and pushing
+%% along $\ep_C$ yields $F\ep_C \o \eta_{FC}$, which,
+%% by triangle equality, is $\rid_{FC}$, as required.
+%%  \cqed
+%% \end{proof}
+
+\begin{lemma}[Sufficient Cartesianness Lemma]
+Suppose we have a situation like
+\[
+\begin{tikzcd}
+\D  \ar[dr, "{(\tilde F, \eta)}" description] \ar[drr, "\eta", bend left]
+\ar[ddr, "\tilde F" swap, bend right]\\
+&\M \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+&\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+Then $(\tilde F, \eta)$ (over $\rid_\C$) is sufficiently cartesian.
+\end{lemma}
+
+\begin{proof}
+Abbreviate $h := (\tilde F, \eta)$.
+Let a pullback
+\[
+\begin{tikzcd}
+ D_1\pbck
+\ar[r, "d"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
+ FC_1 \ar[r, "Fc" swap] & FC_2
+\end{tikzcd}
+\]
+be given.
+
+$$f_1 : D_1 \to FC_1$$
+$$\tilde F f_1 : \tilde F D_1 \to \tilde F F C_1$$
+$$\ep_{C_1} \o \tilde F f_1 : \tilde F D_1 \to C_1$$
+Let's push $hD_1 = \eta_{D_1}$ along $\bar f_1 = \ep_{C_1} \o \tilde F f$. What do we get?
+The morphism $F(\ep_{C_1} \o \tilde F f_1) \o \eta_{D_1} = f_1$.
+Likewise, pushing $hD_2$ along $\bar f_2$ gives $f_2$.
+By opcartesianness, there is only one morphism over $c$ that makes the top
+square commute, and $d$ fits, so it must be it. But this square is a pullback
+by assumption, so we have a cartesian morphism of $\M$.
+ \cqed
+\end{proof}
 
 \begin{theorem}
-Let $n$ be given. Let $\C$ be $L(n)$ and $\D$ be $L(\pi_i : R \to n)$.
 Let $\M$ be defined by the pullback
 \[
 \begin{tikzcd}
@@ -431,56 +504,26 @@ Let $\M$ be defined by the pullback
 \C \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
-The morphisms $\mu$ that complete the diagram
+The functors $\mu$ that complete the diagram
 \[
 \begin{tikzcd}
  \M \ar[r, "\mu", dotted]\ar[d, "\partial" swap] & \E \ar[d, "p"]\\
  \C \ar[r, "\beta" swap] & \B
 \end{tikzcd}
 \]
-correspond bijectively to the objects of $E$ over $\beta \Pi$.
+correspond bijectively to sufficiently cartesian functors $T : \D \to \E$ over $\beta$.
 \end{theorem}
 
-%% \[
-%% \begin{tikzcd}
-%%  \D \ar[r, "\Sigma \o T"]\ar[from=d, " F"] & \E \ar[from=d, "p^*" swap]\\
-%%  \C \ar[r, "m_0" swap] & \B
-%% \end{tikzcd}
-%% \]
-
-%% Note that $\ep$ is a thing that helps me get from $D \to UC$
-%% to $FD \to C$, and $\eta$ is a thing that helps me get back. If I have a $C\in \C$,
-%% then I have $pTFC = m_0\tilde F F C$. The `$\ep$' of $\tilde F \dashv F$ teaches me
-%% how to get an arrow $p T F C \to m_0 C$. The `$\eta$' of $p \dashv p^*$ teaches me
-%% how to navigate to $T F C \to p^* m_0 C$.
 
 \begin{proof}
-The bijection in the `easy direction' takes $\mu$ to $\mu(\rho, \Pi)$.
+The bijection in the `easy direction' takes $\mu$ to $\mu (\tilde F, \eta)$.
+By lemma, (and the fact that $\mu$ must preserve opcartesian morphisms)
+this is sufficiently cartesian.
 
-In the other direction, suppose we have a $\beta$, and we have an $E$
-over $\beta \Pi$ in mind,
-and we're trying to construct $\mu$ such that $E = \mu(\rho, \Pi)$.
-
-What are some examples of objects in $\M$?
-\[
-\begin{tabular}{r@{$\qquad\mapsto\qquad$}l}
-$R \to \Pi$&$E$\\
-$R \to 0$&a push of $E$ along a projection\\
-$R \x R \to \Pi \x \Pi$&$E \x E$\\
-\(
-\begin{tikzcd}[cramped,column sep=1em]
-E \ar[r] & R \ar[r, shift left]\ar[r, shift right] & X
-\end{tikzcd}
-\)&A pullback of two copies of $E$\\
-\end{tabular}
-\]
-
-
-Given that $E$, it determines a functor $T : \D \to \E$. We map $R$ to $E$
-over $\beta \Pi$,
-and each $i < n$ to the trivial object $[\beta(i)]$ over $\beta(i)$, and map
-the $R$-projections to the unique arrows over the projections.
-Note that $f$ arises as a push of $\eta_D$:
+In the other direction, suppose we have a $\beta$, and sufficiently cartesian
+$T : \D \to \E$ over $\beta$,
+and we're trying to construct $\mu$.
+Note that every $f : D \to FC \in \M$ arises as a push of $\eta_D$:
 \[\begin{tikzcd}
 D \ar[dd, "f" swap] \ar[rr, equal, opfib] && D \ar[dd, "\eta_D"]\\
  \
@@ -489,41 +532,63 @@ FC \ar[ur, equal]\ar[opfib, from=r, "{F\ep_D }"] & F\tilde FFC \ar[opfib, from=r
 C \ar[from=r, "{\ep_D }"] & \tilde FFC \ar[ from=r, " \tilde F f"]& \tilde F D \\
 \end{tikzcd}\]
 This means everything we send from $\M$ to $\E$ is determined by what we
-send $\eta_D$ to: so let's send it to $TD$.
-We sensibly require
-\[
-\begin{tikzcd}
-\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
-\C\ar[r, "\beta" swap]  & \B
-\end{tikzcd}
-\]
-so that this lands in the right place.
+send $\eta_D$ to: so let's send it to $TD$. The fact that $T$ is over $\beta$
+means this lands in the right place, in $\E$ over $\beta \tilde F D$.
 Any other object
 $f : D \to FC$ of $\M$ is sent to the push of $TD$ along
 $\beta \bar f$.
 
-Given a moprhism
+%% Right now we can see why we need sufficient triviality of $T$: we must certainly
+%% show that $\mu$ preserves trivial objects, and a trivial object
+%% of $\M$ is an identity $\rid_{FC}$, and our prescription for what to send it to
+%% makes it exactly the push of $TFC$ along
+%% $\beta \ep_C : \beta \tilde F F C \to \beta C$ --- which sufficient triviality guarantees
+%% is trivial.
+
+%% Given a trivial moprhism
+%% \[
+%% \begin{tikzcd}
+%%  FC
+%% \ar[d, equal]\ar[r, "!", fib] & 1 \ar[d, equal]\\
+%%  FC \ar[r, "!" swap, fib] & F1\\
+%%  C \ar[r, "!" swap] & 1
+%% \end{tikzcd}
+%% \]
+%% in $\C^\to$,
+
+%% we produce
+%% \[
+%% \begin{tikzcd}
+%% TFC \ar[dr, dotted, "{!}" description]\ar[from=rr, opfib, equal]\maps  && {TFC} \ar[dr, fib, "!"]\maps\\
+%% &1 \ar[from=rr, opfib, equal, crossing over] &&{1}  \maps\\
+%% \beta C \ar[dr, "!" swap]\ar[from=rr, "\beta \epsilon_C", near start]  && \beta \tilde F FC \ar[dr, "!"]\\
+%% &\beta 1 \ar[from=rr, equal]\frommaps&&\beta \tilde F 1 \\
+%% \end{tikzcd}
+%% \]
+
+%% \div
+
+Given a morphism
 \[
 \begin{tikzcd}
  D_1
-\ar[r, "c"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
- C_1 \ar[r, "d" swap] & C_2
+\ar[r, "d"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
+ FC_1 \ar[r, "Fc" swap] & FC_2
 \end{tikzcd}
 \]
-in $\C^\to$, we produce
+in $\M$, we produce
 \[
 \begin{tikzcd}
-Ff_1 \ar[ddr, dotted, "{F(c, d)}" description]\ar[from=rr, opfib]\mapt  && {[GD_1]} \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
-&&&&1\mapt\\[-1.5em]
-&Ff_2 \ar[from=rr, opfib, crossing over] &&{[GD_2]} \ar[ur, fib] \mapt\\
-GC_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GD_1 \ar[ddr, "Gc" swap] \ar[drr, near start]\\[-1.5em]
-&&&&1\\[-1.5em]
-&GC_2 \ar[from=rr, "Gf_2"]\frommapt&&GD_2 \ar[ur]\\
+\mu f_1 \ar[dr, dotted, "{\mu (c, d)}" description]\ar[from=rr, opfib]\maps  && {TD_1} \ar[dr,  "d"]\maps\\
+&\mu f_2 \ar[from=rr, opfib, crossing over] &&{TD_2}  \maps\\
+\beta C_1 \ar[dr, "\beta c" swap]\ar[from=rr, "\beta \bar f_1" swap, near start]  && \beta \tilde F D_1 \ar[dr, "\beta \tilde F d"]\\
+&\beta C_2 \ar[from=rr, "\beta \bar f_2"]\frommaps&&\beta \tilde F D_2 \\
 \end{tikzcd}
 \]
-by using the opcartesianness of $Gf_1$'s opcartesian lifting.
+by using the opcartesianness of $Gf_1$'s opcartesian lifting, and sufficient
+cartesianness of $T$ guarantees that $\mu(c,d)$ is cartesian when the morphism
+of $\M$ is.
 
-Beck-Chevalley lets us deduce that $F$ preserves cartesian morphisms.
 Two-pullback-lemma reasoning lets us deduce that $F$ preserves opcartesian morphisms.
 \cqed
 \end{proof}
