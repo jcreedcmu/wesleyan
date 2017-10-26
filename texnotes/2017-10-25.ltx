@@ -370,4 +370,209 @@ and
 \end{tikzcd}
 \]
 
+\section{Embedding Theorems}
+
+\begin{theorem}
+Mesh morphisms from $\cod : \C^\to \to \C$ to a mesh $p : \E \to \B$
+correspond to functors $\C \to \B$. That is, we can uniquely lift $G$
+to $F$ in
+\[
+\begin{tikzcd}
+ \C^\to \ar[r, "F", dotted]\ar[d, "\cod" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "G" swap] & \B
+\end{tikzcd}
+\]
+\end{theorem}
+
+\begin{proof}
+Given an object $f : C \to D$ of $\C^\to$ we (are forced by preservation
+of cartesian and opcartesian morphisms to) produce
+\[\begin{tikzcd}
+Ff \ar[from=r, opfib]\ar[d, mapsto]
+  & {[GC]} \ar[d,mapsto]\ar[r, fib]
+  & 1 \ar[d, mapsto]\\
+GD \ar[from=r, "G f"] & GC \ar[r, "!" swap]& 1\\
+\end{tikzcd}\]
+Given a moprhism
+\[
+\begin{tikzcd}
+ C_1
+\ar[r, "c"]\ar[d, "f_1" swap] & C_2 \ar[d, "f_2"]\\
+ D_1 \ar[r, "d" swap] & D_2
+\end{tikzcd}
+\]
+in $\C^\to$, we produce
+\[
+\begin{tikzcd}
+Ff_1 \ar[ddr, dotted, "{F(c, d)}" description]\ar[from=rr, opfib]\mapt  && {[GC_1]} \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
+&&&&1\mapt\\[-1.5em]
+&Ff_2 \ar[from=rr, opfib, crossing over] &&{[GC_2]} \ar[ur, fib] \mapt\\
+GD_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GC_1 \ar[ddr, "Gc" swap] \ar[drr, near start]\\[-1.5em]
+&&&&1\\[-1.5em]
+&GD_2 \ar[from=rr, "Gf_2"]\frommapt&&GC_2 \ar[ur]\\
+\end{tikzcd}
+\]
+by using the opcartesianness of $Gf_1$'s opcartesian lifting.
+
+Beck-Chevalley lets us deduce that $F$ preserves cartesian morphisms.
+Two-pullback-lemma reasoning lets us deduce that $F$ preserves opcartesian morphisms.
+\cqed
+\end{proof}
+
+Define $\Pi \in L(n)$ to be $0\x\cdots \x (n-1)$. Let $\rho$ be the evident
+arrow $ R \to  \Pi$ in $L(\pi_i : R \to n)$.
+
+\begin{theorem}
+Let $n$ be given. Let $\C$ be $L(n)$ and $\D$ be $L(\pi_i : R \to n)$.
+Let $\M$ be defined by the pullback
+\[
+\begin{tikzcd}
+\M \ar[r] \ar[d, "\partial" swap] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+The morphisms $\mu$ that complete the diagram
+\[
+\begin{tikzcd}
+ \M \ar[r, "\mu", dotted]\ar[d, "\partial" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "\beta" swap] & \B
+\end{tikzcd}
+\]
+correspond bijectively to the objects of $E$ over $\beta \Pi$.
+\end{theorem}
+
+%% \[
+%% \begin{tikzcd}
+%%  \D \ar[r, "\Sigma \o T"]\ar[from=d, " F"] & \E \ar[from=d, "p^*" swap]\\
+%%  \C \ar[r, "m_0" swap] & \B
+%% \end{tikzcd}
+%% \]
+
+%% Note that $\ep$ is a thing that helps me get from $D \to UC$
+%% to $FD \to C$, and $\eta$ is a thing that helps me get back. If I have a $C\in \C$,
+%% then I have $pTFC = m_0\tilde F F C$. The `$\ep$' of $\tilde F \dashv F$ teaches me
+%% how to get an arrow $p T F C \to m_0 C$. The `$\eta$' of $p \dashv p^*$ teaches me
+%% how to navigate to $T F C \to p^* m_0 C$.
+
+\begin{proof}
+The bijection in the `easy direction' takes $\mu$ to $\mu(\rho, \Pi)$.
+
+In the other direction, suppose we have a $\beta$, and we have an $E$
+over $\beta \Pi$ in mind,
+and we're trying to construct $\mu$ such that $E = \mu(\rho, \Pi)$.
+
+What are some examples of objects in $\M$?
+\[
+\begin{tabular}{r@{$\qquad\mapsto\qquad$}l}
+$R \to \Pi$&$E$\\
+$R \to 0$&a push of $E$ along a projection\\
+$R \x R \to \Pi \x \Pi$&$E \x E$\\
+\(
+\begin{tikzcd}[cramped,column sep=1em]
+E \ar[r] & R \ar[r, shift left]\ar[r, shift right] & X
+\end{tikzcd}
+\)&A pullback of two copies of $E$\\
+\end{tabular}
+\]
+
+
+Given that $E$, it determines a functor $T : \D \to \E$. We map $R$ to $E$
+over $\beta \Pi$,
+and each $i < n$ to the trivial object $[\beta(i)]$ over $\beta(i)$, and map
+the $R$-projections to the unique arrows over the projections.
+Note that $f$ arises as a push of $\eta_D$:
+\[\begin{tikzcd}
+D \ar[dd, "f" swap] \ar[rr, equal, opfib] && D \ar[dd, "\eta_D"]\\
+ \
+  & FC  \ar[d, "\eta_{FC}" description] \ar[from=ur, "f" swap] & \\
+FC \ar[ur, equal]\ar[opfib, from=r, "{F\ep_D }"] & F\tilde FFC \ar[opfib, from=r, "F \tilde F f"]& F\tilde F D \\
+C \ar[from=r, "{\ep_D }"] & \tilde FFC \ar[ from=r, " \tilde F f"]& \tilde F D \\
+\end{tikzcd}\]
+This means everything we send from $\M$ to $\E$ is determined by what we
+send $\eta_D$ to: so let's send it to $TD$.
+We sensibly require
+\[
+\begin{tikzcd}
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "\beta" swap]  & \B
+\end{tikzcd}
+\]
+so that this lands in the right place.
+Any other object
+$f : D \to FC$ of $\M$ is sent to the push of $TD$ along
+$\beta \bar f$.
+
+Given a moprhism
+\[
+\begin{tikzcd}
+ D_1
+\ar[r, "c"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
+ C_1 \ar[r, "d" swap] & C_2
+\end{tikzcd}
+\]
+in $\C^\to$, we produce
+\[
+\begin{tikzcd}
+Ff_1 \ar[ddr, dotted, "{F(c, d)}" description]\ar[from=rr, opfib]\mapt  && {[GD_1]} \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
+&&&&1\mapt\\[-1.5em]
+&Ff_2 \ar[from=rr, opfib, crossing over] &&{[GD_2]} \ar[ur, fib] \mapt\\
+GC_1 \ar[ddr, "Gd" swap]\ar[from=rr, "Gf_1" swap, near start]  && GD_1 \ar[ddr, "Gc" swap] \ar[drr, near start]\\[-1.5em]
+&&&&1\\[-1.5em]
+&GC_2 \ar[from=rr, "Gf_2"]\frommapt&&GD_2 \ar[ur]\\
+\end{tikzcd}
+\]
+by using the opcartesianness of $Gf_1$'s opcartesian lifting.
+
+Beck-Chevalley lets us deduce that $F$ preserves cartesian morphisms.
+Two-pullback-lemma reasoning lets us deduce that $F$ preserves opcartesian morphisms.
+\cqed
+\end{proof}
+
+\div\vfil\eject
+A pair of functors $F, U$ are {\em semi-adjoint} written
+$F \not\dashv U$ if there's a natural transformation $\ep : FU \to \rid$
+and a pushing operation that takes a map $FD \to C$ to
+an object $D'$ (which is kind
+of an approximation to $UC$) a map $D \to D'$ and
+a map $FD' \to C$, such that
+\[
+\begin{tikzcd}
+D \ar[dd,mapsto]\ar[r, dotted, "d"] &D'\ar[d, mapsto]\\
+&FD'\\
+FD \ar[ur, "Fd"]\ar[r, "m" swap] & C
+\end{tikzcd}
+\]
+In what sense is $D'$ an approximation to $UC$?
+Whenever we can factor $m$ through $\epsilon_C$ as $v$, then we get a unique $u$
+in
+\[
+\begin{tikzcd}
+D \ar[rr, bend left, "v"] \ar[dd,mapsto]\ar[r, "d"] &D'\ar[d, mapsto]\ar[r, "u", dotted]& UC\\
+&FD' \ar[r, "Fu"] & FUC\ar[dl, "\ep_C"]\\
+FD \ar[urr, "Fv" description] \ar[ur, "Fd"]\ar[r, "m" swap] & C
+\end{tikzcd}
+\]
+
+A map between semiadjunctions is a diagram
+\[
+\begin{tikzcd}
+\D
+ \ar[d,      "F"{name=F1,swap}, shift right, bend right=10]
+ \ar[from=d, "U"{name=U1,swap}, shift right, bend right=10]
+ \ar[r, "\Delta"]&[2em]
+\D'
+ \ar[d,      "F'"{name=F2,swap}, shift right, bend right=10]
+ \ar[from=d, "U'"{name=U2,swap}, shift right, bend right=10]
+\\[2em]
+\C  \ar[r, "\Gamma" swap] &\C'
+\ar[from=F1,to=U1,phantom,"\not\dashv"]
+\ar[from=F2,to=U2,phantom,"\not\dashv"]
+\end{tikzcd}
+\]
+such that the $F$ part of the diagram commutes, and the $U$ part satisfies
+the following condition: for any $C \in \C$, note that
+$F'\Delta UC = \Gamma FUC$, so there is a morphism $\Gamma\ep_{C} : F' \Delta  U C \to \Gamma C$.
+The lift of this is $\overline{\Gamma\ep_{C}} : \Delta UC \to U' \Gamma C$.
+We require this to be ???
+
 \end{document}
