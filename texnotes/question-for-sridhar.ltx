@@ -1,0 +1,262 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rspan{\mathbf{Sp}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+If you want to see a distilled high-level version of
+the shape of definitions I'm hunting around for, which one might hope would pattern
+match in your brain against something you've heard of, turn to section
+1.
+
+If you want to know what I've actually been thinking about, turn to section 2.
+
+\section{Fishing Expedition}
+
+I'm interested in a category whose objects are something like adjunctions
+\[
+\begin{tikzcd}
+\D
+ \ar[d,      "F"{name=F1,swap}, shift right, bend right=10]
+ \ar[from=d, "U"{name=U1,swap}, shift right, bend right=10]
+ \ar[r, "\Delta"]&[2em]
+\D'
+ \ar[d,      "F'"{name=F2,swap}, shift right, bend right=10]
+ \ar[from=d, "U'"{name=U2,swap}, shift right, bend right=10]
+\\[2em]
+\C  \ar[r, "\Gamma" swap] &\C'
+\ar[from=F1,to=U1,phantom,"\dashv"]
+\ar[from=F2,to=U2,phantom,"\dashv"]
+\end{tikzcd}
+\]
+
+and whose morphisms are pairs of functors $\Delta, \Gamma$ such that
+$\Gamma F = F' \Delta$, but {\color{gray} some other condition weaker than
+$\Gamma U = U' \Delta$ that I'm not sure of}.
+
+Or... I quite possibly want structures weaker than adjunctions in the first place.
+I notice there is a vague similarity between adjunctions and opfibrations that
+goes like so: in an opfibration $p : \E \to \B$, given an $E \in \E$, and
+$b : pE \to B$, I can `push along $b$' to obtain an object $E'$ and an opcartesian
+morphism $E \to E'$.
+\[
+\begin{tikzcd}
+E \ar[d, mapsto] \ar[r, mild]& {\color{mild}E'} \ar[d, mapsto]\\
+pE \ar[r, "b" swap] & B
+\end{tikzcd}
+\]
+With an adjunction, if I have $D\in \D$ and a morphism $c : FD \to C$,
+I can of course come up with $\tilde c : D \to UC$. This is kind of
+like `pushing along $c$', except of course I don't land on something
+`above' $C$ (in the sense of being an $F$-preimage) but merely above
+$FUC$. But this isn't so bad; I have the counit $\ep_C$ to
+explain how these two objects are related.
+\[
+\begin{tikzcd}
+D \ar[dd, mapsto] \ar[r, mild]& {\color{mild}UC} \ar[d, mapsto]\\
+&FUC\ar[d, "\ep_C"]\\
+FD \ar[r, "c" swap] & C
+\end{tikzcd}
+\]
+So the adjunction situation is `deficient' in that pushing towards $C$
+doesn't yield a thing upstairs over $C$, only over $FUC$; but there's
+a sense in which the opfibration situation is `deficient' because you
+don't have much ability to predict what $E'$ is: it depends not only
+on $B$, but on $b$. Whereas in the adjunction, you {\em can} predict
+that the thing upstairs is always the result of hitting $C$ with $U$
+
+So this rambling is meant to ask: is there a nice well-behaved concept
+you've already heard of that's common generalization of `a functor
+that has a right adjoint' and `a functor that is an opfibration'?
+
+\section{Why I Want These Things}
+
+Here's a definition I've been playing with lately that does seem quite
+nice for capturing `a thing like a category, but instead of functions,
+it has a bunch of abstract things that behave like $n$-ary relations':
+
+Define a {\em mesh} to be a functor $p : \E \to \B$ that is both a
+Grothendieck fibration and opfibration, where $\E$ and $\B$ have all
+finite limits, $p$ preserves them all, the Beck-Chevalley condition is
+satisfied, and products of (op)cartesian morphisms are again
+(op)cartesian.
+
+A morphism between meshes is a pair of functors, one between $\E$s,
+and one between $\B$s, both preserving all finite limits, and the
+$\E$-functor also preserving cartesian and opartesian morphisms.
+
+To see a mesh as a generalized category, the `objects' of it are the
+objects of $\B$, and the `morphisms', or, rather `relations' of it,
+are the objects of $\E$.
+
+The thing analogous to `finding the domain and codomain of a morphism'
+in a category, or, `finding the collection of objects a relation $R$
+is a relation over' is done simply by hitting an object $E \in \E$ with
+$p$.
+
+The fibration and opfibration structure correspond to operations on relations;
+the following example might help clarify how.
+If I have two binary relations, $R\subseteq A \x B$, and $S \subseteq B \x C$, I might
+like to form their composite
+$$\{(a, c) \st \exists b . (a, b) \in R \land (b, c) \in S\}$$
+Abstractly, a `relation $R$ on $A \x B$' means for us
+an object $R \in \E$ over
+some product object $A \x B\in B$. Similarly we have $S \in \E$ over $B \x C\in \B$.
+Because we have products in $\E$, and because $p$ preserves them, we know
+$R \x S$ is over $A \x B \x B \x C$. Note that there is a diagonal morphism
+$$A \x \Delta \x C : A \x B \x C \to A \x B \x B \x C \in \B$$
+so we can use the fibration structure of $\E$ to pull back $R\x S$ along
+this morphism, obtaining an object,
+call it $E \in \E$, analogous to the set
+$$\{(a, b, c) \st (a, b) \in R \land (b, c) \in S\}$$
+There is also a projection morphism
+$$\langle \pi_A, \pi_C\rangle : A \x B \x C \to A \x C \in \B$$
+that we can opfibrationally push $E$ across, to get what
+we might reasonably call $R \o S \in \E$ lying over $A \x C$.
+
+I have a few nice examples of meshes, all of them constructed as pullbacks
+from the codomain bifibration on a finitely complete category $\D$:
+\[
+\begin{tikzcd}
+\E \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\B \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+If I choose $\B$ and $\D$ and $F$ right, I can embed\footnote{I think faithfully,
+if I restrict attention to meshes whose base category is the free finitely
+complete category on some set, and also restrict to only the morphisms that
+arise from functions between those sets}
+categories and sets and `the walking $n$-ary relation' as meshes:
+\[
+\begin{tabular}{lll}
+Intuition&$\B$&$\D$\\
+\hline
+Set&$L(X) $&$ L(X)$\\
+Category&$L(\C_0) $&$ L(\C)$\\
+Walking $n$-ary Relation&$L(n) $&$ L(\pi_i : R \to n)$\\
+\end{tabular}
+\]
+Where by $L(\dash)$ I mean `the free finitely complete category on', by $\C_0$ I mean
+the set of objects of a category, and by $\pi_i : R \to n$ I mean the
+span category with one object $R$ and $n$ objects $1,\ldots, n$ and a morphism
+from $R$ to each of them, and nothing else interesting.
+
+So I set about trying to prove that these behave like I want, and one thing that
+for sure I expected was
+\begin{quote}
+A mesh morphism from the walking $n$-ary relation
+to another mesh $\M$ should correspond exactly to a choice of relation-morphism-thingy in $\M$
+\end{quote}
+
+but all I can prove is
+
+\begin{theorem}
+Let $\M$ be defined by the pullback
+\[
+\begin{tikzcd}
+\M \ar[r] \ar[d, "\partial" swap] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+The functors $\mu$ that complete the diagram
+\[
+\begin{tikzcd}
+ \M \ar[r, "\mu", dotted]\ar[d, "\partial" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "\beta" swap] & \B
+\end{tikzcd}
+\]
+correspond bijectively to `sufficiently cartesian' functors $T : \D \to \E$.
+\end{theorem}
+
+
+
+\end{document}
