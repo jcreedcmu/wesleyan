@@ -166,9 +166,9 @@ part of $\mu$ to be the unique morphism
 guaranteed by the opcartesian morphism $E_1' \to E_1$ over $\beta f_1$ in
 \[
 \begin{tikzcd}
- E_1 \ar[ddr, dotted, "{\mu(c, d)}" description]\ar[from=rr, opfib]\mapt  && E_1' \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
+ \mu f_1 \ar[ddr, dotted, "{\mu(c, d)}" description]\ar[from=rr, opfib]\mapt  && E_{\beta C_1} \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
  &&&&1\mapt\\[-1.5em]
- &E_2 \ar[from=rr, opfib, crossing over] &&E_2' \ar[ur, fib] \mapt\\
+ &\mu f_2 \ar[from=rr, opfib, crossing over] &&E_{\beta C_2} \ar[ur, fib] \mapt\\
  \beta D_1 \ar[ddr, "\beta d" swap]\ar[from=rr, "\beta f_1" swap, near start]  && \beta C_1 \ar[ddr, "\beta c" swap] \ar[drr, near start]\\[-1.5em]
  &&&&1\\[-1.5em]
  &\beta D_2 \ar[from=rr, "\beta f_2"]\frommapt&&\beta C_2 \ar[ur]\\
@@ -176,16 +176,18 @@ guaranteed by the opcartesian morphism $E_1' \to E_1$ over $\beta f_1$ in
 \]
 
 Now that we've defined how $\mu$ acts on all morphisms, we can check
-that it preserves cartesian morphisms: by Beck-Chevalley, this
-morphism $\mu(c,d)$ {\em is} cartesian when the square in $\C$ is a
-pullback --- and pullback squares in $\C$ are exactly the cartesian
-morphisms in $\C^\to$ --- so, yes, $\mu$ preserves cartesian
+that it preserves cartesian morphisms: The morphism over $\beta c$ is cartesian
+by two-pullback-lemma-esque reasoning from the other two cartesian morphisms,
+ and therefore by Beck-Chevalley, when the square in $\C$ is a
+pullback, then $\mu(c,d)$
+is cartesian  --- but pullback squares in $\C$ are exactly the cartesian
+morphisms in $\C^\to$, so indeed $\mu$ preserves cartesian
 morphisms.
 
 Also $\mu $ preserves opcartesian morphisms; for the arrow $(c, d) \in \C^\to$
 is opcartesian when $c$ is iso. When $\beta c$ is iso, showing
 that $\mu \pair c d$ is opcartesian follows from
-two-pullback-lemma-like reasoning on the opcartesian morphisms above
+two-pullback-lemma-esque reasoning on the opcartesian morphisms above
 $\beta f_1$ and $\beta f_2$.
 
 Showing that $\mu$ preserves finite limits depends on finite limits
