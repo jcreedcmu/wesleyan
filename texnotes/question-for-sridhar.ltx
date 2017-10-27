@@ -45,6 +45,7 @@
 \def\T{\mathbf{T}}
 \def\B{\mathbf{B}}
 \def\M{\mathbf{M}}
+\def\X{\mathbf{X}}
 \def\H{\mathbf{H}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
@@ -312,11 +313,11 @@ I have a few nice examples of meshes, all of them constructed as pullbacks
 from the codomain bifibration on a finitely complete category $\D$:
 \[
 \begin{tikzcd}
-\M_1 \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
-\M_0 \ar[r, "F" swap] & \D
+\M \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
-If I choose $\B$ and $\D$ and $F$ right, I can embed
+If I choose $\C$ and $\D$ and $F$ right, I can embed
 categories and sets and `the walking $n$-ary relation' as meshes:
   \begin{myquote}
 Well... side note, I think this
@@ -335,16 +336,15 @@ Anyhow, all the examples below live in here.
   \end{myquote}
 \[
 \begin{tabular}{lll}
-Intuition&$\B$&$\D$\\
+Intuition&$\C$&$\D$\\
 \hline
 Walking $n$-ary Relation&$L(n) $&$ L(\pi_i : R \to n)$\\
-Set&$L(X) $&$ L(X)$\\
-Category&$L(\C_0) $&$ L(\C)$\\
+Set $X$&$L(X) $&$ L(X)$\\
+Category $\X$&$L(\X_0) $&$ L(\X)$\\
 \end{tabular}
 \]
 Where by $L(\dash)$ I mean `the free finitely complete category on', by $n$ I mean
-an arbitrary $n$-element set, by $X$ I mean an arbitrary set, by $\C_0$ I mean
-the set of objects of a category, and by $\pi_i : R \to n$ I mean the
+an arbitrary $n$-element set, and by $\pi_i : R \to n$ I mean the
 span category with one object $R$ and $n$ objects $1,\ldots, n$ and a morphism
 from $R$ to each of them, and nothing else interesting. In each case the functor
 $F$ should be an evident inclusion.
@@ -423,10 +423,17 @@ E_1 \ar[dr, "\mu" description, fib]\ar[from=rr, opfib]\maps  && {TD_1} \ar[dr,  
 &\beta C_2 \ar[from=rr, "\beta \bar f_2"]\frommaps&&\beta \tilde F D_2 \\
 \end{tikzcd}
 \]
-must be cartesian.
+must be cartesian, assuming the blue arrows are opcartesian, and
+where $\bar f$ denotes the adjoint transpose $\tilde F D \to C$ of
+an arrow $f : D \to FC$.
 
-This is sort of Beck-Chevalley-like, but it's not actually true in every case
-that $Td$ is cartesian, so I can't straight up use Beck-Chevalley.
+This is sort of Beck-Chevalley-like, but I can't get away with demanding
+that $Td$ is cartesian, (namely, if I'm given a mesh morphism $(\mu, \beta)$
+and construct $T : \D \to \E$ from
+it as $D \mapsto \mu(\tilde F D \in \C, \eta_D \in \D^\to)$ where $\eta$
+is the unit of the adjunction $\tilde F \dashv F$,
+it's not always the case that $Td$ is cartesian)
+so I can't straight up use Beck-Chevalley.
 
 \subsection{Getting back to the Fishing Expedition}
 

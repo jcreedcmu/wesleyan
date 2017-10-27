@@ -1,0 +1,195 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rmesh{\mathbf{Mesh}}
+\def\rcart{\mathbf{Cart}}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\map1{\ar[d,mapsto,shorten <=0.5em, shorten >=0.5em]}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\begin{theorem}
+There is a free-forgetful adjunction
+\[
+\begin{tikzcd}
+ \rmesh \ar[r, "U", shift left]\ar[from=r, "F", shift left] & \rcart
+\end{tikzcd}
+\]
+between the category of meshes and the category of finitely-complete categories,
+where $U$ takes a mesh to its base category, and $F$ takes $\C$ to the codomain
+mesh on $\C$.
+\end{theorem}
+
+\begin{proof}
+
+We show that a diagram like
+\[
+\begin{tikzcd}
+ \C^\to \ar[r, "\mu", dotted]\ar[d, "\cod" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "\beta" swap] & \B
+\end{tikzcd}
+\]
+can uniquely be filled in.
+
+
+Let  $\beta$ be given. We have to construct $\mu $.
+Let's do the object part first. Let an object $f : C \to D \in \C^\to$
+be given.
+Notice that looking at the bifibration structure of
+ $\C^\to$, we can characterize this object as an
+(opcartesian opreindexing) push of a (cartesian reindexing) pull.
+\[\begin{tikzcd}
+C \ar[from=r, opfib, "opcart" swap, equal]\ar[d, "f" swap]
+  & C \ar[d, equal]\ar[r, fib, "cart"]
+  & 1 \ar[d, equal]\\
+D \map1 \ar[from=r, "f", opfib] &  C \map1\ar[r, "!" swap, fib]& 1\map1\\
+D \ar[from=r, "  f"] &  C \ar[r, "!" swap]& 1\\
+\end{tikzcd}\]
+Therefore, because $\mu$ must preserve cartesian morphisms, we {\em have} to define
+$\mu f$ by the diagram
+\[\begin{tikzcd}
+\mu f \ar[from=r, opfib, "opcart" swap]\map1
+  & E_{\beta C} \map1\ar[r, fib, "cart"]
+  & 1 \map1\\
+\beta D \ar[from=r, "\beta  f"] & \beta C \ar[r, "!" swap]& 1\\
+\end{tikzcd}\]
+
+Now for the morphism part of $f$. Let a morphism of $\C^\to$
+\[
+\begin{tikzcd}
+ C_1
+\ar[r, "c"]\ar[d, "f_1" swap] & C_2 \ar[d, "f_2"]\\
+ D_1 \ar[r, "d" swap] & D_2
+\end{tikzcd}
+\]
+be given.
+Stare at the following diagram
+\[
+\begin{tikzcd}
+C_1 \ar[ddr, "c"]\ar[from=rr, opfib, equal]\ar[ddd, "f_1" swap]  && C_1 \ar[ddr, fib, "c" description] \ar[drr, fib]\ar[ddd, equal]\\[-1.5em]
+&&&&1\ar[ddd, equal]\\[-1.5em]
+&C_2 \ar[from=rr, opfib, crossing over, equal] &&C_2 \ar[ur, fib] \\
+D_1 \ar[ddr, "d" swap]\ar[from=rr, "f_1", near start]  && C_1 \ar[ddr, "c" swap] \ar[drr, near start]\\[-1.5em]
+&&&&1\\[-1.5em]
+&D_2 \ar[from=rr, "f_2"]\ar[from=uuu, crossing over, "f_2" swap, near start]&&C_2 \ar[from=uuu, crossing over, equal]\ar[ur]\\
+\end{tikzcd}
+\]
+and become convinced that $c$ is uniquely characterized by the UMP
+of the opcartesian morphism over $f_1$.
+where cartesian and opcartesian morphisms in $\C^\to$ are again
+marked orange and blue.
+
+Preservation of cartesian and opcartesian morphisms
+by $\mu$ forces us into defining the arrow
+part of $\mu$ to be the unique morphism
+guaranteed by the opcartesian morphism $E_1' \to E_1$ over $\beta f_1$ in
+\[
+\begin{tikzcd}
+ E_1 \ar[ddr, dotted, "{\mu(c, d)}" description]\ar[from=rr, opfib]\mapt  && E_1' \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
+ &&&&1\mapt\\[-1.5em]
+ &E_2 \ar[from=rr, opfib, crossing over] &&E_2' \ar[ur, fib] \mapt\\
+ \beta D_1 \ar[ddr, "\beta d" swap]\ar[from=rr, "\beta f_1" swap, near start]  && \beta C_1 \ar[ddr, "\beta c" swap] \ar[drr, near start]\\[-1.5em]
+ &&&&1\\[-1.5em]
+ &\beta D_2 \ar[from=rr, "\beta f_2"]\frommapt&&\beta C_2 \ar[ur]\\
+\end{tikzcd}
+\]
+
+Now that we've defined how $\mu$ acts on all morphisms, we can check
+that it preserves cartesian morphisms: by Beck-Chevalley, this
+morphism $\mu(c,d)$ {\em is} cartesian when the square in $\C$ is a
+pullback --- and pullback squares in $\C$ are exactly the cartesian
+morphisms in $\C^\to$ --- so, yes, $\mu$ preserves cartesian
+morphisms.
+
+Also $\mu $ preserves opcartesian morphisms; for the arrow $(c, d) \in \C^\to$
+is opcartesian when $c$ is iso. When $\beta c$ is iso, showing
+that $\mu \pair c d$ is opcartesian follows from
+two-pullback-lemma-like reasoning on the opcartesian morphisms above
+$\beta f_1$ and $\beta f_2$.
+
+Showing that $\mu$ preserves finite limits depends on finite limits
+appropriately preserving opcartesian morphisms.
+\cqed
+\end{proof}
+\end{document}
