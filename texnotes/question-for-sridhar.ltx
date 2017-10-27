@@ -26,6 +26,7 @@
 \def\rok{\mathrel\mathsf{ok}}
 \def\rtype{\mathrm{type}}
 \def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
 \def\rspan{\mathbf{Sp}}
 \def\b2{\mathbf 2}
 \def\rcat{\mathbf{Cat}}
@@ -82,6 +83,11 @@
 \definecolor{opfib}{HTML}{007fff}
 \definecolor{dgreen}{HTML}{005f00}
 \definecolor{mild}{HTML}{cc4444}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
 
 \begin{document}
 
@@ -98,7 +104,8 @@ the shape of definitions I'm hunting around for, which one might hope would patt
 match in your brain against something you've heard of, turn to section
 1.
 
-If you want to know what I've actually been thinking about, turn to section 2.
+If you want to know more details about what I've actually been
+thinking about, turn to section 2.
 
 \section{Fishing Expedition}
 
@@ -160,103 +167,309 @@ that has a right adjoint' and `a functor that is an opfibration'?
 
 \section{Why I Want These Things}
 
-Here's a definition I've been playing with lately that does seem quite
-nice for capturing `a thing like a category, but instead of functions,
-it has a bunch of abstract things that behave like $n$-ary relations':
+\subsection{Binary Relations}
 
-Define a {\em mesh} to be a functor $p : \E \to \B$ that is both a
-Grothendieck fibration and opfibration, where $\E$ and $\B$ have all
-finite limits, $p$ preserves them all, the Beck-Chevalley condition is
-satisfied, and products of (op)cartesian morphisms are again
-(op)cartesian.
+What's a relation? A binary relation $R \in \rrel(A, B)$
+is a subset of $A \x B$ for some
+choice of sets $A$ and $B$. We can compose relations, form the identity relation,
+and reverse a relation:
+$$\o : \rrel(A, B) \x \rrel(B, C) \to \rrel(A, C)$$
+$$\rid_A : \rrel(A, A)$$
+$$\dash^{\dagger} : \rrel(A, B) \to \rrel(B, A)$$
 
-A morphism between meshes is a pair of functors, one between $\E$s,
-and one between $\B$s, both preserving all finite limits, and the
-$\E$-functor also preserving cartesian and opartesian morphisms.
 
-To see a mesh as a generalized category, the `objects' of it are the
-objects of $\B$, and the `morphisms', or, rather `relations' of it,
-are the objects of $\E$.
+\subsection{$n$-ary Relations}
+\def\prd{{\textstyle\prod}}
+This attachment to {\em binary} relations seems weird, let's try to
+abandon it. Let's consider instead arbitrary $n$-ary relations
+$R \subseteq \prd \vec A$. What are the canonical operations we can do
+to them? How do we unbias the above operations from their two-ness? I claim that given
+$f : \prd \vec A \to \prd \vec B$,
+it's nice to require only that we should be able to form
+\begin{enumerate}
+\item the inverse image under $f$ of a relation $S\subseteq \prd\vec B$,
+$$f^{<} S = \{\vec a  \st f(\vec a) = \vec b, \vec b \in S\} \subseteq \prd\vec A$$
+\item  the direct image under $f$ of a relation $R \subseteq \prd\vec A$,
+$$f^{>} R = \{\vec b  \st f(\vec a) = \vec b, \vec a \in R\} \subseteq \prd\vec  B$$
+\item the product of any collection
+$R_1 \subseteq \prd\vec A_1, \ldots R_n \subseteq \prd\vec A_n$ of relations,
+$$R_1 \x \cdots \x R_n = \{(\vec a_1, \ldots, \vec a_n)\st \vec a_i \in R_i\} \subseteq
+\prd\vec A_1 \x\cdots \x \prd\vec A_n$$
+\end{enumerate}
 
-The thing analogous to `finding the domain and codomain of a morphism'
-in a category, or, `finding the collection of objects a relation $R$
-is a relation over' is done simply by hitting an object $E \in \E$ with
-$p$.
 
-The fibration and opfibration structure correspond to operations on relations;
-the following example might help clarify how.
-If I have two binary relations, $R\subseteq A \x B$, and $S \subseteq B \x C$, I might
-like to form their composite
-$$\{(a, c) \st \exists b . (a, b) \in R \land (b, c) \in S\}$$
-Abstractly, a `relation $R$ on $A \x B$' means for us
-an object $R \in \E$ over
-some product object $A \x B\in B$. Similarly we have $S \in \E$ over $B \x C\in \B$.
-Because we have products in $\E$, and because $p$ preserves them, we know
-$R \x S$ is over $A \x B \x B \x C$. Note that there is a diagonal morphism
-$$A \x \Delta \x C : A \x B \x C \to A \x B \x B \x C \in \B$$
-so we can use the fibration structure of $\E$ to pull back $R\x S$ along
-this morphism, obtaining an object,
-call it $E \in \E$, analogous to the set
-$$\{(a, b, c) \st (a, b) \in R \land (b, c) \in S\}$$
-There is also a projection morphism
-$$\langle \pi_A, \pi_C\rangle : A \x B \x C \to A \x C \in \B$$
-that we can opfibrationally push $E$ across, to get what
-we might reasonably call $R \o S \in \E$ lying over $A \x C$.
+These are enough to recover the previous operations: $\dash^\dagger$
+is direct (or inverse) image under ${\sim} : A \x B \to B \x A$.
+The identity relation is what you get if you take
+the empty product relation $1 \subseteq 1 = \{*\}$,
+hit with inverse image under the unique function $! : A \to 1$ to get
+$\{a \in A \st {!}(a) = *\}$, then hit it with the direct image with
+the diagonal map $A \to A \x A$.
 
+Composition of $R \subseteq A \x B$ and $S \subseteq B \x C$ is the product
+of $R \x S$, inverse image under the diagonal map $A \x B \x C \to A \x B \x B \x C$,
+then direct image under the projection $A \x B \x C \to A \x C$.
+
+\subsection{Spans}
+
+Another thing I want to be able to do is be able to discriminate which
+binary relations are {\em functional} relations using just these
+operations. This is possible if we take the more category-theoretical,
+and more `proof-relevant' view of relations as spans instead of
+subsets. A relation is now a map $R \to \prod \vec A$, and
+\begin{enumerate}
+\item the inverse image under $f$ of a relation $\sigma : S \to \prd\vec B$ is a pullback
+\[
+\begin{tikzcd}
+R \pbck \ar[r] \ar[d] & S \ar[d]\\
+\prod\vec A \ar[r, "f" swap] & \prod\vec B
+\end{tikzcd}
+\]
+\item  the direct image under $f$ of a relation $\rho : R \to \prd\vec A$ is
+postcomposition,
+$$f^{>} R = f \o \rho : R \to \prd\vec  B$$
+\item the product of any collection
+$$\rho_1 : R_1 \to \prd\vec A_1, \ldots \rho_n : R_n \to \prd\vec A_n$$ of relations
+is just the product of all the morphisms.
+\end{enumerate}
+
+
+In this case, let  $\rho : R \to A \x B$ be given, and notice that $R$
+is functional --- i.e. for any $a \in A$, there is exactly one $b\in B$ and $r \in R$ such
+that $\rho(r) = (a, b)$ --- iff
+$$\pi_A^> R\ \cong\ {!}_A^<$$
+ where $\pi : A \x B \to B$, and where $\cong$ means
+ isomorphism as objects in $\rset^\to$.
+
+\subsection{Abstract Relations}
+A category has a set $\C_0$ of {\em objects} and a set $\C_1$ of {\em morphisms}.
+I want to make a parallel definition of a `category-ish thing, but with morphisms
+that behave like $n$-ary relations, instead of functions'. I'm going to pick
+a word out of a hat and call such a thing a {\em mesh}. A mesh has
+a collection $\M_0$ of {\em domains} --- things like $\prod \vec A$ --- and for each
+domain, a collection $\M_1$ of {\em relations}. We can of course organize
+this indexed collection as a display map $\partial : \M_1 \to \M_0$.
+It turns out that I'm going
+to want to demand that both of these collections are {\em categories}, not
+mere sets. Because the domain of a relation is a product of an
+arbitrary number of things, I can simply demand that $\M_0$ has products.
+
+How do we do the relation operations in this setting? By requiring that
+\begin{enumerate}
+\item $\partial$ is a (Grothendieck) fibration.
+\item $\partial$ is an opfibration.
+\item $\M_1$ has products, and $\partial$ preserves them.
+\end{enumerate}
+
+By trying to prove things like ``the composition of functional relations
+is again functional'', I found that I kept needing a few extra bits of data
+and compatibility among them, so my actual working definition is:
+\begin{quote}
+A {\em mesh} is a bifibration $\partial : \M_1 \to \M_0$
+where $\M_0$ and $\M_1$ have all finite limits, $\partial$ preserves them all,
+the Beck-Chevalley condition is satisfied, (i.e. any pullback downstairs means
+reindexings and opreindexings commute upstairs)
+and products of (op)cartesian morphisms are again (op)cartesian.
+\end{quote}
+(This is quite closely related I think to the `monoidal bifibrations' as defined in
+Mike Shulman's ``Framed bicategories and monoidal fibrations'' section 12, for
+the monoidal structure in my case being finite products)
+A morphism between meshes is a pair of functors $F_0 : \M_0 \to \M'_0$
+and $F_1 : \M_1 \to \M'_1$, both preserving all finite limits, and
+$F_1$ preserving cartesian and opcartesian morphisms. So we have a category $\mathbf{Mesh}$.
+
+%% To see a mesh as a generalized category, the `objects' of it are the
+%% objects of $\B$, and the `morphisms', or, rather `relations' of it,
+%% are the objects of $\E$.
+
+%% The thing analogous to `finding the domain and codomain of a morphism'
+%% in a category, or, `finding the collection of objects a relation $R$
+%% is a relation over' is done simply by hitting an object $E \in \E$ with
+%% $p$.
+
+%% The fibration and opfibration structure correspond to operations on relations;
+%% the following example might help clarify how.
+%% If I have two binary relations, $R\subseteq A \x B$, and $S \subseteq B \x C$, I might
+%% like to form their composite
+%% $$\{(a, c) \st \exists b . (a, b) \in R \land (b, c) \in S\}$$
+%% Abstractly, a `relation $R$ on $A \x B$' means for us
+%% an object $R \in \E$ over
+%% some product object $A \x B\in B$. Similarly we have $S \in \E$ over $B \x C\in \B$.
+%% Because we have products in $\E$, and because $p$ preserves them, we know
+%% $R \x S$ is over $A \x B \x B \x C$. Note that there is a diagonal morphism
+%% $$A \x \Delta \x C : A \x B \x C \to A \x B \x B \x C \in \B$$
+%% so we can use the fibration structure of $\E$ to pull back $R\x S$ along
+%% this morphism, obtaining an object,
+%% call it $E \in \E$, analogous to the set
+%% $$\{(a, b, c) \st (a, b) \in R \land (b, c) \in S\}$$
+%% There is also a projection morphism
+%% $$\langle \pi_A, \pi_C\rangle : A \x B \x C \to A \x C \in \B$$
+%% that we can opfibrationally push $E$ across, to get what
+%% we might reasonably call $R \o S \in \E$ lying over $A \x C$.
+
+\subsection{Example Meshes}
 I have a few nice examples of meshes, all of them constructed as pullbacks
 from the codomain bifibration on a finitely complete category $\D$:
 \[
 \begin{tikzcd}
-\E \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
-\B \ar[r, "F" swap] & \D
+\M_1 \ar[r] \ar[d] \pbck & \D^\to \ar[d, "\cod"]\\
+\M_0 \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
-If I choose $\B$ and $\D$ and $F$ right, I can embed\footnote{I think faithfully,
-if I restrict attention to meshes whose base category is the free finitely
-complete category on some set, and also restrict to only the morphisms that
-arise from functions between those sets}
+If I choose $\B$ and $\D$ and $F$ right, I can embed
 categories and sets and `the walking $n$-ary relation' as meshes:
+  \begin{myquote}
+Well... side note, I think this
+is a faithful embedding of $\rcat$ only into a certain {\em subcategory} of the
+category of meshes I described above: the one where meshes
+are required to have something of the form $L(X)$ downstairs, and the mesh morphisms are required to be of the form
+the form $L(f) : L(X) \to L(X')$ downstairs. I.e. in $\mathbf{LMesh}$ as
+defined by the pullback
+\[
+\begin{tikzcd}
+{\mathbf {LMesh}} \ar[r] \ar[d] \pbck & \rset \ar[d, "L"]\\
+{\mathbf {Mesh}} \ar[r, "M_0" swap] & \rcat
+\end{tikzcd}
+\]
+Anyhow, all the examples below live in here.
+  \end{myquote}
 \[
 \begin{tabular}{lll}
 Intuition&$\B$&$\D$\\
 \hline
+Walking $n$-ary Relation&$L(n) $&$ L(\pi_i : R \to n)$\\
 Set&$L(X) $&$ L(X)$\\
 Category&$L(\C_0) $&$ L(\C)$\\
-Walking $n$-ary Relation&$L(n) $&$ L(\pi_i : R \to n)$\\
 \end{tabular}
 \]
-Where by $L(\dash)$ I mean `the free finitely complete category on', by $\C_0$ I mean
+Where by $L(\dash)$ I mean `the free finitely complete category on', by $n$ I mean
+an arbitrary $n$-element set, by $X$ I mean an arbitrary set, by $\C_0$ I mean
 the set of objects of a category, and by $\pi_i : R \to n$ I mean the
 span category with one object $R$ and $n$ objects $1,\ldots, n$ and a morphism
-from $R$ to each of them, and nothing else interesting.
+from $R$ to each of them, and nothing else interesting. In each case the functor
+$F$ should be an evident inclusion.
 
-So I set about trying to prove that these behave like I want, and one thing that
-for sure I expected was
+So I set about trying to prove that these behave like I want, for example
+I expect
 \begin{quote}
-A mesh morphism from the walking $n$-ary relation
-to another mesh $\M$ should correspond exactly to a choice of relation-morphism-thingy in $\M$
+A mesh morphism $(F_0, F_1)$ from the walking $n$-ary relation
+to another mesh $\M_1 \to \M_0$ is entirely determined by
+a choice of objects $B_1, \ldots, B_n \in \M_0$,
+and one object $R \in \M_1$ over $B_1 \x \cdots \x B_n$.
 \end{quote}
 
-but all I can prove is
+and what I have so far is begging to be cleaned up somehow. I have a
+theorem of the form
 
 \begin{theorem}
-Let $\M$ be defined by the pullback
+Let a mesh $(\M, \C)$ be defined by the pullback
 \[
 \begin{tikzcd}
 \M \ar[r] \ar[d, "\partial" swap] \pbck & \D^\to \ar[d, "\cod"]\\
 \C \ar[r, "F" swap] & \D
 \end{tikzcd}
 \]
-The functors $\mu$ that complete the diagram
+The functors $\mu$ that complete the diagram (where $\E \to \B$ is some other mesh)
 \[
 \begin{tikzcd}
  \M \ar[r, "\mu", dotted]\ar[d, "\partial" swap] & \E \ar[d, "p"]\\
  \C \ar[r, "\beta" swap] & \B
 \end{tikzcd}
 \]
-correspond bijectively to `sufficiently cartesian' functors $T : \D \to \E$.
+correspond bijectively to functors $T : \D \to \E$
+that are
+ `sufficiently cartesian over $\beta$'.
 \end{theorem}
+Where `sufficiently cartesian' is a stupid ugly condition that I hate. Here's
+how it goes, if you're curious.
 
+Fix a choice of $F$.
 
+We can explicitly construct the left adjoint
+of $F : \C \to \D$, call it $\tilde F : \D \to \C$.
+Recall the comma category over a functor $D/F$ is defined as having for
+objects pairs of an object $C \in \C$ and a morphism $D \to FC$,
+with arrows being commutative triangles.
+There is a functor $\cod : D/F \to \C$. Think of this functor
+as a limit diagram in $\C$. If we generalize over objects in $\D$,
+and take the limit of each diagram, we get a functor $\tilde F : \D \to \C$.
 
+Then we say a functor $T : \D \to \E$ is `over $\beta$'  when
+\[
+\begin{tikzcd}
+\D \ar[r, "T" ] \ar[d, "\tilde F" swap] &\E\ar[d, "p" ]\\
+\C\ar[r, "\beta" swap]  & \B
+\end{tikzcd}
+\]
+%% A functor $T$ over $\beta$ is {\em sufficiently trivial}
+%% when, for any $C\in \C$, pushing $TF C$ along
+%% $\beta \ep_C : \beta \tilde F F C \to \beta C$ yields a trivial object in $\E$.
+
+A functor $T$ over $\beta$ is said to be {\em sufficiently cartesian}
+if for any pullback square
+\[
+\begin{tikzcd}
+ D_1\pbck
+\ar[r, "d"]\ar[d, "f_1" swap] & D_2 \ar[d, "f_2"]\\
+ FC_1 \ar[r, "Fc" swap] & FC_2
+\end{tikzcd}
+\]
+the unique $\mu$ over $\beta c$ that makes the top square commute in
+\[
+\begin{tikzcd}
+E_1 \ar[dr, "\mu" description, fib]\ar[from=rr, opfib]\maps  && {TD_1} \ar[dr,  "Td"]\maps\\
+&E_2 \ar[from=rr, opfib, crossing over] &&{TD_2}  \maps\\
+\beta C_1 \ar[dr, "\beta c" swap]\ar[from=rr, "\beta \bar f_1" swap, near start]  && \beta \tilde F D_1 \ar[dr, "\beta \tilde F d"]\\
+&\beta C_2 \ar[from=rr, "\beta \bar f_2"]\frommaps&&\beta \tilde F D_2 \\
+\end{tikzcd}
+\]
+must be cartesian.
+
+This is sort of Beck-Chevalley-like, but it's not actually true in every case
+that $Td$ is cartesian, so I can't straight up use Beck-Chevalley.
+
+\subsection{Getting back to the Fishing Expedition}
+
+What I'd really like to do is just tell the standard story of a free/forgetful
+adjunction, where
+I say
+\[
+\begin{tikzcd}
+\M(F) \ar[r] \ar[d, "F^*\cod" swap] \pbck & \D^\to \ar[d, "\cod"]\\
+\C \ar[r, "F" swap] & \D
+\end{tikzcd}
+\]
+defines the {\em free mesh on $F$}, (or perhaps on a larger piece of data that
+I know I have, like `the free mesh on the adjunction $\tilde F \dashv F$')
+and morphisms {\em out of the free mesh}
+into an arbitrary mesh
+\[
+\begin{tikzcd}
+ \M(F) \ar[r, "\mu"]\ar[d, "F^*\cod" swap] & \E \ar[d, "p"]\\
+ \C \ar[r, "\beta" swap] & \B
+\end{tikzcd}
+\]
+\def\what{{\color{red} \em ?}oid}
+are naturally isomorphic to \what-morphisms from the \what\ $(\tilde F, F)$
+ to the \what\ $(p, p^*)$ where $p^*$ takes an object of $B$ to the (unique up to
+isomorphism) object in $E$ over $B$ such that $! : E \to 1$ is cartesian:
+\[
+\begin{tikzcd}
+\D
+ \ar[d,      "\tilde F"{name=F1,swap}, shift right, bend right=10]
+ \ar[from=d, "F"{name=U1,swap}, shift right, bend right=10]
+ \ar[r, "T"]&[2em]
+\E
+ \ar[d,      "p"{name=F2,swap}, shift right, bend right=10]
+ \ar[from=d, "p^*"{name=U2,swap}, shift right, bend right=10]
+\\[2em]
+\C  \ar[r, "\beta" swap] &\B
+\ar[from=F1,to=U1,phantom,"\dashv"]
+\ar[from=F2,to=U2,phantom,"\dashv"]
+\end{tikzcd}
+\]
+
+Except I don't know what a \what\ is, or what a \what-morphism is,
+that's what I'm trying to figure out. I don't know how to cram my definition of
+`sufficiently cartesian $T$' into this shape.
 \end{document}
