@@ -156,14 +156,14 @@ D_1 \ar[ddr, "d" swap]\ar[from=rr, "f_1", near start]  && C_1 \ar[ddr, "c" swap]
 \end{tikzcd}
 \]
 and become convinced that $c$ is uniquely characterized by the UMP
-of the opcartesian morphism over $f_1$.
+of the opcartesian morphism over $f_1$,
 where cartesian and opcartesian morphisms in $\C^\to$ are again
 marked orange and blue.
 
 Preservation of cartesian and opcartesian morphisms
 by $\mu$ forces us into defining the arrow
-part of $\mu$ to be the unique morphism
-guaranteed by the opcartesian morphism $E_1' \to E_1$ over $\beta f_1$ in
+part of $\mu$ to be the unique morphism over $\beta d$
+guaranteed to exist by the opcartesian morphism over $\beta f_1$ in
 \[
 \begin{tikzcd}
  \mu f_1 \ar[ddr, dotted, "{\mu(c, d)}" description]\ar[from=rr, opfib]\mapt  && E_{\beta C_1} \ar[ddr, fib] \ar[drr, fib]\mapt\\[-1.5em]
@@ -177,9 +177,9 @@ guaranteed by the opcartesian morphism $E_1' \to E_1$ over $\beta f_1$ in
 
 Now that we've defined how $\mu$ acts on all morphisms, we can check
 that it preserves cartesian morphisms: The morphism over $\beta c$ is cartesian
-by two-pullback-lemma-esque reasoning from the other two cartesian morphisms,
+by two-pullback-lemma-esque reasoning from the other two cartesian morphisms into $1$,
  and therefore by Beck-Chevalley, when the square in $\C$ is a
-pullback, then $\mu(c,d)$
+pullback, then $\beta$ applied to that square is a pullback, and then $\mu(c,d)$
 is cartesian  --- but pullback squares in $\C$ are exactly the cartesian
 morphisms in $\C^\to$, so indeed $\mu$ preserves cartesian
 morphisms.
