@@ -1907,3 +1907,8 @@ an isomorphism.
 This is just the normal notion of a hypergraph, but 'proof-relevant' or
 'categorified' or whatever; edges aren't just subsets of vertices, but
 witnesses by set elements in P.
+
+=== 2017.10.29
+
+Q: How do I characterize the mesh maps between one free map and another?
+A: Looks like a slightly messy diagrammatic thing.

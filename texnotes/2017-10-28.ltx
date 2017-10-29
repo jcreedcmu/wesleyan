@@ -111,11 +111,11 @@ $X \to \D$ where $\D$ is finitely complete, and whose morphisms
 are squares
 \[
 \begin{tikzcd}
-\D_1\ar[r, "c"]\ar[from=d]& \D_2\ar[from=d]\\
+\D_1\ar[r, "d"]\ar[from=d]& \D_2\ar[from=d]\\
 X_1\ar[r, "x" swap]& X_2
 \end{tikzcd}
 \]
-such that $c$ preserves all finite limits.
+such that $d$ preserves all finite limits.
 Some examples of meshes are
 \[
 \begin{tabular}{lll}
@@ -128,27 +128,35 @@ Category $\C$&$\C_0 $&$ L(\C)$\\
 \]
 
 
-The `objects' of a mesh $M : X \to \D$ are objects of the category
-$L(X)$, i.e. lists of elements of $X$, construed as a product. For
-some $x \in L(X)$, the things we interpret as `relations on $x$' are
+The `objects' of a mesh $M : X \to \D$ are elements of $X$. The
+things that are allowed to be `the boundary of a morphism' are objects
+of the category $L(X)$, i.e. lists of elements of $X$, construed as a product.
+The notion of `boundary' is analogous to the pair of
+the domain and codomain of a morphism in a category
+--- except of course that the boundary might not be two objects, but instead
+fewer or more. For
+some $x \in L(X)$, the things we interpret as `morphisms on the boundary $x$' are
 morphisms $D \to M x \in \D$. We take products of relations by
 just taking products of morphisms in $\D$. Just like in the codomain
-bifibration, we do fibration pulls in $\D$ by pullback and opfibration
+bifibration, we do fibrational pulls in $\D$ by pullback and opfibrational
 pushes by postcomposition.
 
 \subsection{Hypergraphs}
 
-To go through the standard dance of figuring out what the appropriate simplex-like
-category is, I need to know what the analogue of {\em graphs} is. I think
-it's just (proof-relevant) hypergraphs, i.e. spans of sets
+Categories are to graphs as meshes are to hypergraphs --- a hypergraph is what
+you get if you strip any data about how `composition' works from a mesh.
+We'll want to talk about the free mesh on a hypergraph the same way we'd talk
+about the free category on a graph.
+
+A hypergraph is a span of sets
 \[
 \begin{tikzcd}
 & P\ar[dl, "\rho" swap]\ar[dr, "\theta"]\\
 R&& Q
 \end{tikzcd}
 \]
-where I think of the elements $R$ as the relations of the premesh,
-$Q$ as objects of the premesh, and the set $P$ as counting all the projections
+where $R$ should be thought of as the relations of the premesh,
+$Q$ as objects of the premesh, and the set $P$ consisting of all the projections
 out of all relations to their objects. The category of these is just
 $\rhgrph = \rset^{\rspan}$.
 
@@ -183,7 +191,8 @@ going from $\rho(p)$ to $\theta(p)$.
 %% \]
 \end{itemize}
 
-Confirm that $F \Gamma \to M$ corresponds to $\Gamma \to UM$.
+We should confirm that $F \Gamma \to M$ actually does correspond to $\Gamma \to UM$
+as expected.
 
 On both sides, objects go to objects.
 On the left, we have to map the category $\Gamma$ into $M$, preserving
@@ -241,35 +250,67 @@ is {\em all} of the finitely generated free meshes.
 \subsection{Reducing this to something Manageable}
 
 I'd like to hope that the category --- let's call it $\Phi$ or
-something --- is itself describable in some nice finite way. What are
-the four operations that I think of as fundamental to building up the free
-mesh on a hypergraph?
+something --- is itself describable in some nice finite way.
+%% What are
+%% the four operations that I think of as fundamental to building up the free
+%% mesh on a hypergraph?
 
-\[
-\begin{tabular}{ll}
-Pull&$X\ X \to X$\\
-Push&$ X \to X\ X$\\
-Pull&$1 \to X$\\
-Push&$ X \to 1$\\
-\end{tabular}
-\]
-Can I describe directly what a morphism $UF\Gamma_1 \to UF\Gamma_2$ looks like?
-Is it something like this?
+%% \[
+%% \begin{tabular}{ll}
+%% Pull&$X\ X \to X$\\
+%% Push&$ X \to X\ X$\\
+%% Pull&$1 \to X$\\
+%% Push&$ X \to 1$\\
+%% \end{tabular}
+%% \]
+
+Let $T = UF$ be the {\em free mesh monad} on the category of hypergraphs.
+We can directly describe what it means to be a function $\Gamma_1 \to T\Gamma_2$,
+which is the same thing as a map between free meshes. It's a choice
+of $X, Y, z_1, z_2, r_0, r_1, r_2, q_0, q, y_1, y_2$ such that the diagram
+%% \[
+%% \begin{tikzcd}
+%% R_1 \ar[from=rr, "\rho_1" swap]
+%%   &
+%%   & P_1 \ar[d, "\pi_1"]\ar[r, "\theta_1"]
+%%   & Q_1 \ar[dd, "q"]\\
+%% X \ar[from=r]\ar[u, "r_1"]\ar[d, "r_2" swap]
+%%   & X \x_{R_2} P_2 \ar[r, "\pi_2" swap]\ar[d, "\rho_2^*r_2"] \ar[dl, phantom, pos=0, "\llcorner"]
+%%   &Y \ar[dr, "y" description]\ar[ull, "\phi" description]\\
+%% R_2 \ar[from=r, "\rho_2" ]& P_2\ar[rr, "\theta_2" swap]&& Q_2
+%% \end{tikzcd}
+%% \]
+%% commutes.
 \[
 \begin{tikzcd}
-R_1 \ar[from=r, "\rho_1" swap]& P_1\ar[r, "\theta_1"]& Q_1 \ar[dd]\\
-X_R \ar[from=r]\ar[u]\ar[d] & X_P \ar[u]\ar[d]\\
+R_1\ar[from=r, "\rho_1" swap]\ar[d, equal]
+  &P_1  \ar[d, "y_1"]\ar[r, "\theta_1"]
+  & Q_1 \ar[d, "q"]\\
+R_1
+  &Y\ar[l, "r_0" description]\ar[from=d, "y_2" swap]\ar[r, "q_0" description]
+  &  Q_2 \ar[dd, equal]\\
+X \ar[from=r]\ar[u, "r_1"]\ar[d, "r_2" swap]
+  & X \x_{R_2} P_2 \ar[d] \ar[dl, phantom, pos=0, "\llcorner"]
+  \\
 R_2 \ar[from=r, "\rho_2" ]& P_2\ar[r, "\theta_2" swap]& Q_2
 \end{tikzcd}
 \]
-Let me try to probe into the situation of two composeable binary relations
+commutes.
 
+Example:
 \[
-\begin{tikzcd}
-\{*\} \ar[from=r, "\rho_1" swap]& \{0,1\}\ar[r, "\theta_1"]& \{0,1\} \ar[dd]\\
-X_R \ar[from=r]\ar[u]\ar[d] & X_P \ar[u]\ar[d]\\
-\{R, S\} \ar[from=r, "\rho_2" ]& \{R_A,R_B,S_B,S_C\} \ar[r, "\theta_2" swap]& \{A, B, C\}
+\begin{tikzcd}[column sep=0.5em]
+\{R\} \ar[from=rr, "" swap]
+  &
+  & \{R_a,R_b\} \ar[d, ""]\ar[r, ""]
+  & \{a,b\} \ar[dd, ""]\\
+\{ S,  T\} \ar[from=r]\ar[u, ""]\ar[d, "" swap]
+  & \{S_c, S_d, T_d, T_e\} \ar[r, ""]\ar[d, ""] \ar[dl, phantom, pos=0, "\llcorner"]
+  &\{c,d,e\} \ar[dr, ""]\\
+\{S, T\} \ar[from=r, "" ]& \{S_c,S_d,T_d,T_e\}\ar[rr, "" swap]&& \{c,d,e\}
 \end{tikzcd}
 \]
+
+
 
 \end{document}
