@@ -228,4 +228,48 @@ R&& Q
 \end{tikzcd}
 \]
 determine a generated relation?
+
+Yeah, they actually determine a bunch: such a span tells me which relations
+I want to product together, and how I want to bind their object bits together
+(or indeed which remain unbound? yeah! objects of $Q$ not in the image of
+anything) but it doesn't tell me how to push anything --- but that's ok,
+because I know all the pushes I might do, irrespective of how the hom comes in.
+
+So I think the answer to `what is the corresponding thing to $\Delta$ in my case'
+is {\em all} of the finitely generated free meshes.
+
+\subsection{Reducing this to something Manageable}
+
+I'd like to hope that the category --- let's call it $\Phi$ or
+something --- is itself describable in some nice finite way. What are
+the four operations that I think of as fundamental to building up the free
+mesh on a hypergraph?
+
+\[
+\begin{tabular}{ll}
+Pull&$X\ X \to X$\\
+Push&$ X \to X\ X$\\
+Pull&$1 \to X$\\
+Push&$ X \to 1$\\
+\end{tabular}
+\]
+Can I describe directly what a morphism $UF\Gamma_1 \to UF\Gamma_2$ looks like?
+Is it something like this?
+\[
+\begin{tikzcd}
+R_1 \ar[from=r, "\rho_1" swap]& P_1\ar[r, "\theta_1"]& Q_1 \ar[dd]\\
+X_R \ar[from=r]\ar[u]\ar[d] & X_P \ar[u]\ar[d]\\
+R_2 \ar[from=r, "\rho_2" ]& P_2\ar[r, "\theta_2" swap]& Q_2
+\end{tikzcd}
+\]
+Let me try to probe into the situation of two composeable binary relations
+
+\[
+\begin{tikzcd}
+\{*\} \ar[from=r, "\rho_1" swap]& \{0,1\}\ar[r, "\theta_1"]& \{0,1\} \ar[dd]\\
+X_R \ar[from=r]\ar[u]\ar[d] & X_P \ar[u]\ar[d]\\
+\{R, S\} \ar[from=r, "\rho_2" ]& \{R_A,R_B,S_B,S_C\} \ar[r, "\theta_2" swap]& \{A, B, C\}
+\end{tikzcd}
+\]
+
 \end{document}
