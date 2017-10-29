@@ -1859,3 +1859,51 @@ A: Yes, I think so, along p^*.
 Q: What happens if I iterate that construction, starting from a
 codomain fibration?
 A: Looks like I get simplices in the base category!
+
+=== 2017.10.26
+
+Q: Is the `sufficiently trivial' condition on the functor T : 𝔻 → 𝔼 sufficient
+to guarantee existence of a mesh morphism out of the 𝕄 constructed from
+pullback of cod : 𝔻^→ → 𝔻 along F : ℂ → 𝔻?
+
+A: No, grr, I think I need `sufficiently cartesian', which is a much
+uglier condition.
+
+=== 2017.10.27
+
+Q: Is there some nice generalization of `has a right adjoint' and `is an opfibration'
+that covers their respective lifting properties?
+A: ???
+
+=== 2017.10.28
+
+Q: Can I just get away with identifying meshes with the functors ℂ → 𝔻 I've
+been using? Or, more to the point, can I just say a mesh is a
+function X → 𝔻 for some finitely complete category 𝔻?
+A: Maybe? I might even merely need pullbacks along arrows that are
+in the image of the lift of that function to L(X) → 𝔻.
+
+Q: What's that nice Tom Leinster post about the nerve construction
+and why the simplicial category is chosen to be what it is?
+A: https://golem.ph.utexas.edu/category/2008/01/mark_weber_on_nerves_of_catego.html
+
+Q: So how does this translate into relationy things?
+A: Well, I suspect the thing that plays the role of graphs
+is, let's call them premeshes, which are spans of sets
+
+       P
+      / \
+     /   \
+    ↓     ↓
+    R     C
+
+Where P is is the set of all legs/projections of all relations in a mesh
+collected together as a set. The left leg of the span picks out which
+relation that particular projection comes from, and the right leg of the span
+picks out which object the projection goes to. So the walking relation
+on n things always has R a singleton, and the right leg of the span being
+an isomorphism.
+
+This is just the normal notion of a hypergraph, but 'proof-relevant' or
+'categorified' or whatever; edges aren't just subsets of vertices, but
+witnesses by set elements in P.

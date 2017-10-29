@@ -1,0 +1,231 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rspan{\mathbf{Sp}}
+\def\rmesh{\mathbf{Mesh}}
+\def\rhgrph{\mathbf{HGrph}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{Meshes}
+\subsection{Preliminary Definitions}
+Where by $L(\C)$ I mean `the free finitely complete category on $\C$'.
+When $f : \C \to \D$ and $\D$ a finitely complete category,
+write $\bar f$ for the unique map $L(\C) \to \D$. For an object $\ell \in L(C)$,
+we write $\dom \ell$ for the `index set of $\ell$', thinking of $\ell$ as an object of
+ $(\rfinset / \C)^\op$.
+
+\subsection{Defining Meshes}
+There is a category $\rmesh$ whose objects are functions
+$X \to \D$ where $\D$ is finitely complete, and whose morphisms
+are squares
+\[
+\begin{tikzcd}
+\D_1\ar[r, "c"]\ar[from=d]& \D_2\ar[from=d]\\
+X_1\ar[r, "x" swap]& X_2
+\end{tikzcd}
+\]
+such that $c$ preserves all finite limits.
+Some examples of meshes are
+\[
+\begin{tabular}{lll}
+Intuition&$X$&$\D$\\
+\hline
+Walking $n$-ary Relation&$n $&$ L(\pi_i : R \to n)$\\
+Set $X$&$X $&$ L(X)$\\
+Category $\C$&$\C_0 $&$ L(\C)$\\
+\end{tabular}
+\]
+
+
+The `objects' of a mesh $M : X \to \D$ are objects of the category
+$L(X)$, i.e. lists of elements of $X$, construed as a product. For
+some $x \in L(X)$, the things we interpret as `relations on $x$' are
+morphisms $D \to M x \in \D$. We take products of relations by
+just taking products of morphisms in $\D$. Just like in the codomain
+bifibration, we do fibration pulls in $\D$ by pullback and opfibration
+pushes by postcomposition.
+
+\subsection{Hypergraphs}
+
+To go through the standard dance of figuring out what the appropriate simplex-like
+category is, I need to know what the analogue of {\em graphs} is. I think
+it's just (proof-relevant) hypergraphs, i.e. spans of sets
+\[
+\begin{tikzcd}
+& P\ar[dl, "\rho" swap]\ar[dr, "\theta"]\\
+R&& Q
+\end{tikzcd}
+\]
+where I think of the elements $R$ as the relations of the premesh,
+$Q$ as objects of the premesh, and the set $P$ as counting all the projections
+out of all relations to their objects. The category of these is just
+$\rhgrph = \rset^{\rspan}$.
+
+I want to now describe the free-forgetful adjunction
+\[
+\begin{tikzcd}
+ \rhgrph \ar[r, shift left, "F"]\ar[from=r, shift left, "U"]&\rmesh
+\end{tikzcd}
+\]
+The underlying hypergraph $UM$ of a mesh $M : X \to \C$ is defined like so:
+\begin{itemize}
+\item $Q$ is $X$
+\item $R$ is the set of tuples $(C \in \C_0, \ell \in (L(X))_0,  \rho : C \to \bar M \ell)$, and
+\item $P$ is the set of tuples
+$$(C \in \C_0, \ell \in (L(X))_0,  \rho : C \to \bar M \ell, \delta \in \dom \ell)$$
+The projection from $P$ to $R$ is the evident projection away from $\delta$,
+and the function from $P$ to $Q$ takes $(C, \ell, \rho, \delta)$ to $M (\ell \delta)$.
+\end{itemize}
+
+The free mesh $F \Gamma$ of a hypergraph $\Gamma$ is defined like so:
+\begin{itemize}
+\item $X$ is $Q$
+\item $\D = L(\Gamma)$ where we interpret $\Gamma$ as a category
+whose objects are $R \cup Q$, and which has one morphism for each $p \in P$,
+going from $\rho(p)$ to $\theta(p)$.
+%% \item The objects of $\D$ are ways of filling in the diagram
+%% \[
+%% \begin{tikzcd}
+%% X\ar[d]\ar[from=r]& Y\ar[dl, phantom, pos=0, "\llcorner"]\ar[r]\ar[d]& Z\ar[d]\ar[from=r]& W \ar[dl, bend left]\\
+%% R\ar[from=r]& P \ar[r] &Q
+%% \end{tikzcd}
+%% \]
+\end{itemize}
+
+Confirm that $F \Gamma \to M$ corresponds to $\Gamma \to UM$.
+
+On both sides, objects go to objects.
+On the left, we have to map the category $\Gamma$ into $M$, preserving
+what we do to objects in $Q/X$. So we have a choice of where
+to send all the things in $R$, but we have to pick maps for all the projections ---
+and the projections have to go into {\em objects}. But on the right, we picked
+a description of $R$ that matches this. So I think this is right.
+
+\subsection{Checking Conditions}
+We need $UF : \rhgrph \to \rhgrph$ to be a coproduct
+of representables. Let $[0]$ be
+\[
+\begin{tikzcd}
+& 0\ar[dl, "!" swap]\ar[dr, "!"]\\
+0&& 1
+\end{tikzcd}
+\]
+And we can see that $(UF(X))_Q = \hom([0], X)$. Now
+we need to come up with a bunch of hypergraphs that characterize the situations
+where relations are required to exist. Any single $n$-ary relation
+\[
+\begin{tikzcd}
+& n\ar[dl, "!" swap]\ar[dr, equal]\\
+\{r\}&& n
+\end{tikzcd}
+\]
+might have come from the product of two smaller relations. So any
+hom from
+\[
+\begin{tikzcd}
+& P\ar[dl, "\rho" swap]\ar[dr, "\theta"]\\
+\{0, 1\}&& Q
+\end{tikzcd}
+\]
+is going to imply another cell exists.
+
+Actually, wait... doesn't any hom from anything at all of the form
+\[
+\begin{tikzcd}
+& P\ar[dl, "\rho" swap]\ar[dr, "\theta"]\\
+R&& Q
+\end{tikzcd}
+\]
+determine a generated relation?
+\end{document}
