@@ -32,6 +32,7 @@
 \def\rhgrph{\mathbf{HGrph}}
 \def\b2{\mathbf 2}
 \def\rcat{\mathbf{Cat}}
+\def\rcart{\mathbf{Cart}}
 \def\rfincat{\mathbf{FinCat}}
 \def\rid{\mathrm{id}}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
@@ -266,7 +267,46 @@ something --- is itself describable in some nice finite way.
 
 Let $T = UF$ be the {\em free mesh monad} on the category of hypergraphs.
 We can directly describe what it means to be a function $\Gamma_1 \to T\Gamma_2$,
-which is the same thing as a map between free meshes. It's a choice
+which is the same thing as a map between free meshes.
+
+We reason through this in a series of steps. There are three basic sorts of maps
+$\Gamma_1 \to T\Gamma_2$ we can build up all the rest from. The first is
+a {\em product map}
+\[
+\begin{tikzcd}
+R_1\ar[from=r]
+  &P_1  \ar[d, equal]\ar[r]
+  & Q_1 \ar[dd, equal]\\
+R_0 \ar[u]\ar[d]
+  & P_1 \ar[dl, phantom, pos=0, "\llcorner"] \ar[l]\ar[d]\\
+R_2 \ar[from=r ]& P_2\ar[r]& Q_2
+\end{tikzcd}
+\]
+In which every relation $r \in R_1$ is mapped to a product of relations
+in $R_2$. The second is a {\em pull map}
+\[
+\begin{tikzcd}
+R_1\ar[from=r] \ar[d, equal]
+  &P_1  \ar[from=d]\ar[r]
+  & Q_1 \ar[d, equal]\\
+R_2 \ar[from=r ]& P_2\ar[r]& Q_2
+\end{tikzcd}
+\]
+in which relations in $R_1$ have some of their projections pulled together.
+The third is a {\em push map}
+\[
+\begin{tikzcd}
+R_1\ar[from=r] \ar[d, equal]
+  &P_1  \ar[d]\ar[r]
+  & Q_1 \ar[d]\\
+R_2 \ar[from=r ]& P_2\ar[r]& Q_2
+\end{tikzcd}
+\]
+
+
+Every map in the category of free meshes on a hypergraph is a product followed
+by a pull followed by a push, so a general map looks like
+a choice
 of $X, Y, z_1, z_2, r_0, r_1, r_2, q_0, q, y_1, y_2$ such that the diagram
 %% \[
 %% \begin{tikzcd}
@@ -311,6 +351,215 @@ Example:
 \end{tikzcd}
 \]
 
+\[
+\begin{tikzcd}
+R_1
+  &Y\ar[l, "r_0" description]\ar[from=d, "y_2" swap]\ar[r, "\theta_0" description]
+  &  Q_2 \ar[dd]\\
+X \ar[from=r]\ar[u, "r_1"]\ar[d, "r_2" swap]
+  & Y \ar[d]
+  \\
+R_2 \ar[from=r, "\rho_2" ]& P_2\ar[r, "\theta_2" swap]& Q_2
+\end{tikzcd}
+\]
 
+\vfil\eject
+\section{Not Sure Above Stuff is Right}
+
+Let me revisit the free-forgetful adjunction, as I'm not sure I got it right.
+A hypergraph has vertices, edges, and projections.
+\[
+\begin{tikzcd}
+& P\ar[dl, "\ep" swap]\ar[dr, "\nu"]\\
+E&& V
+\end{tikzcd}
+\]
+And maps in $\rhgrph$ are just span morphisms.
+
+A mesh is a map $M : X \to \D$ with $\D$ finitely complete.
+Maps in $\rmesh$ are commutative squares with one side preserving finite
+limits.
+
+There are a whole bunch of adjoints
+\[
+\begin{tikzcd}[row sep=3em]
+\rset \ar[r, "F_\rhgrph", shift left]\ar[from=r, "U_\rset", shift left]
+&\rhgrph \ar[r, "F_\rcat", shift left]\ar[from=r, "U_\rhgrph", shift left]
+&\rcat \ar[r, "L", shift left]\ar[from=r, "U_\rcat", shift left]
+&\rcart\\
+&\rmesh \ar[u, "U_\rhgrph", shift left, near start]
+        \ar[from=u, "F_{\rmesh}", shift left, near end]
+\end{tikzcd}
+\]
+We drop subscripts on functors when unambiguous.
+
+The free hypergraph $F(X)$ of a set $X$ is
+\[
+\begin{tikzcd}
+& 0\ar[dl, "!" swap]\ar[dr, "!"]\\
+0&& X
+\end{tikzcd}
+\]
+The underlying set $U(H)$ of a hypergraph is its set of vertices.
+
+The free category $F(H)$ of a hypergraph has objects $E \cup V$ and
+(nonidentity) morphisms $P$, with $\dom := \ep$ and $\cod := \nu$
+with no nontrivial compositions being possible. The underlying hypergraph
+$U(\C)$ of a category has $E = V = \C_0$ and $P = \C_1$ with
+$\ep := \dom$ and $\nu := \cod$.
+
+The free finitely complete category on a category $\C$ is written $L(\C)$.
+
+The free mesh of a hypergraph $F(H)$ has $X := V$ and $\C = L(F_{\rcat}(H))$,
+with the injection arising from the evident function $V \to F_{\rcat}(H)$.
+The underlying hypergraph of a mesh $U(M)$ is
+\[
+\begin{tikzcd}
+& \C / M \ar[dl, "\dom" swap]\ar[dr, "\cod"]\\
+\C_0 && X
+\end{tikzcd}
+\]
+
+\begin{lemma}
+$F_\rmesh \dashv U_\rhgrph$
+\end{lemma}
+
+\begin{proof}
+Let $H \in \rhgrph$ and $M \in \rmesh$ be given.
+Hypergraph morphisms $H \to UM$ are the same thing as a span map
+\[
+\begin{tikzcd}
+E \ar[from=r]\ar[d]& \ar[r]\ar[d]P & V\ar[d]\\
+\C_0 \ar[from=r]& \ar[r]\C/M & X
+\end{tikzcd}
+\]
+A mesh morphism $F_\rmesh H \to M$ can be seen to be the same thing;
+we have to map $V \to X$ downstairs, and we have to map
+$L(F_{\rcat}(H)) \to M$ upstairs. This is the same thing as mapping
+$F_{\rcat}(H) \to M$ upstairs. The objects of $F_{\rcat}(H)$ are $V
+\cup E$, but we've already been told how we must map $V$, so we get a
+choice of function $E \to \C_0$. The morphisms of
+$F_{\rcat}(H)$ have to get sent to things in $\C/M$ because all the vertices
+are pinned to $X$, and domains and codomains must be consistent with existing maps.
+ \cqed
+\end{proof}
+
+\subsection{Characterizing Maps between Free Meshes}
+
+Abbreviate $\M = F_\rmesh$.
+Let a hypergraph map $f : H_1 \to \M(H_2)$ be given. What can it look like?
+The category of $H_2$ is $\C(H_2)$. The injection of $V_2$ into $L(\C(H_2))$
+let's call $\iota$. It's gotta be a span map
+\[
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[d]& \ar[r]\ar[d]P_1 & V_1\ar[d]\\
+L(\C(H_2))_0 \ar[from=r, "\dom"]& \ar[r, "\cod" swap]L(\C(H_2))/\iota & V_2
+\end{tikzcd}
+\]
+
+What's an object of $L(\C)$? A functor $\C \to \rset$. Or, equivalently,
+a discrete fibration $\J \to \C^\op$. Or again equivalently in the special
+case where $\C$ is $\C(H)$ for some $H = (E, P, V)$, merely a choice of sets
+$(E', P', V')$ and
+\[
+\begin{tikzcd}
+E' \ar[from=r]\ar[d]& \ar[r]\ar[d]P' & V'\ar[d]\\
+E \ar[from=r]& \ar[r]P & V
+\end{tikzcd}
+\]
+
+What's an object of $L(\C)$? A functor $\C \to \rset$. What's a morphism of $L(\Delta)$? A natural transformation going backwards.
+So given $H_2$ looking like
+\[
+\begin{tikzcd}[column sep=0]
+& e_1\ar[dl]\ar[dr]&& e_2\ar[dl]\ar[dr]\\
+v_1&&v_2&&v_3
+\end{tikzcd}
+\]
+a morphism in $L(\C(H_2))/\iota$ (let's say its codomain is $V_3$) is a natural transformation
+\[
+\begin{tikzcd}[column sep=-1em]
+& \{\cdots\}\ar[dl]\ar[dr]&& \{\cdots\}\ar[dl]\ar[dr]\\
+\{\cdots\}&&\{\cdots\}&&\{\cdots\}
+\end{tikzcd}
+\quad \Leftarrow\quad
+\begin{tikzcd}[column sep=0]
+& 0\ar[dl]\ar[dr]&& 0\ar[dl]\ar[dr]\\
+0&&0&&1
+\end{tikzcd}
+\]
+
+What are some examples? Let's look at a binary pull, a map
+\[
+\begin{tikzcd}
+R \ar[d] \\ a
+\end{tikzcd}
+\quad\to\quad
+\M
+\left(
+\begin{tikzcd}
+R \ar[d, bend right] \ar[d, bend left] \\ a
+\end{tikzcd}
+\right)
+\]
+Some typical objects of $\M(\cdots)$ are
+\[
+R =
+\begin{tikzcd}
+1 \ar[d, bend right, "\ell" swap] \ar[d, bend left, "r"] \\ \{\ell, r\}
+\end{tikzcd}
+\qquad
+R \x R =
+\begin{tikzcd}
+2 \ar[d, bend right, "\ell" swap] \ar[d, bend left, "r"] \\ \{\ell_0, r_0, \ell_1, r_1\}
+\end{tikzcd}
+\]
+\[
+R \x a =
+\begin{tikzcd}
+1 \ar[d, bend right, "\ell" swap] \ar[d, bend left, "r"] \\ \{\ell, r, a\}
+\end{tikzcd}
+\qquad
+R^\Delta =
+\begin{tikzcd}
+1 \ar[d, bend right] \ar[d, bend left] \\ 1
+\end{tikzcd}
+\]
+
+\div
+What's a better way of thinking about a functor $\C \to \rset$ for the specific
+case of $\C(H)$?
+
+I should be able to Grothendieck it around and think of it as a choice
+of amalgamated sets of all $E$-elements and all $V$-elements.
+
+\section{Remedial Category Theory}
+
+\begin{lemma}
+Any limit is a product followed by an equalizer.
+\end{lemma}
+
+\begin{proof}
+A limit diagram in $\C$ with shape $\D$
+is a functor $\J : \C^\D$. For each $C\in \C$ there is a constant
+functor $\Delta(C) : \C^\D$. This is actually the diagonal functor
+$\Delta : \C \to \C^\D$. Limits are right adjoint to the diagonal
+$\Delta \dashv \lim_{\leftarrow}$
+$$\begin{prooftree}
+\Delta^\D_\C(C) \to \J :  \C^\D
+\Justifies
+C \to  \lim_{\leftarrow}{}^\D_\C\, \J : \C
+\end{prooftree}$$
+
+A product is a limit with discrete shape $D$.
+$$\begin{prooftree}
+\Delta^D_\C(C) \to \J :  \C^D
+\Justifies
+C \to  \lim_{\leftarrow}{}^D_\C\, \J : \C
+\end{prooftree}$$
+
+
+\cqed
+\end{proof}
 
 \end{document}
