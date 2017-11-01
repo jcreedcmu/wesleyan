@@ -1,0 +1,370 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\lpbck{\ar[dl, phantom, pos=0, "\llcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rspan{\mathbf{Sp}}
+\def\rmesh{\mathbf{Mesh}}
+\def\rhgrph{\mathbf{HGrph}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rcart{\mathbf{Cart}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
+
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{Definitions}
+\subsection{Adjoints}
+
+We aim to describe all the adjoints in
+\[
+\begin{tikzcd}[row sep=3em]
+\rset \ar[r, "F_\rhgrph", shift left]\ar[from=r, "U_\rhgrph", shift left]
+&\rhgrph \ar[r, "F_\rcat", shift left]\ar[from=r, "U_\rcat", shift left]
+&\rcat \ar[r, "F_\rcart", shift left]\ar[from=r, "U_\rcart", shift left]
+&\rcart\\
+&\rmesh \ar[u, "U_\rmesh", shift left, near start]
+        \ar[from=u, "F_{\rmesh}", shift left, near end]
+\end{tikzcd}
+\]
+defining along the way the categories $\rhgrph$ and $\rmesh$.
+We drop subscripts on functors when unambiguous, and abbreviate
+$L(\C) := F_\rcart(\C)$ and $\M(H) := F_\rmesh(H)$ and $\C(H) := F_\rcat(H)$.
+
+\subsection{Hypergraphs}
+The category $\rhgrph$ is the functor category
+$\rset^{\bullet \leftarrow \bullet \to \bullet}$.
+A hypergraph is a span of sets; it has vertices, edges, and projections.
+\[
+\begin{tikzcd}
+E& P\ar[l, "\ep" swap]\ar[r, "\nu"]&V
+\end{tikzcd}
+\]
+The free hypergraph $F_\rhgrph(X)$ of a set is
+\[
+\begin{tikzcd}
+0& 0\ar[l, "!" swap]\ar[r, "!"]&X
+\end{tikzcd}
+\]
+The underlying set $U_\rhgrph(H)$ of a hypergraph is $V$, its set of vertices.
+
+The free category $F_\rcat(H)$ of a hypergraph has objects $E \cup V$ and
+(nonidentity) morphisms $P$, with $\dom := \ep$ and $\cod := \nu$
+with no nontrivial compositions being possible. The underlying hypergraph
+$U_\rcat(\C)$ of a category has $E = V = \C_0$ and $P = \C_1$ with
+$\ep := \dom$ and $\nu := \cod$.
+
+\subsection{Meshes}
+A mesh is a $\D \in \rcart$ together with a map $M : X \to \D_0$.
+Maps in $\rmesh$ are commutative squares with one side preserving finite
+limits.
+
+The free mesh of a hypergraph $\M(H)$ has $X := V$ and $\C = L(F_{\rcat}(H))$,
+with the map $V \to (L(F_\rcat H))_0$ being pretty much the only thing it can be,
+but just to spell out all the coercions, it's
+$$ \iota_H := U_{\rhgrph} (U_{\rcat} (\eta_{\rcart})_{F_{\rcat} H} \o  (\eta_{\rcat})_H) $$
+The underlying hypergraph of a mesh $U_\rmesh(M)$ is
+\[
+\begin{tikzcd}
+\C_0& \C / M \ar[l, "\dom" swap]\ar[r, "\cod"] & X
+\end{tikzcd}
+\]
+where $\C / M$ is the comma category whose objects are morphisms $\{ C \to M x \st C \in \C_0, x \in X\}$
+
+\subsection{Characterizing Maps between Free Meshes}
+
+Let a hypergraph map $f : H_1 \to \M(H_2)$ be given. What does it look like?
+It's a span map into $UF_\rmesh(H_2)$,
+\[
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[d]& \ar[r]\ar[d]P_1 & V_1\ar[d]\\
+L(\C(H_2))_0 \ar[from=r, "\dom"]& \ar[r, "\cod" swap]L(\C(H_2))/\iota_{H_2} & V_2
+\end{tikzcd}
+\]
+
+What's an object of $L(\C)$? A functor $\C \to \rset$. What's a morphism of $L(\C)$? A natural transformation going backwards.
+So supposing $H_2$ looks like
+\[
+\begin{tikzcd}[column sep=0]
+& e\ar[dl]\ar[dr]&& e'\ar[dl]\ar[dr]\\
+v&&v'&&v''
+\end{tikzcd}
+\]
+a morphism in $L(\C(H_2))/\iota_{H_2}$ (let's say its codomain is $v'' \in V_2$) is a natural transformation
+\[
+\begin{tikzcd}[column sep=-1em]
+& S_{e}\ar[dl]\ar[dr]&& S_{e'}\ar[dl]\ar[dr]\\
+S_{v}&&S_{v'}&&S_{v''}
+\end{tikzcd}
+\quad \Leftarrow\quad
+\begin{tikzcd}[column sep=0]
+& 0\ar[dl]\ar[dr]&& 0\ar[dl]\ar[dr]\\
+0&&0&&1
+\end{tikzcd}
+\]
+So generally an object of $L(\C(H_2))$ is a choice of a set
+$E_\bullet$ of {\em edge points} (in this case $S_e + S_{e'}$) and a
+choice of a set $V_\bullet$ of {\em vertex points} (in this case
+$S_{v} + S_{v'} + S_{v''}$) and some maps
+\[
+\begin{tikzcd}
+E_\bullet  \ar[d] & V_\bullet\ar[d] \\
+E_2 & V_2
+\end{tikzcd}
+\]
+Telling us which place in the $H_2$ diagram each point belongs.
+We also need to know how each edge point gets transported under various projections.
+So we demand the dotted map in
+\[
+\begin{tikzcd}
+E_\bullet \ar[d] \ar[from=r]& \cdot \ar[d] \lpbck \ar[r, dotted] & V_\bullet \ar[d]\\
+E_2 \ar[from=r] & P_2 \ar[r] & V_2
+\end{tikzcd}
+\]
+
+
+The sets $E_\bullet$ and $V_\bullet$ are fibered over $E_1$, (for {\em each} each in
+$E_1$ we need to produce an object of $L(\C(H_2))$) so we have to have
+maps
+\[
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[from=drr]\ar[from=d] & P_1 \ar[r] & V_1\\
+E_\bullet \ar[d] \ar[from=r]& \cdot \ar[d] \lpbck \ar[r] & V_\bullet \ar[d]\\
+E_2 \ar[from=r] & P_2 \ar[r] & V_2
+\end{tikzcd}
+\]
+And the projections $P_1$ have to pick out compatible elements of $V_\bullet$, and the $V_1$
+need to get mapped to $V_2$ consistently, so we need the dotted arrows in
+\[
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[from=drr]\ar[from=d] & P_1 \ar[dr, dotted] \ar[r] & V_1\ar[dd, dotted, bend left]\\
+E_\bullet \ar[d] \ar[from=r]& \cdot \ar[d] \lpbck \ar[r] & V_\bullet \ar[d]\\
+E_2 \ar[from=r] & P_2 \ar[r] & V_2
+\end{tikzcd}
+\]
+Reorganizing this slightly, this is basically the same as
+\[
+\begin{tikzcd}
+E_1\ar[from=r]\ar[d, equal]
+  &P_1  \ar[d]\ar[r]
+  & V_1 \ar[d]\\
+E_1
+  &V_\bullet\ar[l]\ar[from=d]\ar[r]
+  &  V_2 \ar[d, equal]\\
+E_\bullet \ar[from=r]\ar[u]\ar[d]
+  & \cdot \ar[d] \ar[r] \lpbck
+  & V_2 \ar[d, equal]
+  \\
+E_2 \ar[from=r]& P_2\ar[r]& V_2
+\end{tikzcd}
+\]
+which is telling us we can analyze maps $H_1 \to FH_2$ into three types:
+\def\vpush{\mathsf{vpush}}
+\def\epush{\mathsf{epush}}
+\def\pull{\mathsf{pull}}
+\[
+\vpush(f, g) =
+\begin{tikzcd}
+E\ar[from=r]\ar[d, equal]
+  &P_1  \ar[d, "f" swap]\ar[r]
+  & V_1 \ar[d, "g"]\\
+E
+  &P_2\ar[l]\ar[r]
+  &  V_2
+\end{tikzcd}
+\]
+\[
+\pull(f, g) =
+\begin{tikzcd}
+E_1
+  &P_1 \ar[l]\ar[from=d, "g"]\ar[r]
+  &  V \ar[d, equal]\\
+E_2 \ar[from=r]\ar[u, "f"]
+  & P_2  \ar[r]
+  & V
+\end{tikzcd}
+\]
+\[
+\epush(f, g) =
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[d, "f" swap]
+  & P_1 \ar[d, "g" swap] \ar[r] \lpbck
+  & V \ar[d, equal]
+  \\
+E_2 \ar[from=r]& P_2\ar[r]& V
+\end{tikzcd}
+\]
+with every map being canonically equal to some
+$$\epush(f, g) \o \pull(f', g') \o \vpush(f'', g'')$$
+The identities are clearly
+$$\epush(\rid, \rid) \o \pull(\rid, \rid) \o \vpush(\rid, \rid)$$
+and to define composition we need to explain how each of these
+three types of maps commute past each other.
+
+We deal deal with an $\epush$ followed by a $\vpush$
+by observing that we can break up {\em any} span map
+\[
+\begin{tikzcd}
+E_1\ar[from=r]\ar[d, "e", swap]
+  &P_1  \ar[d, "p" swap]\ar[r]
+  & V_1 \ar[d, "v"]\\
+E_2
+  &P_2\ar[l]\ar[r]
+  &  V_2
+\end{tikzcd}
+\]
+into a $\vpush$ followed by an $\epush$ simply by taking a pullback,
+and getting the unique dotted map in
+\[
+\begin{tikzcd}
+E_1\ar[from=r]\ar[d, equal]
+  &P_1  \ar[d, dotted]\ar[r]
+  & V_1 \ar[d, "v"]\\
+E_1\ar[from=r]\ar[d, "e", swap]
+  &\cdot\lpbck  \ar[d]\ar[r]
+  & V_2 \ar[d, equal]\\
+E_2
+  &P_2\ar[l]\ar[r]\ar[from=uu, gray, bend left=40, "p", near start, crossing over]
+  &  V_2
+\end{tikzcd}
+\]
+
+We can deal with an out-of-order $\pull/\epush$ by taking a pullback of the $E$'s and
+the $P$'s --- two-pullback-lemma lets us find that the reordered $\epush$ really is
+a pullback.
+
+The remaining clash is $\vpush/\pull$, which I think is handled by a pushout.
+
+\[
+\begin{tikzcd}[column sep=1.5em]
+  &[-2em]
+  &[-2em] E_1\ar[dll, equal]\ar[ddr]
+  &[-2em]
+  &
+  &[-2em]
+  &[-2em] P_1\ar[llll]\ar[rrrr]\ar[from=dll]\ar[ddr, opfib]
+  &[-2em]
+  &
+  &[-2em]
+  &[-2em] V_1\ar[from=dll]\ar[ddr, equal]
+  &[-2em]
+\\
+E_1 \ar[ddr]
+  &
+  &
+  &
+  &P_2\ar[llll]\ar[rrrr]\ar[ddr]
+  &
+  &
+  &
+  &V_2\ar[ddr, equal]\\[1.5em]
+  &
+  &
+  &E_2 \ar[dll, equal]
+  &
+  &
+  &
+  &\cdot\ar[llll]\ar[rrrr]\ar[from=dll, opfib]
+  &
+  &
+  &
+  &V_1\ar[from=dll]\\
+  &E_2
+  &
+  &
+  &
+  &P_3\ar[llll]\ar[rrrr]
+  &
+  &
+  &
+  &V_2
+\end{tikzcd}
+\]
+
+\end{document}

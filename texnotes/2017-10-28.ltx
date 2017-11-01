@@ -7,6 +7,7 @@
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\lpbck{\ar[dl, phantom, pos=0, "\llcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\lpar{\bindnasrepma}
 \def\lamp{\binampersand}
@@ -186,7 +187,7 @@ going from $\rho(p)$ to $\theta(p)$.
 %% \item The objects of $\D$ are ways of filling in the diagram
 %% \[
 %% \begin{tikzcd}
-%% X\ar[d]\ar[from=r]& Y\ar[dl, phantom, pos=0, "\llcorner"]\ar[r]\ar[d]& Z\ar[d]\ar[from=r]& W \ar[dl, bend left]\\
+%% X\ar[d]\ar[from=r]& Y\lpbck\ar[r]\ar[d]& Z\ar[d]\ar[from=r]& W \ar[dl, bend left]\\
 %% R\ar[from=r]& P \ar[r] &Q
 %% \end{tikzcd}
 %% \]
@@ -278,7 +279,7 @@ R_1\ar[from=r]
   &P_1  \ar[d, equal]\ar[r]
   & Q_1 \ar[dd, equal]\\
 R_0 \ar[u]\ar[d]
-  & P_1 \ar[dl, phantom, pos=0, "\llcorner"] \ar[l]\ar[d]\\
+  & P_1 \lpbck \ar[l]\ar[d]\\
 R_2 \ar[from=r ]& P_2\ar[r]& Q_2
 \end{tikzcd}
 \]
@@ -315,7 +316,7 @@ of $X, Y, z_1, z_2, r_0, r_1, r_2, q_0, q, y_1, y_2$ such that the diagram
 %%   & P_1 \ar[d, "\pi_1"]\ar[r, "\theta_1"]
 %%   & Q_1 \ar[dd, "q"]\\
 %% X \ar[from=r]\ar[u, "r_1"]\ar[d, "r_2" swap]
-%%   & X \x_{R_2} P_2 \ar[r, "\pi_2" swap]\ar[d, "\rho_2^*r_2"] \ar[dl, phantom, pos=0, "\llcorner"]
+%%   & X \x_{R_2} P_2 \ar[r, "\pi_2" swap]\ar[d, "\rho_2^*r_2"] \lpbck
 %%   &Y \ar[dr, "y" description]\ar[ull, "\phi" description]\\
 %% R_2 \ar[from=r, "\rho_2" ]& P_2\ar[rr, "\theta_2" swap]&& Q_2
 %% \end{tikzcd}
@@ -330,7 +331,7 @@ R_1
   &Y\ar[l, "r_0" description]\ar[from=d, "y_2" swap]\ar[r, "q_0" description]
   &  Q_2 \ar[dd, equal]\\
 X \ar[from=r]\ar[u, "r_1"]\ar[d, "r_2" swap]
-  & X \x_{R_2} P_2 \ar[d] \ar[dl, phantom, pos=0, "\llcorner"]
+  & X \x_{R_2} P_2 \ar[d] \lpbck
   \\
 R_2 \ar[from=r, "\rho_2" ]& P_2\ar[r, "\theta_2" swap]& Q_2
 \end{tikzcd}
@@ -345,7 +346,7 @@ Example:
   & \{R_a,R_b\} \ar[d, ""]\ar[r, ""]
   & \{a,b\} \ar[dd, ""]\\
 \{ S,  T\} \ar[from=r]\ar[u, ""]\ar[d, "" swap]
-  & \{S_c, S_d, T_d, T_e\} \ar[r, ""]\ar[d, ""] \ar[dl, phantom, pos=0, "\llcorner"]
+  & \{S_c, S_d, T_d, T_e\} \ar[r, ""]\ar[d, ""] \lpbck
   &\{c,d,e\} \ar[dr, ""]\\
 \{S, T\} \ar[from=r, "" ]& \{S_c,S_d,T_d,T_e\}\ar[rr, "" swap]&& \{c,d,e\}
 \end{tikzcd}
@@ -468,7 +469,7 @@ E \ar[from=r]& \ar[r]P & V
 \end{tikzcd}
 \]
 
-What's an object of $L(\C)$? A functor $\C \to \rset$. What's a morphism of $L(\Delta)$? A natural transformation going backwards.
+What's an object of $L(\C)$? A functor $\C \to \rset$. What's a morphism of $L(\C)$? A natural transformation going backwards.
 So given $H_2$ looking like
 \[
 \begin{tikzcd}[column sep=0]
@@ -488,7 +489,69 @@ a morphism in $L(\C(H_2))/\iota$ (let's say its codomain is $V_3$) is a natural 
 0&&0&&1
 \end{tikzcd}
 \]
+So an object of $L(\C(H_2))$ is a choice of a set $E_\bullet$ of {\em edge points} (elements
+the coproduct of all the edge sets) and a choice of a set $V_\bullet$ of {\em vertex points}
+(elements of the coproduct of all the vertex sets) and some maps
+\[
+\begin{tikzcd}
+E_\bullet  \ar[d] & V_\bullet\ar[d] \\
+E_2 & V_2
+\end{tikzcd}
+\]
+We also need to know how each edge point gets transported under various projections.
+So the dotted map in
+\[
+\begin{tikzcd}
+E_\bullet \ar[d] \ar[from=r]& \cdot \ar[d] \lpbck \ar[r, dotted] & V_\bullet \ar[d]\\
+E_2 \ar[from=r] & P_2 \ar[r] & V_2
+\end{tikzcd}
+\]
+must exist.
 
+All of these sets are fibered over $E_1$, so we have to have maps
+\[
+\begin{tikzcd}
+E_1 \ar[from=r]\ar[from=drr]\ar[from=d] & P_1 \ar[r] & V_1\\
+E_\bullet \ar[d] \ar[from=r]& \cdot \ar[d] \lpbck \ar[r] & V_\bullet \ar[d]\\
+E_2 \ar[from=r] & P_2 \ar[r] & V_2
+\end{tikzcd}
+\]
+And the projections $P_1$ have to pick out elements of $V_\bullet$, and the $V_1$
+have to pick out $V_2$ consistently, so we're left with
+\[
+\begin{tikzcd}
+E_1\ar[from=r]\ar[d, equal]
+  &P_1  \ar[d]\ar[r]
+  & V_1 \ar[d]\\
+E_1
+  &V_\bullet\ar[l]\ar[from=d]\ar[r]
+  &  V_2 \ar[dd, equal]\\
+E_\bullet \ar[from=r]\ar[u]\ar[d]
+  & \cdot \ar[d] \lpbck
+  \\
+E_2 \ar[from=r]& P_2\ar[r]& V_2
+\end{tikzcd}
+\]
+isomorphic to what I conjectured before.
+\div
+More vertically compact:
+\[
+\begin{tikzcd}
+E_1\ar[from=rr]
+  &
+  &P_1  \ar[d]\ar[r]
+  & V_1 \ar[dd]\\
+E_\bullet \ar[from=r]\ar[u]\ar[d]
+  & \cdot \ar[d] \lpbck\ar[r]
+  & V_\bullet \ar[dr] \ar[ull]
+  \\
+E_2 \ar[from=r]
+ & P_2\ar[rr]
+ &
+ & V_2
+\end{tikzcd}
+\]
+\div
 What are some examples? Let's look at a binary pull, a map
 \[
 \begin{tikzcd}
