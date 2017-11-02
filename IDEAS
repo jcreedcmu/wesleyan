@@ -826,7 +826,7 @@ term = b (c k (b k))
 
 Q: Where did I put some notes about how 2-categorical modalities work
 in dependent types?
-A: /Users/jreed/wes/texnotes/2017-09-23.ltx
+A: texnotes//2017-09-23.ltx
 
 === 2017.09.24
 
@@ -2137,14 +2137,7 @@ so that it becomes an instance of the top.
 transform the bottom to ([C] → Z) ≡ ([C] → X) + ([C] → Y) but whatevs)
 
 Q: Does this really preserve colimits?
-A: No! Here's an example.
-
-Consider the category of reflexive graphs. Let 𝟚 be the two-vertex
-one-edge graph, the yoneda embedding of the object E of the category
-that defines reflexive graphs. Let □ be the diamond-shaped
-four-vertex, four-edge graph. Exhibit 𝟚 × 𝟚 as a pushout of 𝟚 +_𝟚 □,
-the one that aligns the `least and greatest elements' of 𝟚 with the
-`least and greatest elements' of □ — what the pushout accomplishes is
-it adds a diagonal edge to □.
-
-Consider the exponential 𝟚 ⇒ 𝟚
+A: No! See texnotes//yoneda-and-colimits.ltx for a counterexample. I
+think I was even a bit conservative in writing down all the mess that
+is 𝟚 → 𝟚 × 𝟚; there are also four knight's-move arrows down and to the
+right.
