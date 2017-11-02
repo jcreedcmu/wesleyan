@@ -2141,3 +2141,65 @@ A: No! See texnotes//yoneda-and-colimits.ltx for a counterexample. I
 think I was even a bit conservative in writing down all the mess that
 is 𝟚 → 𝟚 × 𝟚; there are also four knight's-move arrows down and to the
 right.
+
+Q: What's a more basic demand than
+    (C : ℂ) → ([C] → X) ≡ ([C] → Y)
+implies
+    X ≡ Y
+?
+A:
+    (C : ℂ) → ([C] → X) → ([C] → Y)
+is equivalent
+    X → Y
+so long as it's natural in C!
+
+i.e. if
+f : (C : ℂ) → ([C] → X) → ([C] → Y)
+then for every category morphism g : D → C ∈ ℂ,
+and every actual function h : [C] → X we have
+f C h ∘ [g] ≡ f D (h ∘ [g]) : [D] → Y
+
+I think I would have needed to explicitly demand naturality in the
+equivalence case anyhow, not sure at all that the fibrancy of Πs gives
+the right naturality.
+
+I was about to say, for each natural f we poop out a fout : X → Y,
+such that composition of fout with some [C] → X leads to the
+*specified* (by f) composite [C] → Y, but of course to accomplish that
+I just want to do the usual thing of exhibiting that there *exists* a
+function in the easy direction, namely from X → Y to
+
+    (f : (C : ℂ) → ([C] → X) → ([C] → Y)) × (f is natural in C)
+
+and then demand that *that particular function* is an equivalence.
+
+Q: What does that make me think?
+A: That it would be nice to have already pulled myself up by
+bootstraps and be able to say that instead of a category ℂ
+internalized in the usual way by having
+    Obj : Set
+    Mor : Obj → Obj → Set
+    etc.
+I'd like to ask for an internal category in the sense of
+like, asking for a Rezk space.
+
+Then I would say that if ℂ : Set and Rezk(ℂ) holds, or some such, then
+there is a map [_] : ℂ → Set,
+but then perhaps the maps
+(f : (C : ℂ) → ([C] → X) → ([C] → Y))
+would have naturality baked in?
+
+Q: Can I imagine that [_] still does *something* when ℂ is merely some
+janky graph, and not a real category?
+A: Maybe --- maybe I could consider it to be operating on the free
+category? No, that would wreck its behavior on real categories,
+wouldn't it?
+
+Anyhow it seems prima facie dangerous to say that
+(X → Y) → ((C : ℂ) → ([C] → X) → ([C] → Y))
+is an equivalence unless ℂ is legitimately a *category*
+and Πs out of it are adequately constrained.
+
+Q: Is there an adjointy operation that `completes' presheaves Δ^op →
+Sets to categories but which is idempotent?
+A: ???
