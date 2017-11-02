@@ -1912,3 +1912,239 @@ witnesses by set elements in P.
 
 Q: How do I characterize the mesh maps between one free map and another?
 A: Looks like a slightly messy diagrammatic thing.
+
+=== 2017.10.30
+
+Q: What'd I get out of the conversation with Dan?
+A: (a) the thing that seems to make the modal stuff work is thinking
+with profunctors, which is interesting. (b) at some point I need intro
+and elim rules for at least functions ♯n → U, which maybe correspond
+to the intro and elim rules for glue types in cubical hott?
+
+=== 2017.10.31
+
+Q: What's an interesting paper about verified programming for contracts?
+A: https://blockstream.com/simplicity.pdf
+
+Q: What's the other paper of noam@'s that I should read?
+A: https://arxiv.org/pdf/1501.05115.pdf
+
+=== 2017.11.01
+
+Q: Is there a process ζ that takes any ℂ ∈ Cat
+and yields a functor ζℂ : ℂ → Set
+that gives the simplest possible set assignment
+where, like, `all possible function phenomena happen'?
+A:
+What I have in mind for the arrow category
+•→• is that it spits out a constant (not iso) map 2 → 2.
+I would also accept the map 3 → 2 that sends {0,1,2} to {0,0,1}.
+That's an even better account of `all phenomena happening': there's
+an object with no preimages, one preimage, multiple preimages.
+
+I could consider an even stronger version, where I take
+•→• to
+
+π₁ : {(m, n) | n < m} → ℕ
+
+so that I have something with every finite preimage-count.
+What would I do for •→•→•?
+
+Let's call it f : A → B and g : B → C.
+
+Let's see, every element in the rightmost set is named after how much
+branching it experiences to the left. So a sequence of natural
+numbers, in this case. So C = [[1]]. An element of B says which
+element of C it belongs to, what index in its `ancestors' it is, and
+how much branching remains to its left: so, [[1]] × ℕ × [1]. Or, wait,
+no, I can read off how much branching remains to its left by simply
+indexing into the [[1]]. So B = [[1]] x ℕ, subject to the constraint
+that the ℕ is less than the length of the list. An element of A says
+which element of B it belongs to, and what index it is, so, [[1]] × ℕ
+× ℕ, subject to the constraint that we can index twice.
+
+Ok, I can carry out this pattern unto •→•→...→• just fine. How about a
+commutative triangle? What does it mean for `every possible thing to
+happen'? Ok, let me say that a `possible thing happening' for the
+preimage of a point x ∈ ζℂ(C) means a functor F : ℂ/C → Set where
+F(id) = {*}.
+
+I think I see the something like universal property that it ought to
+satisfy now: Let ℂ be given. ζℂ : ℂ → Set has the property that for
+any (finite?) functor R : ℂ → Set, there's a unique *mono* natural
+transformation R → ζℂ.
+
+All right, so I see that a `behavior' is a functor R : ℂ^op → Set. A
+`behavior from the point of view of an object C ∈ ℂ' is all behaviors
+quotiented by something. I think ζℂ takes C to the set of all
+behaviors from the point of view of C. I can consider R × yC to
+restrict to stuff upstream from C. Two behaviors R, S are identified
+if R × yC is naturally isomorphic to S × yC, I guess? This is the variance-choice
+of the yoneda embedding for which, if I take ℂ = C0 → C1 → C2, I get
+
+y(C0) = 1 ← 0 ← 0
+y(C1) = 1 ← 1 ← 0
+y(C0) = 1 ← 1 ← 1
+
+No, I got something backwards somewhere, hmm..
+
+=== 2017.11.02
+
+Q: What kind of postulates would I have to add to express that the
+ambient universe is being interpreted in some kind of `universal'
+presheaf? I don't necessarily think I need `that much' universality,
+but I should figure out what *kind* of universality I mean:
+A:
+I might suppose that every type actually, all along, lives in
+Set^{(a→b)^op} for some two-object category a→b. What would that mean?
+At least that somewhere I have yoneda types [a] and [b] and there is
+precisely one function between [a] and [b]. How can I probe the
+presheaf structure of a type X, knowing that? Well, the yoneda lemma
+tells me exactly that maps [a] → X are in exact correspondence with
+elements of X(a), and [b] → X with elements of X(b), and I can get
+from X(b) to X(a) be precomposing with the canonical function [a] →
+[b]. So that gives me pretty much everything.
+
+What I think I mean by `universal presheaf' is that every type is secretly
+all along a Sets^{X₁^op × X₂^op × ⋯} for a sufficiently large class of Xᵢ,
+like perhaps all finite ones.
+
+The postulates this seems to correspond to, then, is postulating a
+bunch of little mini-universes of types whose maps amongst themselves
+are totally determined.
+
+I could imagine postulating simply that, if you have an internal category
+in Agda located at ℂ : Set, with hom : ℂ → ℂ → Set, then you get a
+Ref : ℂ → Set
+such that for any (C D : ℂ) the function space Ref C → Ref D
+is equivalent to hom C D.
+
+Q: What happens if I take the category of sets and functions?
+A: I get Ref : Set → Set such that Ref C → Ref D ≡ C → D
+Clearly this Ref should work out to be id_Set. Maybe it's even provable,
+given enough parametricity.
+
+Q: What happens if I take the category of sets and relations?
+A: I get Ref : Set → Set such that Ref C → Ref D ≡ C → D → Set
+That's pretty neat! I guess this Ref is like the nondeterminism monad.
+
+Q: What happens if I take the category of sets and opfunctions?
+A: I get Ref : Set → Set such that Ref C → Ref D ≡ D → C
+One might hope that Ref is then some kind of dualizing involution on types.
+
+Q: Stepping back a bit, if I wanted to say `all types are graphs',
+I'd demand that semantically every type is a Set^{(V⇇E)}, which
+is like saying there's a [V] and an [E] and a dom, cod: [V] → [E].
+But also I `know' that [V] should actually be 1. What does that identification
+correspond to?
+A:
+Actually, if I interpret what I said above nitpickily, [V] should *not* be 1.
+The type 1 is the terminal object; as a presheaf it has one vertex and one edge.
+If [V] were 1, there would be no map from [E] to [V].
+
+Q: But if I consider the category of *reflexive* graphs, with
+dom : V ← E
+cod : V ← E
+id : V → E
+with the expected commutativities, then I get [V] and [E] and cod, dom : [V] → [E]
+and id : [E] → [V]. Can I prove [V] equivalent to 1?
+A: Hm, no, I still have no way of getting from an arbitrary type X to
+either [V] or [E]. But semantically,
+[V] =
+  Vs: 1 (the morphism 1_V : V → V, which is equal to other morphisms like
+          dom id : V → V)
+  Es: 1 (the morphism id : V → E)
+[E] =
+  Vs: 2 (the morphisms dom : E → V and cod : E → V)
+  Es: 3 (the morphisms 1_E, id o dom, id o cod : E → E)
+In this case [V] *is* 1.
+
+Q: How would I represent this understanding as postulates?
+A: I guess it's a matter of internalizing what I know about the
+construction of products (and also general limits, colimits,
+exponentials, Πs and Σs) in presheaf categories.
+
+Q: Assuming I have a category ℂ, what do I say about products, for instance?
+A: Hm, I'm tempted to say that, like
+([V] → A × B) ≡ ([V] → A) × ([V] → B)
+but I already know this --- this isn't a special fact about [V], it's just a fact
+about A × B
+
+Q: What's really the issue?
+A: It's more like some kind of η property.
+I have X, Y, and Z for *every* object C ∈ ℂ,
+[C] → Z ≡ ([C] → X) × ([C] → Y)
+then in fact
+Z = X × Y
+
+Q: Can I get away with summarizing this principle by postulating
+
+    (P : Set → Set) (universal : (C : ℂ) P [ C ]) → P 1
+
+A: No; it smoothly gives me what I want for the product case, but it's
+clearly inconsistent. I could just narrowly tailor P to be the
+disjunction
+
+    λ T . (T ≡ [C₁]) ∨ (T ≡ [C₂]) ∨ ⋯ ∨ (T ≡ [C_n])
+
+when ℂ is finite, and if the yoneda embedding of ℂ doesn't happen to
+produce a terminal object (as with the category of graphs), then we
+get a contradiction.
+
+Q: How about saying that for any two types (X Y : Set), if
+    (C : ℂ) → ([C] → X) ≡ ([C] → Y)
+then
+X ≡ Y?
+A: This seems semantically motivated, but I'm not sure how it plays
+with multiple `index categories' interacting. Seems to work for products
+and though; having
+[C] → Z ≡ ([C] → X) × ([C] → Y)
+for every (C : ℂ) means having
+[C] → Z ≡ ([C] → X × Y)
+for every (C : ℂ), so Z ≡ X × Y.
+
+Q: What about coproducts?
+A:
+We should be able to obtain (a) that
+[C] → X + Y ≡ ([C] → X) + ([C] → Y)
+and (b) that
+    (C : ℂ) → ([C] → Z ≡ ([C] → X) + ([C] → Y))
+implies
+    Z = X + Y
+By similar reasoning as above, at least we have that (a) implies (b), given
+the `extensionality' lemma that probing with [C]s suffice to tell types apart.
+But (a) is interesting; it seems to suggest that ([C] → —) preserves colimits?
+And therefore maybe has a right adjoint, as well as a left?
+
+Q: What can I do with
+([C] → X) → R ≡ X → C*R
+A: Well, I can certainly show that ([C] → —) preserves coproducts at least.
+
+Note that proving
+
+(R : Set) → (Z → R ≡ X → R × Y → R)
+----------------------
+(R : Set) → (([C] → Z) → R ≡ (([C] → X) → R) × (([C] → Y) → R))
+
+would be enough, by substituting X + Y / Z; but armed with the right adjoint,
+I can rewrite the bottom to
+
+Z → C*R ≡ (X → C*R) × (Y → C*R)
+
+so that it becomes an instance of the top.
+
+(or maybe I need parametricity for it to be *really* enough, to
+transform the bottom to ([C] → Z) ≡ ([C] → X) + ([C] → Y) but whatevs)
+
+Q: Does this really preserve colimits?
+A: No! Here's an example.
+
+Consider the category of reflexive graphs. Let 𝟚 be the two-vertex
+one-edge graph, the yoneda embedding of the object E of the category
+that defines reflexive graphs. Let □ be the diamond-shaped
+four-vertex, four-edge graph. Exhibit 𝟚 × 𝟚 as a pushout of 𝟚 +_𝟚 □,
+the one that aligns the `least and greatest elements' of 𝟚 with the
+`least and greatest elements' of □ — what the pushout accomplishes is
+it adds a diagonal edge to □.
+
+Consider the exponential 𝟚 ⇒ 𝟚

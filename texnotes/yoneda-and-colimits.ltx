@@ -1,0 +1,191 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\input{linear}
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\lpbck{\ar[dl, phantom, pos=0, "\llcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rspan{\mathbf{Sp}}
+\def\rmesh{\mathbf{Mesh}}
+\def\rhgrph{\mathbf{HGrph}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rcart{\mathbf{Cart}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\E{\mathsf{E}}
+\def\V{\mathsf{V}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
+
+\definecolor{red}{HTML}{f43712}
+\definecolor{yellow}{HTML}{d2bb0a}
+\definecolor{blue}{HTML}{4c2ce3}
+\definecolor{green}{HTML}{219721}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\begin{conjecture}[Unfortunate Counterexample]
+Let a category $\C$ be given. Write the yoneda
+embedding is $y : \C \to \hat \C$. Write the exponential in $\hat \C$ as $\dash \imp \dash$.
+Given an object $C$, The functor $yC \imp \dash : \hat C \to \hat C$
+does not necessarily preserve colimits.
+\end{conjecture}
+
+\begin{proof}
+Let $\C$ be the category defining the category of reflexive graphs:
+\[
+\begin{tikzcd}
+\V  \ar[r, "\cod", shift left=4]  \ar[r, "\dom"] \ar[from=r, "\rid", shift left=3] & \E
+\end{tikzcd}
+\]
+
+\noindent Let $\square$ be the reflexive graph
+\(\begin{tikzcd}
+\bullet\ar[r]\ar[d]&\bullet\ar[d]\\
+\bullet\ar[r]&\bullet
+\end{tikzcd}\).
+
+\noindent Let $2$ be $y\V + y\V$, the reflexive graph
+\(\begin{tikzcd}
+\bullet&\bullet
+\end{tikzcd}\).
+
+\noindent Let $\b2$ be $y\E$, the reflexive graph
+\(\begin{tikzcd}
+{\color{red}\bullet}\ar[r, green]&{\color{blue}\bullet}
+\end{tikzcd}\).
+
+\noindent Note that $\b2 \x \b2$ is the reflexive graph
+\(\begin{tikzcd}
+{\color{red}\bullet} \ar[r]\ar[d] \ar[dr, green]&\bullet\ar[d]\\
+\bullet\ar[r]&{\color{blue}\bullet}
+\end{tikzcd}\).
+
+\noindent The pushout
+\[\begin{tikzcd}
+2 \ar[r]\ar[d, "{({\color{red}\bullet}, {\color{blue}\bullet})}" swap] \ar[from=dr, phantom, pos=0, "\ulcorner"]&\b2 \ar[d, "{{\color{red}\bullet} {\color{green}\to} {\color{blue}\bullet}}"]\\
+\square \ar[r]&\b2 \x \b2
+\end{tikzcd}\]
+is not preserved by $\b2 \imp \dash $. The pushout we obtain instead is
+\[\begin{tikzcd}
+\b2 \imp 2 \ar[r]\ar[d] \ar[from=dr, phantom, pos=0, "\ulcorner"]&\b2 \imp \b2 \ar[d]\\
+\b2 \imp \square \ar[r]& X
+\end{tikzcd}\]
+where $(\b2 \imp 2) \cong 2$, and $\b2 \imp \b2$ is a commutative triangle
+\[\begin{tikzcd}
+{\color{red}\bullet}\ar[rr, bend left=15, green]\ar[r, green]
+& {\color{yellow}\bullet}\ar[r, green]
+& {\color{blue}\bullet}
+\end{tikzcd}
+\]
+and $\b2\imp\square$, and $(\b2 \imp \b2 \x \b2) \not\cong X$ are
+\[\begin{tikzcd}
+\bullet\ar[d]\ar[dd, bend right=15]\ar[rr, bend left=15]\ar[r]
+  & \bullet\ar[dr]\ar[r]& \bullet \ar[d]\ar[dd, bend left=15]\\
+\bullet\ar[d] \ar[dr]&& \bullet \ar[d]\\
+\bullet\ar[rr, bend right=15]\ar[r] & \bullet\ar[r]& \bullet
+\end{tikzcd}
+\quad\hbox{\&}\quad
+\begin{tikzcd}
+\bullet\ar[dr]\ar[d]\ar[dd, bend right=15]\ar[ddrr, bend left=25]\ar[rr, bend left=15]\ar[r]
+  & \bullet\ar[dr]\ar[r] \ar[d]\ar[dd, bend left=25]
+  & \bullet \ar[d]\ar[dd, bend left=15]\\
+\bullet\ar[d] \ar[dr]\ar[r]\ar[rr, bend right=25]
+  &\bullet\ar[dr]\ar[r]\ar[d]
+  & \bullet \ar[d]\\
+\bullet\ar[rr, bend right=15]\ar[r]
+  & \bullet\ar[r]
+  & \bullet
+\end{tikzcd}
+\ne
+\begin{tikzcd}
+{\color{red}\bullet}\ar[dr, green]\ar[d]\ar[dd, bend right=15]\ar[ddrr, bend left=15, green]\ar[rr, bend left=15]\ar[r]
+  & \bullet\ar[dr]\ar[r]
+  & \bullet \ar[d]\ar[dd, bend left=15]\\
+\bullet\ar[d] \ar[dr]
+  &{\color{yellow}\bullet}\ar[dr, green]
+  & \bullet \ar[d]\\
+\bullet\ar[rr, bend right=15]\ar[r]
+  & \bullet\ar[r]
+  & {\color{blue}\bullet}
+\end{tikzcd}
+\]
+\cqed
+\end{proof}
+
+
+
+
+\end{document}
