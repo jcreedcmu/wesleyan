@@ -2202,4 +2202,49 @@ and Πs out of it are adequately constrained.
 
 Q: Is there an adjointy operation that `completes' presheaves Δ^op →
 Sets to categories but which is idempotent?
-A: ???
+A: Yeah, I think so?
+
+=== 2017.11.03
+
+Q: What's a recap of my line of thinking so far?
+A:
+* Start with the idea that we're doing dependent type theory in a presheaf category.
+  Instead of an object in Sets, every type is secretly a Sets^{ℂ^op}.
+
+* Characterize what this provides internally as:
+  - You get yoneda types [C], [D], ... for any objects C, D, ... ∈ ℂ.
+  - Functions between yoneda types correspond to morphisms
+  - Any function X → Y can be interpreted as a natural transformation
+    (C : ℂ) → ([C] → X) → ([C] → Y)
+    and this interpretation is an equivalence.
+
+* Generalize to imagining that we're working in
+  Sets^{ℂ₁^op × ℂ₂^op × ...} for a broad class of categories ℂ₁, ℂ₂, ...
+
+* How could I describe a choice of these ℂ internally?
+  (a) give a type ℂ : Set which `is a category' qua Rezk space
+  (b) I give a type ℂ : Set and hom : ℂ → ℂ → Set and ∘ and rid such
+      that all the usual stuff.
+  (c) [new thought as of this morning] I remember that every category
+      is a subcategory of a concrete category, and give a collection
+      of sets C, D, etc. and a collection of functions between them
+      that are closed under composition.
+  (d) [`universal' variant] For every function X → Y at all I give
+      a multiplicity, and a description of how mulitplicities
+      are compatible with composition. (this is basically just
+      (c) with `the collection of sets' being set to `all of Set₁')
+
+Q: How I do I think about what this accomplishes?
+A: It takes the actual universe of sets and functions, and a
+description of an alternate one, where I've deleted or duplicated some
+functions, and asserts that the alternate universe has a real
+existence as types and homsets.
+
+Like: I take the set 2 and notice that {id, swap} are closed under
+composition. Then I get a type 2' where {id, swap} are the *only*
+endomaps.
+
+Q: What's a potentially nice way to corral some of these assumptions together?
+A: There is an evident map from an indexed set (X : Set) × (S : X → Set)
+to a category whose objects are X and whose morphisms x → y are all
+functions S x → S y. Postulate that this map is an equivalence.
