@@ -1,0 +1,270 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{tabularx}
+\input{linear}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\b2{\mathbf{2}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\title{Notes on the Logic of Convex Combination}
+\begin{document}
+\bibliographystyle{alpha}
+\maketitle
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\subsection*{Motivation}
+Riehl and Shulman \cite{RS17} describe a type theory that can talk
+about directed paths inside a type, the directed analogue of homotopy type theory identity paths.
+They do this --- omitting
+for the moment the subtleties of their multi-level type system --- by postulating the
+existence of the walking arrow $\b2$, and a relation
+${\le} : \b2 \x \b2$. This means that one can describe for example the
+2-simplex $\Delta_2$ as the subset of the product
+$$\{(x, y) \in \b2 \x \b2 \st y \le x \}$$
+Graphically we can depict this  like
+\[\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+ %  ($(a) + (0.7em,-0.5em)$) --
+      ($(c) + (0.7em,0.5em)$)
+    -- ($(d) + (-0.7em,0.5em)$)
+    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
+  }
+]
+(0,1)\ar[r]\ar[from=d]&(1,1)\ar[from=d]\\
+(0,0)\ar[r]\ar[ur]&(1,0)
+\end{tikzcd}\]
+The fact that we get higher simplices by taking subsets of products of $\b2$ is a really interesting
+and useful idea; it's used in the both definition of composition of morphisms and, even more
+crucially, the proof
+that composition is associative. It's also quite important that the whole product $\b2 \x \b2$
+can be recovered as the pushout of the two triangles
+\[\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+ %  ($(a) + (0.7em,-0.5em)$) --
+      ($(c) + (0.7em,0.5em)$)
+    -- ($(d) + (-0.7em,0.5em)$)
+    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
+\fill[fib,opacity=0.3]
+      ($(a) + (0.7em,-0.5em)$) --
+       ($(c) + (0.7em,0.5em)$) --
+    %  ($(d) + (-0.7em,0.5em)$) --
+     ($(b) + (-0.7em,-0.5em)$) -- cycle;
+  }
+]
+(0,1)\ar[r]\ar[from=d]&(1,1)\ar[from=d]\\
+(0,0)\ar[r]\ar[ur]&(1,0)
+\end{tikzcd}\]
+
+\def\what{{\color{gray}?}}
+I'm interested in setting up a similar pile of machinery, in such a way as to complete the analogy
+$$
+{\hbox{isomorphisms}\over\hbox{equality paths}}  =
+{\hbox{functions}\over\hbox{directed paths}}  =
+{\hbox{relations}\over\hbox{\what}}
+$$
+I want to eliminate the the directionality of directed paths,
+and therefore want to refrain from demanding an ordering $\le$ on the interval.
+At the risk of repeaing myself, I'm decisively {\em not} talking
+about passing to the {\em stronger}, familiar notion of symmetric
+paths that represent isomorphism/equivalence/equality, but passing to a {\em weaker}
+notion of symmetric paths, which represent mere relations. These show up in the work
+of Nuyts et al. \cite{Nuyts.Variance} under the name {\em bridges}.
+
+\subsection*{Undirected Subsetting}
+In order to capture the unordered picture
+
+\[\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+ %  ($(a) + (0.7em,-0.5em)$) --
+      ($(c) + (0.7em,0.5em)$)
+    -- ($(d) + (-0.7em,0.5em)$)
+    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
+  }
+]
+(0,1)\ar[r,dash]\ar[from=d,dash]&(1,1)\ar[from=d,dash]\\
+(0,0)\ar[r,dash]\ar[ur,dash]&(1,0)
+\end{tikzcd}\]
+I need some way of filling in the $\what$ in
+$$\{(x, y) \in \b2 \x \b2 \st \what \}$$
+that doesn't depend on any ordering of the interval $\b2$.
+Just thinking about how I would describe the colored-in points using informal
+mathematical background, the first thought that comes to mind is that they are the convex
+hull of the points $(0,0)$, $(1,0)$, and $(1,1)$.
+
+Is there a nice logical way of talking about convex combinations of points of a type?
+Could there be, say, a logical connective that takes two propositions (whose denotations
+are, to use a term from  \cite{RS17}, `topes', subsets of a cube) and yields a proposition whose
+denotation is all points that are convex combinations of points from the two input propositions?
+
+\subsection*{Join Connective}
+This seems very similar to the operation of topological join, so let's
+introduce a new logical connective $\star$ to match its usual
+notation. Observe that the diagram we want suggestively appears to admit any of the following
+as equivalent formalizations of it:
+$$\{(x, y) \in \b2 \x \b2 \st (x = 0\land y = 0) \star (x = 1\land y = 0) \star (x = 1\land y = 1)\}\eqno(1)$$
+$$\{(x, y) \in \b2 \x \b2 \st y = 0 \star (x = 1\land y = 1)\}\eqno(2)$$
+$$\{(x, y) \in \b2 \x \b2 \st (x = 0\land y = 0) \star x = 1\}\eqno(3)$$
+$$\{(x, y) \in \b2 \x \b2 \st x = y \star (x = 1 \land y = 0)\}\eqno(4)$$
+To spell out what's going on, $(1)$ is meant to be interpreted as
+saying that the triangle is the convex hull of its three endpoints.
+The statement $(2)$ is saying that any point in the triangle is the
+convex combination of some point in the bottom edge of the triangle
+($y=0$) and the point $(1,1)$. Likewise, $(3)$ expresses the triangle
+as combinations of its lower left point and its right edge, and $(4)$
+does it with combinations of its hypotenuse and its lower right point.
+
+We should of course be able to {\em prove} somehow that these are all equivalent,
+but I don't yet know the appropriate proof theory in which to do so.
+\begin{conjecture}[\color{opfib} Open Question]
+What's a nice well-behaved sequent calculus for $\star$?
+\end{conjecture}
+\def\prequiv{\dashv\vdash}
+Some guesses at general principles that $\star$ ought to satisfy are as follows:
+\vskip 1em
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcr}
+&$A \lor B \prov A \star B$&`convex disjunction'\\
+&$(x = 1) \star (x = 0) \prequiv \top$&`totality'\\
+&$A \star (B \star C) \prequiv (A \star B) \star C $&associative\\
+&$A \star B \prequiv B \star A$&commutative\\
+&$A \star (B \lor C) \prequiv (A \star B)\lor (A \star C)$&preserves binary disjunction\\
+&$A \star \bot \prequiv \bot$&preserves nullary disjunction\\
+\end{tabular*}
+\vskip 1em
+\noindent The connective $\star$ is meant to be a `convex disjunction', strictly weaker than actual disjunction; if $A$ is true, or $B$ is true, then certainly
+$A \star B$ is true, but {\em also} if anything convexly `in between' $A$ and $B$ happens to be
+true, then $A \star B$ is still true.
+
+The `totality' principle asserts that the interval between $x = 0$ and
+$x = 1$ is all there is; if we know that $x$ is between $0$ and $1$,
+that's the same as knowing nothing about $x$.
+
+Associativity seems to follow from geometric considerations; from
+basically the same sketched reasoning as above about convex
+combinations in triangles. If you take a triangle, fix an edge $E$ and
+take the opposite vertex $V$, then any point in the triangle can be
+uniquely expressed as a convex combination of $V$ and some choice of
+point in $E$. Either parenthesization of $A\star B \star C$ then
+denotes the set of all points in some triangle $(a, b, c)$ where $a\in
+A, b\in B, c \in C$. Commutativity is pretty evident, and I think the
+preservation of disjunctions is as well, from the intended semantics.
+
+I once briefly conjectured --- but now {\em don't} think it's appropriate to have --- the equivalence
+$$A \land (B \star C) \prequiv (A \land B)\star (A \land C)\eqno(*)$$
+which seems {\em prima facie} like a natural thing to ask for in order to show $(1) \prequiv (2)$
+and $(1) \prequiv (3)$. It would let us rewrite
+$ (x = 1\land y = 0) \star (x = 1\land y = 1)$ to $ x = 1 \land  (y = 0\star y = 1)$,
+and that's just $x = 1$ by totality.
+
+However, I think neither direction of $(*)$ is valid. In the $\prov$ direction, let
+$A = B = (x = 1)$ and $C = (x = 0)$.
+Then $A \land (B\star C)$ is just $x = 1$ by totality, but $(A \land B)\star(A \land C)$ is
+$$(x = 1) \star (x = 1 \land x = 0) $$
+$$\prequiv (x = 1) \star \bot $$
+$$\prequiv \bot$$
+
+In the $\dashv$ direction, let $A = B \lor C$, and it becomes equivalent to showing
+$$B\star C \prov B \lor C$$
+which should not hold.
+
+I think $(*)$ might remain true under a side condition amounting to some kind of {\em orthogonality}
+or otherwise independence of $A$ compared to both $B$ and $C$, but I'm not sure how to express that.
+
+\bibliography{../wes}
+\end{document}

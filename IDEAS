@@ -590,7 +590,7 @@ Anything else???
 
 Q: What should I make of the discussion on
 https://homotopytypetheory.org/2017/09/16/a-hands-on-introduction-to-cubicaltt/
-between shulman@ and mortberg@ about canonicity vs. many-models? I
+between mshulman@ and mortberg@ about canonicity vs. many-models? I
 don't feel like I grasp what's at stake.
 A: ???
 
@@ -2248,3 +2248,190 @@ Q: What's a potentially nice way to corral some of these assumptions together?
 A: There is an evident map from an indexed set (X : Set) × (S : X → Set)
 to a category whose objects are X and whose morphisms x → y are all
 functions S x → S y. Postulate that this map is an equivalence.
+
+Q: Going even farther, I observe that I can map from an indexed set
+(X : Set) × (S : X → Set)
+to a *simplicial* set on X
+(C : ℕ → Set) × (simplicial maps among the Cs)
+by setting
+C 0 = X
+C 1 with vertices x, y = S x → S y
+C 2 with vertices x, y, z = a commuting triangle of functions S x → S y → S z
+etc.
+Can I demand that *that* translation has an inverse?
+A: Hm, maybe not. What if the simplicial set *isn't* a category?
+Like, let's say my simplicial set has three vertices and two edges
+• → • → • but no third arrow spanning the whole line. Yeah, there can
+be no type that gives rise to that simplicial set.
+
+=== 2017.11.04
+
+Q: So for the usual semantics of dependent type theory with univalent
+equality into simplicial sets, how do we get around the fact that the
+category of groupoids isn't lccc? Is it
+(a) no, actually it is lccc, or
+(b) the wide subcategory of fibrations is lccc
+A: ???
+
+=== 2017.11.05
+
+Q: What did mshulman@ say about the reflection principle I suggested?
+A: Compared it to feferman's ZFC/S
+https://arxiv.org/pdf/1603.03272.pdf
+https://golem.ph.utexas.edu/category/2009/11/feferman_set_theory.html
+
+=== 2017.11.06
+
+Q: What's another paper about generalizing from functions to relations?
+A:
+"Arrows are strong monads"
+http://www-kb.is.s.u-tokyo.ac.jp/~asada/papers/arrStrMnd.pdf
+
+
+=== 2017.11.07
+
+Q: What's going on the 'galois theory' of profunctor optics?
+A: I see from Bartosz's talk
+https://www.youtube.com/watch?v=l1FCXUi6Vlw
+"Profunctor Optics: The Categorical Approach - Bartosz Milewski"
+with accompanying blog post
+https://bartoszmilewski.com/2017/07/07/profunctor-optics-the-categorical-view/
+that there's some inverse relationship between more *special* type
+classes on p and more *general* optics when you say
+
+type SomeOptic s t a b
+    = forall p. SomeTypeClass p => p a b -> p s t
+
+=== 2017.11.08
+
+Q: What's an interesting spatial metaphor for all this relational nonsense?
+A: Weighted convex combinations.
+
+A `relation over a, b, c, ...' corresponds to a formal linear
+combination of a, b, c, ... with nonnegative coefficients.
+
+We can push by duplicating or dropping coefficients.
+
+We can pull by taking the sum of colliding coeffients, using the zero
+coefficient for things that we pulled into existence out of thin air.
+
+The product of two `relations' just takes the formal sum of the two sums.
+
+Q: Is this actually a mesh? What's the cartesian category?
+A: Perhaps its objects are formal linear sums over some multiset
+objects. So if {a, b, c} is the set of objects *of the mesh* then the
+objects upstairs actually include things like 2a + 3b + 5b + 7c which
+is not the same as (but can be pulled to) 2a + 8b + 7c, because those
+two copies of b are different. What are the morphisms? I'm guessing
+substitutions of names, together with ≥ on coefficients. So there
+should be a morphism
+
+2a + 8b + 7c ---> 2a + 3b + 5b + 7c
+
+which is the pullback of
+
+a + b + c ---> a + b + b + c
+
+which is directly a substitution morphism?
+
+Q: To always be able to do pullbacks, do I actually need to be integer-weighted,
+not real-weighted? So that, e.g., there's always a morphism
+n a + m b + p c ---> a + b + c
+?
+A: Maybe? Except, wait, then there *isn't* an arrow if n happens to be zero.
+
+Q: What's a conceptual tension I experience?
+A:
+In some way, I want to add a bit of structure to every type that
+captures `betweenness' relationships; morphism-like entities with
+three ends to their boundary, source, target, and median. But this
+would mean that every actual categorical directed morphism would exist
+as a point in the type, and I'm not sure how I feel about that. In the case
+of HoTT, we certainly can use path induction to extract a generic point, by
+
+    generic : (A : Set) (x y : A) (p : x == y) → A
+    generic A x .x idp = x
+
+but this seems to crucially involve the fact that we're dealing with
+*equality* specifically. It's not clear a directed morphism has
+generic points in the same way --- at least not *in the type A itself*.
+
+Q: What occurs to me to try next?
+A: Maybe there's a sense in which the `virtual points of A' all live
+in a separate region, into which A injects. There's A at time 0, and
+there's ○A at time 1, which includes more morphism data about A, and
+of course A injects into ○A.
+
+Q: But do I still end up having some notion of `generic point' of a
+directed morphism?
+A: Maybe. Trying to unpack the definition of functional relation
+(being be a trivial object upon projection *out* of the codomain)
+means having a zero coefficient if you look at the domain coefficient
+only --- so a directed morphism is a virtual in-between point between
+two points that sits at the codomain, maybe?
+
+Q: What's the defining category look like in my head now?
+A:
+    domain, codomain             median
+Points <------ Betweenness Facts ------> Virtual Points
+   |                  ↑
+   +------------------+
+         refl
+
+Q: Doesn't really seem that much different from a reflexive graph, does it.
+A: Nope. Doesn't seem clear that virtual points are anything other
+than a redundant fibering over `betweenness facts'. Hmm.
+
+Q: What's another option?
+A:
+       domain, codomain, median             refl
+Virtual Points <------ Betweenness Facts <------ Points
+
+Q: What's the right notion of associativity for betweenness?
+A: In the same way that the associativity of categorical composition
+is really there to guarantee that n-ary composites canonically make
+sense, I'd want axioms to guarantee that being in the convex hull of n
+points canonically to make sense. Being in a triangle
+    n ∈ [a, b, c]
+is equivalent to
+    ∃ x ∈ [a, b] . n ∈ [x, c]
+but also to any other permutation of a, b, c, e.g.
+    ∃ x ∈ [c, b] . n ∈ [x, a]
+
+Q: How could the universe be so structured?
+A:
+Points and virtual points are sets.
+Betweenness facts are spans (D ← R → C)
+
+Imagine a three-way relation R among {0, 1, 2} and {A, B} and {X, Y, Z, W}
+with elements like
+(0,A,X)
+(0,B,X)
+(1,A,Y)
+(1,A,W)
+(2,A,W)
+
+Now there is a (proof-relevant) binary relation S with some duplicates
+(0,A)
+(0,B)
+(1,A)
+(1,A)
+(2,A)
+
+S is `between' {0, 1, 2} and {A, B}. But the relation
+((0,A),X)
+((0,B),X)
+((1,A),Y)
+((1,A),W)
+((2,A),W)
+
+(where I'm not notating the difference between the two copies of
+(1,A), but the difference is real) is a proof that R is between S and
+{X, Y, Z, Y}.
+
+Q: What's the moral of this?
+A: That reflection of morphisms back into points seems necessary and
+sufficient for a binary notion of relation to explain n-ary relations.
+
+Q: How do I fill in cells with colors in tikzcd?
+A: https://tex.stackexchange.com/questions/256835/tikz-cd-shade-faces-of-commutative-cube
