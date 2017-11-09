@@ -6,6 +6,8 @@
 
 \input{linear}
 \def\lax{\bigcirc}
+\def\rlax{\mathrel\mathrm{lax}}
+\def\rtrue{\mathrel\mathrm{true}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -16,20 +18,6 @@
 \def\FinSet{\mathbf{FinSet}}
 \def\x{\times}
 \def\o{\comp}
-\def\ups#1{#1^G}
-\def\dns#1{#1^B}
-\def\rsn{\ \mathsf{sn}}
-\def\rx{\mapsto}
-\def\ep{\varepsilon}
-\def\wat{{@}}
-\def\sem#1{[\![#1]\!]}
-\def\cn{{:}}
-\def\rok{\mathrel\mathsf{ok}}
-\def\rtype{\mathrm{type}}
-\def\rset{\mathbf{Set}}
-\def\rcat{\mathbf{Cat}}
-\def\rfincat{\mathbf{FinCat}}
-\def\rid{\mathrm{id}}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
@@ -407,5 +395,160 @@ How could we actually implement this? Maybe we need, at the term
 level, something like $\mathsf{rec}_\lax$ as well as
 $\mathsf{rec}_\lor$. But $\b2$ isn't a real type, so maybe this
 doesn't make sense.
+
+\subsection*{Noticing Another (Fortunately not Consequential) Mistake}
+When I said `the hard direction is
+\((x = 0 \land y = 0) \star (x =1 \land y = 0)  \prov y = 0 \)' above,
+I was right all along --- I actually need to rely on the convexity of equality to first show
+$$(x = 0 \land y = 0) \star (x =1 \land y = 0)  \prov \lax (y = 0 )$$
+and then derive the desired conclusion from that. But I'm already committed to demanding
+that equality topes are convex, so that's fine.
+
+\section{A Proper Logic Of Convexity}
+I think I have a good sense of how to judgmentally demand that equality is convex: just
+make the equality relation intrinsically lax. Furthermore, I think I know the right thing
+to say to make $(A1)$ fall out of more primitive things: it's to make the context of cube
+variables only exist at the true judgment, and to force inversion on $\lor L$ for all such
+variables when we pass to lax.
+
+Here's an attempt at a complete description of the logic I have in mind:
+\subsection{Syntax}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Propositions&$A$&$ A \land A \celse A \lor A  \celse U B$\\
+  Lax Propositions&$B$&$v = v \celse F A$\\
+  Concrete Interval Values&$k$&$0 \celse 1$\\
+  Interval Values&$v$&$k \celse x$\\
+  Contexts&$\Gamma$&$\cdot \celse \Gamma, A$\\
+  Lax Contexts&$\Delta$&$\cdot \celse \Delta, B$\\
+  Interval Contexts&$\Xi$&$\cdot \celse \Xi, x : \b2$\\
+  Substitution&$\sigma$&$\cdot \celse \sigma[k / x] $\\
+\end{tabular}
+\]
+\subsection{Judgments}
+There are two main judgments:
+\[ \Xi / \Gamma  \prov A  \]
+in which $\Gamma$ and $A$ can refer to variables in $\Xi$, and
+\[  \Gamma / \Delta  \prov B \rlax  \]
+in which $\Gamma$ and $B$ are closed, and can only refer to {\em concrete} interval values.
+There's an auxiliary notion of a well-formed (and closed) substitution
+\[ \prov \sigma : \Xi \]
+which is really just making sure the lengths match up. The definition
+of substitution $\sigma \Gamma$ applied to contexts and $\sigma A$
+applied to types should be pretty clear. Substitution is used in exactly one place, in the
+rule $UR$, to internalize the axiom $(A1)$ from above, and force both $\lax L$ and asynchronous
+$\lor L$ on the tacit premise $\lax (x = 0 \lor x = 1)$.
+
+\subsection{Rules}
+\[ \fbox{$\prov \sigma : \Xi$} \]
+
+\[
+\erule
+{}
+{\prov \cdot : \cdot}
+\qquad
+\erule
+{\prov \sigma : \Xi }
+{\prov (\sigma[k/x]) : (\Xi, x : \b2)}
+\]
+
+\vskip 1em
+\[ \fbox{$\Xi / \Gamma  \prov A $} \]
+
+$$
+\erule
+{\Xi / \Gamma \prov A_1 \qquad \Xi / \Gamma \prov A_2 \using \land R}
+{\Xi / \Gamma \prov A_1 \land A_2}
+$$
+
+$$
+\erule
+{\Xi / \Gamma, A_1, A_2 \prov A' \using \land L}
+{\Xi / \Gamma, A_1 \land A_2 \prov A'}
+$$
+
+$$
+\erule
+{\Xi / \Gamma \prov A_i \using \lor R}
+{\Xi / \Gamma \prov A_1 \lor A_2}
+$$
+
+$$
+\erule
+{\Xi / \Gamma, A_1 \prov A'\qquad \Xi / \Gamma, A_2 \prov A' \using \lor L}
+{\Xi / \Gamma, A_1 \lor A_2 \prov A'}
+$$
+
+$$
+\erule
+{\forall (\sigma : \Xi) ,\ \sigma \Gamma/\cdot \prov \sigma B\rlax \using U R}
+{\Xi / \Gamma \prov U B}
+$$
+
+\vskip 1em
+\[ \fbox{$  \Gamma / \Delta  \prov B \rlax $} \]
+
+$$
+\erule
+{ \Gamma, A_1, A_2 /\Delta \prov B \rlax  \using \land L^{\rlax}}
+{ \Gamma, A_1 \land A_2  /\Delta \prov B \rlax}
+$$
+
+$$
+\erule
+{ \Gamma, A_1 /\Delta \prov B \rlax \qquad  \Gamma, A_2  /\Delta \prov B \rlax \using \lor L^{\rlax}}
+{ \Gamma, A_1 \lor A_2  /\Delta \prov B \rlax}
+$$
+
+$$
+\erule
+{\Gamma/\Delta,  B \prov B' \using UL}
+{\Gamma, UB/ \Delta \prov B' \rlax}
+$$
+
+$$
+\erule
+{\cdot / \Gamma  \prov A \using FR}
+{\Gamma/ \Delta \prov FA \rlax}
+$$
+
+$$
+\erule
+{\Gamma, A / \Delta  \prov B \using FL}
+{\Gamma/ \Delta, FA \prov B \rlax}
+$$
+
+$$
+\erule
+{k_1 \ne k_2  \using {=} L}
+{\Gamma/ \Delta, k_1 = k_2 \prov B \rlax}
+$$
+
+$$
+\erule
+{ k_1 = k_2 \using {=} R}
+{\Gamma/ \Delta  \prov k_1 = k_2 \rlax}
+$$
+
+\subsection{Cut Elimination}
+\begin{lemma}\
+  \begin{enumerate}
+  \item If $\Xi / \Gamma \prov A$, and $\Xi / \Gamma , A \prov A'$, then
+$\Xi / \Gamma \prov A'$.
+  \item If  $\prov \sigma : \Xi$ and $\Xi / \Gamma \prov A'$, then
+$\cdot / \sigma \Gamma \prov \sigma A'$.
+  \item If $\cdot /  \Gamma \prov  A$ and
+ $ \Gamma ,  A / \Delta \prov B' \rlax$, then
+  $ \Gamma / \Delta \prov B' \rlax$.
+  \item If $ \Gamma / \Delta \prov B \rlax$, and $ \Gamma / \Delta, B \prov B' \rlax$, then
+$\Xi / \Gamma \prov B' \rlax$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+By a standard structural induction, first on the cut formula, then on the derivations.
+\cqed
+\end{proof}
+
 \bibliography{../wes}
 \end{document}
