@@ -550,5 +550,76 @@ By a standard structural induction, first on the cut formula, then on the deriva
 \cqed
 \end{proof}
 
+\subsection*{The Missing Piece}
+
+Oh no, I forgot to account for the fact that I'll certainly want to have
+that the union of two triangles is a square
+\[\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+ %  ($(a) + (0.7em,-0.5em)$) --
+      ($(c) + (0.7em,0.5em)$)
+    -- ($(d) + (-0.7em,0.5em)$)
+    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
+\fill[fib,opacity=0.3]
+      ($(a) + (0.7em,-0.5em)$) --
+       ($(c) + (0.7em,0.5em)$) --
+    %  ($(d) + (-0.7em,0.5em)$) --
+     ($(b) + (-0.7em,-0.5em)$) -- cycle;
+  }
+]
+(0,1)\ar[r, dash]\ar[from=d, dash]&(1,1)\ar[from=d, dash]\\
+(0,0)\ar[r, dash]\ar[ur, dash]&(1,0)
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+ %  ($(a) + (1.15em,-0.5em)$) --
+      ($(c) + (1.15em,0.5em)$)
+    -- ($(d) + (-1.15em,0.5em)$)
+    -- ($(b) + (-1.15em,-0.5em)$) -- cycle;
+\fill[fib,opacity=0.3]
+      ($(a) + (1.15em,-0.5em)$) --
+       ($(c) + (1.15em,0.5em)$) --
+    %  ($(d) + (-1.15em,0.5em)$) --
+     ($(b) + (-1.15em,-0.5em)$) -- cycle;
+  }
+]
+a\ar[r, dash]\ar[from=d, dash]&b\ar[from=d, dash]\\
+c\ar[r, dash]\ar[ur, dash]&d
+\end{tikzcd}
+\]
+But I certainly {\em can't} prove in the above system that
+$$x:\b2, y:\b2 / \lax  (a \lor b \lor c \lor d) \prov {\color{fib} \lax(a \lor b \lor c)} \lor {\color{opfib} \lax(b \lor c \lor d)}$$
+for
+\[  \begin{tabular}{c}
+$a = (x = 0) \land (y = 1)$\\
+$b = (x = 1) \land (y = 1)$\\
+$c = (x = 0) \land (y = 0)$\\
+$d = (x = 1) \land (y = 0)$
+\end{tabular}\]
+
+And I can easily imagine (but not so easily enumerate) that there are other sorts
+of planes separating hypercubes into two convex halves that would entail other
+semantically valid propositions of the form
+$$\lax(\cdots) \prov \lax(\cdots) \lor \lax(\cdots)$$
+that have no hope of being provable in the current system because of the disjunction on the right.
+\begin{conjecture}[\color{opfib} Open Question]
+What to do about this?
+\end{conjecture}
+
 \bibliography{../wes}
 \end{document}
