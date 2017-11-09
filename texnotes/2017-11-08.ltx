@@ -2,7 +2,7 @@
 \input{theorem}
 \input{prooftree}
 \usepackage{latexsym}
-
+\usepackage{amsmath}
 
 \input{linear}
 \def\lax{\bigcirc}
@@ -150,9 +150,9 @@ can be recovered as the pushout of the two triangles
 \def\what{{\color{gray}?}}
 I'm interested in setting up a similar pile of machinery, in such a way as to complete the analogy
 $$
-{\hbox{isomorphisms}\over\hbox{equality paths}}  =
-{\hbox{functions}\over\hbox{directed paths}}  =
-{\hbox{relations}\over\hbox{\what}}
+{\frac{\hbox{isomorphisms}}{\hbox{equality paths}}}  =
+{\frac{\hbox{functions}}{\hbox{directed paths}}}  =
+{\frac{\hbox{relations}}{\hbox{\what}}}
 $$
 I want to eliminate the the directionality of directed paths,
 and therefore want to refrain from demanding an ordering $\le$ on the interval.
@@ -353,5 +353,59 @@ What's a nice well-behaved judgmental-ish sequent calculus for a
 variant of lax logic in which $(A1)$ and $(A2)$ are admissible?
 \end{conjecture}
 
+\subsection*{Connections}
+
+Like in \cite{RS17}, it seems like we ought to
+get the sort of {\em connection} squares found in \cite{cchm}:
+\[
+  \begin{tikzcd}
+    x \arrow[r, "f", dash] \arrow[dr, "f" description, dash] \arrow[d, "f"', dash] & y \arrow[d, equals] \\
+    y \arrow[r, equals]   & y
+  \end{tikzcd}
+  \qquad\text{and}\qquad
+  \begin{tikzcd}
+    x \arrow[r, equals] \arrow[dr, "f" description, dash] \arrow[d, equals] & x \arrow[d, "f", dash] \\
+    x \arrow[r, "f"', dash]   & y
+  \end{tikzcd}
+\]
+\def\bor{\pmb{\lor}}
+\def\band{\pmb{\land}}
+\def\connmax#1{\mathbin{\pmb{\lor}_{#1}}}
+\def\connmin#1{\mathbin{\pmb{\land}_{#1}}}
+I would expect to be able to prove a lemma like
+\begin{lemma}[Not Really Provable Yet]
+For any path $f : \b2 \to A$,
+there are squares $\connmax f, \connmin f : \b2 \x \b2 \to A$ with
+faces as in the diagram above, such that
+  \begin{alignat*}{2}
+    \connmax f(0,s) &\equiv f(s) &\qquad \connmin f(0,s) &\equiv f(0)\\
+    \connmax f(t,0) &\equiv f(t) &\qquad \connmin f(t,0) &\equiv f(0)\\
+    \connmax f(1,s) &\equiv f(1) &\qquad \connmin f(0,s) &\equiv f(s)\\
+    \connmax f(t,1) &\equiv f(1) &\qquad \connmin f(t,0) &\equiv f(t)\\
+    \connmax f(t,t) &\equiv f(t) &\qquad \connmin f(t,t) &\equiv f(t).
+  \end{alignat*}
+\end{lemma}
+
+\begin{proof}
+The reason I think it ought to work is that there are `connection' proofs that
+$\b2 \x \b2 \imp \b2$. If we name the four points in the context $x : \b2, y : \b2$ as
+\[  \begin{tabular}{c}
+$a = (x = 0) \land (y = 0)$\\
+$b = (x = 1) \land (y = 0)$\\
+$c = (x = 0) \land (y = 1)$\\
+$d = (x = 1) \land (y = 1)$
+\end{tabular}\]
+Then there are sequent proofs of
+$$\lax (a \lor b \lor c \lor d) \prov \lax(z = 0 \lor z = 1)$$
+(assuming the `output' axis is named $z$)
+that, bottom-up, do $\lax R$ then $\lax L$, then send $a, b, c, d$ {\em independently} wherever they
+want.
+\cqed
+\end{proof}
+
+How could we actually implement this? Maybe we need, at the term
+level, something like $\mathsf{rec}_\lax$ as well as
+$\mathsf{rec}_\lor$. But $\b2$ isn't a real type, so maybe this
+doesn't make sense.
 \bibliography{../wes}
 \end{document}
