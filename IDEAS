@@ -2435,3 +2435,14 @@ sufficient for a binary notion of relation to explain n-ary relations.
 
 Q: How do I fill in cells with colors in tikzcd?
 A: https://tex.stackexchange.com/questions/256835/tikz-cd-shade-faces-of-commutative-cube
+
+Q: Does one get to use ∨L at at lax judgment on the right in lax logic?
+A: Let's see... what's a shibboleth sequent that would be provable only if we
+could. Let's go with
+○(○A ∨ ○B) ⊢ ○(A ∨ B)
+
+○(○(A ∨ B) ∨ C) ⊣⊢ ○(A ∨ B ∨ C)
+
+Q: Can I prove this in the natural deduction style presentation in fairtlough
+and mendler?
+A: Let e : ○(○A ∨ ○B) be given. I write

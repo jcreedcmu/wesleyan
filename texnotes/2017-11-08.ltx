@@ -1,9 +1,11 @@
 \documentclass{article}
 \input{theorem}
 \input{prooftree}
-\usepackage{stmaryrd}
-\usepackage{tabularx}
+\usepackage{latexsym}
+
+
 \input{linear}
+\def\lax{\bigcirc}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -218,7 +220,7 @@ What's a nice well-behaved sequent calculus for $\star$?
 \def\prequiv{\dashv\vdash}
 Some guesses at general principles that $\star$ ought to satisfy are as follows:
 \vskip 1em
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcr}
+\begin{tabular*}{4in}{@{\extracolsep{\fill}}lcr}
 &$A \lor B \prov A \star B$&`convex disjunction'\\
 &$(x = 1) \star (x = 0) \prequiv \top$&`totality'\\
 &$A \star (B \star C) \prequiv (A \star B) \star C $&associative\\
@@ -265,6 +267,91 @@ which should not hold.
 
 I think $(*)$ might remain true under a side condition amounting to some kind of {\em orthogonality}
 or otherwise independence of $A$ compared to both $B$ and $C$, but I'm not sure how to express that.
+
+\subsection*{Inconsistency}
+
+Oops, the `evident principles' I've stated so far already imply $\bot$. Why? Because
+I can infer from them that
+$A \prov A \lor \bot \prov A \star \bot \prov \bot$. What went wrong? I think I can blame
+the `convex disjunction' property $A \lor B \prov A \star B$ for being incorrect
+without further side conditions. If I think about the
+intended semantics carefully, this only works if $A$ and $B$ are nonempty; if, for
+example, $B$ is nonempty, then I know $A \prov A \star B$, because for any point $a\in A$,
+there does exists a point in $B$ (pick an arbitrary $b$, which I just assumed to exist)
+such that $a$ is a convex combination of some point in $A$ and some point in $B$
+(namely, $a = 1a + 0b$).
+
+So really it's something more like $(A \land \Diamond B) \lor (\Diamond A \land B) \prov A \star B$,
+if $\Diamond$ is taken to express non-emptiness somehow. The antecedent of this entailment seems
+intriguingly reminiscent of types that occur in \cite{cyod}.
+
+\subsection*{Modality}
+
+Sridhar Ramesh suggested the much simpler approach of just having a
+unary modality for `convex hull of'. Let's think about how that might work.
+
+Seems obvious to try to start with lax logic, since convex hull is a closure operator.
+So we'd write the undirected 2-simplex as
+$$\{(x, y) \in \b2 \x \b2 \st \lax ((x = 0\land y = 0) \lor (x = 1\land y = 0) \lor (x = 1\land y = 1))\}$$
+We'd want to postulate totality
+$$x : \b2 \prov \lax ((x = 1) \lor (x = 0))\eqno{(A1)}$$
+but I can't presently think of anything else I'd need to ask for axiomatically
+that doesn't follow from the usual
+rules for $\lax$. If we define $A \star B = \lax(A \lor B)$ and run through the
+list of conjectured tautologies from before, we get
+\vskip 1em
+\begin{tabular*}{4in}{@{\extracolsep{\fill}}lcr}
+&$A \lor B \prov A \star B$&$\checkmark$\\
+&$(x = 1) \star (x = 0) \prequiv \top$&$\checkmark$\\
+&$A \star (B \star C) \prequiv (A \star B) \star C $&$\checkmark$\\
+&$A \star B \prequiv B \star A$&$\checkmark$\\
+&\color{red}$A \star (B \lor C) \not\prov (A \star B)\lor (A \star C)$&\color{red}$\times$\\
+&\color{red}$A \star \bot \not\prov \bot$&\color{red}$\times$\\
+&$A \land (B \star C) \prov (A \land B)\star (A \land C)$&$\checkmark$\\
+&\color{red}$(A \land B)\star (A \land C) \not\prov A \land (B \star C)$&\color{red}$\times$\\
+\end{tabular*}
+\vskip 1em
+\noindent which all feel fairly comfortable semantically. The failure of preservation of disjunctions
+(and the recovered success of $A \lor B \prov A \star B$) make sense
+because the $\star$ we're talking about now and the one from before
+really are different beasts: specifically when $A$ or $B$ are empty,
+`take the union and then convex hull' and `take the join' do different
+things.
+
+ Separately, I can now easily formulate
+and prove the relationship between the triangle being the convex hull
+of its three vertices, and also being the convex hull of one side and
+the opposite vertex:
+
+$$\lax(A \lor B \lor C)\prequiv \lax(\lax(A \lor B) \lor C) $$
+$$\qquad\qquad\qquad\prequiv \lax(\lax(B \lor C) \lor A)$$
+$$\qquad\qquad\qquad \prequiv \lax(\lax(C \lor A) \lor B) $$
+
+Can I actually prove $(1) = (2)$? Specifically, can we prove, abbreviating
+$(x = b_1 \land y = b_2)$ by $[b_1b_2]$,
+$$[00] \star [10] \star [11] \prequiv y = 0 \star [11]$$
+? It would be enough to show
+$$[00] \star [10]  \prequiv y = 0 $$
+and the hard direction is
+$$(x = 0 \land y = 0) \star (x =1 \land y = 0)  \prov y = 0 $$
+But wait, that's not hard; it only looked hard because I thought it was an instance
+of the non-tautology $(A \land B)\star (A \land C) \not\prov A \land (B \star C)$.
+Fortunately, it's more special than that; it's an instance of
+$(A \land B)\star (A \land C) \prov  (B \star C)$, which is provable.
+
+Great, then; By a symmetric argument, I can show all of $(1) = (2) = (3)$. What about $(4)$?
+I need to show
+$$x = y \prequiv \lax ((x = 0 \land y = 0) \lor (x = 1 \land y = 1))$$
+Hmm. This may require additional postulating. I don't see how to get the $\dashv$ direction,
+even if I have $\prov \lax(x = 0 \lor x = 1)$ and
+$\prov \lax(y = 0 \lor y = 1)$.
+Except I {\em can} at least prove that $\lax (x = y)$. So a reasonable candidate for
+another axiom to demand is that equality topes are convex, i.e.
+$$ \lax (x = y) \prov x = y\eqno{(A2)}$$
+\begin{conjecture}[\color{opfib} Open Question]
+What's a nice well-behaved judgmental-ish sequent calculus for a
+variant of lax logic in which $(A1)$ and $(A2)$ are admissible?
+\end{conjecture}
 
 \bibliography{../wes}
 \end{document}
