@@ -2437,12 +2437,104 @@ Q: How do I fill in cells with colors in tikzcd?
 A: https://tex.stackexchange.com/questions/256835/tikz-cd-shade-faces-of-commutative-cube
 
 Q: Does one get to use ∨L at at lax judgment on the right in lax logic?
-A: Let's see... what's a shibboleth sequent that would be provable only if we
-could. Let's go with
-○(○A ∨ ○B) ⊢ ○(A ∨ B)
+A: For sure, yes.
 
-○(○(A ∨ B) ∨ C) ⊣⊢ ○(A ∨ B ∨ C)
+=== 2017.11.09
 
-Q: Can I prove this in the natural deduction style presentation in fairtlough
-and mendler?
-A: Let e : ○(○A ∨ ○B) be given. I write
+Q: What do I need to throw in the proof theory in order to be able to see
+that a square is the union of two triangles?
+A: Not sure. I could just add as an axiom that
+
+⊢ ○((x = 0 ∧ y = 1) ∨ x = y) ∨ ○((x = 1 ∧ y = 0) ∨ x = y)
+
+or equivalently
+
+⊢ ○((x = 0 ∧ y = 0) ∨ x = 1 - y) ∨ ○((x = 1 ∧ y = 1) ∨ x = 1 - y)
+
+but both of these seem dissatisfyingly particular.
+
+Q: What would I do if x and y weren't typed 𝟚 but rather 𝟛, 𝟜, etc.?
+A: I can just barely visualize a possible plane through 𝟚 × 𝟛 = {0,1} × {a,b,c}
+that suggests the provability
+
+x : 𝟚, y: 𝟛 ⊢ ○([0a] ∨ P) ∨  ○([1b] ∨ [1c] ∨ P)
+
+where
+
+P = [1a] ∨ [0b] ∨ [0c]
+[x₀y₀] = (x = x₀ ∧ y = y₀)
+
+The principle I'm imagining that I'm using is that if pick an ordering
+of the elements of 𝟚, and of the elements of 𝟛, (in this case 0 < 1
+and a < b < c) and you pick a subset of the vertices called P, and you
+define L, `the part of the cube below the plane' as all the vertices
+below some vertex in P according to the product order on 𝟚 × 𝟛, and U
+symmetrically as the upper part, then *if* L ∪ U is all vertices of
+the cube, then perhaps ⊢ ○U ∨ ○L
+
+Q: Can I make anything out of the fact that I can map 𝟚 × 𝟛 into 𝟚 × 𝟚?
+A: The mapping I have in mind is:
+
+λ (x : 𝟚) λ (y : 𝟛) . (
+  x,
+  case y of a ↦ 1 | b ↦ 0 | c ↦ 0
+)
+
+which does send P into x = y and determines L and U to be such that
+we're back to proving
+
+⊢ ○((x = 0 ∧ y = 1) ∨ x = y) ∨ ○((x = 1 ∧ y = 0) ∨ x = y)
+
+so it'd be nice if I could just `inverse image that back' to the 𝟚 × 𝟛
+or more complicated cases.
+
+Alternatively, I could take the map
+
+λ (x : 𝟚) λ (y : 𝟛) . (
+  x,
+  case y of a ↦ 0 | b ↦ 1 | c ↦ 1
+)
+
+and be back in the case of proving
+
+⊢ ○((x = 0 ∧ y = 0) ∨ x = 1 - y) ∨ ○((x = 1 ∧ y = 1) ∨ x = 1 - y)
+
+Q: But would either of these be effective for the `majority vote on the cube'
+example I also had thought of?
+A: That was setting P = [001] ∨ [010] ∨ [100] on 𝟚³ and asserting
+⊢ ○([000] ∨ P) ∨ ○([111] ∨ [110] ∨ [101] ∨ [011] ∨ P)
+and... yeah, it's not clear how to canonically map down on to either
+of those.
+
+Q: Do I want, like, a type
+• — • — •
+that has one point that's decisively in the convex hull of the other two?
+A: Dunno. At least this makes me realize that I can internally
+define a ternary betweenness predicate
+A⟨B⟩C
+as
+○(A ∨ C) ⇐⇒ ○(A ∨ B) ∨ ○(B ∨ C)
+
+Q: Wouldn't it be simpler just to say B ⇒ ○(A ∨ C)?
+A:
+Lemme check if it's equivalent:
+B ⇒ ○(A ∨ C) ⊢ ○(A ∨ C) ⇒ ○(A ∨ B) ∨ ○(B ∨ C) ? ×
+B ⇒ ○(A ∨ C) ⊢ ○(A ∨ B) ∨ ○(B ∨ C) ⇒ ○(A ∨ C) ? ✓
+○(A ∨ B) ∨ ○(B ∨ C) ⇐⇒ ○(A ∨ C) ⊢ B ⇒ ○(A ∨ C) ? ×
+Nope.
+
+Q: How do I interpret
+(*)       ○(A ∨ C) ⇐⇒ ○(A ∨ B) ∨ ○(B ∨ C)
+?
+A: It's a quite strong notion of betweenness --- not only does B *fit* between
+A and C, it's a barrier between them. Here's an example of the point B being between the
+parallel line segments A and C, and not satisfying (*)
++     +
+| \ / |
+|  X  |
+| / \ |
++     +
+A  B  C
+
+We don't get that the square ○(A ∨ C) fits inside the bowtie
+○(A ∨ B) ∨ ○(B ∨ C).
