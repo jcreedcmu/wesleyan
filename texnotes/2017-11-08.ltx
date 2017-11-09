@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 
 \input{linear}
-\def\lax{\bigcirc}
+\def\lax{\mathop\bigcirc}
 \def\rlax{\mathrel\mathrm{lax}}
 \def\rtrue{\mathrel\mathrm{true}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
@@ -392,8 +392,8 @@ want.
 \end{proof}
 
 How could we actually implement this? Maybe we need, at the term
-level, something like $\mathsf{rec}_\lax$ as well as
-$\mathsf{rec}_\lor$. But $\b2$ isn't a real type, so maybe this
+level, something like $\mathsf{rec}_{\lax}$ as well as
+$\mathsf{rec}_{\lor}$. But $\b2$ isn't a real type, so maybe this
 doesn't make sense.
 
 \subsection*{Noticing Another (Fortunately not Consequential) Mistake}
@@ -629,5 +629,63 @@ that have no hope of being provable in the current system because of the disjunc
 What to do about this?
 \end{conjecture}
 
+\subsection{The Semantic Complexity I Failed To Notice}
+Wait a minute, there's nothing stopping me from taking the intersection (i.e. conjunction)
+of two triangles.
+
+\[\begin{tikzcd}[execute at end picture={
+\foreach \cc/\cname in
+{%
+  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
+}
+{
+\coordinate (\cname) at (\cc);
+}
+\fill[opfib,opacity=0.3]
+   ($(a) + (0.7em,-0.5em)$)
+% --      ($(c) + (0.7em,0.5em)$)
+    -- ($(d) + (-0.7em,0.5em)$)
+    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
+\fill[fib,opacity=0.3]
+      ($(a) + (0.7em,-0.5em)$) --
+       ($(c) + (0.7em,0.5em)$) --
+    %  ($(d) + (-0.7em,0.5em)$) --
+     ($(b) + (-0.7em,-0.5em)$) -- cycle;
+  }
+]
+(0,1)\ar[r, dash]\ar[from=d, dash]&(1,1)\ar[from=d, dash]\\
+(0,0)\ar[r, dash]\ar[ur, dash]&(1,0)
+\end{tikzcd}
+\]
+I could talk about ${\color{fib} \lax (a \lor b \lor c)} \land {\color{opfib} \lax(a \lor b \lor d)}$.
+I could even say $\lax(a\lor d) \land \lax(b \lor c)$ and obtain a predicate
+that is satisfed only by the midpoint of the square. If I'm willing to throw in enough
+spurious interval variables that I later project away, it seems like I can pin down any dyadic rational
+point in the interior of the interval. For example, $x = 1/2$ is exactly
+$$\exists y . \lax(x = 0 \land y = 1) \land \lax(x = 1 \land y = 0)\eqno(*)$$
+This seems dangerously complicated.
+\subsection{Is Something Deeply Wrong with the Semantics?}
+Hold on a another minute, $\lax$ preserves $\land$, so $(*)$
+should absolutely be equivalent to
+$$\exists y . \lax(x = 0 \land y = 1 \land x = 1 \land y = 0)$$
+in other words
+$$\exists y . \lax(\bot)$$
+\begin{conjecture}[\color{opfib} Open Question]
+What's going on here?
+\end{conjecture}
+Could I imagine there's just no `0-cell content' in the interior of
+the square, so that semantically it should be empty after all? This
+sadly means that a straightforward semantics in euclidean space is no
+longer feasible. Also --- if I'm not generally guaranteed
+lower-dimensional cells that I expect, what gives me the right to
+assume I have any 1-cell content in the interior of the square, like
+the diagonal equality tope?
+
+Is it possible to get the equality tope without getting
+the existence of the `inequality tope' $\lax(a \lor d)$? Or to put it more suggestively, $x = 1 - y$?
+Perhaps this just hinges on whether I have a $1-$ operation in the syntax?
+No, surely not --- $\lax (a \lor d)$ is nonempty even when I don't have reversal, because it's
+at least entailed by $a$ and by $d$. I have no closed substitution like $[\tfrac 1 2/x][\tfrac 1 2/y]$
+to make $(*)$ true.
 \bibliography{../wes}
 \end{document}
