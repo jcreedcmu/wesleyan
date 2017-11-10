@@ -40,7 +40,7 @@
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{calc}
+\usetikzlibrary{calc,arrows}
 \newcounter{nodemaker}
 \setcounter{nodemaker}{0}
 \def\twocell#1#2{%
@@ -65,6 +65,8 @@
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \author{Jason Reed}
 \definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{ff003f}
 \definecolor{opfib}{HTML}{007fff}
 \title{Notes on the Logic of Convex Combination}
 \begin{document}
@@ -550,70 +552,34 @@ By a standard structural induction, first on the cut formula, then on the deriva
 \cqed
 \end{proof}
 
+\section{ Problems}
+
 \subsection*{The Missing Piece}
 
 Oh no, I forgot to account for the fact that I'll certainly want to have
 that the union of two triangles is a square
-\[\begin{tikzcd}[execute at end picture={
-\foreach \cc/\cname in
-{%
-  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
-}
-{
-\coordinate (\cname) at (\cc);
-}
-\fill[opfib,opacity=0.3]
- %  ($(a) + (0.7em,-0.5em)$) --
-      ($(c) + (0.7em,0.5em)$)
-    -- ($(d) + (-0.7em,0.5em)$)
-    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
-\fill[fib,opacity=0.3]
-      ($(a) + (0.7em,-0.5em)$) --
-       ($(c) + (0.7em,0.5em)$) --
-    %  ($(d) + (-0.7em,0.5em)$) --
-     ($(b) + (-0.7em,-0.5em)$) -- cycle;
-  }
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
 ]
-(0,1)\ar[r, dash]\ar[from=d, dash]&(1,1)\ar[from=d, dash]\\
-(0,0)\ar[r, dash]\ar[ur, dash]&(1,0)
-\end{tikzcd}
-\qquad
-\begin{tikzcd}[execute at end picture={
-\foreach \cc/\cname in
-{%
-  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
-}
-{
-\coordinate (\cname) at (\cc);
-}
-\fill[opfib,opacity=0.3]
- %  ($(a) + (1.15em,-0.5em)$) --
-      ($(c) + (1.15em,0.5em)$)
-    -- ($(d) + (-1.15em,0.5em)$)
-    -- ($(b) + (-1.15em,-0.5em)$) -- cycle;
-\fill[fib,opacity=0.3]
-      ($(a) + (1.15em,-0.5em)$) --
-       ($(c) + (1.15em,0.5em)$) --
-    %  ($(d) + (-1.15em,0.5em)$) --
-     ($(b) + (-1.15em,-0.5em)$) -- cycle;
-  }
-]
-a\ar[r, dash]\ar[from=d, dash]&b\ar[from=d, dash]\\
-c\ar[r, dash]\ar[ur, dash]&d
-\end{tikzcd}
-\]
+\coordinate (a) at (0,0);
+\coordinate (b) at (2,0);
+\coordinate (c) at (0,-2);
+\coordinate (d) at (2,-2);
+    \fill[fib, opacity=0.3] (a) -- (b) -- (c) -- cycle;
+    \fill[opfib, opacity=0.3] (b) -- (c) -- (d) -- cycle;
+
+    \draw (a) -- (b) -- (d) -- (c) -- cycle;
+    \draw (c) -- (b);
+
+    \fill[black] (a) circle (2pt) node[left] {$a=(0,1)$};
+    \fill[black] (b) circle (2pt) node[right] {$(1,1)=b$};
+    \fill[black] (c) circle (2pt) node[left] {$c=(0,0)$};
+    \fill[black] (d) circle (2pt) node[right] {$(1,0)=d$};
+\end{tikzpicture}\]
 But I certainly {\em can't} prove in the above system that
 $$x:\b2, y:\b2 / \lax  (a \lor b \lor c \lor d) \prov {\color{fib} \lax(a \lor b \lor c)} \lor {\color{opfib} \lax(b \lor c \lor d)}$$
-for
-\[  \begin{tabular}{c}
-$a = (x = 0) \land (y = 1)$\\
-$b = (x = 1) \land (y = 1)$\\
-$c = (x = 0) \land (y = 0)$\\
-$d = (x = 1) \land (y = 0)$
-\end{tabular}\]
-
-And certainly that proposition is {\em not} valid for {\em general}
-$a, b, c, d$ --- I'm only saying it's valid for these partical points
+That proposition is {\em not} even semantically valid for {\em general}
+$a, b, c, d$ --- I'm only saying it's valid for these particular points
 in $\b2 \x \b2$. Otherwise I would be saying the tetrahedron
 $\Delta_3$ fits inside two of its faces, which is absurd.
 
@@ -629,51 +595,41 @@ that have no hope of being provable in the current system because of the disjunc
 What to do about this?
 \end{conjecture}
 
-\subsection{The Semantic Complexity I Failed To Notice}
+\subsection*{The Semantic Complexity I Failed To Notice}
 Wait a minute, there's nothing stopping me from taking the intersection (i.e. conjunction)
 of two triangles.
 
-\[\begin{tikzcd}[execute at end picture={
-\foreach \cc/\cname in
-{%
-  tikz@f@1-1-1/a,tikz@f@1-1-2/b,tikz@f@1-2-1/c,tikz@f@1-2-2/d%
-}
-{
-\coordinate (\cname) at (\cc);
-}
-\fill[opfib,opacity=0.3]
-   ($(a) + (0.7em,-0.5em)$)
-% --      ($(c) + (0.7em,0.5em)$)
-    -- ($(d) + (-0.7em,0.5em)$)
-    -- ($(b) + (-0.7em,-0.5em)$) -- cycle;
-\fill[fib,opacity=0.3]
-      ($(a) + (0.7em,-0.5em)$) --
-       ($(c) + (0.7em,0.5em)$) --
-    %  ($(d) + (-0.7em,0.5em)$) --
-     ($(b) + (-0.7em,-0.5em)$) -- cycle;
-  }
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
 ]
-(0,1)\ar[r, dash]\ar[from=d, dash]&(1,1)\ar[from=d, dash]\\
-(0,0)\ar[r, dash]\ar[ur, dash]&(1,0)
-\end{tikzcd}
-\]
-I could talk about ${\color{fib} \lax (a \lor b \lor c)} \land {\color{opfib} \lax(a \lor b \lor d)}$.
+\coordinate (a) at (0,0);
+\coordinate (b) at (2,0);
+\coordinate (c) at (0,-2);
+\coordinate (d) at (2,-2);
+    \fill[fib, opacity=0.3] (a) -- (b) -- (c) -- cycle;
+    \fill[opfib, opacity=0.3] (a) -- (b) -- (d) -- cycle;
+
+    \draw (a) -- (b) -- (d) -- (c) -- cycle;
+
+    \fill[black] (a) circle (2pt) node[left] {$a=(0,0)$};
+    \fill[black] (b) circle (2pt) node[right] {$(1,0)=b$};
+    \fill[black] (c) circle (2pt) node[left] {$c=(0,1)$};
+    \fill[black] (d) circle (2pt) node[right] {$(1,1)=d$};
+\end{tikzpicture}\]
+That is, I could talk about ${\color{fib} \lax (a \lor b \lor c)} \land {\color{opfib} \lax(a \lor b \lor d)}$.
 I could even say $\lax(a\lor d) \land \lax(b \lor c)$ and obtain a predicate
 that is satisfed only by the midpoint of the square. If I'm willing to throw in enough
 spurious interval variables that I later project away, it seems like I can pin down any dyadic rational
 point in the interior of the interval. For example, $x = 1/2$ is exactly
 $$\exists y . \lax(x = 0 \land y = 1) \land \lax(x = 1 \land y = 0)\eqno(*)$$
 This seems dangerously complicated.
-\subsection{Is Something Deeply Wrong with the Semantics?}
+\subsection*{Is Something Deeply Wrong with the Semantics?}
 Hold on a another minute, $\lax$ preserves $\land$, so $(*)$
 should absolutely be equivalent to
 $$\exists y . \lax(x = 0 \land y = 1 \land x = 1 \land y = 0)$$
 in other words
 $$\exists y . \lax(\bot)$$
-\begin{conjecture}[\color{opfib} Open Question]
-What's going on here?
-\end{conjecture}
-Could I imagine there's just no `0-cell content' in the interior of
+What's going on here? Could I imagine there's just no `0-cell content' in the interior of
 the square, so that semantically it should be empty after all? This
 sadly means that a straightforward semantics in euclidean space is no
 longer feasible. Also --- if I'm not generally guaranteed
@@ -687,5 +643,94 @@ Perhaps this just hinges on whether I have a $1-$ operation in the syntax?
 No, surely not --- $\lax (a \lor d)$ is nonempty even when I don't have reversal, because it's
 at least entailed by $a$ and by $d$. I have no closed substitution like $[\tfrac 1 2/x][\tfrac 1 2/y]$
 to make $(*)$ true.
+
+\subsection*{Monad vs. Strong Monad}
+
+Oh, right, I'm conflating what convex hull really is (a monad, or,
+decategorified, a closure operator) with what lax logic describes (a
+strong monad, or, decategorified, a closure operator that preserves
+intersections)
+
+The right thing to do if what I want to do is capture convex hull
+exactly would be to pass to a monad without strength, which is
+possible to do in the logic with some more context-clearing
+operations. But I'm slightly reluctant to do that, since having the strength seems
+more well-behaved generally. Plus I'm scared of the proliferation of definable intermediate
+points that $(*)$ points toward. So let me continue thinking about the strong monad $\lax$ of lax logic still for the time being.
+
+\subsection*{Towards Triangulation of $\b2 \x \b2$}
+
+Here's an idea for an axiom that might reasonably give me that $\b2 \x \b2$ can be built
+out of triangles. If I {\em did} have an arbitrary intermediate
+point $m$ in the interior of a square
+like
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+\coordinate (a) at (0,0);
+\coordinate (b) at (2,0);
+\coordinate (c) at (0,-2);
+\coordinate (d) at (2,-2);
+\coordinate (m) at (1.4,-0.8);
+    \fill[red, opacity=0.3] (a) -- (b) -- (m) -- cycle;
+    \fill[green, opacity=0.3] (d) -- (b) -- (m) -- cycle;
+    \fill[opfib, opacity=0.3] (a) -- (c) -- (m) -- cycle;
+    \fill[fib, opacity=0.3] (d) -- (c) -- (m) -- cycle;
+
+    \draw (a) -- (b) -- (d) -- (c) -- cycle;
+    \draw (a) -- (m) -- (d);
+    \draw (b) -- (m) -- (c);
+
+    \fill[black] (a) circle (2pt) node[left] {$a=(0,1)$};
+    \fill[black] (b) circle (2pt) node[right] {$(1,1)=b$};
+    \fill[black] (c) circle (2pt) node[left] {$c=(0,0)$};
+    \fill[black] (d) circle (2pt) node[right] {$(1,0)=d$};
+    \fill[black] (m) circle (2pt) node[right] {$m$};
+\end{tikzpicture}\]
+then it would be true that
+$$\prov
+{\color{opfib}\lax(x = 0 \lor m) }
+\lor {\color{green}\lax(x = 1 \lor m)}
+\lor {\color{fib}\lax(y = 0 \lor m)}
+\lor {\color{red}\lax(y = 1 \lor m)}
+$$
+at least assuming that the context has no {\em other} variables besides
+$x$ and $y$.
+
+So I think the general requirement I want to ask for is
+$$x_1 : \b2, \ldots, x_n : \b2 \prov \bigvee_{i=1}^n \lax(x_i =0 \lor m) \lor \lax(x_i = 1 \lor m)$$
+but this has to be subject to some kind of nonemptiness requirement on $m$ as well, hm.
+Anyway the reason this seemed promising is that I could take $m$ to be something like
+$x = y$ and be able to reason that
+
+$$\lax(x = 0 \lor x = y) \prov \lax((x = 0 \land y = 1) \lor x = y)$$
+$$\lax(y = 1 \lor x = y) \prov \lax((x = 0 \land y = 1) \lor x = y)$$
+$$\lax(x = 1 \lor x = y) \prov \lax((x = 1 \land y = 0) \lor x = y)$$
+$$\lax(y = 0 \lor x = y) \prov \lax((x = 1 \land y = 0) \lor x = y)$$
+(taking advantage, crucially, of the fact that $\lax(x = 0 \lor x = 1)$
+and $\lax(y = 0 \lor y = 1)$)
+so that the postulate reduces in this special case to
+$$\prov {\color{opfib} \lax((x = 0\land y = 1) \lor x = y)} \lor
+{\color{fib} \lax((x = 1\land y = 0) \lor x = y)}$$
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+\coordinate (a) at (0,0);
+\coordinate (b) at (2,0);
+\coordinate (c) at (0,-2);
+\coordinate (d) at (2,-2);
+    \fill[opfib, opacity=0.3] (a) -- (b) -- (c) -- cycle;
+    \fill[fib, opacity=0.3] (b) -- (c) -- (d) -- cycle;
+
+    \draw (a) -- (b) -- (d) -- (c) -- cycle;
+    \draw (c) -- (b);
+
+    \fill[black] (a) circle (2pt) node[left] {$a=(0,1)$};
+    \fill[black] (b) circle (2pt) node[right] {$(1,1)=b$};
+    \fill[black] (c) circle (2pt) node[left] {$c=(0,0)$};
+    \fill[black] (d) circle (2pt) node[right] {$(1,0)=d$};
+\end{tikzpicture}\]
+Actually, I probably could have done a similar proof with $m = (x = 1 \land y = 1)$
+or $m = (x = 0 \land y = 0)$.
 \bibliography{../wes}
 \end{document}

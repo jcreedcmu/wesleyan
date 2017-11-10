@@ -2538,3 +2538,10 @@ A  B  C
 
 We don't get that the square ○(A ∨ C) fits inside the bowtie
 ○(A ∨ B) ∨ ○(B ∨ C).
+
+Q: Where in emacs's source is the visible bell image coming from?
+A:
+I see
+imageNamed:NSImageNameCaution
+in
+emacs/src/nsterm.m
