@@ -1,0 +1,168 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{latexsym}
+\usepackage{amsmath}
+
+\input{linear}
+\def\mod{\$}
+\def\lax{\mathop\bigcirc}
+\def\rlax{\mathrel\mathrm{lax}}
+\def\rposs{\mathrel\mathrm{poss}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\b2{\mathbf{2}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc,arrows}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{ff003f}
+\definecolor{opfib}{HTML}{007fff}
+\begin{document}
+\bibliographystyle{alpha}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+Consider the following modal operator in linear logic: ($\Delta$ is linear assumptions,
+$\Gamma$ is valid assumptions)
+$$
+\erule
+{\Gamma;\Delta \prov A \rposs \using \mod R}
+{\Gamma;\Delta \prov {\mod }A}
+\qquad
+\erule
+{\Gamma; A \prov C \rposs \using \mod L}
+{\Gamma; {\mod }A \prov C \rposs}
+$$
+$$
+\erule
+{ \using p1}
+{\Gamma;\cdot \prov C \rposs}
+\qquad
+\erule
+{\Gamma;\Delta_1 \prov C \qquad \Gamma;\Delta_2 \prov C \rposs \using p\tensor}
+{\Gamma;\Delta_1, \Delta_2\prov C \rposs}
+$$
+
+It bears a considerable similarity to the $?$ in \cite{jill}, but the structural
+rules $p1$ and $p\tensor$ are new. Note that we can use them to admissibly recover the
+{\em promote}
+rule of $?$, as follows:
+$$
+\erule
+{
+\Gamma; \Delta \prov C
+\quad
+\[ \using p1 \justifies
+\Gamma; \cdot \prov C \rposs
+\]\using p\tensor }
+{\Gamma; \Delta \prov C \rposs}
+$$
+But also $p\tensor$ may be used more than once, or not at all.
+This produces the effect of $\mod  A$ meaning something like
+$$\bigoplus_{i = 0}^\infty A^{\tensor i} =  1 \oplus A \oplus (A \tensor A) \oplus (A \tensor A \tensor A) \oplus \cdots$$
+So that $\mod A$ is somewhat a hybrid of $?$ and $!$ --- the latter which is of
+course akin to the infinite {\em internal} choice
+$$1 \amp A \amp (A \tensor A) \amp (A \tensor A \tensor A) \amp \cdots$$
+
+The `context-clearing' nature of $\mod L$ --- the fact that there can be no other
+linear assumptions besides $\mod A$ when decomposing $\mod$ on the left --- seems
+entirely appropriate for this interpretation of the meaning of $\mod$.
+For we would not expect to be able to prove
+$\bigoplus_{i = 0}^\infty B^{\tensor i}$
+from
+$\bigoplus_{i = 0}^\infty A^{\tensor i}$
+and a merely {\em linear} assumption of $A \lol B$, for we might need to call that function any number
+of times. But we would expect the entailment to go through with an {\em unrestricted} assumption
+of $A \lol B$. An indeed, we find that we can derive
+$$
+\erule
+{
+\[
+\[
+\[
+\justifies
+A \lol B ;  A \prov  B
+\]
+\[
+\justifies
+A \lol B ;  \cdot \prov  B\rposs
+\]
+\justifies
+A \lol B ;  A \prov  B\rposs
+\]
+\justifies
+A \lol B ; \mod A \prov  B\rposs
+\]
+}
+{A \lol B ; \mod A \prov \mod B}
+$$
+and yet we fail to obtain
+$${\cdot ; A \lol B,  \mod A \not \prov \mod B}$$
+We can go even further and prove things like
+$${A \lol (B \oplus (B \tensor B)) ; \mod A \prov \mod B}$$
+For each $A$ (of which there nondeterministically may be any number)
+we get one or two $B$s; but this result is a nondeterministic number
+of $B$s, which is what we are trying to produce.
+
+\bibliography{../wes}
+
+\end{document}

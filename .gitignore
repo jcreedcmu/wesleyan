@@ -3,3 +3,7 @@
 *.dvi
 *.log
 texnotes/*.pdf
+.DS_Store
+agda/**/*.agdai
+*.bbl
+*.blg
