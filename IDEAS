@@ -2545,3 +2545,69 @@ I see
 imageNamed:NSImageNameCaution
 in
 emacs/src/nsterm.m
+
+=== 2017.11.11
+
+Q: Whose thesis has some useful things about fibrations in it?
+A: Jonas Frey
+"A fibrational study of realizability toposes"
+https://arxiv.org/abs/1403.3672
+
+Q: What's that popl 2018 paper about cps translating dependent types, and what
+do I think is significant about it?
+A:
+"Type-Preserving CPS Translation of Σ and Π Types is Not Not Possible"
+https://www.williamjbowman.com/resources/cps-sigma.pdf
+https://popl18.sigplan.org/event/popl-2018-papers-type-preserving-cps-translation-of-and-types-is-not-not-possible
+So first of all the passage from (A → ⊥) → ⊥ to
+    ∀α.(A → α) → α                                                           (*)
+forehead-smackingly obvious-(or at least satisfying-)in-hindsight.
+This one type (*) is at the nexus of so much of what I'm trying to understand lately;
+one, the authors depend on (a tiny sprinkling of) /internalized parametricity/ to make
+their theorems hang together. Two, as Bartosz Milewski often points out,
+the parametricity fact that A ≅ ∀α.(A → α) → α is the "programmer's Yoneda lemma".
+Three, (*) is tantalizingly a special case of the type
+
+    (↓↑P)^r = ↓∀φ.(↓∀ρ.P^ρ ⇒ ρ▹φ) ⇒ r▹φ
+
+that shows up in my "logical recipes", degenerating back into (*) if
+you trivialize the resource level.
+
+Q: Why licenses me at *all* to postulate that, e.g.
+⊢ ○(x = 0 ∨ m) ∨ ○(x = 1 ∨ m) ∨ ○(y = 0 ∨ m) ∨ ○(y = 1 ∨ m)
+Isn't this in stark violation of the idea that any disjunction proved in the empty
+context means one of its disjuncts is provable alone?
+A: Ah, but I'm forgetting that it's not in the empty context; there's actually assumptions
+x : 𝟚, y : 𝟚
+which are something like
+x : ○(1 + 1), y : ○(1 + 1)
+So there must be something in ○ that has a little bit of either left asynchronousness
+or left synchronousness that I can fruitfully use before ∨R. It's as if I can
+take out a little bit of a loan on laxness and still apply ○L somehow.
+
+An alternative thought is that I also require nonemptiness of m to
+make that work, so maybe there's some left-work on ◇m that helps me out.
+
+Q: Can I make the logic of ○ take semantics in simplicial sets, maybe?
+A: I thought I could define a closure operator on downward-closed sets of
+simplices, but then I realized that downward closure would mean that only
+really the sets of vertices would matter.
+
+Q: Going back to the idea of the join binary operator ⋆, isn't it the
+case that if I tried to define ○ as A ⋆ A, that this isn't quite
+right?
+A: Yeah, this isn't the all-at-once-from-the-vertices-all-the-way-up
+closure, it's just one step of nonidempotent `closure'. If 3 = 1 + 1 +
+1, then 3 ⋆ 3 is only the boundary of the triangle, and 3 ⋆ 3 ⋆ 3 is
+the interior as well. So actually ○A is more like
+    A ∨ (A ⋆ A) ∨ (A ⋆ A ⋆ A) ∨ ⋯            (†)
+
+Q: Can there be a unit for ⋆?
+A: Seems unlikely, since ○⊥ = ⊥, so if I were to say
+    ○A = U ∨ A ∨ (A ⋆ A) ∨ (A ⋆ A ⋆ A) ∨ ⋯
+with the notion that U ⋆ A = A, then
+    ○⊥ = U ∨ ⊥ ∨ (⊥ ⋆ ⊥) ∨ (⊥ ⋆ ⊥ ⋆ ⊥) ∨ ⋯
+And I definitely know ⊥ ⋆ ⊥ = ⊥, so this is telling me
+    ⊥ = ○⊥ = U
+which *doesn't* work as a unit. So I might be stuck with
+the unitless expression (†) as a quasi-definition of ○ in terms of ⋆.
