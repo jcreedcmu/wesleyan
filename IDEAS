@@ -2611,3 +2611,6 @@ And I definitely know ⊥ ⋆ ⊥ = ⊥, so this is telling me
     ⊥ = ○⊥ = U
 which *doesn't* work as a unit. So I might be stuck with
 the unitless expression (†) as a quasi-definition of ○ in terms of ⋆.
+
+⋆ is topological join and ○ is convex hull, then
+○A ≈ A ∨ (A ⋆ A) ∨ (A ⋆ A ⋆ A) ∨ ⋯
