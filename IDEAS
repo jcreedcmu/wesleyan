@@ -1707,7 +1707,7 @@ Q: Is my characterization of categories as relational things actually
 a full embedding?
 A: Hm, maybe not. Need some kind of grading perhaps.
 
-=== 2017.10.15
+=== 2017.10.14
 
 Q: What agda did I start writing for relational things?
 A:
@@ -2539,6 +2539,8 @@ A  B  C
 We don't get that the square ○(A ∨ C) fits inside the bowtie
 ○(A ∨ B) ∨ ○(B ∨ C).
 
+=== 2017.11.10
+
 Q: Where in emacs's source is the visible bell image coming from?
 A:
 I see
@@ -2614,3 +2616,34 @@ the unitless expression (†) as a quasi-definition of ○ in terms of ⋆.
 
 ⋆ is topological join and ○ is convex hull, then
 ○A ≈ A ∨ (A ⋆ A) ∨ (A ⋆ A ⋆ A) ∨ ⋯
+
+=== 2017.11.12
+
+Q: What's another interesting POPL'18 paper?
+A: "Intrinsically-Typed Definitional Interpreters for Imperative Languages"
+
+=== 2017.11.13
+
+Q: What's the difference between 2-cell coercions α ⇒ β : type
+in depdep2 and mere functions μ : β → α running the other direction?
+A: ???
+
+Q: What's the reason for using telescopes rather than whole-context
+simultaneous substitutions?
+A: ???
+
+Q: What's another view of what a mesh is?
+A:
+A fibration over FinSet is a mesh that supports push, but not
+necessarily pull or product. This can perhaps more easily be seen by
+viewing it grothendieckly as a functor FinSet^op → Cat; for every
+boundary *size* we get a fiber of relation-morphisms over that
+boundary.
+
+Q: No, wait this isn't quite right, is it?
+A: It doesn't seem to distinguish between endpoints and unary
+relations over endpoints.
+
+Q: What's a collage?
+A: What you get from taking a profunctor H : C ⇸ D and producing
+the category that's C + D + [heteromorphisms of H]
