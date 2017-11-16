@@ -2647,3 +2647,94 @@ relations over endpoints.
 Q: What's a collage?
 A: What you get from taking a profunctor H : C ⇸ D and producing
 the category that's C + D + [heteromorphisms of H]
+
+=== 2017.11.14
+
+Q: What's another idea for what to take the presheaf category over?
+A: Finite *co*relations. This seems to bake in push and pull, so that
+I only need to axiomatize (or, like, Segal-condition-ize) on taking
+(perhaps separately both nullary and binary) products of relations.
+
+=== 2017.11.15
+
+Q: How do I understand the fibrational perspective on mode theories in terms
+of my more translate-away habit of thinking?
+A:
+Imagine a mode theory with one mode and the constant ⊙ with type
+x : m, y : m ⊢ x ⊙ y : m
+
+In this we think of having a /type at m/. Prior to translation,
+what a type-at-m is, is a type-level expression with kind
+
+    m⁺ → type or
+    m⁻ → type
+
+depending on whether it's a positive or negative type. We have
+two genuine types m⁺ and m⁻ in the metalanguage.
+
+The propositional connective that reflects this mode operator is
+A : mtype, B : mtype ⊢ A ⊙ B : mtype
+
+and this comes out as the definition
+
+for all A, B : m⁺ → type
+(A ⊙ B) @ ρ = ∃αβ. (ρ ≤ α ⊙ β) × (A @ α) × (B @ β)
+I guess then actually the type of ⊙ is
+x : m⁺, y : m⁺ ⊢ x ⊙ y : m⁺
+
+Q: So how would I think about dependent types in this setting?
+A:
+I'd have to introduce a mode operator that looks more like a sigma than
+a monoid multiplication, maybe something like:
+
+    x : m, y : m → n ⊢ τ x y : n
+
+then I'd have a definition like one of the following options,
+perhaps:
+
+(1) -------------------------
+
+(* most straightforward thing I could think of *)
+
+(Σ_τ (x : A) . B) @ ρ =
+  ∃(α : m)(β : m → n). (ρ ≤ τ α β)
+    × (A @ α)
+    × (B @ β)
+
+where A : m → type
+      B : (m → n) → type
+      (Σ_τ (x : A) . B) : n → type
+
+(2) -------------------------
+
+(* some weird cps conjecture? *)
+
+(Σ_τ (x : A) . B) @ ρ =
+  ∃(α : m)(β : m → n). (ρ ≤ τ α β)
+    × (A @ α)
+    × (B @ (λk : (n → type). λμ: m.  k (β μ)))
+
+where A : m → type
+      B : ((n → type) → (m → type)) → type
+      (Σ_τ (x : A) . B) : n → type
+
+(3) -------------------------
+
+(* this actually seems to capture *dependency* properly *)
+
+x : m, y : n ⊢ τ x y : p
+
+(Σ_τ (x : A) . B) @ (ρ : p) =
+  ∃(α : m)(β : n). (ρ ≤ τ α β)
+    × (a : A @ α)
+    × (B α a β)
+
+where A : m → type
+      B : (μ : m) → (A μ) → n → type
+      (Σ_τ (x : A) . B) : p → type
+
+=== 2017.11.16
+
+Q: Can I extract any of the example from depdep2 and port them over
+to this way of thinking?
+A: ???

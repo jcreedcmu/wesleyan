@@ -6,6 +6,7 @@
 
 \input{linear}
 \def\sem#1{[\![#1]\!]}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
 \def\col#1{{\mathsf{C}}_{#1}}
 \def\lax{\mathop\bigcirc}
 \def\rjust{\mathsf{just}}
@@ -40,7 +41,7 @@
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \usepackage{tikz}
-\usetikzlibrary{calc,arrows,cd}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
 \newcounter{nodemaker}
 \setcounter{nodemaker}{0}
 \def\twocell#1#2{%
@@ -66,7 +67,7 @@
 \author{Jason Reed}
 \definecolor{fib}{HTML}{ff7f00}
 \definecolor{green}{HTML}{007f00}
-\definecolor{red}{HTML}{ff003f}
+\definecolor{red}{HTML}{df3f3f}
 \definecolor{opfib}{HTML}{007fff}
 \definecolor{opfibl}{HTML}{DBEDFF}
 \def\judge#1{\vskip 2em\noindent \fcolorbox{opfib}{white}{$#1$}\vskip 0.5em\noindent}
@@ -204,6 +205,14 @@ Example:
 &|[alias=b]| b \ar[from=r, bend left=15] \ar[from=r, bend right=15]
 &|[alias=c]| c
 \end{tikzcd}\]
+or we could equivalently depict this as the collage
+\[\begin{tikzcd}
+\bullet \ar[d]\ar[dr]\ar[dr, shift left]\\
+a \ar[from=r]\ar[from=rr, bend left=50]
+& b \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+& c
+\end{tikzcd}\]
+where $\bullet$ is the one object of $\bone$.
 
 \rule{\erule{\prov \gamma : \rctx \qquad \gamma \prov \alpha : \rtype}
 {\prov (\gamma, x : \alpha) : \rctx}}
@@ -255,10 +264,10 @@ The picture of the collage of $\rpr_\alpha$ looks close to that of the
 identity profunctor. There's `two copies' of $\sem \gamma$, but one
 of them's been extended with $x : \alpha$.
 \[\begin{tikzcd}
-a' \ar[from=r]\ar[from=rr, bend left=30]\ar[d]
- & b'\ar[dl]\ar[d]
+a \ar[from=r]\ar[from=rr, bend left=30]\ar[d]
+ & b\ar[dl]\ar[d]
  \ar[from=r, bend left=15] \ar[from=r, bend right=15]
- & c'\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+ & c\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
 \\[3em]
 a \ar[from=r]\ar[from=rr, bend left=30] \ar[from=rrr, bend right=30]
  & b \ar[from=rr, bend left=30, shift left=2] \ar[from=rr, bend left=30]
@@ -267,9 +276,157 @@ a \ar[from=r]\ar[from=rr, bend left=30] \ar[from=rrr, bend right=30]
 & x
 \end{tikzcd}\]
 
+After mulling over the diagram below,
+I can sort of see the content of
+Mitchel and Mike's discussion in $\mathtt{depdep2.ltx}$ about what the
+essential data is that we need to specify for a general term
+$$\gamma \prov \mu : \alpha$$
+
+\[\begin{tikzcd}[execute at end picture={
+\draw[decoration={brace,mirror},decorate]
+  ($(b1) + (-1em,-0.3em)$) -- ($(b2) + (-1em,0.3em)$);
+\draw[decoration={brace,mirror},decorate]
+  ($(b2) + (-1em,-0.3em)$) -- ($(b3) + (-1em,0.3em)$);
+\node[left] at ($(b1)!0.5!(b2) + (-1.5em,0)$) {$\rpr_\alpha$};
+\node[left] at ($(b2)!0.5!(b3) + (-1.5em,0)$) {$\mu$};
+}]
+|[alias=b1]|a \ar[from=r]\ar[from=rr, bend left=30]\ar[d]
+ & b\ar[dl]\ar[d]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & c\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+\\[3em]
+|[alias=b2]|\color{gray}a \ar[from=r]\ar[from=rr, bend left=30]
+\ar[from=rrr, bend right=30, fib]
+\ar[d, red]
+ & \color{gray}b \ar[from=rr, bend left=30, shift left=2, fib]
+ \ar[from=rr, bend left=30, fib]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+\ar[dl]\ar[d, red]
+ & \color{gray}c\ar[d, red]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+& \color{gray}x
+\ar[dlll,opfib]
+\ar[dlll,opfib, shift left]
+\ar[dll,opfib,shift left=0.5]
+\\[3em]
+|[alias=b3]|a \ar[from=r]\ar[from=rr, bend left=30]
+ & b
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & c
+\end{tikzcd}\]
+
+It consists of a functor $\color{opfib}\sem \mu : \gamma \to \rset$ (which says
+how many arrows there are from $x$ to each object of the bottom copy of $\gamma$,
+and then a natural transformation
+$\zem\mu : {\color{fib}\sem \alpha} \imp {\color{opfib} \sem\mu}$ that says
+how composition with the `{\color{red}identities}' works.
+
 
 \rule{\erule{}{\gamma \prov \rjust_\alpha : \alpha}}
 
 An example of such a thing is $\rjust_\alpha$. It's just the other
-profunctor derived from the injection functor.
+profunctor derived from the injection functor. A depiction of the
+(collage of the)
+composition of $\rpr_\alpha \o \rjust_\alpha$ is
+\[\begin{tikzcd}[execute at end picture={
+\draw[decoration={brace,mirror},decorate]
+  ($(b1) + (-1em,-0.3em)$) -- ($(b2) + (-1em,0.3em)$);
+\draw[decoration={brace,mirror},decorate]
+  ($(b2) + (-1em,-0.3em)$) -- ($(b3) + (-1em,0.3em)$);
+\node[left] at ($(b1)!0.5!(b2) + (-1.5em,0)$) {$\rpr_\alpha$};
+\node[left] at ($(b2)!0.5!(b3) + (-1.5em,0)$) {$\rjust_\alpha$};
+}]
+|[alias=b1]|a \ar[from=r]\ar[from=rr, bend left=30]\ar[d]
+ & b\ar[dl]\ar[d]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & c\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+\\[3em]
+|[alias=b2]|\color{gray}a \ar[from=r]\ar[from=rr, bend left=30] \ar[from=rrr, bend right=30]
+\ar[d]
+ & \color{gray}b \ar[from=rr, bend left=30, shift left=2] \ar[from=rr, bend left=30]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+\ar[dl]\ar[d]
+ & \color{gray}c\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+& \color{gray}x
+\ar[dlll]\ar[dll]\ar[dll, shift left]
+\\[3em]
+|[alias=b3]|a \ar[from=r]\ar[from=rr, bend left=30]
+ & b
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & c
+\end{tikzcd}\]
+
+If we think of the semantics of a term being given by a
+functor-and-natural-transformation-pair as above, we can have
+pleasantly tautologous-sounding slogan
+\begin{center}``$\sem{\rjust_\alpha}$ is just $\sem \alpha$''\end{center}
+ and then $\zem {\rjust_\alpha}$ is the
+identity natural transformation on $\sem {\rjust_\alpha} = \sem \alpha$.
+
+\judge{
+\gamma \prov s : \mu \imp \nu : \alpha
+}
+A term reduction $\gamma \prov s : \mu \imp \nu : \alpha$
+is interpreted as a natural transformation $\sem s : \sem \mu \imp \sem \nu$
+such that $\sem s \o \zem \mu  = \zem \nu$.
+
+\judge{
+\gamma \prov s : \alpha \imp \beta : \rtype
+}
+A type reduction $\gamma \prov s : \alpha \imp \beta : \rtype$
+is interpreted as a natural transformation
+ $\sem s : \sem \alpha \imp \sem\beta : \sem\gamma \to \rset$.
+
+\rule{
+\erule{\gamma \prov \mu : \beta\qquad \gamma \prov s : \alpha \imp \beta : \rtype}
+{\gamma \prov s_*(\mu) : \alpha
+}}
+We need to come up with  $\sem{s_*(\mu)} : \sem \gamma \to \rset$ and
+$\zem{s_*(\mu)} : \sem \alpha \imp \sem{s_*(\mu)}$.
+We have $\sem s : \sem \alpha \imp \sem\beta : \gamma \to \rset$
+and $\zem \mu : \sem \beta \imp \sem \mu$, so let's set
+$$\sem{s_*(\mu)} = \sem \mu $$
+$$\zem{s_*(\mu)} = \zem \mu \o \sem s$$
+
+\rule{\erule
+{\gamma, x : \alpha \prov \beta : \rtype}
+{\gamma\prov \beta : \rtype}}
+We have $\sem \beta : \sem \gamma \prof \bone$, and we need
+to produce
+the weakened version of it,
+$\sem {\beta_{\mathsf w}} : \sem {\gamma, x : \alpha} \prof \bone$.
+So we profunctor-compose with the projection
+$$\sem{\gamma, x : \alpha} \prof \sem\gamma$$
+to get
+\[\begin{tikzcd}[execute at end picture={
+\draw[decoration={brace,mirror},decorate]
+  ($(b1) + (-1.5em,-0.3em)$) -- ($(b2) + (-1.5em,0.3em)$);
+\draw[decoration={brace,mirror},decorate]
+  ($(b2) + (-1.5em,-0.3em)$) -- ($(b3) + (-1.5em,0.3em)$);
+\draw[decoration={brace,mirror},decorate]
+  ($(b1) + (-4.5em,-0.3em)$) -- ($(b3) + (-4.5em,0.3em)$);
+\node[left] at ($(b1)!0.5!(b2) + (-2em,0)$) {$\sem\beta$};
+\node[left] at ($(b2)!0.5!(b3) + (-2em,0)$) {$\rpr_\alpha$};
+\node[left] at ($(b2) + (-5em,0)$) {$\sem{\beta_{\mathsf w}}$};
+}]
+|[alias=b1]|\bullet\ar[d]\ar[dr]\ar[drr]
+\\[3em]
+|[alias=b2]|\color{gray}a \ar[from=r]\ar[from=rr, bend left=30]\ar[d]
+ & \color{gray}b\ar[dl]\ar[d]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & \color{gray}c\ar[d]\ar[dl]\ar[dl, shift left]\ar[dll, bend right=5]
+\\[3em]
+|[alias=b3]|a \ar[from=r]\ar[from=rr, bend left=30] \ar[from=rrr, bend right=30]
+ & b \ar[from=rr, bend left=30, shift left=2] \ar[from=rr, bend left=30]
+ \ar[from=r, bend left=15] \ar[from=r, bend right=15]
+ & c
+& x
+\end{tikzcd}\]
+
+\rule{\erule{}{\gamma, x : \alpha \prov x : \alpha}}
+We need to come up with $\sem x : \sem{ \gamma, x : \alpha} \to \rset$ and
+$\zem x : \sem {\alpha_{\mathsf w}} \imp \sem x$.
+We let $\sem x = \hom(x, \dash)$ (where $x$ denotes the new object in
+the collage $\sem{ \gamma, x : \alpha}$) and
+$\zem x$ is the identity on the $\sem \gamma$ part of
+$\sem{ \alpha_{\mathsf w}}$, and the inclusion $0 \to 1$ on the $x$ part of it.
 \end{document}
