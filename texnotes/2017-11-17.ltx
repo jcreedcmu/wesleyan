@@ -1,0 +1,303 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{latexsym}
+\usepackage{amsmath}
+
+\input{linear}
+\def\cn{{:}}
+\def\ww{{\mathsf w}}
+\def\tt{{\mathsf t}}
+\def\sem#1{[\![#1]\!]}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rset{\mathbf{Set}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+\def\N{\mathbb{N}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\title{Notes on the Logic of Convex Combination}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Making Multiplicative and Additive Conjunction Coincide}
+I want to go through the exercise of seeing how one can simulate/recreate
+the additive conjunction $\&$ with a multiplicative $\tensor$ given
+the appropriate postulates.
+
+The postulates are, at the mode level
+$$\tt : \rtype$$
+$$\tensor : \tt \to \tt \to \tt \qquad 1 : \tt$$
+$$\rho \tensor \rho \le \rho \qquad 1 \le \rho$$
+
+Now `upstairs' what it means to be a type {\em over} $\tt$
+is to be a type indexed by $\tt$:
+$$
+\erule
+{\prov A : \tt \to \rtype}
+{\prov A_\tt : \rtype}
+$$
+And admissibly we have
+$$
+\erule
+{\prov A_\tt : \rtype \qquad \prov B_\tt : \rtype}
+{\prov (A \tensor B)_\tt : \rtype}
+$$
+if we define
+\[
+(A \tensor B)_\tt = \lambda r \cn \tt . \exists \rho_1 \rho_2 .
+(r \ge \rho_1 \tensor \rho_2) \times (A\ \rho_1)\x (B\ \rho_2)
+\]
+Now let's also try to define
+\[
+(A \& B)_\tt = \lambda r \cn \tt .  (A\ r)\x (B\ r)
+\]
+hoping that I can get away with sweeping the CPS business of the
+polarity shift under the rug. Are these interprovable?
+
+\[\exists \rho_1 \rho_2 .
+(r \ge \rho_1 \tensor \rho_2) \times (A\ \rho_1)\x (B\ \rho_2)
+\prov
+  (A\ r)\x (B\ r)\]
+\[
+(r \ge \rho_1 \tensor \rho_2) \times (A\ \rho_1)\x (B\ \rho_2)
+\prov
+  (A\ r)\x (B\ r)\]
+\[
+(r \ge \rho_1 \tensor \rho_2) \times (A\ \rho_1)
+\prov
+  (A\ r)\]
+\[
+r \ge \rho_1 \tensor \rho_2
+\prov
+   r \ge \rho_1 \]
+\[
+\prov
+   \rho_1 \tensor \rho_2 \ge \rho_1 \]
+\[
+\prov
+   \rho_1 \tensor \rho_2 \ge \rho_1 \tensor 1 \]
+\[\checkmark\]
+
+and
+
+\[
+(A\ r)\x (B\ r)
+\prov
+\exists \rho_1 \rho_2 .
+(r \ge \rho_1 \tensor \rho_2) \times (A\ \rho_1)\x (B\ \rho_2)  \]
+\[
+(A\ r)\x (B\ r)
+\prov
+(r \ge r \tensor r) \times (A\ r)\x (B\ r)  \]
+\[\checkmark\]
+
+\section{Making Dependent Multiplicative and Additive Conjunction Coincide}
+
+\subsection{Attempt \#1}
+
+How do I generalize this to the dependent case?
+
+Suppose $A$ is a $\tt \to \rtype$. Suppose $B$ is a $\Pi r \cn \tt . (A\ r) \to \rtype$.
+\[
+(\Sigma x \cn A . B)_\tt = \lambda r \cn \tt .  \Sigma x \cn (A\ r) . (B\ r\ x)
+\]
+What's the multiplicative analogue?
+
+$$[\dash] : \tt \to \rtype$$
+$$\rjust : \Pi x \cn \tt . [x]$$
+$$\sigma : \Pi x \cn \tt . ([x] \to \tt) \to \tt\qquad 1 : \tt$$
+\[
+\sigma\ r\ (\lambda \_ . r) \le r
+\qquad
+1 \le r\]
+%
+\[
+\erule{r_1 \le r_1' \qquad \forall \zeta . (r_2\ \zeta) \le (r_2'\ \zeta)}
+{\sigma\ r_1\ r_2 \le \sigma\ r_1'\ r_2'}
+\]
+%
+\[
+\sigma\ r\ (\lambda\_. 1) = r
+\qquad
+\color{gray}\sigma\ 1\ r = r\ (\rjust_1)
+\]
+%
+\[
+(\Sigma^- x\cn A . B)_\tt = \lambda r\cn\tt.\exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt .
+\]
+\[(\rho_1 \le \rho_2\ \rjust_{\rho_1}) \x {}\]
+\[
+ (r \ge \sigma\ \rho_1\ \rho_2) \x {}\]
+\[
+\Sigma x \cn (A\ \rho_1) . (B\ (\rho_2\ \rjust_{\rho_1})\ x)
+\]
+
+Are these interprovable?
+Let's do the easy direction where $\exists$ is synchronous. I must show
+\[
+\Sigma x \cn (A\ r) . (B\ r\ x) \prov \exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt . \cdots
+\]
+I pick $\rho_1 = r$ and $\rho_2 = \lambda \_ . r$. I have to show $r \le r$
+(reflexivity!) and $r \ge \sigma\ r\ (\lambda \_ . r)$
+ (contraction!)
+and $\Sigma x \cn (A\ r) . (B\ r\ x)$, which is my assumption.
+
+Let's try the other direction. I need to show
+\[
+\rho_1:\tt, \rho_2:[\rho_1] \to \tt, \Gamma \prov \Sigma x \cn (A\ r) . (B\ r\ x)
+\]
+where
+\[
+\Gamma = (\rho_1 \le \rho_2\ \rjust_{\rho_1}), (r \ge \sigma\ \rho_1\ \rho_2),
+z : (\Sigma x \cn (A\ \rho_1) . (B\ (\rho_2\ \rjust_{\rho_1})\ x)
+\]
+Ok, what do I give for the first component of the output pair?
+It's $\bfst z$. This is ok by weakening:
+$\rho_1 = \sigma\ \rho_1\ (\lambda \_ . 1) \le \sigma\ \rho_1\ \rho_2 \le r$.
+Can I similarly reuse $\bsnd z$ as the second component of my output?
+I would need $\rho_2\ \rjust_{\rho_1} \le r$. Can I demand
+$\rho_2\ \rjust_{\rho_1} \le \sigma\ \rho_1\ \rho_2$?
+Hmm, here this breaks down because of the gray axiom
+$\sigma\ 1\ r = r\ (\rjust_1)$ not making enough sense.
+\subsection{Attempt \#2}
+Maybe $\rjust$ is nonsense, and I just want to feed $B$ the entire blob
+$\sigma\ \rho_1\ \rho_2$. What does that look like?
+
+$$[\dash] : \tt \to \rtype$$
+$$\sigma : \Pi x \cn \tt . ([x] \to \tt) \to \tt\qquad 1 : \tt$$
+\[
+\sigma\ r\ (\lambda \_ . r) \le r
+\qquad
+1 \le r\]
+%
+\[
+\erule{r_1 \le r_1' \qquad \forall \zeta . (r_2\ \zeta) \le (r_2'\ \zeta)}
+{\sigma\ r_1\ r_2 \le \sigma\ r_1'\ r_2'}
+\]
+%
+\[
+\sigma\ r\ (\lambda\_. 1) = r
+\]
+%
+\[
+(\Sigma^- x\cn A . B)_\tt = \lambda r\cn\tt.\exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt .
+\]
+\[
+ (r \ge \sigma\ \rho_1\ \rho_2) \x {}\]
+\[
+\Sigma x \cn (A\ \rho_1) . (B\ (\sigma\ \rho_1\ \rho_2)\ x)
+\]
+This requires $\rho_1 \le \sigma\ \rho_1\ \rho_2$, but this is true in this case:
+$$\rho_1 = \sigma\ \rho_1\ (\lambda\_. 1) \le \sigma\ \rho_1\ \rho_2$$
+Makes me wonder if I need to throw in an additional assumption $\rho_1
+\le \sigma\ \rho_1\ \rho_2$ in the general case.
+
+Oh, wait, this breaks down in the $\& \prov \tensor$ case: I no longer have
+the phenomenon that substituting $\lambda \_ . r$ for $\rho_2$ causes
+$\rho_2 (\rjust_{\rho_1})$ to turn in to plain old $r$, matching the
+$B\ r\ x$ that appears in the $\&$-side type.
+
+\subsection{Attempt \#3}
+
+Maybe I don't want a global $\rjust$ but merely a local inhabitant of $[\rho_1]$?
+Something more like
+\[
+(\Sigma^- x\cn A . B)_\tt = \lambda r\cn\tt.\exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt .\exists j \cn [\rho_1].
+\]
+\[(\rho_1 \le \rho_2\ j) \x
+ (r \ge \sigma\ \rho_1\ \rho_2) \x
+\Sigma x \cn (A\ \rho_1) . (B\ (\rho_2\ j)\ x)
+\]
+but this seems scarcely different from asking for $\rho_2 : \tt$, except
+that we're passing the whole function $\rho_2$ to $\sigma\ \rho_1\ \rho_2$.
+Could consider a forall instead:
+\[
+(\Sigma^- x\cn A . B)_\tt = \lambda r\cn\tt.\exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt .{\color{red}\forall} j \cn [\rho_1].
+\]
+\[(\rho_1 \le \rho_2\ j) \mathrel{\color{red} \imp}
+ (r \ge \sigma\ \rho_1\ \rho_2) \x
+\Sigma x \cn (A\ \rho_1) . (B\ (\rho_2\ j)\ x)
+\]
+But this is scary for being a polarity shift.
+\end{document}
