@@ -2738,3 +2738,13 @@ where A : m → type
 Q: Can I extract any of the example from depdep2 and port them over
 to this way of thinking?
 A: ???
+
+=== 2017.11.17
+
+Q: Does Σ involve a polarity shift? What polarity is it, even?
+A:
+I want
+to think Σ is pos and Π is neg from adjoint considerations, but I
+still think about fst and snd with Σ. The type of the snd involves
+*projecting* the value of fst, not a let-construct which gives you
+both.
