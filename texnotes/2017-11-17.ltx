@@ -300,4 +300,60 @@ Could consider a forall instead:
 \Sigma x \cn (A\ \rho_1) . (B\ (\rho_2\ j)\ x)
 \]
 But this is scary for being a polarity shift.
+\subsection{Thinking About Inequalities Carefully}
+
+When I write
+$\sigma\ r (\lambda\_.r) \le r$, I have in mind the diagonal map
+$\Delta : r \to r \x r$, or like $r \to \sigma\ r\ (\lambda\_.r)$
+for the dependent case.
+
+So I should definitely have projections
+$$\bfst : \sigma\ r_1\ r_2 \ge r_1$$
+$$\bsnd : (z : \sigma\ r_1\ r_2) \ge r_2\ (\bfst z)$$
+Dependent inequality? Ugh.
+
+Ok, so demanding $\rho_2\ \rjust_{\rho_1} \le \sigma\ \rho_1\ \rho_2$,
+which would give me interprovability for my initial attempt, makes
+some sense if I try to interpret it as second projection.
+
+\subsection{Attempt \#4}
+
+How about if I start with
+$$[\dash] : \tt \to \rtype$$
+$$1 : \tt \qquad * : [1]$$
+
+Suppose $A$ is a $\tt \to \rtype$. Suppose $B$ is a
+$\Pi r \cn \tt . (A\ r) \to  ([r] \to \tt) \to  \rtype$.
+We say
+\[
+(\Sigma^a x \cn A . B)_\tt = \lambda r \cn \tt .  \Sigma x \cn (A\ r) . (B\ r\ x\ (\lambda\_. r))
+\]
+So that $B$ gets indexed by $x : A$, but also has its own functional
+world-index.
+The multiplicative version is
+\[\sigma : \Pi x \cn \tt . ([x] \to \tt) \to \tt \]
+\[
+\sigma\ r\ (\lambda \_ . r) \le r
+\qquad
+1 \le r\]
+%
+\[
+\erule{r_1 \le r_1' \qquad \forall \zeta . (r_2\ \zeta) \le (r_2'\ \zeta)}
+{\sigma\ r_1\ r_2 \le \sigma\ r_1'\ r_2'}
+\]
+%
+\[
+\sigma\ r\ (\lambda\_. 1) = r
+\qquad
+\sigma\ 1\ r = r\ *
+\]
+%
+\[
+(\Sigma^m x\cn A . B)_\tt = \lambda r\cn\tt.\exists \rho_1 \cn \tt. \exists \rho_2 \cn [\rho_1] \to \tt .
+\]
+\[
+ (r \ge \sigma\ \rho_1\ \rho_2) \x
+\Sigma x \cn (A\ \rho_1) . (B\ \rho_1\ x\ \rho_2)
+\]
+
 \end{document}
