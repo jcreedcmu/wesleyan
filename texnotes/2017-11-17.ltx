@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 
 \input{linear}
+\def\wat{\mathbin{@}}
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
 \def\tt{{\mathsf t}}
@@ -356,4 +357,31 @@ The multiplicative version is
 \Sigma x \cn (A\ \rho_1) . (B\ \rho_1\ x\ \rho_2)
 \]
 
+\subsection{Attempt \#5}
+
+I think I want to try to generalize the `$\wat$' operation to
+dependent things. Agda-ing up a phony version of the dependent case
+gives me something like the shape of the thing I want.
+
+Whereas in the nondependent case I translate a type $A$ at a resource $\mu$,
+I think now I want to translate a type-in-context $\Gamma \prov A : \rtype$
+at a resource-in-context $\gamma \prov \mu : \alpha$ --- although the exact
+relationship between $\Gamma$ and $\gamma$ is still sort of fuzzy in my
+mind.
+
+Suppose I have
+$$
+\erule
+{\Gamma \prov A : \rtype \qquad \Gamma, x : A \prov B : \rtype}
+{\Gamma \prov \Sigma^m x\cn A . B : \rtype}
+$$
+that I wish to translate. I have to cough up a representation
+language proposition for
+$$(\Gamma \prov \Sigma^m x\cn A . B) \wat (\gamma \prov r : \tt)$$
+I do this by setting it to
+\[ \exists \rho_1 \cn (\gamma \prov \tt) . \exists \rho_2 \cn (\gamma, x:[\rho_1] \prov \tt). \]
+\[ (r \ge \sigma\ \rho_1\ \rho_2) \x  \Sigma x \cn (A \wat  \rho_1). (B \wat \rho_2)\]
+Modulo a lot of squishy guesswork that remains to be done to make
+this formally meaningful, this informally smells very right! No screws left
+over after assembling the ikea furniture.
 \end{document}

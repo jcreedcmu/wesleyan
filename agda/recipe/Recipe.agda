@@ -80,3 +80,7 @@ _ⓐ_ : {σ : Pol} → up σ → rt ($lp σ) → rp +
 (u↓ N) ⓐ r = r↓ (r∀ (λ φ → (N ⓐ φ) r⇒ (r ▹ φ)))
 (u↑ P) ⓐ f = r↓ (r∀ (λ ρ → (P ⓐ ρ) r⇒ (ρ ▹ f)))
 (uatm σ n) ⓐ rf = ratm n σ rf
+
+-- Γ ←→ P : up +
+-- Γ ⊢ A ←→ Q : ut P → up +
+-- γ ⊢ α ←→ θ : rt ($lt ρ ⇀ $lp +)
