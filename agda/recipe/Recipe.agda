@@ -9,50 +9,58 @@ data Pol : Set where
 postulate
   name : Set
 
-data lp : Pol → Set where -- 'lower' props
-  _l⊗_ : lp + → lp + → lp +
-  _l⊸_ : lp + → lp - → lp -
+data lp : Pol → Set -- 'lower' props
+data lt : lp + → Set -- 'lower' terms
 
-data up : Pol → Set where -- 'upper' props
+data lp where
+  _l⊗_ : lp + → lp + → lp +
+  lΣ : (A : lp +) → (lt A → lp +) → lp +
+  _l⊸_ : lp + → lp - → lp -
+data lt where
+
+data up : Pol → Set -- 'upper' props
+data ut : up + → Set -- 'upper' terms
+
+data up where
   _u⊗_ : up + → up + → up +
+  uΣ : (A : up +) → (ut A → up +) → up +
   _u⊸_ : up + → up - → up -
   u↑ : up + → up -
   u↓ : up - → up +
   uatm : (σ : Pol) → name → up σ
+data ut where
 
+data rs : Set where -- representation language first-order sorts
+  res : Pol → rs -- the sort of 'resources', 'frames' in the rep'n language
 
-{- I thought about having
-      rt : Set -- representation language expression types,
-      re : rt → Set -- rep'n language expressions
-      res : Pol → rt -- the type of 'resources', 'frames' in the rep'n language
-   and quantifiers
-      rp∃ : (A : rt) → (re A → rp +) → rp +
-      rp∀ : (A : rt) → (re A → rp -) → rp -
-   and a function
-      cvt : {σ : Pol} → lp σ → re (res σ)
-   converting from lower props to term expressions, but I thought
-   it might be simpler just to identify lp with re ∘ res
--}
+data rt : rs → Set where -- rep'n language terms
+  ⋆ : {σ : Pol} → lp σ → rt (res σ)
+
+_rt⊗_ : rt (res +) → rt (res +) → rt (res +)
+(⋆ x) rt⊗ (⋆ y) = ⋆ (x l⊗ y)
+_rt⊸_ : rt (res +) → rt (res -) → rt (res -)
+(⋆ x) rt⊸ (⋆ y) = ⋆ (x l⊸ y)
 
 data rp : Pol → Set where -- representation language props,
-  _≥+_ : lp + → lp + → rp +
-  _≥-_ : lp - → lp - → rp +
+  _≥+_ : rt (res +) → rt (res +) → rp +
+  _≥-_ : rt (res -) → rt (res -) → rp +
   -- internal turnstile
-  _▹_ : lp + → lp - → rp -
+  _▹_ : rt (res +) → rt (res -) → rp -
 
   -- warning, bogus HOAS:
-  r∃ : {σ : Pol} → (lp σ → rp +) → rp +
-  r∀ : {σ : Pol} → (lp σ → rp -) → rp -
+  r∃ : {s : rs} → (rt s → rp +) → rp +
+  r∀ : {s : rs} → (rt s → rp -) → rp -
 
   _r∧_ : rp + → rp + → rp +
   _r⇒_ : rp + → rp - → rp -
   r↓ : rp - → rp +
-  ratm : name → (σ : Pol) → lp σ → rp +
+  ratm : name → (σ : Pol) → rt (res σ) → rp +
 infixr 20 _r∧_
 
-_ⓐ_ : {σ : Pol} → up σ → lp σ → rp +
-(P u⊗ Q) ⓐ r = r∃ λ ρ → r∃ λ θ → (r ≥+ (ρ l⊗ θ)) r∧ (P ⓐ ρ) r∧ (Q ⓐ θ)
-(P u⊸ N) ⓐ f = r∃ λ ρ → r∃ λ φ → (φ ≥- (ρ l⊸ f)) r∧ (P ⓐ ρ) r∧ (N ⓐ φ)
+_ⓐ_ : {σ : Pol} → up σ → rt (res σ) → rp +
+(P u⊗ Q) ⓐ r = r∃ λ ρ → r∃ λ θ → (r ≥+ (ρ rt⊗ θ)) r∧ (P ⓐ ρ) r∧ (Q ⓐ θ)
+(uΣ P Q) ⓐ r = {!!}
+(P u⊸ N) ⓐ f = r∃ λ ρ → r∃ λ φ → (φ ≥- (ρ rt⊸ f)) r∧ (P ⓐ ρ) r∧ (N ⓐ φ)
 -- (↓ N) @ r = ↓ ∀ φ . (N @ φ) ⇒ (r ▹ φ)
 -- (↑ P) @ f = ↓ ∀ ρ . (P @ ρ) ⇒ (ρ ▹ f)
 (u↓ N) ⓐ r = r↓ (r∀ (λ φ → (N ⓐ φ) r⇒ (r ▹ φ)))
