@@ -2748,3 +2748,14 @@ to think Σ is pos and Π is neg from adjoint considerations, but I
 still think about fst and snd with Σ. The type of the snd involves
 *projecting* the value of fst, not a let-construct which gives you
 both.
+
+=== 2017.11.18
+
+Q: How did I get astral plane unicode (incl. emoji) to work in emacs?
+A:
+https://emacs.stackexchange.com/questions/20186/a-build-of-gui-emacs-for-os-x-that-can-display-emoji
+(setq after-make-frame-functions
+      '(select-frame
+        (lambda (frame) (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                                          frame 'prepend))))
+Then make a new frame.
