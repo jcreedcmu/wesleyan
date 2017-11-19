@@ -5,10 +5,13 @@
 \usepackage{amsmath}
 
 \input{linear}
+\def\div{\vskip 1em \hrule \vskip 1em}
 \def\wat{\mathbin{@}}
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
 \def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\zz{{\mathsf z}}
 \def\sem#1{[\![#1]\!]}
 \def\zem#1{\langle\!\langle#1\rangle\!\rangle}
 \def\col#1{{\mathsf{C}}_{#1}}
@@ -16,6 +19,7 @@
 \def\rjust{\mathsf{just}}
 \def\rcvt{\mathsf{cvt}}
 \def\rtype{\mathsf{type}}
+\def\rmode{\mathsf{mode}}
 \def\rset{\mathbf{Set}}
 \def\binj{\mathbf{inj}}
 \def\rid{\mathsf{id}}
@@ -84,6 +88,12 @@
 \def\njudge#1{\fcolorbox{opfib}{white}{#1}}
 \def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
 \def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
 
 
 \def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
@@ -384,4 +394,53 @@ I do this by setting it to
 Modulo a lot of squishy guesswork that remains to be done to make
 this formally meaningful, this informally smells very right! No screws left
 over after assembling the ikea furniture.
+
+\section{Describing This Last Attempt in more Detail}
+I still feel a constant buzz of uncertainty about how various syntactic classes
+in the `lower theory' ought to line up with Licata/Shulman/Riley $\gamma$s and $\mu$s
+and $\alpha$s. Maybe going through familiar examples will help.
+\begin{myquote}
+Let me articulate as an aside the confusion I {\em do} see at the moment:
+On the one hand, modes seem to `go with' types, and mode terms
+(e.g. $\top, \zeta$) seem to `go with' terms. This is LSR-style
+`$A$ over $\alpha$' and `$M$ over $\mu$'. On the other hand, the
+operators --- like $\tensor$ --- that operate on mode terms are
+very much like {\em type} operators, and I keep seeming to need to say
+$[x]$ for $x$ a mode term, as if mode terms have inhabitants. In this
+other view, modes are like {\em kinds}, mode terms are like {\em
+  types}, and mode term inhabitants exist, and are like {\em terms}.
+Maybe this isn't so crazy: the fact that a type is inextricably
+{\em bound to} a mode is like it {\em coloning} a kind.
+\end{myquote}
+
+In linear logic I have modes $\tt : \rmode$ (true) and $\rr : \rmode$
+(linear resource). I have operations
+like
+$$\tensor : \rr \to \rr \to \rr \qquad \land : \tt \to \tt \to \tt
+\qquad
+\top : \tt
+\qquad
+{\mathsf F} : \tt \to \rr$$
+and I know monoidal things like
+$$\rho \land \rho \le \rho \qquad \top \le \rho$$
+for any $\rho : \tt$.
+
+What's the other dependent-signature data that forces this to make
+some nontrivial amount of sense?
+Could it be like $\zz$
+such that
+$$x : \tt, y : [x] \prov \zz(x, y) : \rmode$$
+and maybe a constant
+$$x : \tt, y : [x] \prov \zeta(x, y) : \zz(x, y) $$
+\subsection{Restating assumptions}
+
+In the nondependent case, we say $ \prov A : \rtype_\tt$ when $A : \tt \to \rtype$.
+
+\noindent In the dependent case, do we say $\Gamma_\gamma \prov A_\alpha : \rtype$ when
+$A : (\gamma \prov \alpha) \to \rtype$?
+
+\div
+
+In the lower theory we have
+
 \end{document}
