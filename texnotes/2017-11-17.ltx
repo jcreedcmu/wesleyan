@@ -2,13 +2,16 @@
 \input{theorem}
 \input{prooftree}
 \usepackage{latexsym}
+\usepackage{yfonts}
 \usepackage{amsmath}
 
 \input{linear}
+\def\sprov{\Vdash}
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\wat{\mathbin{@}}
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
+\def\base{{\textfrak B}}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
 \def\zz{{\mathsf z}}
@@ -19,6 +22,7 @@
 \def\rjust{\mathsf{just}}
 \def\rcvt{\mathsf{cvt}}
 \def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
 \def\rmode{\mathsf{mode}}
 \def\rset{\mathbf{Set}}
 \def\binj{\mathbf{inj}}
@@ -92,6 +96,7 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 \definecolor{block-gray}{gray}{0.85}
+\definecolor{lgray}{gray}{0.7}
 \newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 
@@ -442,5 +447,179 @@ $A : (\gamma \prov \alpha) \to \rtype$?
 \div
 
 In the lower theory we have
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Mode Contexts&$\gamma$&$\cdot \celse \gamma, x : \alpha$\\
+Mode Kinds&$\kappa$&$\tt \celse \rr \celse \cdots$\\
+Mode Types&$\alpha$&$1\celse \alpha \tensor \alpha \celse \cdots$\\
+Mode Terms&$\mu$&$\chi\celse\cdots$\\
+\end{tabular}
+\]
+In the upper theory we ostensibly have
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Contexts&$\Gamma$&$\cdot \celse \Gamma, x : A$\\
+Kinds&&$\rtype_\kappa$\\
+Types&$A$&$1\celse A \tensor A \celse \cdots$\\
+Terms&$M$&$x \celse \cdots$\\
+\end{tabular}
+\]
+In the metalanguage we have
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Contexts&$\Delta$&$\cdot \celse \Delta, x : P$\\
+Kinds&&$\rtype$\\
+Props&$P$&$\top \celse P \land P \celse
+\exists y \cn s . P \celse \alpha \le \alpha $\\
+Sorts&$s$&$ [\gamma \prov \kappa]$\\
+Proofs&$R$&$ \cdots$\\
+\end{tabular}
+\]
+
+The warmup is to define $\wat$ as a translation from
+\begin{enumerate}
+\item A closed upper language type $\prov A : \rtype_\kappa$
+\item A closed lower language type $\prov \alpha : \kappa$
+\end{enumerate}
+to
+\[\hbox{A closed metalanguage prop $A \wat \alpha$}\]
+and we do this with clauses like
+\[
+(A_1 \tensor A_2) \wat \alpha = \exists y_1 \cn [{}\prov \rr].
+\exists y_2 \cn [{}\prov \rr].
+(A_1 \wat y_1) \land (A_2 \wat y_2) \land (\alpha \ge y_1 \tensor y_2)
+\]
+for $\tensor$ such that
+$$
+\erule
+{\prov \alpha_1 : \rr \qquad \prov \alpha_2 : \rr}
+{\prov \alpha_1 \tensor \alpha_2 : \rr}
+$$
+
+The advanced version is to define $\wat$ as a translation from
+\begin{enumerate}
+\item An upper language type $\Gamma \prov A : \rtype_{\theta\kappa}$
+\item A lower language type $\gamma \prov \alpha : \kappa$
+\item $\Gamma \prov \theta : \gamma$
+\end{enumerate}
+to
+\[\hbox{A closed metalanguage prop $A \wat \alpha$}\]
+with clauses like
+\[
+(\Sigma x \cn A_1 . A_2) \wat \alpha =
+\exists y_1 \cn [\gamma \prov \rr].
+\exists y_2 \cn [\gamma, x : y_1(\gamma) \prov \rr].\]
+\[
+(A_1 \wat y_1) \land (A_2 \wat y_2) \land ( \alpha(\gamma) \ge_\gamma \Sigma x \cn y_1(\gamma). y_2(\gamma, x))
+\]
+for $\alpha : [\gamma \prov \rr]$.
+
+This means $\ge$ takes a subscript $\gamma$ which sort of binds all
+the variables in $\gamma$ in the two expressions being compared.
+
+\div
+
+Ok, let's assume all lower kinds are closed. Making {\em them}
+dependent seems a little too crazy for now.
+
+I thought for a moment I saw the reason why I didn't need to explicitly mention
+mode terms --- but now I think I might need to after all. If I have a context
+consisting of $x : \alpha_1, y : \alpha_2(x) \prov \kappa$, then $x$ does
+actually appear in $\alpha_2$.
+
+\div
+
+A mode theory consists of some declarations
+
+\[
+\sprov \kappa : \rkind \qquad \gamma \sprov \alpha : \kappa
+\]
+\[
+\gamma \sprov \alpha \le \alpha : \kappa
+\]
+
+For example, linear logic looks like
+$$
+\sprov \tt : \rkind \qquad \sprov \rr : \rkind
+$$
+$$
+ \sprov 1 : \rr
+$$
+$$
+\phi : \rr, \psi : \rr \sprov \tensor(\phi, \psi) : \rr
+$$
+$$
+\phi : \rr, \psi : \rr \sprov \tensor(\phi, \psi) \le \tensor(\psi, \phi) : \rr
+$$
+
+I might imagine adding a dependent kind
+$$\sprov \zz : \rkind$$
+and a mode constructor
+$$\phi : \rr, m : \phi \sprov \star(\phi, m) : \zz $$
+and a $\Sigma$-like type
+$$\phi : \rr, \psi : \phi \to \zz \sprov \sigma(\phi, \psi) : \zz $$
+The context well-formedness judgments aren't too surprising in shape:
+$$
+\erule
+{\gamma \prov \alpha : \kappa}
+{\prov (\gamma, x : \alpha) : \rctx}
+\qquad
+\erule
+{ \prov \kappa : \rkind}
+{\prov (\gamma, \phi : \kappa) : \rctx}
+$$
+
+Given this data, and a $\gamma$ and a $\kappa$,
+the set of expressions $\alpha$ you can establish as well-formed in the frame
+$$\gamma \prov \alpha : \kappa$$
+is well-defined. This is the sort $[\gamma \prov \kappa]$ in the metalanguage.
+And it's also sort of meaningful to {\em hypothesize} such things, and use
+them under substitution. Which should make it meaningful for me to say
+
+\[
+(\Sigma x \cn A_1 . A_2) \wat \alpha =
+\exists \phi \cn [\gamma \prov \rr].
+\exists \psi \cn [\gamma, x : \phi(\gamma) \prov \zz].\]
+\[
+(\Sigma x \cn (A_1 \wat \phi) . (A_2 \wat \psi)) \land ( \alpha(\gamma) \ge_\gamma
+\sigma(\phi(\gamma), x.\psi(\gamma,x))
+\]
+for $\alpha : [\gamma \prov \zz]$.
+
+\div
+
+Maybe I should just bite the bullet and allow $\Pi$ kinds in the lower theory.
+Well --- contextual ones, anyway.
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Mode Contexts&$\gamma$&$\cdot \celse \gamma, x : \alpha \celse \gamma, \phi : \kappa$\\
+Mode Kinds&$\kappa$&$ (\gamma \prov \base)$\\
+Base Mode Kinds&$\base$&$\tt \celse \rr \celse \cdots$\\
+Mode Types&$\alpha$&$\phi[\theta] \celse 1\celse \alpha \tensor \alpha \celse \cdots$\\
+Mode Terms&$\mu$&$\chi\celse\cdots$\\
+\end{tabular}
+\]
+
+$$
+\erule
+{\phi : (\gamma' \prov \base) \in\gamma\qquad
+ \gamma \prov \theta : \gamma'}
+{\gamma \prov \phi[\theta] : \base}
+$$
+
+$$
+\erule
+{\gamma', \gamma \prov \alpha : \base}
+{\gamma' \prov \lambda \gamma . \alpha : (\gamma \prov \base)}
+$$
+
+$$
+\erule{}{ \prov \tensor : (\phi : \rr, \psi : \rr \prov \rr)}
+$$
+
+$$
+\erule{\prov \alpha_1 : (\gamma \prov \rr)\qquad \prov\alpha_2 : (\gamma\prov \rr)}
+{\prov \lambda \gamma . {\tensor}[\alpha_1[\rid_\gamma]/\phi, \alpha_2[\rid_\gamma]/\psi] : (\gamma \prov \rr)}
+$$
 
 \end{document}
