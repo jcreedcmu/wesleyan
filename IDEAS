@@ -2759,3 +2759,30 @@ https://emacs.stackexchange.com/questions/20186/a-build-of-gui-emacs-for-os-x-th
         (lambda (frame) (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
                                           frame 'prepend))))
 Then make a new frame.
+
+=== 2017.11.19
+
+Q: What's the useful idea I had yesterday?
+A: That the contract of the translation @ is that it takes a type-in-context
+and a mode-type-in-context, and the existential quantifiers range over
+hypothetical mode-types-in-context.
+
+=== 2017.11.20
+
+Q: Do I want to go the whole contextual modal route?
+A: Seems sort of appropriate, and LSR already did so.
+
+Q: How do I interpret "Can there be vague objects?"?
+https://academic.oup.com/analysis/article-abstract/38/4/208/131350?redirectedFrom=fulltext
+A:
+Let a and b be given such that
+¬□(a = b)
+Suppose a = b. Then by identity elimination, ¬□(a = a), hence a contradiction,
+since surely □(a = a). So we've concluded that ¬(a = b).
+
+But this is all sort of assuming that terms survive modal
+context-clearing. I wonder if that's significant. It doesn't seem like
+an immediate deal-breaker, since assuming that a and b exist as terms
+in all future worlds doesn't seem to constrain *which* terms they are
+in all future worlds; they might be different, or vary differently
+from one another. And yet ¬□(a = b) ⊢ ¬(a = b), apparently.

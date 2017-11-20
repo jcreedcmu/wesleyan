@@ -7,11 +7,12 @@
 
 \input{linear}
 \def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\wat{\mathbin{@}}
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
-\def\base{{\textfrak B}}
+\def\base{{\textfrak b}}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
 \def\zz{{\mathsf z}}
@@ -595,31 +596,80 @@ Well --- contextual ones, anyway.
 Mode Contexts&$\gamma$&$\cdot \celse \gamma, x : \alpha \celse \gamma, \phi : \kappa$\\
 Mode Kinds&$\kappa$&$ (\gamma \prov \base)$\\
 Base Mode Kinds&$\base$&$\tt \celse \rr \celse \cdots$\\
-Mode Types&$\alpha$&$\phi[\theta] \celse 1\celse \alpha \tensor \alpha \celse \cdots$\\
+Mode Types&$\alpha$&$\phi[\theta]$\\
 Mode Terms&$\mu$&$\chi\celse\cdots$\\
 \end{tabular}
 \]
 
-$$
+\[
+\erule{\prov \gamma, \gamma' : \rctx \qquad \base \in \signat}
+{\gamma \prov (\gamma' \prov \base) : \rkind}
+ \]
+\[
+\erule{ \prov  \gamma : \rctx \qquad
+\gamma \prov  \kappa : \rkind}
+{ \prov (\gamma, \phi : \kappa) : \rctx}
+\qquad
+\erule{ \prov  \gamma : \rctx \qquad
+\gamma \prov  \alpha : \kappa}
+{ \prov (\gamma, x : \alpha) : \rctx}
+\]
+
+\[
+\erule{\gamma \prov \theta : \gamma'\qquad
+\gamma \prov \alpha : \kappa}
+{\gamma \prov (\theta, \alpha/\phi) : (\gamma', \phi : \kappa)}
+\qquad
+\erule{\gamma \prov \theta : \gamma'\qquad
+\gamma \prov \mu : \alpha[\theta]}
+{\gamma \prov (\theta, \mu/x) : (\gamma', x : \alpha)}
+\]
+\[
 \erule
-{\phi : (\gamma' \prov \base) \in\gamma\qquad
+{\phi : (\gamma' \prov \base) \in\gamma \cup \signat\qquad
  \gamma \prov \theta : \gamma'}
 {\gamma \prov \phi[\theta] : \base}
-$$
-
-$$
+\qquad
 \erule
 {\gamma', \gamma \prov \alpha : \base}
 {\gamma' \prov \lambda \gamma . \alpha : (\gamma \prov \base)}
-$$
+\]
 
-$$
-\erule{}{ \prov \tensor : (\phi : \rr, \psi : \rr \prov \rr)}
-$$
+Suppose $\sigma : (\phi : (\prov \rr), \psi : (x : \phi[] \prov \rr) \prov \rr)$
+is in the signature $\signat$.
 
-$$
+Then for any expression $\alpha : (\gamma \prov \rr)$, we define
+\[
+(\Sigma x \cn A_1 . A_2) \wat \alpha =
+\exists \phi \cn (\gamma \prov \rr).
+\exists \psi \cn (\gamma, x : \phi[\rid_\gamma] \prov \rr).\]
+\[
+(\Sigma x \cn (A_1 \wat \phi) . (A_2 \wat \psi)) \land ( \alpha \ge
+\lambda \gamma . \sigma[\phi[\rid_\gamma]/\phi, \lambda x.\psi[\rid_\gamma,x/x]/\psi]
+\]
+
+\div
+
+What's the $F$-generalization of this look like?
+\[
+F(\Gamma) \wat \alpha =
+\exists \theta \cn f . (\Gamma \wat \theta) \land ( \alpha \ge F(\theta))
+\]
+where $f$ is the kinding of $F$?
+
+{\color{lgray}
+Example:
+\[
+\signat \supseteq \{ \tensor : (\phi : \rr, \psi : \rr \prov \rr), 1 : (\prov \rr), \ldots \}
+\]}
+
+
+
+{\color{lgray}
+Derivable:
+\[
 \erule{\prov \alpha_1 : (\gamma \prov \rr)\qquad \prov\alpha_2 : (\gamma\prov \rr)}
 {\prov \lambda \gamma . {\tensor}[\alpha_1[\rid_\gamma]/\phi, \alpha_2[\rid_\gamma]/\psi] : (\gamma \prov \rr)}
-$$
-
+\]
+}
 \end{document}
