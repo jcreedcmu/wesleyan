@@ -6,6 +6,9 @@
 \usepackage{amsmath}
 
 \input{linear}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\rseq{\mathsf{seq}}
 \def\sprov{\Vdash}
 \def\signat{{\color{red}\Sigma}}
 \def\div{\vskip 1em \hrule \vskip 1em}
@@ -15,6 +18,7 @@
 \def\base{{\textfrak b}}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
+\def\ff{{\mathsf f}}
 \def\zz{{\mathsf z}}
 \def\sem#1{[\![#1]\!]}
 \def\zem#1{\langle\!\langle#1\rangle\!\rangle}
@@ -117,4 +121,108 @@ boxrule=0pt,boxsep=0pt,breakable}
 % https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
 % ???
 
+\bibliographystyle{alpha}
+\section{Introduction}
+I want to reconcile the ideas in \cite{fibsub} with the idea of merely
+{\em compiling away} substructurality/modality into a plain vanilla type theory.
+My hope is that if I do this the right way, it will have the following advantages:
+\begin{enumerate}
+\item The logical connectives $F$ and $U$ will appear as aspects of a single multiplicative connective.
+\item The dependent generalization of it will be more naturally evident.
+\end{enumerate}
+
+\section{The Lower Theory}
+We assume that we're handed a type theory that looks something like the following:
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Contexts&$\Gamma$&$\cdot  \mathrel{\color{lgray} \celse} {\color{lgray}\Gamma, x : A}
+\celse \Gamma, \alpha : K$\\
+Substitutions&$\theta$&$\cdot \mathrel{\color{lgray} \celse} {\color{lgray} \theta[M/x]}\celse \theta[A/\alpha]$\\
+Base Kinds&$\kappa$&$ \cdots$\\
+Kinds&$K$&$  \Gamma \to \kappa$\\
+Types&$A$&$\alpha[\theta]$\\
+\color{lgray}Terms&\color{lgray}$M$&\color{lgray}$x$\\
+Conjugations&&$c$\\
+\end{tabular}
+\]
+
+Our freedom in customizing the lower theory comes in four parts.
+\begin{enumerate}
+\item We can declare kinds like
+$$(\sprov \kappa : \rkind) \in \signat$$
+and declare types and type formers like
+$$(\sprov \alpha : K) \in \signat$$
+For example, to get the multiplicative connectives of linear logic, I say:
+$$(\sprov \rr, \ff : \rkind) \in \signat$$
+$$(\sprov {1} : \cdot \to \rr) \in \signat$$
+$$(\sprov {\tensor} : (\alpha : \rr, \beta : \rr) \to \rr) \in \signat$$
+$$(\sprov {\lol} : (\alpha : \rr, \phi : \ff) \to \ff) \in \signat$$
+%
+\item We get to specify a theory of the judgment
+$$\Gamma \prov A \le B : K$$
+Which I think off the top of my head has to be reflexive and
+transitive and support weakening and contraction. Maybe more stuff, it
+remains to be seen what I need. Write $\equiv$ when $\le$ and $\ge$ hold.
+For linear logic we have
+$$\alpha, \beta : \rr \sprov (\alpha \tensor \beta) \equiv (\beta \tensor \alpha)$$
+and the like.
+%
+\item We get to decide that some pairs of kinds $K_1, K_2$ are {\em
+  conjugate}, written $c : K_1 \sim K_2$. We assume that there is an involution
+on conjugations, so that
+$c^\dagger : K_2 \sim K_1$ and $c^{\dagger \dagger}$ is the same as $c$.
+
+From this choice is determined which {\em internal sequents} exist.
+$$
+\erule
+{\Gamma \prov A_1 : K_1 \qquad \Gamma \prov A_2 : K_2 \qquad c : K_1 \sim K_2}
+{\Gamma \prov (A_1 \tri_c A_2) : \rseq}
+$$
+For linear logic, we'd have
+$$(\sprov c : \rr \sim \ff) \in \signat$$
+We'll drop the suffix from $\tri$ when it's inferrable from context.
+%
+\item We get to decide a theory of the judgment
+$$\Gamma \prov (A \tri_c B) \le (A' \tri_c B') : \rseq_c$$
+which I think needs to be similarly reflexive, transitive, weakenable, and contractible,
+and also be monotone/antitone in the sense of
+$$
+\erule
+{\Gamma \prov A' \le A : K_1 \qquad \Gamma \prov B \le B' : K_2 }
+{\Gamma \prov (A \tri B) \le (A' \tri B') : \rseq}
+$$
+For linear logic, we'd have
+$$(\alpha: \rr, \beta : \rr, \phi: \ff \sprov ((\alpha \tensor \beta) \tri \phi) \equiv
+(\alpha \tri (\beta \lol \phi))) \in \signat$$
+\end{enumerate}
+
+\section{The Upper Theory}
+The language of the upper theory gets to reuse lots of stuff from downstairs.
+The main difference is that we get {\em atoms} and {\em shifts} in the type language.
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Substitutions&$\bar \theta$&$\cdot\celse \bar \theta[\bar A/\alpha]$\\
+Types&$\bar A$&$a_\kappa(\nu) \celse \alpha[\bar \theta] \celse \ups_c \bar A$\\
+\end{tabular}
+\]
+
+$$
+\erule
+{}
+{\Gamma \prov a_\kappa(\nu) : \kappa}
+$$
+
+$$
+\erule
+{\Gamma \prov \bar A : K_1 \qquad c : K_1 \sim K_2 \using{\color{red} \hbox{$\kappa$s not $K$s?}}}
+{\Gamma \prov \ups_c \bar A : K_2}
+$$
+
+In linear logic with $c : \rr \sim \ff$, we have
+ $\ups_c = \ups$ and $\ups_{c^\dagger} = \dns$.
+
+In this language we can pose provability questions like: can I
+\section{The Representation Language}
+
+\bibliography{../wes}
 \end{document}
