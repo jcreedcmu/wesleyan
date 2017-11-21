@@ -11,7 +11,10 @@
 \def\rseq{\mathsf{seq}}
 \def\sprov{\Vdash}
 \def\uprov{\mathrel{\color{opfib}\vdash}}
-\def\signat{{\color{red}\Sigma}}
+\def\uprovc{\mathrel{\color{opfib}\vdash_c}}
+\def\signat{{
+% \color{red}
+\Sigma}}
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\wat{\mathbin{@}}
 \def\cn{{:}}
@@ -33,7 +36,7 @@
 \def\rset{\mathbf{Set}}
 \def\binj{\mathbf{inj}}
 \def\rid{\mathsf{id}}
-\def\rtrue{\mathrel\mathrm{true}}
+\def\rok{\mathrel\mathsf{ok}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -88,6 +91,7 @@
 \definecolor{fib}{HTML}{ff7f00}
 \definecolor{green}{HTML}{007f00}
 \definecolor{red}{HTML}{df3f3f}
+\definecolor{purple}{HTML}{af3faf}
 \definecolor{opfib}{HTML}{007fff}
 
 % For lightening colors I used
@@ -168,20 +172,21 @@ For linear logic we have
 $$\alpha, \beta : \rr \sprov (\alpha \tensor \beta) \equiv (\beta \tensor \alpha)$$
 and the like.
 %
-\item We get to decide that some pairs of kinds $K_1, K_2$ are {\em
-  conjugate}, written $c : K_1 \sim K_2$. We assume that there is an involution
+\item We get to decide that some pairs of kinds $\kappa_1, \kappa_2$ are {\em
+  conjugate}, written $c : \kappa_1 \sim \kappa_2$. We assume that there is an involution
 on conjugations, so that
-$c^\dagger : K_2 \sim K_1$ and $c^{\dagger \dagger}$ is the same as $c$.
+$c^\dagger : \kappa_2 \sim \kappa_1$ and $c^{\dagger \dagger}$ is the same as $c$.
 
 From this choice is determined which {\em internal sequents} exist.
 $$
 \erule
-{\Gamma \prov A_1 : K_1 \qquad \Gamma \prov A_2 : K_2 \qquad c : K_1 \sim K_2}
+{\Gamma \prov A_1 : \kappa_1 \qquad \Gamma \prov A_2 : \kappa_2 \qquad c : \kappa_1 \sim \kappa_2}
 {\Gamma \prov (A_1 \tri_c A_2) : \rseq}
 $$
 For linear logic, we'd have
 $$(\sprov c : \rr \sim \ff) \in \signat$$
-We'll drop the suffix from $\tri$ when it's inferrable from context.
+We'll drop various subscripts $c$ in the sequel
+when they're evident from context.
 %
 \item We get to decide a theory of the judgment
 $$\Gamma \prov (A \tri_c B) \le (A' \tri_c B') : \rseq_c$$
@@ -189,7 +194,7 @@ which I think needs to be similarly reflexive, transitive, weakenable, and contr
 and also be monotone/antitone in the sense of
 $$
 \erule
-{\Gamma \prov A' \le A : K_1 \qquad \Gamma \prov B \le B' : K_2 }
+{\Gamma \prov A' \le A : \kappa_1 \qquad \Gamma \prov B \le B' : \kappa_2 }
 {\Gamma \prov (A \tri B) \le (A' \tri B') : \rseq}
 $$
 We probably also need to demand that $A \tri_c B$ and $B \tri_{c^\dagger} A$ denote
@@ -213,19 +218,20 @@ Types&$\bar A$&$ \alpha[\bar \theta] \celse \ups_c \bar A$\\
 
 $$
 \erule
-{\Gamma \prov \bar A : K_1 \qquad c : K_1 \sim K_2 \using{\color{red} \hbox{$\kappa$s not $K$s?}}}
-{\Gamma \prov \ups_c \bar A : K_2}
+{\Gamma \prov \bar A : \kappa_1 \qquad c : \kappa_1 \sim \kappa_2}
+{\Gamma \prov \ups_c \bar A : \kappa_2}
 $$
 
 In linear logic with $c : \rr \sim \ff$, we have
  $\ups_c = \ups$ and $\ups_{c^\dagger} = \dns$.
+We can write $\dns_c$ for $\ups_{c^\dagger}$.
 
 In this language we can {\em pose} provability questions like:
 \[
 \erule
 {\Gamma \prov \bar A_1 : \kappa_1 \qquad \Gamma \prov \bar A_2 : \kappa_2 \qquad
 c : \kappa_1 \sim \kappa_2}
-{\Gamma / \bar A_1 \uprov \bar A_2}
+{\Gamma / \bar A_1 \uprovc \bar A_2}
 \]
 For example, in linear logic, we might ask if it's the case that
 $$\alpha : \rr, \phi : \ff /\  \alpha \tensor \dns \phi \uprov \alpha \lol \phi$$
@@ -235,9 +241,32 @@ In the following section we will define the content of such questions by
 translation.
 \section{The Representation}
 
-We turn $\Gamma / \bar A_1 \uprov A_2$ into
+We turn $\Gamma / \bar A_1 \uprov \bar A_2$ into the term query
 
-\[\Gamma, \alpha_1 : \kappa_1, \alpha_2 : \kappa_2, \]
-\[x_1 : (\bar A_1 \wat \alpha_1), x_2 : (\bar A_2 \wat \alpha_2) \prov \alpha_1 \tri \alpha_2 \]
+\[\Gamma, \alpha : \kappa_1 ,x : (\bar A_1 \wat \alpha)\prov  {\color{red}?} :  ((\dns_{c}\bar A_2) \wat \alpha ) \]
+
+where the translation $\wat$ has the contract
+$$
+\erule
+{ \prov \bar A : K \qquad  \prov \alpha : K}
+{ \prov \bar A \wat \alpha : \rtype}
+$$
+and clauses like
+
+\def\gg{{\color{green}\Gamma}}
+\def\pa{{\color{purple} A}}
+$$\erule{\alpha : \gg \to \kappa \in \signat \qquad  \prov \pa : \kappa
+\qquad  \prov \bar \theta : \gg}
+{\alpha[\bar\theta] \wat \pa
+  := {\color{red} \exists} \gg . (\bar\theta \wat \gg) \mathrel{\color{opfib}\land} (\alpha[\gg] \le \pa)}$$
+
+\def\ga{{\color{green} \alpha}}
+\def\fba{{\color{fib} \bar A}}
+\def\pb{{\color{purple} B}}
+$$\erule{\prov \fba : \kappa_1\qquad  \prov \pb : \kappa_2
+\qquad  \prov  c : \kappa_1 \sim \kappa_2}
+{(\ups_c \fba) \wat \pb
+  := {\color{red} \forall} \ga \cn \kappa_1 . (\fba \wat \ga) \mathrel{\color{opfib}\imp} (\ga \tri_c \pb)}$$
+
 \bibliography{../wes}
 \end{document}
