@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 
 \input{linear}
+\def\rM{{\mathsf M}}
 \def\ups{{\uparrow}}
 \def\dns{{\downarrow}}
 \def\rseq{\mathsf{seq}}
@@ -265,5 +266,58 @@ $$\erule{\prov \bar A : \kappa_1\qquad  \prov B : \kappa_2
 {(\ups_c \bar A) \wat B
   := \forall \alpha \cn \kappa_1 . (\bar A \wat \alpha) \imp (\alpha \tri_c B)}$$
 
+Speculatively, it seems like I can generalize these to
+
+$$\erule{\alpha : \Gamma \to \kappa_1 \in \signat \qquad \prov \bar \theta : \Gamma \qquad  \prov A : \kappa_2
+\qquad  \prov  c : \kappa_1 \sim \kappa_2}
+{(\ups^\alpha_c \bar\theta) \wat A
+  := \forall \Gamma  . (\bar\theta \wat \Gamma) \imp (\alpha[\Gamma] \tri_c A)}$$
+$$\erule{\alpha : \Gamma \to \kappa_1 \in \signat \qquad \prov \bar \theta : \Gamma \qquad  \prov A : \kappa_2
+\qquad  \prov  c : \kappa_1 \sim \kappa_2}
+{(\rM^\alpha_c \bar\theta) \wat A
+  := \exists \Gamma  . (\bar\theta \wat \Gamma) \land (\alpha[\Gamma] \tri_c A)}$$
+Assuming a reflexivity conjugation exists such that $A \le B$ is somehow
+the same as $A \tri_{\mathrm{refl}} B$. And then the antitone/monotoneness of $\tri$
+pops out of functoriality or something?
+
+What are the rules for these connectives? I think something like
+$$
+\erule
+{\alpha : \Gamma \to \kappa_1 \in \signat \qquad
+ \prov \bar \theta : \Gamma \qquad c : \kappa_1 \sim \kappa_2}
+{ \prov \ups^\alpha_c \bar \theta : \kappa_2}
+$$
+$$
+\erule
+{\alpha : \Gamma \to \kappa_1 \in \signat \qquad
+ \prov \bar \theta : \Gamma \qquad c : \kappa_1 \sim \kappa_2}
+{\Gamma \prov \rM^\alpha_c \bar \theta : \kappa_2}
+$$
+Hmmm in a certain sense, I think $\ups^\alpha_c$ is the only {\em real} connective.
+$\rM^\alpha_c$ is useful for defining intermediate steps or something.
+
+Or at least, if I generalize a slight bit further and I let $\alpha$
+be any appropriately kinded expression in the lower theory, not just
+a constant type family from the signature:
+$$
+\erule
+{\Gamma \prov \alpha : \kappa \qquad \prov \bar \theta : \Gamma \qquad c : \kappa \sim \kappa'}
+{\Gamma \prov \ups^\alpha_c\bar\theta : \kappa'}
+$$
+$$
+\erule
+{\Gamma \prov \alpha : \kappa \qquad \prov \bar \theta : \Gamma \qquad c : \kappa \sim \kappa'}
+{\Gamma \prov \rM^\alpha_c\bar\theta : \kappa'}
+$$
+Then I think I could claim that if I have a
+$\ups^{\alpha_1}_{c_1} \bar\theta_1$ with $\theta_1(x) = \rM^{\alpha_2}_{c_2}\bar \theta_2$,
+where the types of the other things are
+\[\Gamma_1 \prov \alpha_1 : \kappa_1 \qquad \prov \bar \theta_1 : \Gamma_1 \qquad c_1 : \kappa_1 \sim \kappa_1'\]
+\[\Gamma_2 \prov \alpha_2 : \kappa_2 \qquad \prov \bar \theta_2 : \Gamma_2 \qquad c_2 : \kappa_2 \sim \kappa_2'\]
+\[x : \kappa_2' \in \Gamma_1\]
+Then I could set
+\[\Gamma = (\Gamma_1 / x) \cup \Gamma_2\]
+\[\color{red}\alpha = [\alpha_2 / x]\alpha_1\]
+No already that doesn't typecheck. Hmm.
 \bibliography{../wes}
 \end{document}
