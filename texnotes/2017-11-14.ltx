@@ -1,0 +1,229 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{latexsym}
+\usepackage{amsmath}
+
+\input{linear}
+\def\rfcr{\mathbf{Fcr}}
+\def\rpremesh{\mathbf{PreMesh}}
+\def\rpush{\mathsf{push}}
+\def\rpull{\mathsf{pull}}
+
+\def\lax{\mathop\bigcirc}
+\def\rlax{\mathrel\mathsf{lax}}
+\def\rjust{\mathsf{just}}
+\def\rtype{\mathsf{type}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+\def\N{\mathbb{N}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{ff003f}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{opfibl}{HTML}{DBEDFF}
+\def\judge#1{\vskip 2em\noindent \fcolorbox{opfib}{white}{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent\fcolorbox{white}{opfibl}{$#1$} \vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\title{Notes on the Logic of Convex Combination}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+Let $\rfcr$ be the category of finite corelations, whose objects
+are finite sets, and whose morphisms $A \to B$ are cospans (with $X$ also
+a finite set)
+\[
+\begin{tikzcd}
+A \ar[r] & X & \ar[l] B
+\end{tikzcd}
+\]
+where composition is given by pushout:
+\[
+\begin{tikzcd}
+Z \ar[from=d]\ar[from=r]\pbck & Y  & \ar[l] C\\
+X & B \ar[l]\ar[u]\\
+A \ar[u]
+\end{tikzcd}
+\]
+Let $\rpremesh$ be the presheaf category $\rset^{\rfcr^{\op}}$.
+Without loss of generality, the objects of $\rfcr$ can be named
+$0, 1, 2, \ldots$, and we write the yoneda embedding of these in
+$\rpremesh$ as $\sharp 0, \sharp 1, \sharp 2, \ldots$.
+
+A premesh $M$ is a {\em mesh} if it lets us take coproducts under the $\sharp$,
+that is, if we can always do
+\[
+\erule{}{ \sharp 0 \to M}\qquad
+\erule{ \sharp n + \sharp m \to M}
+{ \sharp (n +  m) \to M}
+\]
+
+Can I phrase this as demanding that a certain morphism is an
+equivalence? Is there a canonical morphism
+$\sharp n + \sharp m \to \sharp (n +  m)$?
+Well, there certainly is at least a morphism
+$$! : 0 \to \sharp 0$$
+Demanding that composition with
+$!$ is an equivalence from the type $\sharp 0 \to M$
+to the type $0 \to M$ would just be saying that there is a {\em unique}
+nullary relation in $M$, which seems perhaps too strong. Let's look
+at the binary case, then.
+
+If I have a 5-ary relation in $M$, i.e. a morphism $\sharp 5 \to M$, I can
+certainly come up with a 2-ary and a 3-ary relation by pushing down to
+subsets of the boundary. But in no way do I expect that to constitute an
+equivalence between $\sharp 5 \to M$ and $\sharp 2 + \sharp 3 \to M$.
+
+In general, given a list of numbers $n_1, \ldots, n_m$, I expect
+there to be a canonical way of going
+\[
+\erule{ \sharp n_1 + \cdots + \sharp n_m \to M}
+{ \sharp (n_1 +  \cdots + n_m) \to M}
+\]
+
+Interestingly, if I view this logically, it does make sense that some
+special props $M$ might satisfy
+\[
+\erule{ \lax n + \lax m \prov M}
+{ \lax (n +  m) \prov M}
+\]
+despite it being not generally the case that
+\[\lax (n +  m) \prov \lax n + \lax m \]
+For instance, if $M$ itself is $\lax A$, then
+we can straightforwardly prove
+\[
+\erule{
+\[
+\[
+\[
+\[
+\lax n + \lax m \prov \lax A
+\justifies
+ \prov \lax n + \lax m \imp \lax A
+\]
+\[
+\[
+ \justifies
+ n+ m \prov \lax n + \lax m
+\]
+\[
+ \justifies
+\lax A \prov A \rlax
+\]
+ \justifies
+\lax n + \lax m \imp \lax A, n+ m \prov A \rlax
+\]
+\using cut
+\justifies
+  n + m \prov A \rlax
+\]
+\justifies
+ n + m \prov A \rlax
+\]
+\justifies
+ \lax (n + m) \prov A \rlax
+\]
+}
+{ \lax (n +  m) \prov \lax A}
+\]
+
+\subsection*{Slightly Larger Category}
+I also might consider the category
+\[
+W =\qquad
+\begin{tikzcd}
+0 \ar[r, <->]\ar[dr, <->] & 1\ar[r, <->]\ar[d, <->] & 2\ar[r, <->]\ar[dl, <->]
+ & 3\ar[r, <->] \ar[dll, <->]& \cdots\\
+& \top
+\end{tikzcd}
+\]
+where $\top$ is a terminal object, and we throw in $n$ arrows
+$d^n_i : \top \to n$ for each $i = 0,\ldots, n-1$.
+The homs $n \to m$ still look like
+\[
+\begin{tikzcd}
+n \ar[r, "\rpush"] & x & \ar[l, "\rpull"'] m
+\end{tikzcd}
+\]
+\subsection*{Wait a Minute}
+There's something off about 0 in this category. If I have an element
+of the presheaf at $3$, I know it's a ternary relation, and I have sort
+of fixed what {\em value} as points in the ambient type its boundary objects
+are. But --- yeah --- all pulls don't make sense, yet, it's not just zero.
+Pulls of things into arbitrary existence don't determine what value
+they are, and binary pulls of two things together don't constrain
+them to be the same point. Bummer.
+\subsection*{But I can Still Capture the Pushes, Right?}
+Maybe, if I just take the category $\rfinset$, and tack on
+a terminal object that's a retract of $1$.
+\[
+W =\qquad
+\begin{tikzcd}
+0 \ar[r]\ar[dr] & 1\ar[r]\ar[d] & 2\ar[r]\ar[dl]
+ & 3\ar[r] \ar[dll]& \cdots\\
+& \top
+\end{tikzcd}
+\]
+I still throw in $n$ arrows
+$d^n_i : \top \to n$ for each $i = 0,\ldots, n-1$.
+If I have $f : n \to m$ then $f \o d^{n}_{i} = d^m_{f(i)}$.
+\end{document}
