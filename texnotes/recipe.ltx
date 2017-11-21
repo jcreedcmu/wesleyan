@@ -319,5 +319,30 @@ Then I could set
 \[\Gamma = (\Gamma_1 / x) \cup \Gamma_2\]
 \[\color{red}\alpha = [\alpha_2 / x]\alpha_1\]
 No already that doesn't typecheck. Hmm.
+
+\subsection{Retracting that Hypothesis For Now}
+Let's just stare at
+$$\erule{\alpha : \Gamma \to \kappa \in \signat \qquad  \prov A : \kappa
+\qquad  \prov \bar \theta : \Gamma}
+{\alpha[\bar\theta] \wat A
+  :=  \exists \Gamma . (\bar\theta \wat \Gamma) \land (\alpha[\Gamma] \le A)}$$
+and correct the problem that I think exists with scope.
+
+In linear logic, I could have a context of type variables
+$\Gamma = (\alpha : \rr, \beta : \rr)$ and want to form
+the type $\alpha \tensor \beta : \rr$. The local context of $\alpha \in \signat$
+is conceptually distinct from this. I actually want to say something more like
+$$\erule{\alpha : \Delta \to \kappa \in \signat \qquad  \Gamma \prov A : \kappa
+\qquad  \Gamma \prov \bar \theta : \Delta}
+{\alpha[\bar\theta] \wat A
+  :=  \exists \Delta . (\bar\theta \wat \Delta) \land (\alpha[\Delta] \le A)}$$
+or if I want to allow arbitrary low-theory expressions,
+$$\erule{ \Delta \prov B :  \kappa  \qquad  \Gamma \prov A : \kappa
+\qquad  \Gamma \prov \bar \theta : \Delta}
+{B[\bar\theta] \wat A
+  :=  \exists \Delta . (\bar\theta \wat \Delta) \land (B \le A)}$$
+I guess there's a kind of mutual weakening that goes on in $B \le A$;
+$B$ is weakened up to $\Gamma$, and $A$ up to $\Delta$.
+
 \bibliography{../wes}
 \end{document}
