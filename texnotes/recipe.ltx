@@ -10,6 +10,7 @@
 \def\dns{{\downarrow}}
 \def\rseq{\mathsf{seq}}
 \def\sprov{\Vdash}
+\def\uprov{\mathrel{\color{opfib}\vdash}}
 \def\signat{{\color{red}\Sigma}}
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\wat{\mathbin{@}}
@@ -191,6 +192,9 @@ $$
 {\Gamma \prov A' \le A : K_1 \qquad \Gamma \prov B \le B' : K_2 }
 {\Gamma \prov (A \tri B) \le (A' \tri B') : \rseq}
 $$
+We probably also need to demand that $A \tri_c B$ and $B \tri_{c^\dagger} A$ denote
+exactly the same thing.
+
 For linear logic, we'd have
 $$(\alpha: \rr, \beta : \rr, \phi: \ff \sprov ((\alpha \tensor \beta) \tri \phi) \equiv
 (\alpha \tri (\beta \lol \phi))) \in \signat$$
@@ -198,19 +202,14 @@ $$(\alpha: \rr, \beta : \rr, \phi: \ff \sprov ((\alpha \tensor \beta) \tri \phi)
 
 \section{The Upper Theory}
 The language of the upper theory gets to reuse lots of stuff from downstairs.
-The main difference is that we get {\em atoms} and {\em shifts} in the type language.
+The main difference is that we get {\em shifts} in the type language.
 \[
 \begin{tabular}{rc@{$\quad::=\quad$}l}
 Substitutions&$\bar \theta$&$\cdot\celse \bar \theta[\bar A/\alpha]$\\
-Types&$\bar A$&$a_\kappa(\nu) \celse \alpha[\bar \theta] \celse \ups_c \bar A$\\
+Types&$\bar A$&$ \alpha[\bar \theta] \celse \ups_c \bar A$\\
 \end{tabular}
 \]
 
-$$
-\erule
-{}
-{\Gamma \prov a_\kappa(\nu) : \kappa}
-$$
 
 $$
 \erule
@@ -221,8 +220,24 @@ $$
 In linear logic with $c : \rr \sim \ff$, we have
  $\ups_c = \ups$ and $\ups_{c^\dagger} = \dns$.
 
-In this language we can pose provability questions like: can I
-\section{The Representation Language}
+In this language we can {\em pose} provability questions like:
+\[
+\erule
+{\Gamma \prov \bar A_1 : \kappa_1 \qquad \Gamma \prov \bar A_2 : \kappa_2 \qquad
+c : \kappa_1 \sim \kappa_2}
+{\Gamma / \bar A_1 \uprov \bar A_2}
+\]
+For example, in linear logic, we might ask if it's the case that
+$$\alpha : \rr, \phi : \ff /\  \alpha \tensor \dns \phi \uprov \alpha \lol \phi$$
+which desugars to
+$$\alpha : \rr, \phi : \ff /\  ({\tensor})[\alpha, \dns \phi] \uprov ({\lol}) [\alpha, \phi]$$
+In the following section we will define the content of such questions by
+translation.
+\section{The Representation}
 
+We turn $\Gamma / \bar A_1 \uprov A_2$ into
+
+\[\Gamma, \alpha_1 : \kappa_1, \alpha_2 : \kappa_2, \]
+\[x_1 : (\bar A_1 \wat \alpha_1), x_2 : (\bar A_2 \wat \alpha_2) \prov \alpha_1 \tri \alpha_2 \]
 \bibliography{../wes}
 \end{document}
