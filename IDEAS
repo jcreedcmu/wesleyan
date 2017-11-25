@@ -2786,3 +2786,30 @@ an immediate deal-breaker, since assuming that a and b exist as terms
 in all future worlds doesn't seem to constrain *which* terms they are
 in all future worlds; they might be different, or vary differently
 from one another. And yet ¬□(a = b) ⊢ ¬(a = b), apparently.
+
+=== 2017.11.21
+
+Q: Are the base kinds in some kind of †-category?
+A: Hm, I thought so, but now I think not; There's some kind of converse, relative
+to the shifts, but I can't compose arbitrary zigzags together.
+
+=== 2017.11.22
+
+Q: So what do I want?
+A: Maybe just an ordinary category, and speak of an optionally flipped
+choice of morphism at the very end --- not unlike a bifibration giving
+you the ability to operate as a fibration or opfibration.
+
+Q: Anything worth saying about the distinction between the data
+structure ▹ and the proposition ▹?
+A: That I'm still kind of confused about.
+
+=== 2017.11.23
+
+Q: When do I want base kinds and when general kinds?
+A: ???
+
+=== 2017.11.24
+
+Q: Can I get away with just general binary relations, instead of specific ≤ and ◃ like ones?
+A: ???

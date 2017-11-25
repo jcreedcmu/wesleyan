@@ -60,7 +60,7 @@
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
 \def\pair#1#2{\langle#1,#2\rangle}
-\def\tri{\triangleright}
+\def\tri{\triangleleft}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\del{\partial}
@@ -153,7 +153,7 @@ Morphisms&&$c$\\
 \end{tabular}
 \]
 
-Our freedom in customizing the lower theory comes in three parts.
+Our freedom in customizing the lower theory comes in several forms:
 \begin{enumerate}
 \item We can declare kinds like
 $$(\sprov \kappa : \rkind) \in \signat$$
@@ -165,44 +165,57 @@ $$(\sprov {1} : \cdot \to \rr) \in \signat$$
 $$(\sprov {\tensor} : (\alpha : \rr, \beta : \rr) \to \rr) \in \signat$$
 $$(\sprov {\lol} : (\alpha : \rr, \phi : \ff) \to \ff) \in \signat$$
 %
-\item We get to pick a category structure on the base kinds, with morphisms $c : \kappa_1 \conj \kappa_2$.
-
-From this choice is determined which {\em internal sequents} exist.
+\item We get to a category structure on the base kinds, whose morphisms
+we call {\em conjugations} $c : \kappa_1 \conj \kappa_2$.
+From this choice it is determined which {\em internal sequents} exist.
 $$
 \erule
-{\Gamma \prov A_1 : \kappa_1 \qquad \Gamma \prov A_2 : \kappa_2 \qquad c : \kappa_1 \conj \kappa_2}
+{\Gamma \prov A_1 : \kappa_1 \qquad \Gamma \prov A_2 : \kappa_2 \qquad
+\sprov c : \kappa_1 \conj \kappa_2}
 {\Gamma \prov (A_1 \tri_c A_2) : \rseq_c}
 $$
-For linear logic, we have just
+An internal sequent is just a data structure; a pair of types whose kinds are connected by a chosen conjugation.
+For linear logic, we have
 $$(\sprov c : \rr \conj \ff) \in \signat$$
-and identity arrows at $\rr$ and $\ff$.
+and identity morphisms at $\rr$ and $\ff$.
 We'll drop various subscripts $c$ in the sequel
 when they're evident from context.
 %
+\item We get to decide a theory of the judgment of which internal sequents actually {\em hold}.
+We write $A \le_c B$ to indicate that the sequent $A \tri_c B$ holds.
+We write $\Gamma \prov A \le B : \kappa$ to mean the same thing as $\Gamma \prov A \le_{\rid_\kappa} B$.
+For linear logic we'd have
+$$(\alpha, \beta : \rr \sprov (\alpha \tensor \beta) \equiv (\beta \tensor \alpha) : \rr) \in \signat$$
+and the like,
+where $A \equiv B$ means that both $A \le B : \kappa$ and $B \le A : \kappa$.
+
+Probably generally we have reflexivity, transitivity, weakening (in $\Gamma$), contraction (in $\Gamma$).
+
 \item We get to decide a theory of the judgment
-$$\Gamma \prov A \tri_c B $$
-which I think needs to satisfy weakening and contraction,
-and also satisfy `composition' and `identity':
+$$\Gamma \prov (A \tri_c B) \le (A' \tri_c B') : \rseq_c$$
+which probably needs to satisfy some composition laws with respect to $\le$ on types
+at the same kind, e.g.
 $$
 \erule
-{\Gamma \prov A \tri_c B  \qquad \Gamma \prov B \tri_{c'} C }
-{\Gamma \prov A \tri_{c;c'} C}
-\qquad
-\erule
-{}{\Gamma \prov A \tri_{\rid_\kappa} A : \kappa}
+{\Gamma \prov A' \le A : \kappa_1  \qquad \Gamma \prov B \le B' : \kappa_2 }
+{\Gamma \prov (A \tri B) \le (A' \tri B')}
 $$
-This is clearly some 2-categorical stuff going on.
-We write
-$$\Gamma \prov A \le B : \kappa$$
-for $\Gamma \prov A \tri_{\rid_\kappa} B$ and
-write $\equiv$ when both $\le$ and $\ge$ hold.
+or more generally
+$$
+\erule
+{\Gamma \prov A \le_c B  \qquad \Gamma \prov B \le_{c'} C }
+{\Gamma \prov A \le_{c;c'} C}
+$$
+and I think also
+$$
+\erule
+{\Gamma \prov (A \tri_c B) \le (A' \tri_c B')  \qquad \Gamma \prov A' \le_c B' }
+{\Gamma \prov A \le_c B}
+$$
 
 For linear logic we'd have
-$$\alpha, \beta : \rr \sprov (\alpha \tensor \beta) \equiv (\beta \tensor \alpha)$$
-and
-$$(\alpha: \rr, \beta : \rr, \phi: \ff, (\alpha \tensor \beta) \tri_c \phi \sprov
-\alpha \tri_c (\beta \lol \phi)) \in \signat$$
-and the like.
+$$(\alpha: \rr, \beta : \rr, \phi: \ff \prov  (\alpha \tensor \beta) \tri_c \phi \equiv
+\alpha \tri_c (\beta \lol \phi) : \rseq_c) \in \signat$$
 \end{enumerate}
 
 \section{The Upper Theory}
@@ -255,99 +268,46 @@ $$
 and clauses like
 
 
-$$\erule{\alpha : \Gamma \to \kappa \in \signat \qquad  \prov A : \kappa
-\qquad  \prov \bar \theta : \Gamma}
+$$\erule{\alpha : \Delta \to \kappa \in \signat \qquad  \Gamma\prov A : \kappa
+\qquad  \Gamma \prov \bar \theta : \Delta}
 {\alpha[\bar\theta] \wat A
-  :=  \exists \Gamma . (\bar\theta \wat \Gamma) \land (\alpha[\Gamma] \le A)}$$
+  :=  \exists \Delta . (\bar\theta \wat \Delta) \land (\alpha[\Delta] \le_{\rid_\kappa} A)}$$
 
 
-$$\erule{\prov \bar A : \kappa_1\qquad  \prov B : \kappa_2
+$$\erule{\Gamma \prov \bar A : \kappa_1\qquad  \Gamma \prov B : \kappa_2
 \qquad  \prov  c : \kappa_1 \conj \kappa_2}
 {(\ups_c \bar A) \wat B
-  := \forall \alpha \cn \kappa_1 . (\bar A \wat \alpha) \imp (\alpha \tri_c B)}$$
+  := \forall \alpha \cn \kappa_1 . (\bar A \wat \alpha) \imp (\alpha \le_c B)}$$
 
 $$\erule{\prov \bar A : \kappa_2\qquad  \prov B : \kappa_1
 \qquad  \prov  c : \kappa_1 \conj \kappa_2}
 {(\dns_c \bar A) \wat B
-  := \forall \alpha \cn \kappa_2. (\bar A \wat \alpha) \imp (B \tri_c \alpha)}$$
+  := \forall \alpha \cn \kappa_2. (\bar A \wat \alpha) \imp (B \le_c \alpha)}$$
 
-%% Speculatively, it seems like I can generalize these to
 
-%% $$\erule{\alpha : \Gamma \to \kappa_1 \in \signat \qquad \prov \bar \theta : \Gamma \qquad  \prov A : \kappa_2
-%% \qquad  \prov  c : \kappa_1 \conj \kappa_2}
-%% {(\ups^\alpha_c \bar\theta) \wat A
-%%   := \forall \Gamma  . (\bar\theta \wat \Gamma) \imp (\alpha[\Gamma] \tri_c A)}$$
-%% $$\erule{\alpha : \Gamma \to \kappa_1 \in \signat \qquad \prov \bar \theta : \Gamma \qquad  \prov A : \kappa_2
-%% \qquad  \prov  c : \kappa_1 \conj \kappa_2}
-%% {(\rM^\alpha_c \bar\theta) \wat A
-%%   := \exists \Gamma  . (\bar\theta \wat \Gamma) \land (\alpha[\Gamma] \tri_c A)}$$
-%% Assuming a reflexivity conjugation exists such that $A \le B$ is somehow
-%% the same as $A \tri_{\mathrm{refl}} B$. And then the antitone/monotoneness of $\tri$
-%% pops out of functoriality or something?
+\div \div \div
 
-%% What are the rules for these connectives? I think something like
-%% $$
-%% \erule
-%% {\alpha : \Gamma \to \kappa_1 \in \signat \qquad
-%%  \prov \bar \theta : \Gamma \qquad c : \kappa_1 \conj \kappa_2}
-%% { \prov \ups^\alpha_c \bar \theta : \kappa_2}
-%% $$
-%% $$
-%% \erule
-%% {\alpha : \Gamma \to \kappa_1 \in \signat \qquad
-%%  \prov \bar \theta : \Gamma \qquad c : \kappa_1 \conj \kappa_2}
-%% {\Gamma \prov \rM^\alpha_c \bar \theta : \kappa_2}
-%% $$
-%% Hmmm in a certain sense, I think $\ups^\alpha_c$ is the only {\em real} connective.
-%% $\rM^\alpha_c$ is useful for defining intermediate steps or something.
+The most general form I can think of is: suppose I have some kind of relation
+$R(\alpha_1, \alpha_2)$ for $\alpha_1 : \kappa_1$ and $\alpha_2: \kappa_2$ over
+the lower theory. I can make positive and negative connectives
 
-%% Or at least, if I generalize a slight bit further and I let $\alpha$
-%% be any appropriately kinded expression in the lower theory, not just
-%% a constant type family from the signature:
-%% $$
-%% \erule
-%% {\Gamma \prov \alpha : \kappa \qquad \prov \bar \theta : \Gamma \qquad c : \kappa \conj \kappa'}
-%% {\Gamma \prov \ups^\alpha_c\bar\theta : \kappa'}
-%% $$
-%% $$
-%% \erule
-%% {\Gamma \prov \alpha : \kappa \qquad \prov \bar \theta : \Gamma \qquad c : \kappa \conj \kappa'}
-%% {\Gamma \prov \rM^\alpha_c\bar\theta : \kappa'}
-%% $$
-%% Then I think I could claim that if I have a
-%% $\ups^{\alpha_1}_{c_1} \bar\theta_1$ with $\theta_1(x) = \rM^{\alpha_2}_{c_2}\bar \theta_2$,
-%% where the types of the other things are
-%% \[\Gamma_1 \prov \alpha_1 : \kappa_1 \qquad \prov \bar \theta_1 : \Gamma_1 \qquad c_1 : \kappa_1 \conj \kappa_1'\]
-%% \[\Gamma_2 \prov \alpha_2 : \kappa_2 \qquad \prov \bar \theta_2 : \Gamma_2 \qquad c_2 : \kappa_2 \conj \kappa_2'\]
-%% \[x : \kappa_2' \in \Gamma_1\]
-%% Then I could set
-%% \[\Gamma = (\Gamma_1 / x) \cup \Gamma_2\]
-%% \[\color{red}\alpha = [\alpha_2 / x]\alpha_1\]
-%% No already that doesn't typecheck. Hmm.
+$$\erule{\Gamma \prov \bar \theta : \Delta \qquad \Delta \prov A : \kappa_1
+\qquad \prov R : \kappa_1 \conj \kappa_2}
+{C^\pm(\bar\theta, \Delta,  A, R) : \kappa_2}$$
 
-% \subsection{Retracting that Hypothesis For Now}
-Let's just stare at
-$$\erule{\alpha : \Gamma \to \kappa \in \signat \qquad  \prov A : \kappa
-\qquad  \prov \bar \theta : \Gamma}
-{\alpha[\bar\theta] \wat A
-  :=  \exists \Gamma . (\bar\theta \wat \Gamma) \land (\alpha[\Gamma] \le A)}$$
-and correct the problem that I think exists with scope.
+$$
+{C^+(\bar\theta, \Delta,  A, R) \wat B
+  :=  \exists \Delta . (\bar\theta \wat \Delta) \land R(A,  B)}$$
+$$
+{C^-(\bar\theta, \Delta,  A, R) \wat B
+  :=  \forall \Delta . (\bar\theta \wat \Delta) \imp R(A, B)}$$
 
-In linear logic, I could have a context of type variables
-$\Gamma = (\alpha : \rr, \beta : \rr)$ and want to form
-the type $\alpha \tensor \beta : \rr$. The local context of $\alpha \in \signat$
-is conceptually distinct from this. I actually want to say something more like
-$$\erule{\alpha : \Delta \to \kappa \in \signat \qquad  \Gamma \prov A : \kappa
-\qquad  \Gamma \prov \bar \theta : \Delta}
-{\alpha[\bar\theta] \wat A
-  :=  \exists \Delta . (\bar\theta \wat \Delta) \land (\alpha[\Delta] \le A)}$$
-or if I want to allow arbitrary low-theory expressions,
-$$\erule{ \Delta \prov B :  \kappa  \qquad  \Gamma \prov A : \kappa
-\qquad  \Gamma \prov \bar \theta : \Delta}
-{B[\bar\theta] \wat A
-  :=  \exists \Delta . (\bar\theta \wat \Delta) \land (B \le A)}$$
-I guess there's a kind of mutual weakening that goes on in $B \le A$;
-$B$ is weakened up to $\Gamma$, and $A$ up to $\Delta$.
+Then $(\bar A \tensor \bar B) $ is
+$$C^+([\bar A / \alpha][\bar B / \beta], (\alpha : \rr, \beta : \rr), {\tensor}, \le_{\rid_{\rr}})$$
+and $\ups A$ for $\Gamma \prov \bar A : \rr$ is
+$$C^-([\bar A / \alpha], (\alpha : \rr), {\alpha}, \le_c)$$
+and $\dns A$ for $\Gamma \prov \bar A : \ff$ is
+$$C^-([\bar A / \alpha], (\alpha : \ff), {\alpha}, \ge_c)$$
 
 \bibliography{../wes}
 \end{document}
