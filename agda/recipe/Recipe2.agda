@@ -27,7 +27,7 @@ postulate
   is : ls → Set
 
 holds : ls → Set
-holds s = (t : ls) → s ⊴ t → is t -- XXX: 50% chance I have the orientation of s ⊴ t backwards
+holds s = (t : ls) → s ⊴ t → is t
 
 mkholds : {X Y : ls} → (X ⊴ Y) → holds X → holds Y
 mkholds leq h t leq' = h t (⊴trans leq leq')
