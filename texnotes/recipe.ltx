@@ -59,8 +59,10 @@
 \def\C{\mathbf{C}}
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
+\def\P{\mathbf{P}}
+\def\N{\mathbf{N}}
 \def\pair#1#2{\langle#1,#2\rangle}
-\def\tri{\triangleleft}
+\def\tri{\triangleright}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\del{\partial}
@@ -114,7 +116,7 @@
 boxrule=0pt,boxsep=0pt,breakable}
 
 
-\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\judge#1{\[\njudge{$#1$}\]}
 \def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
 \def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
 \def\prof{\nrightarrow}
@@ -309,5 +311,79 @@ $$C^-([\bar A / \alpha], (\alpha : \rr), {\alpha}, \le_c)$$
 and $\dns A$ for $\Gamma \prov \bar A : \ff$ is
 $$C^-([\bar A / \alpha], (\alpha : \ff), {\alpha}, \ge_c)$$
 
+
+\section{Starting Over with Categorical Semantics}
+
+Suppose I have
+\begin{enumerate}
+\item a symmetric monoidal category $\P$ and a category $\N$
+\item bifunctors $\_\lol\_ : \P \x \N \to \N$ and $\_\tri\_ : \P^\op \x \N^\op \to \rset$
+\item a natural isomorphism
+$$
+\begin{prooftree}
+(P_1 \tensor P_2) \tri N
+\Justifies
+P_1  \tri (P_2 \lol N)
+\end{prooftree}
+$$
+\end{enumerate}
+
+Then I claim there is a bunch of interesting structure on $\hat \P$ and $\hat \N$.
+\begin{enumerate}
+\item An echo of $\tensor$ at the presheaf level:
+\judge{\_\tensor\_ : \hat\P \x \hat\P \to \hat\P}
+$$(\hat P \tensor \hat Q)(P : \P) := \int^{\alpha_1,\alpha_2 \cn \P}
+ \hat P(\alpha_1) \x \hat Q(\alpha_2) \x \P(P, \alpha_1 \tensor \alpha_2)$$
+\item An echo of $\lol$ at the presheaf level:
+\judge{\_\lol\_ : \hat\P \x \hat\N \to \hat\N}
+$$(\hat P \lol \hat N)(N : \N) := \int^{\alpha\cn \P,\phi \cn \N}
+ \hat P(\alpha) \x \hat N(\phi) \x \N(N, \alpha \lol \phi)$$
+\item An up-shift:
+\judge{\ups : \hat\P \to \hat\N}
+$$(\ups \hat P)(N : \N) = \int_{\alpha\cn \P}
+ \hat P(\alpha) \imp  (\alpha \tri N)$$
+\item A down-shift:
+\judge{\dns : \hat\N \to \hat\P}
+$$(\ups \hat N)(P : \P) = \int_{\phi\cn \N}
+ \hat N(\phi) \imp  (P \tri \phi)$$
+\end{enumerate}
+
+
+\section{Trying a Different Orientation Convention}
+
+Suppose I have
+\begin{enumerate}
+\item a symmetric monoidal category $\P$ and a category $\N$
+\item bifunctors $\_\lol\_ : \P \x \N \to \N$ and $\_\tri\_ : \P \x \N \to \rset$
+\item a natural isomorphism
+$$
+\begin{prooftree}
+(P_1 \tensor P_2) \tri N
+\Justifies
+P_1  \tri (P_2 \lol N)
+\end{prooftree}
+$$
+\end{enumerate}
+
+Then I claim there is a bunch of interesting structure on $\hat \P$ and $\hat \N$,
+where $\hat \P = \rset^\P$, contrary to the usual convention.
+\begin{enumerate}
+\item An echo of $\tensor$ at the presheaf level:
+\judge{\_\tensor\_ : \hat\P \x \hat\P \to \hat\P}
+$$(\hat P \tensor \hat Q)(P : \P) := \int^{\alpha_1,\alpha_2 \cn \P}
+ \hat P(\alpha_1) \x \hat Q(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, P)$$
+\item An echo of $\lol$ at the presheaf level:
+\judge{\_\lol\_ : \hat\P \x \hat\N \to \hat\N}
+$$(\hat P \lol \hat N)(N : \N) := \int^{\alpha\cn \P,\phi \cn \N}
+ \hat P(\alpha) \x \hat N(\phi) \x \N(\alpha \lol \phi, N)$$
+\item An up-shift:
+\judge{\ups : \hat\P \to \hat\N}
+$$(\ups \hat P)(N : \N) = \int_{\alpha\cn \P}
+ \hat P(\alpha) \imp  (\alpha \tri N)$$
+\item A down-shift:
+\judge{\dns : \hat\N \to \hat\P}
+$$(\ups \hat N)(P : \P) = \int_{\phi\cn \N}
+ \hat N(\phi) \imp  (P \tri \phi)$$
+\end{enumerate}
 \bibliography{../wes}
 \end{document}
