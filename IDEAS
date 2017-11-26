@@ -2858,3 +2858,19 @@ various stuff.
 
 Can I make anything of this?
 A: ???
+
+Q: What's the two-arrow definition of a coend?
+A:
+If you have F : ℂ^op × ℂ → 𝔻 and you want to compute
+
+∫^C:ℂ F(C, C)
+
+you can do it by taking the colimit of
+
+  ∐ F(c', c) ⇉ ∐ F(c, c)
+ℂ(c, c')       c
+
+The two arrows are the two ways of squeezing an arbitrary F(c', c)
+into the diagonal; one by pushing it covariantly out to F(c', c')
+along the f : c → c', two by pulling it covariantly back to F(c, c)
+along f backwards.

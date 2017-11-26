@@ -385,5 +385,64 @@ $$(\ups \hat P)(N : \N) = \int_{\alpha\cn \P}
 $$(\dns \hat N)(P : \P) = \int_{\phi\cn \N}
  \hat N(\phi) \imp  (P \tri \phi)$$
 \end{enumerate}
+
+\section{Categorical Semantics of Focused Linear Logic}
+The language is
+\[
+\begin{tabular}{rc@{$\quad::=\quad$}l}
+Positives&$P$&$a^+ \celse P \tensor P \celse 1 \celse \dns N$\\
+Negatives&$N$&$a^- \celse P \lol N \celse \ups P $\\
+\end{tabular}
+\]
+For a warm-up, how do we want to translate a nice easy sequent like
+$$P \prov  N$$
+? Syntactically, I'd say
+$$\alpha : \P, \phi : \N, P(\alpha), N(\phi) \prov \alpha \tri \phi$$
+What does this mean semantically?
+I interpret a proposition $P$ as $\sem P : \hat P$ and a proposition
+$N$ as $\sem N : \hat N$. I can sensibly define
+\judge{\erule{\hat C : \hat \C \qquad \hat D : \hat \D}{\hat C \land \hat D : \C \x \D \to \rset}}
+$$(\hat C \land \hat D)(C, D) = \hat C(C) \x \hat D(D)$$
+so that I interpret $P \prov N$ as a natural transformation $\sem P \land \sem N \to {\tri}$.
+
+How about a stable sequent like
+$$N_1, N_2 \prov P$$
+? I'd interpret that as
+$$\sem {\dns N_1} \land \sem {\dns N_2} \land \sem {\ups P} \to \lambda \alpha_1\alpha_2\phi . (\alpha_1 \tensor \alpha_2) \tri \phi$$
+
+So in general, let $\Gamma$ be given and suppose $n = |\Gamma|$.
+The interpretation of $\sem \Gamma$ is a functor $\P^{n} \to \rset$.
+We can define
+\judge{\tri_n : \P^n \x \N \to \rset}
+$$\tri_n( \alpha_1 ,\ldots ,\alpha_n, \phi) = (\alpha_1\tensor \cdots \tensor \alpha_n) \tri \phi$$
+And then a stable sequent $\Gamma \prov P$ is interpreted as
+$$\sem{\Gamma \prov P} : \sem \Gamma \land \sem{\ups P} \to \tri_n$$
+
+How about a right focused sequent
+$$\Gamma \prov [P]$$
+?
+Syntactically I'd say
+$$\Gamma \wat \alpha_\Gamma \prov P \wat \alpha_\Gamma$$
+so semantically I think
+$$\sem{\Gamma \prov [P]} : \sem \Gamma \to  \sem{ P} \o \tensor_n$$
+where $\tensor_n : \P^n \to \P$ is the obvious $n$-ary $\tensor$ functor.
+
+How about a left focused sequent
+$$\Gamma[N] \prov P$$
+?
+Syntactically I'd say
+$$\Gamma \wat \alpha_\Gamma, (\ups P) \wat \phi \prov N \wat (\alpha_\Gamma \lol \phi)$$
+so semantically I think
+$$\sem{\Gamma[N] \prov P} : \sem \Gamma  \land \sem {\ups P} \to  \sem{ N} \o {\lol_n}$$
+where $\lol_n : \P^n \x \N \to \N$ is the obvious functor that $\tensor$s and $\lol$s stuff
+together.
+
+How about an asynchronous sequent
+$$\Gamma; \Omega \prov N$$
+I think it'd be interpreted by (abusing notation, assuming $|\Omega| = m$)
+$$\sem{\Gamma;\Omega \prov N} : \sem \Gamma  \land \sem \Omega \land \sem{ N} \to \tri_{n+m}$$
+The only real difference between $\sem \Gamma$ and $\sem \Omega$ is just that we shift
+the negative things in $\Gamma$ to make them positive. Similarly between asynchronous
+$N$ on the right (no shift) and stable $P$ on the right (upshifted)
 \bibliography{../wes}
 \end{document}
