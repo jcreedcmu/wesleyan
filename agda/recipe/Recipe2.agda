@@ -5,8 +5,6 @@ open import HoTT using ( _×_ ; Σ ; _,_ )
 {- Trying to nail down the "Logical Recipes" approach for the case of linear logic,
   to make sure I know what I'm doing. -}
 
--- WARNING: bogus HOAS throughout
-
 data Pol : Set where
   + – : Pol -- <- that's a dash (\en) not a ascii minus sign, so that
             -- I can do –} without it being a comment.
