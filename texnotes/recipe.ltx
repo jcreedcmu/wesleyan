@@ -447,8 +447,8 @@ $N$ on the right (no shift) and stable $P$ on the right (upshifted)
 
 \subsection{Soundness}
 
-Can I establish that any of normal inference rules are sound? Let's
-take
+Can I establish that any of normal inference rules are sound?
+\subsubsection{Right Focus}
 $$
 \erule
 {\Gamma \prov [P]}
@@ -473,5 +473,68 @@ is a $\sem P(\alpha_1\tensor \cdots \tensor\alpha_n)$.
 This we can get out of the input natural transformation applied to the
 $$\sem{N_1}(\alpha_1) \x\cdots \x \sem{N_n}(\alpha_n)$$
 and thus we're done.
+
+\subsubsection{$\tensor R$}
+$$
+\erule
+{\Gamma \prov [P_1]\qquad \Delta \prov [P_1]}
+{\Gamma, \Delta \prov [P_1\tensor P_2]}
+$$
+We assume that we have natural transformations $\sem \Gamma \to \sem{P_1} \o \tensor_n$
+and $\sem \Delta \to \sem{P_2} \o \tensor_m$. We want to get a natural transformation
+$$\sem \Gamma \land \sem \Delta \to \sem{P_1 \tensor P_2} \o \tensor_{n+m}$$
+Assuming $\Gamma = \bar N$ and $\Delta = \bar M$, we can let $\bar \beta_1, \bar \beta_2$ be given
+and try to make
+$$\sem{\bar N}(\bar \beta_1) \land \sem{\bar M}(\bar \beta_2) \to \sem{P_1 \tensor P_2}(\bar \beta_1 \tensor \bar \beta_2)$$
+expanding the definition of the semantics of tensor, our goal is
+$$\sem{\bar N}(\bar \beta_1) \land \sem{\bar M}(\bar \beta_2) \to$$
+$$\int^{\alpha_1,\alpha_2 : \P} \sem{P_1}(\alpha_1) \x \sem{P_2}(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, \bar\beta_1\tensor\bar\beta_2)$$
+Because it's a coend, we do have an injection
+$$\sem{P_1}(\alpha_1) \x \sem{P_2}(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, \bar\beta_1\tensor\bar\beta_2) \to $$
+$$\int^{\alpha_1,\alpha_2 : \P} \sem{P_1}(\alpha_1) \x \sem{P_2}(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, \bar\beta_1\tensor\bar\beta_2)$$
+for any particular $\alpha_1, \alpha_2$, so we can pick $\alpha_1 = \bar\beta_1$ and
+$\alpha_2 = \bar\beta_2$ and produce
+$$\sem{\bar N}(\bar \beta_1) \x \sem{\bar M}(\bar \beta_2) \to \sem{P_1}(\bar \beta_1)$$
+$$\sem{\bar N}(\bar \beta_1) \x \sem{\bar M}(\bar \beta_2) \to \sem{P_2}(\bar \beta_2)$$
+$$\sem{\bar N}(\bar \beta_1) \x \sem{\bar M}(\bar \beta_2) \to \P(\bar\beta_1 \tensor \bar\beta_2
+, \bar\beta_1 \tensor \bar\beta_2)$$
+via the two input natural deductions, and the constant identity map, respectively.
+
+\subsubsection{$\tensor L$}
+$$
+\erule
+{\Gamma; P_1, P_2 \prov Q}
+{\Gamma; P_1\tensor P_2 \prov Q}
+$$
+I have a natural transformation
+$$\sem \Gamma \land \sem{P_1} \land \sem{P_2} \land \sem{\ups Q} \to \tri_n$$
+and I want one
+$$\sem \Gamma \land \sem{P_1 \tensor P_2} \land \sem{\ups Q} \to \tri_n$$
+Let $\bar \alpha, \beta : \P$ and $\phi : \N$ be given. We want
+an arrow
+\[
+\sem{\Gamma}(\bar \alpha) \x \sem{P_1 \tensor P_2}(\beta) \x \sem{\ups Q}(\phi)
+\to (\bar \alpha \tensor \beta \tri \phi)
+\]
+To get out of the coend $\sem{P_1 \tensor P_2}(\beta)$, we let $\beta_1, \beta_2$ be given,
+assume we have $\sem{P_1}(\beta_1)$ and $\sem{P_2}(\beta_2)$
+and $\P(\beta_1 \tensor \beta_2, \beta)$, and try to produce
+\[
+\sem{\Gamma}(\bar \alpha) \x \sem{\ups Q}(\phi)
+\to (\bar \alpha \tensor \beta \tri \phi)
+\]
+in a sufficiently coequalizey way.
+
+But we have the input natural transformation to tell us how to do
+\[
+\sem{\Gamma}(\bar \alpha) \x \sem{P_1}(\beta_1) \x  \sem{P_2}(\beta_2) \x \sem{\ups Q}(\phi)
+\to (\bar \alpha \tensor (\beta_1 \tensor \beta_2) \tri \phi)
+\]
+and we can use the functoriality of $\tri$ to tack on the information that $\P(\beta_1 \tensor \beta_2, \beta)$ and get all the way
+\[
+\sem{\Gamma}(\bar \alpha) \x \sem{P_1}(\beta_1) \x  \sem{P_2}(\beta_2) \x \sem{\ups Q}(\phi)
+\to (\bar \alpha \tensor \beta \tri \phi)
+\]
+so we're fine as long as this process is sufficiently natural. I think it is, though.
 \bibliography{../wes}
 \end{document}
