@@ -444,5 +444,34 @@ $$\sem{\Gamma;\Omega \prov N} : \sem \Gamma  \land \sem \Omega \land \sem{ N} \t
 The only real difference between $\sem \Gamma$ and $\sem \Omega$ is just that we shift
 the negative things in $\Gamma$ to make them positive. Similarly between asynchronous
 $N$ on the right (no shift) and stable $P$ on the right (upshifted)
+
+\subsection{Soundness}
+
+Can I establish that any of normal inference rules are sound? Let's
+take
+$$
+\erule
+{\Gamma \prov [P]}
+{\Gamma \prov P}
+$$
+I assume I have a natural transformation $\sem \Gamma \to \sem P \o \tensor_n$
+of functors $\P^n \to \rset$. I want to get to a natural transformation
+$\sem \Gamma \land \sem{\ups P}\to \tri_n$ of functors $\P^n \x \N \to \rset$.
+
+Ok, let an object $(\alpha_1, \ldots, \alpha_n,\phi)$ of $\P^n \x \N$ be given.
+I need to make an arrow
+$$(\sem\Gamma \land \sem{ \ups P})(\alpha_1, \ldots, \alpha_n,\phi) \to (\alpha_1\tensor \ldots\tensor \alpha_n\tri \phi)$$
+Assuming $\Gamma = N_1, \ldots, N_n$ this is the same thing as
+$$\sem{N_1}(\alpha_1) \x\cdots \x \sem{N_n}(\alpha_n) \x  \sem{\ups P}(\phi) \to (\alpha_1\tensor \ldots\tensor \alpha_n\tri \phi)$$
+What's $\sem {\ups P}(\phi)$? We defined it as
+$$ \int_{\alpha\cn \P} \sem P(\alpha) \imp  (\alpha \tri \phi)$$
+So for any object $\alpha : \P$ there for sure is at least a projection function
+$$\sem{\ups P}(\phi) \to  \sem P(\alpha) \to (\alpha \tri \phi)$$
+This is basically the identity rule! Nice. We can apply it at the object
+$\alpha_1\tensor \cdots \tensor\alpha_n$, which means all we need to produce
+is a $\sem P(\alpha_1\tensor \cdots \tensor\alpha_n)$.
+This we can get out of the input natural transformation applied to the
+$$\sem{N_1}(\alpha_1) \x\cdots \x \sem{N_n}(\alpha_n)$$
+and thus we're done.
 \bibliography{../wes}
 \end{document}
