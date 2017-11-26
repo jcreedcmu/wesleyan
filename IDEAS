@@ -2812,4 +2812,49 @@ A: ???
 === 2017.11.24
 
 Q: Can I get away with just general binary relations, instead of specific ≤ and ◃ like ones?
+A: I think I still want to retain information about which polarity
+they are in the representation language.
+
+=== 2017.11.25
+
+Q: What interesting thing did rntz@ point out about Nuyts bridges?
+A: That in his setup, he actually did want localization and core to be `mutually idempotent'
+and therefore not commutative, in the sense that
+ core ∘ loc = loc
+ loc ∘ core = core
+rather than in Nuyts's case, where
+ loc ∘ core = loc
+because core leaves bridges and loc turns them into isomorphisms.
+
+Q: Which way around does the adjunction go?
+A:
+loc ⊣ forget ⊣ core
+where forget : 𝔾rpd → ℂat
+
+loc ℂ → 𝔾 ∈ 𝔾rpd
+==================
+ℂ → forget 𝔾 ∈ ℂat
+
+𝔾 → core ℂ ∈ 𝔾rpd
+==================
+forget 𝔾 → ℂ ∈ ℂat
+
+=== 2017.11.26
+
+Q: Let me say that F' and G' : ℂ → ℂ are _trijoint_ if there are
+adjoint ℂ → ℂ functors
+F ⊣ G ⊣ H
+such that F' = G ∘ F and G' = G ∘ H
+
+Further say coinductively that F' and G' are _hereditarily triadjoint_ (write it
+F' ▹ G') when there are hered. triadj. functors
+F ▹ G ▹ H
+such that F' = G ∘ F and G' = G ∘ H.
+
+This means there are
+A ▹ B ▹ C and  D ▹ E ▹ F
+such that
+various stuff.
+
+Can I make anything of this?
 A: ???
