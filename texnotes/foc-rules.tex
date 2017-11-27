@@ -1,0 +1,168 @@
+
+\begin{figure}
+\begin{center}
+\footnotesize
+\setstretch{4}
+$
+\erule
+{\Gamma; P \prov  N \using {\lol}R}
+{\Gamma; \cdot \prov P \lol N}
+$
+\gap
+$
+\erule
+{\Gamma_1 \prov [P] \qquad \Gamma_2[N] \prov Q \using {\lol}L}
+{\Gamma_1,\Gamma_2 [P \lol N] \prov Q}
+$
+\gap
+$
+\erule
+{\Gamma;\cdot\prov N_1  \qquad \Gamma;\cdot\prov N_2 \using {\amp}R}
+{\Gamma;\cdot\prov N_1\amp N_2 }
+$
+\gap
+$
+\erule
+{\Gamma [N_i] \prov Q \using {\amp}L}
+{\Gamma [N_1 \amp N_2] \prov Q}
+$
+\gap
+$
+\erule
+{\Gamma_1 \prov [P_1] \qquad \Gamma_2 \prov [P_2]\using {\tensor}R}
+{\Gamma_1, \Gamma_2  \prov [P_1 \tensor P_2]}
+$
+\gap
+$
+\erule
+{\Gamma; P_1, P_2, \Omega \prov R \using {\tensor}L}
+{\Gamma; P_1\tensor P_2, \Omega  \prov  R}
+$
+\gap
+$
+\erule
+{\Gamma \prov [P_i] \using {\oplus}R_i}
+{\Gamma  \prov [P_1 \oplus P_2]}
+$
+\gap
+$
+\erule
+{\Gamma; P_1, \Omega \prov R \qquad \Gamma; P_2, \Omega \prov R\using {\oplus}L}
+{\Gamma; P_1\oplus P_2, \Omega \prov R}
+$
+\gap
+$
+\erule
+{\using {\top}R}
+{\Gamma;\cdot  \prov \top}
+$
+\gap
+$
+\erule
+{\using {1}R}
+{\Delta  \prov [1]}
+$
+\gap
+$
+\erule
+{\Gamma; \Omega \prov R \using {1}L}
+{\Gamma; 1, \Omega \prov R}
+$
+\gap
+$
+\erule
+{\using {0}L}
+{\Gamma; 0, \Omega \prov R}
+$
+\gap
+%% $
+%% \erule
+%% {\Gamma; \cdot \prov N
+%% \using \forall R^x}
+%% {\Gamma;\cdot  \prov \forall x . N}
+%% $
+%% \sgap
+%% $
+%% \erule
+%% {\Gamma[\{t/x\}N] \prov Q
+%% \using \forall L}
+%% {\Gamma[ \forall x . N] \prov Q}
+%% $
+%% \sgap
+%% $
+%% \erule
+%% {\Gamma \prov [\{t/x\}P]
+%% \using \exists R}
+%% {\Gamma  \prov [\exists x .P]}
+%% $
+%% \sgap
+%% $
+%% \erule
+%% {\Gamma, P; \Omega \prov R
+%% \using \exists L^x}
+%% {\Gamma; \exists x .P, \Omega \prov R}
+%% $
+%% \gap
+$
+\erule
+{\Gamma;\cdot \prov N\using {\dns}R}
+{\Gamma  \prov [\dns N]}
+$
+\gap
+$
+\erule
+{\Gamma, N; \Omega \prov R \using {\dns}L}
+{\Gamma; \dns N,  \Omega \prov R}
+$
+\gap
+$
+\erule
+{\Gamma; \cdot \prov P\using {\ups}R}
+{\Gamma; \cdot  \prov \ups P}
+$
+\gap
+$
+\erule
+{\Gamma; P\prov Q \using {\ups}L}
+{\Gamma[\ups P] \prov Q}
+$
+\gap
+$
+\erule
+{\using {a^+}R}
+{ \susp{a^+}  \prov [a^+ ]}
+$
+\gap
+$
+\erule
+{\Gamma, \susp{a^+}; \Omega\prov R \using {a^+}L}
+{\Gamma;  a^+, \Omega  \prov R}
+$
+\gap
+$
+\erule
+{\Gamma; \cdot \prov \susp{a^-}\using {a^-}R}
+{\Gamma; \cdot  \prov a^-}
+$
+\gap
+$
+\erule
+{\using {a^-}L }
+{[a^-] \prov \susp{a^-}}
+$
+\gap
+$
+\erule
+{\Gamma \prov [P]\using {foc}R}
+{\Gamma;\cdot  \prov P}
+$
+\gap
+$
+\erule
+{\Gamma[N] \prov Q\using {foc}L}
+{\Gamma,N;\cdot  \prov Q}
+$
+
+\end{center}
+\caption{Focused Linear Logic Proof Rules \label{foc-rules}}
+\end{figure}

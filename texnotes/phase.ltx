@@ -1,0 +1,250 @@
+\documentclass{article}
+\usepackage{setspace}
+
+\usepackage[framestyle=fbox,framefit=yes,heightadjust=all,framearound=all]{floatrow}
+\usepackage{amssymb}
+\input theorem
+\input prooftree
+\def\nto{\mathrel{\dot\to}}
+\def\sem#1{[\![#1]\!]}
+\def\seme#1{[\![#1]\!]_{\eta}}
+\def\mode{\models_{M,\eta}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\P{\mathbf{P}}
+\def\N{\mathbf{N}}
+\def\tri{\triangleright}
+\def\x{\times}
+\def\rset{\mathbf{Set}}
+\def\gap{\hskip 1em\hfil\hskip 1em}
+\def\sgap{\hskip 0.3em\hfil\hskip 0.3em}
+\def\XXX#1{{\color{red}\em XXX #1}}
+\def\celse{\mathrel|}
+\def\st{|}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\imp{\Rightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\op{\mathrm{op}}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\susp#1{\langle {#1} \rangle}
+\def\erule#1#2{
+\begin{prooftree}
+#1 \justifies #2
+\end{prooftree}}
+\def\cn{{:}}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\amp{\mathrel{\&}}
+\def\dash{\hbox{---}}
+
+
+\title{Categorical Semantics of Focused ILL}
+\author{Jason Reed}
+\bibliographystyle{alpha}
+\begin{document}
+
+\maketitle
+\section{Introduction}
+I want to describe a certain categorical semantics of focused
+intuitionistic linear logic so that I can better understand how it
+relates to other semantics I've seen in the literature \cite{polarized.mall}.
+
+\section{Language}
+We recall the syntax of focused intuitionistic linear logic.
+Propositions are polarized into positive and negative.
+There are shift operators $\ups$ and $\dns$
+that coerce back and forth between the two polarities.
+Atomic propositions also come in positive $a^+$ and $a^-$. Somewhat unusually (but it's just a matter of presentation,
+not an essential part of the result)
+we distinguish an atomic proposition $a^\pm$ of either polarity from
+the suspension $\susp {a^\pm}$ of it that arises after asynchronous decomposition terminates at it.
+$$\begin{tabular}{rlll}
+Positives&$P$&$::=$&$ \dns N \celse P \tensor P \celse P \oplus P \celse 1 \celse 0 \celse a^+ $\\
+Negatives&$N$&$::=$&$\ups P \celse  P \lol N \celse N \amp N \celse \top  \celse a^-$\\
+Positive Contexts&$\Omega$&$::=$&$\cdot \celse P, \Omega$\\
+Negative Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, H$\\
+Stable Hypotheses&$H$&$::=$&$N \celse \susp{a^+}$\\
+Stable Conclusions&$Q$&$::=$&$P \celse \susp{a^-}$\\
+Conclusions&$R$&$::=$&$N \celse Q$\\
+\end{tabular}$$
+
+The three judgments of the logic are
+\[\begin{tabular}{rl}
+Inversion&$\Gamma;\Omega\prov R$\\
+Right Focus&$\Gamma\prov [P]$\\
+Left Focus&$\Gamma[N]\prov Q$\\
+\end{tabular}\]
+(we sometimes abbreviate $\Gamma;\cdot \prov R$ as $\Gamma\prov R$)
+and the proof rules for the focusing system are in
+Figure~\ref{foc-rules}.
+\input{foc-rules}
+
+\subsection{Results}
+These are thoroughly standard.
+
+\begin{lemma}[Cut]\
+  \begin{enumerate}
+  \item If $\Gamma_1[N] \prov Q$ and $\Gamma_2 \prov N$, then
+    $\Gamma_1, \Gamma_2 \prov Q$.
+  \item If $\Gamma_1 \prov [P]$ and $\Gamma_2; P \prov Q$, then
+  $\Gamma_1, \Gamma_2 \prov Q$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{lemma}[Identity]\
+  \begin{enumerate}
+  \item $N \prov N$
+  \item $P \prov P$
+  %% \item If $\Gamma_0[N] \prov Q$ implies
+  %%   $\Gamma_0, \Gamma_\bullet \prov Q$
+  %%   for every $\Gamma_0$ and $Q$, then  $\Gamma_\bullet \prov N$.
+  %% \item If $\Gamma_0 \prov [P]$ implies $\Gamma_0, \Gamma_\bullet; \Omega \prov R$
+  %%   for every $\Gamma_0$, then $\Gamma_\bullet; P, \Omega \prov R$.
+  \end{enumerate}
+
+\end{lemma}
+
+\section{Semantics}
+
+A {\em model}  $M$ consists of the following data:
+\begin{enumerate}
+\item a symmetric monoidal category $\P$ and a category $\N$
+\item functors $\_\lol\_ : \P \x \N \to \N$ and $\_\tri\_ : \P \x \N \to \rset$
+\item a natural isomorphism
+$$
+k :
+\begin{prooftree}
+(P_1 \tensor P_2) \tri N
+\Justifies
+P_1  \tri (P_2 \lol N)
+\end{prooftree}
+$$
+\end{enumerate}
+
+We write $\hat \C$ as an abbreviation for $\C \to \rset$, despite the
+usual contravariant convention. Given an environment, i.e. a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to objects of $\hat \P$ (resp.
+$\hat \N$), we inductively define an interpretation of all positive
+(resp. negative) propositions $P$ (resp. $N$)
+ as objects $\seme{P} \in \hat \P$ (resp. $\seme{N} \in \hat \N$).
+We write $\sem\dash$ instead of $\seme\dash$ when the $\eta$ is evident from context.
+The definition of the interpretation is given in Figure~\ref{semantics},
+where $\cup$ denotes the coproduct, $\emptyset$ the initial object, and $1$ the terminal object,
+ in the category $\hat P$ or $\hat N$ as appropriate. The arrow $\to$ in the definition
+of the shifts is just the  function space in $\rset$.
+The multiplicative connectives are defined with coends, using the
+operators $\hlol$ and $\htensor$ defined in Figure~\ref{semops}.
+Shifts are defined with ends.
+\begin{figure}
+\begin{center}
+\[
+\erule{X \in \hat\P \qquad Y \in \hat\N}
+{X \hlol Y := \int^{\alpha : \P, \phi: \N} X(\alpha) \x Y(\phi) \x \N(\alpha \lol \phi, \dash)}
+\]
+\[
+\erule{X \in \hat\P \qquad Y \in \hat\P}
+{X \htensor Y := \int^{\alpha_1 : \P, \alpha_2: \P} X(\alpha_1) \x Y(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, \dash)}
+\]
+\end{center}
+\caption{Semantic Operations \label{semops}}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = 1\]
+\[\sem{P_1 \oplus P_2} =  \sem{P_1} \cup \sem{P_2}\qquad
+\sem{0} = \emptyset\]
+\[\sem{N_1 \amp N_2} =  \sem{N_1} \cup \sem{N_2}\qquad
+\sem{\top} = \emptyset\]
+\[\sem{P \lol N} = \sem P \hlol \sem N\]
+\[\sem{P_1 \tensor P_2} = \sem {P_1} \htensor \sem{P_2}\]
+\[\sem{\ups P } = \int_{\alpha : \P} \sem P (\alpha) \to (\alpha \tri \dash)\]
+\[\sem{\dns N } = \int_{\phi : \N} \sem N (\alpha) \to (\dash \tri \phi)\]
+\[\erule{\Gamma = H_1, \ldots, H_n}{\sem{\Gamma} = \sem{ H_1}^< \htensor \cdots \htensor \sem{ H_n}^<}
+\qquad
+\erule{\Omega = P_1, \ldots, P_n}{\sem{\Omega} = \sem{P_1}^< \htensor \cdots \htensor \sem{P_n}^<}\]
+\[\sem P^< = \sem{P} \qquad \sem N^< = \sem{\dns N} \qquad \sem{\susp{a^+}}^< = \eta(a^+)\]
+\[\sem N^> = \sem{N} \qquad \sem P^> = \sem{\ups P} \qquad \sem{\susp{a^-}}^> = \eta(a^-)\]
+\end{center}
+\caption{Interpreting Propositions \label{semantics}}
+\end{figure}
+
+
+To interpret sequents, do as follows. If $X : \hat \C$ and $Y : \hat \D$, define their
+objectwise product
+$X \land Y : \widehat{\C \x \D}$ as $(X \land Y) (C, D) =  X(C) \x Y(D)$.
+
+We say
+\begin{enumerate}
+\item  $\Gamma;\Omega \mode R$ iff there is a nat. trans. $(\sem \Gamma \htensor \sem \Omega) \land \sem{R}^> \nto \tri$
+\item  $\Gamma \mode [P]$ iff there is a nat. trans. $\sem \Gamma   \nto \sem{ P}$
+\item  $\Gamma[N] \mode Q$ iff there is a nat. trans. $(\sem \Gamma \hlol \sem Q^>) \nto \sem N$
+\end{enumerate}
+When we drop the subscripts $M, \eta$ and just write $\models$, it  means that the statement
+holds for all $M, \eta$.
+
+
+\section{Results}
+
+\begin{theorem}[Soundness]\
+  \begin{enumerate}
+  \item If $\Gamma; \Omega \prov R$ then $\Gamma ; \Omega \models R$
+  \item If $\Gamma \prov [P]$ then $\Gamma \models [P]$
+  \item If $\Gamma[N] \prov Q$ then $\Gamma[N] \models Q$
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By induction on the derivation.
+\cqed
+\end{proof}
+
+
+
+
+\begin{theorem}[Completeness]\
+  \begin{enumerate}
+  \item If $\Gamma; \Omega \models R$ then $\Gamma ; \Omega \prov R$
+  \item If $\Gamma \models [P]$ then $\Gamma \prov [P]$
+  \item If $\Gamma[N] \models Q$ then $\Gamma[N] \prov Q$
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  We build a universal model. Fix a countable collection of atoms.
+  \begin{itemize}
+  \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
+whose morphisms are substitutions $\Gamma_1 \prov \bigotimes \Gamma_2$.
+The functor $\tensor$ is multiset union, and the unit $1$ is the empty context.
+\item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
+morphisms $(\Gamma_1, Q_1) \to (\Gamma_2, Q_2)$ are proofs
+\[\Gamma_1, \left(\bigotimes \Gamma_2 \right)\lol Q_2 \prov  Q_1\]
+(Note the apparent contravariance)
+\item
+The functor $\lol$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
+and produces $((\Gamma_1, \Gamma_2), Q)$ in $\N$.
+\item The functor $\tri$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
+and yields the set of derivations $\Gamma_1, \Gamma_2 \prov Q$.
+\item
+  We choose as interpretations of the atoms as follows
+\[\eta(a^+)(X: \P) = \cases{\{*\}&if $X = (\susp{a^+})$; \cr \{\} & otherwise.}\]
+\[\eta(a^-)(X: \N) = \cases{\{*\}&if $X = (\cdot, \susp{a^-})$; \cr \{\} & otherwise.}\]
+  \end{itemize}
+  The thing we need to do is show that this model is in fact universal ---
+  that the interpretation of every proposition reflects its (focused)
+  provability. We claim that for all $P$ and $N$ we have
+  \begin{itemize}
+  \item $\sem{P}(\Gamma) \iff  \Gamma \prov [P]$
+  \item $\sem{N}(\Gamma, Q) \iff \Gamma[N] \prov Q$
+  \end{itemize}
+
+\cqed
+\end{proof}
+
+\bibliography{../wes}
+
+\end{document}
