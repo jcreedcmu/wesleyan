@@ -507,34 +507,84 @@ $$
 {\Gamma; P_1\tensor P_2 \prov Q}
 $$
 I have a natural transformation
-$$\sem \Gamma \land \sem{P_1} \land \sem{P_2} \land \sem{\ups Q} \to \tri_n$$
+$$\zeta : \sem \Gamma \land \sem{P_1} \land \sem{P_2} \land \sem{\ups Q} \to \tri_n$$
 and I want one
 $$\sem \Gamma \land \sem{P_1 \tensor P_2} \land \sem{\ups Q} \to \tri_n$$
-Let $\bar \alpha, \beta : \P$ and $\phi : \N$ be given. We want
-an arrow
-\[
-\sem{\Gamma}(\bar \alpha) \x \sem{P_1 \tensor P_2}(\beta) \x \sem{\ups Q}(\phi)
-\to (\bar \alpha \tensor \beta \tri \phi)
+So we want to fill the hole in
+ \[\lambda \bar \alpha \cn \P^n.\ \lambda \beta\cn \P.\ \lambda \phi \cn \N.\]
+\[\lambda \gamma \cn \sem{\Gamma}(\bar \alpha) .\ \lambda \pi\cn \sem{P_1 \tensor P_2}(\beta).
+\ \lambda \theta \cn \sem{\ups Q}(\phi) .\]
+\[{\color{red} ???} : (\bar \alpha \tensor \beta \tri \phi)
 \]
-To get out of the coend $\sem{P_1 \tensor P_2}(\beta)$, we let $\beta_1, \beta_2$ be given,
-assume we have $\sem{P_1}(\beta_1)$ and $\sem{P_2}(\beta_2)$
-and $\P(\beta_1 \tensor \beta_2, \beta)$, and try to produce
+To get out of the coend $\sem{P_1 \tensor P_2}(\beta)$, we need to find a way
+to get out of
 \[
-\sem{\Gamma}(\bar \alpha) \x \sem{\ups Q}(\phi)
-\to (\bar \alpha \tensor \beta \tri \phi)
-\]
-in a sufficiently coequalizey way.
+C := \coprod_{\beta_1,\beta_2: \P} \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2) \x \P(\beta_1 \tensor \beta_2, \beta) \]
+which is sufficiently coequalizing. Observe that
+\[
+\zeta(\bar \alpha \beta_1 \beta_2 \phi; \gamma \pi_1 \pi_2 \theta)
+: \bar \alpha \tensor \beta_1 \tensor \beta_2 \tri \phi\]
+so we can use functoriality of $\tensor$ and $\tri$ to build
+\[z = (\lambda \langle \beta_1 \beta_2 ; \pi_1 \pi_2 f \rangle. (\bar\alpha \tensor f\tri \phi) \o
+ \zeta(\bar \alpha \beta_1 \beta_2 \phi; \gamma \pi_1 \pi_2 \theta)): C \to (\bar \alpha \tensor \beta \tri \phi) \]
+Now we need to think about the four morphisms
+\[
+ \coprod_{\delta_1 \to \delta_1'} \coprod_{\delta_2 \to \delta_2'} \sem{P_1}(\delta_1) \x \sem{P_2}(\delta_2) \x \P(\delta_1' \tensor \delta_2', \beta) \to C\]
+(we can independently covariantly or contravariantly fudge the $\delta^{(\prime)}_1$
+and $\delta^{(\prime)}_2$ discrepancies)
+and check that $z$ coequalizes them.
 
-But we have the input natural transformation to tell us how to do
+Let morphisms $g_1 : \delta_1 \to \delta_1'$ and $g_2 : \delta_2 \to \delta_2'$ in $\P$ be given.
+Let $\pi_1^* : \sem{P_1}(\delta_1)$ and $\pi_2^* : \sem{P_2}(\delta_2)$
+ and $f^{*} : \delta_1' \tensor \delta_2' \to \beta$ be given.
+We choose one of the following scenarios:
+ \begin{enumerate}
+ \item
+   \begin{itemize}
+   \item  $\beta_1 = \delta_1$ and $\beta_2 = \delta_2$
+   \item $\pi_1 = \pi_1^*$ and $\pi_2 = \pi_2^*$ and $f = f^* \o (g_1 \tensor g_2)$
+   \end{itemize}
+ \item
+   \begin{itemize}
+   \item  $\beta_1 = \delta_1'$ and $\beta_2 = \delta_2$
+   \item $\pi_1 = \sem{P_1}(g_1)(\pi_1^*)$ and $\pi_2 = \pi_2^*$ and $f = f^* \o (\rid \tensor g_2)$
+   \end{itemize}
+ \item
+   \begin{itemize}
+   \item  $\beta_1 = \delta_1$ and $\beta_2 = \delta_2'$
+   \item $\pi_1 = \pi_1^*$ and $\pi_2 = \sem{P_2}(g_2)(\pi_2^*)$ and $f = f^* \o (g_1 \tensor \rid)$
+   \end{itemize}
+ \item
+   \begin{itemize}
+   \item  $\beta_1 = \delta_1'$ and $\beta_2 = \delta_2'$
+   \item  $\pi_1 = \sem{P_1}(g_1)(\pi_1^*)$ and $\pi_2 = \sem{P_2}(g_2)(\pi_2^*)$ and $f = f^*$
+   \end{itemize}
+ \end{enumerate}
+
+So we need to show that all of the following are equal:
+ \begin{enumerate}
+ \item
+\( (\bar\alpha \tensor (f^* \o (g_1 \tensor g_2))\tri \phi) \o \zeta(\bar \alpha \delta_1 \delta_2 \phi; \gamma \pi^*_1 \pi^*_2 \theta) \)
+ \item
+\( (\bar\alpha \tensor (f^* \o (\rid \tensor g_2)) \tri \phi) \o \zeta(\bar \alpha \delta'_1 \delta_2 \phi; \gamma (\sem{P_1}(g_1)(\pi^*_1)) \pi^*_2 \theta) \)
+ \item
+\( (\bar\alpha \tensor (f^* \o (g_1 \tensor \rid)) \tri \phi) \o \zeta(\bar \alpha \delta_1 \delta'_2 \phi; \gamma \pi^*_1 (\sem{P_2}(g_2)(\pi^*_2)) \theta) \)
+ \item
+\( (\bar\alpha \tensor f^*\tri \phi) \o \zeta(\bar \alpha \delta'_1 \delta'_2 \phi; \gamma (\sem{P_1}(g_1)(\pi^*_1))(\sem{P_2}(g_2)(\pi^*_2))  \theta) \)
+ \end{enumerate}
+
+but this follows from naturality of $\zeta$ in its $\P$ arguments, for example
 \[
-\sem{\Gamma}(\bar \alpha) \x \sem{P_1}(\beta_1) \x  \sem{P_2}(\beta_2) \x \sem{\ups Q}(\phi)
-\to (\bar \alpha \tensor (\beta_1 \tensor \beta_2) \tri \phi)
+\begin{tikzcd}
+{ {\sem \Gamma(\bar \alpha) \x \sem{P_1}(\delta_1) \x \atop \sem{P_2}(\delta_2) \x \sem{\ups Q}(\phi)}} \ar[r, "{\zeta(\bar \alpha \delta_1 \delta_2 \phi)}"]
+\ar[dd, "\cdots\x\sem{P_2}(g_2)\x\cdots"']
+ &[3em] \bar \alpha \delta_1\delta_2 \tri \phi \ar[rd, "{(\bar\alpha  (f^* \o (g_1 \tensor g_2))\tri \phi)}"]
+\ar[dd, "\bar \alpha\delta_1 g_2 \tri \phi "'] \\
+&& \bar \alpha \beta \tri \phi\\
+{\sem \Gamma(\bar \alpha) \x \sem{P_1}(\delta_1) \x \atop \sem{P_2}(\delta_2') \x \sem{\ups Q}(\phi)}\ar[r, "{\zeta(\bar \alpha \delta_1 \delta_2' \phi)}"']
+ &[3em] \bar \alpha \delta_1\delta_2' \tri \phi \ar[ur, "{(\bar\alpha  (f^* \o (g_1 \tensor \rid))\tri \phi)}"']
+\end{tikzcd}
 \]
-and we can use the functoriality of $\tri$ to tack on the information that $\P(\beta_1 \tensor \beta_2, \beta)$ and get all the way
-\[
-\sem{\Gamma}(\bar \alpha) \x \sem{P_1}(\beta_1) \x  \sem{P_2}(\beta_2) \x \sem{\ups Q}(\phi)
-\to (\bar \alpha \tensor \beta \tri \phi)
-\]
-so we're fine as long as this process is sufficiently natural. I think it is, though.
+shows that $(1)$ and $(3)$ are equal.
 \bibliography{../wes}
 \end{document}
