@@ -163,7 +163,7 @@ Shifts are defined with ends.
 \[\sem{P \lol N} = \sem P \hlol \sem N\]
 \[\sem{P_1 \tensor P_2} = \sem {P_1} \htensor \sem{P_2}\]
 \[\sem{\ups P } = \int_{\alpha : \P} \sem P (\alpha) \to (\alpha \tri \dash)\]
-\[\sem{\dns N } = \int_{\phi : \N} \sem N (\alpha) \to (\dash \tri \phi)\]
+\[\sem{\dns N } = \int_{\phi : \N} \sem N (\phi) \to (\dash \tri \phi)\]
 \[\erule{\Gamma = H_1, \ldots, H_n}{\sem{\Gamma} = \sem{ H_1}^< \htensor \cdots \htensor \sem{ H_n}^<}
 \qquad
 \erule{\Omega = P_1, \ldots, P_n}{\sem{\Omega} = \sem{P_1}^< \htensor \cdots \htensor \sem{P_n}^<}\]
@@ -218,12 +218,10 @@ holds for all $M, \eta$.
   We build a universal model. Fix a countable collection of atoms.
   \begin{itemize}
   \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
-whose morphisms are substitutions $\Gamma_1 \prov \bigotimes \Gamma_2$.
+whose morphisms are permutations.
 The functor $\tensor$ is multiset union, and the unit $1$ is the empty context.
 \item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
-morphisms $(\Gamma_1, Q_1) \to (\Gamma_2, Q_2)$ are proofs
-\[\Gamma_1, \left(\bigotimes \Gamma_2 \right)\lol Q_2 \prov  Q_1\]
-(Note the apparent contravariance)
+morphisms are context permutations.
 \item
 The functor $\lol$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
 and produces $((\Gamma_1, \Gamma_2), Q)$ in $\N$.
