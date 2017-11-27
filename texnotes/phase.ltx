@@ -99,11 +99,11 @@ These are thoroughly standard.
   \begin{enumerate}
   \item $N \prov N$
   \item $P \prov P$
-  %% \item If $\Gamma_0[N] \prov Q$ implies
-  %%   $\Gamma_0, \Gamma_\bullet \prov Q$
-  %%   for every $\Gamma_0$ and $Q$, then  $\Gamma_\bullet \prov N$.
-  %% \item If $\Gamma_0 \prov [P]$ implies $\Gamma_0, \Gamma_\bullet; \Omega \prov R$
-  %%   for every $\Gamma_0$, then $\Gamma_\bullet; P, \Omega \prov R$.
+  \item If $\Gamma_0[N] \prov Q$ implies
+    $\Gamma_0, \Gamma_\bullet \prov Q$
+    for every $\Gamma_0$ and $Q$, then  $\Gamma_\bullet \prov N$.
+  \item If $\Gamma_0 \prov [P]$ implies $\Gamma_0, \Gamma_\bullet; \Omega \prov R$
+    for every $\Gamma_0$, then $\Gamma_\bullet; P, \Omega \prov R$.
   \end{enumerate}
 
 \end{lemma}
@@ -133,7 +133,7 @@ $\hat \N$), we inductively define an interpretation of all positive
  as objects $\seme{P} \in \hat \P$ (resp. $\seme{N} \in \hat \N$).
 We write $\sem\dash$ instead of $\seme\dash$ when the $\eta$ is evident from context.
 The definition of the interpretation is given in Figure~\ref{semantics},
-where $\cup$ denotes the coproduct, $\emptyset$ the initial object, and $1$ the terminal object,
+where $\cup$ denotes the coproduct and $\emptyset$ the initial object,
  in the category $\hat P$ or $\hat N$ as appropriate. The arrow $\to$ in the definition
 of the shifts is just the  function space in $\rset$.
 The multiplicative connectives are defined with coends, using the
@@ -155,7 +155,7 @@ Shifts are defined with ends.
 
 \begin{figure}
 \begin{center}
-\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = 1\]
+\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = \P(1, \dash)\]
 \[\sem{P_1 \oplus P_2} =  \sem{P_1} \cup \sem{P_2}\qquad
 \sem{0} = \emptyset\]
 \[\sem{N_1 \amp N_2} =  \sem{N_1} \cup \sem{N_2}\qquad
