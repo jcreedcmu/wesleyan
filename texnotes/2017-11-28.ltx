@@ -28,7 +28,10 @@
 \def\rtype{\mathsf{type}}
 \def\rkind{\mathsf{kind}}
 \def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
 \def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
 \def\rcat{\mathbf{Cat}}
 \def\rfam{\mathbf{Fam}}
 \def\binj{\mathbf{inj}}
@@ -165,4 +168,66 @@ For each $a \in \alpha$, a natural transformation $\phi : \eta(a) \dto \xi(a)\o 
 
 So can I construct a function $\sem P_{M}(*_\C) \to \sem P_{N}(*_\D)$?
 
+\subsection{Thinking Relationally}
+
+The category $\rmod$ has objects $(\C, \eta : \alpha \to  \C \to \rrel)$.
+A morphism $(\C,\eta) \to (\D, \phi)$ is $F : \C \to \D$ and for each $a\in \alpha$
+\[
+\begin{tikzcd}
+\C \ar[r, "\eta_a"]\twocell{dr}{"\zeta"}\ar[d, "F"'] & \rrel \ar[d, equal]\\
+\D \ar[r, "\phi_a"'] & \rrel
+\end{tikzcd}
+\]
+The category $\rprel$ has objects $(\C, X : \C \to \rrel)$. A morphism
+$(\C, X) \to (\D, Y)$ is $F : \C \to \D$ and a natural transformation
+\[
+\begin{tikzcd}
+\C \ar[r, "X"]\twocell{dr}{"\xi"}\ar[d, "F"'] & \rrel \ar[d, equal]\\
+\D \ar[r, "Y"'] & \rrel
+\end{tikzcd}
+\]
+That is, for each $C\in \C$ we have a relation $\xi_C : X(C) \to Y(FC) \to \rset$.
+Let $M = (\C,\eta)$ and $N = (\D, \phi)$ and $f = (F, \zeta) : M \to N \in \rmod$.
+
+Propositions are interpreted as functors $\rmod \to \rprel$ over $\rcat$.
+\[\sem{a}_{M} = \eta_a \qquad \sem{a}_{f} = \zeta_a\]
+
+\vfil\eject
+\subsection{Thinking Relationally with Mere Sets}
+Write $A \sim B$ for the type of relations $A \to B \to \rset$.
+
+The category $\rmod$ has objects
+\[M = (W : \rset,  \# : W \to \rset, \eta : \alpha \to  W \to \rrel)\]
+A morphism $f : M \to M'$ is
+\begin{itemize}
+\item $\omega : W \to W'$
+\item $s : \Pi w \cn W . \#( w) \sim \#'(\omega w)$
+\item $t : \Pi a \cn \alpha . \Pi w \cn W . \eta(a)(w) \sim \eta'(a)(\omega w)$
+\end{itemize}
+The category $\rrfam$ has objects $\Phi = (W : \rset, h : W \to \rset)$
+and morphisms
+\begin{itemize}
+\item $\omega : W \to W'$
+\item $q : \Pi w \cn W. h(w) \sim h'(\omega w)$
+\end{itemize}
+
+Positive props interpret as functors $\rmod \to \rrel$.
+Negative props interpret as functors $\rmod \to \rrfam$ over $\rset$.
+We conflate $\sem N_M$ with its $h$ and $\sem N_f$ with its $q$ for ease of calculation.
+
+\[\sem {\dns N}_M = \forall w . \sem N_M(w) \to \#(w) \]
+\[\sem {\ups P}_M = \lambda w .\sem P_M \to \#(w)\]
+
+\[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \lambda x' \cn \sem{\dns N}_{M'}.\]
+\[\Pi w .\Pi y \cn \sem N_M(w).\Pi y' \cn\sem N_{M'}(\omega w).  \sem N_f(w, y, y')  \to s(w, (x\ w\ y), (x'\ \omega w\ y'))  \]
+
+\[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
+\[\Pi y \cn \sem P_M.\Pi y' \cn\sem P_{M'}.  \sem P_f(y, y')  \to s(w, (x\ y), (x'\ y'))  \]
+
+\subsubsection{Writing this more Perspicuously}
+
+Define
+$$\equiv^f_w : \#(w) \sim \#(f_\omega w)$$
+$$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(f_\omega w)$$
+$$\equiv^{\sem{P}_f} : \sem{P}_M \sim \sem{P}_{M'}$$
 \end{document}
