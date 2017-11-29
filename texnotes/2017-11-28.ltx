@@ -237,23 +237,40 @@ Then
 \[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
 \[\Pi (y \equiv^{\sem P_f} y') .  (x\ y) \equiv^{\#_f}_w (x'\ y')  \]
 
-\subsubsection{Can I Get Away With Positives as Functions}
+%% \subsubsection{Can I Get Away With Positives as Functions}
 
-Positive props interpret as functors $\rmod \to \rset$.
-Negative props interpret as functors $\rmod \to \rrfam$ over $\rset$.
-\[\sem {\dns N}_M = \forall w . \sem N_M(w) \to \#(w) \]
-\[\sem {\ups P}_M = \lambda w .\sem P_M \to \#(w)\]
+%% Positive props interpret as functors $\rmod \to \rset$.
+%% Negative props interpret as functors $\rmod \to \rrfam$ over $\rset$.
+%% \[\sem {\dns N}_M = \forall w . \sem N_M(w) \to \#(w) \]
+%% \[\sem {\ups P}_M = \lambda w .\sem P_M \to \#(w)\]
 
-Define
-$$\equiv^{\#_f}_w : \#(w) \sim \#(\omega w) $$
-$$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(\omega w)$$
-$$\equiv^{\sem{P}_f} : \sem{P}_M \to \sem{P}_{M'}$$
-Then
-\[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \]
-\[\Pi w .\Pi (y \equiv_w^{\sem N_f} y') .   (x\ w\ y) \equiv_w^{\#_f} (x'\ \omega w\ y'))  \]
-\[: \sem{\dns N}_{M'}\]
+%% Define
+%% $$\equiv^{\#_f}_w : \#(w) \sim \#(\omega w) $$
+%% $$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(\omega w)$$
+%% $$\equiv^{\sem{P}_f} : \sem{P}_M \to \sem{P}_{M'}$$
+%% Then
+%% \[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \]
+%% \[\Pi w .\Pi (y \equiv_w^{\sem N_f} y') .   (x\ w\ y) \equiv_w^{\#_f} (x'\ \omega w\ y'))  \]
+%% \[: \sem{\dns N}_{M'}\]
 
-\[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
-\[\Pi (y \equiv^{\sem P_f} y') .  (x\ y) \equiv^{\#_f}_w (x'\ y')  \]
+%% \[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
+%% \[\Pi (y \equiv^{\sem P_f} y') .  (x\ y) \equiv^{\#_f}_w (x'\ y')  \]
 
+\subsection{Now What}
+I think I hope that proofs of $P \prov N$ line up with `natural transformations' $e$
+as in
+\[
+\begin{tikzcd}
+\sem P_M\ar[d, "e_M"'] \x \sem N_M(w)\ar[r, <->, "{\sem {P\tri N}_f}"]
+&\sem P_{M'}\ar[d, "e_{M'}"] \x \sem N_{M'}(\omega w)\\
+\#_w \ar[r, <->, "{\equiv_w^{\#_f}}"']&\#'_{\omega w}\\
+\end{tikzcd}
+\]
+
+%% \[
+%% \begin{tikzcd}
+%% \sem P_M\ar[d, "e_M"']\ar[r, <->, "{\sem P_f}"]&\sem P_{M'}\ar[d, "e_{M'}"]\\
+%% \sem Q_M\ar[r, <->, "{\sem Q_f}"']&\sem Q_{M'}\\
+%% \end{tikzcd}
+%% \]
 \end{document}
