@@ -1,0 +1,168 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+
+\input{linear}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\wat{\mathbin{@}}
+\def\cn{{:}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+\def\N{\mathbb{N}}
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\definecolor{lgray}{gray}{0.7}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\title{Notes on the Logic of Convex Combination}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\def\rmod{\mathbf{Mod}}
+\section{Thinking About Semantics}
+Write $\rfam$ for $\rset^\to$.
+Fix a set $\alpha^+$ of positive atoms. Putting off thinking about negative atoms for now.
+Let $\rmod$ be the category $\rfam \x \rset^{\alpha^+}$, or, to put it another way,
+a model consists of a set $W$ of kripke worlds, and a set indexed over that called
+ $\#(w)$ for $w\in W$, and a choice of sets $\eta : \alpha^+ \to \rset$ for each of the atoms.
+
+Positive props are interpreted as functors from $\rmod \to \rset$, and negative props
+are interpreted as functors $\rmod \to \rfam$ such that
+\[\begin{tikzcd}
+\rmod \ar[dr, "W"']\ar[rr, "\sem N"]&& \rfam\ar[dl, "\cod"]\\
+& \rset
+\end{tikzcd}\]
+
+\[\sem{P_1 \tensor P_2}(M) = \sem{P_1}(M) \x \sem{P_2}(M)\]
+\[\sem{P_1 \oplus P_2}(M) = \sem{P_1}(M) + \sem{P_2}(M)\]
+\[\sem{\dns N}(M) = \Pi w \cn W . \sem {N}(M)(w) \to \#(M)(w)\]
+\[\sem{\ups P}(M)(w) = \sem P(M) \to \#(M)(w)\]
+
+These clauses for shifts blatantly violate covariance. What gives?
+
+\subsection{Pondering Intuitionistic Logic}
+
+A model is a pointed krikpe category $\C \in \rcat_*$ and a functor $\eta : \alpha \to \C \to \rset$.
+We interpret props as functors $\C \to \rset$.
+\[\sem{A \land B}_{M}(C) = \sem{A}_{M}(C) \x \sem{B}_{M}(C)\]
+\[\sem{A \lor B}_{M}(C) = \sem{A}_{M}(C) + \sem{B}_{M}(C)\]
+\[\sem{A \lol B}_{M}(C) = \forall(f : C \to D). \sem{A}_{M}(D) \to \sem{B}_{M}(D)\]
+\[\sem{a}_{M} = \eta(a)\]
+
+If for every $M$ we have that $\sem {P}_M(*)$ is inhabited,
+then $\prov P$ should be true.
+
+This should mean that every prop can
+be interpreted as a functor from $\rmod$ to $\rset$, yeah? By taking the distinguished
+object of the category? Yeah, given an $M$, I construct the set $\sem{P}_M(*)$.
+
+What's a morphism between models $M = (\C, \eta)$ and $N = (\D, \xi)$? A pointed functor $F : \C \to \D$.
+For each $a \in \alpha$, a natural transformation $\phi : \eta(a) \dto \xi(a)\o F$.
+
+So can I construct a function $\sem P_{M}(*_\C) \to \sem P_{N}(*_\D)$?
+
+\end{document}

@@ -2874,3 +2874,15 @@ The two arrows are the two ways of squeezing an arbitrary F(c', c)
 into the diagonal; one by pushing it covariantly out to F(c', c')
 along the f : c → c', two by pulling it covariantly back to F(c, c)
 along f backwards.
+
+=== 2017.11.27
+
+Q: What's a paper on semantics of focusing I'd like to understand better?
+A: "A Categorical Semantics for Polarized MALL" Masahiro Hamano & Philip Scott
+http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=F9C7CB8E4B64F242C54550FFA3578760?doi=10.1.1.92.6638&rep=rep1&type=pdf
+
+=== 2017.11.28
+
+Q: How do I do any kind of semantics that lines up nicely with counting proofs in
+focused logic?
+A: ???

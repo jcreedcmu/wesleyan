@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \input theorem
 \input prooftree
+\def\munit{{I}}
 \def\nto{\mathrel{\dot\to}}
 \def\sem#1{[\![#1]\!]}
 \def\seme#1{[\![#1]\!]_{\eta}}
@@ -112,7 +113,7 @@ These are thoroughly standard.
 
 A {\em model}  $M$ consists of the following data:
 \begin{enumerate}
-\item a symmetric monoidal category $\P$ and a category $\N$
+\item a symmetric monoidal category $(\P, \tensor, \munit)$ and a category $\N$
 \item functors $\_\lol\_ : \P \x \N \to \N$ and $\_\tri\_ : \P \x \N \to \rset$
 \item a natural isomorphism
 $$
@@ -155,7 +156,7 @@ Shifts are defined with ends.
 
 \begin{figure}
 \begin{center}
-\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = \P(1, \dash)\]
+\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = \P(\munit, \dash)\]
 \[\sem{P_1 \oplus P_2} =  \sem{P_1} \cup \sem{P_2}\qquad
 \sem{0} = \emptyset\]
 \[\sem{N_1 \amp N_2} =  \sem{N_1} \cup \sem{N_2}\qquad
@@ -219,10 +220,9 @@ holds for all $M, \eta$.
   \begin{itemize}
   \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
 whose morphisms are permutations.
-The functor $\tensor$ is multiset union, and the unit $1$ is the empty context.
+The functor $\tensor$ is context concatenation, and the monoidal unit $\munit$ is the empty context.
 \item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
 morphisms are context permutations.
-\item
 The functor $\lol$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
 and produces $((\Gamma_1, \Gamma_2), Q)$ in $\N$.
 \item The functor $\tri$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
