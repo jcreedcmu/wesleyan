@@ -218,16 +218,42 @@ We conflate $\sem N_M$ with its $h$ and $\sem N_f$ with its $q$ for ease of calc
 \[\sem {\dns N}_M = \forall w . \sem N_M(w) \to \#(w) \]
 \[\sem {\ups P}_M = \lambda w .\sem P_M \to \#(w)\]
 
-\[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \lambda x' \cn \sem{\dns N}_{M'}.\]
-\[\Pi w .\Pi y \cn \sem N_M(w).\Pi y' \cn\sem N_{M'}(\omega w).  \sem N_f(w, y, y')  \to s(w, (x\ w\ y), (x'\ \omega w\ y'))  \]
+%% \[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \lambda x' \cn \sem{\dns N}_{M'}.\]
+%% \[\Pi w .\Pi y \cn \sem N_M(w).\Pi y' \cn\sem N_{M'}(\omega w).  \sem N_f(w, y, y')  \to s(w, (x\ w\ y), (x'\ \omega w\ y'))  \]
 
-\[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
-\[\Pi y \cn \sem P_M.\Pi y' \cn\sem P_{M'}.  \sem P_f(y, y')  \to s(w, (x\ y), (x'\ y'))  \]
+%% \[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
+%% \[\Pi y \cn \sem P_M.\Pi y' \cn\sem P_{M'}.  \sem P_f(y, y')  \to s(w, (x\ y), (x'\ y'))  \]
 
 \subsubsection{Writing this more Perspicuously}
 
 Define
-$$\equiv^f_w : \#(w) \sim \#(f_\omega w)$$
-$$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(f_\omega w)$$
+$$\equiv^{\#_f}_w : \#(w) \sim \#(\omega w) $$
+$$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(\omega w)$$
 $$\equiv^{\sem{P}_f} : \sem{P}_M \sim \sem{P}_{M'}$$
+Then
+\[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \lambda x' \cn \sem{\dns N}_{M'}.\]
+\[\Pi w .\Pi (y \equiv_w^{\sem N_f} y') .   (x\ w\ y) \equiv_w^{\#_f} (x'\ \omega w\ y'))  \]
+
+\[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
+\[\Pi (y \equiv^{\sem P_f} y') .  (x\ y) \equiv^{\#_f}_w (x'\ y')  \]
+
+\subsubsection{Can I Get Away With Positives as Functions}
+
+Positive props interpret as functors $\rmod \to \rset$.
+Negative props interpret as functors $\rmod \to \rrfam$ over $\rset$.
+\[\sem {\dns N}_M = \forall w . \sem N_M(w) \to \#(w) \]
+\[\sem {\ups P}_M = \lambda w .\sem P_M \to \#(w)\]
+
+Define
+$$\equiv^{\#_f}_w : \#(w) \sim \#(\omega w) $$
+$$\equiv^{\sem{N}_f}_w : \sem{N}_M(w) \sim \sem{N}_M'(\omega w)$$
+$$\equiv^{\sem{P}_f} : \sem{P}_M \to \sem{P}_{M'}$$
+Then
+\[\sem {\dns N}_f = \lambda x \cn \sem {\dns N}_M . \]
+\[\Pi w .\Pi (y \equiv_w^{\sem N_f} y') .   (x\ w\ y) \equiv_w^{\#_f} (x'\ \omega w\ y'))  \]
+\[: \sem{\dns N}_{M'}\]
+
+\[\sem {\ups P}_f = \lambda w . \lambda x \cn \sem {\ups P}_M(w) . \lambda x' \cn \sem{\ups P}_{M'}(w).\]
+\[\Pi (y \equiv^{\sem P_f} y') .  (x\ y) \equiv^{\#_f}_w (x'\ y')  \]
+
 \end{document}
