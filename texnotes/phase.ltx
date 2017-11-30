@@ -3,13 +3,19 @@
 
 \usepackage[framestyle=fbox,framefit=yes,heightadjust=all,framearound=all]{floatrow}
 \usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{cd}
+
+
 \input theorem
 \input prooftree
+\def\o{\circ}
+\def\rid{\mathsf{id}}
 \def\munit{{I}}
 \def\nto{\mathrel{\dot\to}}
 \def\sem#1{[\![#1]\!]}
-\def\seme#1{[\![#1]\!]_{\eta}}
-\def\mode{\models_{M,\eta}}
+\def\seme#1{[\![#1]\!]_{M}}
+\def\mode{\models_{M}}
 \def\C{\mathbf{C}}
 \def\D{\mathbf{D}}
 \def\P{\mathbf{P}}
@@ -23,7 +29,7 @@
 \def\celse{\mathrel|}
 \def\st{|}
 \def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
-\def\imp{\Rightarrow}
+\def\imp{\rightarrow}
 \def\tensor{\otimes}
 \def\htensor{\mathrel{\hat\otimes}}
 \def\lol{\multimap}
@@ -55,7 +61,7 @@ intuitionistic linear logic so that I can better understand how it
 relates to other semantics I've seen in the literature \cite{polarized.mall}.
 
 \section{Language}
-We recall the syntax of focused intuitionistic linear logic.
+We recall the syntax of focused intuitionistic linear logic, leaving out exponentials for now.
 Propositions are polarized into positive and negative.
 There are shift operators $\ups$ and $\dns$
 that coerce back and forth between the two polarities.
@@ -97,19 +103,23 @@ These are thoroughly standard.
 \end{lemma}
 
 \begin{lemma}[Identity]\
+\label{identity}
   \begin{enumerate}
   \item $N \prov N$
   \item $P \prov P$
   \item If $\Gamma_0[N] \prov Q$ implies
-    $\Gamma_0, \Gamma_\bullet \prov Q$
-    for every $\Gamma_0$ and $Q$, then  $\Gamma_\bullet \prov N$.
-  \item If $\Gamma_0 \prov [P]$ implies $\Gamma_0, \Gamma_\bullet; \Omega \prov R$
-    for every $\Gamma_0$, then $\Gamma_\bullet; P, \Omega \prov R$.
+    $\Gamma_0, \Gamma \prov Q$
+    for every $\Gamma_0$ and $Q$, then  $\Gamma \prov N$.
+  \item If $\Gamma_0 \prov [P]$ implies $\Gamma_0, \Gamma; \Omega \prov R$
+    for every $\Gamma_0$, then $\Gamma; P, \Omega \prov R$.
   \end{enumerate}
 
 \end{lemma}
 
 \section{Semantics}
+
+In what follows we write $\hat \C$ as an abbreviation for $\C \to \rset$, despite the
+usual contravariant convention.
 
 A {\em model}  $M$ consists of the following data:
 \begin{enumerate}
@@ -124,17 +134,17 @@ k :
 P_1  \tri (P_2 \lol N)
 \end{prooftree}
 $$
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to objects of $\hat \P$ (resp.
+$\hat \N$)
 \end{enumerate}
 
-We write $\hat \C$ as an abbreviation for $\C \to \rset$, despite the
-usual contravariant convention. Given an environment, i.e. a mapping
-$\eta$ of atoms $a^+$ (resp. $a^-$) to objects of $\hat \P$ (resp.
-$\hat \N$), we inductively define an interpretation of all positive
+We inductively define an interpretation of all positive
 (resp. negative) propositions $P$ (resp. $N$)
  as objects $\seme{P} \in \hat \P$ (resp. $\seme{N} \in \hat \N$).
-We write $\sem\dash$ instead of $\seme\dash$ when the $\eta$ is evident from context.
+We write $\sem\dash$ instead of $\seme\dash$ when the $M$ is evident from context.
 The definition of the interpretation is given in Figure~\ref{semantics},
-where $\cup$ denotes the coproduct and $\emptyset$ the initial object,
+where $+$ denotes the (objectwise) coproduct and $\emptyset$ the initial object,
  in the category $\hat P$ or $\hat N$ as appropriate. The arrow $\to$ in the definition
 of the shifts is just the  function space in $\rset$.
 The multiplicative connectives are defined with coends, using the
@@ -157,9 +167,9 @@ Shifts are defined with ends.
 \begin{figure}
 \begin{center}
 \[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = \P(\munit, \dash)\]
-\[\sem{P_1 \oplus P_2} =  \sem{P_1} \cup \sem{P_2}\qquad
+\[\sem{P_1 \oplus P_2} =  \sem{P_1} + \sem{P_2}\qquad
 \sem{0} = \emptyset\]
-\[\sem{N_1 \amp N_2} =  \sem{N_1} \cup \sem{N_2}\qquad
+\[\sem{N_1 \amp N_2} =  \sem{N_1} + \sem{N_2}\qquad
 \sem{\top} = \emptyset\]
 \[\sem{P \lol N} = \sem P \hlol \sem N\]
 \[\sem{P_1 \tensor P_2} = \sem {P_1} \htensor \sem{P_2}\]
@@ -185,11 +195,28 @@ We say
 \item  $\Gamma \mode [P]$ iff there is a nat. trans. $\sem \Gamma   \nto \sem{ P}$
 \item  $\Gamma[N] \mode Q$ iff there is a nat. trans. $(\sem \Gamma \hlol \sem Q^>) \nto \sem N$
 \end{enumerate}
-When we drop the subscripts $M, \eta$ and just write $\models$, it  means that the statement
-holds for all $M, \eta$.
+When we drop the subscripts $M$ and just write $\models$, it  means that the statement
+holds for all $M$.
 
 
 \section{Results}
+
+\begin{lemma}
+$\htensor$ is associative.
+\end{lemma}
+
+\def\ep{\varepsilon}
+\begin{proof}
+\[(X \htensor (Y \htensor Z))(\ep)
+ \cong \left(X \htensor \int^{\beta,\gamma : \P} Y(\beta)\x Z(\gamma) \x \P(\beta \tensor \gamma, \dash)\right)(\ep)\]
+\[ \cong \int^{\alpha, \delta: \P} X(\alpha) \x \left(\int^{\beta,\gamma : \P} Y(\beta)\x Z(\gamma) \x \P(\beta \tensor \gamma, \delta)\right) \x \P(\alpha \tensor \delta, \ep)\]
+\[ \cong \int^{\alpha, \beta, \delta, \gamma: \P} X(\alpha) \x Y(\beta)\x Z(\gamma) \x \P(\alpha \tensor \delta, \ep) \x \P(\beta \tensor \gamma, \delta) \]
+\[ \cong \int^{\alpha, \beta, \delta: \P} X(\alpha) \x Y(\beta)\x Z(\gamma) \x \int^{\delta:\P} \P(\alpha \tensor \delta, \ep) \x \P(\beta \tensor \gamma, \delta) \]
+\[ \cong \int^{\alpha, \beta, \gamma: \P} X(\alpha) \x Y(\beta)\x Z(\gamma) \x \P(\alpha \tensor \beta \tensor \gamma, \ep) \]
+and we can show symmetrically that
+\[ (X\htensor Y)\htensor Z \cong \int^{\alpha, \beta, \gamma: \P} X(\alpha) \x Y(\beta)\x Z(\gamma) \x \P(\alpha \tensor \beta \tensor \gamma, \dash) \]
+\cqed
+\end{proof}
 
 \begin{theorem}[Soundness]\
   \begin{enumerate}
@@ -201,47 +228,181 @@ holds for all $M, \eta$.
 
 \begin{proof}
   By induction on the derivation.
+Some example cases:
+\begin{itemize}
+\item[Case:]
+$$
+\erule
+{\Gamma; P \prov Q}
+{\Gamma[\ups P] \prov Q}
+$$
+We assume a natural transformation
+\[\zeta : (\sem\Gamma \hlol \sem Q^>) \nto \sem{\ups P}\]
+and need to produce a natural transformation
+\[\xi : (\sem\Gamma \htensor \sem P) \land  \sem Q^> \nto \tri\]
+Expanding definitions, we have
+\[\zeta_\psi : \left(\int^{\alpha : \P, \phi: \N} \sem\Gamma(\alpha) \x \sem Q^>(\phi) \x \N(\alpha \lol \phi, \psi)\right) \nto \]
+\[\int_{\beta : \P} \sem P (\beta) \to (\beta \tri \psi)\]
+and we need
+\[\xi_{\alpha,\phi} :
+\left(
+\int^{\alpha_1 : \P, \alpha_2: \P} \sem\Gamma(\alpha_1) \x \sem P(\alpha_2) \x \P(\alpha_1 \tensor \alpha_2, \alpha)
+\right)
+  \x  \sem Q^>(\phi) \to (\alpha \tri \phi)\]
+So let
+\[\gamma : \sem{\Gamma}(\alpha_1)\qquad p : \sem P(\alpha_2)
+\qquad g : \P(\alpha_1\tensor \alpha_2, \alpha) \qquad q : \sem Q^>(\phi)\]
+be given.
+Then we have
+\[\zeta_{\alpha_1 \lol \phi}(\gamma, q, \rid_{\alpha_1   \lol\phi})( p) : \alpha_2 \tri (\alpha_1 \lol \phi)\]
+By $k$, this is as good as $(\alpha_1 \tensor \alpha_2) \tri \phi$, and we apply functoriality
+of $\tri$ to $g$ and
+we're done.
+\item[Case:]
+$$
+\erule
+{\Gamma \prov [P]}
+{\Gamma \prov P}
+$$
+We assume a natural transformation $\zeta :\sem \Gamma \nto \sem P : \P \to \rset$,
+and need to produce a natural transformation
+$\xi : \sem \Gamma \land \sem{\ups P}\nto \tri : \P \x \N \to \rset$.
+
+For an object $(\alpha,\phi)$ of $\P \x \N$, the arrow $\xi_{(\alpha, \phi)}$ must
+be a function
+$$\sem{\Gamma}(\alpha) \x  \left(\int_{\alpha\cn \P} \sem P(\alpha) \imp  (\alpha \tri \phi)\right) \to (\alpha\tri \phi)$$
+Note that for any object $\alpha : \P$ there is a projection function
+out of the end
+$$\pi_\alpha : \left(\int_{\alpha\cn \P} \sem P(\alpha) \imp  (\alpha \tri \phi)\right) \to  \sem P(\alpha) \to (\alpha \tri \phi)$$
+So we set
+$$\xi_{(\alpha, \phi)} = \lambda (\gamma, e) . \pi_\alpha(e)(\zeta_\alpha(\gamma))$$
+\item[Case:]
+$$
+\erule
+{\Gamma_1 \prov [P_1]\qquad \Gamma_2 \prov [P_1]}
+{\Gamma_1, \Gamma_2 \prov [P_1\tensor P_2]}
+$$
+We assume natural transformations $\zeta_1 : \sem {\Gamma_1} \nto \sem{P_1}$
+and $\zeta_2 : \sem {\Gamma_2} \nto \sem{P_2}$, and we need to produce
+$$\xi : \sem {\Gamma_1} \htensor \sem {\Gamma_2} \nto \sem{P_1 \tensor P_2}$$
+In other words
+\[\xi_{\beta} : \int^{\alpha_1,\alpha_2 : \P} \sem {\Gamma_1}(\alpha_1) \x \sem {\Gamma_2}(\alpha_2)
+\x \P(\alpha_1 \tensor \alpha_2, \beta) \nto\]
+\[
+\int^{\alpha_1,\alpha_2 : \P} \sem{P_1}(\alpha_1) \x \sem{P_2}(\alpha_2)
+\x \P(\alpha_1 \tensor \alpha_2, \beta)\]
+
+This is easily constructed out of $\zeta_1$ and $\zeta_2$ and $\rid_{\P(\dash\tensor\dash, \beta)}$.
+\item[Case:]
+$$
+\erule
+{\Gamma; P_1, P_2 \prov Q}
+{\Gamma; P_1\tensor P_2 \prov Q}
+$$
+We have a natural transformation
+$$ \sem \Gamma \htensor \sem{P_1} \htensor \sem{P_2} \htensor \sem{\ups Q} \nto \tri$$
+and need to produce
+$$ \sem \Gamma \htensor \sem{P_1 \tensor P_2} \htensor \sem{\ups Q} \nto \tri$$
+which is essentially the same thing, by associativity of $\htensor$.
+\end{itemize}
+\cqed
+\end{proof}
+
+
+
+\subsection{Completeness}
+We build a  syntactic model. Fix a collection of atoms.
+\begin{itemize}
+\item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
+  whose morphisms are permutations.
+  The functor $\tensor$ is context concatenation, and the monoidal unit $\munit$ is the empty context.
+\item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
+  morphisms are context permutations.
+  The functor $\lol$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
+  and produces $((\Gamma_1, \Gamma_2), Q)$ in $\N$.
+\item The functor $\tri$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
+  and yields the set of derivations $\Gamma_1, \Gamma_2 \prov Q$.
+\item $k$ is easy to check by simply constructing proofs and using cut.
+\item
+  We choose as interpretations of the atoms as follows
+  \[\eta(a^+)(\Gamma) = \cases{\{*\}&if $\Gamma = (\susp{a^+})$; \cr \emptyset & otherwise.}\]
+  \[\eta(a^-)(\Gamma, Q) = \cases{\{*\}&if $(\Gamma, Q) = (\cdot, \susp{a^-})$; \cr \emptyset & otherwise.}\]
+\end{itemize}
+
+The thing we need to do is show that this model is in fact universal ---
+that the interpretation of every proposition reflects its (focused)
+provability. We first claim that
+
+\begin{lemma}\label{syntactic}
+In the syntactic model, for all $P$ and $N$ we have
+  \begin{itemize}
+  \item If $\sem{P}(\Gamma)$, then $\Gamma \prov [P]$
+  \item If $\sem{N}(\Gamma, Q)$, then $\Gamma[N] \prov Q$
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+This proceeds by induction on the proposition. For the atoms, the definition of $\eta$
+makes this immediately true.
+
+Note that because the categories $\P$ and $\N$ are groupoids,
+taking (co)ends over them is the same as taking mere (co)products over their connected components,
+for example
+$$\int^{\Gamma:\P} F(\Gamma, \Gamma) = \coprod_{\Gamma : \P}  F(\Gamma, \Gamma)$$
+where the $\coprod$ is understood as ranging over contexts identified up to permutation.
+ Other cases:
+\begin{itemize}
+\item[Case:] $P_1 \tensor P_2$.
+If $\sem {P_1 \tensor P_2}(\Gamma)$ is inhabited, then by definition
+$$\coprod_{\Gamma_1,\Gamma_2 \cn \P} \sem{P_1}(\Gamma_1) \x \sem{P_1}(\Gamma_2) \x \P((\Gamma_1, \Gamma_2), \Gamma)$$
+is inhabited. By i.h., we have $\Gamma_1 \prov [P_1]$ and $\Gamma_2 \prov [P_2]$, so $\Gamma_1, \Gamma_2 \prov [P_1 \tensor P_2]$ as required.
+\item[Case:] $\dns N$. Suppose $\sem{\dns N}(\Gamma)$ is inhabited. By definition,
+\[\prod_{(\Gamma_0, Q) : \N} \sem N(\Gamma_0, Q) \to \Gamma \tri (\Gamma_0, Q) \]
+is inhabited. By Lemma~\ref{identity} and soundness, we have $\Gamma \prov N$.
+\end{itemize}
+
 \cqed
 \end{proof}
 
 
 
 
-\begin{theorem}[Completeness]\
+\begin{lemma}\label{inhabit}
+In the syntactic model,
+\begin{enumerate}
+\item $\sem{\dns N}(N)$ is inhabited.
+\item $\sem{\ups P}(\cdot, P)$ is inhabited.
+\item  $\sem{\Gamma}(\Gamma)$ is inhabited.
+\item  $(\sem \Gamma \hlol \sem Q^>)(\Gamma, Q)$ is inhabited.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Follows easily from Lemma~\ref{identity}.\cqed
+\end{proof}
+
+\begin{lemma}
+In the syntactic model,
+\begin{enumerate}
+\item  If  $(\sem \Gamma \htensor \sem \Omega) \land \sem{R}^> \nto \tri$, then $\Gamma; \Omega \prov R$.
+\item  If $\sem \Gamma   \nto \sem{ P}$, then $\Gamma \prov [P]$.
+\item  If $(\sem \Gamma \hlol \sem Q^>) \nto \sem N$, then $\Gamma[N] \prov Q$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Combine Lemmas~\ref{inhabit} and~\ref{syntactic}.
+\cqed
+\end{proof}
+
+\begin{corollary}[Completeness]\
   \begin{enumerate}
   \item If $\Gamma; \Omega \models R$ then $\Gamma ; \Omega \prov R$
   \item If $\Gamma \models [P]$ then $\Gamma \prov [P]$
   \item If $\Gamma[N] \models Q$ then $\Gamma[N] \prov Q$
   \end{enumerate}
-\end{theorem}
+\end{corollary}
 
-\begin{proof}
-  We build a universal model. Fix a countable collection of atoms.
-  \begin{itemize}
-  \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
-whose morphisms are permutations.
-The functor $\tensor$ is context concatenation, and the monoidal unit $\munit$ is the empty context.
-\item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
-morphisms are context permutations.
-The functor $\lol$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
-and produces $((\Gamma_1, \Gamma_2), Q)$ in $\N$.
-\item The functor $\tri$ takes an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$
-and yields the set of derivations $\Gamma_1, \Gamma_2 \prov Q$.
-\item
-  We choose as interpretations of the atoms as follows
-\[\eta(a^+)(X: \P) = \cases{\{*\}&if $X = (\susp{a^+})$; \cr \{\} & otherwise.}\]
-\[\eta(a^-)(X: \N) = \cases{\{*\}&if $X = (\cdot, \susp{a^-})$; \cr \{\} & otherwise.}\]
-  \end{itemize}
-  The thing we need to do is show that this model is in fact universal ---
-  that the interpretation of every proposition reflects its (focused)
-  provability. We claim that for all $P$ and $N$ we have
-  \begin{itemize}
-  \item $\sem{P}(\Gamma) \iff  \Gamma \prov [P]$
-  \item $\sem{N}(\Gamma, Q) \iff \Gamma[N] \prov Q$
-  \end{itemize}
-
-\cqed
-\end{proof}
 
 \bibliography{../wes}
 
