@@ -329,15 +329,28 @@ for $\pi : \alpha \equiv_P \alpha'$ and $\nu : \phi \equiv_N \phi'$ we have
 \[ \equiv^\pi_{\sem P_R} :  \sem P_M(\alpha) \sim \sem P_{M'}(\alpha') \]
 \[ \equiv^\nu_{\sem N_R} :  \sem N_M(\phi) \sim \sem N_{M'}(\phi') \]
 
-Now a semantic entailment from $P \models N$
+Now a semantic entailment, e.g $\Gamma \models Q$
 is defined as a family of functions
-\[\zeta_{M\alpha\phi} : \sem P_M(\alpha) \x \sem N_M(\phi) \to (\alpha \tri\phi)\]
+\[\zeta_{M\alpha\phi} : \sem \Gamma_M(\alpha) \x \sem Q_M(\phi) \to (\alpha \tri\phi)\]
 such that
 for any
 \begin{itemize}
 \item $R: M \to M'$
 \item $\pi : \alpha \equiv_P \alpha'$ and $\nu : \phi \equiv_N \phi'$
-\item $p \equiv^\pi_{\sem P_R} p'$ and $n \equiv^\nu_{\sem N_R} n'$
+\item $p \equiv^\pi_{\sem \Gamma_R} p'$ and $n \equiv^\nu_{\sem Q_R} n'$
 \end{itemize}
 we have $\zeta_{M\alpha\phi} (p, n) \equiv_{\pi \tri \nu} \zeta_{M'\alpha'\phi'}(p', n')$.
+
+And I hope that these line up somehow term-for-term with derivations $\Gamma \prov Q$.
+
+For another example to think about, the semantic $\Gamma \models [P]$ I expect to be like a family
+of functions
+$\zeta_{M\alpha} : \sem\Gamma_M(\alpha) \to \sem P(\alpha)$ such that for any
+\begin{itemize}
+\item $R: M \to M'$
+\item $\pi : \alpha \equiv_P \alpha'$
+\item $p \equiv^\pi_{\sem \Gamma_R} p'$
+\end{itemize}
+we have $\zeta_{M\alpha} (p) \equiv^\pi_{\sem P_R} \zeta_{M'\alpha'}(p')$.
+
 \end{document}

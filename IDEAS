@@ -2891,3 +2891,9 @@ A: ???
 
 Q: What's the right way of thinking about parametricity categorically?
 A: ???
+
+=== 2017.11.30
+
+Q: Can I make anything out of the notion that parametricity is about an intuitionistically
+*growing* set of equalities between things? Or preservation of colimits or something?
+A: ???
