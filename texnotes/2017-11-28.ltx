@@ -4,6 +4,16 @@
 \usepackage{latexsym}
 \usepackage{yfonts}
 \usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\definecolor{lgray}{gray}{0.7}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
 \def\dto{\mathrel{\dot\to}}
@@ -16,6 +26,9 @@
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
+\def\P{{\mathbf P}}
+\def\N{{\mathbf N}}
+\def\munit{I}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
 \def\zz{{\mathsf z}}
@@ -44,7 +57,7 @@
 \def\lamp{\binampersand}
 \def\btwo{\mathbf{2}}
 \def\bone{\mathbf{1}}
-\def\N{\mathbb{N}}
+
 \newarrow {Equiv} =====
 \def\FinSet{\mathbf{FinSet}}
 \def\x{\times}
@@ -61,10 +74,7 @@
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\del{\partial}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
-\usepackage{tikz}
-\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
 \newcounter{nodemaker}
 \setcounter{nodemaker}{0}
 \def\twocell#1#2{%
@@ -102,18 +112,16 @@
 \def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
 \def\neqn#1{\fcolorbox{white}{redl}{#1}}
 
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable}
-\definecolor{block-gray}{gray}{0.85}
-\definecolor{lgray}{gray}{0.7}
-\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
-boxrule=0pt,boxsep=0pt,breakable}
 
 
 \def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
 \def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
 \def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
 \def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
 \title{Notes on the Logic of Convex Combination}
 \begin{document}
 
@@ -150,7 +158,7 @@ These clauses for shifts blatantly violate covariance. What gives?
 \subsection{Pondering Intuitionistic Logic}
 
 A model is a pointed krikpe category $\C \in \rcat_*$ and a functor $\eta : \alpha \to \C \to \rset$.
-We interpret props as functors $\C \to \rset$.
+We interpret props as functors $\C$.
 \[\sem{A \land B}_{M}(C) = \sem{A}_{M}(C) \x \sem{B}_{M}(C)\]
 \[\sem{A \lor B}_{M}(C) = \sem{A}_{M}(C) + \sem{B}_{M}(C)\]
 \[\sem{A \lol B}_{M}(C) = \forall(f : C \to D). \sem{A}_{M}(D) \to \sem{B}_{M}(D)\]
@@ -273,4 +281,63 @@ as in
 %% \sem Q_M\ar[r, <->, "{\sem Q_f}"']&\sem Q_{M'}\\
 %% \end{tikzcd}
 %% \]
+
+\section{Parametricity with Categories}
+
+A model is
+\begin{enumerate}
+\item a symmetric monoidal category $(\P, \tensor, \munit)$ and a category $\N$
+\item functors $\_\lol\_ : \P \x \N \to \N$ and $\_\tri\_ : \P \x \N \to \rset$
+\item a natural isomorphism
+$$
+k :
+\begin{prooftree}
+(P_1 \tensor P_2) \tri N
+\Justifies
+P_1  \tri (P_2 \lol N)
+\end{prooftree}
+$$
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to objects of $\hat \P$ (resp.
+$\hat \N$)
+\end{enumerate}
+
+
+We interpret props as functors $\hat\P$ or $\hat\N$. The stuff I'm used to:
+\[\sem{P_1 \tensor P_2} = \int^{\alpha_1,\alpha_2:\P} \sem{P_1}(\alpha_1) \x \sem{P_2}(\alpha_2) \x \P(\alpha_1\tensor\alpha_2, \dash)\]
+\[\sem{P \lol N} = \int^{\alpha,\phi:\P} \sem{P}(\alpha) \x \sem{N}(\phi) \x \P(\alpha\lol\phi, \dash)\]
+\[\sem{\ups P} = \int_{\alpha : \P} \sem P(\alpha) \to \alpha \tri \dash\]
+\[\sem{\dns N} = \int_{\phi : \N} \sem N(\phi) \to \dash \tri \phi\]
+\[\sem{a^-} = \eta(a^-)\qquad \sem{a^+} = \eta(a^+)\]
+
+However, I now want to have a further notion of relations on models.
+A relation $R : M \sim M'$ is something like
+\begin{enumerate}
+\item a functor $\equiv_P : \P \x \P' \to \rset$
+\item a functor $\equiv_N : \N \x \N' \to \rset$
+\item For each $\pi : \alpha \equiv_P \alpha'$ and $\nu : \phi \equiv_N \phi'$ a
+relation $\equiv_{\pi \tri \nu} : (\alpha \tri \phi) \sim (\alpha' \tri \phi') $.
+\item For each $a^+$ and each $\pi : \alpha \equiv_P \alpha'$,
+a relation $\equiv^\pi_{\eta(a^+)} : \eta(a^+)(\alpha) \sim \eta(a^+)(\alpha')$
+\item For each $a^-$ and each $\nu : \phi \equiv_N \phi'$,
+a relation $\equiv^\nu_{\eta(a^-)} : \eta(a^-)(\phi) \sim \eta(a^-)(\phi')$
+\end{enumerate}
+
+And I should be able to interpret any proposition at a model relation, and obtain
+a relation between the set interpretations of the prop, i.e.
+for $\pi : \alpha \equiv_P \alpha'$ and $\nu : \phi \equiv_N \phi'$ we have
+\[ \equiv^\pi_{\sem P_R} :  \sem P_M(\alpha) \sim \sem P_{M'}(\alpha') \]
+\[ \equiv^\nu_{\sem N_R} :  \sem N_M(\phi) \sim \sem N_{M'}(\phi') \]
+
+Now a semantic entailment from $P \models N$
+is defined as a family of functions
+\[\zeta_{M\alpha\phi} : \sem P_M(\alpha) \x \sem N_M(\phi) \to (\alpha \tri\phi)\]
+such that
+for any
+\begin{itemize}
+\item $R: M \to M'$
+\item $\pi : \alpha \equiv_P \alpha'$ and $\nu : \phi \equiv_N \phi'$
+\item $p \equiv^\pi_{\sem P_R} p'$ and $n \equiv^\nu_{\sem N_R} n'$
+\end{itemize}
+we have $\zeta_{M\alpha\phi} (p, n) \equiv_{\pi \tri \nu} \zeta_{M'\alpha'\phi'}(p', n')$.
 \end{document}
