@@ -1,0 +1,246 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\definecolor{lgray}{gray}{0.7}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\wat{\mathbin{@}}
+\def\cn{{:}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+\def\P{{\mathbf P}}
+\def\N{{\mathbf N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\title{Notes on the Logic of Convex Combination}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\def\rmod{\mathbf{Mod}}
+\def\ratm{\mathsf{atm}}
+%% \section{Remedial Grothendieck}
+%% If I have a $F : \C \to \rcat$, I make a category $\int F$
+%% whose
+%% \begin{itemize}
+%% \item objects are $C \in \C$ together with $X \in F C$.
+%% \item morphisms $(C, X) \to (D, Y)$ are $f : C \to D \in \C$ together with $g : (Ff)(X) \to Y$.
+%% \end{itemize}
+%% There should be a projection $\int F \to \C$.
+
+\section{How Much Naturality Do I Need}
+
+Consider the functor $\nabla_n : \rcat \to \rcat$
+\[\nabla_n(\C) = (\C \x \C^\op)^n\]
+Grothendieck it around to the fibration $p_n : \E_n \to \rcat$. We can
+explicitly describe $\E_n$ as the category whose
+\begin{itemize}
+\item objects are $(\C, X)$, a category $\C$
+together with an object $X$ of $\nabla_n\C$.
+\item morphisms $(\C, X) \to (\C', X')$
+are tuples  $(F, h)$ where $F : \C \to \C'$ and $h : \nabla_nF(X) \to  X'$
+is a morphism in $\nabla_n\C' $.
+\end{itemize}
+
+
+\def\rtm{\mathsf{tm}}
+Let $\M_n = \rset^{\E_n}$.
+I want to interpret a proposition $x_1, \ldots, x_n \prov A(x_1, \ldots, x_n)$ over
+$n$ term variables as a functor $\sem A : \M_n$, and interpret a term expression
+$x_1, \ldots, x_n \prov e : \rtm$ as either
+\begin{itemize}
+\item a natural transformation $\sem e : \nabla_n \to \rid$
+\item a natural transformation $\sem e^\op : \nabla_n \to \op$
+\end{itemize}
+Or I can kind of glue these together and think of $\sem e$ as being a natural
+transformation $\nabla_n \to \nabla_1$.
+
+We can give a semantics of substitutions --- $m$-tuples of expressions over $n$ free variables
+--- as a natural transformation
+\[\sem{(t_1, \ldots, t_m)}_\C : \nabla_n \to \nabla_m \]
+defined by
+\[\sem{(t_1, \ldots, t_m)}_\C(X) = (\sem {t_1}_\C(X), \sem{t_1}^\op_\C(X), \ldots, \sem {t_m}_\C(X), \sem{t_m}^\op_\C(X))\]
+
+Assume I'm given some environment $\eta : \ratm(x_1, \ldots, x_n) \to \M_n$.
+Presheaf categories
+should be nice and (co)complete and ccc and everything, so I should be able to turn the crank
+and not have to think too much.
+The rest of the semantics is
+
+\[\sem{A \imp B}(E)  = \M_n(yE, \sem {A \imp B}) \]
+\[= \M_n(yE, \sem A \imp \sem B) \]
+\[= \M_n(\E_n(E, \dash) \x \sem A, \sem B) \]
+
+\[\sem{A \x B}(E)  = \sem A(E) \x \sem B(E) \]
+\[\sem{A + B}(E)  = \sem A(E) + \sem B(E) \]
+\[\sem{a(\vec t)}(\C, X)  = \eta(a)(\sem{\vec t}_\C(X)) \]
+\[\sem{t \le u}(\C, X)  = \C(\sem t^\op_\C(X) , \sem u_\C(X))\]
+\[\sem{\forall \phi . A(\phi)}(\C, X)  = \int_{C : \C} \sem{A}(\C, (X, C, C)) \]
+\[\sem{\exists \phi . A(\phi)}(\C, X)  = \int^{C : \C} \sem{A}(\C, (X, C, C)) \]
+
+Let's quickly check that $\le$ is actually functorial. Let $(F, h) : (\C, X) \to (\C', X')$
+be given. That is $F : \C \to \C'$ and $h : \nabla_nF(X) \to X' \in \nabla_n \C'$.
+
+Note that naturality of $\sem t^\op$ is
+\[\begin{tikzcd}
+  \nabla_n\C \ar[r,"{\sem t_\C^\op}"] \ar[d, "\nabla_n F"']& \C^\op \ar[d, "F^\op"]\\
+  \nabla_n\C' \ar[r,"{\sem t_{\C'}^\op}"']& (\C')^\op \\
+\end{tikzcd}\]
+and naturality of $\sem u$ is
+\[\begin{tikzcd}
+  \nabla_n\C \ar[r,"{\sem u_\C}"] \ar[d, "\nabla_n F"']& \C \ar[d, "F"]\\
+  \nabla_n\C' \ar[r,"{\sem u_{\C'}}"']& \C' \\
+\end{tikzcd}\]
+
+We start with an element of
+\[ \C(\sem t^\op_\C(X) , \sem u_\C(X))\]
+hit it with $F$ to get
+\[ \C'(F^\op\sem t^\op_\C(X) , F\sem u_\C(X))\]
+apply naturality of $\sem t^\op$ and $\sem u$ to see that this is the same as
+\[ \C'(\sem t^\op_{\C'} \nabla_n F(X)  , \sem u_{\C'}\nabla_nF(X))\]
+and compose with $h$ on both ends to get
+\[ \C'(\sem t^\op_{\C'}(X') , \sem u_{\C'}(X'))\]
+as required.
+
+%% So let some morphism $g : \sem t^\op_\C(X) \to \sem u_\C(X) \in \C$ be given. We can
+%% certainly hit this with $F$ to get
+%% \[Fg : F\sem t^\op_\C(X) \to F\sem u_\C(X) \in \C'\]
+%% Note that $\sem t_\C^\op : \nabla_n \C \to \C^\op$.
+
+Ok, so then interpretation of propositional contexts $\sem\Gamma$ in a term context of
+$n$ things should be at $\M_n$ as well. We can ask about natural transformations
+$\sem \Gamma \dto \sem A$.
+
+We should at least have nice isomorphisms for the asynchronous cases, e.g.
+$$
+\begin{prooftree}
+{\sem{\Gamma, A} \dto\sem  B}
+\Justifies
+{\sem\Gamma\dto\sem {A\imp B}}
+\end{prooftree}
+$$
+By construction of the semantics of $\imp$, and the obvious choice that leads
+to $\sem{\Gamma, A}$ being the product $\sem\Gamma \x \sem A$ in $\M_n$.
+
+How about things like
+\[\sem{U \phi . A(\phi)}(\C, X)  = \int_{C : \C} \sem{A}(\C, (X, C, C)) \]
+\[\sem{F_{t}  A(\phi)}(\C, X)  = \int^{C : \C} \sem{A}(\C, (X, C, C)) \]
+
+\end{document}

@@ -7,7 +7,7 @@
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
-
+\usetikzlibrary{decorations.pathmorphing}
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 \definecolor{block-gray}{gray}{0.85}
@@ -352,5 +352,49 @@ $\zeta_{M\alpha} : \sem\Gamma_M(\alpha) \to \sem P(\alpha)$ such that for any
 \item $p \equiv^\pi_{\sem \Gamma_R} p'$
 \end{itemize}
 we have $\zeta_{M\alpha} (p) \equiv^\pi_{\sem P_R} \zeta_{M'\alpha'}(p')$.
+
+\vfil\eject
+\section{Parametricity with Sets}
+I can define a category of {\em sets parametric over one set} as
+\begin{enumerate}
+\item An object is functor-like thing $F$ overloaded as both a
+  function from $\rset$ to $\rset$, and a relation transformer, which
+takes $R : X \sim Y$ and produces $FR : FX \sim FY$.
+\item A morphism from $F$ to $G$ is a natural-transformation-like thing, a
+map $\alpha$ that takes a $X : \rset$ and produces $\alpha_X : FX \to GX$. `Naturality' requires for any
+$R : X \sim Y$ and $x \in FX$ and $y \in FY$ that
+$$x(FR)y \imp (\alpha_X x)(GR)(\alpha_Y y)$$
+which we could view as a composition
+$$FR \imp \alpha_X \o GR \o \alpha_Y$$
+in a diagram something like
+\[\begin{tikzcd}
+FX \ar[d, squiggly, -, "FR"']\ar[r, "\alpha_X"{name=a}]& GX\ar[d, squiggly, -, "GR"]\\
+FY \ar[r, "\alpha_Y"'{name=b}]& GY
+  \ar[phantom,""{name=nr},from=a,to=b,shift left=3]%
+  \ar[phantom,""{name=nl},from=a,to=b,shift right=3]%
+  \ar[Rightarrow,"",from=nl,to=nr]%
+\end{tikzcd}\]
+\end{enumerate}
+
+Actually let me consider the diagram
+\[\begin{tikzcd}
+A_1 \ar[d, squiggly, -, "R_a"']\ar[r, "f_1"{name=a}]& B_1\ar[d, squiggly, -, "R_b"]\\
+A_2 \ar[r, "f_2"'{name=b}]& B_2
+  \ar[phantom,""{name=nr},from=a,to=b,shift left=3]%
+  \ar[phantom,""{name=nl},from=a,to=b,shift right=3]%
+  \ar[Rightarrow,"",from=nl,to=nr]%
+\end{tikzcd}\]
+Is this the same as, for instance
+\[\begin{tikzcd}
+A_1 \ar[d, squiggly, -, "R_a"']\ar[r, "f_1"{name=a}]& B_1\ar[d, squiggly, -, "R_b"]\\
+A_2 \ar[r, "f_2"']& B_2\twocell{ul}{}
+\end{tikzcd}\]
+The meaning of the first is:
+$$\forall a_1 a_2  . R_a(a_1, a_2) \imp \exists b_1 b_2 . f_1(a_1) = b_1 \land f_2(a_2) = b_2 \land R_b(b_1, b_2)$$
+The meaning of the second is:
+$$\forall a_1 b_2  . (\exists a_2 . R_a(a_1, a_2) \land f_2(a_2) = b_2) \imp \exists b_1 . f_1(a_1) = b_1  \land R_b(b_1, b_2)$$
+These appear interprovable!
+
+
 
 \end{document}
