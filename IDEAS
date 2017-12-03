@@ -2897,3 +2897,21 @@ A: ???
 Q: Can I make anything out of the notion that parametricity is about an intuitionistically
 *growing* set of equalities between things? Or preservation of colimits or something?
 A: ???
+
+=== 2017.12.01
+
+Q: What's an interesting relational structure?
+A: A "undirected graph object" in Cat, except that we
+require a *fibration* ∂ : E → V × V and a twist functor ~ : E → E
+such that ~ ∘ ∂ = ∂ ∘ ~ for the evident ~ : V × V → V × V.
+
+=== 2017.12.02
+
+Q: What'd I learn from talking to Dan?
+A: The coend used to interpret multiplicatives might just be a sort of
+profunctor composition.
+
+=== 2017.12.03
+
+Q: What am I struggling with suprisingly?
+A: Trying to just show that I can interpret ≤ functorially.
