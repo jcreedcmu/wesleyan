@@ -67,6 +67,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
 \def\M{\mathbf{M}}
@@ -243,4 +244,97 @@ How about things like
 \[\sem{U \phi . A(\phi)}(\C, X)  = \int_{C : \C} \sem{A}(\C, (X, C, C)) \]
 \[\sem{F_{t}  A(\phi)}(\C, X)  = \int^{C : \C} \sem{A}(\C, (X, C, C)) \]
 
+\vfil\eject
+\section{Starting Over with a Little More Generality}
+Let's say I have a category $\S$ of sorts.
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Sorts&$\sigma$&$\cdots$\\
+  Term Contexts&$\gamma$&$\cdot\celse \gamma, x : \sigma$\\
+  Terms&$t$&$x$\\
+  Substitutions&$\theta$&$\cdot\celse \theta[t/x]$\\
+\end{tabular}
+\]
+I'm going to write $\C$ generally for a functor in $\rcat^\S$,
+and $\C_\sigma$ to mean $\C$
+applied to the object $\sigma \in \S$.
+Define a functor $\sem\gamma : \rcat^\S \to \rcat$ by
+$$\sem\gamma \C = \prod_{x :\sigma \in \gamma}\C_\sigma \x \C_\sigma^\op$$
+Grothendieck this around to get a fibration $p_\gamma : \E_\gamma \to \rcat^\S$. Explicitly,
+$\E_\gamma$ has
+\begin{itemize}
+\item objects are  $(\C :  \rcat^\S, X : \sem\gamma\C)$.
+\item morphisms $(\C, X) \to (\D, Y)$ are
+$(F : \C \to \D, h : (\sem\gamma F)  X \to Y)$
+\end{itemize}
+Let $\M_\gamma = \rset^{\E_\gamma}$.
+Some typing rules of the syntactic system are
+$$
+\erule
+{\gamma \prov \theta : \gamma' \qquad \gamma' \prov a : \rtype}
+{\gamma \prov a[\theta] : \rtype}
+\qquad
+\erule
+{\gamma \prov \theta : \gamma' \qquad \gamma \prov t : \sigma}
+{\gamma \prov \theta[t/x] : (\gamma', x : \sigma)}
+$$
+The typing of the semantics is
+$$
+\erule
+{\gamma \prov A : \rtype}
+{\sem A : \M_\gamma}
+\qquad
+\erule
+{\gamma \prov a : \rtype}
+{\eta(a) : \M_\gamma}
+$$
+$$
+\erule
+{\gamma \prov \theta : \gamma'}
+{\sem \theta : \sem{\gamma} \dto \sem{\gamma'}}
+\qquad
+\erule
+{\gamma \prov t : \sigma}
+{\sem t^+ : \sem{\gamma} \dto \square_\sigma}
+\qquad
+\erule
+{\gamma \prov t : \sigma}
+{\sem t^- : \sem{\gamma} \dto \square_\sigma^\op}
+$$
+
+I can do predictable things like
+\[\sem {A \imp B} = \M_n(\E_n(E, \dash) \x \sem A, \sem B)\]
+\[\sem {a [\theta]}(\C, X) = \eta(a)(\C, \sem{\theta}_\C(X))\]
+\[\sem{\theta[t/x]}_\C = (\sem{\theta}_\C, (\sem{t}^+_\C, \sem{t}^-_\C))\]
+\[\sem{\forall x \cn \sigma . A}(\C, X) = \int_{C\cn \C_\sigma} \sem A (\C, (X, C, C))\]
+but then I come to $\le$ and I try to do
+\[\sem{t \le_\sigma u}(\C, X) = \C_\sigma(\sem{t}^-_\C(X), \sem{u}^+_\C(X))\]
+and I want to convince myself this is a functor $\E_\gamma \to \rset$. Given
+$X : \sem\gamma\C$ and $Y:\sem\gamma\D$ and
+$F : \C \to \D$ and $ h : (\sem\gamma F)  X \to Y$
+we need to make
+\[\C_\sigma(\sem{t}^-_\C(X), \sem{u}^+_\C(X))
+\to
+\D_\sigma(\sem{t}^-_\D(Y), \sem{u}^+_\D(Y))\]
+
+Let's first remind ourselves of what naturality of $\sem t^-$ and $\sem u^+$ means:
+\[\begin{tikzcd}
+  \sem\gamma\C \ar[r,"{\sem t_\C^-}"] \ar[d, "\sem\gamma F"']& \C_\sigma^\op \ar[d, "F_\sigma^\op"]\\
+  \sem\gamma\D \ar[r,"{\sem t_{\D}^-}"']& \D_\sigma^\op \\
+\end{tikzcd}
+\qquad\begin{tikzcd}
+  \sem\gamma\C \ar[r,"{\sem u_\C^+}"] \ar[d, "\sem\gamma F"']& \C_\sigma \ar[d, "F_\sigma"]\\
+  \sem\gamma\D \ar[r,"{\sem u_{\D}^+}"']& \D_\sigma \\
+\end{tikzcd}\]
+With what we have we can of course make
+\[\D_\sigma(F^\op_\sigma\sem{t}^-_\C(X), F_\sigma\sem{u}^+_\C(X))\]
+just by hitting the objects with $F_\sigma$ (or, equivalently, $F^\op_\sigma$, since opfunctors
+agree on objects) and then naturality tells us this is the same as
+\[\D_\sigma(\sem{t}^-_\D (\sem\gamma F) (X), \sem{u}^+_\D (\sem\gamma F)(X))\]
+and all we need to is observe that we can construct the morphisms
+\[\sem t^-_\D(h) \in \D^\op_\sigma(\sem{t}^-_\D (\sem\gamma F) (X), \sem t_\D^- (Y))\]
+\[\sem u^+_\D(h) \in \D_\sigma(\sem{u}^+_\D (\sem\gamma F) (X), \sem u_\D^+ (Y))\]
+and compose them with what we have and we're done. More or less we can say
+\[\sem{t \le_\sigma u}(F, h) = \lambda m . (\sem u^+_\D(h) \o F_\sigma m \o \sem t^-_\D(h))\]
+Ok, good, I think this works!
 \end{document}
