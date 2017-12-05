@@ -16,6 +16,7 @@
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
+\def\susp#1{\langle {#1} \rangle}
 \def\dto{\mathrel{\dot\to}}
 \def\dns{{\downarrow}}
 \def\ups{{\uparrow}}
@@ -337,4 +338,105 @@ and all we need to is observe that we can construct the morphisms
 and compose them with what we have and we're done. More or less we can say
 \[\sem{t \le_\sigma u}(F, h) = \lambda m . (\sem u^+_\D(h) \o F_\sigma m \o \sem t^-_\D(h))\]
 Ok, good, I think this works!
+\vfil\eject
+\subsection{Just Sets and Focusing}
+\def\ra{\mathsf{a}}
+Fix collections of atoms $A^+, A^- : \rset$ and assume there's an atom named $\# \in A^-$.
+Let's say the category $\rmod$ has
+
+\noindent\parbox[t]{2.4in}{
+Objects consisting of
+  \begin{itemize}
+\itemsep -0.5em
+  \item A set $W$
+\item A map $\eta^+ : A^+ \to \rset $
+\item A map $\eta^- : A^- \x W \to \rset $
+  \end{itemize}
+}
+\parbox[t]{2.4in}{
+Morphisms $(W, \ra^+, \ra^-) \to (W_0, \ra_0^+, \ra_0^-)$
+  \begin{itemize}
+\itemsep -0.5em
+  \item   $\omega : W \to W_0$
+\item  $\ra^+ : \Pi a^+ \cn A^+ . \eta^+(a^+) \to \eta^+_0(a^+)$
+\item $\ra^- : \Pi a^- \cn A^- .\Pi w \cn W. \eta^-(a^-, w) \to \eta^-_0(a^-, \omega(w))$
+  \end{itemize}
+}
+The category $\rmod_*$ is the same except objects also carry a chosen point $* : W$
+and morphisms are required to have their $\omega$ preserve it.
+
+\def\hmod{\widehat\rmod}
+\def\hu{\mathsf U}
+Interpret positive props into functors $\hmod = \rmod \to \rset$ and negative props
+into functors $\hmod_* = \rmod_* \to \rset$. There is an evident forgetful functor
+$U : \rmod_* \to \rmod$ that forgets the point, and we can define
+$\hu : \hmod \to \hmod_* =  \dash \o U$ by composition. This functor has
+a right adjoint, call it $\forall : \hmod_* \to \hmod$. For any $a^+ \in A^+$,
+we can define a functor $\eta^+(a^+) : \rmod \to \rset$, whose morphism-part
+is given by $\ra^+$. Similarly, for any $a^- \in A^-$, we
+can define a functor $\eta^-(a^-) : \rmod_* \to \rset$ whose morphism part is given by $\ra^-$.
+
+Note that $\rmod_*$ and $\rmod$, being presheaf categories, are ccc and (co)complete,
+so they have product $\x$ and coproduct $+$ and exponential $\imp$, and initial and
+terminal objects $0$ and $1$.
+
+Here's the semantics:
+\[
+\sem{a^+} = \eta^+(a^+) \qquad \sem{a^-} = \eta^-(a^-)
+\]
+\[
+\sem{1} = 1
+\qquad
+\sem{0} = 0 \qquad \sem{\top} = 0
+\]
+\[
+\sem{P_1\tensor P_2} = \sem{P_1}\x\sem{P_2} \qquad \sem{P\lol N} = \hu\sem{P}\x\sem{N}
+\]
+\[
+\sem{P_1\oplus P_2} = \sem{P_1}+\sem{P_2} \qquad \sem{N_1\& N_2} = \sem{N_1}+\sem{N_2}
+\]
+\[
+\sem{\ups P} = \hu\sem P \imp \sem \# \qquad \sem{\dns N} = \forall(\sem N \imp \sem \#)
+\]
+We also interpret contexts into $\rmod$ like so
+\[
+\sem \cdot = 1 \qquad\sem{\Gamma, N} = \sem\Gamma \x \sem{\dns N}
+\qquad
+\sem{\Omega, P} = \sem\Omega \x \sem{P}
+\]
+So I expect
+$$\Gamma \prov N\iff \hu\sem \Gamma \x \sem N \dto \sem \#$$
+$$\Gamma \prov [P]\iff \sem \Gamma \dto \sem P$$
+$$\Gamma  [N] \prov P \iff \hu\sem \Gamma \x \sem {\ups P}\dto \sem N$$
+\div
+Let's try some examples.
+\begin{enumerate}
+\item
+There should be exactly one inhabitant of
+\[\susp{ a^+} \models [a^+]\]
+which is to say
+\[\eta(a^+) \dto \eta(a^+) : \rmod \to \rset\]
+which I think I can get exactly the same way I'd show  $\forall \alpha . \alpha \to \alpha$
+has one inhabitant. Let $\beta : \eta(a^+) \dto \eta(a^+)$ be given,
+make up a model $M_1$ such that $\eta_{M_1}(a^+) = 1$, and investigate the naturality
+square on a model morphism from $M_1$ to arbitrary model $M$ that takes the single element
+of $\eta_{M_1}(a^+)$ to a chosen element $x\in \eta_{M}(a^+)$.
+\[\begin{tikzcd}
+  1 \ar[d, "!"']\ar[r, "x"]& \eta_M(a^+)\ar[d, "\beta_M"]\\
+1 \ar[r, "x"']& \eta_M(a^+)
+\end{tikzcd}\]
+We see that $\beta_M$ {\em must} preserve every $x$, so it's the identity.
+\item
+There should be exactly one inhabitant of
+\[ \susp{a^+} \models a^+\]
+which is to  say
+\[\hu \eta(a^+) \x (\hu \eta(a^+) \imp \sem \#) \dto \sem \#: \rmod_* \to \rset\]
+which amounts to the same thing as
+\[ (\hu \eta(a^+) \imp \sem \#) \dto (\hu \eta(a^+) \imp \sem \#): \rmod_* \to \rset\]
+Of which there's probably just one, but I don't see it quite yet.
+\item
+There should be exactly one inhabitant of
+\[\ups a^+ \models a^+\]
+
+\end{enumerate}
 \end{document}

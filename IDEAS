@@ -2915,3 +2915,13 @@ profunctor composition.
 
 Q: What am I struggling with suprisingly?
 A: Trying to just show that I can interpret ≤ functorially.
+
+=== 2017.12.04
+
+Q: Can I, though?
+A: Yes, if I'm careful enough.
+
+=== 2017.12.05
+
+Q: What's blocking me now?
+A: Not understanding how a model can validate a⁺ ⊧ ⊥
