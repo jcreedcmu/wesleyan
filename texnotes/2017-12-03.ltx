@@ -27,8 +27,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\cn{{:}}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
-\def\P{{\mathbf P}}
-\def\N{{\mathbf N}}
+
+\def\N{{\mathbb N}}
 \def\munit{I}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
@@ -245,7 +245,7 @@ How about things like
 \[\sem{U \phi . A(\phi)}(\C, X)  = \int_{C : \C} \sem{A}(\C, (X, C, C)) \]
 \[\sem{F_{t}  A(\phi)}(\C, X)  = \int^{C : \C} \sem{A}(\C, (X, C, C)) \]
 
-\vfil\eject
+
 \section{Starting Over with a Little More Generality}
 Let's say I have a category $\S$ of sorts.
 \[
@@ -338,7 +338,7 @@ and all we need to is observe that we can construct the morphisms
 and compose them with what we have and we're done. More or less we can say
 \[\sem{t \le_\sigma u}(F, h) = \lambda m . (\sem u^+_\D(h) \o F_\sigma m \o \sem t^-_\D(h))\]
 Ok, good, I think this works!
-\vfil\eject
+
 \subsection{Just Sets and Focusing}
 \def\ra{\mathsf{a}}
 Fix collections of atoms $A^+, A^- : \rset$ and assume there's an atom named $\# \in A^-$.
@@ -437,6 +437,173 @@ Of which there's probably just one, but I don't see it quite yet.
 \item
 There should be exactly one inhabitant of
 \[\ups a^+ \models a^+\]
+\end{enumerate}
+
+
+
+\def\rA{\mathbb{A}}
+\subsection{Simplest Case I can Think Of}
+Let there be a set $\rA$ of atoms. A model is a functor $M : \rA \to \rset$, a map
+of models is a natural transformation $\zeta : M \dto M'$. The semantics takes
+propositions to $\rmod \to \rset$. We can easily construct $\eta : \rA \to \rmod \to \rset$
+\[
+\sem{a} = \eta(a)
+\]
+\[
+\sem{\top} = 1
+\qquad
+\sem{\bot} = 0
+\]
+\[
+\sem{A\land B} = \sem{A}\x\sem{B} \qquad \sem{A\imp B} = \sem{A}\imp\sem{B}
+\]
+\[
+\sem{A\lor B} = \sem{A}+\sem{B}
+\]
+\[
+\sem \cdot = 1 \qquad\sem{\Gamma, A} = \sem\Gamma \x \sem{A}
+\]
+
+I should be able to see that all the asynchronous rules are exactly modeled;
+There's  isomorphisms
+\[
+\begin{prooftree}
+\sem \Gamma \dto \sem {A \imp B}
+\Justifies
+\sem{\Gamma, A} \dto \sem B
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\sem{\Gamma, A} \dto \sem C \x \sem{\Gamma, B} \dto \sem C
+\Justifies
+\sem{\Gamma, A \lor B} \dto \sem C
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\sem{\Gamma, A, B} \dto \sem C
+\Justifies
+\sem{\Gamma, A \land B} \dto \sem C
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\sem{\Gamma} \dto \sem A \x \sem{\Gamma} \dto \sem B
+\Justifies
+\sem{\Gamma} \dto \sem {A \land B}
+\end{prooftree}
+\]
+
+\begin{enumerate}
+\item Suppose $\beta : \sem a \dto \sem a$. Then $\beta : \eta(a) \dto \eta(a) : \rmod \to \rset$.
+Want to show that $\beta_M = \rid_{\eta_M(a)}$. Naturality says
+\[\begin{tikzcd}
+  \eta_{M_1}(a) \ar[d, "\beta_{M_1}"']\ar[r, "\zeta_a"]& \eta_{M_2}(a)\ar[d, "\beta_{M_2}"]\\
+  \eta_{M_1}(a) \ar[r, "\zeta_a"']& \eta_{M_2}(a)
+\end{tikzcd}\]
+so set $M_1$ to some model for which $\eta_{M_1}(a) = 1$ and set $M_2$ to an arbitrary model $M$ and we get
+\[\begin{tikzcd}
+  1 \ar[d, "!"']\ar[r, "\zeta_a"]& \eta_{M}(a)\ar[d, "\beta_{M}"]\\
+  1 \ar[r, "\zeta_a"']& \eta_{M}(a)
+\end{tikzcd}\]
+And we find $\beta_M$ has to be the identity.
+\item
+Suppose $\beta : \sem {a \land a \land a}  \dto \sem a$. Then $\beta : \eta(a) \x \eta(a) \x \eta(a) \dto \eta(a) : \rmod \to \rset$.
+Want to show that $\beta_M $ is one of the three projections.
+Pick a model $M_3$ which assigns the set $3$ to $a$. Then naturality tells us
+\[\begin{tikzcd}
+  3^3 \ar[d, "q"']\ar[r, "\zeta^3_a"]& \eta_{M}(a) ^3\ar[d, "\beta_{M}"]\\
+  3 \ar[r, "\zeta_a"']& \eta_{M}(a)
+\end{tikzcd}\]
+Consider $\rid_3 \in 3^3$. Apparently $q(\rid_3)$ is some point in $3$.
+But given any point in $p \in \eta_M(a)^3$,
+we can construe it as a $\zeta_a$ such that $\zeta_a^3(\rid_3) = p$,
+and then we find that $\beta_M(p) = \beta_M(\zeta_a^3(\rid_3)) = \zeta_a(q(\rid_3))$,
+so that means $\zeta_a$ is given by a fixed projection.
+\item
+Suppose $\beta : \sem {a \land (a \imp a)}  \dto \sem a$. Then $\beta : \eta(a) \x (\eta(a) \imp \eta(a)) \dto \eta(a) : \rmod \to \rset$. I claim there are $\N$ many such $\beta$.
+\[\begin{tikzcd}
+  \N \x \mathrm{Nat}(y \x \N, \N) \ar[d, "q"']\ar[r, "\zeta^3_a"]& \eta_{M}(a) ^3\ar[d, "\beta_{M}"]\\
+  3 \ar[r, "\zeta_a"']& \eta_{M}(a)
+\end{tikzcd}\]
 
 \end{enumerate}
+
+\vfil\eject
+\subsection{No, Really, the Simplest Case I can Think Of}
+Set $\rmod = \rset$.
+The semantics takes propositions to $\rset \to \rset$.
+\[
+\sem{a} = \rid_\rset
+\]
+\[
+\sem{\top} = 1
+\qquad
+\sem{\bot} = 0
+\]
+\[
+\sem{A\land B} = \sem{A}\x\sem{B} \qquad \sem{A\imp B} = \sem{A}\imp\sem{B}
+\]
+\[
+\sem{A\lor B} = \sem{A}+\sem{B}
+\]
+\[
+\sem \cdot = 1 \qquad\sem{\Gamma, A} = \sem\Gamma \x \sem{A}
+\]
+
+Same asynchronous isomorphisms as before.
+
+Let's say explicitly what $\sem {a \imp a}$ is. It's the functor that takes
+a set $S$ and returns the set of natural transformations $\rset(S, \dash) \x \sem a \dto \sem a$.
+If you have a function $f : S \to T$ and a
+\[\rset(S, \dash) \x \sem a \dto \sem a\]
+ then here's how you get a
+\[\rset(T, \dash) \x \sem a \dto \sem a\]
+
+Let's make this more concrete. You have $f : S \to T$ and
+\[\zeta_U : \rset(S, U) \x U \dto U\]
+and you want to define
+\[\xi_U : \rset(T, U) \x U \dto U\]
+So you define
+\[\xi_U(g, u) = \zeta_U(g \o f, u)\]
+This is the functoriality, the morphism part, of $\sem{a \imp a}$.
+
+\def\iid{\mathbb{I}}
+Suppose $\beta : \sem {a \land (a \imp a)}  \dto \sem a$.
+Let $\iid$ be $\rid_{\rset}$. Then
+\[\beta : \iid
+\x (\lambda S .  \rset(S, \dash) \x \iid \dto \iid)  \dto \iid : \rmod \to \rset\]
+ I claim there are $\N$ many such $\beta$. If someone hands us such a $\beta$,
+how do we figure out which one it is?
+
+Let's first remind ourselves of how soundness goes.
+Any syntactic proof $a, a\imp a \prov a$ should certainly
+have a semantic analogue. Call these $\beta^0, \beta^1,\beta^2$, etc.
+
+Look at (recalling $yS =\rset(S, \dash)$)
+$\beta^0_S : S \x (yS \x \iid \dto \iid) \dto S$. It's just first projection.
+What's
+$\beta^1_S : S \x (yS \x \iid \dto \iid) \dto S$?
+We have a $\rset(S, Q) \x Q \to Q$ for any $Q$, and an $S$,
+how do we nontrivially get an $S$? Apply that natural transformation
+at $Q = S$ and the identity function.
+%% Well, we evaluate it at $\N$, and we
+%% get a set function
+Suppose I have $\beta$.
+\[\beta_Q : Q
+\x (\rset(Q, \N) \x \N \dto \N)  \dto Q \in \rset_1\]
+
+\[\beta_\N : \N
+\x (\forall Q . \rset(\N, Q) \x Q \dto Q)  \dto \N \in \rset_1\]
+%% We want to give $\beta_\N$ zero and the successor function, and read out
+%% the number we get. How do we massage successor into being of type
+%% \[ \rset(\N, \dash) \x \iid \dto \iid\]
+%% ? We define
+%% \[ \sigma_Q : \rset(\N, Q) \x Q \to Q =\lambda g . \lambda q . \]
+%% \[\begin{tikzcd}
+%%   \N \x \mathrm{Nat}(y \x \N, \N) \ar[d, "q"']\ar[r, "\zeta^3_a"]& \eta_{M}(a) ^3\ar[d, "\beta_{M}"]\\
+%%   3 \ar[r, "\zeta_a"']& \eta_{M}(a)
+%% \end{tikzcd}\]
+
+
+
 \end{document}
