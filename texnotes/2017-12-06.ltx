@@ -1,0 +1,609 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\definecolor{lgray}{gray}{0.7}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\rpath{\mathsf{Path}}
+\def\wtf{{\color{red}???}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Digesting various things by Bernardy and Moulin}
+
+\subsection{Old Style, pre `Type Theory in Color'}
+We have an operation $\sem e_\theta$ that takes an expression $e$ and a variable-for-variable
+substitution $\theta$.
+\[ C \in \sem s_\theta = C \to s \]
+\[ C \in \Pi x\cn A . B =  \Pi x \cn A. \Pi \dot x  \cn x \in \sem A_\theta . (C\ x) \in \sem B_{\theta[\dot x / x]}\]
+\[ C \in \sem T_\theta = \sem T_\theta \ C \]
+\[ \sem {\lambda x\cn A . M}_\theta = \lambda x \cn A . \lambda \dot x \cn \sem A_\theta . \sem M_{\theta[\dot x/x]}\]
+\[ \sem {M\ N}_\theta = \sem M_\theta\ N\ \sem N_\theta\]
+\[ \sem {T}_\theta = \lambda z \cn T . z \in \sem T_\theta\]
+\[ \sem {x}_\theta = \begin{cases} \theta (x) & \hbox{if $x\in\theta$} \cr \usem x & \hbox{otherwise.}\end{cases}\]
+\[[M/x]\usem x = \sem M\]
+
+In general,
+\[\Gamma, x : A \prov \usem x : x \in \sem A\]
+In particular,
+\\ If $A : * \in \Gamma $ then $\usem A : A \to *$
+\\ If $a : A \in \Gamma $ then $\usem a :  \usem A\ a$
+
+Suppose $R : A \to *$.
+Then what type is $\sem {\sem R}$?
+\[\sem R : R \in \sem {A \to *}\]
+\[\sem R : (a : A)(\dot a : a \in \sem A) \to R\ a \to *\]
+\[\sem {\sem R} : \sem R \in \sem {R \in \sem {A \to *}}\]
+\[\sem {\sem R} : \sem R \in \sem {(a : A)\to (a \in \sem A) \to R\ a \to *}\]
+\[\sem {\sem R} : (a : A)(\dot a : a \in \sem A) \to \sem R \in \sem { (a \in \sem A) \to R\ a \to *}\]
+\[\sem {\sem R} : (a : A)(\dot a : a \in \sem A)(\dot a_0 : a \in \sem A)(\ddot a: \dot a_0 \in \sem{a\in \sem A}) \]
+\[(z : R\ a)(\dot z : z \in \sem{R\ a}) \to \sem R\ a\ \dot a_0\ z \to *\]
+???
+
+I don't think I can follow the technicalities here very easily.
+\vfil\eject
+\subsection{New Style}
+I'm going to rewrite some of their syntax to make the binding structure clearer, and
+insert an isomorphism in place of their \textsc{Pair-Pred} equality.
+
+\[
+\begin{tabular}{r@{$\quad$}c@{ }c@{ }l}
+  Terms&$M,N, A, B$&$::=$&$\lambda x . M \celse M \in i.A \celse (x : A)^i \x P$\\
+&&&$\celse (a, p)^i \celse \pair t u^i \celse \susp i M$\\
+&&&$\celse (x : A) \to B$
+\end{tabular}
+\]
+
+\subsubsection*{Formation}
+
+$$
+\erule
+{\Gamma, i : \ii \prov A : \rtype \qquad \Gamma \prov a : [0/i]A }
+{\Gamma \prov  a \in i.A : \rtype}
+$$
+
+$$
+\erule
+{\Gamma \prov A : \rtype \qquad \Gamma, x : A \prov P : \rtype}
+{\Gamma \prov  (x : A) \x_i P : \rtype}
+$$
+
+\subsubsection*{Typing}
+$$
+\erule
+{\Gamma \prov a : [0/i]A \qquad \Gamma \prov p : a \in i.A}
+{\Gamma, i : \ii \prov (a, p)^i : A}
+$$
+
+$$
+\erule
+{\[\Gamma \prov t : [0/i]((x : A) \to P)
+\djust
+\qquad\Gamma \prov u  : (x : [0/i]A) (x' : x\in i.A) \to t\ x \in i.[(x,x')^i/x]P\]}
+{\Gamma, i : \ii \prov \pair t u^i : (x : A) \to P}
+$$
+$$
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma \prov \susp i M : ([0/i]M) \in i.A}
+$$
+$$
+\erule
+{\Gamma, i : \ii\prov A : \rtype \qquad
+\Gamma \prov a : [0/i]A
+\qquad \Gamma, x : A \prov P : \rtype
+\qquad \Gamma \prov M : P(a)}
+{\Gamma \prov \bunfold^P_a M : a \in i .(x : A) \x_i P(x) }
+$$
+$$
+\erule
+{\[\Gamma, i : \ii\prov A : \rtype \qquad
+\Gamma \prov a : [0/i]A
+\djust \Gamma, x : A \prov P : \rtype
+\qquad \Gamma \prov M : a \in i .(x : A) \x_i P(x)\]}
+{\Gamma \prov \bfold^P_a M : P(a) }
+$$
+
+\subsection{Less Evil}
+\subsubsection*{Formation}
+I don't love how it demands variables be in the context.
+
+$$
+\erule
+{\Gamma \prov A : \ii \to \rtype \qquad \Gamma \prov a : A(0)}
+{\Gamma \prov  a \in A : \rtype}
+$$
+
+$$
+\erule
+{\Gamma \prov A : \rtype \qquad \Gamma, x : A \prov P : \rtype}
+{\Gamma \prov   A\x (x.P) : \ii \to \rtype}
+$$
+
+\subsubsection*{Typing}
+$$
+\erule
+{\Gamma \prov a : A(0) \qquad \Gamma \prov p : a \in A}
+{\Gamma \prov (a, p) : (i : \ii) \to A}
+$$
+
+$$
+\erule
+{\[\Gamma \prov t :  (x : A(0)) \to P(0)
+\djust
+\qquad\Gamma \prov u  : (x : A(0)) (x' : x\in A) \to t\ x \in \lambda i . [(x,x')(i)/x]P(i)\]}
+{\Gamma \prov \pair t u : (i : \ii) (x : A) \to P}
+$$
+$$
+%% \erule
+%% {\Gamma \prov M : (i : \ii)\to A}
+%% {\Gamma \prov M(0) : A(0)}
+%% \qquad
+\erule
+{\Gamma \prov M : (i : \ii)\to A}
+{\Gamma \prov \susp  M : M(0) \in A}
+$$
+$$
+\erule
+{\Gamma, i : \ii\prov A : \rtype \qquad
+\Gamma \prov a : [0/i]A
+\qquad \Gamma, x : A \prov P : \rtype
+\qquad \Gamma \prov M : P(a)}
+{\Gamma \prov \bunfold^P_a M : a \in i .(x : A) \x_i P(x) }
+$$
+\[
+\erule
+{\[\Gamma, i : \ii\prov A : \rtype \qquad
+\Gamma \prov a : [0/i]A
+\djust \Gamma, x : A \prov P : \rtype
+\qquad \Gamma \prov M : a \in i .(x : A) \x_i P(x)\]}
+{\Gamma \prov \bfold^P_a M : P(a) }
+\]
+
+\subsection{Thinking About Pair Types}
+The type $(i : \ii) \to A$ feels like a pair type, actually. Let me make it more
+first class.
+Let's say $\pp B = \ii \to B$
+and $\PP B =  (i : \ii) \to B(i)$ and $K M =  \lambda i . M$.
+\[
+\erule
+{\Gamma \prov  B  : s}
+{\Gamma \prov \pp B : s}
+\qquad
+\erule
+{\Gamma \prov  B  : \pp s}
+{\Gamma \prov \PP B : s}
+\qquad
+\erule
+{\Gamma \prov A : B}
+{\Gamma \prov K A : \pp B}
+\]
+are justified by
+\[
+\erule
+{\Gamma \prov  B  :  s}
+{\Gamma \prov \ii \to B : s}
+\qquad
+\erule
+{\Gamma \prov B : \ii \to s}
+{\Gamma \prov (i : \ii) \to B(i) : s}
+\qquad
+\erule
+{\Gamma \prov A :  B}
+{\Gamma \prov \lambda i . A : \ii \to B}
+\]
+And moreover we have that $\PP(K A) = \pp A$
+and $\pi_1 (K A) = A$.
+What are projections?
+
+\[
+\erule
+{\Gamma \prov M : \pp A}
+{\Gamma \prov \pi_1 M : A}
+\qquad
+\erule
+{\Gamma \prov M : \PP A}
+{\Gamma \prov \rfst M : \pi_1 A}
+\]
+\[
+\erule
+{\Gamma \prov M : \pp A}
+{\Gamma \prov \pi_2 M : (\pi_1 M \in K A) }
+\qquad
+\erule
+{\Gamma \prov M : \PP A}
+{\Gamma \prov \rsnd M : (\rfst M \in A) }
+\]
+\[
+\erule
+{\Gamma \prov A : s \qquad \Gamma \prov M :  A \qquad \Gamma \prov N : M \in K A}
+{\Gamma \prov \pair M N : \pp A }
+\] \[
+\erule
+{\Gamma \prov A : \pp s \qquad \Gamma \prov M : \pi_1 A \qquad \Gamma \prov N : M \in A}
+{\Gamma \prov \pair M N : \PP A }
+\]
+
+\[
+\erule
+{\Gamma \prov M  : \pi_1 A \qquad \Gamma \prov A : \pp s}
+{\Gamma \prov M \in A : s }
+\]
+
+\subsection{Type Theory In Color, without Colors}
+
+I want to rigorously understand what's going on in the single-color
+version of the calculus. Say the one color is called $i$: then there
+are three judgments, $i$, $\not i$, and $\emptyset$. I think these
+more or less coincide with irrelevant ($\div$), valid ($::$), and true
+($:$). Things that are $\overline{\hbox{barred}}$ are already required
+in be in the erased language with neither $\div$ nor $::$ in it.
+Alternatively I could maybe think about promoting $:$ to $::$? Not
+sure.
+\[
+\begin{tabular}{r@{$\quad$}c@{ }c@{ }l}
+Modes $M$&$::=$&${\div}\celse {::} \celse {:}$\\
+\end{tabular}
+\]
+\[
+(\Pi x {::} \bar A . B)^\ominus = \Pi x\cn \bar A . B^\ominus\qquad
+(\lambda x {::} \bar A . B)^\ominus = \lambda x\cn \bar A . B^\ominus
+\]
+\[
+(\Pi x\cn A . B)^\ominus = \Pi x\cn A^\ominus . B^\ominus\qquad
+(\lambda x\cn A . B)^\ominus = \lambda x\cn A^\ominus . B^\ominus
+\]
+\[
+(\Pi x\dv A . B)^\ominus = B^\ominus\qquad
+(\lambda x\dv A . B)^\ominus = B^\ominus
+\]
+\[
+(M \bullet^{::} \bar N)^\ominus = M^\ominus\ \bar N\qquad
+(\Gamma, x :: \bar A)^\ominus = \Gamma^\ominus, x : \bar A
+\]
+\[
+(M\ N)^\ominus = M^\ominus\ N^\ominus\qquad
+(\Gamma, x : A)^\ominus = \Gamma^\ominus, x : A^\ominus
+\]
+\[
+(M\bullet^\div N)^\ominus = M^\ominus\qquad
+(\Gamma, x \div A)^\ominus = \Gamma^\ominus
+\]
+\[\mu \le \mu \qquad {::} \le {:}\]
+\[
+\erule
+{\mu \le \nu}
+{\Gamma, x :^\mu A \prov  x  :^\nu A}
+\qquad
+\erule
+{\Gamma^\ominus \prov \bar M : \bar A}
+{\Gamma \prov  \bar M  :: \bar A}
+\]
+\[
+\erule
+{\Gamma, x \cn^\mu A \prov B :^\nu \rtype}
+{\Gamma \prov  \Pi x \cn^\mu A . B  :^\nu \rtype}
+\]
+\[
+\erule
+{\Gamma, x \cn^\mu A \prov M :^\nu B}
+{\Gamma \prov \lambda x \cn^\mu A . M :^\nu \Pi x \cn^\mu A . B}
+\qquad
+\erule
+{\Gamma \prov M :^\nu \Pi x \cn^\mu A . B \qquad \Gamma \prov N :^\mu A}
+{\Gamma \prov M \bullet^\mu N :^\nu [N/x]B}
+\]
+
+\begin{lemma}[Substitution]\ \\
+If $\Gamma \prov P :^\rho C$ and $\Gamma, y :^\rho C \prov J$,
+then $\Gamma \prov [P/y]J$.
+\end{lemma}
+
+\begin{proof}
+By induction on $\Gamma, y :^\rho C \prov J$. We routinely abbreviate  $\sigma := [P/y]$
+and $\Gamma_0 = \Gamma, y :^\rho C , \Gamma'$ and $\Gamma_1 = \Gamma, \sigma \Gamma'$.
+and.
+  \begin{itemize}
+  \item[Case:]
+\[
+\erule
+{\Gamma_0 ,x :^\mu A \prov M :^\nu B}
+{\Gamma_0  \prov \lambda x \cn^\mu A . M :^\nu \Pi x \cn^\mu A . B}
+\]
+We reason like so:
+\[
+\erule
+{\[(i.h.)\djust \Gamma_1, x:^\mu \sigma A \prov \sigma M :^\nu \sigma B\]}
+{\Gamma_1\prov\lambda x\cn^\mu \sigma A . \sigma M :^\nu \Pi x\cn^\mu \sigma A . \sigma B}
+\]
+\item[Case:]
+\[
+\erule
+{\Gamma_0 \prov M :^\nu \Pi x \cn^\mu A . B \qquad \Gamma_0 \prov N :^\mu A}
+{\Gamma_0 \prov M \bullet^\mu N :^\nu [N/x]B}
+\]
+We reason like so:
+\[
+\erule
+{\[(i.h.) \djust \Gamma_1 \prov \sigma M :^\nu \Pi x \cn^\mu \sigma A . \sigma B \qquad \Gamma_1 \prov \sigma N :^\mu \sigma A\]}
+{\Gamma_1 \prov \sigma M \bullet^\mu \sigma N :^\nu [\sigma N/x]\sigma B}
+\]
+
+  \end{itemize}
+\cqed
+\end{proof}
+
+There's something weird in the fact that I seem to be able to write down an isomorphism
+between $A\to B$ and $A \to^{::} B$, can't I?
+
+\[f : A \to B, x :: A \prov f \bullet x : B\]
+\[f : A \to^{::} B, x : A \prov f \bullet^{::} x : B\]
+\vfil\eject
+\subsection{Explicit Paths}
+If I have explicit rules for making `unpointed paths' ($\forall i . A$) and
+`pointed paths' ($N \in i.A$) like so
+\[
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma \prov \susp i M : \forall i . A}
+\qquad
+\erule
+{\Gamma \prov M : \forall i . A \qquad \Delta \prov j : \ii}
+{\Gamma, \Delta \prov M\wat j : [j/i]A}
+\]
+\[
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma \prov \ssusp i M : M[0] \in  i . A}
+\qquad
+\erule
+{\Gamma \prov M : N \in i . A \qquad \Delta \prov j : \ii}
+{\Gamma, \Delta \prov M \wwat j : [j/i]A}
+\]
+
+\[
+\erule
+{\Gamma \prov M : N \in i . A }
+{\Gamma \prov M \wwat 0 \equiv N}
+\]
+then I can simulate Bernardy-Moulin
+\[\erule{\Gamma \prov a : A[0]\qquad \Gamma \prov p : a \in i.A}
+{\Gamma \prov \llparenthesis a, p \rrparenthesis : \forall i . A}\]
+with
+\[\erule{ \[
+\Gamma \prov p : a \in i.A
+\justifies
+\Gamma, i : \ii \prov p\wwat i : A
+\]}
+{\Gamma \prov \susp i p \wwat i : \forall i . A}\]
+and Bernardy-Moulin
+\[\erule{u : \forall i . A}
+{\Gamma \prov {u!} : (u\wat 0) \in i.A}\]
+with
+\[\erule{ \[
+\Gamma \prov u : \forall i.A
+\justifies
+\Gamma, i : \ii \prov u\wat i : A
+\]}
+{\Gamma \prov \ssusp i u \wat i : (u \wat 0) \in i.A}\]
+
+But what about
+$$( i:\ii \prov A : \rtype \qquad  i:\ii, x : A \prov B : \rtype)$$
+$$
+\erule
+{\[
+\prov t : (x : A[0]) \to B[0]
+\djust
+\prov u : (z : \forall i . A) \to t (z\wat 0) \in i . B[z \wat i / x]
+\]}
+{ \prov \Phi_t u : t \in (i.(x : A) \to B)}
+$$
+or its binary analogue
+
+$$
+\erule
+{\[
+\prov t_0 : (x : A[0]) \to B[0]
+\qquad
+\prov t_1 : (x : A[1]) \to B[1]
+\djust
+\prov u : (z : \forall i . A) \to \rpath\ (i . B[z \wat i / x])\ (t_0 (z\wat 0))\ (t_1 (z\wat 1))
+\]}
+{ \prov \wtf : \rpath\ (i.(x : A) \to B)\ t_0\ t_1}
+$$
+
+Can I do like some kind of reified substitution
+$$
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma, j : \ii \prov [j/i]M : [j/i]A}
+$$
+Then perhaps
+$$
+\begin{prooftree}
+\[
+\[\justifies i : \ii, x : A \prov \susp j [j/i] x : \forall i . A\]
+\qquad
+\justifies
+ i : \ii, x : A \prov  u\ (\susp j [j/i]x)\wwat i:   B
+\]
+\justifies
+\prov \ssusp i \lambda x . u\ (\susp j [j/i]x)\wwat i: \rpath (i.(x\cn A) \to B)\ t_0\ t_1
+\end{prooftree}
+$$
+Do we actually have that
+\[(\ssusp i \lambda x . u\ (\susp j [j/i]x)\wwat i) \wwat 0 = t_0\]
+\[(\ssusp i \lambda x . u\ (\susp j [j/i]x)\wwat i) \wwat 1 = t_1\]
+? Let's calculate
+\[(\ssusp i \lambda x . u\ (\susp j [j/i]x)\wwat i) \wwat 0 =
+\lambda x . u\ (\susp j [0/i][j/i]x)\wwat 0\]
+Hm, scope problems.
+Since
+\[
+\prov u : (z : \forall i . A) \to \rpath\ (i . B[z \wat i / x])\ (t_0 (z\wat 0))\ (t_1 (z\wat 1))
+\]
+we know that
+$u\ M\wwat 0 = t_0 (M \wat 0)$ so
+$$\lambda x . u\ (\susp j [0/i][j/i]x)\wwat 0
+= \lambda x . t_0 ((\susp j [0/i][j/i]x) \wat 0)$$
+$$ = \lambda x . t_0 ( [0/i][0/i]x) $$
+$$\cdots = t_0?$$
+\end{document}
+
+% garbage
+If $A : *$ then $\usem A : A \to *$
+\[\pi : \Pi A \cn * . \Pi a \cn A .  \usem A\ a\]
+\[\sem \pi : \pi \in \sem{\Pi A \cn * . \Pi a \cn A .  \usem A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * . \pi\ A \in \sem{ \Pi a \cn A .  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .\pi\ A \in \sem{  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .  \sem{  \dot A\ a} (\pi\ A)  \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \sem {\dot A}\ a\ \sem a\ (\pi\ A)\]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \usem {\dot A}\ a\ \dot a\ (\pi\ A)\]
+\[\sem{ \dot A} : \dot A \in \sem {A \to *}\]
+\[\sem{ \dot A} : \Pi a \cn A . \Pi \dot a \cn \dot A(a) . \dot A(a) \to *\]
+
+
+\end{document}
