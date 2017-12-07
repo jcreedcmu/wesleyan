@@ -2925,3 +2925,18 @@ A: Yes, if I'm careful enough.
 
 Q: What's blocking me now?
 A: Not understanding how a model can validate a⁺ ⊧ ⊥
+
+=== 2017.12.06
+
+Q: What have I been reading lately?
+A: Bunch of bernardy-moulin parametricity stuff.
+"Toward a computational interpretation of parametricity"
+"A computational interpretation of parametricity"
+"Type-Theory In Color"
+"A Presheaf Model of Parametric Type Theory"
+Moulin's thesis, "Internalizing Parametricity"
+
+=== 2017.12.07
+
+Q: What's the deal with their erasure?
+A: It feels like normal and irrelevant things are fibered over valid things.

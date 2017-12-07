@@ -32,6 +32,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\munit{I}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
+\def\pp{{\mathsf p}}
+\def\nn{{\mathsf n}}
+\def\PP{{\mathsf P}}
+\def\NN{{\mathsf N}}
 \def\zz{{\mathsf z}}
 \def\sem#1{[\![#1]\!]}
 \def\zem#1{\langle\!\langle#1\rangle\!\rangle}
@@ -528,7 +532,7 @@ Suppose $\beta : \sem {a \land (a \imp a)}  \dto \sem a$. Then $\beta : \eta(a) 
 
 \end{enumerate}
 
-\vfil\eject
+
 \subsection{No, Really, the Simplest Case I can Think Of}
 Set $\rmod = \rset$.
 The semantics takes propositions to $\rset \to \rset$.
@@ -594,6 +598,7 @@ Suppose I have $\beta$.
 
 \[\beta_\N : \N
 \x (\forall Q . \rset(\N, Q) \x Q \dto Q)  \dto \N \in \rset_1\]
+???
 %% We want to give $\beta_\N$ zero and the successor function, and read out
 %% the number we get. How do we massage successor into being of type
 %% \[ \rset(\N, \dash) \x \iid \dto \iid\]
@@ -603,7 +608,50 @@ Suppose I have $\beta$.
 %%   \N \x \mathrm{Nat}(y \x \N, \N) \ar[d, "q"']\ar[r, "\zeta^3_a"]& \eta_{M}(a) ^3\ar[d, "\beta_{M}"]\\
 %%   3 \ar[r, "\zeta_a"']& \eta_{M}(a)
 %% \end{tikzcd}\]
+\vfil\eject
+\section{Just going back to thinking about syntax}
 
-
-
+Downstairs I have things like (in agda perhaps read $\rkind$ as $\rset_1$ and $\rtype$ as $\rset_0$)
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Signatures&$\Sigma$&$\cdot \celse \Sigma, \kappa : \rkind \celse \Sigma, \alpha : K$\\
+  Contexts&$\Gamma$&$\cdot \celse \Gamma, \alpha : K \celse \Gamma, x : A$\\
+  Kinds&$K$&$ \Gamma \to \kappa$\\
+  Types&$A$&$ \Gamma \to \alpha[\theta]$\\
+  Term Contexts&$\gamma$&$\cdot\celse \gamma, x : \sigma$\\
+  Terms&$t$&$x$\\
+  Substitutions&$\theta$&$\cdot\celse \theta[t/x]$\\
+\end{tabular}
+\]
+\[\prov \pp : \rkind \qquad \prov \nn : \rkind\]
+\[  \prov {\tensor} : (\alpha : \pp, \beta : \pp) \to \pp \]
+\[  \prov {\mathsf c} : (\alpha : \pp, \beta : \pp, f : \tensor[\alpha, \beta]) \to \tensor[\beta, \alpha] \]
+\[\prov {\sigma} : ( \alpha : \pp, \beta : (x : \alpha) \to \pp ) \to \pp \]
+\[  \prov \mathsf{pair} : \{\alpha : \pp, \beta : \alpha \to \pp\}(x : \alpha, y : \beta[x]) \to \sigma[\alpha, \beta] \]
+\[  \prov \mathsf{a} : (\alpha : \pp)(\beta : \alpha \to \pp)( \gamma : \sigma[\alpha, \beta] \to \pp) \to \]
+\[ \sigma[\alpha, \lambda x . \sigma[\beta, \lambda y . \gamma[\mathsf{pair}[x, y]]]] \to
+\sigma[\sigma[\alpha, \beta], \gamma]\]
+\[  \prov {\lol} : (\alpha : \pp, \beta : \nn) \to \nn \]
+I also suppose I have to come up with
+\[\tri : \pp \to \nn \to \rtype\]
+I define upstairs that
+\[ \PP = \pp \to \rtype \]
+\[ \NN = \nn \to \rtype \]
+And then I can synthesize things like
+\[  \prov {\tensor} : (\alpha_1 : \PP, \alpha_2 : \PP) \to \PP \]
+by saying
+\[ \tensor = \lambda \alpha_1 \alpha_2 \cn \PP . \lambda p \cn \pp . \exists p_1, p_2\cn \pp . (\alpha_1\ p_1) \x (\alpha_2\ p_2) \x (p \to p_1 \tensor p_2) \]
+In general if I have a
+\[\prov \alpha : \Gamma \to \kappa\]
+asserted downstairs I get
+\[ \bar\alpha : \bar \Gamma \to \bar \kappa = \lambda \bar \Gamma . \lambda k : \kappa .
+\exists \Gamma . (\bar \Gamma\ \Gamma) \x (k \to \alpha[\rid_\Gamma])\]
+upstairs. From $\tri$ downstairs I get
+\[\ups  : \PP \to \NN = \lambda P . \lambda n . \forall p . (P\ p) \to (p \tri n) \]
+\[\dns  : \NN \to \PP = \lambda N . \lambda p . \forall n . (N\ n) \to (p \tri n) \]
+Or is $\tri$ just $\to$?
+\subsection{Quick thought}
+What's the relationship between a kind $\kappa$ and
+$(\kappa \to \rtype) \to \rtype$
+?
 \end{document}
