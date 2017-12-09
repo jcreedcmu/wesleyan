@@ -184,7 +184,7 @@ Then what type is $\sem {\sem R}$?
 ???
 
 I don't think I can follow the technicalities here very easily.
-\vfil\eject
+
 \subsection{New Style}
 I'm going to rewrite some of their syntax to make the binding structure clearer, and
 insert an isomorphism in place of their \textsc{Pair-Pred} equality.
@@ -481,7 +481,7 @@ between $A\to B$ and $A \to^{::} B$, can't I?
 
 \[f : A \to B, x :: A \prov f \bullet x : B\]
 \[f : A \to^{::} B, x : A \prov f \bullet^{::} x : B\]
-\vfil\eject
+
 \subsection{Explicit Paths}
 If I have explicit rules for making `unpointed paths' ($\forall i . A$) and
 `pointed paths' ($N \in i.A$) like so
@@ -591,6 +591,93 @@ $$\lambda x . u\ (\susp j [0/i][j/i]x)\wwat 0
 = \lambda x . t_0 ((\susp j [0/i][j/i]x) \wat 0)$$
 $$ = \lambda x . t_0 ( [0/i][0/i]x) $$
 $$\cdots = t_0?$$
+
+\vfil\eject
+\subsection{New Constructors}
+
+Here's another idea: what happens if I try to replace the `$\Phi$  defines a new sort of path'
+found in Bernardy-Moulin with something that defines a new sort of type? For binary paths
+I'd say
+
+\def\TT{\mathsf{T}}
+\def\tt{\mathsf{t}}
+$$
+\erule
+{\Gamma, x : A, y : B \prov R : U \using \TT }
+{\Gamma, i : \ii \prov \TT^ixy.R : U}
+$$
+\[
+\erule
+{\Gamma, x : A, y : B \prov R : U  }
+{ \TT^0xy.R \equiv A}
+\qquad
+\erule
+{\Gamma, x : A, y : B \prov R : U  }
+{ \TT^1xy.R \equiv B}
+\]
+\[
+\erule
+{\Gamma, i : \ii \prov M : \TT^ixy . R \using \TT E}
+{\Gamma \prov \tt i . M : [[0/i]M/x][[1/i]M/y]R }
+\qquad
+\erule
+{\Gamma \prov M : [a/x][b/y]R \using \TT I}
+{\Gamma, i : \ii \prov M \bullet i : \TT^i x y . R}
+\]
+\[
+\erule
+{\Gamma \prov M : [a/x][b/y]R }
+{ M \bullet 0 \equiv a}
+\qquad
+\erule
+{\Gamma \prov M : [a/x][b/y]R }
+{ M \bullet 1 \equiv b}
+\]
+
+and for unary paths this degenerates to
+$$
+\erule
+{\Gamma, x : A \prov R : U \using \TT }
+{\Gamma, i : \ii \prov \TT^ix.R : U}
+$$
+\[
+\erule
+{\Gamma, x : A \prov R : U  }
+{ \TT^0x.R \equiv A}
+\]
+\[
+\erule
+{\Gamma, i : \ii \prov M : \TT^ix . R \using \TT E}
+{\Gamma \prov \tt i . M : [[0/i]M/x]R }
+\qquad
+\erule
+{\Gamma \prov M : [a/x]R \using \TT I}
+{\Gamma, i : \ii \prov M \bullet i : \TT^i x  . R}
+\]
+\[
+\erule
+{\Gamma \prov M : [a/x]R }
+{ M \bullet 0 \equiv a}
+\]
+
+Suppose
+\[ f : (x : A[0]) \to B[0]\]
+\[ g : (x : A[1]) \to B[1]\]
+\[ u : (x : \forall i . A) \to \rpath\ (i.[x\wat i / x]B)\ (f (x \wat 0))\ (g (x \wat 1))\]
+then
+\[ ? : \rpath\ (i.(x: A) \to B)\ f\ g\]
+Well we could get
+\[ \tt i . M : \rpath\ (i.(x: A) \to B)\ f\ g\]
+if
+\[ i \prov M  : \TT^i x y . \rpath\ (i.(x: A) \to B)\ x\ y\]
+and $[0/i]M \equiv f$ and $[1/i]M \equiv g$.
+
+Let's take the endpointless version.
+Suppose
+\[ u : (x : \forall i . A) \to (\forall i.[x\wat i / x]B)\]
+then
+\[ ? : \forall i.(x: A) \to B\]
+
 \end{document}
 
 % garbage

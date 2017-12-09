@@ -2940,3 +2940,48 @@ Moulin's thesis, "Internalizing Parametricity"
 
 Q: What's the deal with their erasure?
 A: It feels like normal and irrelevant things are fibered over valid things.
+
+=== 2017.12.08
+
+Q: What in the world is going on with coercions and dependent function extensionality?
+A: Dunno. I thought I could make up a type constructor that accomodated relations
+being paths-in-the-universe, and it seems like I should be able to get from
+
+(∀i∀j A @ i) → (∀i∀j A @ j)
+
+(or α-equivalently (∀i∀j A @ i) → (∀j∀i A @ i))
+
+to
+
+∀i∀j . A @ i → A @ j
+
+inside Bernardy-Moulin's own system, so that seems a look like an
+arbitrary coercion.
+
+=== 2017.12.09
+
+Q: Wait, isn't this kind of problematic?
+A: here's my thinking:
+
+Let Pⁱ be a macro for any of the following equivalent things:
+ ⦇ A,ᵢ Ψ_A P ⦈     ⦇ A, Ψ_A P ⦈ @ i
+ A ⋈ᵢ P           (A ⋈ P) @ i
+
+Their rule Pᴀɪʀ-Pʀᴇᴅ says
+ a ∈ i.Pⁱ ≡ P a
+
+Then for any i : 𝕀 ⊢ A : rtype I can define
+M : (∀i∀j . A @ i) → (∀i∀j . A @ j)
+M : λ(f : ∀i∀j.A[i/i]). ⟨i⟩⟨j⟩ f @ j @ i
+
+and then
+
+N : (f : ∀i∀j . A @ i) → (M f @ 0 ∈ i.(∀j . A @ j))
+N : (f : ∀i∀j . A @ i) → ((⟨j⟩ f @ j @ 0) ∈ i.(∀j . A @ j))
+N : λf . (M f) !
+
+...
+
+then surely I have
+P⁰ → ∀i.Pⁱ
+?
