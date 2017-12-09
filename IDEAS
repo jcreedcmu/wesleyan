@@ -2985,3 +2985,39 @@ N : λf . (M f) !
 then surely I have
 P⁰ → ∀i.Pⁱ
 ?
+
+Q: No, wait, what?
+A:
+I think I figured out the mistake I made. Arbitrary coercion is
+*not* possible in Bernardy-Moulin.
+
+The conditions on their rule Iɴ-Fᴜɴ for Φ are stronger than I realized.
+They require that you have
+ i : 𝕀 ⊢ A : type
+ i : 𝕀, x : A ⊢ B : type
+ t : (x : A[O]) → B[O]
+ u : (x : ∀i.A) → (t (x @ O) ∈ ∀i . B[x @ i / x])
+
+and having merely
+
+ u' : (x : ∀i.A) → (∀i . B[x @ i / x])
+
+is *not* enough to build a u of the appropriate type! I was being
+sloppy in thinking merely along the lines of "any time I have a path
+type with an endpoint nailed down (y ∈ ∀i.Y) that's strictly more
+information than having a path type without any endpoints nailed down
+(∀i.Y), I can always just apply it to 0 and find out what the endpoint
+is" which is true enough for *closed* path types, but not applicable
+to the situation that's actually happening here because of scope
+issues. if I have u' as above, then I know I can turn it into
+
+λx . (u' x)! : (x : ∀i.A) → (u' x 0 ∈ ∀i . B[x @ i / x])
+
+but there doesn't appear to be any way of expressing u' x 0 as a
+function of x @ 0.
+
+Iɴ-Fᴜɴ isn't saying that *any* old function
+  (x : ∀i.A) → (∀i . B[x @ i / x])
+can have its quantifiers hoisted up to ∀i.(x : A) → B, only the ones
+with certain endpoints, namely the ones that only depend on x through
+x @ 0.
