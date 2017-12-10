@@ -1,7 +1,15 @@
 {-# OPTIONS --without-K --rewriting #-}
-module BernardyMoulin3 where
+module BernardyMoulin4 where
 
--- {-# OPTIONS --type-in-type #-}
+-- postulate
+--   Foo : Set
+--   𝕥 𝕗 : Foo
+
+--   𝕥-rewrite : 𝕥 ↦ 𝕗
+--   {-# REWRITE 𝕥-rewrite #-}
+
+-- x : 𝕥 == 𝕗
+-- x = idp
 
 open import HoTT hiding ( O; Path; _*_)
 
@@ -9,18 +17,21 @@ postulate
   𝕀 : Set
   O : 𝕀
 
-Path : ∀ {ℓ} (A : 𝕀 → Set ℓ) → A O → Set ℓ
-Path A a = Σ ((i : 𝕀) → A i) (λ f → a == f O)
+  Path : ∀ {ℓ} (A : 𝕀 → Set ℓ) → A O → Set ℓ
+  _*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} → Path A a → (i : 𝕀) → A i
+  lam : ∀ {ℓ} {A : 𝕀 → Set ℓ} (f : (i : 𝕀) → A i) → Path A (f O)
+
 syntax Path (λ i -> A) a = a ∈ i · A
 
-_*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} → (a ∈ i · A i) → (i : 𝕀) → A i
-p * i = p .fst i
+postulate
+  O-rewrite : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} (p : a ∈ i · A i) → (p * O) ↦ a
+  {-# REWRITE O-rewrite #-}
 
-_//_ : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → p * O
-p // a = coe (p .snd) a
+-- _//_ : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → p * O
+-- p // a = coe (p .snd) a
 
 embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → Set ℓ
-embu {ℓ} {A} p a = (p // a) ∈ i · (p * i)
+embu {ℓ} {A} p a = a ∈ i · (p * i)
 
 postulate
   embu-equiv : ∀ {ℓ} {A : Set ℓ} → is-equiv (embu {ℓ} {A})
@@ -33,7 +44,7 @@ embu-fg {ℓ} {A} = embu-equiv .is-equiv.f-g
 
 embf : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ} {f : (x : A O) → B O x}
   → (f ∈ i · Π (A i) (B i)) → ((x : (i : 𝕀) → A i) → f (x O) ∈ i · B i (x i))
-embf p x = (λ i → (p * i) (x i)) , (app= (p .snd) (x O))
+embf p x = lam (λ i → (p * i) (x i))
 
 postulate
   embf-equiv : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ} {f : (x : A O) → B O x}
@@ -61,11 +72,7 @@ freeThm f A P a p = finally where
   pp i = embu-round P a p * i
   app : (i : 𝕀) → ww i
   app i = f (ww i) (pp i)
-  wwO : A == ww O
-  wwO = embu-inv P .snd
-  atzero : (embu-inv P // (f A a)) == app O
-  atzero = {!!}
-  makepath : (embu-inv P // (f A a)) ∈ i · ww i
-  makepath = app , atzero
+  makepath : (f A a) ∈ i · ww i
+  makepath = lam app
   finally : P (f A a)
   finally = embu-round2 P (f A a) makepath
