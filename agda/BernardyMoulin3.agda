@@ -16,11 +16,8 @@ syntax Path (λ i -> A) a = a ∈ i · A
 _*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} → (a ∈ i · A i) → (i : 𝕀) → A i
 p * i = p .fst i
 
-_//_ : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → p * O
-p // a = coe (p .snd) a
-
 embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → Set ℓ
-embu {ℓ} {A} p a = (p // a) ∈ i · (p * i)
+embu {ℓ} {A} p a = (coe (p .snd) a) ∈ i · (p * i)
 
 postulate
   embu-equiv : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) → is-equiv (embu p)
