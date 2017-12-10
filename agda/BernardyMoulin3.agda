@@ -43,17 +43,29 @@ embf-inv : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set �
   → ((x : (i : 𝕀) → A i) → f (x O) ∈ i · B i (x i)) → (f ∈ i · Π (A i) (B i))
 embf-inv {ℓ} {A} = embf-equiv .is-equiv.g
 
-embu-round : {A : Set} (P : A → Set) (a : A) (p : P a) → embu (embu-inv P) a
+embu-round : {A : Set} (P : A → Set) (a : A)
+             → P a → embu (embu-inv P) a
 embu-round P a p = coe (app= (! (embu-fg P)) a) p
 
-embu-inv-inh : {A : Set} (P : A → Set) (a : A) (p : P a) (i : 𝕀) → embu-inv P * i
-embu-inv-inh P a p i = embu-round P a p * i
+embu-round2 : {A : Set} (P : A → Set) (a : A)
+             → embu (embu-inv P) a → P a
+embu-round2 P a t = coe (app= (embu-fg P) a) t
 
 freeThm : (f : (X : Set) → X → X) (A : Set) (P : A → Set) (a : A) (p : P a) → P (f A a)
-freeThm f A P a p = {!!} where
+freeThm f A P a p = finally where
   w : A ∈ i · Set
   w = embu-inv P
   ww : (i : 𝕀) → Set
-  ww = λ i → embu-inv P * i
+  ww i = embu-inv P * i
   pp : (i : 𝕀) → ww i
-  pp = {!!}
+  pp i = embu-round P a p * i
+  app : (i : 𝕀) → ww i
+  app i = f (ww i) (pp i)
+  wwO : A == ww O
+  wwO = embu-inv P .snd
+  atzero : (embu-inv P // (f A a)) == app O
+  atzero = {!!}
+  makepath : (embu-inv P // (f A a)) ∈ i · ww i
+  makepath = app , atzero
+  finally : P (f A a)
+  finally = embu-round2 P (f A a) makepath
