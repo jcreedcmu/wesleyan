@@ -5,7 +5,7 @@ open import HoTT hiding ( O; Path; _*_ )
 import Sharp
 
 module Sh = Sharp.WithArity ⊤
-open Sh using ( η ) renaming ( ♯ to 𝕀 )
+open Sh using ( η ; 𝕀 )
 
 O : 𝕀
 O = η tt

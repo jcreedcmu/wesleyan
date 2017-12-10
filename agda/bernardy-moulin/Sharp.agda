@@ -5,14 +5,14 @@ open import HoTT hiding ( O; Path; _*_ )
 
 module WithArity (C : Set) where
   postulate
-    ♯ : Set
-    η : C → ♯
-    Path : ∀ {ℓ} (A : ♯ → Set ℓ) (a : (c : C) → A (η c)) → Set ℓ
-    _*_ : ∀ {ℓ} {A : ♯ → Set ℓ} {a : (c : C) → A (η c)}
-      → Path A a → (i : ♯) → A i
-    lam : ∀ {ℓ} {A : ♯ → Set ℓ} (f : (i : ♯) → A i)
+    𝕀 : Set
+    η : C → 𝕀
+    Path : ∀ {ℓ} (A : 𝕀 → Set ℓ) (a : (c : C) → A (η c)) → Set ℓ
+    _*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : (c : C) → A (η c)}
+      → Path A a → (i : 𝕀) → A i
+    lam : ∀ {ℓ} {A : 𝕀 → Set ℓ} (f : (i : 𝕀) → A i)
       → Path A (f ∘ η)
-    η-rewrite : ∀ {ℓ} {A : ♯ → Set ℓ} {a : (c : C) → A (η c)}
+    η-rewrite : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : (c : C) → A (η c)}
       (p : Path A a) (c : C) → (p * (η c)) ↦ a c
     {-# REWRITE η-rewrite #-}
 
@@ -22,14 +22,14 @@ module WithArity (C : Set) where
     (a : (c : C) → A c) → Set ℓ
   embu {ℓ} {A} p a = a ∈ i · (p * i)
 
-  embf : ∀ {ℓ} {A : ♯ → Set ℓ} {B : (i : ♯) (x : A i) → Set ℓ}
+  embf : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ}
        {f : (c : C) → (x : A (η c)) → B (η c) x}
        → (f ∈ i · Π (A i) (B i))
-       → ((x : (i : ♯) → A i) → (λ c → f c (x (η c))) ∈ i · B i (x i))
+       → ((x : (i : 𝕀) → A i) → (λ c → f c (x (η c))) ∈ i · B i (x i))
   embf p x = lam (λ i → (p * i) (x i))
 
   postulate
     embu-equiv : ∀ {ℓ} {A : C → Set ℓ} → is-equiv (embu {ℓ} {A})
-    embf-equiv : ∀ {ℓ} {A : ♯ → Set ℓ} {B : (i : ♯) (x : A i) → Set ℓ}
+    embf-equiv : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ}
       {f : (c : C) (x : A (η c)) → B (η c) x}
       → is-equiv (embf {ℓ} {A} {B} {f})
