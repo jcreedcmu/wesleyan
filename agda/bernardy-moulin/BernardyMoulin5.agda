@@ -1,31 +1,41 @@
--- {-# OPTIONS --without-K --rewriting #-}
--- module BernardyMoulin5 where
+{-# OPTIONS --without-K --rewriting #-}
+module BernardyMoulin5 where
 
--- open import HoTT hiding ( O; Path; _*_ )
--- open import Sharp using ( η ; ♯ )
+open import HoTT hiding ( O; Path; _*_ )
+import Sharp
 
--- 𝕀 : Set
--- 𝕀 = ♯ ⊤
+module Sh = Sharp.WithArity ⊤
+open Sh using ( η ) renaming ( ♯ to 𝕀 )
 
--- O : 𝕀
--- O = η tt
+O : 𝕀
+O = η tt
 
--- Path : ∀ {ℓ} (A : 𝕀 → Set ℓ) → A O → Set ℓ
--- Path {ℓ} A a = Sharp.Path {ℓ} {⊤} A (λ _ → a)
+Path : ∀ {ℓ} (A : 𝕀 → Set ℓ) → A O → Set ℓ
+Path A a = Sh.Path A (λ _ → a)
 
--- _*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} → Path A a → (i : 𝕀) → A i
--- _*_ {ℓ} {A} {a} p i = Sharp._*_ {ℓ} {⊤} {A} {λ _ → a} p i
+_*_ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O} → Path A a → (i : 𝕀) → A i
+_*_ = Sh._*_
 
--- lam : ∀ {ℓ} {A : 𝕀 → Set ℓ} (f : (i : 𝕀) → A i) → Path A (f O)
--- lam {ℓ} {A} f = Sharp.lam {ℓ} {⊤} {A} f
+lam : ∀ {ℓ} {A : 𝕀 → Set ℓ} (f : (i : 𝕀) → A i) → Path A (f O)
+lam = Sh.lam
 
--- syntax Path (λ i -> A) a = a ∈ i · A
+syntax Path (λ i -> A) a = a ∈ i · A
 
--- embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → Set ℓ
--- embu {ℓ} {A} p a =  a ∈ i · (p * i)
+embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → Set ℓ
+embu p a = Sh.embu p (λ _ → a)
 
--- embu-equiv : ∀ {ℓ} {A : Set ℓ} → is-equiv (embu {ℓ} {A})
--- embu-equiv {ℓ} {A : Set ℓ} = Sharp.embu-equiv {ℓ} {⊤}
+postulate
+  eq : ∀ {ℓ} {X : Set ℓ} → (⊤ → X) == X
+
+-- ughhhhh
+
+embu-equiv0 : ∀ {ℓ} {A : Set ℓ} → is-equiv (Sh.embu {ℓ} {λ _ → A})
+embu-equiv0 {ℓ} {A} = Sh.embu-equiv {ℓ} {λ _ → A}
+
+embu-equiv1 : ∀ {ℓ} {A : Set ℓ} → is-equiv (Sh.embu {ℓ} {λ _ → A})
+   → is-equiv (embu {ℓ} {A})
+embu-equiv1 = {!!}
+
 -- embu-inv : ∀ {ℓ} {A : Set ℓ} → (A → Set ℓ) → A ∈ i · Set ℓ
 -- embu-inv {ℓ} {A} = embu-equiv .is-equiv.g
 

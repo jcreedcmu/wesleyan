@@ -3054,3 +3054,10 @@ to
 It was looking at ! and ⦇_,_⦈ that convinced me that the inverse map
 is the specific map I think it is: the *elements* of the type
 a ∈ i.A are the maps M : ∀i.A such that M @ 0 ≡ a.
+
+=== 2017.12.10
+
+Q: Why was my bitbucket push slow?
+A: ipv6 to bitbucket was timing out; ipv4 still fine.
+https://grosse.io/blog/posts/Fixing-slow-Bitbucket-git-connections-via-SSH
+https://confluence.atlassian.com/bbkb/recent-ipv6-changes-840796883.html
