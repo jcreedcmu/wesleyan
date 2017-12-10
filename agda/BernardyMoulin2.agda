@@ -5,8 +5,6 @@ module BernardyMoulin2 where
 
 open import HoTT hiding ( O; Path) renaming (! to ‼)
 
-x = is-equiv
-
 postulate
   𝕀 : Set
   O : 𝕀
