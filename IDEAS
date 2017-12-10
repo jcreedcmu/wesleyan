@@ -3040,7 +3040,7 @@ is an equivalence from (C : 𝕀 → Set) × (C 0 ≡ A) to (A → Set). It's
 Or I can rephrase a bit if I have nicely-reducing path types around.
 Then I can say that I want the function
 
-E : (A ∈ i.U) → (A → Set)
+E : (A ∈ i.U) → (A → U)
 E π a = a ∈ i . π @ i
 
 to be an equivalence. That may be a bit circular, but it is nice and concise.

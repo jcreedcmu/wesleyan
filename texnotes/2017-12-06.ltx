@@ -592,7 +592,7 @@ $$\lambda x . u\ (\susp j [0/i][j/i]x)\wwat 0
 $$ = \lambda x . t_0 ( [0/i][0/i]x) $$
 $$\cdots = t_0?$$
 
-\vfil\eject
+
 \subsection{New Constructors}
 
 Here's another idea: what happens if I try to replace the `$\Phi$  defines a new sort of path'
@@ -677,7 +677,89 @@ Suppose
 \[ u : (x : \forall i . A) \to (\forall i.[x\wat i / x]B)\]
 then
 \[ ? : \forall i.(x: A) \to B\]
-
+\vfil\eject
+\subsection{Path-Centric}
+What if I just assert that $\ii$ exists and $0 : \ii$, and make
+up the extension type
+\[
+\erule
+{\Gamma, i : \ii \prov A : \rtype \qquad \Gamma \prov a : A[0]}
+{ \Gamma \prov a \in i. A : \rtype}
+\qquad
+\erule
+{\Gamma, i : \ii \prov M : A \qquad \Gamma \prov M[0] \equiv a}
+{\Gamma \prov \susp i M :  a \in i. A }
+\]
+\[
+\erule
+{\Gamma \prov N : a \in i. A \qquad \Gamma \prov j : \ii}
+{\Gamma \prov N \wat j : [j/i]A}
+\qquad
+\erule
+{\Gamma \prov N : a \in i. A }
+{\Gamma \prov N \wat 0 \equiv a}
+\]
+and assert that the function
+\[\rho : (A \in i.\rtype) \to (A \to \rtype)\]
+\[\rho\ x = \lambda a . a \in i . (x \wat i)\]
+is an equivalence?
+Let's just make sure it typechecks, first:
+Let $\Gamma = x : A \in i.\rtype, a : A$ and reason
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+\Gamma \prov   x : A \in i.\rtype
+\]
+\justifies
+\Gamma, i : \ii \prov   (x \wat i) :  \rtype
+\]
+\[
+\[
+\[
+\justifies
+\Gamma \prov   x : A \in i.\rtype
+\]
+\justifies
+\Gamma \prov    x \wat 0 \equiv A
+\]
+\justifies
+\Gamma \prov   a : x \wat 0
+\]
+\justifies
+\Gamma \prov   a \in i . (x \wat i) :  \rtype
+\]
+\justifies
+\prov  \lambda x. \lambda a . a \in i . (x \wat i) : (A \in i.\rtype) \to (A \to \rtype)
+\end{prooftree}
+\]
+Ok, good. This does smell very univalencey.
+For if I had
+\[
+\erule
+{\Gamma, i : \ii \prov A : \rtype \qquad \[\Gamma \prov a : A[0] \djust \Gamma \prov b : A[1]\]}
+{ \Gamma \prov \rpath\ i. A\ a\ b: \rtype}
+\qquad
+\erule
+{\Gamma, i : \ii \prov M : A \qquad \[\Gamma \prov M[0] \equiv a \djust \Gamma \prov M[1] \equiv b\]}
+{\Gamma \prov \susp i M :  \rpath\  i. A\ a\ b}
+\]
+\[
+\erule
+{\Gamma \prov N : \rpath\ i. A\ a\ b \qquad \Gamma \prov j : \ii}
+{\Gamma \prov N \wat j : [j/i]A}
+\qquad
+\begin{prooftree}
+\[\Gamma \prov N : \rpath\ i. A\ a\ b \justifies
+\Gamma \prov N \wat 0 \equiv a\] \djust \Gamma \prov N \wat 1 \equiv b
+\end{prooftree}
+\]
+I'd assert that
+\[\rho : (\rpath\ i.\rtype\ A\ B) \to (A \to B \to \rtype)\]
+\[\rho\ x = \lambda a b . \rpath\ i . (x \wat i)\ a\ b\]
+was an equivalence.
 \end{document}
 
 % garbage
