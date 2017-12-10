@@ -22,19 +22,14 @@ lam = Sh.lam
 syntax Path (λ i -> A) a = a ∈ i · A
 
 embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ) (a : A) → Set ℓ
-embu p a = Sh.embu p (λ _ → a)
+embu {ℓ} {A} p a  = Sh.embu {ℓ} {λ _ → A} p (λ _ → a)
 
-postulate
-  eq : ∀ {ℓ} {X : Set ℓ} → (⊤ → X) == X
+-- ugh still too bored, it hinges on the equality of A and ⊤ → A
 
--- ughhhhh
-
-embu-equiv0 : ∀ {ℓ} {A : Set ℓ} → is-equiv (Sh.embu {ℓ} {λ _ → A})
+-- embu-equiv0 : ∀ {ℓ} {A : Set ℓ} → is-equiv (λ p a → embu {ℓ} {A} p a)
+embu-equiv0 : ∀ {ℓ} {A : Set ℓ} → is-equiv (λ p a → Sh.embu {ℓ} {λ _ → A} p a)
 embu-equiv0 {ℓ} {A} = Sh.embu-equiv {ℓ} {λ _ → A}
 
-embu-equiv1 : ∀ {ℓ} {A : Set ℓ} → is-equiv (Sh.embu {ℓ} {λ _ → A})
-   → is-equiv (embu {ℓ} {A})
-embu-equiv1 = {!!}
 
 -- embu-inv : ∀ {ℓ} {A : Set ℓ} → (A → Set ℓ) → A ∈ i · Set ℓ
 -- embu-inv {ℓ} {A} = embu-equiv .is-equiv.g
