@@ -3061,3 +3061,14 @@ Q: Why was my bitbucket push slow?
 A: ipv6 to bitbucket was timing out; ipv4 still fine.
 https://grosse.io/blog/posts/Fixing-slow-Bitbucket-git-connections-via-SSH
 https://confluence.atlassian.com/bbkb/recent-ipv6-changes-840796883.html
+
+=== 2017.12.11
+
+Q: What do I need for B-M's relational symmetry in iterated parametricity?
+A: A kind of η-contraction for path types:
+
+  lam-rewrite : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O}
+    (R : Path A a) → lam (λ j → R * j) ↦ R
+  {-# REWRITE lam-rewrite #-}
+
+which I stuck in Sharp1.agda and haven't ported to Sharp.agda yet.

@@ -14,6 +14,9 @@ postulate
   O-rewrite : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O}
     (p : Path A a) → (p * O) ↦ a
   {-# REWRITE O-rewrite #-}
+  lam-rewrite : ∀ {ℓ} {A : 𝕀 → Set ℓ} {a : A O}
+    (R : Path A a) → lam (λ j → R * j) ↦ R
+  {-# REWRITE lam-rewrite #-}
 
 syntax Path (λ i -> A) a = a ∈ i · A
 
