@@ -68,3 +68,12 @@ module WithArity (C : Set) where
     app i = f (ww i) (embu-round P z zp * i) (s5 i)
     path : output ∈ i · ww i
     path = lam app
+
+
+freeThm-leib : (f : (X : Set) (x y : X) (P : X → Set) → P x → P y)
+            (Xi : Set) (Xip : Xi → Set)
+            (xi yi : Xi) (xip : Xip xi) (yip : Xip yi)
+            (Pi : Xi → Set) (Pip : (xi : Xi) (xip : Xip xi) → Pi xi → Set)
+            (Pxi : Pi xi) (Pxip : Pip xi xip Pxi) →
+            Pip yi yip (f Xi xi yi Pi Pxi)
+freeThm-leib = {!!}
