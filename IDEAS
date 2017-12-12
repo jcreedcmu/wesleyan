@@ -3072,3 +3072,12 @@ A: A kind of η-contraction for path types:
   {-# REWRITE lam-rewrite #-}
 
 which I stuck in Sharp1.agda and haven't ported to Sharp.agda yet.
+
+=== 2017.12.12
+
+Q: Does the 'internal category' nonsense also lead to requiring a semantics
+that looks something like a presheaf over a countable power of a category?
+A: ???
+
+Q: What the heck is the deal with the B-M symmetry, really?
+A: ???
