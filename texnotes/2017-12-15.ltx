@@ -11,9 +11,12 @@
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
-\definecolor{block-gray}{rgb}{0.80,0.95,0.95}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
 \definecolor{lgray}{gray}{0.7}
-\newtcolorbox{myquote}{colframe=block-gray,colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+\newtcolorbox{callout}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{callout2}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
@@ -167,14 +170,14 @@ Let's take the simplest nontrivial category
 $\begin{tikzcd}[cramped,sep=small] \bullet \ar[r] & \bullet \end{tikzcd}$
 and consider presheaves over that.
 Some results I expect are
-\begin{myquote}
+\begin{callout}
   If $\prov A : \rtype$ then $\prov \sem A_0 : \rtype$.\\
   If $\prov A : \rtype$ then $\prov \sem A_1 : \rtype$.\\
   If $\prov A : \rtype$ then $\prov \sem A_f : \sem A_0 \to \sem A_1$.\\
   If $\prov M : A$ then $\sem M_0 : \sem A_0$.\\
   If $\prov M : A$ then $\sem M_1 : \sem A_1$.\\
   If $\prov M : A$ then $\sem A_f \sem M_0 = \sem M_1$.
-\end{myquote}
+\end{callout}
 Let's try to write down some clauses:
 \[ \sem { A \to B }_0 = \{ g_0 : \sem A_0 \to \sem B_0,  g_1 : \sem A_1 \to \sem B_1, p : g_1 \o \sem A_f = \sem B_f \o g_0 \} \]
 \[ \sem { A \to B }_1 =  \sem A_1 \to \sem B_1 \]
@@ -182,17 +185,17 @@ Let's try to write down some clauses:
 \[ \sem{\lambda x . M}_0  = \{ g_0 = \lambda x . \sem M_0 , g_1 = \lambda x . \sem M_1, p= \underline{\ \ } \, \}\]
 \[ \sem{\lambda x . M}_1  = \lambda x . \sem M_1\]
 I realize I need to require
-\begin{myquote}
+\begin{callout}
 If $x : A \prov M : B$ then $ [\sem A_f x / x] \sem M_1 = \sem B_f \sem M_0 $
-\end{myquote}
+\end{callout}
 to fill in the $p = \underline{\ \ }$ in the definition of $\sem{\lambda x . M}_0$.
 
 So, attempting to generalize, I reckon
-\begin{myquote}
+\begin{callout}
   If $\Gamma \prov M : A$ then $\sem \Gamma_0 \prov \sem M_0 : \sem A_0$.\\
   If $\Gamma \prov M : A$ then $\sem \Gamma_1 \prov \sem M_1 : \sem A_1$.\\
   If $\Gamma \prov M : A$ then $\sem A_f \sem M_0 = [\theta_\Gamma]\sem M_1$.
-\end{myquote}
+\end{callout}
 where
 \[ \theta_\cdot = \cdot \qquad \theta_{\Gamma, x : A} = \theta_\Gamma  [\sem A_f x / x ]\]
 What's the theorem that guarantees well-formedness of $\theta$?
@@ -218,13 +221,13 @@ function type, and then smoothly generalize from types to contexts.
 \section{Laying out the Simply Typed version}
 We're going to translate from a simply typed theory into one with dependent functions and records.
 Let a category $\C$ be given. For any $c \in \C$ and $f : c \to d \in \C$, we'll have
-\begin{myquote}
+\begin{callout}
   If $\prov A : \rtype$ then $\prov \sem A_c : \rtype$.\\
   If $\prov A : \rtype$ then $ \prov \sem A_f : \sem A_c \to \sem A_d$.\\
   If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
   If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv_{\beta\eta} \sem\Gamma_f\sem M_d$.\\
   If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
-\end{myquote}
+\end{callout}
 \subsection{$\to$}
 Suppose $f : c \to c'$.
 \[\begin{tabular}{l@{ }c@{ }l}
@@ -236,8 +239,67 @@ $ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)
 $ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M_d $\\
 &&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $
 \end{tabular}\]
+\subsection{Contexts}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \cdot }_f $&$=$&$\cdot$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
+\end{tabular}\]
 
+Is it the case that
+$$\sem{A \to B}_f(\sem{\lambda x . M}_c) \equiv \sem \Gamma_f \sem {\lambda x . M}_{c'}$$
 
+\[\sem{A \to B}_f(\sem{\lambda x . M}_c) \equiv\]
+\[  \pair{\lambda d g x . \sem \Gamma_f\sem M_d }{\lambda d e g h y . \mathsf{idp}}\]
+
+Suppose $$\sem \Gamma_c, x : \sem A_c \prov \sem M_c : \sem B_c$$
+Is it the case that
+$$\sem \Gamma_c \prov \sem {\lambda x . M}_c : \sem {A \to B}_c$$
+? Is it even the case that
+$$\sem \Gamma_c \prov \lambda d g x . \sem M _ d : (d : \C) (g : \C(c, d)) \to \sem A_d \to \sem B_d$$
+? No, I kinda need to hit it with $\sem \Gamma_g$, blargh.
+\section{Trying again}
+I think I need to index term translations (eventually, in the
+dependent case, also types) by their context and type.
+So whenever I see $\sem M$ I'm really saying $\sem{\Gamma \prov M : A}$.
+Also stating some functoriality properties.
+\begin{callout}
+  If $\prov A : \rtype$ then $\prov \sem A_c : \rtype$.\\
+  If $\prov A : \rtype$ then $ \prov \sem A_f : \sem A_c \to \sem A_d$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \sem\Gamma_f\sem M_d$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
+\end{callout}
+\begin{callout2}
+  If $\prov A : \rtype$ then $ \prov \sem A_{fg} \equiv \sem A_f \o \sem A_g$.\\
+  If $\prov A : \rtype$ then $ \prov \sem A_{\rid_c} \equiv \rid_{\sem A_c}$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{fg} \equiv \sem \Gamma_g \sem \Gamma_f$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$.
+\end{callout2}
+\subsection{Contexts}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \cdot }_f $&$=$&$\cdot$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
+\end{tabular}\]
+\subsection{$\to$}
+Suppose $f : c \to c'$.
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { A \to B }_c $&$=$&$\{ \omega : (d : \C) (g : \C(c, d)) \to \sem A_d \to \sem B_d,$\\
+&&$\ \ \mu : (d\ e : \C) (g : \C(c, d)) (h : \C(d, e)) \to $\\
+&&$\ \  (y : \sem A_d) \to \omega_{e(h\o g)} ( \sem A_h(y)) = \sem B_h(\omega_{dg}(y))  \}   $\\
+$ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)} ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g \o f)\ h\ y\} $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem \Gamma_g \sem M_d $\\
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $
+\end{tabular}\]
+{\color{gray}
+check that $\mu$ can be $\mathsf{idp}$. Let $y : \sem A_d$ be given.
+By i.h.
+\[\sem \Gamma_d, y : \sem A_d \prov \sem M_d : \sem B_d\]
+and
+\[\sem B_f(\sem M_c) \equiv \sem \Gamma_f[\sem A_f(x) / x]\sem M_d \]
+so
+\[ \sem \Gamma_g\sem \Gamma_h \sem M_e  \sem A_h(y) = \sem B_h \sem \Gamma_g \sem M_d (y) \]
+\[ \sem \Gamma_g\sem B_h \sem M_d  (y) = \sem B_h \sem \Gamma_g \sem M_d (y) \]}
 \end{document}
 
 % garbage
