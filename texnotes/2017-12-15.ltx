@@ -1,0 +1,256 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{rgb}{0.80,0.95,0.95}
+\definecolor{lgray}{gray}{0.7}
+\newtcolorbox{myquote}{colframe=block-gray,colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\rpath{\mathsf{Path}}
+\def\wtf{{\color{red}???}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Approaching the Presheaf Model Syntactically}
+
+Let's say I have a simply typed lambda calculus
+
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Props&$A$&$A + A \celse A \times A \celse A \to A \celse 1 \celse 0$\\
+\end{tabular}
+\]
+
+I want to reify the yoneda embedding as a homomorphism from this type theory into itself, sort of.
+Let's take the simplest nontrivial category
+$\begin{tikzcd}[cramped,sep=small] \bullet \ar[r] & \bullet \end{tikzcd}$
+and consider presheaves over that.
+Some results I expect are
+\begin{myquote}
+  If $\prov A : \rtype$ then $\prov \sem A_0 : \rtype$.\\
+  If $\prov A : \rtype$ then $\prov \sem A_1 : \rtype$.\\
+  If $\prov A : \rtype$ then $\prov \sem A_f : \sem A_0 \to \sem A_1$.\\
+  If $\prov M : A$ then $\sem M_0 : \sem A_0$.\\
+  If $\prov M : A$ then $\sem M_1 : \sem A_1$.\\
+  If $\prov M : A$ then $\sem A_f \sem M_0 = \sem M_1$.
+\end{myquote}
+Let's try to write down some clauses:
+\[ \sem { A \to B }_0 = \{ g_0 : \sem A_0 \to \sem B_0,  g_1 : \sem A_1 \to \sem B_1, p : g_1 \o \sem A_f = \sem B_f \o g_0 \} \]
+\[ \sem { A \to B }_1 =  \sem A_1 \to \sem B_1 \]
+\[ \sem { A \to B }_f =  \lambda r  . (r . g_1) \]
+\[ \sem{\lambda x . M}_0  = \{ g_0 = \lambda x . \sem M_0 , g_1 = \lambda x . \sem M_1, p= \underline{\ \ } \, \}\]
+\[ \sem{\lambda x . M}_1  = \lambda x . \sem M_1\]
+I realize I need to require
+\begin{myquote}
+If $x : A \prov M : B$ then $ [\sem A_f x / x] \sem M_1 = \sem B_f \sem M_0 $
+\end{myquote}
+to fill in the $p = \underline{\ \ }$ in the definition of $\sem{\lambda x . M}_0$.
+
+So, attempting to generalize, I reckon
+\begin{myquote}
+  If $\Gamma \prov M : A$ then $\sem \Gamma_0 \prov \sem M_0 : \sem A_0$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_1 \prov \sem M_1 : \sem A_1$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f \sem M_0 = [\theta_\Gamma]\sem M_1$.
+\end{myquote}
+where
+\[ \theta_\cdot = \cdot \qquad \theta_{\Gamma, x : A} = \theta_\Gamma  [\sem A_f x / x ]\]
+What's the theorem that guarantees well-formedness of $\theta$?
+I think it's
+\begin{lemma}
+If $\prov \Gamma \rctx$ then $\sem{\Gamma}_0 \prov \theta_\Gamma : \sem\Gamma_1$.
+\end{lemma}
+
+\begin{proof}
+The empty case is trivial. If we already know
+$\sem{\Gamma}_0 \prov \theta_\Gamma : \sem\Gamma_1$
+then we can immediately derive that
+$$
+\erule
+{\sem{\Gamma}_0 \prov \theta_\Gamma : \sem\Gamma_1 \qquad
+\Gamma_0 , x : \sem A_0 \prov \sem A_f\ x : \sem A_1}
+{\sem{\Gamma}_0, x : \sem A_0 \prov \theta_\Gamma[\sem A_f x / x] : \sem\Gamma_1, x : \sem A_1}
+$$
+\cqed
+\end{proof}
+Actually I could probably just treat $\sem A_f$ as a substitution rather than a thing of
+function type, and then smoothly generalize from types to contexts.
+\section{Laying out the Simply Typed version}
+We're going to translate from a simply typed theory into one with dependent functions and records.
+Let a category $\C$ be given. For any $c \in \C$ and $f : c \to d \in \C$, we'll have
+\begin{myquote}
+  If $\prov A : \rtype$ then $\prov \sem A_c : \rtype$.\\
+  If $\prov A : \rtype$ then $ \prov \sem A_f : \sem A_c \to \sem A_d$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv_{\beta\eta} \sem\Gamma_f\sem M_d$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
+\end{myquote}
+\subsection{$\to$}
+Suppose $f : c \to c'$.
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { A \to B }_c $&$=$&$\{ \omega : (d : \C) (g : \C(c, d)) \to \sem A_d \to \sem B_d,$\\
+&&$\ \ \mu : (d\ e : \C) (g : \C(c, d)) (h : \C(d, e)) \to $\\
+&&$\ \  (y : \sem A_d) \to \omega_{e(h\o g)} ( \sem A_h(y)) = \sem B_h(\omega_{dg}(y))  \}   $\\
+$ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)} ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g \o f)\ h\ y\} $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M_d $\\
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $
+\end{tabular}\]
+
+
+\end{document}
+
+% garbage
+If $A : *$ then $\usem A : A \to *$
+\[\pi : \Pi A \cn * . \Pi a \cn A .  \usem A\ a\]
+\[\sem \pi : \pi \in \sem{\Pi A \cn * . \Pi a \cn A .  \usem A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * . \pi\ A \in \sem{ \Pi a \cn A .  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .\pi\ A \in \sem{  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .  \sem{  \dot A\ a} (\pi\ A)  \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \sem {\dot A}\ a\ \sem a\ (\pi\ A)\]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \usem {\dot A}\ a\ \dot a\ (\pi\ A)\]
+\[\sem{ \dot A} : \dot A \in \sem {A \to *}\]
+\[\sem{ \dot A} : \Pi a \cn A . \Pi \dot a \cn \dot A(a) . \dot A(a) \to *\]
+
+
+\end{document}

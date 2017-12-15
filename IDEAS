@@ -3081,3 +3081,27 @@ A: ???
 
 Q: What the heck is the deal with the B-M symmetry, really?
 A: ???
+
+=== 2017.12.13
+
+Q: Can I do the presheaf semantics purely syntactically?
+A: ???
+
+=== 2017.12.14
+
+Q: What's the thought I had about internal vs. external type theory?
+A:
+External type theory is
+- ordinary type constructors
+- linear types
+
+- refinement types
+Internal type theory is
+- monads
+- HoTT and univalence
+- directed HoTT
+- types as metric spaces
+- parametric polymorphism, in that if you *don't* have things like polymorphic
+equality, then you get parametricity.
+
+=== 2017.12.15
