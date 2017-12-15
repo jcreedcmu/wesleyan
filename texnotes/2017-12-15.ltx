@@ -289,7 +289,8 @@ $ \sem { A \to B }_c $&$=$&$\{ \omega : (d : \C) (g : \C(c, d)) \to \sem A_d \to
 $ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)} ,  $\\
 &&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g \o f)\ h\ y\} $\\
 $ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem \Gamma_g \sem M_d $\\
-&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
+$ \sem{M\ N}_c  $&$=$&$\sem M_c.\omega_{c,\rid_c}\ \sem N_c$
 \end{tabular}\]
 {\color{gray}
 check that $\mu$ can be $\mathsf{idp}$. Let $y : \sem A_d$ be given.
