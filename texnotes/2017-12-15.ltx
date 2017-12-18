@@ -301,6 +301,97 @@ and
 so
 \[ \sem \Gamma_g\sem \Gamma_h \sem M_e  \sem A_h(y) = \sem B_h \sem \Gamma_g \sem M_d (y) \]
 \[ \sem \Gamma_g\sem B_h \sem M_d  (y) = \sem B_h \sem \Gamma_g \sem M_d (y) \]}
+\section{Dependent Types}
+What does it mean to have a variable $i : \ii$ sitting in the context somewhere, where
+$\ii$ is thought of as a category? I might well say $x : \C$ instead. What I'm really doing is
+interpreting $\C$ as a positive type, and asserting a kind of left inversion when I say that
+\[\Gamma, x : \C, \Gamma' \prov M : A\]
+means that, for every actual object $c \in \C$ that I know
+\[\Gamma, [c/x]\Gamma' \prov [c/x]M : [c/x]A\]
+and for every $f : c \to d \in \C$ that I can do some kind of compatible transport.
+Let me write all the `interpretations' as substitutions, then.
+
+The unusual thing is wanting to assert something like
+\begin{callout}
+  If $x : \C \prov A : \rtype$ and $f : c \to d \in \C$,
+  then \[\prov [f/x]A : [c/x]A \to [d/x]A\]
+\end{callout}
+or maybe I want to structure this as a substitution. How would this look with a general context?
+\begin{callout}
+  If $\prov \Gamma, x : \C, \Gamma' : \rctx$ and $f : c \to d \in \C$,
+  then \[\Gamma, [c/x]\Gamma' \prov   [f/x]\Gamma' :  [d/x]\Gamma'\]
+  If $\Gamma, x : \C, \Gamma' \prov A : \rtype$ and $f : c \to d \in \C$,
+  then \[\Gamma, [c/x]\Gamma' \prov [f/x]A : [c/x]A \to ([f/x]\Gamma')[d/x]A\]
+\end{callout}
+This notation is sort of noisy after all. What does it look like with $\sem\dash$?
+\begin{callout}
+  If $\prov \Gamma, x : \C, \Gamma' : \rctx$ and $f : c \to d \in \C$,
+  then \[\Gamma, \sem{\Gamma'}_c \prov   \sem{\Gamma'}_f :  \sem{\Gamma'}_d\]
+  If $\Gamma, x : \C, \Gamma' \prov A : \rtype$ and $f : c \to d \in \C$,
+  then \[\Gamma, \sem{\Gamma'}_c \prov \sem{A}_f : \sem A_c \to \sem{\Gamma'}_f\sem{A}_d\]
+\end{callout}
+
+\vfil\eject
+Suppose $f : c \to d \in \ii$. Let
+\begin{itemize}
+\item $\Gamma = \Gamma_0, i:\ii,\Gamma_1$ and
+\item $\sem \Gamma_c = \Gamma_0, \sem{\Gamma_1}_c$ and
+\item $\sem \Gamma_f = \rid_{\Gamma_0} \sem{\Gamma_1}_f$.
+\end{itemize}
+\begin{callout}
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_f : \sem A_c \to \sem {\Gamma}_f \sem A_d$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \sem{\Gamma}_f\sem M_d$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.
+\end{callout}
+\begin{callout2}
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{fg} \equiv \sem A_f \o \sem A_g$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{\rid_c} \equiv \rid_{\sem A_c}$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{fg} \equiv \sem \Gamma_g \sem \Gamma_f$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$.
+\end{callout2}
+\subsection{Contexts}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_c $&$=$&$\Gamma$\\
+$ \sem { \Gamma, x : A }_c $&$=$&$\sem{\Gamma}_c, x : \sem A_c$\\
+$ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
+\end{tabular}\]
+Check case
+$$
+\begin{prooftree}
+\Gamma \prov \theta : \Delta
+\qquad
+\Gamma \prov M : \theta A
+\justifies
+\Gamma \prov \theta[M/x] : (\Delta, x : A)
+\end{prooftree}
+$$
+
+$$
+\begin{prooftree}
+\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d \qquad
+\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d
+\justifies
+\sem \Gamma_c, x : \sem A_c \prov \sem \Gamma_f[\sem A_f(x) / x] : \sem \Gamma_d, x : \sem A_d
+\end{prooftree}
+$$
+
+\subsection{$\to$}
+Suppose $f : c \to c'$.
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { A \to B }_c $&$=$&$\{ \omega : (d : \C) (g : \C(c, d)) \to \sem A_d \to \sem B_d,$\\
+&&$\ \ \mu : (d\ e : \C) (g : \C(c, d)) (h : \C(d, e)) \to $\\
+&&$\ \  (y : \sem A_d) \to \omega_{e(h\o g)} ( \sem A_h(y)) = \sem B_h(\omega_{dg}(y))  \}   $\\
+$ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)} ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g \o f)\ h\ y\} $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem \Gamma_g \sem M_d $\\
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
+$ \sem{M\ N}_c  $&$=$&$\sem M_c.\omega_{c,\rid_c}\ \sem N_c$
+\end{tabular}\]
+
 \end{document}
 
 % garbage

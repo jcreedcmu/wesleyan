@@ -3105,3 +3105,52 @@ Internal type theory is
 equality, then you get parametricity.
 
 === 2017.12.15
+
+Q: Is there much difficulty in trying to extend what I have to the dependent case?
+A: ???
+
+=== 2017.12.16
+
+Q: Where's that old gears code?
+A:
+http://jsfiddle.net/fb48vshg/1/
+http://jsfiddle.net/nv109w81/
+
+=== 2017.12.17
+
+Q: What do I do about universes?
+A: Maybe I can get some yoneda leverage out of
+
+Uhat(C) = Nat(yC, Uhat) ≈ ∃Phat . Nat(Phat, yC)
+
+because of U's nature as an object classifier.
+
+=== 2017.12.18
+
+Q: What's that other idea I had about defining what a mesh is?
+A: Choose a set X and consider the category Cell(X) whose
+
+objects are functions Y → X for a finite set Y
+morphisms Y1 → X to Y2 → X are commutative squares
+
+Z ----> Y1
+|       |
+|       |
+v       v
+Y2 ---> X
+
+for Z a finite set, with composition given by pullback.
+A functor F : Cell(X) → Set gives the data of how pull and push work in the mesh.
+Where do I get coproducts from? I should demand
+
+z ∈ F(0 -!-> X)
+
+if z1 ∈ F(A -f-> X) and z2 ∈ F(B -g-> X) then
+there exists (z1,z2) ∈ F(A + B -(f,g)-> X)
+
+with some universal properties? Do I know that
+
+F(A + B -(f,g)-> X) = F(A -f-> X) × F(B -g-> X)
+
+? No, merely that it includes it. But that inclusion should be
+associative or something.
