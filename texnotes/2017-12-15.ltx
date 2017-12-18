@@ -332,66 +332,45 @@ This notation is sort of noisy after all. What does it look like with $\sem\dash
 \end{callout}
 
 \vfil\eject
-Suppose $f : c \to d \in \ii$. Let
-\begin{itemize}
-\item $\Gamma = \Gamma_0, i:\ii,\Gamma_1$ and
-\item $\sem \Gamma_c = \Gamma_0, \sem{\Gamma_1}_c$ and
-\item $\sem \Gamma_f = \rid_{\Gamma_0} \sem{\Gamma_1}_f$.
-\end{itemize}
+Suppose $f : c \to d \in \ii$ and $i : \ii \in \Gamma$.
 \begin{callout}
-  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
-  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_f : \sem A_c \to \sem {\Gamma}_f \sem A_d$.\\
-  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
-  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \sem{\Gamma}_f\sem M_d$.\\
   If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
-  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) :\sem {\Gamma}_f \sem A_d$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \sem{\Gamma}_f\sem M_d$.
 \end{callout}
+Suppose $g : d \to e \in \ii$.
 \begin{callout2}
-  If $\Gamma \prov A : \rtype$ then $  \sem A_{fg} \equiv \sem A_f \o \sem A_g$.\\
-  If $\Gamma \prov A : \rtype$ then $  \sem A_{\rid_c} \equiv \rid_{\sem A_c}$.\\
-  If $\prov \Gamma \rctx$ then $\sem \Gamma_{fg} \equiv \sem \Gamma_g \sem \Gamma_f$.\\
-  If $\prov \Gamma \rctx$ then $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$.
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{gf} \equiv \sem \Gamma_f \sem \Gamma_g$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{gf}(M) \equiv \sem \Gamma_f \sem A_g  (\sem A_f (M))$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{\rid_c}(M) \equiv M$.
 \end{callout2}
+
 \subsection{Contexts}
 \[\begin{tabular}{l@{ }c@{ }l}
 $ \sem { \Gamma, i : \ii }_c $&$=$&$\Gamma$\\
 $ \sem { \Gamma, x : A }_c $&$=$&$\sem{\Gamma}_c, x : \sem A_c$\\
+\end{tabular}
+\qquad\begin{tabular}{l@{ }c@{ }l}
 $ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
 $ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
 \end{tabular}\]
-Check case
-$$
-\begin{prooftree}
-\Gamma \prov \theta : \Delta
-\qquad
-\Gamma \prov M : \theta A
-\justifies
-\Gamma \prov \theta[M/x] : (\Delta, x : A)
-\end{prooftree}
-$$
-
-$$
-\begin{prooftree}
-\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d \qquad
-\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d
-\justifies
-\sem \Gamma_c, x : \sem A_c \prov \sem \Gamma_f[\sem A_f(x) / x] : \sem \Gamma_d, x : \sem A_d
-\end{prooftree}
-$$
 
 \subsection{$\to$}
-Suppose $f : c \to c'$.
+Suppose $f : c \to c' \in \ii$.
 \[\begin{tabular}{l@{ }c@{ }l}
-$ \sem { A \to B }_c $&$=$&$\{ \omega : (d : \C) (g : \C(c, d)) \to \sem A_d \to \sem B_d,$\\
-&&$\ \ \mu : (d\ e : \C) (g : \C(c, d)) (h : \C(d, e)) \to $\\
-&&$\ \  (y : \sem A_d) \to \omega_{e(h\o g)} ( \sem A_h(y)) = \sem B_h(\omega_{dg}(y))  \}   $\\
-$ \sem { A \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)_{d(g \o f)} ,  $\\
-&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g \o f)\ h\ y\} $\\
+$ \sem { ( y : A) \to B }_c $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :  \sem \Gamma_g\sem A_d) \to  \sem \Gamma_g\sem B_d,$\\
+&&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem \Gamma_g\sem A_d) $\\
+&&$\ \   \to \omega\ e\ (h g)\ ( \sem \Gamma_g \sem A_h(y)) = \sem \Gamma_g\sem B_h(\omega\ d\ g\ y)  \}   $\\
+$ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)\ d\ g\  f ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $\\
 $ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem \Gamma_g \sem M_d $\\
 &&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
-$ \sem{M\ N}_c  $&$=$&$\sem M_c.\omega_{c,\rid_c}\ \sem N_c$
+$ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
 \end{tabular}\]
-
 \end{document}
 
 % garbage
