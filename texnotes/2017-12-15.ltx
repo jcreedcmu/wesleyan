@@ -476,7 +476,7 @@ So I can set $M.\mu = \lambda ghy . (x.\mu)\ (gf)\ h\ y $ and I'm done.
 %% So the lesson is: If $h, g \in B$ and $\partial h = k g$, then there
 %% exists a $c$ such that $\partial c = \partial g$ and $k c = k h$. Ah,
 %% this is no better than domain and codomain, I guess.
-\vfil\eject
+
 \subsection{Observation}
 
 It seems interesting that $e$ doesn't actually appear in the definition of
@@ -539,6 +539,69 @@ $ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)\ d\ 
 $ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M^g $\\
 &&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
 $ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
+\end{tabular}\]
+
+\vfil\eject
+\section{More Explicitly After All}
+Definitely have the following, assuming
+$f : c \to d, g : d \to e \in \ii$.
+\begin{calldefn}
+$\sem \Gamma_c\qquad \sem \Gamma_f \qquad \sem A_c \qquad \sem A_f(x) \qquad \sem M_c$
+\end{calldefn}
+\begin{callout}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) :\sem {\Gamma}_f \sem A_d$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \sem{\Gamma}_f\sem M_d$.
+\end{callout}
+
+\begin{callout2}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{gf} \equiv \sem \Gamma_f \sem \Gamma_g$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{gf}(M) \equiv \sem \Gamma_f \sem A_g  (\sem A_f (M))$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A_{\rid_c}(M) \equiv M$.
+\end{callout2}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+Now define
+\[\begin{tabular}{r@{ }c@{ }l}
+ $\ssem A_f $&$=$&$ \sem \Gamma_f \sem A_{f_1}$\\
+ $\ssem M_f $&$=$&$ \sem \Gamma_f \sem M_{f_1}$ \\
+ $\ssem A^{f;g}(x) $&$=$&$ \sem \Gamma_f \sem A_g (x)$
+\end{tabular}\]
+and we have
+\begin{callout}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.\\
+If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \ssem A_f : \rtype$.\\
+If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c, x : \ssem A_f \prov \ssem A^{f;g}(x) : \ssem A_{gf}$.\\
+If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \ssem M_f : \ssem A_f$.\\
+If $\Gamma \prov M : A$ then $\ssem A^{e;f} (\ssem M_e) \equiv \ssem M_{fe}$.
+\end{callout}
+\begin{callout2}
+ $\sem \Gamma_{gf} \equiv \sem \Gamma_f \sem \Gamma_g$\\
+ $\sem \Gamma_{\rid_c} \equiv \rid_{\sem\Gamma_c}$\\
+ $  \ssem A^{e;gf}(M) \equiv  \ssem A^{fe;g}  (\ssem A^{e;f} (M))$\\
+ $\sem \Gamma_f \ssem A_g \equiv \ssem A_{gf} $\\
+ $\sem \Gamma_f \ssem M_g \equiv \ssem M_{gf} $
+\end{callout2}
+\subsubsection{Contexts}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_c $&$=$&$\Gamma$\\
+$ \sem { \Gamma, x : A }_c $&$=$&$\sem{\Gamma}_c, x : \ssem A_{\rid_c}$\\
+\end{tabular}
+\qquad\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\ssem A^{\rid_c;f} (x)/ x]$\\
+\end{tabular}\]
+\subsubsection{$\to$}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \ssem { ( y : A) \to B }_f $&$=$&$\{ \omega : (g : [f])  (y :   \ssem A_{gf}) \to  \ssem B_{gf},$\\
+&&$\ \ \mu : (g : [f])  (h : [g])  $\\
+&&$\ \   \to (\omega\ (h g))\o  \ssem A^{gf;h} = \ssem B^{gf;h} \o (\omega\ g)  \}   $\\
+$ \ssem { (y : A) \to B }^{e;f}(x) $&$=$&$ \{ \omega = \lambda g  . (x.\omega)\ (g f) ,  $\\
+&&$\ \  \mu =   \lambda g . (x.\mu)\ (g  f)\} $
 \end{tabular}\]
 
 \end{document}
