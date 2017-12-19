@@ -13,7 +13,10 @@
 \tcbuselibrary{breakable}
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
 \definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
 \definecolor{lgray}{gray}{0.7}
+\newtcolorbox{calldefn}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{callout}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{callout2}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
@@ -414,7 +417,7 @@ And we need to check that
 \[ \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y : (d\ e : \ii) (g : \ii(c', d))  (h : \ii(d, e)) (y : \sem A^{gfz}) \]
 \[   \to \omega\ e\ (h g)\ ( \sem A^{gfz;h}(y)) = \sem B^{gfz;h}(\omega\ d\ g\ y)  \]
 and the latter doesn't quite hold, arg.
-\vfil\eject
+
 \subsection{Notation Fiddling}
 Say $f_0$ and $f_1$ are the domain and codomain of $f$.
 Say $[f]$ is the type of morphisms $g$ such that $g_0 = f_1$.
@@ -434,7 +437,7 @@ If $g : [f]$, then
 $ \sem { ( y : A) \to B }^f $&$=$&$\{ \omega : (g : [f])  (y :   \sem A^{gf}) \to  \sem B^{gf},$\\
 &&$\ \ \mu :  (g : [f])  (h : [g]) (y : \sem A^{gf}) \to $\\
 &&$\ \ \ \  \omega\ (h g)\ ( \sem A^{gf;h}(y)) = \sem B^{gf;h}(\omega\ g\ y)  \}   $\\
-$ \sem { (y : A) \to B }^{f;g}(x) $&$=$&$ \{
+$ \sem { (y : A) \to B }^{e;f}(x) $&$=$&$ \{
 \omega = \lambda g y . (x.\omega)\ (gf)\ y,  $\\
 &&$\ \  \mu =   \lambda ghy . (x.\mu)\ (gf)\ h\ y\} $
 \end{tabular}\]
@@ -458,6 +461,86 @@ $(M.\mu)  :  (g : [f])  (h : [g]) (y : \sem A^{gfe}) \to$\\
 $\qquad\qquad (x.\omega)\ (h gf)\ ( \sem A^{gfe;h}(y)) = \sem B^{gfe;h}((x.\omega)\ (gf)\ y)  $
 \end{tabular}\]
 So I can set $M.\mu = \lambda ghy . (x.\mu)\ (gf)\ h\ y $ and I'm done.
+
+%% \subsection{Unrelated Tangent}
+
+%% A category is a thing with two sets $M$ and $B$ and a morphism $\partial : B \to M$.
+%% Things in $M$ are morphisms and things in $B$ are based morphisms; $\partial(b)$ says
+%% which morphism $b$ is `after'. Composition is a different morphism $k : B \to M$ which
+%% composes a morphism with the one it's `after'. How do we think about identities?
+%% There's a morphism $\rid : M \to B$ that's a section of both $\partial$ and $k$.
+%% How do we think about associativity $h (g f) = (h g ) f$? Well $g \in [f]$ and $h \in [g]$.
+%% So $f\in M$ and $\dot g\in B$ and $\partial \dot g = f$. Moreover $\dot h \in B$ and
+%% $\partial \dot h = k \dot g$.
+
+%% So the lesson is: If $h, g \in B$ and $\partial h = k g$, then there
+%% exists a $c$ such that $\partial c = \partial g$ and $k c = k h$. Ah,
+%% this is no better than domain and codomain, I guess.
+\vfil\eject
+\subsection{Observation}
+
+It seems interesting that $e$ doesn't actually appear in the definition of
+$\sem { (y : A) \to B }^{e;f}(x)$. Maybe I just want to universally quantify over $e$
+in the statement of correctness. So here's another attempt at starting from the beginning:
+
+\begin{calldefn}
+$\sem \Gamma_f\qquad \sem \Gamma^f \qquad \sem A_f \qquad \sem A^f(x) \qquad \sem M_f$
+\end{calldefn}
+We sometimes write simply $c$ for $\rid_c$.
+Suppose $f : c \to d, g : d \to e \in \ii$.
+\begin{callout}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_f \rctx$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_{f} \prov \sem {\Gamma}^g : \sem {\Gamma}_{gf}$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_{f} \prov \sem A_{gf} : \rtype$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_{f}, x : \sem A_f \prov \sem A^g(x) :\sem {A}_{gf} $.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_{f} \prov \sem M_{gf} : \sem A_{gf}$.\\
+  If $\Gamma \prov M : A$ then $\sem A^g (\sem M_{f}) \equiv \sem{M}_{gf}$.
+\end{callout}
+\begin{callout2}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma^{gf} \equiv \sem \Gamma^f \sem \Gamma^g$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma^{\rid_c} \equiv \rid_{\sem\Gamma_c}$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A^{gf}(M) \equiv  \sem A^g  (\sem A^f (M))$.\\
+  If $\Gamma \prov A : \rtype$ then $  \sem A^{\rid_c}(M) \equiv M$.
+\end{callout2}
+
+\subsubsection{Contexts}
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_f $&$=$&$\Gamma$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f, x : \sem A_f$\\
+\end{tabular}
+\qquad\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }^f $&$=$&$\rid_\Gamma$\\
+$ \sem { \Gamma, x : A }^f $&$=$&$\sem{\Gamma}^f [\sem A^f (x)/ x]$\\
+\end{tabular}\]
+
+\subsubsection{$\to$}
+Suppose $g : c \to d \in \ii$ and $h : d \to e \in \ii$.
+Suppose $\Gamma \prov A : \rtype$ and $\Gamma \prov M : A$.
+
+Define
+\[\sem M^g = \sem \Gamma_g \sem M_d\]
+\[\sem A^g = \sem \Gamma_g \sem A_d\]
+\[\sem A^{g;h}(y) = \sem \Gamma_g \sem A_h(y)\]
+
+We then have
+\[\sem \Gamma_c \prov \sem M^g :  \sem A^g \]
+\[\sem \Gamma_c \prov \sem A^g : \rtype\]
+\[\sem \Gamma_c, y : \sem A^g \prov \sem A^{g;h}(y) : \sem A^{hg}\]
+
+
+My original thought was to define $\sem A_c$ and $\sem A_f(x)$ and $\sem M_c$ inductively, like so:
+(In the following, suppose $f : c \to c' \in \ii$)
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { ( y : A) \to B }_c $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :   \sem A^g) \to  \sem B^g,$\\
+&&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem A^g) $\\
+&&$\ \   \to \omega\ e\ (h g)\ ( \sem A^{g;h}(y)) = \sem B^{g;h}(\omega\ d\ g\ y)  \}   $\\
+$ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)\ d\ g\  f ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M^g $\\
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
+$ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
+\end{tabular}\]
+
 \end{document}
 
 % garbage
