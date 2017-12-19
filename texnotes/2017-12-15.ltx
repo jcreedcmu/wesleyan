@@ -331,7 +331,7 @@ This notation is sort of noisy after all. What does it look like with $\sem\dash
   then \[\Gamma, \sem{\Gamma'}_c \prov \sem{A}_f : \sem A_c \to \sem{\Gamma'}_f\sem{A}_d\]
 \end{callout}
 
-\vfil\eject
+\subsection{Hmm}
 Suppose $f : c \to d \in \ii$ and $i : \ii \in \Gamma$.
 \begin{callout}
   If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
@@ -359,18 +359,65 @@ $ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
 $ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
 \end{tabular}\]
 
+\vfil\eject
 \subsection{$\to$}
-Suppose $f : c \to c' \in \ii$.
+Suppose $g : c \to d \in \ii$ and $h : d \to e \in \ii$.
+Suppose $\Gamma \prov A : \rtype$ and $\Gamma \prov M : A$.
+
+Define
+\[\sem M^g = \sem \Gamma_g \sem M_d\]
+\[\sem A^g = \sem \Gamma_g \sem A_d\]
+\[\sem A^{g;h}(y) = \sem \Gamma_g \sem A_h(y)\]
+
+We then have
+\[\sem \Gamma_c \prov \sem M^g :  \sem A^g \]
+\[\sem \Gamma_c \prov \sem A^g : \rtype\]
+\[\sem \Gamma_c, y : \sem A^g \prov \sem A^{g;h}(y) : \sem A^{hg}\]
+
+
+My original thought was to define $\sem A_c$ and $\sem A_f(x)$ and $\sem M_c$ inductively, like so:
+(In the following, suppose $f : c \to c' \in \ii$)
 \[\begin{tabular}{l@{ }c@{ }l}
-$ \sem { ( y : A) \to B }_c $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :  \sem \Gamma_g\sem A_d) \to  \sem \Gamma_g\sem B_d,$\\
-&&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem \Gamma_g\sem A_d) $\\
-&&$\ \   \to \omega\ e\ (h g)\ ( \sem \Gamma_g \sem A_h(y)) = \sem \Gamma_g\sem B_h(\omega\ d\ g\ y)  \}   $\\
+$ \sem { ( y : A) \to B }_c $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :   \sem A^g) \to  \sem B^g,$\\
+&&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem A^g) $\\
+&&$\ \   \to \omega\ e\ (h g)\ ( \sem A^{g;h}(y)) = \sem B^{g;h}(\omega\ d\ g\ y)  \}   $\\
 $ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda d  g . (x.\omega)\ d\ g\  f ,  $\\
 &&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $\\
-$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem \Gamma_g \sem M_d $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M^g $\\
 &&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
 $ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
 \end{tabular}\]
+
+But maybe I should define the superscripted translations directly instead.
+
+In the following, suppose $f : c \to c' \in \ii$. Suppose $z : b \to c$.
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { ( y : A) \to B }^z $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :   \sem A^{gz}) \to  \sem B^{gz},$\\
+&&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem A^{gz}) $\\
+&&$\ \   \to \omega\ e\ (h g)\ ( \sem A^{gz;h}(y)) = \sem B^{gz;h}(\omega\ d\ g\ y)  \}   $\\
+$ \sem { (y : A) \to B }^{z;f}(x) $&$=$&$ \{ \omega = \lambda d g y . (x.\omega)\ d\ (g f)\  y ,  $\\
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $\\
+$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M^g $\\
+&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
+$ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
+\end{tabular}\]
+
+Want to typecheck
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { (y : A) \to B }^{z;f}(x) &=& \{ \omega = \lambda d  g y . (x.\omega)\ d\ (g f)\  y$\\
+ &&$\ \ \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\}$
+\end{tabular}\]
+Want to show
+\[\sem \Gamma_b, x : \sem {(y : A) \to B}^z \prov \sem {(y : A) \to B}^{z;f}(x) : \sem {(y : A) \to B}^{fz}\]
+So we're assuming
+\[(x.\omega) : (d : \ii) (g : \ii(c, d))  (y :   \sem A^{gz}) \to  \sem B^{gz}\]
+\[(x.\mu) : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem A^{gz}) \]
+\[   \to \omega\ e\ (h g)\ ( \sem A^{gz;h}(y)) = \sem B^{gz;h}(\omega\ d\ g\ y)  \]
+And we need to check that
+\[\lambda d  g y . (x.\omega)\ d\ (g f)\  y  : (d : \ii) (g : \ii(c', d))  (y :   \sem A^{gfz}) \to  \sem B^{gfz}\]
+\[ \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y : (d\ e : \ii) (g : \ii(c', d))  (h : \ii(d, e)) (y : \sem A^{gfz}) \]
+\[   \to \omega\ e\ (h g)\ ( \sem A^{gfz;h}(y)) = \sem B^{gfz;h}(\omega\ d\ g\ y)  \]
+and the latter doesn't quite hold, arg.
 \end{document}
 
 % garbage
