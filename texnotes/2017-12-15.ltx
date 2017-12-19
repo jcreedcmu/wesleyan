@@ -359,7 +359,6 @@ $ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
 $ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
 \end{tabular}\]
 
-\vfil\eject
 \subsection{$\to$}
 Suppose $g : c \to d \in \ii$ and $h : d \to e \in \ii$.
 Suppose $\Gamma \prov A : \rtype$ and $\Gamma \prov M : A$.
@@ -396,15 +395,12 @@ $ \sem { ( y : A) \to B }^z $&$=$&$\{ \omega : (d : \ii) (g : \ii(c, d))  (y :  
 &&$\ \ \mu : (d\ e : \ii) (g : \ii(c, d))  (h : \ii(d, e)) (y : \sem A^{gz}) $\\
 &&$\ \   \to \omega\ e\ (h g)\ ( \sem A^{gz;h}(y)) = \sem B^{gz;h}(\omega\ d\ g\ y)  \}   $\\
 $ \sem { (y : A) \to B }^{z;f}(x) $&$=$&$ \{ \omega = \lambda d g y . (x.\omega)\ d\ (g f)\  y ,  $\\
-&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $\\
-$ \sem{\lambda x . M}_c  $&$=$&$\{ \omega = \lambda d g x . \sem M^g $\\
-&&$\ \ \mu = \lambda d e g h y . \mathsf{idp}  \}   $\\
-$ \sem{M\ N}_c  $&$=$&$(\sem M_c.\omega)\ c\ \rid_c\ \sem N_c$
+&&$\ \  \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\} $
 \end{tabular}\]
 
 Want to typecheck
 \[\begin{tabular}{l@{ }c@{ }l}
-$ \sem { (y : A) \to B }^{z;f}(x) &=& \{ \omega = \lambda d  g y . (x.\omega)\ d\ (g f)\  y$\\
+$ \sem { (y : A) \to B }^{z;f}(x)$ &$=$&$ \{ \omega = \lambda d  g y . (x.\omega)\ d\ (g f)\  y$\\
  &&$\ \ \mu =  \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y\}$
 \end{tabular}\]
 Want to show
@@ -418,6 +414,50 @@ And we need to check that
 \[ \lambda d e g h y . (x.\mu)\ d\ e\ (g  f)\ h\ y : (d\ e : \ii) (g : \ii(c', d))  (h : \ii(d, e)) (y : \sem A^{gfz}) \]
 \[   \to \omega\ e\ (h g)\ ( \sem A^{gfz;h}(y)) = \sem B^{gfz;h}(\omega\ d\ g\ y)  \]
 and the latter doesn't quite hold, arg.
+\vfil\eject
+\subsection{Notation Fiddling}
+Say $f_0$ and $f_1$ are the domain and codomain of $f$.
+Say $[f]$ is the type of morphisms $g$ such that $g_0 = f_1$.
+
+If $g : [f]$, then
+\[\sem \Gamma_{f_0} \prov \sem M^f :  \sem A^f \]
+\[\sem \Gamma_{f_0} \prov \sem A^f : \rtype\]
+\[\sem \Gamma_{f_0}, x : \sem A^f \prov \sem A^{f;g}(x) : \sem A^{gf}\]
+
+\[\mu : \qquad \begin{tikzcd}
+  \sem A^{gf}\ar[r, "\omega\ g"] \ar[d, "{\sem A^{gf;h}}"']
+  & \sem B^{gf} \ar[d, "{\sem B^{gf;h}}"]\\
+\sem A^{hgf} \ar[r, "{\omega\ (hg)}"'] & \sem B^{hgf}
+\end{tikzcd}\]
+
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { ( y : A) \to B }^f $&$=$&$\{ \omega : (g : [f])  (y :   \sem A^{gf}) \to  \sem B^{gf},$\\
+&&$\ \ \mu :  (g : [f])  (h : [g]) (y : \sem A^{gf}) \to $\\
+&&$\ \ \ \  \omega\ (h g)\ ( \sem A^{gf;h}(y)) = \sem B^{gf;h}(\omega\ g\ y)  \}   $\\
+$ \sem { (y : A) \to B }^{f;g}(x) $&$=$&$ \{
+\omega = \lambda g y . (x.\omega)\ (gf)\ y,  $\\
+&&$\ \  \mu =   \lambda ghy . (x.\mu)\ (gf)\ h\ y\} $
+\end{tabular}\]
+Ah, maybe I just didn't use the right def'n of $\omega$ when unpacking the type of $\mu$ before.
+
+I want to typecheck $\sem { (y : A) \to B }^{e;f}(x)$. I assume $x : \sem {(y : A) \to B}^e$. So
+\[\begin{tabular}{l}
+$(x.\omega) : (q : [e])(y : \sem A^{qe}) \to \sem B^{qe} $\\
+$(x.\mu)  :  (q : [e])  (h : [q]) (y : \sem A^{qe}) \to$\\
+$\qquad\qquad (x.\omega)\ (h q)\ ( \sem A^{qe;h}(y)) = \sem B^{qe;h}((x.\omega)\ q\ y)  $
+\end{tabular}\]
+and need to make $M(x)$ such that
+\[\begin{tabular}{l}
+$(M.\omega) : (g : [f])(y : \sem A^{gfe}) \to \sem B^{gfe} $\\
+$(M.\mu)  :  (g : [f])  (h : [g]) (y : \sem A^{gfe}) \to$\\
+$\qquad\qquad (M.\omega)\ (h g)\ ( \sem A^{gfe;h}(y)) = \sem B^{gfe;h}((M.\omega)\ g\ y)  $
+\end{tabular}\]
+So I set $M.\omega = \lambda g y . (x.\omega)\ (gf)\ y$ which means I want
+\[\begin{tabular}{l}
+$(M.\mu)  :  (g : [f])  (h : [g]) (y : \sem A^{gfe}) \to$\\
+$\qquad\qquad (x.\omega)\ (h gf)\ ( \sem A^{gfe;h}(y)) = \sem B^{gfe;h}((x.\omega)\ (gf)\ y)  $
+\end{tabular}\]
+So I can set $M.\mu = \lambda ghy . (x.\mu)\ (gf)\ h\ y $ and I'm done.
 \end{document}
 
 % garbage
