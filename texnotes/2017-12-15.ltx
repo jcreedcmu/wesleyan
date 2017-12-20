@@ -591,18 +591,193 @@ If $\Gamma \prov M : A$ then $\ssem A^{e;f} (\ssem M_e) \equiv \ssem M_{fe}$.
 $ \sem { \Gamma, i : \ii }_c $&$=$&$\Gamma$\\
 $ \sem { \Gamma, x : A }_c $&$=$&$\sem{\Gamma}_c, x : \ssem A_{\rid_c}$\\
 \end{tabular}
-\qquad\begin{tabular}{l@{ }c@{ }l}
+\qquad{\color{gray}\begin{tabular}{l@{ }c@{ }l}
 $ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
 $ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\ssem A^{\rid_c;f} (x)/ x]$\\
-\end{tabular}\]
+\end{tabular}}\]
+\[\ssem x_f = \ssem A^{\rid_c;f}(x)\]
 \subsubsection{$\to$}
 \[\begin{tabular}{l@{ }c@{ }l}
 $ \ssem { ( y : A) \to B }_f $&$=$&$\{ \omega : (g : [f])  (y :   \ssem A_{gf}) \to  \ssem B_{gf},$\\
 &&$\ \ \mu : (g : [f])  (h : [g])  $\\
 &&$\ \   \to (\omega\ (h g))\o  \ssem A^{gf;h} = \ssem B^{gf;h} \o (\omega\ g)  \}   $\\
 $ \ssem { (y : A) \to B }^{e;f}(x) $&$=$&$ \{ \omega = \lambda g  . (x.\omega)\ (g f) ,  $\\
-&&$\ \  \mu =   \lambda g . (x.\mu)\ (g  f)\} $
+&&$\ \  \mu =   \lambda g . (x.\mu)\ (g  f)\} $\\
+$ \ssem{\lambda y .M}_f $&$=$&$ \{ \omega = \lambda g y .  \ssem M_{gf} $\\
+&&$\ \ \mu = \lambda gh . \mathsf{idp} \}$
 \end{tabular}\]
+
+What can I do to the context?
+\begin{calldefn}
+$\ssem \Gamma_f$
+\end{calldefn}
+\begin{callout}
+  If $\prov \Gamma \rctx$ then $\ssem \Gamma_f \rctx$.
+\end{callout}
+\begin{callout2}
+\begin{tabular}{l@{ }c@{ }l}
+$ \ssem { \Gamma, i : \ii }_f $&$=$&$\Gamma$\\
+$ \ssem { \Gamma, x : A }_f $&$=$&$\ssem{\Gamma}_f, x : \ssem A_{f}$\\
+\end{tabular}
+\end{callout2}
+\[\Gamma, y : A \prov  M : B \]
+\[\Gamma \prov \lambda y . M : (y : A) \to B \]
+
+\[\sem\Gamma_c, y : \sem A_c \prov  \sem  M_c : \sem B_c \]
+\[\sem\Gamma_c, y : \ssem A_f \prov  \ssem  M_f : \ssem B_f \]
+\[\sem\Gamma_c \prov \ssem{\lambda y . M}_f : \ssem{(y : A) \to B}_f \]
+
+
+\subsection{What did the lambda case look like before I tried to get clever}
+
+\[\mu : \qquad \begin{tikzcd}
+  \ssem A_{g}\ar[r, "\omega\ g"] \ar[d, "{\ssem A^{g;h}}"']
+  & \ssem B_{g} \ar[d, "{\ssem B^{g;h}}"]\\
+\ssem A_{hg} \ar[r, "{\omega\ hg}"'] & \ssem B_{hg}
+\end{tikzcd}\]
+
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \sem { ( y : A) \to B }_c $&$=$&$\{  \omega: (g : [c])  (y : \ssem A_g) \to  \ssem B_g,$\\
+&&$\ \ \mu :  (g : [c])  (h : [g])  $\\
+&&$\ \   \to (\omega\ hg)\ \o \ssem A^{g;h} = \ssem B^{g;h} \o (\omega\ g)  \}   $\\
+$ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda   g . (x.\omega)\ (gf) ,  $\\
+&&$\ \  \mu =  \lambda g   . (x.\mu)\  (g  f)\  \} $\\
+$ \sem{\lambda y . M}_c  $&$=$&$\{ \omega = \lambda  g y . \ssem M_g $\\
+&&$\ \ \mu = \lambda  g h  . \mathsf{idp}  \}   $
+\end{tabular}\]
+Typecheck that
+\[\sem\Gamma_c \prov \sem{\lambda y . M}_c : \sem {(y : A) \to B}_c\]
+which means
+\[\sem\Gamma_c \prov \lambda g y . \sem \Gamma_g \sem M_d : (g : [c]) (y : \ssem A_g) \to \ssem B_g\]
+so
+\[\sem\Gamma_c, g : [c], y : \sem \Gamma_g \sem A_d \prov \sem {\Gamma, y : A}_g \sem M_d : \sem {\Gamma, y : A}_g \sem B_d\]
+Now we have by i.h. that
+\[\sem\Gamma_d, y : \sem A_d \prov  \sem M_d : \sem B_d\]
+hence
+\[\sem\Gamma_c, y : \sem \Gamma_g\sem A_d \prov  \sem\Gamma_g\sem M_d : \sem\Gamma_g\sem B_d\]
+and then
+\[\sem\Gamma_c, y : \sem A_c \prov  \sem{\Gamma, y : A}_g\sem M_d : \sem{\Gamma, y : A}_g\sem B_d\]
+This doesn't match up, arrrg.
+\section{Why is this so Difficult}
+Can I conjecture that perhaps $\sem \Gamma_f \sem A_d \equiv \sem A_c$? Does that
+simplify things? This would mean that $\ssem A_f \equiv \sem A_c$. But this seems
+to take a lot of the punch out of the definition of $\sem {(y : A) \to B}$. Right?
+It would be
+\[\begin{tabular}{l@{ }c@{ }l}
+$ \ssem { ( y : A) \to B }_f $&$=$&$\{ \omega : (g : [f])  (y :   \sem A_{c}) \to  \sem B_{c}, \cdots\}$\\
+\end{tabular}\]
+and $g$ wouldn't really be used at all.
+How about something like  $$\sem \Gamma_f \sem A_d \equiv \sem{\rtype}_f (\sem A_c)$$?
+It feels sort of like $\sem \rtype$ `doesn't have enough information'
+to do the job, but what do I know. What's the theorem?
+\[\erule{\sem \Gamma_c \prov A : \rtype}
+{\sem \Gamma_c \prov \sem \rtype_f(A) :\rtype}\]
+No, that feels all wrong.
+
+\vfil\eject
+\section{Declevering One More Time}
+Generally assume that $f : c \to d$ and $g : d \to e$. My primary definitions are
+\begin{calldefn}
+$\sem \Gamma_c\qquad \sem \Gamma_f \qquad \sem A_c \qquad \sem A_f(x) \qquad \sem M_c$
+\end{calldefn}
+\noindent as abbreviations I'll write
+\begin{callout2}
+$\ssem M^\Gamma_f = \sem \Gamma_f\sem M_{d}$.\\
+$\ssem A^\Gamma_f = \sem \Gamma_f\sem A_{d}$.\\
+$\ssem A^\Gamma_{f;g}(M) = \sem \Gamma_f\sem A_{g}(M)$.
+\end{callout2}
+The main theorems I have are
+\begin{callout}
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \rctx$.\\
+  If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem {\Gamma}_f : \sem {\Gamma}_d$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
+  If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \ssem A^\Gamma_f$.\\
+  If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.\\
+  If $\Gamma \prov M : A$ then $\sem A_f (\sem M_c) \equiv \ssem M^\Gamma_f$.
+\end{callout}
+some derived theorems are
+\begin{callout}
+If $\Gamma \prov A : \rtype$ then $\sem{\Gamma}_c \prov  \ssem A^\Gamma_f : \rtype$\\
+If $\Gamma \prov A : \rtype$ then $\sem \Gamma_c, x : \ssem A^\Gamma_f \prov \ssem A^\Gamma_{f;g}(x) : \ssem A^\Gamma_{gf}$.\\
+If $\Gamma \prov M : A$ then $\sem{\Gamma}_c \prov \ssem M^\Gamma_f : \ssem A^\Gamma_f$\\
+If $\Gamma \prov M : A$ then $\ssem A^{\Gamma}_{f;g} (\ssem M^\Gamma_f) \equiv  \ssem M^\Gamma_{gf}$.
+\end{callout}
+%% \[\mu : \qquad \begin{tikzcd}
+%%   \ssem A^\Gamma_{f}\ar[r, "\omega\ f"] \ar[d, "{\ssem A^\Gamma_{f;g}}"']
+%%   & \ssem B^\Gamma_{f} \ar[d, "{\ssem B^\Gamma_{f;g}}"]\\
+%% \ssem A^\Gamma_{gf} \ar[r, "{\omega\ gf}"'] & \ssem B^\Gamma_{gf}
+%% \end{tikzcd}\]
+\subsection{Contexts and Variables}
+\begin{callout2}
+\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_c $&$=$&$\Gamma$\\
+$ \sem { \Gamma, x : A }_c $&$=$&$\sem{\Gamma}_c, x : \sem A_{c}$\\
+\end{tabular}\quad
+\begin{tabular}{l@{ }c@{ }l}
+$ \sem { \Gamma, i : \ii }_f $&$=$&$\rid_\Gamma$\\
+$ \sem { \Gamma, x : A }_f $&$=$&$\sem{\Gamma}_f [\sem A_f (x)/ x]$\\
+\end{tabular}\\
+\[\sem x_c = x\]
+\end{callout2}
+\begin{lemma}
+If $\prov \Gamma \rctx$ then $\prov \sem \Gamma_c \rctx$.
+\end{lemma}
+\begin{proof}
+Suppose $\prov \Gamma, x : A \rctx$. This means $\Gamma \prov A : \rtype$.
+By i.h. $\sem \Gamma_c \prov \sem A_c : \rtype$. Hence
+$\prov \sem{\Gamma}_c, x : \sem A_c \rctx$.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $\prov \Gamma \rctx$ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
+\end{lemma}
+\begin{proof}
+\[
+\erule
+{\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d \qquad \sem \Gamma_c, x : \sem A_c \prov  \sem A_f(x) : \sem \Gamma_f\sem A_d}
+{\sem\Gamma_c, x : \sem A_c \prov \sem \Gamma_f[\sem A_f(x) / x] : (\sem \Gamma_d, x : \sem A_d)}
+\]
+\cqed
+\end{proof}
+\subsection{Functions}
+Here the variable convention is that $f : b \to c, g : c \to d, h: d \to e$.
+\begin{callout2}
+\begin{tabular}{l@{ }c@{ }l}
+$ \sem { ( y : A) \to B }_c $&$=$&$\{  \omega: (g : [c])  (y : \ssem A^\Gamma_g) \to  \ssem B^{\Gamma}_g,$\\
+&&$\ \ \mu :  (g : [c])  (h : [g])  $\\
+&&$\ \   \to (\omega\ hg)\ \o \ssem A^{g;h} = \ssem B^{g;h} \o (\omega\ g)  \}   $\\
+$ \sem { (y : A) \to B }_f(x) $&$=$&$ \{ \omega = \lambda   g . (x.\omega)\ (gf) ,  $\\
+&&$\ \  \mu =  \lambda g   . (x.\mu)\  (g  f)\  \} $\\
+$ \sem{\lambda y . M}_c  $&$=$&$\{ \omega = \lambda  g y . \ssem M^\Gamma_g $\\
+&&$\ \ \mu = \lambda  g h  . \mathsf{idp}  \}   $\\
+$ \sem{M N}_c  $&$=$&$\{ \omega = \lambda  g y . \ssem M^\Gamma_g $\\
+&&$\ \ \mu = \lambda  g h  . \mathsf{idp}  \}   $
+\end{tabular}
+\end{callout2}
+\begin{lemma}
+If $\Gamma \prov A : \rtype$, then $\sem \Gamma_c \prov \sem A_c : \rtype$.
+\end{lemma}
+
+\begin{proof}
+Suppose $\Gamma \prov (y : A) \to B : \rtype$.
+By inversion and i.h. we know $\sem {\Gamma}_d , y : \sem{A}_d \prov \sem B_d : \rtype$.
+As well we know $\sem{\Gamma}_c \prov \sem{\Gamma}_g : \sem{\Gamma}_d$.
+So apply the substitution to get
+\[\sem {\Gamma}_c, y : \sem{\Gamma}_g \sem A_d \prov \sem{\Gamma}_g\sem B_d : \rtype\]
+thus
+\[\sem {\Gamma}_c \prov (y :  \ssem A^\Gamma_d) \to \ssem B^\Gamma_d : \rtype\]
+Now we need to check that
+$(\omega\ hg)\ \o \ssem A^{g;h}$ and $\ssem B^{g;h} \o (\omega\ g)$ have the same type
+in $\sem \Gamma_c$.
+\[\mu : \qquad \begin{tikzcd}
+  \ssem A^\Gamma_{g}\ar[r, "\omega\ g"] \ar[d, "{\ssem A^\Gamma_{g;h}}"']
+  & \ssem B^\Gamma_{g} \ar[d, "{\ssem B^\Gamma_{g;h}}"]\\
+\ssem A^\Gamma_{hg} \ar[r, "{\omega\ hg}"'] & \ssem B^\Gamma_{hg}
+\end{tikzcd}\]
+\cqed
+\end{proof}
+
 
 \end{document}
 
