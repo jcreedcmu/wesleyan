@@ -1,0 +1,148 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows}
+\tikzset{
+commutative diagrams/.cd,
+arrow style=tikz,
+diagrams={>=stealth}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\celse{\mathrel |}
+\def\bcase{\mathop{\bf case}\nolimits}
+\def\bof{\mathop{\bf of}}
+\def\bif{\mathop{\bf if}}
+\def\bthen{\mathop{\bf then}}
+\def\belse{\mathop{\bf else}}
+\def\binl{\mathbf{inl}}
+\def\binr{\mathbf{inr}}
+\def\rnone{\mathsf{none}}
+\def\rsome{\mathsf{some}}
+\def\rtrue{\mathsf{true}}
+\def\rfalse{\mathsf{false}}
+
+\def\x{\times}
+\def\rid{\mathsf{id}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\wat{\mathbin{@}}
+\def\cn{{:}}
+
+\def\tensor{\otimes}
+\def\lol{\multimap}
+\def\wtf{{\color{red}???}}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.7}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+\newtcolorbox{calldefn}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{callout}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{callout2}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+
+
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\author{Jason Reed}
+
+
+
+\begin{document}
+
+
+\section{Notes on Cache Types}
+
+A {\em cache-type} is a diagram
+\[\begin{tikzcd}
+  C \ar[r, two heads, shift left, "p"]\ar[from=r, tail, shift left, "g"]
+& G\ar[r, two heads, shift left, "\pi"]\ar[from=r, tail, shift left, "\iota"]
+ & B
+\end{tikzcd}\]
+such that $pg = \rid_G$ and $\pi \iota = \rid_B$. A morphism between cache types
+is a map $f : C_1 \to C_2$ such that there exists $f'$ and $f''$ completing
+\[
+\begin{tikzcd}
+  C_1 \ar[from=r, tail,  "g_1"'] \ar[d, "f"']
+& G_1\ar[from=r, tail,  "\iota_1"']\ar[d, "f'"]
+ & B_1\ar[d, "f''"]
+\\
+  C_2 \ar[from=r, tail,  "g_2"]
+& G_2\ar[from=r, tail,  "\iota_2"]
+ & B_2
+\end{tikzcd}
+\]
+Such $f'$ and $f''$, when they exist, are determined uniquely.
+If $g_2 f' = f g_1$, then $f' = p_2 g_2 f' = p_2 f g_1$.
+If $g_2 \iota_2 f'' = f g_1 \iota_1$, then
+$f'' = \pi_2 \iota_2 f'' = \pi_2 p_2 g_2 \iota_2 f'' = \pi_2 p_2 f g_1 \iota_1 = \pi_2 f' \iota_1$.
+
+So in the definition of morphism, we might as well ask for an $f : C_1 \to C_2$ such that
+$g_2 p_2 f g_1 = f g_1$ and $g_2 \iota_2 \pi_2 p_2 f g_1 \iota_1 = f g_1 \iota_1$.
+\subsection{Example}
+Let $z : B \to D$ be given. This function is a computation we use to
+obtain a {\em Derived} value of type $D$ from our
+ {\em Base} type $B$, while keeping the value of the {\em Cache}
+type $C$ in a specified subset of {\em Good} cache states $G$.
+
+We set
+
+\begin{itemize}
+\item $C = B \x (D + 1)$. When we include the state of the cache, we
+have a base value and an optional cache value of type $D$. When we're in the
+$\rnone$ branch of the option type, it means the cache is dirty.
+\item $G = B \x 2$.
+The type of $G$ simply tracks {\em whether} the cache is clean (true) or dirty (false),
+without storing the value of the cache.
+\item $\iota(b) = (b, \rfalse)$.
+\item $\pi(b, t) = b$.
+\item $g(b, t) = \bif t \bthen \rsome(z(b)) \belse \rnone$.
+\item $p(b, d) = \bcase d \bof \rsome\ \_ \mapsto \rtrue \celse  \rnone \mapsto \rfalse$.
+\end{itemize}
+
+Let $f : B \to B$ be given. Here are some morphisms from this cache type to itself.
+
+\begin{itemize}
+\item $k_1(b, d) = (f(b), \rnone)$.
+\end{itemize}
+\end{document}
