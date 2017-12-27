@@ -104,21 +104,21 @@ is a map $f : C_1 \to C_2$ such that there exists $f'$ and $f''$ completing
 \[
 \begin{tikzcd}
   C_1 \ar[from=r, tail,  "g_1"'] \ar[d, "f"']
-& G_1\ar[from=r, tail,  "\iota_1"']\ar[d, "f'"]
+& G_1\ar[r, two heads,  "\pi_1"]\ar[d, "f'"]
  & B_1\ar[d, "f''"]
 \\
   C_2 \ar[from=r, tail,  "g_2"]
-& G_2\ar[from=r, tail,  "\iota_2"]
+& G_2\ar[r, two heads,  "\pi_2"']
  & B_2
 \end{tikzcd}
 \]
 Such $f'$ and $f''$, when they exist, are determined uniquely.
 If $g_2 f' = f g_1$, then $f' = p_2 g_2 f' = p_2 f g_1$.
-If $g_2 \iota_2 f'' = f g_1 \iota_1$, then
-$f'' = \pi_2 \iota_2 f'' = \pi_2 p_2 g_2 \iota_2 f'' = \pi_2 p_2 f g_1 \iota_1 = \pi_2 f' \iota_1$.
+If $\pi_2 f' = f'' \pi_1$, then
+$f'' = f'' \pi_1 \iota_1 = \pi_2 f' \iota_1 $.
 
 So in the definition of morphism, we might as well ask for an $f : C_1 \to C_2$ such that
-$g_2 p_2 f g_1 = f g_1$ and $g_2 \iota_2 \pi_2 p_2 f g_1 \iota_1 = f g_1 \iota_1$.
+$g_2 p_2 f g_1 = f g_1$ and $\pi_2 p_2 f g_1 = \pi_2 p_2 f g_1 \iota_1 \pi_1$.
 \subsection{Example}
 Let $z : B \to D$ be given. This function is a computation we use to
 obtain a {\em Derived} value of type $D$ from our
@@ -140,9 +140,16 @@ without storing the value of the cache.
 \item $p(b, d) = \bcase d \bof \rsome\ \_ \mapsto \rtrue \celse  \rnone \mapsto \rfalse$.
 \end{itemize}
 
-Let $f : B \to B$ be given. Here are some morphisms from this cache type to itself.
+Let $k : B \to B$ be given. Here are some morphisms from this cache type to itself.
 
 \begin{itemize}
-\item $k_1(b, d) = (f(b), \rnone)$.
+\item $f_1(b, \chi) = (k(b), \rnone)$. Compute a new value and clear the cache.
+\item $f_2(b, \chi) = (k(b), \bif b = k(b) \bthen \chi \belse \rnone)$. Compute a new value and clear the cache if the value has changed.
+\item $f_3(b, \chi) = (b, \rsome(z(b)))$. Make sure cache is full.
+\end{itemize}
+Here are some {\color{red}non}-morphisms.
+\begin{itemize}
+\item $\textcolor{red}{f_4}(b, \chi) = \bcase \chi \bof \rsome\ \_ \mapsto b \celse \rnone \mapsto k(b)$. Leaks cache state.
+\item $\textcolor{red}{f_5}(b, \chi) = (k(b), \chi)$. Doesn't update cache.
 \end{itemize}
 \end{document}
