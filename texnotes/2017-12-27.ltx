@@ -307,6 +307,31 @@ We set
 \item $e(b, \chi) = (b, \rnone)$
 \end{itemize}
 
+\vfil\eject
+\subsection{Direct Evidence of Compositions Existing}
 
+All along I haven't proved that compositions of morphisms exist for
+SCTs because it arose out of a more simple diagrammatic sort of
+reasoning for CTs, assuming that $f, f', f''$ were given as a tuple.
+But I should convince myself of it directly for SCTs. It's not hard: we're given
 
+\[ e_2 f e_1 = e_2 f r_1 \qquad r_2 f r_1 = f r_1 \]
+\[ e_3 g e_2 = e_3 g r_2 \qquad r_3 g r_2 = g r_2 \]
+and we want to show
+
+\[ e_3 gf e_1 = e_3 gf r_1 \qquad r_3 gf r_1 = gf r_1 \]
+
+and we do this by
+
+\[ e_3 gf e_1 = e_3 gf r_1 e_1 \]
+\[ = e_3 g r_2 f r_1 e_1 \]
+\[ = e_3 g e_2 f r_1 e_1 \]
+\[ = e_3 g e_2 f e_1 \]
+\[ = e_3 g e_2 f r_1 \]
+\[ = e_3 g r_2 f r_1 \]
+\[ = e_3 g f r_1 \]
+and
+\[ r_3 gf r_1 = r_3 g r_2 f r_1 \]
+\[ = g r_2 f r_1 \]
+\[ = g  f r_1 \]
 \end{document}
