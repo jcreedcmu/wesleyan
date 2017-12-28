@@ -158,17 +158,18 @@ Here are some {\color{red}non}-morphisms.
 A {\em simple cache type} is a type $X$ with two idempotent maps
 $r : X \to X$ `rectify the cache' and $e : X \to X$ `erase the cache', such that
 $r e = e r = e$.
-A morphism from $X \to X'$ being a function $f : X \to X$ such that
+A morphism from $X_1 \to X_2$ being a function $f : X_1 \to X_2$ such that
 \[
 \begin{tikzcd}
-  X\ar[r, "e"] \ar[d, "f"']& X \ar[d, "f"]\\
-  X'\ar[r, "e'"'] & X'\\
+  X_1\ar[rr, "e_1"] \ar[d, "f"']&& X_1 \ar[d, "f"]\\
+  X_2\ar[dr, "e_2"'] && X_2\ar[dl, "e_2"]\\
+& X_2
 \end{tikzcd}
 \qquad
 \begin{tikzcd}
-&X\ar[dr, "r"]\ar[dl, "r"']\\
-  X \ar[d, "f"']&& X \ar[d, "f"]\\
-  X'\ar[rr, "r'"'] && X'\\
+&X_1\ar[dr, "r_1"]\ar[dl, "r_1"']\\
+  X_1 \ar[d, "f"']&& X_1 \ar[d, "f"]\\
+  X_2\ar[rr, "r_2"'] && X_2\\
 \end{tikzcd}
 \]
 
@@ -197,6 +198,83 @@ are satisfied. For sure $r$ and $e$ are idempotent. Also $r$ is absorbed on eith
 side of an $e$, because $pg = \rid$.
 
 Can we see that these constitute an equivalence? Let's try to see that the
-SCT $\to$ CT direction is full and faithful. Let two SCTs $(X, r, e)$ and $(X', r', e')$
-be given.
+CT $\to$ SCT direction is full and faithful. Let two CTs
+$(C_1, G_1, B_1, p_1, g_1, \pi_1, \iota_1)$ and $(C_2, G_2, B_2, p_2, g_2, \pi_2, \iota_2)$
+be given. Suppose we have a CT morphism $f : C_1 \to C_2$. Is this still an SCT
+morphism when we set $X_1 = C_1$ and $X_2 = C_2$ and so on? We must check
+
+\[
+\begin{tikzcd}
+& X_1\ar[dl, "r_1"']\ar[dr, "e_1"]\\
+  X_1 \ar[d, "f"']&& X_1 \ar[d, "f"]\\
+  X_2\ar[dr, "e_2"'] && X_2\ar[dl, "e_2"]\\
+& X_2
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+&X_1\ar[dr, "r_1"]\ar[dl, "r_1"']\\
+  X_1 \ar[d, "f"']&& X_1 \ar[d, "f"]\\
+  X_2\ar[rr, "r_2"'] && X_2\\
+\end{tikzcd}
+\]
+so this expands to
+\[
+\begin{tikzcd}
+  C_1\ar[r, "p_1"] &G_1\ar[ddd, "g_1"]\ar[r, "\pi_1"] &B_1\ar[r, "\iota_1"] &G_1\ar[r, "g_1"] &C_1\ar[d, "f"]\\
+&&&& C_2\ar[d, "p_2"]\\
+&&&& G_2\ar[d, "\pi_2"]\\
+&C_1\ar[r, "f"]&C_2\ar[r, "p_2"]&G_2 \ar[r, "\pi_2"]& B_2\ar[d, "\iota_2"]\\
+&&&& G_2\ar[d, "g_2"]\\
+&&&& C_2\\
+\end{tikzcd}
+\]
+and
+\[
+\begin{tikzcd}
+C_1\ar[dd, "f"']\ar[from=r, "g_1"']&G_1 \ar[dr, "g_1"'] \ar[from=r, "p_1"']&C_1\ar[r, "p_1"]&G_1\ar[r, "g_1"]&C_1\ar[dd, "f"]\\
+&&C_1\ar[drr, "f"']\\
+C_2 \ar[rr, "p_2"']&&G_2\ar[rr, "g_2"']&& C_2
+\end{tikzcd}
+\]
+Now we want to show SCT morphism implies CT morphism.
+We have
+\[
+\begin{tikzcd}
+  C_1\ar[d, "p_1"']\ar[r, "p_1"] &G_1\ar[r, "\pi_1"] &B_1\ar[r, "\iota_1"] &G_1\ar[r, "g_1"] &C_1\ar[d, "f"]\\
+G_1\ar[dr, "g_1"']&&&& C_2\ar[d, "p_2"]\\
+&C_1\ar[dr, "f"']&&& G_2\ar[d, "\pi_2"]\\
+&&C_2\ar[d, "p_2"']&& B_2\ar[d, "\iota_2"]\\
+&&G_2\ar[d, "\pi_2"']&& G_2\ar[d, "g_2"]\\
+&&B_2\ar[r, "\iota_2"']&G_2\ar[r, "g_2"']& C_2\\
+\end{tikzcd}
+\]
+and because we have $pg = \rid$ and $\pi \iota = \rid$ we can reduce this to
+\[
+\begin{tikzcd}
+   G_1\ar[dd, "g_1"']\ar[r, "\pi_1"] &B_1\ar[r, "\iota_1"] &G_1\ar[r, "g_1"] &C_1\ar[d, "f"]\\
+&&& C_2\ar[d, "p_2"]\\
+C_1\ar[dr, "f"']&&& G_2\ar[d, "\pi_2"]\\
+&C_2\ar[d, "p_2"']&& B_2\\
+&G_2\ar[rru, "\pi_2"']&& \\
+\end{tikzcd}
+\]
+as required. And similarly staring with
+\[
+\begin{tikzcd}
+C_1\ar[dd, "f"']\ar[from=r, "g_1"']&G_1  \ar[from=r, "p_1"']&C_1\ar[r, "p_1"]&G_1\ar[r, "g_1"]&C_1\ar[dd, "f"]\\
+&&\\
+C_2 \ar[rr, "p_2"']&&G_2\ar[rr, "g_2"']&& C_2
+\end{tikzcd}
+\]
+we can feed it $g_1$ on the input side and get
+\[
+\begin{tikzcd}
+C_1\ar[dd, "f"']\ar[from=rr, "g_1"']&  &G_1\ar[rr, "g_1"]&&C_1\ar[dd, "f"]\\
+&&\\
+C_2 \ar[rr, "p_2"']&&G_2\ar[rr, "g_2"']&& C_2
+\end{tikzcd}
+\]
+as required.
+
+Now we just need to show essential surjectivity.
 \end{document}
