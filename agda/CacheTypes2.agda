@@ -27,6 +27,14 @@ postulate
   z : B → D
   k : B → B
   decide : (b1 b2 : B) → (b1 == b2) ⊔ ⊤
+  -- there exists some point b0 in B such that it's observably
+  -- different (under observation z) after being hit with k.
+  b0 : B
+  b0diffz : ¬ (z b0 == z (k b0))
+
+-- ... of course, this means in particular that k must move it.
+b0moves : ¬ (b0 == k b0)
+b0moves q = b0diffz (ap z q)
 
 decCase : {b1 b2 : B} {A : Set} → (b1 == b2) ⊔ ⊤ → (b1 == b2 → A) → A → A
 decCase (inl x) f g = f x
@@ -100,3 +108,23 @@ valid3 = lem , (λ _ → idp) where
   lem : (c : C) → (e ∘ f3 ∘ r) c == (e ∘ f3 ∘ e) c
   lem (b , some _) = idp
   lem (b , none) = idp
+
+f4 : C → C
+f4 (b , none) = (k b , none)
+f4 (b , some _) = (b , none)
+
+f5 : C → C
+f5 (b , χ) = k b , χ
+
+inlEq : {A B : Set} {x y : A} → _==_ {A = A ⊔ B} (inl x) (inl y) → x == y
+inlEq {x = x} {.x} idp = idp
+
+notValid4 : ¬ (valid Simple Simple f4)
+notValid4 (v1 , v2) = b0moves (ap fst lem) where
+  lem : b0 , inr unit == k b0 , inr unit
+  lem = v1 (b0 , some (z b0))
+
+notValid5 : ¬ (valid Simple Simple f5)
+notValid5 (v1 , v2) = b0diffz (! (inlEq (ap snd lem))) where
+  lem : k b0 , inl (z (k b0)) == k b0 , inl (z b0)
+  lem = v2 (b0 , some (z b0))

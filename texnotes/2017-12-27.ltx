@@ -151,7 +151,7 @@ Let $k : B \to B$ be given. Here are some morphisms from this cache type to itse
 \end{itemize}
 \subsection{Example \textcolor{red}{Non}-Morphisms}
 \begin{itemize}
-\item $\textcolor{red}{f_4}(b, \chi) = \bcase \chi \bof \rsome\ \_ \mapsto b \celse \rnone \mapsto k(b)$. Leaks cache state.
+\item $\textcolor{red}{f_4}(b, \chi) = (\bcase \chi \bof \rsome\ \_ \mapsto b \celse \rnone \mapsto k(b), \rnone)$. Leaks cache state.
 \item $\textcolor{red}{f_5}(b, \chi) = (k(b), \chi)$. Doesn't update cache.
 \end{itemize}
 
