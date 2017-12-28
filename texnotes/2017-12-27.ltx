@@ -152,4 +152,51 @@ Here are some {\color{red}non}-morphisms.
 \item $\textcolor{red}{f_4}(b, \chi) = \bcase \chi \bof \rsome\ \_ \mapsto b \celse \rnone \mapsto k(b)$. Leaks cache state.
 \item $\textcolor{red}{f_5}(b, \chi) = (k(b), \chi)$. Doesn't update cache.
 \end{itemize}
+
+\subsection{Another Maybe Equivalent Formulation}
+
+A {\em simple cache type} is a type $X$ with two idempotent maps
+$r : X \to X$ `rectify the cache' and $e : X \to X$ `erase the cache', such that
+$r e = e r = e$.
+A morphism from $X \to X'$ being a function $f : X \to X$ such that
+\[
+\begin{tikzcd}
+  X\ar[r, "e"] \ar[d, "f"']& X \ar[d, "f"]\\
+  X'\ar[r, "e'"'] & X'\\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+&X\ar[dr, "r"]\ar[dl, "r"']\\
+  X \ar[d, "f"']&& X \ar[d, "f"]\\
+  X'\ar[rr, "r'"'] && X'\\
+\end{tikzcd}
+\]
+
+To construct a cache type from a simple cache type $(X, e, r)$ set
+$C = X$ and $g : G \to C$ to the equalizer of $\rid_X$ and $r$ and $b : B \to C$ to the equalizer
+of $\rid_X$ and $e$. The morphisms come from the equalizer UMP:
+We $p : C \to G$ as the unique morphism such that $g p = r$.
+We get $\bar b : C \to B$ as the unique morphism such that $b \bar b = e$.
+Now we define $\pi = \bar b g$ and $\iota = p b$.
+
+We know $r g = g$, so $gpg = g$, which forces $pg = \rid$ by equalizer uniqueness.
+We can diagram chase
+\[
+\begin{tikzcd}
+B\ar[d, "b"']\ar[rr, "b"]&& C\\
+C \ar[urr, "e"] \ar[d, "p"'] \ar[dr, "r"]\\
+G \ar[r, "g"'] & C \ar[uur, "e"] \ar[r, "\bar b"']& B \ar[uu, "b"']
+\end{tikzcd}
+\]
+And then conclude by equalizer uniqueness that  $\pi \iota = \bar b g p b = \rid$.
+
+
+To construct a simple cache type from a cache type, set $X = C$ and
+$r = gp$ and $e = g\iota \pi p$. We can check that the appropriate equations
+are satisfied. For sure $r$ and $e$ are idempotent. Also $r$ is absorbed on either
+side of an $e$, because $pg = \rid$.
+
+Can we see that these constitute an equivalence? Let's try to see that the
+SCT $\to$ CT direction is full and faithful. Let two SCTs $(X, r, e)$ and $(X', r', e')$
+be given.
 \end{document}
