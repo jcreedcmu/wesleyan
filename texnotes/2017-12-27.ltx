@@ -153,56 +153,13 @@ Here are some {\color{red}non}-morphisms.
 \item $\textcolor{red}{f_5}(b, \chi) = (k(b), \chi)$. Doesn't update cache.
 \end{itemize}
 
+\vfil\eject
 \subsection{Another Maybe Equivalent Formulation}
 
 A {\em simple cache type} is a type $X$ with two idempotent maps
 $r : X \to X$ `rectify the cache' and $e : X \to X$ `erase the cache', such that
 $r e = e r = e$.
-A morphism from $X_1 \to X_2$ being a function $f : X_1 \to X_2$ such that
-\[
-\begin{tikzcd}
-  X_1\ar[rr, "e_1"] \ar[d, "f"']&& X_1 \ar[d, "f"]\\
-  X_2\ar[dr, "e_2"'] && X_2\ar[dl, "e_2"]\\
-& X_2
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-&X_1\ar[dr, "r_1"]\ar[dl, "r_1"']\\
-  X_1 \ar[d, "f"']&& X_1 \ar[d, "f"]\\
-  X_2\ar[rr, "r_2"'] && X_2\\
-\end{tikzcd}
-\]
-
-To construct a cache type from a simple cache type $(X, e, r)$ set
-$C = X$ and $g : G \to C$ to the equalizer of $\rid_X$ and $r$ and $b : B \to C$ to the equalizer
-of $\rid_X$ and $e$. The morphisms come from the equalizer UMP:
-We $p : C \to G$ as the unique morphism such that $g p = r$.
-We get $\bar b : C \to B$ as the unique morphism such that $b \bar b = e$.
-Now we define $\pi = \bar b g$ and $\iota = p b$.
-
-We know $r g = g$, so $gpg = g$, which forces $pg = \rid$ by equalizer uniqueness.
-We can diagram chase
-\[
-\begin{tikzcd}
-B\ar[d, "b"']\ar[rr, "b"]&& C\\
-C \ar[urr, "e"] \ar[d, "p"'] \ar[dr, "r"]\\
-G \ar[r, "g"'] & C \ar[uur, "e"] \ar[r, "\bar b"']& B \ar[uu, "b"']
-\end{tikzcd}
-\]
-And then conclude by equalizer uniqueness that  $\pi \iota = \bar b g p b = \rid$.
-
-
-To construct a simple cache type from a cache type, set $X = C$ and
-$r = gp$ and $e = g\iota \pi p$. We can check that the appropriate equations
-are satisfied. For sure $r$ and $e$ are idempotent. Also $r$ is absorbed on either
-side of an $e$, because $pg = \rid$.
-
-Can we see that these constitute an equivalence? Let's try to see that the
-CT $\to$ SCT direction is full and faithful. Let two CTs
-$(C_1, G_1, B_1, p_1, g_1, \pi_1, \iota_1)$ and $(C_2, G_2, B_2, p_2, g_2, \pi_2, \iota_2)$
-be given. Suppose we have a CT morphism $f : C_1 \to C_2$. Is this still an SCT
-morphism when we set $X_1 = C_1$ and $X_2 = C_2$ and so on? We must check
-
+A morphism $(X_1, r_1, e_1) \to (X_2, r_2, e_2)$ is a function $f : X_1 \to X_2$ such that
 \[
 \begin{tikzcd}
 & X_1\ar[dl, "r_1"']\ar[dr, "e_1"]\\
@@ -217,7 +174,21 @@ morphism when we set $X_1 = C_1$ and $X_2 = C_2$ and so on? We must check
   X_2\ar[rr, "r_2"'] && X_2\\
 \end{tikzcd}
 \]
-so this expands to
+
+To construct a simple cache type from a cache type, set $X = C$ and
+$r = gp$ and $e = g\iota \pi p$. We can check that the appropriate equations
+are satisfied. For sure $r$ and $e$ are idempotent. Also $r$ is absorbed on either
+side of an $e$, because $pg = \rid$.
+
+We want to show this is an equivalence. Let's try to see that this functor
+is full and faithful. Conveniently, the raw data of a morphism is unchanged between a CT and an SCT,
+ just the conditions on it. So we must check that the CT condition is satisfied if and only
+if the SCT condition is.  Let two CTs
+$(C_1, G_1, B_1, p_1, g_1, \pi_1, \iota_1)$ and $(C_2, G_2, B_2, p_2, g_2, \pi_2, \iota_2)$
+be given. Suppose we have a CT morphism $f : C_1 \to C_2$. Is this still an SCT
+morphism when we set $X_1 = C_1$ and $X_2 = C_2$ and so on? We must check
+that the above diagrams are satisfied, which
+expand to
 \[
 \begin{tikzcd}
   C_1\ar[r, "p_1"] &G_1\ar[ddd, "g_1"]\ar[r, "\pi_1"] &B_1\ar[r, "\iota_1"] &G_1\ar[r, "g_1"] &C_1\ar[d, "f"]\\
@@ -258,7 +229,8 @@ C_1\ar[dr, "f"']&&& G_2\ar[d, "\pi_2"]\\
 &G_2\ar[rru, "\pi_2"']&& \\
 \end{tikzcd}
 \]
-as required. And similarly staring with
+as required, by plugging in $g_1$ on the input side, and applying $\pi_2 p_2$ to the output.
+And similarly staring with
 \[
 \begin{tikzcd}
 C_1\ar[dd, "f"']\ar[from=r, "g_1"']&G_1  \ar[from=r, "p_1"']&C_1\ar[r, "p_1"]&G_1\ar[r, "g_1"]&C_1\ar[dd, "f"]\\
@@ -276,5 +248,51 @@ C_2 \ar[rr, "p_2"']&&G_2\ar[rr, "g_2"']&& C_2
 \]
 as required.
 
-Now we just need to show essential surjectivity.
+Now we just need to show essential surjectivity: for every SCT, there should be a CT
+such that our above transformation yields an SCT isomorphic to it. We can construct such a CT
+explicitly:
+
+To construct a CT from an SCT $(X, r, e)$, set
+$C = X$ and $g : G \to C$ to the equalizer of $\rid_X$ and $r$ and $b : B \to C$ to the equalizer
+of $\rid_X$ and $e$. The morphisms come from the equalizer UMP:
+We get $p : C \to G$ as the unique morphism such that $g p = r$
+and $\bar b : C \to B$ as the unique morphism such that $b \bar b = e$.
+
+\[
+\begin{tikzcd}
+C \ar[dr, "r"]\ar[d, dotted, "p"'] \\
+  G\ar[r, tail, "g"']& C \ar[r, shift left, "r"] \ar[r, shift right, "\rid"' ]&C
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+C \ar[dr, "e"]\ar[d, dotted, "\bar b"'] \\
+  B\ar[r, tail, "b"']& C \ar[r, shift left, "e"] \ar[r, shift right, "\rid"' ]&C
+\end{tikzcd}
+\]
+Now we define $\pi = \bar b g$ and $\iota = p b$.
+
+We know $r g = g$, so $gpg = g$, which forces $pg = \rid$ by equalizer uniqueness.
+\[
+\begin{tikzcd}
+C \ar[dr, "r"]\ar[d, "p"'] \ar[from=r, "g"']& C \ar[d, "g"]\\
+  G\ar[r, tail, "g"']& C \ar[r, shift left, "r"] \ar[r, shift right, "\rid"' ]&C
+\end{tikzcd}
+\]
+We can similarly diagram-chase
+\[
+\begin{tikzcd}
+B\ar[d, "b"']\ar[rr, "b"]&& C \ar[r, shift left, "e"] \ar[r, shift right, "\rid"' ]&C\\
+C \ar[urr, "e"] \ar[d, "p"'] \ar[dr, "r"]\\
+G \ar[r, "g"'] & C \ar[uur, "e"] \ar[r, "\bar b"']& B \ar[uu, "b"']
+\end{tikzcd}
+\]
+and conclude by equalizer uniqueness that  $\pi \iota = \bar b g p b = \rid$.
+
+Now let an SCT $(X, r, e)$ be given. We set $C, G, B, p, g, \pi, \iota$ according to the above.
+Subsequently we set $\hat r = g p$ and $\hat e = g \iota \pi p$.
+Consequently,
+\[\hat r = gp = r\qquad \hat e = g \iota \pi p = g pb \bar b g p = r e r = e\]
+(using the heretofore unused fact that $re = e$) so the
+round trip gives us exactly the same SCT that we started with.
+
 \end{document}
