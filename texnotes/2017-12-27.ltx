@@ -119,7 +119,8 @@ $f'' = f'' \pi_1 \iota_1 = \pi_2 f' \iota_1 $.
 
 So in the definition of morphism, we might as well ask for an $f : C_1 \to C_2$ such that
 $g_2 p_2 f g_1 = f g_1$ and $\pi_2 p_2 f g_1 = \pi_2 p_2 f g_1 \iota_1 \pi_1$.
-\subsection{Example}
+
+\subsection{Example Type}
 Let $z : B \to D$ be given. This function is a computation we use to
 obtain a {\em Derived} value of type $D$ from our
  {\em Base} type $B$, while keeping the value of the {\em Cache}
@@ -140,6 +141,7 @@ without storing the value of the cache.
 \item $p(b, d) = \bcase d \bof \rsome\ \_ \mapsto \rtrue \celse  \rnone \mapsto \rfalse$.
 \end{itemize}
 
+\subsection{Example Functions}
 Let $k : B \to B$ be given. Here are some morphisms from this cache type to itself.
 
 \begin{itemize}
@@ -147,14 +149,13 @@ Let $k : B \to B$ be given. Here are some morphisms from this cache type to itse
 \item $f_2(b, \chi) = (k(b), \bif b = k(b) \bthen \chi \belse \rnone)$. Compute a new value and clear the cache if the value has changed.
 \item $f_3(b, \chi) = (b, \rsome(z(b)))$. Make sure cache is full.
 \end{itemize}
-Here are some {\color{red}non}-morphisms.
+\subsection{Example \textcolor{red}{Non}-Morphisms}
 \begin{itemize}
 \item $\textcolor{red}{f_4}(b, \chi) = \bcase \chi \bof \rsome\ \_ \mapsto b \celse \rnone \mapsto k(b)$. Leaks cache state.
 \item $\textcolor{red}{f_5}(b, \chi) = (k(b), \chi)$. Doesn't update cache.
 \end{itemize}
 
-\vfil\eject
-\subsection{Another Maybe Equivalent Formulation}
+\section{Another Equivalent Formulation}
 
 A {\em simple cache type} is a type $X$ with two idempotent maps
 $r : X \to X$ `rectify the cache' and $e : X \to X$ `erase the cache', such that
@@ -294,5 +295,18 @@ Consequently,
 \[\hat r = gp = r\qquad \hat e = g \iota \pi p = g pb \bar b g p = r e r = e\]
 (using the heretofore unused fact that $re = e$) so the
 round trip gives us exactly the same SCT that we started with.
+
+\subsection{Example Type}
+Let $z : B \to D$ be given as before.
+
+We set
+
+\begin{itemize}
+\item $X = B \x (D + 1)$.
+\item $r(b, \chi) = (b, \bcase \chi \bof \rsome\ \_ \mapsto \rsome(z(b)) \celse \rnone\mapsto \rnone)$
+\item $e(b, \chi) = (b, \rnone)$
+\end{itemize}
+
+
 
 \end{document}
