@@ -13,6 +13,8 @@
 \tcbuselibrary{breakable}
 
 
+\def\fc{\mathfrak{C}}
+\def\ff{\mathfrak{F}}
 \def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
 
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
@@ -268,7 +270,71 @@ $ \chi_{ (y : A) \to B }(M) $&$=$&$ \{ \omega = \lambda   \zeta . (M.\omega)\ (\
 \end{tabular}
 \end{callout2}
 
+\subsection{Naturality Directly?}
 
+I'd like to be able to say more simply something like
+
+$$[c/i] ((y : A) \to B) = (g : [c])  (y : [\bar g/i] A) \to [\bar g /i]B$$
+and let the $\mu$ part fall magically out somehow. I surmise this would require
+something special about $\Pi$ types over morphisms --- that what I'm really asking
+for when I say $(g : [c])$ bakes in the naturality. Ok, so when do I have
+$$\Gamma \prov \lambda g . M : (g : [c]) \to A$$?
+I must at least have
+$$\Gamma, g : [c] \prov M : A$$
+but also I expect
+$$\Gamma, g : [c], h : [\bar g] \prov [hg / g]M \o ? = ? \o M$$
+Nope, that doesn't make sense; I need $A$ to actually be a function type
+to state this kind of naturality.
+
+Is it possible to imagine the $\mu$ part falls out as a general theorem?
+Like --- can I just carefully define $\xi_A$ in such a way that it's true,
+without mudding the definition of $\theta((y : A) \to B)$ too much?
+
+\subsection{Perhaps all these quantifiers exist already?}
+Something feels very wrong about the fact that substituting for different categorical variables
+in different orders leads to different answers. Seems like a flagrant violation of the kind of
+substitution principle I expect to hold. Can this be repaired, maybe, by redefining
+what it means to be a valid $\Pi$ type in the first place?
+
+
+$$
+\erule
+{\bar \ff ; \Gamma, y : A \prov  B : \rtype}
+{\fc;\Gamma \prov (\ff : [\fc])(y : A ) \to B : \rtype}
+$$
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Categorical Contexts&$\fc$&$\cdot \celse \fc, c : \ii_0$\\
+  Morphism Contexts&$\ff$&$\cdot \celse \ff, f : \ii_1$\\
+\end{tabular}
+\]
+In this case perhaps substitution of objects for categorical context variables
+is just straightforward syntactic substitution?
+
+Hm, my head is spinning slightly from the binding conventions going on. I'm tempted
+to instead say something like
+$$
+\erule
+{\fc, \fc', \ff : [\fc \to \fc'] ; \Gamma, y : [\fc'/\fc]A \prov  [\fc'/\fc]B : \rtype}
+{\fc;\Gamma \prov (\fc')(\ff : [\fc \to \fc'])(y : A ) \to B : \rtype}
+$$
+
+Bah, this is very hard to think about clearly. Surely it should make sense to
+substitute a variable for a variable? Should even the identity substitution lead to
+extra $\Pi$s? Surely not, I'd think.
+
+The point is that, somehow, even when I substitute a {\em concrete}
+object for a categorical variable that is free when I defined a $\Pi$
+type, that that substitution doesn't clobber the universal
+quantification over future worlds; it just changes the base of it.
+Just as when I say
+$$x : A \prov \lambda y . M : (y : B) \to C$$
+and I pick a concrete $k : A$ and substitute, I get
+$$ \prov \lambda y . [k/x]M : (y : [k/x]B) \to [k/x]C$$
+This is, quite naturally, a `special case' of $\lambda y . M$ obtained by substitution;
+it's no different when I take a function that works for all future worlds, and pick
+a future world $\omega$, and observe that it works in all future worlds of $\omega$,
+because the accessibility relation ought to be transitive.
 \end{document}
 
 % garbage
