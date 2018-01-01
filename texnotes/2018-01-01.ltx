@@ -335,6 +335,23 @@ This is, quite naturally, a `special case' of $\lambda y . M$ obtained by substi
 it's no different when I take a function that works for all future worlds, and pick
 a future world $\omega$, and observe that it works in all future worlds of $\omega$,
 because the accessibility relation ought to be transitive.
+
+\subsection{Back to the original syntax maybe? With morphisms?}
+
+$$
+\erule{\ff \prov c : \ii \qquad a : \ii \to \rtype \in \Sigma }{\ff ; \Gamma \prov a(c) : \rtype}
+\qquad
+\erule{f : \ii_1 \in \ff  }{\ff \prov\bar f : \ii_0}
+$$
+$$
+\erule
+{ \ff' ; \Gamma, y : A \prov  B : \rtype}
+{\ff;\Gamma \prov (\ff' : [\bar \ff])(y : A ) \to B : \rtype}
+$$
+Aw, heck, this doesn't work at all. If I substitute something in the middle of
+$\ff$, I won't have a contiguous set of binders matching up with the remainder
+of the substituted left and right halves of $\ff$ nicely. Hmm.
+
 \end{document}
 
 % garbage
