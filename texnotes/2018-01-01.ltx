@@ -21,14 +21,15 @@
 \definecolor{orange}{rgb}{0.95,0.90,0.80}
 \definecolor{lred}{rgb}{0.95,0.8,0.8}
 \definecolor{lgray}{gray}{0.7}
-\newtcolorbox{calldefn}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
-\newtcolorbox{callout}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
-\newtcolorbox{callout2}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
+\def\rpath#1{[#1]}
 \def\rfst{\mathsf{fst}\,}
 \def\rsnd{\mathsf{snd}\,}
 \def\bunfold{\mathbf{unfold}}
@@ -151,7 +152,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\htensor{\mathrel{\hat\otimes}}
 \def\lol{\multimap}
 \def\hlol{\mathrel{\hat\multimap}}
-\def\rpath{\mathsf{Path}}
 \def\wtf{{\color{red}???}}
 \begin{document}
 
@@ -188,17 +188,17 @@ $$
 $$
 
 and still have a substitution theorem like
-\begin{callout}
+\begin{thmbox}
 If $\Gamma \prov A : \rtype$ and $\Delta \prov \theta : \Gamma$, then
 $\Delta \prov \theta A : \rtype$.\\
 If $\Gamma \prov M : A$ and $\Delta \prov \theta : \Gamma$, then
 $\Delta \prov \theta M : \theta A$.
-\end{callout}
+\end{thmbox}
 The trick, of course, is to define what substitution does.
 
-\begin{calldefn}
+\begin{declbox}
 $\Delta \prov \zeta : \theta_1 \to \theta_2 : \Gamma$
-\end{calldefn}
+\end{declbox}
 
 
 \[
@@ -212,20 +212,20 @@ $\Delta \prov \zeta : \theta_1 \to \theta_2 : \Gamma$
 {\Delta \prov \zeta [M/x] : \theta_1[M/x] \to \theta_2[\zeta_A (M)/x] : (\Gamma, x : A)}
 \]
 
-\begin{callout}
+\begin{thmbox}
   If \begin{itemize}
 \item[] $\Gamma \prov A : \rtype\qquad \Delta \prov M : \theta_1 A$
 \item[] $\Delta \prov \theta_1, \theta_2 : \Gamma \qquad \Delta \prov \zeta : \theta_1 \to \theta_2 : \Gamma$
 \end{itemize} then
  $\Delta \prov \zeta_A(M) : \theta_2 A$.
-\end{callout}
+\end{thmbox}
 
 \subsection{Brackets From a Substitution}
 I can be {\em less} explicit about the construction of substitution morphisms $\zeta$,
 and define merely
-\begin{calldefn}
+\begin{declbox}
 $\Delta \prov \zeta : [\theta]$
-\end{calldefn}
+\end{declbox}
 which I pronounce as $\zeta$ is a substitution morphism {\em starting from} (i.e.
 whose domain is) $\theta$. Its rules are nice and simple:
 \[
@@ -239,14 +239,14 @@ whose domain is) $\theta$. Its rules are nice and simple:
 \]
 Subsequently I can simply {\em compute} what the codomain of a substitution morphism is,
 call it $\bar \zeta$, defined by
-\begin{callout2}
+\begin{defnbox}
 \begin{tabular}{l@{ }c@{ }l}
 $ \overline{\zeta[ f/i]} $&$=$&$\overline \zeta [\cod f / i]$\\
 $ \overline{\zeta[ M/x]} $&$=$&$\overline \zeta [\zeta_A(M) / x]$
 \end{tabular}
-\end{callout2}
+\end{defnbox}
 Then my theorems are
-\begin{callout}
+\begin{thmbox}
 If $\Delta \prov \theta : \Gamma$ and $\Delta \prov \zeta : [\theta]$,
 then $\Delta \prov \bar \zeta : \Gamma$.\\
   If \begin{itemize}
@@ -254,9 +254,9 @@ then $\Delta \prov \bar \zeta : \Gamma$.\\
 \item[] $\Delta \prov \theta : \Gamma \qquad \Delta \prov \zeta : [\theta]$
 \end{itemize} then
  $\Delta \prov \zeta_A(M) : \bar \zeta A$.
-\end{callout}
+\end{thmbox}
 
-\begin{callout2}
+\begin{defnbox}
 \begin{tabular}{l@{ }c@{ }l}
 $ \theta (( y : A) \to B ) $&$=$&$\{  \omega: (\zeta : [\theta])  (y : \bar \zeta A) \to  \bar\zeta  B,$\\
 &&$\ \ \mu :  (\zeta : [\theta])  (\xi : [\bar \zeta])  $\\
@@ -268,7 +268,7 @@ $ \chi_{ (y : A) \to B }(M) $&$=$&$ \{ \omega = \lambda   \zeta . (M.\omega)\ (\
 %% $ \sem{M N}_c  $&$=$&$\{ \omega = \lambda  g y . \ssem M^\Gamma_g $\\
 %% &&$\ \ \mu = \lambda  g h  . \mathsf{idp}  \}   $
 \end{tabular}
-\end{callout2}
+\end{defnbox}
 
 \subsection{Naturality Directly?}
 
@@ -352,6 +352,151 @@ Aw, heck, this doesn't work at all. If I substitute something in the middle of
 $\ff$, I won't have a contiguous set of binders matching up with the remainder
 of the substituted left and right halves of $\ff$ nicely. Hmm.
 
+\subsection{Taking Stock of what I Need to Figure Out}
+I feel reasonably confident that
+\begin{enumerate}
+\item I don't really need to think about categorical variables in the middle of the context;
+they might as well all be to the left. I don't have any dependencies of categorical variables
+{\em on} ordinary ones, just the reverse.
+\item I don't need to do any special thinking about multiple categorical variables,
+since their meaning is the same as a single variable of the product category.
+\item Most of the complexity is embodied in just the one-arrow category.
+\end{enumerate}
+
+So, ok, let's just be extremely careful and return to the stuff I was
+doing two weeks ago: just one variable, and a simple category. The
+easiest form of the theorem I'm after is, if you have an expression in
+the language of dependent types --- maybe with some additional stuff,
+such as a base type with a chosen presheaf interpretation, but surely
+it should work at least for the bare language --- then it admits a
+well-typed translation into dependent types that is compatible with
+reduction and so on. Specifically, I expect, in order of decreasing certainty:
+
+\begin{thmbox}
+If $\prov A : \rtype$, then $\prov \sem A_c : \rtype$.\\
+If $\prov A : \rtype$, then $x : \sem A_0 \prov \sem A_\tri(x) : \sem A_1$.\\
+If $\prov M : A$, then $\prov \sem M_c : \sem A_c$.
+\end{thmbox}
+With incomplete definition sketch:
+\begin{defnbox}
+\begin{tabular}{l@{ }c@{ }l}
+ $\sem{\Pi y \cn A . B}_0$&$=$&$(g : (c : \fc) (y : \sem A_c) \to \sem B_c) \x $\\
+&&$\quad ((y : \sem A_0) \to \sem B_\tri (g_0\ y) \equiv g_1(\sem A_\tri (y)))$\\
+ $\sem{\Pi y \cn A . B}_1$&$=$&$\Pi y \cn \sem A_1 . \sem B_1$\\
+ $\sem{\Pi y \cn A . B}_\tri(x)$&$=$&$(\bfst x)_1$\\
+ $\sem{\lambda y  . M}_0$&$=$&$ \pair{\lambda c y . \sem M_c }{\mathsf{idp}}$\\
+ $\sem{\lambda y . M}_1$&$=$&$\lambda y . \sem M_1$\\
+\end{tabular}
+\end{defnbox}
+I previously thought the induction hypothesis with contexts involved was something like
+``If $\Gamma \prov M : A$ then $\sem \Gamma_c \prov \sem M_c : \sem A_c$''. I wonder
+if I want something more general, like saying that there is such thing as a {\em path}
+$\pi$ which has a bunch of objects and morphisms corresponding to a context.
+
+If the interpretation at object $c$ of a simple function type in the
+empty context involves a choice of a morphism from $c$, then the
+interpretation of a base type at object $c$ in a context of $n$ things should allow
+an arbitrary path of $n$ morphisms starting from $c$.
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Paths&$\pi$&$c \celse \pi \to^f c $\\
+\end{tabular}
+\]
+I can then define what it means to be a valid path in a context, and what the codomain
+of a path is.
+\begin{declbox}
+  $\Gamma \prov \pi : \rpath c$\\
+\end{declbox}
+\begin{defnbox}
+  $$
+\erule
+{}
+{\cdot \prov c : \rpath c}
+\qquad
+\erule
+{\Gamma \prov \pi : \rpath c}
+{\Gamma, x : A \prov (\pi \to^f d) : \rpath c}
+$$
+\end{defnbox}
+\begin{declbox}
+  $\bar \pi $
+\end{declbox}
+\begin{defnbox}
+\begin{tabular}{l@{ }c@{ }l}
+ $\bar c$&$=$&$c$\\
+$\overline{ \pi \to_f d}$&$=$&$d$
+\end{tabular}
+\end{defnbox}
+So I expect something like
+\begin{thmbox}
+  If $\Gamma \prov A : \rtype$ and $\Gamma \prov \pi : [c]$ then $\sem \Gamma_\pi \prov \sem A_{\bar \pi} : \rtype$.\\
+  If $\Gamma \prov M : A$ and $\Gamma \prov \pi : [c]$ then $\sem \Gamma_\pi \prov \sem M_{\bar \pi} :\sem A_{\bar \pi}$.
+\end{thmbox}
+How do I interpret contexts at a path, then?
+\begin{declbox}
+$  \sem \Gamma_\pi$
+\end{declbox}
+\begin{defnbox}
+\begin{tabular}{l@{ }c@{ }l}
+ $\sem \cdot_c$&$=$&$\cdot$\\
+$\sem{ \Gamma, x : A}_{\pi \to_f d}$&$=$&$\sem \Gamma_\pi, x : \sem A_{\bar \pi}$
+\end{tabular}
+\end{defnbox}
+Where does the $f$ go, I wonder? Maybe into the variable rule?
+I have $\Gamma, x : A, \Gamma' \prov x : A$, so how do I see
+that
+$$\sem \Gamma_\pi, x : \sem A_{\bar\pi}, \sem{\Gamma'}_{\rho} \prov \sem x_{\bar\rho} : \sem A_{\bar\rho}$$
+For some $\Gamma' \prov \rho : [\pi]$? I think probably $\sem x_{\bar \rho} = \sem A_\rho(x)$.
+Right? I think this follows from a general observation about how weakening works. For sure I have
+$$\sem \Gamma_\pi, x : \sem A_{\bar\pi} \prov  \sem x_{\bar\pi} : \sem A_{\bar\pi}$$
+in the case where I have no weakening to worry about.
+
+\vfil\eject
+\section{Take Eleventy Billion}
+Assume $\Gamma \prov A : \rtype$, $\Gamma \prov M : A$,
+ $\Gamma \prov \pi : [c]$, and $f : [\bar\pi]$.
+\begin{thmbox}
+   $\sem \Gamma_\pi \prov \sem A_{\bar \pi} : \rtype$.\\
+   $\sem \Gamma_\pi \prov \sem M_{\bar \pi} :\sem A_{\bar \pi}$.\\
+  $ \sem \Gamma_\pi, x : \sem A_{\bar \pi} \prov \sem A_f ( x) : \sem A_{\bar f}$.
+\end{thmbox}
+
+\begin{defnbox}
+\begin{tabular}{l@{ }c@{ }l}
+ $\sem{(y :A) \to B}_c$&$=$&$(\omega : {}_{(g : [c])} (y : \sem A_{\bar g}) \to \sem B_{\bar g}) \x $\\
+&&$ ({}_{(g : [c])}(h : [\bar g])(y : \sem A_{\bar g}) \to  $\\
+&&$\sem B_h (\omega_{g}\ y) \equiv \omega_{hg}(\sem A_{h} (y)))$\\
+ $\sem{(y :A) \to B}_f(x)$&$=$&$\langle \lambda g . (x.1)_{g f}, $\\
+&&$\ \lambda g . (x.2)_{g f} \rangle$\\
+$\sem{\lambda y . M}_c$&$=$&$\pair{\lambda gy . \sem M_c}{\mathsf{idp}}$\\
+$\sem{M\  N}_c$&$=$&$(\sem M_c.1)_{\rid_c}(\sem N_c)$\\
+\end{tabular}
+\end{defnbox}
+\begin{thmbox}
+   $\sem \Gamma_\pi \prov \sem A_{\bar \pi} : \rtype$.
+\end{thmbox}
+We have $\Gamma, y : A \prov B : \rtype$. We can define an operation
+$\pi + g$ that takes a path and concatenates on a morphism without
+changing its length. We observe that $\sem \Gamma_\pi = \sem \Gamma_{\pi + g}$.
+So for any $g : [\bar \pi]$
+by induction hypothesis on the path
+$\Gamma, y : A \prov ((\pi + g) \to^{\rid_{\bar g}} \bar g) : \rpath c$ we have
+$\sem \Gamma_\pi, y : \sem A_{\bar g} \prov \sem B_{\bar g} : \rtype$.
+So we know now that ${(g : [\bar \pi])} (y : \sem A_{\bar g}) \to \sem B_{\bar g}) $
+is a meaningful type in $\sem \Gamma_\pi$.
+
+How about the other half of the pair? We can get
+$$\sem \Gamma_\pi, y : \sem A_{\bar g} \prov \sem A_h (y) : \sem A_{\bar h}$$
+out of the $\sem A_f$ theorem on $\pi + g$ and $h$. So $\omega_{hg}$ of that is
+$$\sem \Gamma_\pi, y : \sem A_{\bar g} \prov \omega_{hg}(\sem A_h (y)) : [\sem A_h (y)/y]\sem B_{\bar h}$$
+On the other side, what type does $\omega_g\ y$ have?
+$$\sem \Gamma_\pi, y : \sem A_{\bar g} \prov  : \sem B_{\bar g}$$
+We can get
+$$\sem \Gamma_\pi, y : \sem A_{\bar g}, z : \sem B_{\bar g} \prov \sem B_h (z) : \sem B_{\bar h}$$
+out of the $\sem A_f$ theorem on $\pi + g \to^{\rid_{\bar g}} \bar g$ and $h$. Substituting, we get
+$$\sem \Gamma_\pi, y : \sem A_{\bar g} \prov \sem B_h (\omega_g\ y) : \sem B_{\bar h}$$
+Oh no these seem like slightly different types up to substitution. What's up? Do
+I need to pay attention to the whole path instead of just the endpoint, or something?
 \end{document}
 
 % garbage
