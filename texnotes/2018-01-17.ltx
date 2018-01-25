@@ -1,0 +1,564 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\ridp{\mathsf{idp}}
+\def\fc{\mathfrak{C}}
+\def\ff{\mathfrak{F}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Reasoning about Syntactic Presheaf Model}
+
+I want to syntactically relate the model of dependent types in $\rset$ and
+the model of dependent types in $\rset^\C$ for an arbitrary $\C$.
+
+I know that $\sem\Gamma^\rset$ is a set, and $\sem\Gamma^{\rset^\C}$ is a presheaf.
+So I want to define $\sem \Gamma_c$ for each $c\in \C$, and $\sem \Gamma_f$ should
+be a set-function from $\sem \Gamma_c$ to $\sem \Gamma_d$ for each $f : c \to d \in \C$,
+in other words a substitution $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$ as
+I guessed earlier.
+
+Can I derive what the inductive definition of $\sem \Gamma_c, \sem \Gamma_f$ must be?
+The intepretation of a type expression $\Gamma \prov A :\rtype$ --- in any category --- is
+a morphism
+$$\sem A : \sem {\Gamma, x:A} \to \sem \Gamma$$
+and we're basically thereby defining $\sem {\Gamma, x : A}$ as being $\dom( \sem A)$.
+
+\subsection{Types}
+
+A type in $\rset$ is $\sem A : \sem{\Gamma, x : A} \to \sem {\Gamma}$.
+A type in $\rset^\C$ is a natural transformation between the presheaves
+$\sem{\Gamma, x : A}$ and $\sem{\Gamma}$. So for
+each $c \in \C$ we have $\sem A_c : \sem{\Gamma, x : A}_c \to \sem \Gamma_c$,
+and for each $f : c \to d \in \C$ we have $\sem A_f : \sem {\Gamma, x : A}_c \to \sem {\Gamma, x : A}_d$ such that
+\[\begin{tikzcd}
+  \sem {\Gamma, x : A}_c \ar[d, "{\sem A_f}"']\ar[r, "{\sem A_c}"]
+  & \ar[d, "{\sem \Gamma_f}"]\sem \Gamma_c\\
+  \sem {\Gamma, x : A}_d \ar[r, "{\sem A_d}"'] & \sem \Gamma_d
+\end{tikzcd}\]
+So what's really going on is I'm going to revise the typings I have in mind, and
+say instead that we need a single {\em term} $\sem A_f$ to extend
+the substitution $\sem \Gamma_f$. I think it is the case that $\sem {\Gamma, x : A}_c$ is
+going to be equal to $\sem{\Gamma}_c, x : \sem A_c$. So I can stare at the substitution typing rule
+to see what type $\sem A_f$ has to be:
+\[
+\erule
+{\Gamma \prov \theta : \Delta \qquad \Gamma \prov M : \theta A}
+{\Gamma \prov \theta[M/x] : (\Delta, x : A)}
+\]
+specializes to
+\[
+\erule
+{\sem\Gamma_c \prov \sem\Gamma_f : \sem\Gamma_d \qquad \sem\Gamma_c, y : \sem A_c \prov \sem A_f(y) : \sem\Gamma_f \sem A_d}
+{\sem\Gamma_c, y : \sem A_c \prov \sem\Gamma_f[\sem A_f(y)/x] : (\sem\Gamma_d, x : \sem A_d)}
+\]
+This is again pretty close to what I had before.
+
+\section{Stuff}
+So some things I feel confident about so far are
+\begin{defnbox}
+$\sem \cdot_c = \cdot \qquad \sem {\Gamma, x : A}_c = \sem \Gamma_c, x : \sem A_c$\\
+$\sem \cdot_f = \cdot \qquad \sem {\Gamma, x : A}_f = \sem \Gamma_f[\sem A_f(x) / x]$
+\end{defnbox}
+\begin{thmbox}
+If $\prov \Gamma \rctx $ then $\sem \Gamma_c \rctx$.\\
+If $\prov \Gamma \rctx $ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.\\
+If $\Gamma \prov A: \rtype$ then $\sem \Gamma_c \prov \sem A_c$.\\
+If $\Gamma \prov A: \rtype$ then $\sem \Gamma_c, y : \sem A_c \prov \sem A_f(y) : \sem \Gamma_f \sem A_d$.
+\end{thmbox}
+
+Let's talk about explicitly, semantically, what $\Gamma \prov \lambda x . M : \Pi x \cn A . B$
+is in the $\rset$ model. There is a map
+$\sem {\Pi x \cn A . B} : \sem {\Gamma, y : \Pi x \cn A . B} \to \sem \Gamma$.
+The premise of the $\Pi I$ rule gets interpreted as a section of the projection
+\[\sem B : \sem {\Gamma, x : A, z : B} \to \sem {\Gamma, x : A}\]
+What's that? A function from a closed substitution for $\Gamma, x : A$
+to an element of $B$ over that particular element of $\sem {\Gamma, x : A}$.
+What's the element of $\Pi x\cn A . B$ that we kick out? Just a curried version
+of that function, one that takes a closed substitution $\gamma \in \sem \Gamma$
+and kicks out the remaining part of the function from $x : \sem A$ to $\sem B$ over $\gamma$ and $x$.
+
+\section{Page-In 1}
+
+Let $\C$ be some category, and let $\hat \C = \rset^{\C^\op}$.
+Let $X$ be some presheaf in $\hat \C$.
+Let $\int_\C X$ be the category of elements of $X$. That is, its objects
+are pairs $(c,x)$ where $x \in X(c)$, and its morphisms
+$(c, x) \to (d, y)$ are morphisms $f : c \to d \in \C$ such that $X(f)(y) = x$.
+Then we claim that
+\[\hat \C / X \cong \widehat{\textstyle\int_\C X}\]
+
+What's an object of $\hat\C / X$? It's a natural transformation
+$\alpha : Y \to X$ for some $Y \in \hat\C$.  That is, for each object $c \in \C$
+we have a function $\alpha_c : Y(c) \to X(c)$, with naturality looking like
+\[
+\begin{tikzcd}
+  Y(c) \ar[d, "\alpha_c"']\ar[from=r, "{Y(f)}"']&  Y(d)\ar[d, "\alpha_d"]\\
+X(c)\ar[from=r, "{X(f)}"] & X(d)
+\end{tikzcd}
+\]
+ A morphism is like
+\[
+\begin{tikzcd}
+  Y \ar[dr, "\alpha"']\ar[rr]&& Z\ar[dl, "\beta"]\\
+& X
+\end{tikzcd}
+\]
+What's an object of $\widehat {\int_\C X}$? It's a functor from the category of elements
+of $X$ to $\rset$. So for each $c\in C$ and $x \in X(c)$, we have a set $\alpha_c^{-1}(x)$.
+
+\section{Page-In 2 - Wrong}
+How exactly is the LCCC $\Pi$ constructed from cartesian closedness of slice categories?
+
+For an $f : c \to d$, I want a right adjoint to pullback $*_f : \C / d \to \C / c$.
+
+\[
+\begin{tikzcd}
+&  c'\ar[dl, bend right=50, "g"']\pbck\ar[r, "f'"]\ar[d, "*_f(k)"'] & d'\ar[d, "k"] \ar[dr, bend left=50, "\bar g"]\\
+e\ar[r, "h"']&c \ar[r, "f"'] & d & \ar[l, "\Pi_f h"] \pi
+\end{tikzcd}
+\]
+
+The thing to do is observe that the doubly-named morphism $c' \to d$
+(i.e.  either side of the equation
+ $f \o *_f(k) = k \o f'$) is the product  $f \times k$ in the slice
+category over $d$, and $g$ is a morphism from that to $fh$ over $d$. So we have
+a morphism $g : k \x f \to fh$, and the ccc structure
+of the slice over $d$ licenses us to form $\bar g : k \to f \imp fh$,
+and $\Pi_f h$ is precisely this slice-exponential $f \imp fh$.
+
+How do I confirm this is an adjoint? The left adjoint  $F : \C/d \to \C/c$ is pullback along
+$f$. The putative right adjoint $U : \C/c \to \C/d$ is $h \mapsto f \imp f h$.
+So I should have $\eta : \rid_{\C/d} \to UF$ and $\varepsilon : FU \to \rid_{\C/c}$.
+
+Let's think about $\eta$ first. We're given a $k : d' \to d$. We first
+pull it back along $f$ to get $*_f(k)$. Then we compute $f \imp f(*_fk)$. Supposedly there should be an arrow (natural in $k$) of shape $k \to f \imp f(*_fk) $.
+That would be the same as $k \x f \to f(*_f k)$.
+But that's the type of the identity on the pullback! That's easy and
+natural and seems right.
+
+How about $\varepsilon$? We start with some $h : e \to c$. We compute
+$ f \imp f h$. We then pull that back across $f$.
+\[
+\begin{tikzcd}
+e\ar[dr, "h"']& \ar[l]x \ar[r]\ar[d]\pbck&\pi \ar[d, "f \imp fh"]\\
+&c \ar[r, "f"'] & d
+\end{tikzcd}
+\]
+We need an arrow {\em from} this pullback to $h$. This seems tricky. Can I instead
+show that $e$ already {\em is} the pullback somehow? Can I get from $f h$ to $f \imp fh$?
+Hmm I can, by projection, but this seems wasteful somehow.
+
+\[
+\begin{tikzcd}
+z\ar[drr, bend left, "a"]\ar[ddr, bend right, "b"']\\
+&e \ar[r, "\overline{\pi_1}"]\ar[d, "h"']\pbck&\pi \ar[d, "f \imp fh"]\\
+&c \ar[r, "f"'] & d
+\end{tikzcd}
+\]
+Suppose $fb = (f\imp fh) a$. Hmmm. I got nothin'.
+\subsection{Tangent}
+What's the above diagram look like when specialized to something that looks more familiar
+type-theoretically?
+\[
+\begin{tikzcd}
+&  \Delta, x : \theta A\ar[dl, bend right=30, "{\theta[x/x][N/y]}"']\pbck\ar[r, "{\rid_\Delta}"]\ar[d, "{\theta[x/x]}"'] & \Delta \ar[d, "\theta"] \ar[dr, bend left=30, "{\theta[\lambda x . N / z]}"]\\
+\Gamma, x:A, y:B\ar[r, "\rid_{\Gamma,x:A}"']&\Gamma, x:A \ar[r, "\rid_\Gamma"'] & \Gamma & \ar[l, "\rid_\Gamma"] \Gamma, z:\Pi A B
+\end{tikzcd}
+\]
+\[\erule{\Delta, x : \theta A \prov N : \theta B}
+{\Delta \prov \lambda  x . N : \theta (\Pi A B )}\]
+
+\[\rset / X \cong \widehat{ X }\]
+
+\subsection{CCC structure of the slice of the presheaf category}
+
+Suppose $X\in \rset^{\C^\op}$ and I have two objects of the slice, $\alpha : W \to X$
+and $\beta : Z \to X$. I can construe $\alpha, \beta$ as objects
+ $\bar\alpha, \bar\beta : \widehat {\int_\C X}$. For each object of ${\int_\C X}$, i.e.
+each pair $(c, x)$ with $c \in \C$ and $x \in X(c)$, the set I get out is
+\[\bar\alpha(c, x) = \alpha_c^{-1}(x)\]
+For each $f : (c, x) \to (d, y) \in \int_\C X$ I should be able to do a restriction map
+\[\bar\alpha(f) : \bar\alpha(d, y) \to \bar\alpha(c, x)\]
+But what is $f$? It's a map $c \to d$ such that $X(f)(y) = x$. How do I get
+from $\alpha^{-1}_d(y) \to \alpha^{-1}_c(x)$? I think just `hit it with $W(f)$'.
+What I know immediately about $W(f)$ is that it goes $W(d) \to W(c)$.
+I know $\alpha^{-1}_d(y) \subseteq W(d)$. So suppose I have a $w$ that's in $\alpha^{-1}_d(y)$,
+i.e. I know $\alpha_d(w) = y$. I need to show that $\alpha_c(W(f)(w)) = x$. But naturality
+\[
+\begin{tikzcd}
+  W(d) \ar[r, "\alpha_d"]\ar[d, "W(f)"'] & X(d)\ar[d, "X(f)"]\\
+  W(c) \ar[r, "\alpha_c"']& X(c)
+\end{tikzcd}
+\]
+tells me this is the same as demanding $X(f)(\alpha_d(w)) = x$. But $X(f)(\alpha_d(w)) = X(f)(y) = x$ by assumptions, so we're done.
+
+Ok, so what's $\bar\alpha \imp \bar\beta$, as a presheaf?
+Generally, for $P, Q $ presheaves, we yoneda-compute
+\[(P \imp Q)(C) = \hom(yC, P \imp Q) \]
+\[= \hom(yC \x P, Q) = \hom_{\hat \C}(\hom_\C(\dash, C) \x P, Q)\]
+
+So
+$(\bar\alpha \imp \bar\beta)(c, x)$ is the set of natural transformations from
+$\hom_{\int_\C X}(\dash, (c, x)) \x \bar\alpha$ to $\bar\beta$.
+That is, for every $(d, y)$ and every $f : (d, y) \to (c, x)$,
+its job is to (naturally in $(d, y)$) kick out a function $\bar\alpha(d, y) \to \bar\beta(d, y)$.
+
+\section{Page-In 2 - Correct?}
+How exactly is the LCCC $\Pi$ constructed from cartesian closedness of slice categories?
+
+For an $f : c \to d$, I want a right adjoint to pullback $*_f : \C / d \to \C / c$.
+
+\[
+\begin{tikzcd}
+&  c'\ar[dl, bend right=50, "g"']\pbck\ar[r, "f'"]\ar[d, "*_f(k)"'] & d'\ar[d, "k"] \ar[dr, bend left=50, "\bar g"]\\
+e\ar[r, "h"']&c \ar[r, "f"'] & d & \ar[l, "\Pi_f h"] \pi
+\end{tikzcd}
+\]
+
+We start with $\rid_f : f \to f$ and take the adjoint transpose
+$\overline{ \rid_f} : \rid_d \to f \imp f$, and construct $\Pi_f h$ by pullback:
+\[
+\begin{tikzcd}
+\pi \pbck\ar[d, "\Pi_f h"']\ar[r] & \bullet \ar[d, "f \imp h"]\ar[ddr, bend left, "f \imp fh"]\\
+d \ar[r, "{\overline {\rid_f}}"']\ar[drr, equal, bend right]& \bullet \ar[dr, "f \imp f" description]\\
+&&d
+\end{tikzcd}
+\]
+
+($\dash \x f$ and $f \imp \dash$ are functors $\C / d \to \C / d$.
+Note that $h$ is an {\em arrow} from $fh$ to $f$ in $\C/d$.
+So $f \imp h$ is an arrow from $f \imp fh$ to $f\imp f$ in $\C/d$)
+
+So what's $FU$? We pullback $\Pi_f h$ along $f$.
+
+\[
+\begin{tikzcd}
+\bullet\ar[r]\ar[d]\pbck&\pi \pbck\ar[d, "\Pi_f h"']\ar[r] & \bullet \ar[d, "f \imp h"]\ar[ddr, bend left, "f \imp fh"]\\
+c \ar[r, "f"']&d \ar[r, "{\overline {\rid_f}}"']\ar[drr, equal, bend right]& \bullet \ar[dr, "f \imp f" description]\\
+&&&d
+\end{tikzcd}
+\]
+
+
+\section{Back to Brute Force}
+
+\begin{defnbox}
+$\sem \cdot_c = \cdot \qquad \sem {\Gamma, x : A}_c = \sem \Gamma_c, x : \sem A_c$\\
+$\sem \cdot_f = \cdot \qquad \sem {\Gamma, x : A}_f = \sem \Gamma_f[\sem A_f(x) / x]$
+\end{defnbox}
+\begin{thmbox}
+If $\prov \Gamma \rctx $ then $\sem \Gamma_c \rctx$.\\
+If $\prov \Gamma \rctx $ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.\\
+If $\Gamma \prov A: \rtype$ then $\sem \Gamma_c \prov \sem A_c : \rtype$.\\
+If $\Gamma \prov A: \rtype$ then $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d$.
+\end{thmbox}
+have
+\[\Gamma \prov A : \rtype\]
+\[\Gamma, x : A \prov B : \rtype\]
+derive
+\[\sem\Gamma_c, x : \sem \Gamma_g \sem A_d \prov \sem \Gamma_g \sem B_d : \rtype\]
+\[\sem \Gamma_c \prov \sem{(x : A) \to B}_c : \rtype\]
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_c$&$ =$&$ (\omega : (g : c \to d) (y : \sem \Gamma_g \sem A_d)  \to \sem \Gamma_g \sem B_d  ) \ \x $\\
+&&$(g : c \to d)(h : d \to e) (y : \sem \Gamma_g \sem A_d) \to$\\
+&&$ \sem \Gamma_g \sem B_h  (\omega\ g\ y) \equiv \omega\ (hg)\ (\sem \Gamma_g \sem A_h(y)) $
+  \end{tabular}
+\end{defnbox}
+
+There is a bunch of tedious calculation to verify that this is well-typed. Out the end I get
+
+\[\sem {\Gamma}_c, y : \sem \Gamma_g \sem{A}_d  \prov \sem \Gamma_g \sem B_h(\omega\ g\ y) : \sem \Gamma_{hg} [\sem \Gamma_g\sem{A}_h(y)/y] \sem B_e\]
+\[\sem {\Gamma}_c, y : \sem \Gamma_g\sem{A}_d \prov \omega\ (hg)\  (\sem \Gamma_g\sem A_h(y)) : \sem {\Gamma}_{hg} [\sem \Gamma_g\sem A_h(y) / y] \sem B_e\]
+
+If I abbreviate $\sem \Gamma_g \sem A_d$ as just $\sem A_d^{\Gamma;g}$ then I can write
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_c$&$ =$&$ (\omega : (g : c \to d) (y : \sem A^{\Gamma;g}_d)  \to  \sem B^{\Gamma;g}_d  ) \ \x $\\
+&&$(g : c \to d)(h : d \to e) \to$\\
+&&$  \sem B^{\Gamma;g}_h \o (\omega\ g) \equiv (\omega\ hg)\o  \sem A^{\Gamma;g}_h $
+  \end{tabular}
+\end{defnbox}
+A possibly confusing thing about $\sem B^{\Gamma;g}_d$ is that we're actually carrying
+out the translation $\sem B_d$ in the full context that $B$ naturally lives in, namely
+ $\Gamma, y : A$ --- and only {\em then}
+performing the substitution $\sem \Gamma_g$ on the result, which leaves along that variable $y$.
+I think I was confusing myself earlier by conflating these two contexts.
+
+As for the type-morphism translation, and the term translations, I think I can still do
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_f(x)$&$ =$&$ \langle \lambda g . (x.1)\ {gf},$ \\
+&&$\ \lambda g . (x.2)\ {gf}\rangle$\\
+$\sem{\lambda y . M}_c$&$ =$&$ \langle\lambda gy . \sem M_c, \lambda gh.\ridp\rangle$\\
+$\sem{M N}_c$&$ =$&$ (\sem M_c.1)_{\rid_c}\ \sem N_c$
+  \end{tabular}
+\end{defnbox}
+
+\subsection{Type-correctness of type-morphism translation}
+For some $f : b \to c \in \C$. I want to check that
+\[\sem \Gamma_b, x : \sem{(y : A) \to B}_b\prov \sem{(y : A) \to B}_f(x) : \sem \Gamma_f \sem{(y : A) \to B}_c \]
+so this breaks up into (letting $\Gamma_0 = \sem \Gamma_b, x : \sem{(y : A) \to B}_b$)
+\[\Gamma_0 \prov \lambda g . (x.1)\ gf : \sem \Gamma_f (g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d \]
+\[\Gamma_0 \prov \lambda g . (x.2)\ gf : \sem \Gamma_f (g : c \to d)(h : d \to e)\to\]
+\[ \sem B^{\Gamma;g}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;g}_h\]
+and these simplify to
+\[\Gamma_0 \prov \lambda g . (x.1)\ gf :  (g : c \to d)(y : \sem A^{\Gamma;gf}_d) \to \sem B^{\Gamma;gf}_d \]
+\[\Gamma_0 \prov \lambda g . (x.2)\ gf :  (g : c \to d)(h : d \to e)\to\]
+\[ \sem B^{\Gamma;gf}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;gf}_h\]
+and unpack to
+\[\Gamma_0, g : c \to d \prov  (x.1)\ gf :  (y : \sem A^{\Gamma;gf}_d) \to \sem B^{\Gamma;gf}_d \]
+\[\Gamma_0, g : c \to d \prov (x.2)\ gf :  (h : d \to e)\to\]
+\[ \sem B^{\Gamma;gf}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;gf}_h\]
+and I can read these typings straight off the assumption $x : \sem{(y : A) \to B}_b \in \Gamma_0$.
+
+\subsection{Type-correctness of lambda translation}
+Let's now check that
+\[\erule{
+\Gamma \prov \lambda y . M : (y:A) \to B}
+{\sem \Gamma_c \prov \sem{\lambda y . M}_c : \sem{(y : A) \to B}_c}
+\]
+We must show
+\[\sem \Gamma_c \prov \langle\lambda gy . \sem M_c, \lambda gh.\ridp\rangle : \sem{(y:A) \to B}_c\]
+i.e. both of
+\[\sem \Gamma_c \prov \lambda gy . \sem M_c : (g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d\]
+\[\sem \Gamma_c \prov \lambda gh.\ridp : (g : c \to d)(h : d \to e) \to \]
+\[  \sem B^{\Gamma;g}_h \o (\lambda y . \sem M_c) \equiv (\lambda y . [ hg/g]\sem M_c)\o  \sem A^{\Gamma;g}_h \]
+in other words
+\[\sem \Gamma_c, g : c \to d, y : \sem A^{\Gamma;g}_d \prov \sem M_c : \sem B^{\Gamma;g}_d\]
+\[\sem \Gamma_c, g : c \to d, h : d \to e, y : \sem A^{\Gamma;g}_d \prov  \]
+\[  \sem B^{\Gamma;g}_h  ( \sem M_c) \equiv  [\sem A^{\Gamma;g}_h(y)/y][ hg/g]\sem M_c  \]
+This seems a little wrong already. $\sem M_c$ isn't at the right world, is it?
+
+How about I try to make something just to get the first half of the pair to typecheck.
+Does $ \lambda g y . \sem M_d$ have type
+\[(g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d\]
+?
+Since I have $\Gamma, y : A \prov M : B$ I have
+$\sem \Gamma_d, y : \sem A_d \prov \sem M_d : \sem B_d$. I can substitute across $g$ to get
+$\sem \Gamma_c, y : \sem A_d^{\Gamma;g} \prov \sem M_d^{\Gamma;g} : \sem B_d^{\Gamma;g}$. So
+actually
+\[\sem \Gamma_c \prov \lambda g y . \sem M_d^{\Gamma;g} : (g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d\]
+
+Starting over, in order to check
+\[\erule{
+\Gamma \prov \lambda y . M : (y:A) \to B}
+{\sem \Gamma_c \prov \sem{\lambda y . M}_c : \sem{(y : A) \to B}_c}
+\]
+We must show
+\[\sem \Gamma_c \prov \langle\lambda gy . \sem M^{\Gamma;g}_d, \lambda gh.\ridp\rangle : \sem{(y:A) \to B}_c\]
+i.e. both of
+\[\sem \Gamma_c \prov \lambda gy . \sem M^{\Gamma;g}_d : (g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d\]
+\[\sem \Gamma_c \prov \lambda gh.\ridp : (g : c \to d)(h : d \to e) \to \]
+\[  \sem B^{\Gamma;g}_h \o (\lambda y . \sem M^{\Gamma;g}_d) \equiv (\lambda y . \sem M^{hg}_e)\o  \sem A^{\Gamma;g}_h \]
+I've already convinced myself of the first one, so I've just got to get
+\[\sem \Gamma_c, g : c \to d, h : d \to e, y : \sem A^{\Gamma;g}_d \prov  \]
+\[  \sem B^{\Gamma;g}_h  ( \sem M^{\Gamma;g}_d) \equiv  [\sem A^{\Gamma;g}_h(y)/y]\sem M^{\Gamma;hg}_e  \]
+\begin{tangentbox}
+  Let's reassure ourselves of the types involved here.
+  \[ \sem \Gamma_d, y : \sem A_d \prov \sem M_d : \sem B_d \]
+  \[ \sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem M^{\Gamma;g}_d : \sem B^{\Gamma;g}_d \]
+  If $\Gamma, y : A \prov B: \rtype$ then
+  \[\sem {\Gamma}_d, y : \sem{A}_d, x : \sem B_d \prov \sem B_h(x) : \sem {\Gamma}_h[\sem A_h(y)/y] \sem B_e\]
+  \[\sem {\Gamma}_c, y : \sem{A}^{\Gamma;g}_d, x : \sem B^{\Gamma;g}_d \prov \sem B^{\Gamma;g}_h(x) : \sem {\Gamma}_{hg}[\sem A^{\Gamma;g}_h(y)/y] \sem B_e\]
+  hence
+  \[\sem {\Gamma}_c, y : \sem{A}^{\Gamma;g}_d \prov \sem B^{\Gamma;g}_h(\sem M^{\Gamma;g}_d) : \sem {\Gamma}_{hg}[\sem A^{\Gamma;g}_h(y)/y] \sem B_e\]
+On the other side of the equation,
+  \[ \sem \Gamma_c, y : \sem A^{\Gamma;hg}_e \prov \sem M^{\Gamma;hg}_e : \sem B^{\Gamma;hg}_e \]
+  and I can derive
+  \[ \sem \Gamma_d, y : \sem A_d \prov \sem A_h(y) : \sem A^{\Gamma;h}_e \]
+  \[ \sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem A_h^{\Gamma;g}(y) : \sem A^{\Gamma;hg}_e \]
+  hence by substitution
+  \[ \sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov  [\sem A^{\Gamma;g}_h(y)/y] \sem M^{\Gamma;hg}_e : [\sem A^{\Gamma;g}_h(y)/y]\sem B^{\Gamma;hg}_e
+\]
+So yeah, the two sides of this equation have the same type, I think.
+\end{tangentbox}
+I want to claim as a theorem
+\begin{thmbox}
+  If $\Gamma\prov M : A$, then $\sem A_f (\sem M_c) \equiv \sem \Gamma_f \sem M_d$.
+\end{thmbox}
+and then plug in $f := h$ and $\Gamma, y : A \prov M  : B$ for the derivation.
+I get out
+\[\sem B_h (\sem M_d) \equiv \sem {\Gamma, y : A}_h \sem M_e\]
+in other words
+\[\sem B_h (\sem M_d) \equiv \sem {\Gamma}_h [\sem A_h(y)/y] \sem M_e\]
+and then I hit both sides with $\sem \Gamma_g$ to get
+\[  \sem B^{\Gamma;g}_h  ( \sem M^{\Gamma;g}_d) \equiv  [\sem A^{\Gamma;g}_h(y)/y]\sem M^{\Gamma;hg}_e  \]
+as required.
+
+\end{document}
+
+% garbage
+If $A : *$ then $\usem A : A \to *$
+\[\pi : \Pi A \cn * . \Pi a \cn A .  \usem A\ a\]
+\[\sem \pi : \pi \in \sem{\Pi A \cn * . \Pi a \cn A .  \usem A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * . \pi\ A \in \sem{ \Pi a \cn A .  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .\pi\ A \in \sem{  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .  \sem{  \dot A\ a} (\pi\ A)  \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \sem {\dot A}\ a\ \sem a\ (\pi\ A)\]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \usem {\dot A}\ a\ \dot a\ (\pi\ A)\]
+\[\sem{ \dot A} : \dot A \in \sem {A \to *}\]
+\[\sem{ \dot A} : \Pi a \cn A . \Pi \dot a \cn \dot A(a) . \dot A(a) \to *\]
+
+
+\end{document}
