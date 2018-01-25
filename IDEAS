@@ -3154,3 +3154,91 @@ F(A + B -(f,g)-> X) = F(A -f-> X) × F(B -g-> X)
 
 ? No, merely that it includes it. But that inclusion should be
 associative or something.
+
+=== 2018.01.17
+
+Q: So how do I arrange a purely syntactic *explanation* of a generic
+presheaf model of dependent types?
+A: Let's first page back in conclusively what the presheaf model *is*,
+and prior to that, what a model of dependent types *is* at all.
+
+A context Γ is interpreted as an object of the category.
+A substitution Γ ⊢ θ : Δ is interpreted as a morphism Γ → Δ.
+A type Γ ⊢ A : type is a weakening/projection morphism π : Γ, A → Γ
+A term Γ ⊢ M : A is section of its type, M : Γ → Γ , A such that
+M ; π = id.
+
+Carrying out a substitution on a type is pullback. If we have
+Γ ⊢ θ : Δ (i.e. a morphism Γ → Δ) and Γ ⊢ A : type (i.e. a morphism A → Δ)
+then we can do a pullback to get θA → Γ.
+
+Carrying out a substitution on a term is a use of the pullback UMP.
+If M;π = id then θ;M;π = id;θ and therefore we get a section
+Γ → Γ, θA that is θM.
+
+Context comprehension just takes the object of the newly added type as
+the object that is the context.
+
+Q: What are some nicely organized notes about this stuff?
+A: http://math.cmu.edu/~cnewstea/talks/20170301.pdf
+
+=== 2018.01.18
+
+Q: What's the shape of the interpretation of a type, then?
+A: Something like the [[A]]_c and [[A]]_f structure I had before. I
+don't quite understand naturality, though. Maybe I need to really
+think about the interpretation of a type as the extended context.
+
+=== 2018.01.19
+
+Q: What's an easy way to remember why presheaf categories are lccc?
+A:
+The fact that a slice of a presheaf category is again a presheaf category,
+specifically over a category of elements:
+
+\hat ℂ / X ≅ \hat {∫_ℂ X}
+
+=== 2018.01.20
+
+Q: What happens to contravariance when I consider the case where ℂ = Set?
+A: Duh, it goes away, because I'm only considering sets. The ccc structure
+of Set/X and Set^X are both exactly the boring pointwise thing I expect.
+
+=== 2018.01.21
+
+Q: How do I check the existence of the counit epsilon for any of these?
+I am so lost in technical fiddliness.
+A: ???
+
+=== 2018.01.22
+
+Q: Actually, what goes wrong when I just try to barrel ahead with the
+syntactic definition of how pi-types work, assuming I am confident
+about how I've set up [[Γ]]_f and [[A]]_f and so on?
+A: Actually, nothing seems to go wrong so far? I may have just been making several
+errors to do with substitution. I needed to be careful to remember that of course
+Φ ∘ (θ[M/x]) = (Φ ∘ θ) [ΦM / x]
+which comes up when I must rewrite
+[[Γ]]_g ∘ ([[Γ]]_h [ [[A]]_h(y) / y ])
+into
+[[Γ]]_{hg} [ [[Γ]]_g [[A]]_h(y) / y ]
+and not the incorrect
+[[Γ]]_{hg} [         [[A]]_h(y) / y ]
+
+=== 2018.01.23
+
+Q: What was the equality constraint I had figured out before?
+Does it actually hold for definitional equality?
+A: It's something like if Γ ⊢ M : A then
+⟦ A ⟧_f (⟦ M ⟧_c) ≡ ⟦ Γ ⟧_f ⟦ M ⟧_d
+
+=== 2018.01.24
+
+Q: How's this compare to what I seem to be conjecturing for the lambda case?
+A: Not quite the same deal at all. I'm missing the involvement of the context.
+
+=== 2018.01.25
+
+Q: How to reconcile this?
+A: Maybe by not trying to `factor out' the context substitution from
+the get-go.
