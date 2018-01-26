@@ -20,6 +20,11 @@
 \def\ttme{\mathsf{TmE}}
 \def\tctxc{\mathsf{CtxC}}
 \def\ttpc{\mathsf{TpC}}
+\def\tctxi{\mathsf{CtxI}}
+\def\ttpi{\mathsf{TpI}}
+\def\ttmsub{\mathsf{TmSub}}
+\def\ttpsub{\mathsf{TpSub}}
+\def\ttpmsub{\mathsf{TpMSub}}
 
 \def\mor#1#2{#1 \to \underline{#2}}
 \def\ridp{\mathsf{idp}}
@@ -238,10 +243,17 @@ $\sem \Gamma_c\prov \sem A_f(N) : \sem \Gamma_f \sem A_d$.
 Some auxiliary theorems are as follows:
 \begin{thmbox}
   \begin{itemize} \itemsep-0.25em
+  \item[$\tctxi$:] $\sem \Gamma_{\rid_c} \equiv \rid_\Gamma$.
+  \item[$\ttpi$:] $\sem A_{\rid_c}(x) \equiv x$.
   \item[$\tctxc$:] $\sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{gh}$.
   \item[$\ttpc$:] $\sem \Gamma_c,  x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) \equiv \sem A_{hg}(x)$.
+  \item[$\ttmsub$:] $\sem {[N/x]M}_c \equiv [\sem N_c / x] \sem M_c$.
+  \item[$\ttpsub$:] $\sem {[N/x]B}_c \equiv [\sem N_c / x] \sem B_c$.
+  \item[$\ttpmsub$:] $\sem {[N/y]B}_g(x) \equiv [\sem N_c / y] \sem B_g(x)$.
+\textcolor{red}{XXX is this right?}
   \end{itemize}
 \end{thmbox}
+
 
 \section{Defining the Translation}
 
@@ -321,6 +333,26 @@ So we can derive that
 %% \[\sem \Gamma_c, x : \sem A^{\Gamma;g}_d \prov \sem A^{\Gamma;g}_h(x) : \sem \Gamma_{hg} \sem A_e\]
 %% \[\sem \Gamma_c, x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) : \sem \Gamma_{hg} \sem A_e\]
 as required.
+\cqed
+\end{proof}
+
+\begin{lemma}[$\tctxi$]
+ If $\prov \Gamma \rctx $ and $c \in \C$,
+then $\sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$.
+\end{lemma}
+
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+By induction hypothesis on $\tctxi$ we have that
+$ \sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$. By $\ttpi$
+we know
+$\sem A_{\rid_c}(x) \equiv x$, so $\sem {\Gamma, x : A}_{\rid_c}$ is
+an identity substitution as well.
 \cqed
 \end{proof}
 
@@ -422,14 +454,15 @@ assuming the term in question is well-defined in $\Gamma$.
 \begin{defnbox}
 \begin{tabular}{r@{ }c@{ }l}
 $\sem{\lambda y . M}_c$&$ =$&$ \langle\lambda gy . \sem M^{\Gamma;g}_d, \lambda ghy.\ridp\rangle$\\
-$\sem{M N}_c$&$ =$&$ (\sem M_c.1)_{\rid_c}\ \sem N_c$
+$\sem{M N}_c$&$ =$&$ (\sem M_c.1)\ {\rid_c}\ \sem N_c$
   \end{tabular}
 \end{defnbox}
 \begin{lemma}[$\ttm$]
 If $\Gamma \prov M : A$, then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.
 \end{lemma}
 \begin{proof}
-Consider the lambda case. We assume
+\ \begin{itemize}
+\item[Case:] Lambda.\\
 \[
 \erule
 {\Gamma, y : A \prov M : B}
@@ -451,8 +484,23 @@ and applying the substitution $\sem \Gamma_g$ we derive
 \[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem \Gamma_{hg}[\sem A^{\Gamma;g}_h(y)/y]\sem M_e \equiv \sem B^{\Gamma;g}_h (\sem M^{\Gamma;g}_d) \]
 which is, up to associativity of substitutions and symmetry of equality, the same as $(2)$.
 
-Consider the application case. \textcolor{red}{???}
+\item[Case:] Application.\\
+\[
+\erule
+{\Gamma \prov (y : A) \to B \qquad \Gamma \prov N : A}
+{\Gamma \prov M\ N : [N/y]B}
+\]
+and want to show
+
+\[
+\erule
+{\sem \Gamma_c \prov \sem M_c : \sem{(y : A) \to B}_c \qquad \sem \Gamma_c \prov \sem N_c : \sem A_c}
+{\sem \Gamma_c \prov (\sem M_c.1)\ {\rid_c}\ \sem N_c : [\sem N_c/y]\sem{B}_c}
+\]
+
+For this we need only check that $\sem \Gamma_c \prov (\sem M_c.1) \ \rid_c : (y : \sem A_c) \to \sem B_c$, but this easily follows from the definition of $\sem {(y : A) \to B}_c$ and $\tctxi$.
 \cqed
+\end{itemize}
 \end{proof}
 
 
