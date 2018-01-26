@@ -1,0 +1,459 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\tctx{\mathsf{Ctx}}
+\def\tctxm{\mathsf{CtxM}}
+\def\ttp{\mathsf{Tp}}
+\def\ttpm{\mathsf{TpM}}
+\def\ttm{\mathsf{Tm}}
+\def\ttme{\mathsf{TmE}}
+\def\tctxc{\mathsf{CtxC}}
+\def\ttpc{\mathsf{TpC}}
+
+\def\mor#1#2{#1 \to \underline{#2}}
+\def\ridp{\mathsf{idp}}
+\def\fc{\mathfrak{C}}
+\def\ff{\mathfrak{F}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\comp}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\title{The Syntactic Presheaf Model}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\begin{document}
+% \maketitle
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Introduction}
+
+I want to obtain a nice compact description of the presheaf model of
+dependent types in purely syntactic terms, as a translation from the language of
+dependent types to a language that also has (dependent product) quantifiers over objects
+and morphisms of a chosen category.
+
+Notational conventions: fix a category $\C$, whose typical objects are $c, d, e$
+and whose morphisms are $f, g, h$. The language of dependent types is as usual
+\[\begin{tabular}{lr@{ }c@{ }l}
+Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A$\\
+Types&$A$&$::=$&$(x : A) \to B \celse (x : A) \x B \celse \cdots$\\
+Terms&$M$&$::=$&$\lambda x . M \celse M\ M \celse \pair M M  \celse M.1 \celse M.2 \celse \cdots$\\
+Substitutions&$\theta$&$::=$&$\cdot \celse \theta[M/x]$\\
+\end{tabular}\]
+We abbreviate $(x : A) \to (y : B) \to C$ as $(x : A)(y : B) \to C$
+and $(x : A) \x (y : B) \x C$ as $(x : A)(y : B) \x C$.
+
+And in the target language we additionally have
+\[\begin{tabular}{lr@{ }c@{ }l}
+Types&$A$&$::=$&$(c : \C) \to A \celse (f : c \to d) \to B \celse \cdots$\\
+Terms&$M$&$::=$&$\lambda c . M \celse M\ c \celse \lambda f . M \celse M\ f \celse \cdots$\\
+\end{tabular}\]
+We abbreviate $(d : \C) (f : c \to d) \to A$ as $(f : \mor c d) \to A$, the
+underline indicating that $d$ is also a binding position.
+
+The translation consists of several functions
+\begin{declbox}
+$ \sem \Gamma_c \in \Gamma \qquad \sem \Gamma_f \in \theta$\\
+$ \sem A_c \in A \qquad \sem A_f (M) \in M  $\\
+$\sem M_c \in M$
+\end{declbox}
+which translate various syntactic classes at an object to themselves,
+and also a context at a morphism to a substitution, and a type at a morphism
+to a function from terms to terms.
+\section{Correctness Theorems for the Translation}
+We'll declare up front what it means for the translation to be correct: assuming
+$\prov \Gamma \rctx$, $\Gamma \prov A : \rtype$, $\Gamma \prov M : A$,
+$c \in \C$, and $f : c \to d \in \C$, all
+of the following should be true.
+
+\begin{thmbox}
+  \begin{itemize} \itemsep-0.25em
+  \item[$\tctx$:] $\prov \sem \Gamma_c \rctx$.
+  \item[$\tctxm$:] $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
+  \item[$\ttp$:] $\sem \Gamma_c \prov \sem A_c : \rtype$.
+  \item[$\ttpm$:] $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d$.
+  \item[$\ttm$:] $\sem \Gamma_c \prov \sem M_c : \sem A_c$.
+  \item[$\ttme$:] $\sem \Gamma_c \prov \sem \Gamma_f\sem M_d \equiv \sem A_f (\sem M_c) : \sem \Gamma_f \sem A_d$.
+  \end{itemize}
+\end{thmbox}
+An equivalent statement of $\ttpm$, given that the substitution theorem holds in the
+target language, would be to say that if $\Gamma \prov M : A$
+and $\sem \Gamma_c \prov N : \sem A_c$, then
+$\sem \Gamma_c\prov \sem A_f(N) : \sem \Gamma_f \sem A_d$.
+
+Some auxiliary theorems are as follows:
+\begin{thmbox}
+  \begin{itemize} \itemsep-0.25em
+  \item[$\tctxc$:] $\sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{gh}$.
+  \item[$\ttpc$:] $\sem \Gamma_c,  x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) \equiv \sem A_{hg}(x)$.
+  \end{itemize}
+\end{thmbox}
+
+\section{Defining the Translation}
+
+\subsection{Contexts}
+The definitions of the two translations on contexts are as follows:
+\begin{defnbox}
+$\sem \cdot_c = \cdot \qquad \sem {\Gamma, x : A}_c = \sem \Gamma_c, x : \sem A_c$\\
+$\sem \cdot_f = \cdot \qquad \sem {\Gamma, x : A}_f = \sem \Gamma_f[\sem A_f(x) / x]$
+\end{defnbox}
+\begin{lemma}[$\tctx$]
+ If $\prov \Gamma \rctx $ then $\prov \sem \Gamma_c \rctx$.
+\end{lemma}
+
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+By induction hypothesis on $\tctx$ we have $\prov  \sem \Gamma_c : \rctx$
+and on $\ttp$ we have $\sem \Gamma_c \prov \sem A_c : \rtype$, so we can derive
+\[\erule
+  {\prov \sem \Gamma_c \rctx\qquad \sem \Gamma_c \prov \sem A_c : \rtype}
+{\prov (\sem \Gamma_c, x : \sem A_c) \rctx}
+\]
+as required.
+\cqed
+\end{proof}
+
+\begin{lemma}[$\tctxm$]
+ If $\prov \Gamma \rctx $ then $\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d$.
+\end{lemma}
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+We must show .
+
+By induction hypothesis on $\tctxm$ we have
+\(\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d\)
+and on $\ttpm$ we have
+\( \sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d\)
+so we can derive
+\[\erule
+  {\sem \Gamma_c \prov \sem \Gamma_f : \sem \Gamma_d \qquad \sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d}
+{\sem \Gamma_c, x : \sem A_c \prov \sem \Gamma_f[\sem A_f(x) / x] : (\sem \Gamma_d, x : \sem A_d)}
+\]
+as required.
+\cqed
+\end{proof}
+
+\begin{lemma}[$\tctxc$]
+ If $\prov \Gamma \rctx $ and $g : c \to d$ and $h : d \to e$,
+then $ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $.
+\end{lemma}
+
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+By induction hypothesis on $\tctxc$ we have
+$ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $,
+and on $\ttpc$ we have $\sem A^{\Gamma;g}_h (\sem A_g(x)) \equiv \sem A_{hg}(x)$.
+So we can derive that
+\[(\sem \Gamma_g[\sem A_g(x) / x]) (\sem \Gamma_h[\sem A_h(x) / x])
+\equiv  \sem \Gamma_{g}\sem \Gamma_{h}[ \sem A^{\Gamma;g}_h(\sem A_g(x)) / x]\]
+\[\equiv  \sem \Gamma_{hg}[\sem A_{hg}(x) / x]\]
+%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A_g(x) : \sem \Gamma_g \sem A_d\]
+%% \[\sem \Gamma_d, x : \sem A_d \prov \sem A_h(x) : \sem \Gamma_h \sem A_e\]
+%% \[\sem \Gamma_c, x : \sem A^{\Gamma;g}_d \prov \sem A^{\Gamma;g}_h(x) : \sem \Gamma_{hg} \sem A_e\]
+%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) : \sem \Gamma_{hg} \sem A_e\]
+as required.
+\cqed
+\end{proof}
+
+\subsection{Type Translation}
+For $g : c \to d \in \C$ and $h : d \to e\in \C$, make the abbreviations
+\[\sem A_d^{\Gamma;g} = \sem \Gamma_g \sem A_d\]
+\[\sem A_h^{\Gamma;g}(x) = \sem \Gamma_g (\sem A_h(x))\]
+The definition of type translation at an object is then as follows,
+assuming the type in question is well-defined in $\Gamma$:
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_c$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\Gamma;g}_d)  \to  \sem B^{\Gamma;g}_d  ) \ \x $\\
+&&$(g : \mor c d)(h : \mor d e) (y : \sem A^{\Gamma;g}_d) \to$\\
+&&$  \sem B^{\Gamma;g}_h  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A^{\Gamma;g}_h(y)) $
+  \end{tabular}
+\end{defnbox}
+
+\begin{lemma}[$\ttp$]
+ If $ \Gamma \prov A : \rtype $, then $\sem \Gamma_c \prov \sem A_c : \rtype$.
+\end{lemma}
+\begin{proof}
+Consider the case for dependent functions. We assume
+\[
+\erule
+{\Gamma, y : A \prov B : \rtype}
+{\Gamma \prov (y : A) \to B : \rtype}
+\]
+By induction hypothesis on $\ttp$, we have $\sem \Gamma_d , y : \sem A_d \prov \sem B_d : \rtype$.
+By applying the substitution $\sem \Gamma_g$, we derive
+$\sem \Gamma_c , y : \sem A^{\Gamma;g}_d \prov \sem B^{\Gamma;g}_d : \rtype$.
+So at least the type of $\omega$ is legitimate. What about the second part
+of the dependent pair type? We need to check that
+$\sem B^{\Gamma;g}_h  (\omega\ g\ y)$ and $\omega\ hg\ ( \sem A^{\Gamma;g}_h(y))$
+are well-formed terms at the same type.
+
+Let's do them one at a time. We know first of all that
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \omega\ g\ y : \sem B^{\Gamma;g}_d\]
+and $\ttpm$ on $B$ (which is valid in context $\Gamma, y : A$) and $h$ tells us
+\[\sem \Gamma_d, y : \sem A_d, x : \sem B_d \prov \sem B_h(x) : \sem \Gamma_h[\sem A_h(y)/y] \sem B_e\]
+and we can apply $\sem \Gamma_g$ (incidentally using $\tctxc$ on $\Gamma,h,g$) to get
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d, x : \sem B^{\Gamma;g}_d \prov \sem B^{\Gamma;g}_h(x) : \sem \Gamma_{hg}[\sem A^{\Gamma;g}_h(y)/y] \sem B_e\]
+Now we just substitute in $\omega\ g\ y$ for $x$ to obtain
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem B^{\Gamma;g}_h(\omega\ g\ y) : \sem \Gamma_{hg}[\sem A^{\Gamma;g}_h(y)/y] \sem B_e\]
+
+Now for the other side of the equation: we have directly from $\ttpm$ on $A$ and $h$ that
+\[\sem \Gamma_d, y : \sem A_d \prov \sem A_h(y) : \sem \Gamma_h \sem A_e\]
+so applying $\sem \Gamma_g$ (and $\tctxc$ on $\Gamma,h,g$) we get
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem A^{\Gamma;g}_h(y) : \sem A^{\Gamma;hg}_e\]
+Now $\omega$ applied to $hg : c \to e$ can be typed like
+\[\sem \Gamma_c, y : \sem A^{\Gamma;hg}_e \prov \omega\ hg\ y : \sem B^{\Gamma;hg}_e\]
+so substituting in for the third argument we find
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \omega\ hg\ (\sem A^{\Gamma;g}_h(y)) : [\sem A^{\Gamma;g}_h(y)/y]\sem B^{\Gamma;hg}_e\]
+and by ordinary reasoning about associativity of substitution, this is the same as the type
+\[\sem \Gamma_{hg}[\sem A^{\Gamma;g}_h(y)/y] \sem B_e\] we obtained above for the left side
+of the equation, as required.
+\cqed
+\end{proof}
+
+
+\subsection{Type-Morphism Translation}
+The definition of the type-morphism translation is as follows,
+assuming the type in question is well-defined in $\Gamma$,
+and $f : b \to c \in \C$.
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_f(x)$&$ =$&$ \langle \lambda g . (x.1)\ {gf},$ \\
+&&$\ \lambda g . (x.2)\ {gf}\rangle$\\
+  \end{tabular}
+\end{defnbox}
+
+\begin{lemma}[$\ttpm$]
+ If $\Gamma \prov A : \rtype$, then $\sem \Gamma_c, x : \sem A_c \prov \sem A_f(x) : \sem \Gamma_f \sem A_d$.
+\end{lemma}
+\begin{proof}
+Consider the dependent function case
+Let $f : b \to c \in \C$ be given. We must check that
+\[\sem \Gamma_b, x : \sem{(y : A) \to B}_b\prov \sem{(y : A) \to B}_f(x) : \sem \Gamma_f \sem{(y : A) \to B}_c \]
+so this breaks up into checking the two components of the dependent pair.
+Let $\Gamma_0 = \sem \Gamma_b, x : \sem{(y : A) \to B}_b$. The first part is (simplifying progressively)
+\[\Gamma_0 \prov \lambda g . (x.1)\ gf : \sem \Gamma_f (g : c \to d)(y : \sem A^{\Gamma;g}_d) \to \sem B^{\Gamma;g}_d \]
+\[\Gamma_0 \prov \lambda g . (x.1)\ gf :  (g : c \to d)(y : \sem A^{\Gamma;gf}_d) \to \sem B^{\Gamma;gf}_d \]
+\[\Gamma_0, g : c \to d \prov  (x.1)\ gf :  (y : \sem A^{\Gamma;gf}_d) \to \sem B^{\Gamma;gf}_d \]
+and the second is
+\[\Gamma_0 \prov \lambda g . (x.2)\ gf : \sem \Gamma_f (g : c \to d)(h : d \to e)\to\]
+\[ \sem B^{\Gamma;g}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;g}_h\]
+\[\Gamma_0 \prov \lambda g . (x.2)\ gf :  (g : c \to d)(h : d \to e)\to\]
+\[ \sem B^{\Gamma;gf}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;gf}_h\]
+\[\Gamma_0, g : c \to d \prov (x.2)\ gf :  (h : d \to e)\to\]
+\[ \sem B^{\Gamma;gf}_h \o (x.1\ gf) \equiv (x.1\ hgf) \o \sem A^{\Gamma;gf}_h\]
+\textcolor{red}{XXX should maybe fix this above to not refer to composition but explicitly mention $y$}
+and for both, one can read verify these typings hold as direct consequences of the
+ assumption $x : \sem{(y : A) \to B}_b \in \Gamma_0$.
+\cqed
+\end{proof}
+
+\subsection{Term Translation}
+The definition of the term translation is as follows,
+assuming the term in question is well-defined in $\Gamma$.
+\begin{defnbox}
+\begin{tabular}{r@{ }c@{ }l}
+$\sem{\lambda y . M}_c$&$ =$&$ \langle\lambda gy . \sem M^{\Gamma;g}_d, \lambda ghy.\ridp\rangle$\\
+$\sem{M N}_c$&$ =$&$ (\sem M_c.1)_{\rid_c}\ \sem N_c$
+  \end{tabular}
+\end{defnbox}
+\begin{lemma}[$\ttm$]
+If $\Gamma \prov M : A$, then $\sem \Gamma_c \prov \sem M_c : \sem A_c$.
+\end{lemma}
+\begin{proof}
+Consider the lambda case. We assume
+\[
+\erule
+{\Gamma, y : A \prov M : B}
+{\Gamma \prov \lambda y . M : (y : A) \to B }
+\]
+We need to show
+\[\sem \Gamma_c \prov \langle\lambda gy . \sem M^{\Gamma;g}_d, \lambda ghy.\ridp\rangle :
+\sem {(y : A) \to B}_c\]
+in other words, both of
+\[\sem \Gamma_c, y : \sem A_d^{\Gamma;g} \prov  \sem M^{\Gamma;g}_d : \sem B^{\Gamma;g}_d\eqno(1)\]
+\[\sem \Gamma_c, y : \sem A_d^{\Gamma;g} \prov  \sem B^{\Gamma;g}_h  (\sem M^{\Gamma;g}_d) \equiv [\sem A^{\Gamma;g}_h(y)]/y] \sem M^{\Gamma;hg}_e \eqno(2)\]
+
+By induction on $\ttm$, we have $\sem \Gamma_d, y : \sem A_d \prov \sem M_d : \sem B_d$.
+By substituting $\Gamma_g$, we derive $(1)$.
+By $\ttme$ on the term $M$ and the type $B$ and the
+ context $\Gamma, y : A$ and the morphism $h$ we get
+\[\sem \Gamma_d, y : \sem A_d \prov \sem \Gamma_h[\sem A_h(y)/y]\sem M_e \equiv \sem B_h (\sem M_d) \]
+and applying the substitution $\sem \Gamma_g$ we derive
+\[\sem \Gamma_c, y : \sem A^{\Gamma;g}_d \prov \sem \Gamma_{hg}[\sem A^{\Gamma;g}_h(y)/y]\sem M_e \equiv \sem B^{\Gamma;g}_h (\sem M^{\Gamma;g}_d) \]
+which is, up to associativity of substitutions and symmetry of equality, the same as $(2)$.
+
+Consider the application case. \textcolor{red}{???}
+\cqed
+\end{proof}
+
+
+\end{document}
