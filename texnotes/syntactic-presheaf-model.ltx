@@ -503,5 +503,47 @@ For this we need only check that $\sem \Gamma_c \prov (\sem M_c.1) \ \rid_c : (y
 \end{itemize}
 \end{proof}
 
+\begin{lemma}[$\ttme$]
+If $\Gamma \prov M : A$ and $f : b \to c$, then
+\[\sem \Gamma_b \prov \sem \Gamma_f\sem M_c \equiv \sem A_f (\sem M_b) : \sem \Gamma_f \sem A_c\]
+\end{lemma}
+\begin{proof}
+\ \begin{itemize}
+\item[Case:] Lambda.\\
+We want to check that
+ $\sem \Gamma_f \sem {\lambda y.M}_c \equiv \sem {(y : A) \to B}_f (\sem {\lambda y.M}_b)$. In other words, that
+\[\sem \Gamma_f \langle\lambda (g : \mor c d)y . \sem M^{\Gamma;g}_d, \lambda ghy.\ridp\rangle  \eqno(1)\]
+\[ \sem {(y : A) \to B}_f (\langle\lambda (\ell : \mor b c)y . \sem M^{\Gamma;f}_c, \lambda \ell g y.\ridp\rangle)\eqno(2)\]
+are equal, for $f : b \to c$. But if we say $N = \langle\lambda (\ell : \mor b c)y . \sem M^{\Gamma;f}_c, \lambda \ell g y.\ridp\rangle$, then $(2)$ is
+\[\langle \lambda g . (N.1)\ {gf}, \lambda g . (N.2)\ {gf}\rangle\]
+\[= \langle \lambda g . (\lambda (\ell : \mor b c)y . \sem M^{\Gamma;f}_c)\ {gf}, \lambda g . (N.2)\ {gf}\rangle\]
+\[= \langle \lambda g y . \sem M^{\Gamma;gf}_d, \lambda g . (N.2)\ {gf}\rangle\]
+\[= \langle \lambda g y . \sem M^{\Gamma;gf}_d, \lambda g h y.\ridp \rangle\]
+which is equal to $(1)$ because $\sem \Gamma_f \sem M^{\Gamma;g}_d = \sem M^{\Gamma;gf}_d$ by
+$\tctxc$.
+% $\sem{\lambda y . M}_c$&$ =$&$ \langle\lambda gy . \sem M^{\Gamma;g}_d, \lambda ghy.\ridp\rangle$\\
 
+
+\item[Case:] Application.\\
+ $\sem \Gamma_f \sem {M\ N}_c \equiv \sem {[N/y] B}_f (\sem {M\ N}_b)$. In other words, that
+\[\sem \Gamma_f ((\sem M_c.1)\ {\rid_c}\ \sem N_c)  \eqno(1)\]
+\[ \sem {[N/y] B}_f ((\sem M_b.1)\ {\rid_b}\ \sem N_b) \eqno(2)\]
+are equal, in context $\sem \Gamma_b$ at type
+$\sem \Gamma_f [\sem N_c / y] \sem B_c \equiv \sem \Gamma_f \sem{[N / y] B}_c$.
+We can reason that $(1)$ is equal to
+\[ ((\sem \Gamma_f\sem M_c).1)\ {\rid_c}\ (\sem \Gamma_f\sem N_c)  \]
+and by induction (twice, at smaller terms $M$ and $N$) on $\ttme$, we have this is
+\[ = (\sem {(y : A) \to B}_f( \sem M_b).1)\ \rid_c\ \sem A_f (\sem N_b) \]
+\[ = (\langle{ \lambda g.(\sem M_b).1\ gf, \lambda g.(\sem M_b).2\ gf }\rangle.1)\ \rid_c\ \sem A_f (\sem N_b) \]
+\[ =  (\lambda g.(\sem M_b).1\ gf)\ \rid_c\ \sem A_f (\sem N_b) \]
+\[ =  (\sem M_b).1\ f \ \sem A_f (\sem N_b) \]
+Finally, $(\sem M_b).2\ \rid_b\ f\ \sem N_b$, gives us
+\[[\sem N_b / y]\sem B_f  ((\sem M_b).1\ \rid_b\ \sem N_b) \equiv (\sem M_b).1\ f\ ( \sem A_f(\sem N_b))\]
+which by $\ttpmsub$ is as good as
+\[\sem{[N/y] B}_f  ((\sem M_b).1\ \rid_b\ \sem N_b) \equiv (\sem M_b).1\ f\ ( \sem A_f(\sem N_b))\]
+\textcolor{red}{ XXX so far this is the only place where we {\em use} the equality baked into
+the translated function type. Can it be a definitional equality, or need it be propositional?}
+\end{itemize}
+\cqed
+\end{proof}
 \end{document}
