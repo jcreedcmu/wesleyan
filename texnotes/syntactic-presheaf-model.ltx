@@ -25,6 +25,7 @@
 \def\ttmsub{\mathsf{TmSub}}
 \def\ttpsub{\mathsf{TpSub}}
 \def\ttpmsub{\mathsf{TpMSub}}
+\def\tctxs{\mathsf{CtxS}}
 
 \def\mor#1#2{#1 \to \underline{#2}}
 \def\ridp{\mathsf{idp}}
@@ -251,6 +252,7 @@ Some auxiliary theorems are as follows:
   \item[$\ttpsub$:] $\sem {[N/x]B}_c \equiv [\sem N_c / x] \sem B_c$.
   \item[$\ttpmsub$:] $\sem {[N/y]B}_g(x) \equiv [\sem N_c / y] \sem B_g(x)$.
 \textcolor{red}{XXX is this right?}
+  \item[$\tctxs$:] $\sem {\Gamma,[N/y]\Gamma'}_g[\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma'}_g$
   \end{itemize}
 \end{thmbox}
 
@@ -309,52 +311,6 @@ as required.
 \cqed
 \end{proof}
 
-\begin{lemma}[$\tctxc$]
- If $\prov \Gamma \rctx $ and $g : c \to d$ and $h : d \to e$,
-then $ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $.
-\end{lemma}
-
-\begin{proof}
-The case involving $\cdot$ is trivial.
-Otherwise we have
-\[\erule
-  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
-{\prov (\Gamma, x : A) \rctx}
-\]
-By induction hypothesis on $\tctxc$ we have
-$ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $,
-and on $\ttpc$ we have $\sem A^{\Gamma;g}_h (\sem A_g(x)) \equiv \sem A_{hg}(x)$.
-So we can derive that
-\[(\sem \Gamma_g[\sem A_g(x) / x]) (\sem \Gamma_h[\sem A_h(x) / x])
-\equiv  \sem \Gamma_{g}\sem \Gamma_{h}[ \sem A^{\Gamma;g}_h(\sem A_g(x)) / x]\]
-\[\equiv  \sem \Gamma_{hg}[\sem A_{hg}(x) / x]\]
-%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A_g(x) : \sem \Gamma_g \sem A_d\]
-%% \[\sem \Gamma_d, x : \sem A_d \prov \sem A_h(x) : \sem \Gamma_h \sem A_e\]
-%% \[\sem \Gamma_c, x : \sem A^{\Gamma;g}_d \prov \sem A^{\Gamma;g}_h(x) : \sem \Gamma_{hg} \sem A_e\]
-%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) : \sem \Gamma_{hg} \sem A_e\]
-as required.
-\cqed
-\end{proof}
-
-\begin{lemma}[$\tctxi$]
- If $\prov \Gamma \rctx $ and $c \in \C$,
-then $\sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$.
-\end{lemma}
-
-\begin{proof}
-The case involving $\cdot$ is trivial.
-Otherwise we have
-\[\erule
-  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
-{\prov (\Gamma, x : A) \rctx}
-\]
-By induction hypothesis on $\tctxi$ we have that
-$ \sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$. By $\ttpi$
-we know
-$\sem A_{\rid_c}(x) \equiv x$, so $\sem {\Gamma, x : A}_{\rid_c}$ is
-an identity substitution as well.
-\cqed
-\end{proof}
 
 \subsection{Type Translation}
 For $g : c \to d \in \C$ and $h : d \to e\in \C$, make the abbreviations
@@ -546,4 +502,145 @@ the translated function type. Can it be a definitional equality, or need it be p
 \end{itemize}
 \cqed
 \end{proof}
+
+\subsection{Auxiliary Lemmas}
+
+\begin{lemma}[$\tctxi$]
+ If $\prov \Gamma \rctx $ and $c \in \C$,
+then $\sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$.
+\end{lemma}
+
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+By induction hypothesis on $\tctxi$ we have that
+$ \sem \Gamma_{\rid_c}$ is the identity substitution on $\Gamma$. By $\ttpi$
+we know
+$\sem A_{\rid_c}(x) \equiv x$, so $\sem {\Gamma, x : A}_{\rid_c}$ is
+an identity substitution as well.
+\cqed
+\end{proof}
+
+\begin{lemma}[$\ttpi$]
+If $\Gamma \prov A : \rtype$, then $\sem A_{\rid_c}(x) \equiv x$.
+\end{lemma}
+
+\begin{proof}
+In the case of dependent product types, we have
+\[\sem{(y : A) \to B}_{\rid_c}(x) = \langle \lambda g . (x.1)\ {g}, \lambda g . (x.2)\ {g}\rangle\]
+which is indeed $\eta$-equivalent to $x$.
+
+\cqed
+\end{proof}
+
+\begin{lemma}[$\tctxc$]
+ If $\prov \Gamma \rctx $ and $g : c \to d$ and $h : d \to e$,
+then $ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $.
+\end{lemma}
+
+\begin{proof}
+The case involving $\cdot$ is trivial.
+Otherwise we have
+\[\erule
+  {\prov \Gamma \rctx\qquad \Gamma \prov A : \rtype}
+{\prov (\Gamma, x : A) \rctx}
+\]
+By induction hypothesis on $\tctxc$ we have
+$ \sem \Gamma_g \o \sem \Gamma_h \equiv \sem \Gamma_{hg} $,
+and on $\ttpc$ we have $\sem A^{\Gamma;g}_h (\sem A_g(x)) \equiv \sem A_{hg}(x)$.
+So we can derive that
+\[(\sem \Gamma_g[\sem A_g(x) / x]) (\sem \Gamma_h[\sem A_h(x) / x])
+\equiv  \sem \Gamma_{g}\sem \Gamma_{h}[ \sem A^{\Gamma;g}_h(\sem A_g(x)) / x]\]
+\[\equiv  \sem \Gamma_{hg}[\sem A_{hg}(x) / x]\]
+%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A_g(x) : \sem \Gamma_g \sem A_d\]
+%% \[\sem \Gamma_d, x : \sem A_d \prov \sem A_h(x) : \sem \Gamma_h \sem A_e\]
+%% \[\sem \Gamma_c, x : \sem A^{\Gamma;g}_d \prov \sem A^{\Gamma;g}_h(x) : \sem \Gamma_{hg} \sem A_e\]
+%% \[\sem \Gamma_c, x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) : \sem \Gamma_{hg} \sem A_e\]
+as required.
+\cqed
+\end{proof}
+
+\begin{lemma}[$\ttpc$]
+If $\Gamma \prov A : \rtype$, then
+$\sem \Gamma_c,  x : \sem A_c \prov \sem A^{\Gamma;g}_h(\sem A_g(x)) \equiv \sem A_{hg}(x)$.
+\end{lemma}
+
+\begin{proof}
+Consider the case of dependent function types.
+Let $g : c \to d$ and $h : d \to e$ be given. We simply compute
+\[\sem{(y : A) \to B}^{\Gamma;g}_{h}(\sem{(y : A) \to B}_{g}(x)) =\]
+\[ \langle \lambda k . (\sem{(y : A) \to B}_{g}(x).1)\ {kh}, \lambda k . (\sem{(y : A) \to B}_{g}(x).2)\ {kh}\rangle\]
+\[= \langle \lambda k . (\lambda \ell . (x.1)\ \ell g)\ {kh}, \lambda k . (\lambda \ell . (x.2)\ \ell g)\ {kh}\rangle\]
+\[= \langle \lambda k .  (x.1)\ kh g)\ {kh}, \lambda k .  (x.2)\ {kh} g)\rangle\]
+\[= \sem{(y : A) \to B}_{hg}(x)\]
+\cqed
+\end{proof}
+
+\begin{lemma}[$\ttmsub$]
+If $\Gamma, y : A, \Gamma' \prov M : B$ and $\Gamma \prov N : A$,
+then
+$\sem {[N/y]M}_c \equiv [\sem N_c / y] \sem M_c$.
+\end{lemma}
+
+\begin{proof}
+Split cases on $M$. \begin{itemize}
+\item[Case:] Lambda.\\
+We have $\Gamma, y : A, \Gamma' \prov \lambda z . M : (z : B) \to C$ and $\Gamma \prov N : A$.
+By inversion, $\Gamma, y : A, \Gamma', z : B \prov M : C$. We need to show
+\[  \langle\lambda gz . \sem {[N/y]M}^{\Gamma,[N/y]\Gamma';g}_d, \lambda ghz.\ridp\rangle
+\equiv
+[\sem N_c / y] \langle\lambda gz . \sem M^{\Gamma,y:A,\Gamma';g}_d, \lambda ghz.\ridp\rangle\]
+By i.h. the left side is equal to
+\[  \langle\lambda gz . \sem {\Gamma,[N/y]\Gamma'}_g[\sem N_d/y]\sem {M}_d, \lambda ghz.\ridp\rangle \]
+so we need only confirm that the two substitutions applied to $\sem M_d$ are equal, i.e.
+\[\sem {\Gamma,[N/y]\Gamma'}_g[\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma'}_g\]
+which holds by $\tctxs$.
+
+%% Let $\Delta = \Gamma, y : A, \Gamma'$ and $\Omega = \Gamma, [N/y]\Gamma'$.
+%% \[\sem \Gamma_d, y : \sem A_d, \sem {\Gamma'}_d, z  \prov \sem M_d : \sem C_d\]
+%% \[\sem \Gamma_d, [\sem N_d/y]\sem {\Gamma'}_d, z  \prov [\sem N_d/y]\sem M_d : [\sem N_d/y]\sem C_d\]
+%% \[\sem {\Gamma, [N/y]\Gamma'}_d, z  \prov [\sem N_d/y]\sem M_d : [\sem N_d/y]\sem C_d\]
+%% \[\sem {\Gamma, [N/y]\Gamma'}_c, z  \prov \sem \Omega_g [\sem N_d/y]\sem M_d : \sem \Omega_g [\sem N_d/y]\sem C_d\eqno(*)\]
+
+%% \[\sem \Gamma_c, y : \sem A_c, \sem {\Gamma'}_c, z  \prov \sem M^{\Delta;g}_d : \sem C^{\Delta;g}_d\]
+%% \[\sem \Gamma_c, [\sem N_c / y] \sem {\Gamma'}_c, z  \prov [\sem N_c / y]\sem M^{\Delta;g}_d : [\sem N_c / y]\sem C^{\Delta;g}_d\]
+
+
+
+\item[Case:] Application. \\
+\[\sem{M N}_c = (\sem M_c.1)\ {\rid_c}\ \sem N_c\]
+\end{itemize}
+\textcolor{red}{XXX ???}
+\cqed
+\end{proof}
+
+
+\begin{lemma}[$\tctxs$]
+If $\prov \Gamma, y : A, \Gamma' : \rctx$ and $\Gamma \prov N : A$, then
+\[\sem {\Gamma,[N/y]\Gamma'}_g \o [\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma'}_g\]
+\end{lemma}
+
+\begin{proof}
+If $\Gamma'$ is empty, then we need to check
+\[\sem {\Gamma}_g \o [\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A}_g\]
+But \[[\sem N_c / y] \o \sem{\Gamma, y : A}_g\]
+\[ \equiv [\sem N_c / y] \o \sem \Gamma_g [\sem A_g(y) / y] \]
+\[ \equiv \sem \Gamma_g [\sem A_g(\sem N_c) / y] \]
+\[ \equiv \sem \Gamma_g [\sem \Gamma_g(\sem N_d) / y] \eqno {(\hbox{by }\ttme)} \]
+\[ \equiv \sem \Gamma_g \o  [(\sem N_d) / y]  \]
+
+Otherwise $\Gamma'$ is nonempty, and we need to show something like
+\[\sem {\Gamma,[N/y]\Gamma', z : [N/y]C}_g \o [\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma', z : C}_g\]
+in other words
+\[\sem {\Gamma,[N/y]\Gamma'}_g[\sem{[N/y]C}_g(z)/z] \o [\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma'}_g [ \sem{C}_g(z) / z]\]
+so we apply the induction hypothesis to reduce this to showing
+\[\sem{[N/y]C}_g(z) \equiv [\sem N_c / y]\sem C_g(z)\]
+which follows from $\ttpmsub$.
+\cqed
+\end{proof}
+
 \end{document}
