@@ -167,9 +167,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 % ???
 
 \section{Thinking about contexts and substitutions}
+General convention for the whole document: assume $g : c \to d$ and $h : d \to e$.
 \[ \Gamma = (x : A, y : B, z : C)\]
 \[ \sem \Gamma_e = (x : \sem A_e, y : \sem B_e, z : \sem C_e) \]
-Assume $g : c \to d$ and $h : d \to e$. I want to come up with a substitution
+I want to come up with a substitution
 $\theta$
 \[(x : \sem A_c, y : [\sem A_g(x)/x]\sem B_d, z : \theta \sem C_e)\]
 is a valid context.
@@ -183,7 +184,7 @@ That seems to do the trick.
 So let me declare
 \[
 \begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
-  Paths&$\pi$&$\bullet_c \celse \pi ; f  $\\
+  Paths&$\pi$&$\bullet_c \celse \pi ; g  $\\
 \end{tabular}
 \]
 I can then define what it means to be a valid path in a context; I just need the lengths
@@ -198,8 +199,8 @@ $\Gamma \prov \pi : \rpath c$
 {x : A \prov \bullet_c : \rpath c}
 \qquad
 \erule
-{\Gamma \prov \pi : \rpath c\qquad f : c \to d}
-{\Gamma, x : A \prov (\pi ; f) : \rpath d}
+{\Gamma \prov \pi : \rpath c\qquad g : c \to d}
+{\Gamma, x : A \prov (\pi ; g) : \rpath d}
 $$
 \end{defnbox}
 I can pick out the codomain of a path easily enough:
@@ -209,7 +210,7 @@ I can pick out the codomain of a path easily enough:
 \begin{defnbox}
 \begin{tabular}{l@{ }c@{ }l}
  $\overline{\bullet_c}$&$=$&$c$\\
-$\overline{ \pi ; f}$&$=$&$\cod f$
+$\overline{ \pi ; g}$&$=$&$\cod g$
 \end{tabular}
 \end{defnbox}
 
@@ -229,16 +230,17 @@ So I expect something like a substitution operation
 \end{declbox}
 \begin{thmbox}
 If $\Gamma \prov \pi : [c]$, then $\prov \sem {\Gamma}_{\pi} : \rctx$.\\
-If $\Gamma \prov \pi : [c]$, then $\sem \Gamma_\pi \prov \sem {\Gamma}^{\pi;f} : \sem \Gamma_{d}$.
+If $\Gamma \prov \pi : [c]$, then $\sem \Gamma_\pi \prov \sem {\Gamma}^{\pi;g} : \sem \Gamma_{d}$.
 \end{thmbox}
 \begin{defnbox}
 \begin{tabular}{l@{ }c@{ }l}
- $\sem {x:A}_{\bullet_c}$&$=$&$\cdot$\\
-$\sem{\Gamma, x : A}_{\pi;f}$&$=$&$\sem \Gamma_\pi, x : \sem \Gamma^{\pi;f} \sem A_{d}$
+ $\sem {x:A}_{\bullet_c}$&$=$&$x : \sem A_c$\\
+$\sem{\Gamma, x : A}_{\pi;g}$&$=$&$\sem \Gamma_\pi, x : \sem \Gamma^{\pi;g} \sem A_{d}$
 \end{tabular}\\\vskip 0.5em
 \begin{tabular}{l@{ }c@{ }l}
  $\sem \cdot^{\bullet_c}$&$=$&$\rid$\\
-$\sem{\Gamma, x : A}^{\pi;f}$&$=$&$\sem \Gamma^\pi \o \sem {\Gamma, x : A}_f $
+\color{gray} $\sem {x : A}^{\bullet_c;g}$&\color{gray}$=$&\color{gray}$[\sem A_g(x) / x]$\\
+$\sem{\Gamma, x : A}^{\pi;g}$&$=$&$\sem \Gamma^\pi \o \sem {\Gamma, x : A}_g $
 \end{tabular}
 \end{defnbox}
 \begin{lemma}
@@ -246,15 +248,31 @@ If $\Gamma \prov \pi : [c]$, then $\prov \sem {\Gamma}_{\pi} : \rctx$.
 \end{lemma}
 
 \begin{proof}
-
+If $\pi$ is $\bullet_c$, then $\Gamma = x : A$, and $ \prov A : \rtype$,
+so $\prov \sem A_c : \rtype$. Otherwise, we need to show
+$\prov \sem{\Gamma, x : A}_{\pi;g} : \rctx$.
+We have ${\Gamma} \prov A : \rtype$ so $\sem {\Gamma}_d \prov \sem A_d : \rtype$,
+hence by applying $\sem {\Gamma}^{\pi;g}$ we get
+$\sem {\Gamma}^\pi \prov \sem {\Gamma}^{\pi;g} \sem A_d : \rtype$
+as required.
 \cqed
 \end{proof}
 \begin{lemma}
-If $\Gamma \prov \pi : [c]$, then $\sem \Gamma_\pi \prov \sem {\Gamma}^{\pi;f} : \sem \Gamma_{d}$.
+If $\Gamma \prov \pi : [c]$, then $\sem \Gamma_\pi \prov \sem {\Gamma}^{\pi;g} : \sem \Gamma_{d}$.
 \end{lemma}
 
 \begin{proof}
-
+If $\pi = \bullet_c$ and $\Gamma = x : A$ we must show
+\[x : \sem A_c \prov \sem A_g(x) :  \sem A_d\]
+which holds. Otherwise we have to show
+\[\sem {\Gamma, x : A}_{\pi;g} \prov \sem {\Gamma, x : A}^{\pi;g;h} : \sem {\Gamma, x : A}_{e}\]
+i.e.
+\[\sem {\Gamma}_\pi, x : \sem \Gamma^{\pi;g}\sem{A}_d \prov \sem\Gamma^{\pi;g} \o \sem {\Gamma, x : A}_h  : \sem {\Gamma}_e, x : \sem{A}_{e}\]
+and we already know that
+\[\sem {\Gamma, x : A}_d \prov \sem {\Gamma, x : A}_h \prov \sem {\Gamma, x : A}_e\]
+so it remains to see that
+\[\sem {\Gamma}_\pi, x : \sem \Gamma^{\pi;g}\sem{A}_d \prov \sem\Gamma^{\pi;g}   : (\sem {\Gamma}_d, x : \sem{A}_{d})\]
+and this follows from the induction hypothesis.
 \cqed
 \end{proof}
 
