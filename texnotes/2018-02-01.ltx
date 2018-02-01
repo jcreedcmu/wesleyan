@@ -213,7 +213,7 @@ $\overline{ \pi ; g}$&$=$&$\cod g$
 \end{tabular}
 \end{defnbox}
 
-\vfil\eject
+
 Concretely futzing around some more I see something like
 
 
@@ -277,27 +277,8 @@ and this follows from the induction hypothesis.
 
 \subsection{Trying to Shorten Definitions}
 
-What if I say
-\begin{defnbox}
-\begin{tabular}{l@{ }c@{ }l}
- $\zem {\cdot}_{\bullet_c}$&$=$&$\cdot$\\
-$\zem{\Gamma, x : A}_{\pi;g}$&$=$&$\zem \Gamma_\pi, x : \sem \Gamma^{\pi;g} \sem A_{d}$
-\end{tabular}
-\end{defnbox}
-Then for any $f : b \to c$, we have
-\[\sem \Gamma_\pi \equiv \zem \Gamma_{f ; \pi}\]
-Base case $\Gamma = x : A$ and $\pi = \bullet_c$. Then we have
-to check
-\[x : \sem A_c \equiv \zem \cdot_{\bullet_b}, x : \sem{\cdot}^{\bullet_b; f} \sem A_c\]
-which is fine. The definition of the other function is:
-\begin{defnbox}
-\begin{tabular}{l@{ }c@{ }l}
- $\sem \cdot^{\bullet_c}$&$=$&$\rid$\\
-$\sem{\Gamma, x : A}^{\pi;g}$&$=$&$(\sem \Gamma^\pi[x/x]) \o \sem {\Gamma, x : A}_g $
-\end{tabular}
-\end{defnbox}
- We just have to change the definition of length-matching, and the
-theorems:
+What if instead I say
+
 \begin{defnbox}
 \[
 \erule
@@ -308,6 +289,16 @@ theorems:
 {\Gamma \prov \pi : \rpath c\qquad g : c \to d}
 {\Gamma, x : A \prov (\pi ; g) : \rpath d}
 \]
+\vskip 1em
+\begin{tabular}{l@{ }c@{ }l}
+ $\zem {\cdot}_{\bullet_c}$&$=$&$\cdot$\\
+$\zem{\Gamma, x : A}_{\pi;g}$&$=$&$\zem \Gamma_\pi, x : \sem \Gamma^{\pi} \sem A_{c}$
+\end{tabular}
+\vskip 1em
+\begin{tabular}{l@{ }c@{ }l}
+ $\sem \cdot^{\bullet_c}$&$=$&$\rid_{\cdot}$\\
+$\sem{\Gamma, x : A}^{\pi;g}$&$=$&$ \sem \Gamma^\pi[x/x] \o \sem {\Gamma, x : A}_g $
+\end{tabular}
 \end{defnbox}
 
 \begin{lemma}
@@ -322,32 +313,27 @@ theorems:
 \ \begin{enumerate}
 \item Easy in the case where $\Gamma = \cdot$ and $\pi = \bullet_c$.
 Otherwise we have $\Gamma \prov A : \rtype$ and we need
-$\zem \Gamma_\pi \prov \sem \Gamma^{\pi;g} \sem A_d : \rtype$.
-But by i.h. (2) we know \[\zem \Gamma_\pi \prov \sem \Gamma^{\pi;g} : \sem \Gamma_d\]
-so just apply that substitution to $\sem \Gamma_d \prov \sem A_d : \rtype$.
+$\zem \Gamma_\pi \prov \sem \Gamma^{\pi} \sem A_c : \rtype$.
+But by (2) we know \[\zem \Gamma_\pi \prov \sem \Gamma^{\pi} : \sem \Gamma_c\]
+so just apply that substitution to $\sem \Gamma_c \prov \sem A_c : \rtype$.
 \item Easy in the case where $\Gamma = \cdot$ and $\pi = \bullet_c$. Otherwise
 we have $\Gamma, x : A$ and $\pi; g$ and we need to show
 \[\zem {\Gamma,x:A}_{\pi;g} \prov \sem {\Gamma,x:A}^{\pi;g} : \sem {\Gamma,x:A}_{d}\]
 i.e.
-\[\zem {\Gamma}_\pi, x:\sem \Gamma^{\pi;g}\sem {A}_{d} \prov (\sem \Gamma^\pi[x/x]) \o \sem {\Gamma, x : A}_g : \sem {\Gamma,x:A}_{d}\]
+\[\zem {\Gamma}_\pi, x:\sem \Gamma^{\pi}\sem {A}_{c} \prov (\sem \Gamma^\pi[x/x]) \o \sem {\Gamma, x : A}_g : \sem {\Gamma,x:A}_{d}\]
 We already know that
 \[\sem {\Gamma, x : A}_c \prov  \sem {\Gamma, x : A}_g : \sem {\Gamma,x:A}_{d}\]
-so it remains to see that
-\[\zem {\Gamma}_\pi, x:\sem \Gamma^{\pi;g}\sem {A}_{d} \prov \sem \Gamma^\pi[x/x]  : (\sem {\Gamma}_c ,x:\sem{A}_{c})\]
-which requires
-\[\zem {\Gamma}_\pi, x:\sem \Gamma^{\pi;g}\sem {A}_{d} \prov x  : \sem \Gamma^\pi \sem{A}_{c}\]
-in other words
-\[\zem {\Gamma}_\pi, x:(\sem \Gamma^\pi \o \sem {\Gamma, x : A}_g)\sem {A}_{d} \prov x  : \sem \Gamma^\pi \sem{A}_{c}\]
-so we just have to check that
-\[\sem {\Gamma, x : A}_g \sem A_d \equiv \sem A_c \]
-\[\sem {\Gamma}_g \sem A_d \equiv \sem A_c \]
-which seems totally wrong??
+so it remains to verify that
+\[\zem {\Gamma}_\pi, x:\sem \Gamma^{\pi}\sem {A}_{c} \prov \sem \Gamma^\pi[x/x]  : (\sem {\Gamma}_c ,x:\sem{A}_{c})\]
+which follows from i.h. \cqed
 \end{enumerate}
 
-\cqed
+
 \end{proof}
 
 
+\[\sem \Gamma^\pi[x/x] \o \sem{\Gamma, x :A}_g\]
+\[=  (\sem\Gamma^\pi\o\sem{\Gamma}_g) [\sem\Gamma^\pi\sem{A}_g(x)/x]\]
 \end{document}
 
 % garbage
