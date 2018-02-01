@@ -251,7 +251,6 @@ Some auxiliary theorems are as follows:
   \item[$\ttmsub$:] $\sem {[N/x]M}_c \equiv [\sem N_c / x] \sem M_c$.
   \item[$\ttpsub$:] $\sem {[N/x]B}_c \equiv [\sem N_c / x] \sem B_c$.
   \item[$\ttpmsub$:] $\sem {[N/y]B}_g(x) \equiv [\sem N_c / y] \sem B_g(x)$.
-\textcolor{red}{XXX is this right?}
   \item[$\tctxs$:] $\sem {\Gamma,[N/y]\Gamma'}_g[\sem N_d/y]\equiv [\sem N_c / y] \o \sem{\Gamma, y : A, \Gamma'}_g$
   \end{itemize}
 \end{thmbox}
@@ -612,12 +611,73 @@ which holds by $\tctxs$.
 
 
 \item[Case:] Application. \\
-\[\sem{M N}_c = (\sem M_c.1)\ {\rid_c}\ \sem N_c\]
+Suppose $M = M_1\ M_2$. then we must show
+\[\sem {[N/y]M_1\ [N/y]M_2}_c \equiv [\sem N_c / y] \sem {M_1\ M_2}_c\]
+in other words
+\[(\sem {[N/y]M_1}_c.1)\ {\rid_c}\ \sem {[N/y]M_2}_c
+\equiv [\sem N_c / y] ((\sem {M_1}_c.1)\ {\rid_c}\ \sem {M_2}_c)\]
+We just need to appeal to the i.h. to see that $\sem{[N/y]M_1}_c \equiv [\sem N_c /y]\sem{M_1}_c$
+and
+$\sem{[N/y]M_2}_c \equiv [\sem N_c /y]\sem{M_2}_c$.\cqed
 \end{itemize}
-\textcolor{red}{XXX ???}
+
+
+\end{proof}
+
+
+\begin{lemma}[$\ttpsub$]
+If $\Gamma \prov N : A$ and $\Gamma, y : A, \Gamma' \prov B : \rtype$,
+then $\sem {[N/x]B}_c \equiv [\sem N_c / x] \sem B_c$.
+\end{lemma}
+
+\begin{proof} By induction on $B$.
+\begin{itemize}
+\item[Case:] Suppose the type being substituted into is $(z : B) \to C$. Then we must show
+$\sem {[N/y]((z : B) \to C)}_c \equiv [\sem N_c / y] \sem {(z : B) \to C}_c$, in other words
+(abbreviating $\Gamma_y = \Gamma, y : A, \Gamma'$ and $\Gamma_N = \Gamma, [N/y]\Gamma'$)
+\[ ((y : \sem {[N/y]B}^{\Gamma_N;g}_d)  \to  \sem {[N/y]C}^{\Gamma_N;g}_d) \equiv
+[\sem N_c / y] ((y : \sem B^{\Gamma_y;g}_d)  \to  \sem C^{\Gamma_y;g}_d) \]
+and
+\[ ((y : \sem {[N/y]B}^{\Gamma_N;g}_d) \to
+  \sem {[N/y]C}^{\Gamma_N;g}_h  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem {[N/y]B}^{\Gamma_N;g}_h(y))) \]
+\[ \equiv [\sem N_c/y] ((y : \sem B^{\Gamma_y;g}_d) \to
+  \sem C^{\Gamma_y;g}_h  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem B^{\Gamma_y;g}_h(y)))\]
+It suffices to see that
+\[\sem {[N/y]B}^{\Gamma_N;g}_d \equiv [\sem N_c / y] \sem B^{\Gamma_y;g}_d\]
+\[\sem {[N/y]C}^{\Gamma_N;g}_d \equiv [\sem N_c / y] \sem C^{\Gamma_y;g}_d\]
+\[\sem {[N/y]B}^{\Gamma_N;g}_h(y) \equiv [\sem N_c / y] \sem B^{\Gamma_y;g}_h(y)\]
+\[\sem {[N/y]C}^{\Gamma_N;g}_h(y) \equiv [\sem N_c / y] \sem C^{\Gamma_y;g}_h(y)\]
+in other words
+\[\sem {\Gamma_N}_g\sem {[N/y]B}_d \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem B_d\]
+\[\sem {\Gamma_N}_g\sem {[N/y]C}_d \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem C_d\]
+\[\sem {\Gamma_N}_g\sem {[N/y]B}_h(y) \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem B_h(y)\]
+\[\sem {\Gamma_N}_g\sem {[N/y]C}_h(y) \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem C_h(y)\]
+By i.h. on $\ttpsub$ and $\ttpmsub$ this is the same as
+\[\sem {\Gamma_N}_g [\sem{N_d}/y]\sem {B}_d \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem B_d\]
+\[\sem {\Gamma_N}_g [\sem{N_d}/y]\sem {C}_d \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem C_d\]
+\[\sem {\Gamma_N}_g [\sem{N_d}/y]\sem {B}_h(y) \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem B_h(y)\]
+\[\sem {\Gamma_N}_g [\sem{N_d}/y]\sem {C}_h(y) \equiv [\sem N_c / y] \sem{\Gamma_y}_g\sem C_h(y)\]
+which all hold by $\tctxs$.
+\end{itemize}
 \cqed
 \end{proof}
 
+\begin{lemma}[$\ttpmsub$]
+If $\Gamma \prov N : A$ and $\Gamma, y : A, \Gamma' \prov B : \rtype$,
+then $\sem {[N/y]B}_g(x) \equiv [\sem N_c / y] \sem B_g(x)$.
+\end{lemma}
+
+\begin{proof}
+By induction on $B$.
+\begin{itemize}
+\item [Case:] Suppose the type being substituted into is $(z : B) \to C$. Then we must show
+$\sem {[N/y]((z : B) \to C)}_g(x) \equiv [\sem N_c / y] \sem {(z : B) \to C}_g(x)$, in other words
+\[\langle \lambda g . (x.1)\ {gf},
+ \lambda g . (x.2)\ {gf}\rangle \equiv \langle \lambda g . (x.1)\ {gf},
+ \lambda g . (x.2)\ {gf}\rangle \]
+which immediately holds. \cqed
+\end{itemize}
+\end{proof}
 
 \begin{lemma}[$\tctxs$]
 If $\prov \Gamma, y : A, \Gamma' : \rctx$ and $\Gamma \prov N : A$, then
@@ -642,5 +702,7 @@ so we apply the induction hypothesis to reduce this to showing
 which follows from $\ttpmsub$.
 \cqed
 \end{proof}
+
+
 
 \end{document}

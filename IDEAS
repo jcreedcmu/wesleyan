@@ -3242,3 +3242,9 @@ A: Not quite the same deal at all. I'm missing the involvement of the context.
 Q: How to reconcile this?
 A: Maybe by not trying to `factor out' the context substitution from
 the get-go.
+
+=== 2018.02.01
+
+Q: So now can I simplify what I have of the syntactic presheaf model
+by considering contexts translated at paths?
+A: ???
