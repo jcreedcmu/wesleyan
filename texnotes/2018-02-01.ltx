@@ -12,6 +12,8 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
+\def\mor#1#2{#1 \to \underline{#2}}
+
 \def\ridp{\mathsf{idp}}
 \def\fc{\mathfrak{C}}
 \def\ff{\mathfrak{F}}
@@ -331,9 +333,51 @@ which follows from i.h. \cqed
 
 \end{proof}
 
+\vfil\eject
+\subsection{Speculation}
 
-\[\sem \Gamma^\pi[x/x] \o \sem{\Gamma, x :A}_g\]
-\[=  (\sem\Gamma^\pi\o\sem{\Gamma}_g) [\sem\Gamma^\pi\sem{A}_g(x)/x]\]
+What happens if I $\sem \Gamma^\pi$ some function type? I normally have
+\[\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}_c$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\Gamma;g}_d)  \to  \sem B^{\Gamma;g}_d  ) \ \x $\\
+&&$(g : \mor c d)(h : \mor d e) (y : \sem A^{\Gamma;g}_d) \to$\\
+&&$  \sem B^{\Gamma;g}_h  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A^{\Gamma;g}_h(y)) $
+  \end{tabular}\]
+Assuming $\Gamma \prov (y : A) \to B : \rtype$, so also
+$\sem \Gamma_c \prov \sem{(y : A) \to B}_c : \rtype$.
+So if I have some $\pi$ ending in $c$,
+I should find $\zem \Gamma_\pi \prov \sem \Gamma^\pi \sem{(y : A) \to B}_c : \rtype$.
+Let's say then that
+\[\sem A^\Gamma_\pi = \sem \Gamma^\pi \sem A_{\bar\pi}\]
+and we derive that
+\[\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}^\Gamma_\pi$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\Gamma/g}_\pi)  \to  \sem B^{\Gamma/g}_\pi  ) \ \x $\\
+&&$(g : \mor c d)(h : \mor d e) (y : \sem A^{\Gamma/g}_\pi) \to$\\
+&&$  \sem B^{\Gamma/g}_{h/\pi}  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A^{\Gamma/g}_{h/\pi}(y)) $
+  \end{tabular}\]
+(using $/$ instead of $;$ to not conflict with path cons) where
+\[\sem A^{\Gamma/g}_\pi = \sem \Gamma^\pi \sem \Gamma_g \sem A_{\bar g}\]
+\[\sem A^{\Gamma/g}_{h/\pi}(x) = \sem \Gamma^\pi \sem \Gamma_g \sem A_{h}(x)\]
+Just for the sake of argument, let's assume $\Gamma = \Gamma', z : C$
+and $\pi = \pi'; f$. Compute
+\[\sem A^{\Gamma}_{\pi+g} = \sem \Gamma^{\pi+g} \sem A_{\bar g}\]
+\[ =  \sem{ \Gamma', z : C}^{\pi';gf} \sem A_{\bar g}\]
+\[ =  (\sem {\Gamma'}^{\pi'}[z/z] \o \sem {{\Gamma'}, z : C}_{gf}) \sem A_{\bar g}\]
+\[ =  (\sem {\Gamma'}^{\pi'}[z/z] \o \sem {{\Gamma'}, z : C}_{f} \o \sem {{\Gamma'}, z : C}_{g}) \sem A_{\bar g}\]
+\[ =  \sem \Gamma^\pi  \sem {\Gamma}_{g} \sem A_{\bar g}\]
+\[ =  \sem A^{\Gamma/g}_\pi\]
+
+Nice! The real property I care about is that
+\[\sem \Gamma^{\pi + g} \equiv \sem \Gamma^\pi \o \sem \Gamma_g\]
+Okay now if I say
+\[\sem A^\Gamma_\pi = \sem \Gamma^\pi \sem A_{\bar\pi}\]
+\[\sem A^\Gamma_{\pi;h}(x) = \sem \Gamma^\pi \sem A_{h}(x)\]
+I can be reasonably confident about the definition
+\[\begin{tabular}{r@{ }c@{ }l}
+$\sem{(y : A) \to B}^\Gamma_\pi$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\Gamma}_{\pi+g})  \to  \sem B^{\Gamma}_{\pi+g}  ) \ \x $\\
+&&$(g : \mor c d)(h : \mor d e) (y : \sem A^{\Gamma}_{\pi+g}) \to$\\
+&&$  \sem B^{\Gamma}_{\pi+g;h}  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A^{\Gamma}_{\pi+g;h}(y)) $
+  \end{tabular}\]
+And really I should be able to fold the context and path into one data structure.
 \end{document}
 
 % garbage
