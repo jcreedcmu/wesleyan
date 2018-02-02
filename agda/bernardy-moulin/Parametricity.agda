@@ -91,8 +91,7 @@ module _ where
 
 -- Then I make the somewhat more speculative conjecture that the
 -- remainder of BCM's axiomatization of how their types behave amounts
--- to asserting that two particular functions are equivalences. We
--- first define those functions.
+-- to asserting that two particular functions are equivalences.
 
 -- (1) embu, an "EMBedding function for the Universe". It is the case
 -- that if we have a path p in the universe Set whose endpoint is A,
