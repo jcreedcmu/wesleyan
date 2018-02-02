@@ -3247,4 +3247,15 @@ the get-go.
 
 Q: So now can I simplify what I have of the syntactic presheaf model
 by considering contexts translated at paths?
+A: Slightly, but it seems to present its own difficulties. The main
+friction is persistent off-by-one discrepancies between one
+translation and another. Afaict, there's not a clear sense in which a
+context x : A, y : B, z : C wants to be associated with two morphisms
+or three --- it wants two for translating the context to a context,
+but three for translating the context to a substitution. Maybe this is
+ok, though, not sure.
+
+=== 2018.02.02
+
+Q: Now how do I connect this back to Bernardy-Moulin?
 A: ???
