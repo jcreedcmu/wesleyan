@@ -3259,3 +3259,34 @@ ok, though, not sure.
 
 Q: Now how do I connect this back to Bernardy-Moulin?
 A: ???
+
+=== 2018.02.05
+
+Q: I claim in
+https://gist.github.com/jcreedcmu/a8c2546c045150b05da62449667c7386
+in the second paragraph a certain claim about embu. How do I prove it?
+A:
+'lemma' in
+<<<
+embu-inv : ∀ {ℓ} {A : Set ℓ}
+  → (A → Set ℓ) → A ∈ i · Set ℓ
+embu-inv {ℓ} {A} = embu-equiv .is-equiv.g
+
+embu-fg : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ)
+  → embu (embu-inv P) == P
+embu-fg {ℓ} {A} = embu-equiv .is-equiv.f-g
+
+embu-round : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) (a : A)
+            → embu (embu-inv P) a → P a
+embu-round P a t = coe (app= (embu-fg P) a) t
+
+lemma : ∀ {ℓ} {A : Set ℓ} (asm : (p : A ∈ i · Set ℓ) (a : A) → a ∈ i · (p * i))
+  → (R : A → Set ℓ) (a : A) → R a
+lemma asm R a = embu-round R a (asm (embu-inv R) a) where
+>>>
+which can be tacked on to
+wes//agda/bernardy-moulin/Parametricity.agda
+
+Q: Wait a minute, my agda encoding doesn't use linearity of ray-valued
+variables i : 𝕀. What goes wrong, then? Seems like something should go wrong.
+A: ???

@@ -56,40 +56,9 @@ postulate
 -- the left for some reason. The 'i' position is binding.
 syntax Path (λ i -> A) a = a ∈ i · A
 
--- Having set things up this way means that we don't need to specially
--- declare things like BCM's operations ⦇ , ⦈ and ! --- they're merely
--- definable ways to convert between the types a ∈ i · A and ∀i.A.
--- (cf. Moulin's thesis, p88, rules PARAM and IN-ABS)
-module _ where
-  -- although, to be fair, as you can see below, ! basically *is* the
-  -- lambda abstraction we declared for path types, and ⦅_,_⦆ is the
-  -- corresponding application. In that way, I'm not really getting a
-  -- free lunch --- but I think it's clearer/more natural to see them
-  -- as lambda abstraction and application, rather than some ad hoc
-  -- things.
-  _! : ∀ {ℓ} {A : 𝕀 → Set ℓ} (u : (i : 𝕀) → A i) → u O ∈ i · (A i)
-  _! = lam
-
-  ⦅_,_⦆ : {A : 𝕀 → Set} (a : A O) (p : a ∈ i · A i) → ((i : 𝕀) → A i)
-  ⦅_,_⦆ a p i = p * i
-
-  -- Several of the conversion-relation axioms fall out of these definitions:
-  -- (cf. Moulin's thesis, p89)
-  PAIR-ORIG : {A : 𝕀 → Set} (a : A O) (p : a ∈ i · A i) →
-    ⦅ a , p ⦆ O == a
-  PAIR-ORIG a p = idp
-
-  PAIR-PARAM : {A : 𝕀 → Set} (a : A O) (p : a ∈ i · A i) →
-    (⦅ a , p ⦆ !) == p
-  PAIR-PARAM a p = idp
-
-  SURJ-PARAM : {A : 𝕀 → Set} (u : (i : 𝕀) → A i) →
-    ⦅ u O , u ! ⦆ == u
-  SURJ-PARAM u = idp
-
 -- -----------------------------
 
--- Then I make the somewhat more speculative conjecture that the
+-- I make the somewhat more speculative conjecture that the
 -- remainder of BCM's axiomatization of how their types behave amounts
 -- to asserting that two particular functions are equivalences.
 
@@ -112,11 +81,6 @@ embu {ℓ} {A} p a = a ∈ i · (p * i)
 postulate
   embu-equiv : ∀ {ℓ} {A : Set ℓ} → is-equiv (embu {ℓ} {A})
 
-module _ where
-  -- This inverse is the Ψ_A used in rule IN-PRED (cf. Moulin's thesis, p88)
-  Ψ : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) → A ∈ i · Set ℓ
-  Ψ P = embu-equiv .is-equiv.g P
-
 -- (2) embf, an "EMBedding function for Function extensionality".
 -- Suppose we have two interval-varying types A and B, such that B is
 -- also fibered over A. Suppose we have a path in Π (A i) (B i) whose
@@ -136,17 +100,5 @@ embf p x = lam (λ i → (p * i) (x i))
 
 postulate
   embf-equiv : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ}
-    {f : (x : A O) → B O x}
-    → is-equiv (embf {ℓ} {A} {B} {f})
-
-module _ where
-  -- This inverse is the Φ_t used in rule IN-FUN (cf. Moulin's thesis, p88)
-  Φ : ∀ {ℓ} {A : 𝕀 → Set ℓ} {B : (i : 𝕀) (x : A i) → Set ℓ}
-    → (t : (x : A O) → B O x)
-    → (u : (x : (i : 𝕀) → A i) → (t (x O)) ∈ i · B i (x i))
-    → t ∈ i · ((x : A i) → B i x)
-  Φ t u = embf-equiv .is-equiv.g u
-
--- (I conjecture SURJ-TYPE, SURJ-FUN, PAIR-PRED, and PAIR-APP are
--- provable using the round-trip properties of equivalences but
--- haven't got around to formalizing it yet.)
+    (t : (x : A O) → B O x)
+    → is-equiv (embf {ℓ} {A} {B} {t})
