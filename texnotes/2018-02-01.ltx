@@ -12,6 +12,8 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathcal{U}}
 \def\mor#1#2{#1 \to \underline{#2}}
 
 \def\ridp{\mathsf{idp}}
@@ -336,7 +338,7 @@ which follows from i.h. \cqed
 \vfil\eject
 \subsection{Speculation}
 
-What happens if I $\sem \Gamma^\pi$ some function type? I normally have
+What happens if I apply $\sem \Gamma^\pi$ to some function type? I normally have
 \[\begin{tabular}{r@{ }c@{ }l}
 $\sem{(y : A) \to B}_c$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\Gamma;g}_d)  \to  \sem B^{\Gamma;g}_d  ) \ \x $\\
 &&$(g : \mor c d)(h : \mor d e) (y : \sem A^{\Gamma;g}_d) \to$\\
@@ -378,6 +380,55 @@ $\sem{(y : A) \to B}^\Gamma_\pi$&$ =$&$ (\omega : (g : \mor c d) (y : \sem A^{\G
 &&$  \sem B^{\Gamma}_{\pi+g;h}  (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A^{\Gamma}_{\pi+g;h}(y)) $
   \end{tabular}\]
 And really I should be able to fold the context and path into one data structure.
+
+\vfil\eject
+\section{What to do about Universes?}
+
+\[\erule
+{}{\Gamma \prov \U : \rtype}\]
+
+\[\erule
+{\Gamma \prov A : \U}{\Gamma \prov [A] : \rtype}\]
+
+\[\erule
+{\Gamma \prov A : \U \qquad \Gamma, x : [A] \prov B : \U}
+{\Gamma \prov (x : A) \to B : \U}\]
+
+\[\erule
+{\Gamma, x : [A] \prov M : [B]}
+{\Gamma \prov \lambda x . M : [(x : A) \to B]}
+\qquad
+\erule
+{\Gamma\prov M : [(x:A) \to B] \qquad \Gamma \prov N : [A]}
+{\Gamma \prov M\ N : [N/x][B]}\]
+
+Some suitable $f$ have a name $\quote f$.
+\[
+\begin{tikzcd}
+P\ar[r]\ar[d, "f"']\pbck&\mathcal{E}\ar[d, "e"]\\
+B\ar[r, "\quote f"']&\U
+\end{tikzcd}
+\]
+I want to have an interpretation $\sem \U$ as a covariant presheaf over $\C$.
+I can do some suggestive yoneda-ish reasoning and say that
+\[\sem \U_c =\hom_{\rset^\C}(\hom_{\C}(c, \dash), \sem \U )\]
+\[ = ( P : \rset^\C ) \x \hom_{\rset^\C}(P, \hom_{\C}(c, \dash) )\]
+
+So I say more concretely
+
+\[\sem \U_c = (P : (d : \C) \to \U) \x \]
+\[(Q : (h : \mor {\underline d} e) \to [P\ d] \to [P\ e]) \x \]
+\[\hbox {($P,Q$ is a functor)} \x \]
+\[ (\eta : (d : \C) \to [P\ d] \to \C(c, d)) \x \]
+\[ (h : \mor {\underline d} e) (\iota : [P\ d]) \to \eta\ e\ (Q\ h\ \iota) \equiv h \o (\eta\ d\ \iota)\]
+
+\[
+\begin{tikzcd}
+{[P\ d]}\ar[r, "\eta_d"]\ar[d, "Q\ h"']&\C(c, d)\ar[d, "\lambda g . hg"]\\
+{[P\ e]}\ar[r, "\eta_e"']&\C(c, e)
+\end{tikzcd}
+\]
+
 \end{document}
 
 % garbage
