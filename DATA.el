@@ -24,4 +24,10 @@
  ("JG"
   "https://personal.cis.strath.ac.uk/fredrik.nordvall-forsberg/papers/bifibparam_mfps2015.pdf"
   "Bifibrational functorial semantics of parametric polymorphism")
+ ("LOPS"
+  "https://arxiv.org/pdf/1801.07664.pdf"
+  "Internal Universes in Models of Homotopy Type Theory")
+ ("GCTT"
+  "http://www.jonmsterling.com/pdfs/guarded-ctt.pdf"
+  "Guarded Computational Type Theory")
  )

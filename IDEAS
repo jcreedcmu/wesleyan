@@ -3290,3 +3290,107 @@ wes//agda/bernardy-moulin/Parametricity.agda
 Q: Wait a minute, my agda encoding doesn't use linearity of ray-valued
 variables i : 𝕀. What goes wrong, then? Seems like something should go wrong.
 A: ???
+
+=== 2018.02.06
+
+Q: What's a snappy thing to say about the extension relation _↗_ in page 5 of [LOPS]?
+A: It's a morphism in the category of elements of the preheaf.
+
+=== 2018.02.07
+
+Q: What's the current obstacle to overcome?
+A: Understanding the Bernardy-Moulin presheaf semantics, particularly
+(a) how the universe gets interpreted
+(b) what linearity is crucial for
+(c) what their talking about symmetry is crucial for
+
+Q: What's the thought I have about the larger-scale direction I'm heading?
+A: I want to be able to *program knowing that I live in some
+open-world presheaf model*, which I can mentally extend (even though in some sense
+it was already extended) almost as if I allocate ref cells.
+
+Q: Ref cells? Huh?
+A: Like --- I know at runtime, in ML, say, I can allocate a ref cell
+of any type. But to support this semantically, I need to say that I
+have a Store which is (something like) a map (τ : Tp) → Set,
+quantifying over all object-language types. Similarly, I want to have
+operations in my programming language that feel like I'm dynamically
+extending the ℂ in the Sets^{ℂ^op} that I live in, but actually I
+think I want to be able to `plan ahead' and pick a big enough ℂ to
+start with, so that my real Sets^{ℂ^op} is something like the (τ : Tp)
+→ Set that models ref cells.
+
+Q: What supports the desirability of this?
+A: All these other pieces of work that live in presheaves,
+Bernardy-Moulin, [RS], [LOPS], [CCHM], [GCTT].
+
+=== 2018.02.08
+
+Q: Does it help much to page back in the proof that slices of toposes
+are again toposes?
+A: Not particularly at the moment.
+
+Q: Whoa, [OrtonPitts] gets away without an involution?
+A: Yeah, apparently! That's really interesting. It means some
+macro-ish duplicated effort proving theorems or postulating axioms at
+one endpoint and then the other, but that seems worth the trouble if
+it becomes apparent how to *drop* some of those axioms/theorems.
+
+Q: What's up with their ax₈? It seems like the presence of B *and* B'
+seems redundant somehow. I read it intuitively as saying: if B extends
+partial type A, then there exists B' such that B' extends partial type
+A, so surely I'm thinking about it wrong, aren't I?
+A: ???
+
+Q: What intuition just kicked in about fibrant objects?
+A: Fibrations are the well-behaved morphisms that, as weakening
+projections, characterize types. Recall that generally a fibrant
+object is an object such that the morphism into the terminal object is
+a fibration --- through the lens of dependent type semantics, that's a
+type that's well-behaved, and which is additionally *closed*, because
+it's over empty context.
+
+Q: So does [LOPS] actually yield univalence provably?
+A: ???
+
+Q: What's another good couple of older papers to look at?
+A:
+"Universes in Toposes"
+http://www.mathematik.tu-darmstadt.de/~streicher/NOTES/UniTop.pdf
+"The intrinsic topology of Martin-Löf universes"
+https://www.cs.bham.ac.uk/~mhe/papers/universe-indiscrete.pdf
+
+Q: Can I say something like
+<<<
+a 'b' is a potentially infinite vector of bits
+a 's' is a potentially infinite vector of {0, 1, *}
+where
+ dom s is a 'b', replaces * with 0 and
+ cod s is a 'b', replaces * with 1
+
+⟦ cons f : A → B ⟧_0b = ⟦ A ⟧_b
+⟦ cons f : A → B ⟧_1b = ⟦ B ⟧_b
+⟦ cons f : A → B ⟧_0s(x) = ⟦ A ⟧_s(x)
+⟦ cons f : A → B ⟧_1s(x) = ⟦ B ⟧_s(x)
+⟦ cons f : A → B ⟧_*s(x) = ?
+>>>
+A: Let's try to type check it. I'm assuming
+Γ ⊢ f : A → B
+so (assuming dom s = d and cod s = c)
+I need
+⟦ Γ ⟧_0d, x : ⟦ cons f : A → B ⟧_0d ⊢ ⟦ cons f : A → B ⟧_*s(x) : ⟦ Γ ⟧_1c ⟦ cons f : A → B ⟧_1c
+in other words
+⟦ Γ ⟧_0d, x : ⟦ A ⟧_d ⊢ ⟦ cons f : A → B ⟧_*s(x) : ⟦ Γ ⟧_1c ⟦ B ⟧_c
+so I observe
+⟦ Γ ⟧_0d ⊢ ⟦ f x ⟧_0d : ⟦ B ⟧_0d
+oh but hold up I'm getting a discrepancy between d and 0d here hmm.
+
+Q: Maybe say also something like
+<<<
+⟦ cons f : A → B ⟧_0b = ⟦ cdr A ⟧_0b
+⟦ cons f : A → B ⟧_1b = ⟦ cdr B ⟧_1b
+⟦ cons f : A → B ⟧_0s(x) = ⟦ cdr A ⟧_0s(x)
+⟦ cons f : A → B ⟧_1s(x) = ⟦ cdr B ⟧_1s(x)
+>>>
+?
+A: Not sure I can figure out what to do with that.
