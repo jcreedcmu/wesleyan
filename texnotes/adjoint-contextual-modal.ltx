@@ -21,12 +21,8 @@
 {\Delta;\Gamma \prov U_\Psi B}
 \qquad
 \erule
-{ \Delta, B; \Gamma \prov B' \qquad \Delta; \Gamma \prov \Psi \using UL_1}
+{ \Delta; \Gamma, B \prov B' \qquad \Delta; \Gamma \prov \Psi \using UL}
 {\Delta, U_\Psi B; \Gamma \prov B'}
-\qquad
-\erule
-{ \Delta, B \prov A \qquad \Delta \prov \Psi \using UL_2}
-{\Delta, U_\Psi B \prov A}
 \]
 \[
 \erule
