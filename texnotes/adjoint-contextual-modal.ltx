@@ -1,0 +1,41 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\input{linear}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\begin{document}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Valid Props&$A$&$U_\Psi B$\\
+  True Props&$B$&$F A \celse A \land B \celse A \lor B \celse \cdots $\\
+  Valid Contexts&$\Delta$&$\cdot \celse \Delta, A $\\
+  True Contexts&$\Gamma,\Psi$&$\cdot \celse \Gamma, B $
+\end{tabular}
+\]
+\[
+\erule
+{\Delta; \Psi \prov B \using UR}
+{\Delta;\Gamma \prov U_\Psi B}
+\qquad
+\erule
+{ \Delta, B; \Gamma \prov B' \qquad \Delta; \Gamma \prov \Psi \using UL_1}
+{\Delta, U_\Psi B; \Gamma \prov B'}
+\qquad
+\erule
+{ \Delta, B \prov A \qquad \Delta \prov \Psi \using UL_2}
+{\Delta, U_\Psi B \prov A}
+\]
+\[
+\erule
+{\Delta \prov A}
+{\Delta; \Gamma \prov FA \using FR}
+\qquad
+\erule
+{ \Delta, A; \Gamma \prov B  \using FL}
+{\Delta; \Gamma, FA \prov B}
+\]
+
+\end{document}

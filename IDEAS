@@ -3394,3 +3394,16 @@ Q: Maybe say also something like
 >>>
 ?
 A: Not sure I can figure out what to do with that.
+
+Q: Hey, actually is this where linearity needs to come into play?
+A: ???
+
+
+Q: What even approximately does the presheaf model for n-ary relations
+look like? Like, assuming that I make the approximation that unary
+relations need just the unmodified cube category.
+A: ???
+
+Q: Is there a reason I don't need a postulate to specifically spell
+out what paths in dependent product types look like?
+A: ???

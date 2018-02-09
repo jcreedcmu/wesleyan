@@ -1,0 +1,377 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathcal{U}}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\fc{\mathfrak{C}}
+\def\ff{\mathfrak{F}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Bernardy-Moulin's Semantics in my Own Words}
+
+The category $\re_e$ has as objects finite sets and for morphisms has
+injections `with exceptions' drawn from the set $e$. That is, a
+morphism $n \to m$ is a function $f : n \to m + e$ that is injective
+as far as the $m$-part of the domain is concerned; if
+$f(n_1) = f(n_2) = \binl m_0$, for $n_1, n_2 < n$
+and $m_0 < m$, then $n_1 = n_2$.
+
+The usual notion of cubical set (disallowing diagonals) is an object of $\rset^{\re_2^\op}$.
+I might depict the objects $1, 2$ in $\re_2$ as
+\[
+\begin{tikzcd}
+  \bullet\ar[r, "z"]&\bullet
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \bullet\ar[d, "y"']\ar[r, "x"]&\bullet\ar[d, "y"]\\
+  \bullet\ar[r, "x"']&\bullet
+\end{tikzcd}
+\]
+
+In which case the (degeneracy) morphisms $1 \to 2$ in $\re_2$ are
+$z \mapsto (x, y, 0, 1)$, and the morphisms  $2 \to 1$
+are $(x, y) \mapsto$
+\[(z, 0) \quad (z, 1)\quad (0, z) \quad (1, z)\]
+\[ (0, 0)\quad (0, 1) \quad (1, 0)\quad (1, 1) \]
+The morphism $0 \to 1$ is $!$ and the morphisms $1 \to 0$ are $z \mapsto (0,1)$.
+
+So a {\em cubical set} is a functor in $\rset^{\re_2}$. I could say
+a {\em rayical set} is a copresheaf in $\rset^{\re_1}$.
+Bernardy-Moulin talk about presheaves on $\re_1^\op$.
+
+The yoneda embedding says that $\re_2^\op$ is the thing that embeds
+faithfully in cubical sets. So there are two ways that the vertex $0$
+embeds into the arrow $1$ because there are two morphisms $0 \to 1$ in
+$\re_2^\op$. Ok, fine, everything lines up.
+
+I want to give names to the two dual categories I might be dealing
+with: there's the {\em abstract} or {\em interface} or {\em
+  operational} side, in which there are two morphisms $1 \to 0$,
+because there are two abstract operations $\dom$ and $\cod$. Then
+there's the {\em concrete} or {\em implementation} side of the
+duality, where each object actually {\em behaves} like the cubey
+object, and there are two morphisms $0 \to 1$ because there are two
+morphisms that I can visualize from $y0 \to y1$, namely, map the
+vertex into the domain or codomain vertex. Which is $\re_2$? It's the
+abstract one. Which one do we take functor category into sets of? The abstract one.
+We take {\em presheaves} of the {\em concrete} one.
+
+\subsection{Speculation About Mixing Arities}
+So what happens if I want to consider a mixture of arities? To choose an object of $\re_1$
+is to choose how many rays I want to have, and to choose an object of $\re_2$ is to choose
+how many intervals I want to have. I'd like to be able to choose any number of both, and
+also how many 0-pointed, 3-pointed, 4-pointed, etc. pseudointervals. Let me depict
+`two intervals and one ray' and `one ray and two intervals':
+\[
+\begin{tikzcd}
+&\bullet\ar[dl, "z"']\ar[dd, "y"', near start]\ar[rr, "x"]&&\bullet\ar[dd, "y"]\ar[dl, "z"']\\
+  \ &&\ \\
+&\bullet\ar[dl, "z"']\ar[rr, "x"', near start]&&\bullet\ar[dl, "z"]\\
+\ &&\ %
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+&\bullet\ar[dl, "z"']\ar[dd, "y"', near start]\ar[rr, "x"]&&\bullet\ar[dd, "y"]\ar[dl, "z"']\\
+  \ &&\ \\
+&\ &&\ %
+\end{tikzcd}
+\]
+Let's call these objects $x^2y^2z^1$ and $x^2y^1z^1$.
+And for comparison, here's $x^2y^2z^2$:
+\[
+\begin{tikzcd}
+&\bullet\ar[dl, "z"']\ar[dd, "y"', near start]\ar[rr, "x"]&&\bullet\ar[dd, "y"]\ar[dl, "z"']\\
+  \bullet\ar[dd, "y"']\ar[rr, "x", near start, crossing over]&&\bullet\\
+&\bullet\ar[dl, "z"']\ar[rr, "x"', near start]&&\bullet\ar[dl, "z"]\\
+  \bullet\ar[rr, "x"']&&\bullet\ar[from=uu, "y", near start, crossing over]
+\end{tikzcd}
+\]
+
+How many ways can a ray $w^1$ go concretely into $x^2y^2z^1$? It's going to be something like
+a map $\{x, y, z\} \to w$. Can I map $x$, $y$ into $w$, though? Can I inject a ray into an interval?
+Not sure yet. At the very least I certainly can do anything
+of the form $x \mapsto (0,1), y \mapsto (0,1), z\mapsto w$.
+
+How many ways can a ray $w^1$ go concretely into $x^2y^1z^1$? I can map $x$ into either $(0,1)$
+and my remaining choice looks like picking $(y,z)\mapsto (0,w)$ versus $(w,0)$.
+
+Okay, so if I have a variable of type $x^n$ I can map it to any value $0,\ldots,n-1$ for sure,
+and also for sure I can map it to any $y^n$ --- but probably more generally I should be able
+to map it to $y^m$ for some map either $n \to m$ or $m \to n$, not sure.
+
+I think a ray should be able to concretely map into an interval, in at
+least two different nontrivial ways; by situating it at either vertex.
+This is in addition to the two trivial ways it can sit at those
+vertices.
+
+So when we abstractly map $x^2$ into $y^1$, we map $x$ to $y$, and pick a function
+{\em contra}variantly, I guess, from $1$ to $2$. This means that there is a way of
+mapping $y^1$ to $x^2$, also, using the unique map $2 \to 1$.
+
+What's my category, then? The objects are functions between finite sets $f : A \to B$.
+For example, $x^2y^2z^1$ is the map $\{x_0,x_1,y_0,y_1,z_0\} \to \{x, y, z\}$.
+An (abstract-direction) morphism from $f : A \to B$ to $g : C \to D$ is we have to map
+$B$ to something like the sum of $A$ and... $D$?
+
+No, let me write down the earlier thing concretely. An object is a
+finite set $X$ and a map $f : X \to \rfinset$. An (abstract) morphism
+$(X, f) \to (Y, g)$ is a map from each element $x\in X$ to either $f(x)$ or
+$(y \in Y) \x (g(y) \to f(x))$. Oho, that lets me define an operation $Y^+$ that takes
+$(Y, g)$ to $(Y + 1, g + (\star \mapsto 1))$, and then a morphism
+$(X, f) \to (Y, g)$ is a map $(x : X) \to (y : Y^+) \x g(y) \to f(x)$.
+
+Right, good, let me rephrase this in terms of fibers, then. My category has objects
+$f : A \to B$. There's the evident exception-monad map operation $f^+ : A+ 1 \to B + 1$.
+A morphism $f \to g$ is map
+\[ (x : \cod f) \to (y : \cod g^+) \x (g^+)^*(y) \to f^*(x) \]
+or like logically
+\[ \forall x : \cod f . \exists y : \cod g^+ . \forall \_ : g^+ . \exists \_ :  f^*(x) \]
+or maybe I should demand (what I think is a stronger, more coherent proposition)
+\[
+\begin{tikzcd}
+  A\ar[from=d]\ar[r, "f"]& B\ar[d]\\
+C+1 \ar[r, "g+1"'] &D+1
+\end{tikzcd}
+\]
+No, this isn't right; it doesn't allow different things in $B$ to line
+up with different things in $A$. Probably want to demand a $\beta, \delta$
+that make
+\[
+\begin{tikzcd}
+  A\ar[from=d, "\delta"]\ar[dr, "f"]\\
+  \bullet\ar[d]\pbck\ar[r]& B\ar[d, "\beta"]\\
+C+1 \ar[r, "g+1"'] &D+1
+\end{tikzcd}
+\]
+commute.
+
+Okay, a unary relation in a type $X$ looks like
+\[\begin{tikzpicture}
+\node at (0,0){
+\begin{tikzcd}
+    \bullet\ar[r, "x"]&\ %
+\end{tikzcd}
+};
+\node at (2.5,0){$\to$};
+
+\begin{scope}[shift={(5,0)}]
+  \node(aa) at (.2,1){};
+  \node(bb) at (1,0){};
+  \node(cc) at (.5,-1){};
+  \node(dd) at (-1,0){};
+  \fill [opfibl] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+  \draw [opfib] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+  \node [opfib] at (0,0){$X$};
+\end{scope}
+\end{tikzpicture}\]
+and a binary relation looks like
+\[\begin{tikzpicture}
+\node at (0,0){
+\begin{tikzcd}
+    \bullet\ar[r, "x"]&\bullet %
+\end{tikzcd}
+};
+\node at (2.5,0){$\to$};
+
+\begin{scope}[shift={(5,0)}]
+  \node(aa) at (.2,1){};
+  \node(bb) at (1,0){};
+  \node(cc) at (.5,-1){};
+  \node(dd) at (-1,0){};
+  \fill [opfibl] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+  \draw [opfib] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+  \node [opfib] at (0,0){$X$};
+\end{scope}
+\end{tikzpicture}\]
+
+So what are `push'-like operations? I know it's a pull when I start with the canonical nullary
+relation into $X$ and get a unary relation, so I guess it has to be a pull when I go from
+binary to unary. So it's a push when I go from unary to binary along the diagonal. Right?
+There's a canonical $2 \to 1$ so a canonical $\sharp 2 \to \sharp 1$ and mere composition
+is push, I think. So it should take me from unary to binary. So there should be a canonical
+concrete map from $x^2$ to $x^1$, so a canonical abstract map from $x^1$ to $x^2$, so a canonical
+map $2 \to 1$. I think that's right, now.
+
+\end{document}
+
+% garbage
+If $A : *$ then $\usem A : A \to *$
+\[\pi : \Pi A \cn * . \Pi a \cn A .  \usem A\ a\]
+\[\sem \pi : \pi \in \sem{\Pi A \cn * . \Pi a \cn A .  \usem A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * . \pi\ A \in \sem{ \Pi a \cn A .  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .\pi\ A \in \sem{  \dot A\ a}   \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) .  \sem{  \dot A\ a} (\pi\ A)  \]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \sem {\dot A}\ a\ \sem a\ (\pi\ A)\]
+\[\sem \pi : \Pi A \cn * .\Pi \dot A \cn A \to * .  \Pi a \cn A .  \Pi \dot a \cn \dot A(a) . \usem {\dot A}\ a\ \dot a\ (\pi\ A)\]
+\[\sem{ \dot A} : \dot A \in \sem {A \to *}\]
+\[\sem{ \dot A} : \Pi a \cn A . \Pi \dot a \cn \dot A(a) . \dot A(a) \to *\]
+
+
+\end{document}
