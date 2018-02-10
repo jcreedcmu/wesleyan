@@ -359,6 +359,12 @@ is push, I think. So it should take me from unary to binary. So there should be 
 concrete map from $x^2$ to $x^1$, so a canonical abstract map from $x^1$ to $x^2$, so a canonical
 map $2 \to 1$. I think that's right, now.
 
+Right, I was thinking that push couldn't possibly impose an equality via
+\[\mathsf{push}_{\delta : A \to A \x A} R : A \x A \to \rset = \{ (a, b) \st a = b \land Ra \}\]
+And that a pull taking $R : A \x A \to \rset$ and forming
+\[\mathsf{pull}_{\delta : A \to A \x A} R: \{ a \st Raa \}\]
+is `simpler' but if I think about table rows, the push is the one simply
+renaming the tuple $(a)$ to $(a, a)$ and the pull is the one filtering by equality.
 \end{document}
 
 % garbage
