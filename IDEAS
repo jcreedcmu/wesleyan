@@ -3398,12 +3398,21 @@ A: Not sure I can figure out what to do with that.
 Q: Hey, actually is this where linearity needs to come into play?
 A: ???
 
-
 Q: What even approximately does the presheaf model for n-ary relations
 look like? Like, assuming that I make the approximation that unary
 relations need just the unmodified cube category.
 A: ???
 
+=== 2018.02.09
+
 Q: Is there a reason I don't need a postulate to specifically spell
 out what paths in dependent product types look like?
+A: ???
+
+=== 2018.02.10
+
+Q: Does Moulin introduce I-sets, I-elements, etc. just so that some
+definitional equalities translate to equalities rather than
+isomorphisms? Can I validate embu and embf with just the usual
+presheaf model?
 A: ???

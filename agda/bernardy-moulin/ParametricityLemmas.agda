@@ -35,32 +35,32 @@ A ⋈ P = ⦅ A , Ψ P ⦆
 ⦉ t , u ⦊ = ⦅ t , Φ t u ⦆
 
 -- Some lemmas for what follows
-module _ where
-  embu-inv : ∀ {ℓ} {A : Set ℓ}
-    → (A → Set ℓ) → A ∈ i · Set ℓ
-  embu-inv {ℓ} {A} = embu-equiv .is-equiv.g
 
-  embu-fg : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ)
-    → embu (embu-inv P) == P
-  embu-fg {ℓ} {A} = embu-equiv .is-equiv.f-g
+embu-inv : ∀ {ℓ} {A : Set ℓ}
+  → (A → Set ℓ) → A ∈ i · Set ℓ
+embu-inv {ℓ} {A} = embu-equiv .is-equiv.g
 
-  embu-coe : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) (a : A)
-               → P a → embu (embu-inv P) a
-  embu-coe P a p = coe (app= (rev (embu-fg P)) a) p
+embu-fg : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ)
+  → embu (embu-inv P) == P
+embu-fg {ℓ} {A} = embu-equiv .is-equiv.f-g
 
-  embu-coe2 : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) (a : A)
-              → embu (embu-inv P) a → P a
-  embu-coe2 P a t = coe (app= (embu-fg P) a) t
+embu-coe : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) (a : A)
+             → P a → embu (embu-inv P) a
+embu-coe P a p = coe (app= (rev (embu-fg P)) a) p
 
-  round-trip :  ∀ {ℓ} {A : Set ℓ} {P Q : A → Set ℓ}
-    (π : P == Q) (a : A) (z : P a) →
-    coe (app= (rev π) a) (coe (app= π a) z) == z
-  round-trip idp a z = idp
+embu-coe2 : ∀ {ℓ} {A : Set ℓ} (P : A → Set ℓ) (a : A)
+            → embu (embu-inv P) a → P a
+embu-coe2 P a t = coe (app= (embu-fg P) a) t
 
-  round-trip2 :  ∀ {ℓ} {A : Set ℓ} {P Q : A → Set ℓ}
-    (π : P == Q) (a : A) (z : Q a) →
-    coe (app= π a) (coe (app= (rev π) a) z) == z
-  round-trip2 idp a z = idp
+round-trip :  ∀ {ℓ} {A : Set ℓ} {P Q : A → Set ℓ}
+  (π : P == Q) (a : A) (z : P a) →
+  coe (app= (rev π) a) (coe (app= π a) z) == z
+round-trip idp a z = idp
+
+round-trip2 :  ∀ {ℓ} {A : Set ℓ} {P Q : A → Set ℓ}
+  (π : P == Q) (a : A) (z : Q a) →
+  coe (app= π a) (coe (app= (rev π) a) z) == z
+round-trip2 idp a z = idp
 
 -- The conversion-relation axioms fall out of these definitions:
 -- (cf. Moulin's thesis, p89)

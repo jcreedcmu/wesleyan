@@ -301,11 +301,11 @@ C+1 \ar[r, "g+1"'] &D+1
 \end{tikzcd}
 \]
 No, this isn't right; it doesn't allow different things in $B$ to line
-up with different things in $A$. Probably want to demand a $\beta, \delta$
+up with different things in $A$. Probably want to demand a $\beta, \gamma$
 that make
 \[
 \begin{tikzcd}
-  A\ar[from=d, "\delta"]\ar[dr, "f"]\\
+  A\ar[from=d, "\gamma"]\ar[dr, "f"]\\
   \bullet\ar[d]\pbck\ar[r]& B\ar[d, "\beta"]\\
 C+1 \ar[r, "g+1"'] &D+1
 \end{tikzcd}
@@ -365,6 +365,180 @@ And that a pull taking $R : A \x A \to \rset$ and forming
 \[\mathsf{pull}_{\delta : A \to A \x A} R: \{ a \st Raa \}\]
 is `simpler' but if I think about table rows, the push is the one simply
 renaming the tuple $(a)$ to $(a, a)$ and the pull is the one filtering by equality.
+
+\subsection{Found a Problem}
+
+This pullback definition doesn't make sense when I try to think about an abstract map
+\[x^2y^2 \to z^4\]
+which would correspond to a concrete map
+\[\sharp 4 \to \sharp 2 \otimes \sharp 2\]
+which would allow me to convert maps
+\[(\sharp 2 \otimes \sharp 2 \to X) \to (\sharp 4 \to X)\]
+which combined with
+\[\mathsf{ pull} : (\sharp 4 \to X) \to (\sharp 3 \to X)\]
+\[\mathsf{ push} : (\sharp 3 \to X) \to (\sharp 2 \to X)\]
+is the thing that lets me define binary relation composition.
+
+Here's the thing that doesn't make sense: if I independently allow
+mapping $x \mapsto z$ and $y\mapsto z$, I have the entirety of the $4$
+to choose how to map back to $2$, {\em twice}. This is too much data.
+I actually want to split up the $4$ and map it onto both $2$s jointly,
+linearly. This makes sense out of the {\em injectivity} in the
+Bernardy-Moulin definition; if all my dimensions are $x^1y^1z^1\cdots$
+etc., then this linearity (well, affineness, I guess, since I can
+throw things away into endpoints) is exactly injectivity.
+
+Ignoring the ability to pick endpoints, a morphism $(f : A \to B) \to (g : C \to D)$ does
+seem to want to be something like
+\[
+\begin{tikzcd}
+  A\ar[from=d, "\gamma"]\ar[r, "f"]& B\ar[d, "\beta"]\\
+C \ar[r, "g"'] &D
+\end{tikzcd}
+\]
+but the totality of $\gamma$ seems to be slightly too much to ask in
+general. What if $\beta$ isn't surjective? So let me then stare at
+\[
+\begin{tikzcd}
+  A+1\ar[from=d, "\gamma"]\ar[r, "f+1"]& B+1\ar[d, "\beta+1"]\\
+C \ar[r, "\binl \o g"'] &D+1
+\end{tikzcd}
+\]
+Is this sufficient? Should I be able to do something like an abstract morphism
+\[ x^2 \to z^4 \]
+where I only use part of the $4$ to cover the $2$? Somehow my gut says no.
+
+I thought for a moment that I wanted to ask for a map, for each $d \in
+C$, from $g^*(d)$ to the preimage under {\em the composition of
+  $\beta$ and $f$}: a function $g^*(d) \to (\beta\o f)^*(d)$. But if nobody hits
+$z^4$ at all, that's asking for a map {\em into} 0, so that's no good. Hrm.
+
+
+\subsection{Retreating to what I Do Know}
+
+Some abstract maps $x_1^nx_2^n\cdots \to y_1^ny_2^n \cdots$ that I definitely believe
+exist are any `sufficiently injective' maps of $X \to Y + n$.
+
+Furthermore for any $x$ that maps to a $y$, I think I can pick a {\em
+  permutation} of $n$, to capture permuting vertices.
+
+I'm pretty sure there are canonical abstract maps $x^1 \to y^n$ (push to duplicate columns)
+and $x^n \to y^0$ (push to project out all columns). And indeed for any map $n \to m$ there
+should exist an abstract push map $x^m \to x^n$.
+
+Actually, {\em is} it perhaps the case that these maps ought to be
+surjective on dimensions? No, that doesn't seem right: we can send everything to the $+n$.
+
+Can I say definitively what the sets-and-relations interpretation is for any of these presheaves?
+For sure $x^n$ should be a set with an $n$-ary relation. I figure $x^2 y^2$ should be a
+relation that's the product of two binary relations? Or is it four arbitrary binary relations?
+I know I can yoneda-embed each object and then take sums of them in the presheaf category,
+being as it's the free cocompletion. So $x^2 + y^2$ is a thing, and it should work out to asking
+for two unrelated binary relations.
+
+When I have just the `cube category' for Benardy-Moulin, what's going on? The objects I have
+are $\mathsf{I}, x^1, x^1y^1, x^1y^1z^1$, etc. To map them into an object is to construct something
+with $n$ variables of type $\ii$. That $\mathsf{embu}$ is an equivalence is to say
+%% embu : ∀ {ℓ} {A : Set ℓ} (p : A ∈ i · Set ℓ)
+%%   (a : A) → Set ℓ
+%% embu {ℓ} {A} p a = a ∈ i · (p * i)
+
+\[
+\begin{prooftree}
+   \prov A \in i . \rset
+\Justifies
+   \prov A \to \rset
+\end{prooftree}
+\]
+
+So $\ii \to \rset$ is the same as $(A : \rset) \x (A \to \rset)$.
+More generally $\sharp n \to \rset$ should be the same as $(A : n \to \rset) \x ((c : n) \to A\ c) \to \rset$. Thus
+\[\sharp n \to \sharp m \to \rset\]
+\[= \sharp n \to (A : m \to \rset) \x ((c : m) \to A\ c) \to \rset\]
+and by the `axiom of constructive choice'
+%% {-# OPTIONS --without-K --rewriting #-}
+%% module a where
+%%
+%% open import HoTT
+%%
+%% thm : {A : Set} {B : A → Set} {P : (x : A) (y : B x) → Set} →
+%%   ((x : A) → Σ (B x) (λ y → P x y)) == Σ ((x : A) → B x) (λ f → (x : A) → P x (f x))
+%% thm {A} {B} {P} = ua (equiv inj out zig zag) where
+%%   inj : ((x : A) → Σ (B x) (P x)) →
+%%       Σ ((x : A) → B x) (λ f → (x : A) → P x (f x))
+%%   inj g = (λ x → g x .fst) , (λ x → g x .snd)
+%%   out : Σ ((x : A) → B x) (λ f → (x : A) → P x (f x)) →
+%%       (x : A) → Σ (B x) (P x)
+%%   out (f , s) x = f x , s x
+%%   zig : (b : Σ ((x : A) → B x) (λ f → (x : A) → P x (f x))) →
+%%       inj (out b) == b
+%%   zig b = idp
+%%   zag : (a : (x : A) → Σ (B x) (P x)) → out (inj a) == a
+%%   zag a = idp
+\[((x : A) \to (y : B) \x P(x, y)) \equiv (f : (x : A) \to B) \x (x : A) \to P(x, f(x))\]
+change this to
+\[=  (A : \sharp n \to m \to \rset) \x (x : \sharp n) \to ((c : m) \to A\ x\ c) \to \rset\]
+Bah, this is still difficult to massage. Let me first refine the double-horizontal that I have above.
+
+
+\[
+    p : (A \in i . \rset)
+\qquad\longleftrightarrow\qquad
+    (\lambda a . a \in i . (p * i)) : A \to \rset
+\]
+\[ (q : \sharp n) \to \rset \equiv (A : \rset) \x ?\]
+
+Bah. The function
+\[
+\lambda p a . \{ g : \lambda (i : \ii) . p * i \st g\ 0 \equiv a \} :
+   \{ f : \ii \to \rset  \st f 0 \equiv A \}\to( A \to \rset)
+\]
+is an equivalence? No this is also a mess.
+
+\subsection{Trying Again with just $\ii$}
+
+I want to transform $\ii \to \ii \to \rset$ to something reasonable.
+I know $\ii \to \rset$ is the same thing as $(A : \rset) \x (A \to \rset)$.
+So
+\[\ii \to \ii \to \rset = \ii \to (A : \rset) \x (A \to \rset) \eqno(*)\]
+\[=   (F : \ii \to \rset) \x (i : \ii) \to F\ i \to \rset\]
+First thing I need to do is generalize
+% cf. ParametricitySb.agda
+\[\ii \to \rset \equiv (A : \rset) \x (A \to \rset)\]
+to
+\[(F : \ii \to \rset) \to B(F) \equiv  (A : \rset) (P : A \to \rset) \to B(\lambda i . \Psi_A P * i)\]
+\[(F : \ii \to \rset) \x B(F) \equiv  (A : \rset) (P : A \to \rset) \x B(\lambda i . \Psi_A P * i)\]
+whence
+\[(*) =  (A : \rset) (P : A \to \rset)  \x (i : \ii)  (\Psi_A P * i) \to \rset\]
+
+Wait a minute. Isn't it the case that a `diagram' like
+\[
+\begin{tikzcd}
+&\ \\
+    \bullet\ar[ur, "y"]\ar[r, "x"']&\ %
+\end{tikzcd}
+\]
+ends up being something like a map from a square
+\[
+\begin{tikzcd}
+\bullet \ar[r]\ar[d] & \ar[d] \bullet\\
+\bullet \ar[r] &  \bullet
+\end{tikzcd}
+\]
+into $\rset$ in the presheaf semantics?
+This is exploiting the Grothendieck isomorphism
+\[ (A \to \rset) \equiv (B : \rset) \x (B \to A)\]
+so that
+\[ (A : \rset) \x (A \to \rset) \equiv (A\ B : \rset) \x (B \to A)\]
+and transitively
+\[ (\ii \to \rset) \equiv (A\ B : \rset) \x (B \to A)\]
+This is true for unary $\ii$ only.
+\[(\sharp n \to \rset) \equiv (A : n \to \rset) \x ((x : n) \to A\ x) \to \rset\]
+\[\equiv (A : n \to \rset) (B : \rset) \x (x : n) \to B \to A\ x \]
+% or in other words
+% \[(\sharp n \to \rset) \equiv (A_1 : \rset)\cdots (A_n : \rset) \x (A_1 \x\cdots\x A_n) \to \rset\]
+% \[ \equiv (A_1 : \rset)\cdots (A_n : \rset) \x (B : \rset) \x (B \to A_1 \x\cdots\x A_n)\]
+So we get spans instead of single morphisms.
 \end{document}
 
 % garbage
