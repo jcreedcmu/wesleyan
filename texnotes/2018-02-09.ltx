@@ -503,7 +503,7 @@ So
 \[\ii \to \ii \to \rset = \ii \to (A : \rset) \x (A \to \rset) \eqno(*)\]
 \[=   (F : \ii \to \rset) \x (i : \ii) \to F\ i \to \rset\]
 First thing I need to do is generalize
-% cf. ParametricitySb.agda
+% cf. thmExpand in ParametricitySb.agda
 \[\ii \to \rset \equiv (A : \rset) \x (A \to \rset)\]
 to
 \[(F : \ii \to \rset) \to B(F) \equiv  (A : \rset) (P : A \to \rset) \to B(\lambda i . \Psi_A P * i)\]
@@ -539,7 +539,39 @@ This is true for unary $\ii$ only.
 % \[(\sharp n \to \rset) \equiv (A_1 : \rset)\cdots (A_n : \rset) \x (A_1 \x\cdots\x A_n) \to \rset\]
 % \[ \equiv (A_1 : \rset)\cdots (A_n : \rset) \x (B : \rset) \x (B \to A_1 \x\cdots\x A_n)\]
 So we get spans instead of single morphisms.
+
+\subsection{No Problem After All?}
+
+I think section 1.2 is misguided, since I'm confusing $\sharp 2 + \sharp 2$
+ with $\sharp 2 \tensor \sharp 2$. The pullback definition of
+morphisms might be right after all.
+
+I still kinda want to understand exactly $\ii \to \ii \to \rset$ looks like.
+If I have
+\[(F : \ii \to \rset) \x B(F) \equiv  (A : \rset) (P : A \to \rset) \x B(\lambda i . \Psi_A P * i)\]
+then I should also be able to have
+\[(F : \ii \to \rset) \x B(F) \equiv  (A\ C : \rset) (f : C \to A) \x\]
+\[ \qquad\qquad B(\lambda i . \Psi_A (\lambda a . (c : C) \x (f c \equiv a)) * i)\]
+on the grounds that for any $A$
+\[(P : A \to \rset) \x B(P) \equiv  (C : \rset) (f : C \to A) \x B( \lambda a . (c : C) \x (f\ c \equiv a )) \]
+So we can reason
+\[\ii \to \ii \to \rset \equiv \ii \to (A_1\ A_2 : \rset) \x (A_2 \to A_1) \]
+\[\equiv (A_1\ A_2 : \ii \to \rset) \x (i : \ii) \to (A_2\ i \to A_1\ i) \]
+\[\equiv (A_1\ A_2\ C_1\ C_2 : \rset) (f_1 : C_1 \to A_1) (f_2 : C_2 \to A_2) \x (i : \ii) \to\]
+\[
+( \Psi_{A_2} (\lambda a . (c : C_2) \x (f_2\ c \equiv a)) * i) \to \]
+\[ ( \Psi_{A_1} (\lambda a . (c : C_1) \x (f_1\ c \equiv a)) * i) \]
+
+I think I can reason that $ (i : \ii) \to (x: A(i)) \to B(i)$ is equivalent
+to a pair consisting of an $f : (x : A(0)) \to B(0)$ and
+a proof that $(x : (i : \ii) \to A(i)) \to (f (x\ 0) \in i.B(x\ i))$. So
+\[\equiv (A_1\ A_2\ C_1\ C_2 : \rset) (f_1 : C_1 \to A_1) (f_2 : C_2 \to A_2) (f_A : A_2 \to A_1) \to\]
+\[
+(x : \forall i . \Psi_{A_2} (\lambda a . (c : C_2) \x (f_2\ c \equiv a)) * i) \to \]
+\[ f_A\ (x\ 0) \in i . ( \Psi_{A_1} (\lambda a . (c : C_1) \x (f_1\ c \equiv a)) * i) \]
+
 \end{document}
+
 
 % garbage
 If $A : *$ then $\usem A : A \to *$

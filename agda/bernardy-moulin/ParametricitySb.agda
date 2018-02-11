@@ -12,8 +12,8 @@ pair=1 : ∀ {i j} {A : Type i} {B : A → Type j}
 pair=1 idp = idp
 
 
-thm : (𝕀 → Set) == Σ Set (λ A → A → Set)
-thm = ua (equiv into out zig zag) where
+thmExpand : (𝕀 → Set) == Σ Set (λ A → A → Set)
+thmExpand = ua (equiv into out zig zag) where
   into : (𝕀 → Set) → Σ Set (λ A → A → Set)
   into f = f O , embu (f !)
 
@@ -25,3 +25,15 @@ thm = ua (equiv into out zig zag) where
 
   zag : (a : 𝕀 → Set) → (λ i → embu-inv (embu (lam a)) * i) == a
   zag a = λ= (λ i → ap (λ z → z * i) (embu-equiv .is-equiv.g-f (a !)))
+
+
+thmExpand2 : ∀ {ℓ} (A : Set ℓ) → (A → Set ℓ) == Σ (Set ℓ) (λ B → B → A)
+thmExpand2 {ℓ} A = ua (equiv inj out {!zig!} {!!}) where
+  inj : (A → Set ℓ) → Σ (Set ℓ) (λ B → B → A)
+  inj φ = Σ A φ , fst
+
+  out : Σ (Set ℓ) (λ B → B → A) → (A → Set ℓ)
+  out (B , p) a = Σ B (λ b → p b == a)
+
+  zig : (b : Σ (Set ℓ) (λ B → B → A)) → inj (out b) == b
+  zig b = {!inj (out b) == b!}

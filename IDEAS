@@ -3416,3 +3416,8 @@ definitional equalities translate to equalities rather than
 isomorphisms? Can I validate embu and embf with just the usual
 presheaf model?
 A: ???
+
+=== 2018.02.11
+
+Q: So what does 𝕀 → 𝕀 → Set look like, really?
+A: ???
