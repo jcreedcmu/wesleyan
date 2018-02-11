@@ -570,6 +570,19 @@ a proof that $(x : (i : \ii) \to A(i)) \to (f (x\ 0) \in i.B(x\ i))$. So
 (x : \forall i . \Psi_{A_2} (\lambda a . (c : C_2) \x (f_2\ c \equiv a)) * i) \to \]
 \[ f_A\ (x\ 0) \in i . ( \Psi_{A_1} (\lambda a . (c : C_1) \x (f_1\ c \equiv a)) * i) \]
 
+\[\equiv (A_1\ A_2\ C_1\ C_2 : \rset) (f_1 : C_1 \to A_1) (f_2 : C_2 \to A_2) (f_A : A_2 \to A_1) \to\]
+\[
+(x : \forall i . \Psi_{A_2} (\lambda a . (c : C_2) \x (f_2\ c \equiv a)) * i) \to \]
+\[ (c : C_1) \x (f_1\ c \equiv f_A\ (x\ 0))  \]
+?
+\[\equiv (A_1\ A_2\ C_1\ C_2 : \rset) (f_1 : C_1 \to A_1) (f_2 : C_2 \to A_2) (f_A : A_2 \to A_1) \to\]
+\[ ((a_2 : A_2)  (c : C_2) \x (f_2\ c_2 \equiv  a_2)) \to \]
+\[ (c : C_1) \x (f_1\ c \equiv f_A\ a_2)  \]
+\[\equiv (A_1\ A_2\ C_1\ C_2 : \rset) (f_1 : C_1 \to A_1) (f_2 : C_2 \to A_2) (f_A : A_2 \to A_1) \to\]
+\[ (c : C_2) \to  (c : C_1) \x (f_1\ c \equiv f_A\ (f_2\ c_2))  \]
+
+So perhaps a commutative rectangle after all!
+
 \end{document}
 
 
