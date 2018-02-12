@@ -3420,4 +3420,68 @@ A: ???
 === 2018.02.11
 
 Q: So what does 𝕀 → 𝕀 → Set look like, really?
-A: ???
+A: A commutative square in set.
+
+=== 2018.02.12
+
+Q: What's the relationship between push and pull?
+A: Are they adjoint, maybe?
+
+If I have ♯B → X I can push_f along f : ♯A → ♯B to get something ♯A → X.
+Conversely I should be able to pull_f from ♯A → X to ♯B → X.
+
+I have some intuition that if I push (project out a column, say) and pull it back in,
+I go from something like (x ∈ X = {1,2,3,4,5} and y ∈ Y = {α, β, γ})
+
+ x | y     x     x | y
+---+---   ---   ---+--------
+ 3   α     3     3   α, β, γ
+ 3   α  ↦  3  ↦  3   α, β, γ
+ 3   β     3     3   α, β, γ
+ 4   γ     4     4   α, β, γ
+
+and so there's a canonical map from the (4, in this case) rows of the original relation
+to the (12, in this case) rows of the final result.
+
+So we have something like
+
+ id → pull ∘ push
+
+and conversely if I pull to filter equals, then push back along the diagonal, like
+
+ x | x'    x     x | x'
+---+---   ---   ---+--
+ 3   3  ↦  3  ↦  3   3
+ 5   5     5     5   5
+ 3   4
+ 1   5
+
+then I get something smaller, in the sense that I know how to inject
+it back. Hence
+
+  push ∘ pull → id
+
+So it smells like push ⊣ pull. But how exactly do I think about
+morphisms among things of type ♯A → X? I reckon it should be a special
+kind of ♯2 → (♯A → X) but that seems like a clear danger of infinite
+regress.
+
+Q: Or is it?
+A:
+ε : push ∘ pull → id_(♯A → X)
+η : id_(♯B → X) → pull ∘ push
+
+all this parametrized over f : A → B:
+
+ε : (♯A → X) → ♯2 → (♯A → X)
+η : (♯B → X) → ♯2 → (♯B → X)
+ε g (ι 0) ≡ push (pull g)
+ε g (ι 1) ≡ g
+η g (ι 0) ≡ g
+η g (ι 1) ≡ pull (push g)
+
+but yeah to express the directedness of the morphisms that ε and η are
+kicking out, I seem to need to be able to express a pull from
+♯0 → (♯A → X) to ♯1 → (♯A → X), or at least a pull from
+♯0 → X to ♯1 → X even if I sort of commute the ♯A outward. And
+the whole point is I'm trying to define what it means for X to have pulls.

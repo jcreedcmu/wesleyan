@@ -27,13 +27,29 @@ thmExpand = ua (equiv into out zig zag) where
   zag a = λ= (λ i → ap (λ z → z * i) (embu-equiv .is-equiv.g-f (a !)))
 
 
-thmExpand2 : ∀ {ℓ} (A : Set ℓ) → (A → Set ℓ) == Σ (Set ℓ) (λ B → B → A)
-thmExpand2 {ℓ} A = ua (equiv inj out {!zig!} {!!}) where
-  inj : (A → Set ℓ) → Σ (Set ℓ) (λ B → B → A)
-  inj φ = Σ A φ , fst
+-- thmExpand2 : ∀ {ℓ} (A : Set ℓ) → (A → Set ℓ) == Σ (Set ℓ) (λ B → B → A)
+-- thmExpand2 {ℓ} A = ua (equiv inj out {!zig!} {!!}) where
+--   inj : (A → Set ℓ) → Σ (Set ℓ) (λ B → B → A)
+--   inj φ = Σ A φ , fst
 
-  out : Σ (Set ℓ) (λ B → B → A) → (A → Set ℓ)
-  out (B , p) a = Σ B (λ b → p b == a)
+--   out : Σ (Set ℓ) (λ B → B → A) → (A → Set ℓ)
+--   out (B , p) a = Σ B (λ b → p b == a)
 
-  zig : (b : Σ (Set ℓ) (λ B → B → A)) → inj (out b) == b
-  zig b = {!inj (out b) == b!}
+--   zig : (b : Σ (Set ℓ) (λ B → B → A)) → inj (out b) == b
+--   zig b = {!inj (out b) == b!}
+  -- Reuse proof from Groth.agda in score-editor for this
+
+thmTerm : ∀ {ℓ} (A : 𝕀 → Set ℓ) →
+  ((i : 𝕀) → A i) == Σ (A O) (λ a → a ∈ i · (A i))
+thmTerm A = ua (equiv inj out zig zag) where
+  inj : ((i : 𝕀) → A i) → Σ (A O) (Path A)
+  inj α = (α O) , (lam α)
+
+  out : Σ (A O) (Path A) → (i : 𝕀) → A i
+  out (_ , d) = λ i → d * i
+
+  zig : (b : Σ (A O) (Path A)) → inj (out b) == b
+  zig (c , d) = idp
+
+  zag : (a : (i : 𝕀) → A i) → out (inj a) == a
+  zag α = idp

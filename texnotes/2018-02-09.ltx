@@ -583,6 +583,38 @@ a proof that $(x : (i : \ii) \to A(i)) \to (f (x\ 0) \in i.B(x\ i))$. So
 
 So perhaps a commutative rectangle after all!
 
+\subsection{Checking that Question Mark}
+
+The part I'm least certain (but hopeful) about is the bit where
+\[(x : (i : \ii) \to A(i)) \to B(x) \equiv (a : A(0)) (x : a \in i . A(i)) \to B(\lambda i . x * i)\]
+but yeah, no, this is fine and provable.
+% cf. thmTerm in ParametricitySb.agda
+
+\vfil\eject
+\section{Tangent about equivalences}
+
+Suppose I have a $f : C \to A$ and I know
+\[(x : A) \to B(x) \equiv (z : C) \to B(f(z))\]
+\[(x : A) \x B(x) \equiv (z : C) \x B(f(z))\]
+For any $B$. Can I infer that $f$ is an equivalence?
+I can instantiate the first to
+\[(x : A) \to (c : C) \x (x \equiv f\ c) \equiv (z : C) \to (c : C) \x (f\ z \equiv f\ c)\eqno(*)\]
+and trivially I can prove the rhs of this, so the lhs is inhabited;
+$f$ is surjective, at least. I'd want injectivity also
+\[(z\ w : C) \to f\ z\equiv f\ w \to z \equiv w\]
+so it would suffice to know that
+\[C \equiv ((z\ w: C) \x f z\equiv f\ w) \]
+but I reckon I can get this from
+\[((z : C)(x : A) \x f\ z \equiv x) \equiv ((z\ w: C) \x f z\equiv f\ w) \]
+
+To put it another way, let me call $g : A \to C$ the function I get out of $(*)$.
+I want to show $g (f (c)) \equiv c$.
+\[ {\Leftarrow}(*)(\lambda z . \pair{z}{\mathsf{idp})} = \bar g\]
+\[ \bar g(a) = \pair{g(a)}{e(a)} \]
+Want
+\[\pair{g (f (c))}{e(f(c))} \equiv \pair c {e(f(c))}\]
+\[\bar g \o f \equiv \lambda c . \pair c {e(f(c))}\]
+?
 \end{document}
 
 
