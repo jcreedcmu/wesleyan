@@ -590,8 +590,7 @@ The part I'm least certain (but hopeful) about is the bit where
 but yeah, no, this is fine and provable.
 % cf. thmTerm in ParametricitySb.agda
 
-\vfil\eject
-\section{Tangent about equivalences}
+\subsection{Tangent about equivalences}
 
 Suppose I have a $f : C \to A$ and I know
 \[(x : A) \to B(x) \equiv (z : C) \to B(f(z))\]
@@ -615,7 +614,118 @@ Want
 \[\pair{g (f (c))}{e(f(c))} \equiv \pair c {e(f(c))}\]
 \[\bar g \o f \equiv \lambda c . \pair c {e(f(c))}\]
 ?
+
+\vfil\eject
+\subsection{Back to Semantics}
+
+I conjecture that just a regular old presheaf semantics might be
+enough to interpret $\mathsf{embu}$ and $\mathsf{embf}$ as
+isomorphisms. Essentially, I'm guessing that the whole excursion to
+$I$-sets is just to get conversions like \textsc{Pair-Pred} to be more
+on the nose. I tried emailing Moulin but he said he didn't remember
+and was too busy to page it back in.
+
+So in my notation $\sem \Gamma$ is a functor in $\rset^{\E_1}$.
+For $f : I \to J \in \E_1$,
+\[\sem \Gamma_I : \rset \qquad \sem \Gamma_f : \sem \Gamma_I \to \sem\Gamma_J\]
+A type can be thought of as indexed over elements of the context, like
+\[\sem A_I : (\rho \in \sem \Gamma_I) \to \rset \]
+\[\sem A_f :  \{\rho : \sem \Gamma_I\} \to \sem A_I(\rho) \to \sem A_J(\sem \Gamma_f (\rho)) \]
+And we should have functoriality for $\sem \Gamma_f$ and $\sem A_f$.
+A term $\Gamma\prov M : A$ gets interpreted
+\[ \sem M_I : ( \rho : \sem \Gamma_I) \to \sem A_I(\rho)\]
+and we require
+\[ \sem A_f  (\sem M_I(\rho))  \equiv \sem M_J(\sem \Gamma_f (\rho))\]
+\subsubsection{Contexts}
+\[\sem {\cdot}_I = \{*\} \qquad \sem {\cdot}_f = \rid\]
+\[\sem {\Gamma, x : A}_I = (\rho : \sem \Gamma_I) \x \sem A_I(\rho) \]
+\[ \sem {\Gamma, x : A}_f \pair{\rho : \sem \Gamma_I}{\phi : \sem A_I(\rho)} =
+\pair{\sem\Gamma_f(\rho)}{\sem A_f(\phi)} \]
+\[\sem {\Gamma, i : \ii}_I =  \sem \Gamma_I + \sum_{{i_0} \in I} \sem \Gamma_{I\setminus {i_0}} \]
+
+\[ \sem {\Gamma, i : \ii}_f (\binl \rho : \sem \Gamma_I) = \binl (\sem \Gamma_f (\rho))\]
+\[ \sem {\Gamma, i : \ii}_f (\binr ({i_0} \in I, \rho : \sem \Gamma_{I\setminus {i_0}}) =
+\begin{cases}\binl( \sem \Gamma_{f \setminus i_0} (\rho)) & \text{if  $f(i_0) = 0$;} \\
+ \binr(f(i_0) \in J, \sem \Gamma_{f \setminus i_0} (\rho)) & \text{otherwise.}\end{cases}\]
+
+A note about representables: The representable functor $yn$ for
+$n\in \E_1$ is $\hom(n, \dash)$ since we're working in the covariant functor
+category. That is, for each $I\in\E_1$, we're concerned with the set of
+partial injections $n \to I$. This is exactly $\sem{i_1:\ii, \ldots, i_n: \ii}_I$.
+So the exponent category of the presheaf sort of represents uncertainty about
+how many `real' objects of type $\ii$ there are, which the $\ii$-typed context variables
+can be (linearly) assigned to, or else to $0$ if we run out of them.
+
+\subsubsection{Pi Types}
+Interpret
+\[\sem{ (x : A) \to B }^\Gamma_I  = \lambda \rho : \sem \Gamma_I .  \]
+\[ (\ell_{f : I \to J} : (x : \sem A^{\Gamma}_J (\sem \Gamma_f (\rho))) \to \sem B^{\Gamma,x:A}_J \pair {\sem \Gamma_f(\rho)}{x}) \x \]
+\[ (f : I \to J) (g : J \to K) (x : \sem A^{\Gamma}_J (\sem \Gamma_f(\rho))) \to \]
+\[  \sem B^{\Gamma,x:A}_g (\ell_f (x)) \equiv \ell_{gf}(\sem A^\Gamma_g (x))\]
+
+
+\subsubsection{Variables}
+If we're dealing with $\Gamma, x : A \prov x : A$, then
+$\sem x_I = \mathsf{snd}$.
+For we need
+$\sem x_I : (\rho : (\rho' : \sem \Gamma_I) \x \sem A^\Gamma_I(\rho')) \to \sem A^{\Gamma, x : A}_I(\rho)$. Oh and then I suppose I need to know that
+$\sem A^\Gamma_I(\mathsf{fst}\ \rho) \equiv \sem A^{\Gamma,x:A}_I(\rho)$.
+But surely that should be true, by induction on types or something.
+Maybe I just need to mutually define the semantic weakening substitution.
+
+If we're dealing with $\Gamma, z : B \prov x : A$, then we need
+\[\sem x^{\Gamma, z :B}_I : (\rho : (\rho' : \sem \Gamma_I) \x \sem B^\Gamma_I(\rho')) \to \sem A^{\Gamma, z : B}_I(\rho)\]
+So I'd like to set $\sem x^{\Gamma, z:B}_I(\rho, \phi) = \sem x_I^{\Gamma} (\rho)$.
+
+\subsubsection{Interval Functions}
+I wanna guess something like
+\[\sem {\forall i . A}^\Gamma_I = \lambda \rho : \sem \Gamma_I .
+\sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))\]
+where recall that $\sem{\Gamma, i:\ii}_J = \sem \Gamma_J + \sum_{k\in J} \sem\Gamma_{J\setminus k}$.
+
+I want to believe there's an isomorphism between
+\[(\rho : \sem \Gamma_I) \to \sem {\forall i .  A}^\Gamma_I(\rho)\equiv
+(\rho : \sem {\Gamma, i:\ii}_I) \to \sem A^{\Gamma, i:\ii}_I(\rho)\]
+
+\[(\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))\equiv\]
+\[(\rho : \sem \Gamma_I + \sum_{k\in I} \sem\Gamma_{I\setminus k}) \to \sem A^{\Gamma, i:\ii}_I(\rho)\]
+Actually, hm, this equality is leaving out the functoriality intrinsic to $\sem A_I$.
+The `semantic set of proofs $\Gamma\prov \forall i . A$' isn't just
+\[(\rho : \sem \Gamma_I) \to \sem {\forall i .  A}^\Gamma_I(\rho)\]
+it's the subset of those that are sufficiently functorial/natural in $I$.
+
+Let's see if I can reason about lambdas and application then.
+Suppose I have $\Gamma, i : \ii \prov M : A$ and therefore $\Gamma \prov M : \forall i . A$.
+I want to define
+\[ \sem{\langle i\rangle M}^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem{\forall i . A}^\Gamma_I(\rho) \]
+i.e.
+\[ \sem{\langle i\rangle M}^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho)) \]
+And what I have by induction hypothesis --- applied to a smaller term
+`at the future world $I,i$' --- is
+\[\sem M^{\Gamma,i:\ii}_{I,i} : (\rho : \sem \Gamma_{I,i} + \sum_{k\in {I,i}} \sem\Gamma_{I,i\setminus k}) \to \sem A^{\Gamma, i:\ii}_{I,i}(\rho)\]
+Good, this looks doable. I can take my $\rho : \sem \Gamma_I$ and plop it into
+$\binr(i \in (I, i), \rho)$ and get out exactly what I need.
+\[\sem{\langle i\rangle M}^\Gamma_I = \lambda \rho . \sem M^{\Gamma, i : \ii}_{I, i}(\binr(i \in (I, i), \rho ))\]
+Ok, how about
+\[
+\erule
+{\Gamma \prov M : \forall i . A}
+{\Gamma, j : \ii \prov M \wat j : [j/i]A}
+\]
+I'll need
+\[ \sem {M \wat j}^{\Gamma, j : \ii}_I : (\rho : \sem {\Gamma}_I + \sum_{k \in I} \sem \Gamma_{I\setminus k}) \to \sem {[j/i] A}^{\Gamma, j : \ii}_I(\rho)\]
+and I have
+\[ \sem {M }^{\Gamma}_I : (\rho : \sem {\Gamma}_I) \to \sem {\forall i . A}^{\Gamma}_I(\rho)\]
+i.e.
+\[ \sem {M }^{\Gamma}_I : (\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))\]
+which if I take $I = I\setminus k$ for the $\binr$ branch, I get
+\[ \sem {M }^{\Gamma}_{I\setminus k} : (\rho : \sem \Gamma_{I\setminus k}) \to \sem A^{\Gamma, i:\ii}_{{I\setminus k},i}(\binr(i \in ({I\setminus k}, i), \rho))\]
+So this is falling apart a little but maybe it might hold if I'm more
+careful about case analyzing how variables are used.
 \end{document}
+
+
+
 
 
 % garbage
