@@ -3490,3 +3490,14 @@ the whole point is I'm trying to define what it means for X to have pulls.
 
 Q: Did I get anything useful out of emailing Guilhem Moulin?
 A: Nooope. He's fled to industry and paged out everything.
+
+=== 2018.02.15
+
+Q: Anything essentially different about treating things as *functions* from the context
+instead of terms with free variables over a translated context?
+A: No, I think everything lines up ok.
+
+=== 2018.02.16
+
+Q: Any progress possible on formalizing these intuitions?
+A: ???

@@ -12,8 +12,11 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
+
+\def\El#1{\mathsf{El}({#1})}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
-\def\U{\mathcal{U}}
+\def\U{\mathsf{U}}
+\def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
 
 \def\ridp{\mathsf{idp}}
@@ -615,7 +618,7 @@ Want
 \[\bar g \o f \equiv \lambda c . \pair c {e(f(c))}\]
 ?
 
-\vfil\eject
+
 \subsection{Back to Semantics}
 
 I conjecture that just a regular old presheaf semantics might be
@@ -629,13 +632,13 @@ So in my notation $\sem \Gamma$ is a functor in $\rset^{\E_1}$.
 For $f : I \to J \in \E_1$,
 \[\sem \Gamma_I : \rset \qquad \sem \Gamma_f : \sem \Gamma_I \to \sem\Gamma_J\]
 A type can be thought of as indexed over elements of the context, like
-\[\sem A_I : (\rho \in \sem \Gamma_I) \to \rset \]
-\[\sem A_f :  \{\rho : \sem \Gamma_I\} \to \sem A_I(\rho) \to \sem A_J(\sem \Gamma_f (\rho)) \]
-And we should have functoriality for $\sem \Gamma_f$ and $\sem A_f$.
+\[\sem A^\Gamma_I : (\rho \in \sem \Gamma_I) \to \rset \]
+\[\sem A^\Gamma_f :  \{\rho : \sem \Gamma_I\} \to \sem A^\Gamma_I(\rho) \to \sem A^\Gamma_J(\sem \Gamma_f (\rho)) \]
+And we should have functoriality for $\sem \Gamma_f$ and $\sem A^\Gamma_f$.
 A term $\Gamma\prov M : A$ gets interpreted
-\[ \sem M_I : ( \rho : \sem \Gamma_I) \to \sem A_I(\rho)\]
+\[ \sem M^\Gamma_I : ( \rho : \sem \Gamma_I) \to \sem A^\Gamma_I(\rho)\]
 and we require
-\[ \sem A_f  (\sem M_I(\rho))  \equiv \sem M_J(\sem \Gamma_f (\rho))\]
+\[ \sem A^\Gamma_f  (\sem M^\Gamma_I(\rho))  \equiv \sem M^\Gamma_J(\sem \Gamma_f (\rho))\]
 \subsubsection{Contexts}
 \[\sem {\cdot}_I = \{*\} \qquad \sem {\cdot}_f = \rid\]
 \[\sem {\Gamma, x : A}_I = (\rho : \sem \Gamma_I) \x \sem A_I(\rho) \]
@@ -694,6 +697,7 @@ The `semantic set of proofs $\Gamma\prov \forall i . A$' isn't just
 \[(\rho : \sem \Gamma_I) \to \sem {\forall i .  A}^\Gamma_I(\rho)\]
 it's the subset of those that are sufficiently functorial/natural in $I$.
 
+\subsubsection{Interval Lambdas}
 Let's see if I can reason about lambdas and application then.
 Suppose I have $\Gamma, i : \ii \prov M : A$ and therefore $\Gamma \prov M : \forall i . A$.
 I want to define
@@ -706,6 +710,7 @@ And what I have by induction hypothesis --- applied to a smaller term
 Good, this looks doable. I can take my $\rho : \sem \Gamma_I$ and plop it into
 $\binr(i \in (I, i), \rho)$ and get out exactly what I need.
 \[\sem{\langle i\rangle M}^\Gamma_I = \lambda \rho . \sem M^{\Gamma, i : \ii}_{I, i}(\binr(i \in (I, i), \rho ))\]
+\subsubsection{Interval Applications}
 Ok, how about
 \[
 \erule
@@ -720,8 +725,66 @@ i.e.
 \[ \sem {M }^{\Gamma}_I : (\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))\]
 which if I take $I = I\setminus k$ for the $\binr$ branch, I get
 \[ \sem {M }^{\Gamma}_{I\setminus k} : (\rho : \sem \Gamma_{I\setminus k}) \to \sem A^{\Gamma, i:\ii}_{{I\setminus k},i}(\binr(i \in ({I\setminus k}, i), \rho))\]
-So this is falling apart a little but maybe it might hold if I'm more
-careful about case analyzing how variables are used.
+$\alpha$-equivalently
+\[ \sem {M }^{\Gamma}_{I\setminus k} : (\rho : \sem \Gamma_{I\setminus k}) \to \sem A^{\Gamma, i:\ii}_{I}(\binr(k \in I, \rho))\]
+\[ \sem {M }^{\Gamma}_{I\setminus k} : (\rho : \sem \Gamma_{I\setminus k}) \to \sem {[j/i]A}^{\Gamma, j:\ii}_{I}(\binr(k \in I, \rho))\]
+so that takes care of the $\binr$ case. In the $\binl$ case we have from above
+\[ \sem {M }^{\Gamma}_I : (\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))\]
+and I can take a projection
+\[\sem A^{\Delta}_{i : = 0} : \{ \rho' :\sem \Delta_{I,i} \} \to \sem A^{\Delta}_{I, i}(\rho') \to \sem A^{\Delta}_I(\sem \Delta_{i:=0 }(\rho')) \]
+for $\Delta = \Gamma, i : \ii$
+to get (where the implicit argument $\rho'$ is $\binr(i \in (i, i), \rho)$)
+\[\rho : \sem \Gamma_I \prov \sem A^{\Delta}_{i : = 0} \sem {M }^{\Gamma}_I (\rho) :
+\sem A^{\Delta}_{I}(\sem \Delta_{i := 0} \binr(i \in (I, i), \rho)) \]
+and I can unpack definitions to see that
+\[\sem \Delta_{i := 0} \binr(i \in (I, i), \rho) \equiv \binl \rho\]
+thus
+\[\rho : \sem \Gamma_I \prov \sem A^{\Gamma, i : \ii}_{i : = 0} \sem {M }^{\Gamma}_I (\rho) :
+\sem A^{\Gamma, i:\ii}_{I}(\binl \rho) \]
+as required.
+\subsubsection{Universe}
+
+Moulin's thesis says to do
+\[\sem\uni^\Gamma_I (\rho) = (A : (f : \mor I J) \to \uni) \x {}\]
+\[ (\omega : (fg : I\underline{JK}) \to A\ f \to A\ gf) \x {}\]
+\[ ((f : \mor I J) \to \omega\ f\ \rid_J \equiv \rid_{A(f)}) \x {}\]
+\[ (f\ g\ h: I \underline{J  K  L}) \to \omega\ f\ (hg) = \omega\ (gf)\ h \o \omega\ f\ g)) \]
+
+Let $e : H \to I$. Then
+\[ \sem\uni^\Gamma_e : \{\rho:\sem\Gamma_H \} \to \sem \uni_H(\rho) \to \sem \uni_{I}(\sem \Gamma_e(\rho))\]
+\[\sem\uni^\Gamma_e (A, \omega, \mathsf{ida}, \mathsf{compa}) =  \]
+\[ \langle(\lambda f  . A\ (fe)), (\lambda f. \omega\ (fe)),\]
+\[(\lambda f . \mathsf{ida}\ (fe)), (\lambda f . \mathsf{compa}\ (fe)) \rangle\]
+
+
+\subsubsection{Codes for Types}
+\[\sem{\El \alpha}_I^\Gamma = \lambda \rho . \El {\sem{\alpha}^\Gamma_I (\rho)}\]
+\vfil\eject
+\subsubsection{Parametricity Types}
+I want to say
+\[\sem{a \in i . A(i)}^\Gamma_I (\rho) = \]
+\[(u : \sem {\forall i . A}_I^\Gamma(\rho)) \x
+ (\sem a^\Gamma_I(\rho) \equiv  u \wat 0)\]
+for a semantic notion of `$\wat 0$'. Let's try to expand this out.
+\[\sem{a \in i . A(i)}^\Gamma_I (\rho) = \]
+\[(u :
+\sem {A(i)}^{\Gamma, i:\ii}_{I,i}(\binr(i \in (I, i), \rho))) \x\]
+\[ (\sem a^\Gamma_I(\rho) \equiv  \sem A^{\Gamma, i: \ii}_{i := 0} (u))\]
+where $i := 0$ is the evident morphism $I,i \to I$ that projects out $i$.
+Recall from the above subsection that
+\[\sem A^{\Delta}_{i : = 0} : \{ \rho :\sem \Delta_{I,i} \} \to \sem A^{\Delta}_{I, i}(\rho) \to \sem A^{\Delta}_I(\sem {\Delta}_{i:=0 }(\rho)) \]
+for $\Delta = \Gamma, i : \ii$.
+Therefore
+\[(\rho : \sem \Gamma_I) \prov \sem A^{\Gamma, i : \ii}_{i : = 0}(u) : \sem A^{\Gamma,i:\ii}_I(\binl \rho) \]
+What's the type of $a$? Syntactically, before translation, it's $\Gamma \prov a : A(0)$.
+So $\sem a^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem {A(0)}^\Gamma_I(\rho)$
+But surely we should have a substitution-for-zero principle relating syntactic
+substitution to `semantic application to zero' like so:
+\[(\rho : \sem \Gamma_I) \prov \sem {A(i)}^{\Gamma, i : \ii}_I(\binl \rho) \equiv \sem {A(0)}^{\Gamma}_I(\rho)\]
+so these are of the same type, and the `expanded' definition above is right.
+\subsection{Validating $\mathsf{embu}$}
+I want to compare first of all
+$\sem{\El \alpha \to \uni}_I$ and $\sem{\alpha \in  i . \uni }_I$
 \end{document}
 
 
