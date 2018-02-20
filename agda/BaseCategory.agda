@@ -51,6 +51,20 @@ module Take1 where
   ident : (A : Arrow) → Mor A A
   ident A ad = Os ad (idf _)
 
+  assoclem : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
+    → (ad : A .dst)
+    → compose (compose f g) h ad == compose f (compose g h) ad
+  assoclem {A} {B} {C} {D} f g h ad with (f ad)
+  ... | On π = idp
+  ... | Os bd π with g bd
+  ...   | Os bd' π' = {!!}
+  ...   | On π' = idp
+
+  assoc : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
+    → compose (compose f g) h == compose f (compose g h)
+  assoc {A} {B} {C} {D} f g h = λ= (assoclem f g h)
+
+
 module Take2 where
 
   -- Auxiliary types used to define morphisms
@@ -67,13 +81,32 @@ module Take2 where
 
   -- Composition
   compose : {A B C : Arrow} → Mor A B → Mor B C → Mor A C
-  compose {A} {B} {C} f g ad = lemma (f ad) where
-    lemma : Aux A B ad → Aux A C ad
-    lemma (none , h) = none , h
-    lemma (some bd , h) = lemma2 (g bd) where
-      lemma2 : Aux B C bd → Aux A C ad
-      lemma2 (q , k) = q , h ∘ k
+  compose {A} {B} {C} f g ad with f ad
+  ... | (none , h) = none , h
+  ... | (some bd , h) with g bd
+  ...   | (q , k) = q , h ∘ k
+
+    -- lemma : Aux A B ad → Aux A C ad
+    -- lemma (none , h) = none , h
+    -- lemma (some bd , h) = lemma2 (g bd) where
+    --   lemma2 : Aux B C bd → Aux A C ad
+    --   lemma2 (q , k) = q , h ∘ k
 
   -- Identities
   ident : (A : Arrow) → Mor A A
   ident A ad = (some ad) , idf _
+
+  assoclem : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
+    → (ad : A .dst)
+    → compose (compose f g) h ad == compose f (compose g h) ad
+  assoclem {A} {B} {C} {D} f g h ad with f ad
+  ... | (none , q) = idp
+  ... | (some bd , q) = {!!}
+
+  -- compose : {A B C : Arrow} → Mor A B → Mor B C → Mor A C
+  -- compose {A} {B} {C} f g ad = lemma (f ad) where
+  --   lemma : Aux A B ad → Aux A C ad
+  --   lemma (none , h) = none , h
+  --   lemma (some bd , h) = lemma2 (g bd) where
+  --     lemma2 : Aux B C bd → Aux A C ad
+  --     lemma2 (q , k) = q , h ∘ k
