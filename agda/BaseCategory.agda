@@ -86,12 +86,6 @@ module Take2 where
   ... | (some bd , h) with g bd
   ...   | (q , k) = q , h ∘ k
 
-    -- lemma : Aux A B ad → Aux A C ad
-    -- lemma (none , h) = none , h
-    -- lemma (some bd , h) = lemma2 (g bd) where
-    --   lemma2 : Aux B C bd → Aux A C ad
-    --   lemma2 (q , k) = q , h ∘ k
-
   -- Identities
   ident : (A : Arrow) → Mor A A
   ident A ad = (some ad) , idf _
@@ -101,12 +95,6 @@ module Take2 where
     → compose (compose f g) h ad == compose f (compose g h) ad
   assoclem {A} {B} {C} {D} f g h ad with f ad
   ... | (none , q) = idp
-  ... | (some bd , q) = {!!}
-
-  -- compose : {A B C : Arrow} → Mor A B → Mor B C → Mor A C
-  -- compose {A} {B} {C} f g ad = lemma (f ad) where
-  --   lemma : Aux A B ad → Aux A C ad
-  --   lemma (none , h) = none , h
-  --   lemma (some bd , h) = lemma2 (g bd) where
-  --     lemma2 : Aux B C bd → Aux A C ad
-  --     lemma2 (q , k) = q , h ∘ k
+  ... | (some bd , z) with g bd
+  ...   | (none , k) = idp
+  ...   | (some y , k) = {!!}
