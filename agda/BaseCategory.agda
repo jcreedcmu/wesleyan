@@ -57,8 +57,10 @@ module Take1 where
   assoclem {A} {B} {C} {D} f g h ad with (f ad)
   ... | On π = idp
   ... | Os bd π with g bd
-  ...   | Os bd' π' = {!!}
   ...   | On π' = idp
+  ...   | Os bd' π' with h bd'
+  ...     | On π'' = idp
+  ...     | Os bd'' π'' = idp
 
   assoc : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
     → compose (compose f g) h == compose f (compose g h)
@@ -90,11 +92,31 @@ module Take2 where
   ident : (A : Arrow) → Mor A A
   ident A ad = (some ad) , idf _
 
-  assoclem : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
-    → (ad : A .dst)
-    → compose (compose f g) h ad == compose f (compose g h) ad
-  assoclem {A} {B} {C} {D} f g h ad with f ad
-  ... | (none , q) = idp
-  ... | (some bd , z) with g bd
-  ...   | (none , k) = idp
-  ...   | (some y , k) = {!!}
+
+  assoc : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
+    → compose (compose f g) h == compose f (compose g h)
+  assoc {A} {B} {C} {D} f g h = λ= (assoclem f g h) where
+    assoclem : {A B C D : Arrow} (f : Mor A B) (g : Mor B C) (h : Mor C D)
+      → (ad : A .dst)
+      → compose (compose f g) h ad == compose f (compose g h) ad
+    assoclem {A} {B} {C} {D} f g h ad with f ad
+    ... | (none , z1) = idp
+    ... | (some bd , z1) with g bd
+    ...   | (none , z2) = idp
+    ...   | (some cd , z2) with h cd
+    ...     | (none , z3) = idp
+    ...     | (some dd , z3) = idp
+
+  identℓ : {A B : Arrow} (f : Mor A B) → compose (ident A) f == f
+  identℓ f = λ= (lem f) where
+    lem : {A B : Arrow} (f : Mor A B) (ad : A .dst) → compose (ident A) f ad == f ad
+    lem f ad with f ad
+    ... | (none , _) = idp
+    ... | (some _ , _) = idp
+
+  identr : {A B : Arrow} (f : Mor A B) → compose f (ident B) == f
+  identr f = λ= (lem f) where
+    lem : {A B : Arrow} (f : Mor A B) (ad : A .dst) → compose f (ident B) ad == f ad
+    lem f ad with f ad
+    ... | (none , _) = idp
+    ... | (some _ , _) = idp
