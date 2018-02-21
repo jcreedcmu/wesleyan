@@ -104,6 +104,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
+\def\W{\mathbf{W}}
 \def\S{\mathbf{S}}
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
@@ -172,9 +173,92 @@ boxrule=0pt,boxsep=0pt,breakable}
    commutative diagrams/.cd,
    arrow style=tikz,
    diagrams={>=stealth}}
-% got this from
-% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
-% ???
+
+\section{What I Currently Think About the Presheaf Category}
+
+An {\em $n$-endpointed interval} (or just {\em $n$-interval})
+ in a monoidal category (whose monoidal unit is named $u$) is an object $\ii$ with arrows
+$m_1, \ldots, m_n,e$ such that
+\[
+\begin{tikzcd}
+ u \ar[d, "m_i"']\ar[dr, equal]\\
+ \ii \ar[r, "e"'] & u
+\end{tikzcd}
+\]
+for every $i \in 1, \ldots n$.
+
+The bag of examples for the choice of $\C$ in $\rset^{\C^\op}$ that
+are relevant for cubical-ish type theories are
+\begin{itemize}
+\item $\C_\bullet$, the free monoidal category on an $n$-interval.
+\item $\C_\tensor$, the free symmetric monoidal category on an
+  $n$-interval.
+\item $\C_\x$, the free finite product category on an $n$-interval.
+\end{itemize}
+We can characterize these dually as
+
+\begin{itemize}
+\item $\C_\bullet^\op$: the
+  category whose objects are natural numbers and whose morphisms
+  $a \to b$ are {\bf order-preserving partial injections} $a \to b + n$.
+\item $\C_\tensor^\op$: the category whose objects are natural
+  numbers and whose morphisms $a \to b$ are {\bf partial injections}
+  $a \to b + n$.
+\item $\C_\x^\op$: the category whose objects are natural numbers and whose
+  morphisms $a \to b$ are {\bf functions} $a \to b + n$.
+\end{itemize}
+What we mean precisely by the `free monoidal category on an $n$-interval' is that
+we consider the adjunction
+\[
+\begin{tikzcd}
+\rcat_*\ar[r,shift left=2.3,"F",""{name=A, below}] &
+ \mathbf{MonCat}\ar[l,shift left=2.3,"U",""{name=B,above}]
+\ar[from=A, to=B, "\dashv", phantom, sloped]
+\end{tikzcd}
+\]
+where $U$ forgets monoidal structure except that it takes the monodial
+unit to the distinguished object of its output in $\rcat_*$, and apply
+$F$ to the two-object pointed category induced by the above diagram,
+such the distinguished object is $u$. Proceed similarly for the other two
+categories, substituting the category of symmetric monoidal categories
+or finite product categories.
+
+
+\subsection{Generalization to Multiple Simultaneous Arities}
+I want to have not just one $\ii$ of arity $n$, I want to have objects
+ $\sharp n$ of all arities at once so I can talk about pushes.
+
+The thing missing from any of the above sites is an arrow $\ii \to \ii$
+that permutes the $n$ endpoints. I'm going to implicitly do that below now.
+
+Let $\W$ be the category that I was trying to get at in \texttt{2017-11-04.ltx}.
+It looks a lot like $\rfinset$ except with an additional terminal object.
+Its objects are $\{\top, 0, 1, 2, 3, \ldots\}$. A morphism $m \to n$
+for $m,n\in\N$ is either a function $m\to n$ or an element of $n$, written $( i) !$
+for $i< n$. A morphism $\top \to n$ is an element of $n$ written $(i)$. There is
+a unique morphism $n \to \top$, written $!$. Composition of functions between
+naturals works like normal, and we have $(i) \o ! = (i)!$ and $!(i) = \rid_\top$.
+\[
+\W =\qquad
+\begin{tikzcd}
+\sharp 0\ar[r]\ar[d, "!"']
+& \sharp 1\ar[d, "!", shift left]\ar[from=d, "(0)", shift left]
+\ar[r, shift left]\ar[r, shift right]\ar[from=r, shift right=3]
+& \sharp 2\ar[d, "!", shift left]\ar[from=d, "{(0)\atop (1)}" , shift left]
+\ar[from=d]
+\ar[r, leftrightarrow]\ar[r, shift right, leftrightarrow]\ar[r, shift left, leftrightarrow]
+&\cdots
+\\
+\top \ar[r, equal]
+& \top\ar[r, equal]
+& \top\ar[r, equal]
+& \cdots
+\end{tikzcd}
+\]
+
+I think I'm interested in considering type theory interpreted into
+presheaves over the free (monoidal, symmetric monoidal, finite
+product) category on $\W$ with $\top$ as monoidal unit.
 
 \section{Totally Unrelated Tangent About Monads}
 Compile the language

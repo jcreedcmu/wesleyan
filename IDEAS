@@ -3501,3 +3501,37 @@ A: No, I think everything lines up ok.
 
 Q: Any progress possible on formalizing these intuitions?
 A: ???
+
+=== 2018.02.21
+
+Q: What's my current thoughts?
+A: [LOPS] cites
+https://github.com/awodey/math/blob/master/Cubical/cubical.pdf which
+has a nice summary of sites to take presheaves of.
+
+Q: What's the covariant presentation of the `classical cube category' therein?
+A: ???
+
+Q: What else comes from that repo?
+A: https://www.andrew.cmu.edu/user/awodey/preprints/stockholm.pdf
+
+Q: What are some other interesting preprints of his?
+A:
+https://www.andrew.cmu.edu/user/awodey/preprints/tait.pdf
+https://www.andrew.cmu.edu/user/awodey/preprints/uapl.pdf
+https://www.andrew.cmu.edu/user/awodey/preprints/natural.pdf
+
+Q: Some unrelated quantum fracton nonsense I meant to read at some point?
+A: https://quantumfrontiers.com/2018/02/16/fractons-for-real/
+
+Q: Bob harper and jon sterling paper about guarded computational type theory?
+A: http://www.jonmsterling.com/pdfs/guarded-ctt.pdf
+
+Q: Where's a handy copy of Hofmann's?
+"Syntax and Semantics of Dependent Types"?
+A:
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.36.8985&rep=rep1&type=pdf
+
+Q: What's that tikzcd options for making labels rotate to match the
+slope of diagonal arrows?
+A: 'sloped'
