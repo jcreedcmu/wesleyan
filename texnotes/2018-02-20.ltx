@@ -260,6 +260,91 @@ I think I'm interested in considering type theory interpreted into
 presheaves over the free (monoidal, symmetric monoidal, finite
 product) category on $\W$ with $\top$ as monoidal unit.
 
+\subsection{Is this the same as the pullback definition?}
+
+In \texttt{wes/agda/BaseCategory.agda} I'm describing a category
+where the objects are the same as those in $\rset^\to$, but the morphisms
+from $f : A_1 \to A_2$ to $g : B_1 \to B_2$ are choices of $h$ and $k$ such that
+
+\[
+\begin{tikzcd}
+  A_1\ar[from=d, "h"]\ar[dr, "f"]\\
+X\pbck\ar[r]\ar[d]&A_2\ar[d, "k"]\\
+B_1+1\ar[r, "g+1"'] & B_2+1
+\end{tikzcd}
+\]
+Although in \texttt{module Take2} in there, it's
+described as a function
+\[(a : A_2) \to (\beta : B_2 + 1) \x \texttt{Out}\ \beta \to f^*(a)\]
+where
+\[ \texttt{Out}\ \binr = \top \]
+\[ \texttt{Out}\ (\binl b) = g^*(b) \]
+
+I think without further restriction, the dual of this category is the
+free finite product category on $\W$. If I restrict $k$ to be partial
+injective or ordered partial injective, then perhaps it's the free
+symmetric monodial or monoidal category on $\W$. Why? All of these
+free categories have objects like $\sharp 1, \sharp 2, \sharp 3$, etc.
+and let me tensor them together. So I can make morphisms like
+\[
+\begin{tikzcd}
+  \sharp 2 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 2 \ar[d, "\sim"]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d]\\
+  \sharp 2
+&[-2em] \tensor
+&[-2em] \sharp 2
+&[-2em] \tensor
+&[-2em] \sharp 1
+&[-2em] \tensor
+&[-2em] \sharp 1
+\end{tikzcd}
+\]
+where $\sim$ is $0 \mapsto 1, 1 \mapsto 0$, (and all the rest of the morphisms are identities) and
+\[
+\begin{tikzcd}
+  \sharp 2 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 2 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d, "!"]\\
+  \sharp 2
+&[-2em] \tensor
+&[-2em] \sharp 2
+&[-2em] \tensor
+&[-2em] \sharp 1
+&[-2em] \tensor
+&[-2em] \top
+\end{tikzcd}
+\]
+which is like a nonsurjective morphism in the dual category, and
+\[
+\begin{tikzcd}
+  \sharp 2 \ar[d]
+&[-2em] \tensor
+&[-2em] \top \ar[d, "{(5)}"]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d]
+&[-2em] \tensor
+&[-2em] \sharp 1 \ar[d]\\
+  \sharp 2
+&[-2em] \tensor
+&[-2em] \sharp 7
+&[-2em] \tensor
+&[-2em] \sharp 1
+&[-2em] \tensor
+&[-2em] \sharp 1
+\end{tikzcd}
+\]
+which as a morphism $(A_1 \to A_2) \to (B_1 \to B_2)$ is like
+deciding that the element $a \in A_2$ that represents $\sharp 7$ (and so has a 7-element fiber $f^*(a)$ sitting in $A_1$) gets
+mapped to $\binr$ in $B_2 + 1$, and $(\binr, a) \in X$ gets mapped to $5 \in f^*(a)$ by $h$.
 \section{Totally Unrelated Tangent About Monads}
 Compile the language
 \[
