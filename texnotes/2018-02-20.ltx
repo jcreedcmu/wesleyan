@@ -166,6 +166,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \def\re{\mathbf{E}}
 \def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
 \begin{document}
 
 \def\
@@ -345,6 +346,92 @@ which is like a nonsurjective morphism in the dual category, and
 which as a morphism $(A_1 \to A_2) \to (B_1 \to B_2)$ is like
 deciding that the element $a \in A_2$ that represents $\sharp 7$ (and so has a 7-element fiber $f^*(a)$ sitting in $A_1$) gets
 mapped to $\binr$ in $B_2 + 1$, and $(\binr, a) \in X$ gets mapped to $5 \in f^*(a)$ by $h$.
+
+\section{Revisiting the Semantics with Just Bernardy-Moulin $\ii$}
+
+\subsection{A Relation on $A$}
+What's the interpretation of $\sem {A \to \U}^\Gamma_I$ for an arbitrary
+$I$ in the abstract category (i.e. the functor category we're
+considering is {\em covariant} in this category) of finite sets and
+partial injections?
+
+This assumes $\Gamma \prov A : \rtype$. We have
+\[ \sem {A \to \U}^\Gamma_I : (\rho : \sem \Gamma_I) \to  \rset\]
+and
+\[ \sem {A \to \U}^\Gamma_I = \lambda (\rho : \sem \Gamma_I) .  (f : I \to J)  (a : \sem A^\Gamma_J\sem \Gamma_f(\rho))  (g : J \to K) . \U\]
+
+I need to disabuse myself of the notion that $\sem U^\Gamma_I$ is the
+same at every $I$ just because it doesn't mention any
+`$\ii$-machinery'. Because it works out to be $\forall (J \ge I) . \U$,
+the `size' of the family of sets I need to choose depends on the
+object I start at. It is still, the case, then, I think, that it's
+`the same' at every $\Gamma$, though, because it's a closed type?
+I need to be careful about what I mean by that, since $\sem A^{\Gamma_1}_I$
+and $\sem A^{\Gamma_2}_I$ have different types. But if $A$ makes sense in the empty context,
+and thus $\sem A^{\cdot}_I : (\rho : \sem \cdot_I) \to \rset$ makes sense,
+then  $\sem A^{\cdot}_I$ must be of the form $\lambda \_ . \mathcal{A}(I)$
+for some presheaf $\mathcal{A}(I) : \rset$. I can apply a weakening substitution
+to see that $\Gamma\prov A : \rtype$, but surely some suitable comptability theorem
+entails that $\sem A^{\Gamma}_I = \lambda \_ . \mathcal{A}(I)$ also, I think. \textcolor{red}{???}
+
+Might need to nail down what that principle is to actually understand
+the isomorphism going on here.
+\subsection{Path In the Universe}
+
+Okay, how about $\sem{ \forall i . \U}^\Gamma_I$?
+We still have
+\[ \sem{ \forall i . \U}^\Gamma_I : (\rho : \sem \Gamma_I) \to \rset \]
+so according to the guesses I made earlier in \texttt{2018-02-09.ltx} this should be
+\[ \sem{ \forall i . \U}^\Gamma_I = \lambda (\rho : \sem \Gamma_I) .
+\sem \U^{\Gamma, i : \ii}_{I, i}(\binr(i \in (I, i), \rho))
+\]
+recalling that
+\[\sem{\Gamma, i:\ii}_I = \sem \Gamma_I + \sum_{k \in I} \sem \Gamma_{I \setminus k}\]
+but $\sem\U$ is going to discard that argument, so this is
+\[ \sem{ \forall i . \U}^\Gamma_I = \lambda (\rho : \sem \Gamma_I) .
+(f : (I,i) \to J) \to \U
+\]
+Alright, suppose I have one of these things, how do I apply it to the
+endpoint $\zero$? Oh, it looks like I didn't consider this case in
+\texttt{2018-02-09.ltx}, only the case where you're applying to an
+interval-valued variable. Let me do it now.
+\subsubsection{Semantically Applying An Expression to $\zero$}
+Syntactically, from $\Gamma \prov M : \forall i . A$ we infer
+$\Gamma \prov M \wat \zero : [\zero/i]A$.
+Semantically, suppose we have
+$\sem M^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem{\forall i . A}^\Gamma_I$,
+and our goal is to obtain
+\[\sem {M\wat\zero}^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem{[\zero/i] A}^\Gamma_I(\rho)\]
+Expanding definitions, what we have is
+\[\sem M^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem A^{\Gamma, i : \ii}_{I, i}(\binr(i\in (I, i), \rho))\]
+
+and I can take a projection
+\[\sem A^{\Delta}_{i : = \zero} : \{ \rho' :\sem \Delta_{I,i} \} \to \sem A^{\Delta}_{I, i}(\rho') \to \sem A^{\Delta}_I(\sem \Delta_{i:=\zero }(\rho')) \]
+for $\Delta = \Gamma, i : \ii$ and apply it to what we have, and now we have
+\[(\lambda \rho . \sem A^{\Delta}_{i:=\zero} \ \{\binr(i \in I, i), \rho\}\ \sem M^\Gamma_I(\rho))
+: (\rho : \sem \Gamma_I) \to \sem A^{\Delta}_I(\binl  \rho)\]
+and I totally expect that in general
+\[\sem {[\zero/i]A}^\Gamma_I(\rho) \equiv \sem{A}^{\Gamma, i:\ii}_I(\binl \rho)\eqno(1)\]
+so I'm pretty much done, I just set
+\[ \sem {M \wat \zero}^\Gamma_I(\rho) = \sem A^{\Gamma, i : \ii}_{i:= \zero} \sem M^\Gamma_I(\rho) \eqno(2)\]
+except that maybe I should be explicit that $(2)$ involves transport across $(1)$.
+
+\subsubsection{Popping up the Stack}
+
+Ok, suppose we have a $\Gamma \prov M : \forall i . \U$ which means
+\[\sem M^\Gamma_I : (\rho : \sem \Gamma_I) \to \sem{\forall i .\U}^\Gamma_I(\rho)\]
+\[\sem M^\Gamma_I : (\rho : \sem \Gamma_I) \to (f : (I, i) \to J) \to \U\]
+then
+\[\sem {M \wat \zero}^\Gamma_I = \sem \U_{i := \zero}^{\Gamma, i:\ii} \sem M^\Gamma_I(\rho) \]
+So what we're doing is just taking the big morphism-indexed family of sets that
+$\sem M^\Gamma_I$ is, and composing along the morphism $(i := \zero) : (I, i) \to I$.
+
+We're supposed to have the typing
+\[\sem {M \wat \zero}^\Gamma_I : (\rho : \sem \Gamma_I) \to (f : I \to J) \to \U\]
+So yeah! If we're given a morphism $I \to J$, we compose it with $i  := \zero$ and feed it
+to $\sem M^\Gamma_I$.
+
+\subsubsection{How are these isomorphic?}
 \section{Totally Unrelated Tangent About Monads}
 Compile the language
 \[
