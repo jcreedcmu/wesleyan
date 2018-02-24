@@ -13,9 +13,10 @@
 \tcbuselibrary{breakable}
 
 
-\def\el#1{\mathsf{E}({#1})}
+\def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
+\def\A{\mathsf{A}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
 
@@ -27,6 +28,7 @@
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
 \definecolor{orange}{rgb}{0.95,0.90,0.80}
 \definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{bluegray}{rgb}{0.4,0.4,0.8}
 \definecolor{lgray}{gray}{0.9}
 \newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
@@ -213,12 +215,12 @@ $\sem {\Gamma, x : A}_f$&$=$&$\lambda \pair \rho a . \pair {\sem \Gamma_f(\rho)}
 $\sem {(y : A) \to B}^\Gamma_c(\rho) = {}$\\
 \> $(\omega : (g : \mor c d) (y : \sem A_d \sem \Gamma_g (\rho)) \to \sem B_d
 \pair{\sem \Gamma_g(\rho)}{y}) \x $\\
-\> $(g : \mor c d)(h : \mor d e)  (y : \sem A_d \sem \Gamma_g (\rho)) \to$\\
-\> \> $  \sem B_h (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A_h(y)) $\\
+\> $(\kappa : (g : \mor c d)(h : \mor d e)  (y : \sem A_d \sem \Gamma_g (\rho)) \to$\\
+\> \> $  \sem B_h (\omega\ g\ y) \equiv \omega\ hg\ ( \sem A_h(y))) $\\
 \\
 $\sem {(y : A) \to B}_f  (x) = {}$\\
-\> $\langle \lambda g  . (x.1)\ gf,$\\
-\> $\ \lambda g  . (x.2)\ gf\rangle$
+\> $\langle \omega = \lambda g  . (x.\omega)\ gf,$\\
+\> $\ \kappa = \lambda g  . (x.\kappa)\ gf\rangle$
 \end{tabbing}
 \end{defnbox}
 
@@ -229,39 +231,46 @@ Suppose $f' : b' \to b$.
 \hspace*{2em}\=\hspace*{2em}\= \kill
 $\sem \U_b (\rho)  = $\\
 \> $(\omega : (f : \mor b  c) \to \U)  $\\
-\> $(\phi : (f : \mor b  c)(g : \mor c d) \to \omega\ f \to \omega\ gf) \x$\\
-\> $( (f : \mor b  c) \to \phi\ f\ \rid_c \equiv \rid_{\omega f}) \x$\\
-\> $( (f : \mor b  c)(g : \mor c d)(h : \mor d e) \to$\\
-\> \> $\phi\ f\ hg \equiv (\phi\ gf\ h) \o (\phi\ f\ g)  $
+\> $(\kappa : (f : \mor b  c)(g : \mor c d) \to \el{\omega\ f} \to \el{\omega\ gf}) \x$\\
+\> $(\iota : (f : \mor b  c) \to \kappa\ f\ \rid_c \equiv \rid_{\el{\omega\ f}}) \x$\\
+\> $(\alpha : (f : \mor b  c)(g : \mor c d)(h : \mor d e) \to$\\
+\> \> $\kappa\ f\ hg \equiv (\kappa\ gf\ h) \o (\kappa\ f\ g)  $
 \\
 $\sem \U_{f'} (x)  = $\\
-\> $\langle\lambda f . (x.1)\ ff',$\\
-\> $\ \lambda f . (x.2)\ ff',$\\
-\> $\ \lambda f . (x.3)\ ff',$\\
-\> $\ \lambda f . (x.4)\ ff'\rangle$
+\> $\langle\lambda f . (x.\omega)\ ff',$\\
+\> $\ \lambda f . (x.\kappa)\ ff',$\\
+\> $\ \lambda f . (x.\iota)\ ff',$\\
+\> $\ \lambda f . (x.\alpha)\ ff'\rangle$
 \end{tabbing}
 \end{defnbox}
-Assuming $x : \sem \U_{b'}(\rho)$, we need $y := \sem \U_{f'}(x)$ to have type $\sem \U_{b}(\rho)$.
-We know that
+The critical thing for showing functoriality is
+that the only occurrences of the first argument of each function in the tuple
+are {\em occurrences as the first argument} to some prior function in the tuple, maybe precomposed
+with some other morphism.
+
+\subsubsection{Elements of the Universe}
+%% Suppose $\Gamma\prov \A: \U$ is the code of some type.
+%% We know that $\sem \A_c : (\rho : \sem \Gamma_c) \to \sem \U_c(\rho)$,
+%% and we must make it so that
+%% \[\sem {\el{\A}}_f  : \sem {\el{\A}}_b(\rho) \to \sem {\el{\A}}_c(\sem \Gamma_f(\rho))\]
+%% in other words
+%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_c(\sem \Gamma_f(\rho)).\omega(\rid_c)}\]
+%% and by naturality of term interpretation
+%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \U_f(\sem \A_b(\rho)).\omega(\rid_c)}\]
+%% which expanding definitions is
+%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_b(\rho).\omega\ f}\]
+%% We observe that
+%% \[\sem \A_b(\rho).\kappa : (f' : \mor b c) (g' : \mor c d) \to \el{\sem \A_b(\rho).\omega\ f'} \to \el{\sem \A_b(\rho).\omega\ g'f'}\]
+%% so instantiating $f' := \rid_b$ and $g' := f$ we get
+%% \[\sem \A_b(\rho).\kappa\ \rid_b\ f : \el{\sem \A_b(\rho).\omega\ \rid_b} \to \el{\sem \A_b(\rho).\omega\ f}\]
+\begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
-\> $(x.1) : ({\bar f} : \mor {b'}  c) \to \U  $\\
-\> $(x.2) : ({\bar f} : \mor {b'}  c)(g : \mor c d) \to (x.1)\ {\bar f} \to (x.1)\ g{\bar f}$\\
-\> $(x.3) : ({\bar f} : \mor {b'}  c) \to (x.2)\ {\bar f}\ \rid_c \equiv \rid_{(x.1) {\bar f}}$\\
-\> $(x.4) :  ({\bar f} : \mor {b'}  c)(g : \mor c d)(h : \mor d e) \to$\\
-\> \> $(x.2)\ {\bar f}\ hg \equiv ((x.2)\ g{\bar f}\ h) \o ((x.2)\ {\bar f}\ g)  $
+$\sem {\el{\A}}_b (\rho)  = \el{\sem \A_b(\rho).\omega(\rid_b)}$\\
+$\sem {\el{\A}}_f \{\rho\}(x)  = \sem \A_b(\rho).\kappa\ \rid_b\ f$
 \end{tabbing}
-so we can show that
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\= \kill
-\> $(y.1) : (f : \mor {b}  c) \to \U  $\\
-\> $(y.2) : (f : \mor {b}  c)(g : \mor c d) \to (y.1)\ f \to (y.1)\ gf$\\
-\> $(y.3) : (f : \mor {b'}  c) \to (y.2)\ f\ \rid_c \equiv \rid_{(y.1) f}$\\
-\> $(y.4) :  (f : \mor {b'}  c)(g : \mor c d)(h : \mor d e) \to$\\
-\> \> $(y.2)\ f\ hg \equiv ((y.2)\ gf\ h) \o ((y.2)\ f\ g)  $
-\end{tabbing}
-The critical thing is that every use of the first argument to these functions is
-as a first argument (maybe precompsed) for a previously declared function.
+\end{defnbox}
+
 \section{The Bernardy-Moulin Category Specifically}
 $\C$ for has objects finite sets, and for morphisms partial injections.
 We write $H, I, J, K$ for objects instead of $b, c, d, e$.
