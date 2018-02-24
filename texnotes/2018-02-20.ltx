@@ -431,7 +431,7 @@ We're supposed to have the typing
 So yeah! If we're given a morphism $I \to J$, we compose it with $i  := \zero$ and feed it
 to $\sem M^\Gamma_I$.
 
-\subsubsection{How are these isomorphic?}
+\subsection{How are these isomorphic?}
 
 \def\A{\mathsf{A}}
 I should be careful about the distinction between types and codes for types.
@@ -457,47 +457,77 @@ Because
 I think we can safely say that
 \[\sem {[\A]}^\Gamma_I (\rho) = [\sem \A^\Gamma_I\ \rho\ \rid_I]\]
 so we're comparing, given a $\rho : \sem \Gamma_I$,
-\[ (f : I \to J)  (a : [\sem\A^\Gamma_J\ (\sem \Gamma_f(\rho))\ \rid_J])  (g : J \to K) \to \U\]
+\[ (f : I \to J)  (a : [\sem\A^\Gamma_J\ (\sem \Gamma_f(\rho))\ \rid_J])  (g : J \to K) \to \U \eqno(1)\]
 with
-\[(\mu : (f : (I, i) \to J) \to \U) \x \]
-\[(\sem \A^\Gamma_I(\rho) \equiv \lambda f . \mu(\rho)\ (f \o (i := 0))) \]
+\[(\mu : (k : (I, i) \to J) \to \U) \x \]
+\[(\sem \A^\Gamma_I(\rho) \equiv \lambda f . \mu\ (f \o (i := \zero))) : (f : I \to J) \to \U \eqno(2)\]
+What's the term coherence equation in this notation? It's
+\[ \sem A^\Gamma_f  (\sem M^\Gamma_I(\rho))  \equiv \sem M^\Gamma_J(\sem \Gamma_f (\rho))\]
+thus in particular
+\[ \sem \U^\Gamma_f  (\sem \A^\Gamma_I(\rho))  \equiv \sem \A^\Gamma_J(\sem \Gamma_f (\rho))\eqno(1b)\]
+which means $(1)$ is the same as
+\[ (f : I \to J)  (a : [\sem\U^\Gamma_f\ (\sem \A_I(\rho))\ \rid_J])  (g : J \to K) \to \U \]
+and presumably naturality of the interpretations of the universe means this is the same as
+\[ (f : I \to J)  (a : [\sem \A_I(\rho)\ f])  (g : J \to K) \to \U \eqno(1c)\]
+Let's try to analyze what something of type $(2)$ can look like.
+It takes in a morphism $k : (I, i) \to J$ and spits out a type.
+These morphisms can look like one of two things; either they discard $i$, meaning that
+$k := f \o (i := 0)$ and the second half of $(2)$ forces our hand about what type to output,
+or else $k(i) = j$ for some $j \in J$, and there is a map $k_0 : I \to J\setminus j$ such that
+$k := k_0 + (i := j)$.
 
-\section{Totally Unrelated Tangent About Monads}
-Compile the language
-\[
-\erule
-{}
-{\Gamma \prov_1 \mathsf{some\_prim} :  \mathsf{int}}
-\qquad
-\erule
-{\Gamma \prov_1 e : \bigcirc\tau}
-{\Gamma \prov_1 [e] : \tau}
-\qquad
-\erule
-{\Gamma \prov_1 e : \tau}
-{\Gamma \prov_0 \{e\} : \tau}
-\]
-\[
-\erule
-{\Gamma \prov_i e_1 : \tau_1 \qquad \Gamma \prov_i e_2 : \tau_2}
-{\Gamma \prov_i (e_1, e_2) : \tau_1 \x \tau_2}
-\]
+Somehow all the information in $(1)$ has to be telling us what to do with these maps.
 
-\begin{lemma}\ \\
-If $\Gamma \prov_0 e : \tau$ then $\Gamma \prov \sem e :  \tau$.\\
-If $\Gamma \prov_1 e : \tau$ then $\Gamma \prov \sem e : \bigcirc \tau$.
-\end{lemma}
+\subsubsection{Grinding Through Syntax I Know}
 
-\begin{proof}
+Wait a minute, I definitely should be able to do one of the two directions just on the basis
+that I already have a syntactic function
+\[\texttt{embu}: (A \in i.\U)\to (A \to \U)  \]
+\[\texttt{embu}\ p\ a = a \in i . p\ i\]
 
-\cqed
-\end{proof}
+And indeed, I don't merely need these two types to be equivalent, I
+need \texttt{embu} in particular to be an equivalence.
 
+So this is the recipe for you to get  from $(2)$ to $(1c)$? I think I can.
+Take something $(\mu, \mathsf{idp})$ of type $(2)$ and build from it
+\[ \lambda f : (I \to J) . \lambda (a : [\sem \A_I(\rho)\ f]) . \sem { a \in j .  \mu\ j }\]
+This is a little too much to fit in my brain now.
 \end{document}
 
 
 
 
+
+%% \section{Totally Unrelated Tangent About Monads}
+%% Compile the language
+%% \[
+%% \erule
+%% {}
+%% {\Gamma \prov_1 \mathsf{some\_prim} :  \mathsf{int}}
+%% \qquad
+%% \erule
+%% {\Gamma \prov_1 e : \bigcirc\tau}
+%% {\Gamma \prov_1 [e] : \tau}
+%% \qquad
+%% \erule
+%% {\Gamma \prov_1 e : \tau}
+%% {\Gamma \prov_0 \{e\} : \tau}
+%% \]
+%% \[
+%% \erule
+%% {\Gamma \prov_i e_1 : \tau_1 \qquad \Gamma \prov_i e_2 : \tau_2}
+%% {\Gamma \prov_i (e_1, e_2) : \tau_1 \x \tau_2}
+%% \]
+
+%% \begin{lemma}\ \\
+%% If $\Gamma \prov_0 e : \tau$ then $\Gamma \prov \sem e :  \tau$.\\
+%% If $\Gamma \prov_1 e : \tau$ then $\Gamma \prov \sem e : \bigcirc \tau$.
+%% \end{lemma}
+
+%% \begin{proof}
+
+%% \cqed
+%% \end{proof}
 
 % garbage
 If $A : *$ then $\usem A : A \to *$

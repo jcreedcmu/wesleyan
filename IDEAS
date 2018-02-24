@@ -3536,4 +3536,7 @@ Q: What's that tikzcd options for making labels rotate to match the
 slope of diagonal arrows?
 A: 'sloped'
 
-=== 2018.02.22
+=== 2018.02.24
+
+Q: What's an interesting prototype implementation of a dependently typed language in rust?
+A: https://github.com/brendanzab/pikelet
