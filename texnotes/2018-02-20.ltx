@@ -432,6 +432,36 @@ So yeah! If we're given a morphism $I \to J$, we compose it with $i  := \zero$ a
 to $\sem M^\Gamma_I$.
 
 \subsubsection{How are these isomorphic?}
+
+\def\A{\mathsf{A}}
+I should be careful about the distinction between types and codes for types.
+Let's say $\Gamma \prov \A : \U$ and then $\Gamma \prov [\A] : \rset$, so define $A$
+everywhere above to be $[\A]$.
+
+In general when I say $a \in i . A(i)$ its elements are the $M : \forall i . A(i)$
+such that $M \wat \zero \equiv a : A(\zero)$. So the type $\A \in i . \U$ has
+for elements the $M : \forall i . \U$ such that $M \wat \zero \equiv \A : \U$.
+I know that a $M : \forall i . \U$ semantically is something like a
+\[\mu : (\rho : \sem \Gamma_I) \to (f : (I, i) \to J) \to \U\]
+So I'm looking for a $\mu$ such that
+\[(\alpha \equiv \lambda \rho . \lambda f . \mu\ \rho\ (f \o (i := 0))) : (\rho : \sem \Gamma_I) \to (f : I \to J) \to \U\]
+where $\alpha = \sem \A^\Gamma_I$. Which means
+\[\forall \rho : \sem \Gamma_I . \forall f : (I \to J) . \alpha\ \rho\ f \equiv \mu\ \rho\ (f \o (i := 0)) : \U\]
+
+What about the relation-on-$A$ type? It's $[\A] \to \U$.
+\[ \sem {[\A] \to \U}^\Gamma_I = \lambda (\rho : \sem \Gamma_I) .  (f : I \to J)  (a : \sem{ [\A]}^\Gamma_J\sem \Gamma_f(\rho))  (g : J \to K) \to \U\]
+
+Because
+\[\sem \A^\Gamma_I : (\rho : \sem \Gamma_I)  (f : I \to J) \to \U\]
+\[\sem {[\A]}^\Gamma_I : (\rho : \sem \Gamma_I)  \to \rset\]
+I think we can safely say that
+\[\sem {[\A]}^\Gamma_I (\rho) = [\sem \A^\Gamma_I\ \rho\ \rid_I]\]
+so we're comparing, given a $\rho : \sem \Gamma_I$,
+\[ (f : I \to J)  (a : [\sem\A^\Gamma_J\ (\sem \Gamma_f(\rho))\ \rid_J])  (g : J \to K) \to \U\]
+with
+\[(\mu : (f : (I, i) \to J) \to \U) \x \]
+\[(\sem \A^\Gamma_I(\rho) \equiv \lambda f . \mu(\rho)\ (f \o (i := 0))) \]
+
 \section{Totally Unrelated Tangent About Monads}
 Compile the language
 \[
