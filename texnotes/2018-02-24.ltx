@@ -33,7 +33,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
-boxrule=0pt,boxsep=0pt,breakable}
+boxrule=0pt,boxsep=0pt}
 \newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 
@@ -223,15 +223,45 @@ $\sem {(y : A) \to B}_f  (x) = {}$\\
 \end{defnbox}
 
 \subsubsection{The Universe}
+Suppose $f' : b' \to b$.
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
-$\sem \U_c (\rho)  = $\\
-\> $(\omega : (g : \mor c  d) \to \U) \x $\\
-\> $(\omega : (g : \mor c  d) \to \U) \x $
+$\sem \U_b (\rho)  = $\\
+\> $(\omega : (f : \mor b  c) \to \U)  $\\
+\> $(\phi : (f : \mor b  c)(g : \mor c d) \to \omega\ f \to \omega\ gf) \x$\\
+\> $( (f : \mor b  c) \to \phi\ f\ \rid_c \equiv \rid_{\omega f}) \x$\\
+\> $( (f : \mor b  c)(g : \mor c d)(h : \mor d e) \to$\\
+\> \> $\phi\ f\ hg \equiv (\phi\ gf\ h) \o (\phi\ f\ g)  $
+\\
+$\sem \U_{f'} (x)  = $\\
+\> $\langle\lambda f . (x.1)\ ff',$\\
+\> $\ \lambda f . (x.2)\ ff',$\\
+\> $\ \lambda f . (x.3)\ ff',$\\
+\> $\ \lambda f . (x.4)\ ff'\rangle$
 \end{tabbing}
 \end{defnbox}
-
+Assuming $x : \sem \U_{b'}(\rho)$, we need $y := \sem \U_{f'}(x)$ to have type $\sem \U_{b}(\rho)$.
+We know that
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $(x.1) : ({\bar f} : \mor {b'}  c) \to \U  $\\
+\> $(x.2) : ({\bar f} : \mor {b'}  c)(g : \mor c d) \to (x.1)\ {\bar f} \to (x.1)\ g{\bar f}$\\
+\> $(x.3) : ({\bar f} : \mor {b'}  c) \to (x.2)\ {\bar f}\ \rid_c \equiv \rid_{(x.1) {\bar f}}$\\
+\> $(x.4) :  ({\bar f} : \mor {b'}  c)(g : \mor c d)(h : \mor d e) \to$\\
+\> \> $(x.2)\ {\bar f}\ hg \equiv ((x.2)\ g{\bar f}\ h) \o ((x.2)\ {\bar f}\ g)  $
+\end{tabbing}
+so we can show that
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $(y.1) : (f : \mor {b}  c) \to \U  $\\
+\> $(y.2) : (f : \mor {b}  c)(g : \mor c d) \to (y.1)\ f \to (y.1)\ gf$\\
+\> $(y.3) : (f : \mor {b'}  c) \to (y.2)\ f\ \rid_c \equiv \rid_{(y.1) f}$\\
+\> $(y.4) :  (f : \mor {b'}  c)(g : \mor c d)(h : \mor d e) \to$\\
+\> \> $(y.2)\ f\ hg \equiv ((y.2)\ gf\ h) \o ((y.2)\ f\ g)  $
+\end{tabbing}
+The critical thing is that every use of the first argument to these functions is
+as a first argument (maybe precompsed) for a previously declared function.
 \section{The Bernardy-Moulin Category Specifically}
 $\C$ for has objects finite sets, and for morphisms partial injections.
 We write $H, I, J, K$ for objects instead of $b, c, d, e$.
