@@ -3540,3 +3540,9 @@ A: 'sloped'
 
 Q: What's an interesting prototype implementation of a dependently typed language in rust?
 A: https://github.com/brendanzab/pikelet
+
+=== 2018.02.25
+
+Q: Wait, what happens when interval variables sneak into types in the context? Don't you
+get the usual problems with linearity and dependency?
+A: ???
