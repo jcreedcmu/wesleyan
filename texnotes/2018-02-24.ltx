@@ -249,27 +249,27 @@ are {\em occurrences as the first argument} to some prior function in the tuple,
 with some other morphism.
 
 \subsubsection{Elements of the Universe}
-%% Suppose $\Gamma\prov \A: \U$ is the code of some type.
-%% We know that $\sem \A_c : (\rho : \sem \Gamma_c) \to \sem \U_c(\rho)$,
-%% and we must make it so that
-%% \[\sem {\el{\A}}_f  : \sem {\el{\A}}_b(\rho) \to \sem {\el{\A}}_c(\sem \Gamma_f(\rho))\]
-%% in other words
-%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_c(\sem \Gamma_f(\rho)).\omega(\rid_c)}\]
-%% and by naturality of term interpretation
-%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \U_f(\sem \A_b(\rho)).\omega(\rid_c)}\]
-%% which expanding definitions is
-%% \[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_b(\rho).\omega\ f}\]
-%% We observe that
-%% \[\sem \A_b(\rho).\kappa : (f' : \mor b c) (g' : \mor c d) \to \el{\sem \A_b(\rho).\omega\ f'} \to \el{\sem \A_b(\rho).\omega\ g'f'}\]
-%% so instantiating $f' := \rid_b$ and $g' := f$ we get
-%% \[\sem \A_b(\rho).\kappa\ \rid_b\ f : \el{\sem \A_b(\rho).\omega\ \rid_b} \to \el{\sem \A_b(\rho).\omega\ f}\]
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
 $\sem {\el{\A}}_b (\rho)  = \el{\sem \A_b(\rho).\omega(\rid_b)}$\\
-$\sem {\el{\A}}_f \{\rho\}(x)  = \sem \A_b(\rho).\kappa\ \rid_b\ f$
+$\sem {\el{\A}}_f \{\rho\}(x)  = \sem \A_b(\rho).\kappa\ \rid_b\ f\ x$
 \end{tabbing}
 \end{defnbox}
+Suppose $\Gamma\prov \A: \U$ is the code of some type.
+We know that $\sem \A_c : (\rho : \sem \Gamma_c) \to \sem \U_c(\rho)$,
+and we must make it so that
+\[\sem {\el{\A}}_f  : \sem {\el{\A}}_b(\rho) \to \sem {\el{\A}}_c(\sem \Gamma_f(\rho))\]
+in other words
+\[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_c(\sem \Gamma_f(\rho)).\omega(\rid_c)}\]
+and by naturality of term interpretation
+\[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \U_f(\sem \A_b(\rho)).\omega(\rid_c)}\]
+which expanding definitions is
+\[\sem {\el{\A}}_f  : \el{\sem \A_b(\rho).\omega(\rid_b)} \to \el{\sem \A_b(\rho).\omega\ f}\]
+We observe that
+\[\sem \A_b(\rho).\kappa : (f' : \mor b c) (g' : \mor c d) \to \el{\sem \A_b(\rho).\omega\ f'} \to \el{\sem \A_b(\rho).\omega\ g'f'}\]
+so instantiating $f' := \rid_b$ and $g' := f$ we get
+\[\sem \A_b(\rho).\kappa\ \rid_b\ f : \el{\sem \A_b(\rho).\omega\ \rid_b} \to \el{\sem \A_b(\rho).\omega\ f}\]
 
 \section{The Bernardy-Moulin Category Specifically}
 $\C$ for has objects finite sets, and for morphisms partial injections.
@@ -308,12 +308,17 @@ If $z = k$, then $\rho : \sem \Gamma_{I\setminus k}$, and since $f$ is a partial
 we can think of $f$ also as a function $I\setminus k \to J \setminus f(k)$, hence
 $\sem \Gamma_f (\rho) : \sem \Gamma_{J\setminus f(k)} (\rho)$.
 up to weakening.
+
+A way to say this in one fell swoop instead of inductively is that
+$\sem \Gamma_I$ requires a partial injection {\em from} all of the
+$\ii$ variables in $\Gamma$ and {\em into} $I$. The functoriality part
+$\sem\Gamma_f$ is just composition of partial injections.
 \subsubsection{Interval Function Types}
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
 $\sem {\forall i . A}_I(\rho) = \sem A_{I, j} (\rho, i := j)$\\
-$?$
+$\sem {\forall i . A}_f\ \{\rho\}\ (x) = \sem A_{(f,\,j\mapsto j)}\ \{\rho, i := j \}\ (x)$
 \end{tabbing}
 \end{defnbox}
 A note about the variables involved: since $\Gamma, i : \ii \prov A : \rtype$,
@@ -325,4 +330,124 @@ finite-set element $j$ from the category object we're interpreting at.
 That is, we chose $k$ to be $j$, so the remainder of the
 interpretation obligation, $\sem \Gamma_{(I, j) \setminus k}$, turns
 out to be satisfied by $\rho : \sem \Gamma_I$.
+
+For the functoriality part, assume $f : I \to J$. We have the typing
+\[\sem A_{(f,\,j\mapsto j)} : \{\rho' : \sem\Gamma_{I, j}\} \to \sem{A}_{I, j}(\rho') \to \sem{A}_{J, j}(\sem\Gamma_{(f,\,j\mapsto j)}(\rho'))\]
+so when $\rho : \sem\Gamma_I$, we can substitute $(\rho, i:=j)$ for $\rho'$, and find that
+\[\sem A_{(f,\,j\mapsto j)}\ \{\rho, i:=j\} :  \sem{A}_{I, j}(\rho, i:=j) \to \sem{A}_{J, j}(\sem\Gamma_{(f,\,j\mapsto j)}(\rho, i:=j))\]
+in other words
+\[\sem A_{(f,\,j\mapsto j)}\ \{\rho, i:=j\} :  \sem{A}_{I, j}(\rho, i:=j) \to \sem{A}_{J, j} (\sem\Gamma_{f}(\rho), i:=j)\]
+and equivalently
+\[\sem A_{(f,\,j\mapsto j)}\ \{\rho, i:=j\} : \sem {\forall i . A}_I(\rho) \to \sem {\forall i . A}_J(\sem \Gamma_f(\rho))\]
+as required for $\sem{\forall i . A}_f\ \{\rho\}$.
+
+\subsubsection{Interval Function Abstraction}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {\langle i \rangle M}_I(\rho) = \sem M_{I, j}(\rho, i:= j) $
+\end{tabbing}
+\end{defnbox}
+\[
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma  \langle i \rangle M : \forall i . A}
+\]
+We need $(\rho : \sem \Gamma_I) \to \sem A_{I, j}(\rho, i := j)$
+and we know for any $I$ that
+\[\sem M_I : (\rho :  \sem {\Gamma, i : \ii}_I) \to \sem A_{I}(\rho)\]
+It's a simple matter of picking the right arguments to $\sem M$.
+
+\subsubsection{Interval Function Application}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {M \wat i}_I(\rho) = \bcase \rho \bof$\\
+\> $(\rho_0, i:=\zero) \mapsto \sem A_{j := \zero}(\sem M_I(\rho_0))$\\
+\> $(\rho_0, i:=k) \mapsto \sem A_{j := k} (\sem M_{I\setminus k}(\rho_0))$\\
+$\sem {M \wat \zero}_I(\rho) = \sem A_{j:=\zero}(\sem M_I(\rho))$
+\end{tabbing}
+\end{defnbox}
+
+When we apply to a variable, we have
+\[
+\erule
+{\Gamma \prov M : \forall i . A}
+{\Gamma, i : \ii \prov M \wat i : A}
+\]
+We have to make something of type
+\[(\rho : \sem {\Gamma, i : \ii}_{I})\to \sem {A}_{I}(\rho)\]
+but we get to assume for any $I$ that
+$\sem M_I : (\rho : \sem \Gamma_I)\to \sem {\forall i . A}_I(\rho)$,
+in other words
+\[\sem M_I : (\rho : \sem \Gamma_I)\to \sem {A}_{I,j}(\rho, i := j)\]
+ The thing we build is a case analysis;
+it splits cases depending on whether $\rho$ is $(\rho_0, i:=\zero)$ or
+$(\rho_0, i:=k)$ for some $k \in I$.
+
+If we have $(\rho_0, i:=\zero)$, then $\rho_0 \in \sem\Gamma_I$ and we feed
+it to $\sem M_I$ and we have something of type $\sem A_{I, j}(\rho_0, i := j)$.
+Consider the projection $(j := \zero) : I,j \to I$. We can consider functoriality along it
+\[ \sem A_{j := \zero} : \{\rho' : \sem{\Gamma,i:\ii}_{I,j}\} \to
+\sem A_{I,j}(\rho') \to \sem A_{I}(\sem{\Gamma,i:\ii}_{j := \zero}(\rho'))\]
+and applying it we find
+\[ \sem A_{j := \zero}\ \{\rho_0, i:= j\}\ (\sem M_I(\rho_0)) :
+\sem A_{I}(\sem{\Gamma,i:\ii}_{j := \zero}(\rho_0, i:= j))
+ \]
+or equivalently (by functoriality, since `most of' the morphism $j := \zero$ is the identity)
+\[ \sem A_{j := \zero}\ \{\rho_0, i:= j\}\ (\sem M_I(\rho_0)) :
+\sem A_{I}(\rho_0, i:= \zero))
+ \]
+ Otherwise, $\rho = (\rho_0, i:=k)$ and $\rho_0 \in \sem\Gamma_{I\setminus k}$.
+ So we want to put $\rho_0$ into $\sem M_{I\setminus k}$,
+and we get out $\sem A_{I\setminus k, j}(\rho_0, i := j)$. There clearly is a map $(j := k) : I\setminus k, j \to I$ which assigns $j$ to $k$. So similarly to before we consider
+\[ \sem A_{j := k} : \{\rho' : \sem{\Gamma,i:\ii}_{I\setminus k,j}\} \to
+\sem A_{I\setminus k,j}(\rho') \to \sem A_{I}(\sem{\Gamma,i:\ii}_{j := k}(\rho'))\]
+and observe
+\[ \sem A_{j := k}\  \{\rho_0, i := j\} :
+\sem A_{I\setminus k,j}(\rho_0, i := j) \to \sem A_{I}(\sem{\Gamma,i:\ii}_{j := k}(\rho_0, i := j))\]
+\[ \sem A_{j := k}\  \{\rho_0, i := j\}\ (\sem M_{I\setminus k}(\rho_0)) :
+ \sem A_{I}(\sem{\Gamma,i:\ii}_{j := k}(\rho_0, i := j))\]
+\[ \sem A_{j := k}\  \{\rho_0, i := j\}\ (\sem M_{I\setminus k}(\rho_0)) :
+ \sem A_{I}(\rho_0, i := k)\]
+
+When we apply to zero, we have
+\[
+\erule
+{\Gamma \prov M : \forall i . A}
+{\Gamma \prov M \wat \zero : [\zero/i]A}
+\]
+We have to make something of type
+\[(\rho : \sem {\Gamma}_{I})\to \sem {[\zero/i]A}_{I}(\rho)\]
+but we get to assume for any $I$ that
+\[\sem M_I : (\rho : \sem \Gamma_I)\to \sem {A}_{I,j}(\rho, i := j)\]
+I expect for any $\rho : \sem \Gamma_I$ that
+$\sem{[\zero/i]A}_I(\rho) \equiv \sem A_{I}(\rho, i := \zero)$, so we
+really just have to get from $\sem {A}_{I,j}(\rho, i := j)$
+to $\sem {A}_{I}(\rho, i := \zero)$. But we do that the same way as above, with a
+projection $j := \zero$. Indeed, to {\em make} this $\zero$-substitution lemma true,
+we basically need to imitate the variable case when the context-element happens to
+have a $i := \zero$ in it.
+
+\subsection{Interval Conversions}
+
+It appears that we have $\eta$-equality
+\[\sem {\langle i \rangle M \wat i}_I(\rho) = \sem {M}_{I}(\rho) \]
+and $\beta$-equality
+\[\sem {(\langle h \rangle M) \wat i}_I(\rho, i:=\zero) = \sem A_{j:=\zero}(\sem {\langle h\rangle M}_I(\rho)) \]
+\[ = \sem A_{j:=\zero}(\sem { M}_{I,j}(\rho, h := j)) \]
+\[ = \sem { M}_{I}(\rho, h := \zero) \]
+\[\sem {(\langle h \rangle M) \wat i}_I(\rho, i:=k) = \sem A_{j:=k}(\sem {\langle h\rangle M}_{I\setminus k}(\rho)) \]
+\[ = \sem A_{j:=k}(\sem { M}_{I\setminus k,j}(\rho, h := j)) \]
+\[ = \sem { M}_{I}(\rho, h := k) \]
+And I figure surely by $\alpha$-equivalence
+ $\sem {[i/h]M}_I(\rho, i := v) \equiv \sem M_I(\rho, h := v)$, so this checks out.
+
+Similarly we get a $\beta$-equation for application to zero,
+\[\sem {(\langle h \rangle M) \wat \zero}_I(\rho) = \sem A_{j:=\zero}(\sem{\langle h\rangle M}_I(\rho)) \]
+\[= \sem A_{j:=\zero}(\sem{ M}_{I,j}(\rho, h := j)) \]
+\[= \sem{ M}_{I}(\rho, h := \zero) \]
+\[= \sem{ [\zero/h]M}_{I}(\rho) \]
+
+
 \end{document}
