@@ -12,7 +12,8 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
-
+\def\pbind#1{\langle \! \langle #1 \rangle \! \rangle}
+\def\embu{\mathsf{embu}}
 \def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
@@ -177,6 +178,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \section{Dictionary of Covariant Presheaf Semantics}
 
+I'm switching to the style that Moulin uses in his thesis, in which contexts
+are interpreted as sets, not as contexts, and consequently the interpretations
+of types and terms take an explicit (translated) context argument.
+
 Fix a category $\C$. Conventionally $f : b \to c$ and $g : c \to d$ are morphisms.
 All the $\sem A$ and $\sem M$ carry $\Gamma$ superscripts, technically, but we omit them
 when the $\Gamma$ involved is clear.
@@ -249,6 +254,7 @@ are {\em occurrences as the first argument} to some prior function in the tuple,
 with some other morphism.
 
 \subsubsection{Elements of the Universe}
+If $\A:\U$ is a code for a type, $\el \A$ is the type it encodes.
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
@@ -449,5 +455,99 @@ Similarly we get a $\beta$-equation for application to zero,
 \[= \sem{ M}_{I}(\rho, h := \zero) \]
 \[= \sem{ [\zero/h]M}_{I}(\rho) \]
 
+\subsubsection{Path Types}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {a \in i . A}_I(\rho) = $\\
+\> $(\phi : \sem A_{I, j} (\rho, i := j)) \x $\\
+\> $\sem A_{j := 0}(\phi) \equiv \sem a_I(\rho) $\\
+$\sem {a \in i . A}_f\ \{\rho\}\ (x) = {???}$
+% \sem A_{(f,\,j\mapsto j)}\ \{\rho, i := j \}\ (x)
+\end{tabbing}
+\end{defnbox}
+\[
+\erule
+{\Gamma \prov a :  {[ \zero/i]A}\qquad \Gamma, i : \ii \prov A : \rset}
+{\Gamma \prov a \in i . A : \rset}
+\qquad
+\]
+So $\sem a_I : (\rho : \sem \Gamma_I) \to \sem {A}_I(\rho, i := 0)$ which is the
+same type that $\sem A_{j:=0}(\phi)$ has, as required.
 
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {\pbind i M}_I(\rho) = \pair{\sem M_{I, j}(\rho, i := j)}{ \ridp}$
+\end{tabbing}
+\end{defnbox}
+\[
+\erule
+{\Gamma, i : \ii \prov M : A}
+{\Gamma \prov \pbind i M : [\zero / i]M \in i . A}
+\]
+\subsubsection{Converting Paths in the Universe to Relations}
+
+There is a syntactically definable way to get from $\A \in i . \U$ to
+$\el \A \to \U$. It's
+
+\begin{defnbox}
+  \begin{tabbing}
+    $\embu: \{\A : \U\} \to (\A \in i . \U) \to (\el \A \to \U)$\\
+    $\embu\ p\ a = a \in i .p * i$
+  \end{tabbing}
+\end{defnbox}
+
+Note that the $a \in i . p* i$ is the {\em small} pathspace type, (since $p * i$ has type $\U$)
+and $p * i$ is the real (`large') pathspace elimination.
+
+The interpretation of $\embu$, as a closed function, is essentially at the type
+ $(\A : \sem \U_I(*)) \to \sem {\A \in i . \U}_I(*) \to \sem {\el \A \to \U}_I(*)$
+We have
+\[\sem {\A \in i . \U}_I(*) = (\phi : \sem \U_{I, j} ) \x
+\sem \U_{j := 0}(\phi) \equiv \sem \A_I \]
+
+\[\sem {\lambda \A p a . a \in i .p * i}_I : \sem{\{\A : \U\} \to (\A \in i . \U) \to (\el \A \to \U)}_I \]
+\[\sem {\lambda  p a . a \in i .p * i}_I : (\A : \sem \U_I) \to \sem{ (\A \in i . \U) \to (\el \A \to \U)}_I \]
+\[\sem {\lambda a . a \in i .p * i}_I : (\A : \sem \U_I) \to \sem{ (\A \in i . \U)}_I \to \sem{(\el \A \to \U)}_I \]
+\[\sem { a \in i .p * i}_I : (\A : \sem \U_I) (p : \sem{ (\A \in i . \U)}_I)(a : \sem{\el \A}_I) \to \sem{\U}_I \]
+\section{Typing Rules}
+\subsection{Small Pathspace}
+\[
+\erule
+{\Gamma \prov a : \el {[ \zero/i]\A}\qquad \Gamma, i : \ii \prov \A : \U}
+{\Gamma \prov a \in i . \A : \U}
+\qquad
+\erule
+{\Gamma \prov M : \el{a \in i . \A}}
+{\Gamma \prov M * \zero \equiv a}
+\]
+\[
+\erule
+{\Gamma \prov M : \el{a \in i . \A}}
+{\Gamma, j : \ii \prov M * j : \el{[j/i] \A}}
+\qquad
+\erule
+{\Gamma \prov M : \el{a \in i . \A}}
+{\Gamma \prov M * \zero : \el{[\zero/i] \A}}
+\]
+\subsection{Large Pathspace}
+\[
+\erule
+{\Gamma \prov a :  {[ \zero/i]A}\qquad \Gamma, i : \ii \prov A : \rset}
+{\Gamma \prov a \in i . A : \rset}
+\qquad
+\erule
+{\Gamma \prov M : {a \in i . A}}
+{\Gamma \prov M * \zero \equiv a}
+\]
+\[
+\erule
+{\Gamma \prov M : {a \in i . A}}
+{\Gamma, j : \ii \prov M * j : {[j/i] A}}
+\qquad
+\erule
+{\Gamma \prov M : {a \in i . A}}
+{\Gamma \prov M * \zero : {[\zero/i] A}}
+\]
 \end{document}
