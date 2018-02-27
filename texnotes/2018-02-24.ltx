@@ -435,7 +435,7 @@ projection $j := \zero$. Indeed, to {\em make} this $\zero$-substitution lemma t
 we basically need to imitate the variable case when the context-element happens to
 have a $i := \zero$ in it.
 
-\subsection{Interval Conversions}
+\subsubsection{Interval Conversions}
 
 It appears that we have $\eta$-equality
 \[\sem {\langle i \rangle M \wat i}_I(\rho) = \sem {M}_{I}(\rho) \]
@@ -460,9 +460,9 @@ Similarly we get a $\beta$-equation for application to zero,
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
 $\sem {a \in i . A}_I(\rho) = $\\
-\> $(\phi : \sem A_{I, j} (\rho, i := j)) \x $\\
-\> $\sem A_{j := 0}(\phi) \equiv \sem a_I(\rho) $\\
-$\sem {a \in i . A}_f\ \{\rho\}\ (x) = {???}$
+\> $(\omega : \sem A_{I, j} (\rho, i := j)) \x $\\
+\> $(\kappa : \sem A_{j := \zero}(\omega) \equiv \sem a_I(\rho) )$\\
+$\sem {a \in i . A}_f\ (x) = \pair{\sem A_{(f,\,j\mapsto j)}(x.\omega)}{\ridp}$
 % \sem A_{(f,\,j\mapsto j)}\ \{\rho, i := j \}\ (x)
 \end{tabbing}
 \end{defnbox}
@@ -475,6 +475,20 @@ $\sem {a \in i . A}_f\ \{\rho\}\ (x) = {???}$
 So $\sem a_I : (\rho : \sem \Gamma_I) \to \sem {A}_I(\rho, i := 0)$ which is the
 same type that $\sem A_{j:=0}(\phi)$ has, as required.
 
+The functoriality part needs to be
+\[\sem {a \in i . A}_f\ \{\rho\}\ (x) : \sem{ a \in i . A}_I(\rho) \to
+\sem{ a \in i . A}_J(\sem \Gamma_f(\rho))\]
+We have $x.\omega : \sem A_{I, j}(\rho, i : j)$. So
+\[\sem A_{(f,\,j\mapsto j)}(x.\omega) : \sem A_{J,j}(\sem {\Gamma, i : \ii}_{(f, j\mapsto j)}(\rho, i := j))\]
+\[\sem A_{(f,\,j\mapsto j)}(x.\omega) : \sem A_{J,j}(\sem {\Gamma}_{f}(\rho), i := j)\]
+as required. Then we have
+$\sem A_{j:=\zero}(x.\omega) \equiv \sem a_I(\rho)$ and we need
+\[\sem A_{j:=\zero}(\sem A_{(f,\,j\mapsto j)}(x.\omega)) \equiv \sem a_J(\sem \Gamma_f(\rho))\]
+in other words
+\[\sem A_{f}(\sem A_{j:=\zero}(x.\omega)) \equiv \sem a_J(\sem \Gamma_f(\rho))\]
+\[\sem A_{f}(\sem a_I(\rho)) \equiv \sem a_J(\sem \Gamma_f(\rho))\]
+which holds.
+
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
@@ -486,6 +500,43 @@ $\sem {\pbind i M}_I(\rho) = \pair{\sem M_{I, j}(\rho, i := j)}{ \ridp}$
 {\Gamma, i : \ii \prov M : A}
 {\Gamma \prov \pbind i M : [\zero / i]M \in i . A}
 \]
+\subsubsection{Small Interval Function Types}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {\forall i . A}_I(\rho) = \sem A_{I, j} (\rho, i := j)$\\
+$\sem {\forall i . A}_f\ \{\rho\}\ (x) = \sem A_{(f,\,j\mapsto j)}\ \{\rho, i := j \}\ (x)$
+\end{tabbing}
+\end{defnbox}
+
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {\forall i . \A}_I(\rho) = \sem \A_{I, j} (\rho, i := j)$\\
+$\sem {\forall i . \A}_f\ \{\rho\}\ (x) = \sem \A_{(f,\,j\mapsto j)}\ \{\rho, i := j \}\ (x)$
+\end{tabbing}
+\end{defnbox}
+The inference rule is
+\[
+\erule
+{\Gamma, i : \ii \prov \A : \U}
+{\Gamma \prov \forall i . \A : \U}
+\]
+So we get to assume $\sem \A_{I,j} : \sem {\Gamma, i : \ii}_{I,j} \to \sem \U_{I,j}$.
+and we want to show $\sem{\forall i . \A}_I : \sem \Gamma_I \to \sem \U_I$.
+\textcolor{red}{This is a problem since I don't have a canonical way
+  of getting from $\sem \U_{I, j}$ to $\sem \U_I$!} The only thing I
+can think of is $\zero$-projection, and that's not going to be
+canonical for higher arities.
+
+\subsubsection{Small Path Types}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+?
+\end{tabbing}
+\end{defnbox}
+
 \subsubsection{Converting Paths in the Universe to Relations}
 
 There is a syntactically definable way to get from $\A \in i . \U$ to
