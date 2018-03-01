@@ -12,7 +12,7 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
-\def\pbind#1{\langle \! \langle #1 \rangle \! \rangle}
+\def\rarm{\mathsf{rarm}}
 \def\embu{\mathsf{embu}}
 \def\coglue{\mathsf{coglue}}
 \def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
@@ -223,7 +223,7 @@ $p : \sharp n \to \rset, i  :\sharp n \prov \textcolor{red}{R_2} : p\ i \equiv $
 \> $\ \ff\ k\ c $\>$ = c\ \underline k\rangle \star i$
 \end{tabbing}
 
-\subsection{Naive Attempt \#1}
+\subsection{Naive Thought \#1}
 What happens if we set
 \[\langle \fC, \fA, \ff\rangle \star i := (p : \sharp n \to \rset)(\theta : p\ i)(g : ((j : \sharp n) \to p\ j) \to \fC) \x \]
 \[(e : (k : n) \to p\ \underline k \to \fA_k) \x (\pi : (k : n) \to \ff_k g \equiv e_k (\lambda t . t\ \underline k))\]
@@ -275,7 +275,7 @@ started showing that $p \equiv q$, because although I have $g : \forall p \to \f
 sense of promoting function to equivalence, and also in the larger
 scope of the $\forall i$!
 
-\subsection{Note}
+\subsection{Naive Thought \#2}
 
 If I know $R_2$, and I have that
 \[
@@ -290,6 +290,76 @@ and applying the above principle. So I probably expect something like
 {i : \sharp n \prov S_1 \star i \to S_2 \star i}
 { \prov S_1 \to S_2 }
 \]
-to hold as well? For a suitable notion of morphisms between $n$-spans of course.
-This is a sort of converse to the principle that I put in $\texttt{sketch}$
+to hold as well? For a suitable notion of morphisms between $n$-spans
+of course. This is a sort of converse to the principle
+ $G\sharp g\mathsf{trans}$ in the upper right corner of
+$\texttt{sketch/coglue2.png}$.
+I think it's basically saying something like
+\[
+\erule
+{ \prov S_1 \to_g S_2 }
+{i : \sharp n \prov S_1 \star i \to S_2 \star \sharp g(i)}
+\]
+where $\to_g$ is a notion of span morphism {\em along} a function $g : n \to m$.
+
+\subsection{Naive Thought \#3}
+
+What happens if I introduce a sort of `global element' $\gamma \in \sharp n$
+such that alongside
+\[\langle \fC, \fA, \ff\rangle \star \underline k \equiv \fA\ k\]
+I also have
+\[\langle \fC, \fA, \ff\rangle \star \gamma \equiv \fC\]
+and then if my intro rule for $S \star i$ is the simple thing derived
+from $R_1$ that I started out thinking of, like
+\[
+\erule
+{c : \fC\qquad i : \sharp n \using \star I}
+{ c * i : \langle \fC, \fA, \ff\rangle \star i}
+\]
+then alongside
+\[(c * \underline k) \equiv \ff_k(c)\]
+I also have
+\[(c * \gamma) \equiv c\]
+Then maybe I could say an elim rule like
+\[
+\erule
+{  \begin{tabular}{ll}
+&$a_1 : A_1  \prov N_1 : D(\underline 1)$\\
+&\hfill $\vdots$ \hfill\\
+&$a_n : A_n  \prov N_n : D(\underline{n})$\\
+&$c : C  \prov N' : D(\gamma)$\\
+$ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  N'$
+\end{tabular}
+}
+{  \bcase M \bof a_1.N_1 \cdots a_n . N_n \celse c .N' : D(i)}
+\]
+Not quite right! There's a misalignment of the type $D(\underline k)$ with
+$D(\gamma)$.
+
+But I know there should be a function
+$\rarm^D_k  : D\ \gamma \to D\ \underline k$, right?
+For any $D : \sharp n \to \rset$? So then I can say
+
+\[
+\erule
+{  \begin{tabular}{ll}
+&$a_1 : A_1  \prov N_1 : D(\underline 1)$\\
+&\hfill $\vdots$ \hfill\\
+&$a_n : A_n  \prov N_n : D(\underline{n})$\\
+&$c : C  \prov N' : D(\gamma)$\\
+$ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  \rarm^D_k ( N')$
+\end{tabular}\using {\star E}
+}
+{  \bcase M \bof a_1.N_1 \cdots a_n . N_n \celse c .N' : D(i)}
+\]
+
+Okay, so suppose I have $(i : \sharp n) \to S \star i$. I think I should
+be able to get back out a $C$ from this. How? Just plug in $\gamma$.
+
+Trying to think about $R_2$ again I feel like the intro rule written
+down above {\em isn't strong enough}. What it's really telling us is
+how to give points of $S \star i$ for $i = \gamma$, when we have
+an entire element of the tuple. Even if we have
+a lowly element $a \in \fA_k$ for some particular $k$, this is a legitimate
+element of $S \star \underline k$, isn't it?
 \end{document}
