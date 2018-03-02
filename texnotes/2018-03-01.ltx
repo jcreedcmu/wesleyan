@@ -24,6 +24,7 @@
 \def\B{\mathsf{B}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
+\def\atm#1{\underline{#1}}
 
 \def\ridp{\mathsf{idp}}
 \def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
@@ -196,8 +197,8 @@ We want the canonical map taking a path in the universe to a span
 $\embu : (p : \sharp n \to \rset) \to \rspan_n $  \\
 $\embu\ p = $  \\
 \> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
-\> $\ \fA\ k $\>$ = p\ \underline k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \underline k\rangle$
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
 to have an inverse.
 So there should be some type
@@ -211,26 +212,26 @@ Such that $S : \rspan_n \prov S \equiv \embu(\lambda i . S \star i)$ i.e.
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $S : \rspan_n \prov \textcolor{red}{R_1} : S \equiv$\\
 \> $\langle \fC $\>$ = ( i : \sharp n) \to  S\star i$\\
-\> $\ \fA\ k $\>$ = S\star \underline k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \underline k\rangle$
+\> $\ \fA\ k $\>$ = S\star \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
 and $p : \sharp n \to \rset \prov p \equiv \lambda i . (\embu\ p)\star i$, i.e.
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $p : \sharp n \to \rset, i  :\sharp n \prov \textcolor{red}{R_2} : p\ i \equiv $\\
 \> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
-\> $\ \fA\ k $\>$ = p\ \underline k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \underline k\rangle \star i$
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
 \end{tabbing}
 
 \subsection{Naive Thought \#1}
 What happens if we set
 \[\langle \fC, \fA, \ff\rangle \star i := (p : \sharp n \to \rset)(\theta : p\ i)(g : ((j : \sharp n) \to p\ j) \to \fC) \x \]
-\[(e : (k : n) \to p\ \underline k \to \fA_k) \x (\pi : (k : n) \to \ff_k g \equiv e_k (\lambda t . t\ \underline k))\]
+\[(e : (k : n) \to p\ \atm k \to \fA_k) \x (\pi : (k : n) \to \ff_k g \equiv e_k (\lambda t . t\ \atm k))\]
 \[
 \begin{tikzcd}
-  \forall j . p\ j \ar[r, "g"]\ar[d, "\lambda t.t\ \underline k"'] & \fC\ar[d, "\ff_k"]\\
-p\ \underline k \ar[r, "e_k"']& \fA_k
+  \forall j . p\ j \ar[r, "g"]\ar[d, "\lambda t.t\ \atm k"'] & \fC\ar[d, "\ff_k"]\\
+p\ \atm k \ar[r, "e_k"']& \fA_k
 \end{tikzcd}
 \]
 
@@ -239,16 +240,16 @@ Then we can build a function
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $q : \sharp n \to \rset, i  :\sharp n \prov q\ i \to $\\
 \> $\langle \fC $\>$ = ( i : \sharp n) \to  q\ i$\\
-\> $\ \fA\ k $\>$ = q\ \underline k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \underline k\rangle \star i$
+\> $\ \fA\ k $\>$ = q\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
 \end{tabbing}
 because in that case the codomain type is
 \[ T := (p : \sharp n \to \rset)(\theta : p\ i)(g : \forall p \to \forall q) \x \]
-\[(e : (k : n) \to p\ \underline k \to q\ \underline k) \x (\pi : (k : n) \to (\lambda t . t\ \underline k) g \equiv e_k (\lambda t . t\ \underline k))\]
+\[(e : (k : n) \to p\ \atm k \to q\ \atm k) \x (\pi : (k : n) \to (\lambda t . t\ \atm k) g \equiv e_k (\lambda t . t\ \atm k))\]
 \[
 \begin{tikzcd}
-  \forall   p \ar[r, "g"]\ar[d, "\lambda t.t\ \underline k"'] & \forall   q\ar[d, "\lambda t.t\ \underline k"]\\
-p\ \underline k \ar[r, "e_k"']& q\ \underline k
+  \forall   p \ar[r, "g"]\ar[d, "\lambda t.t\ \atm k"'] & \forall   q\ar[d, "\lambda t.t\ \atm k"]\\
+p\ \atm k \ar[r, "e_k"']& q\ \atm k
 \end{tikzcd}
 \]
 
@@ -261,13 +262,13 @@ Can I get out of it, though? Seems like maybe not. I write down
 \[\mathsf{out}\ \langle p, \theta, g, e, \pi\rangle = {?}\]
 and what I want to do is call $e_i(\theta)$, but that's no good; $i$
 isn't necessarily an endpoint. I really would like to write something like
-\[\mathsf{out}\ \langle p, \theta, g, e, \pi\rangle = \blet \underline k = i
+\[\mathsf{out}\ \langle p, \theta, g, e, \pi\rangle = \blet \atm k = i
 \bin e_k(\theta)\]
 Checking $\mathsf{out} \o \mathsf{into} = \rid$ seems fairly straightforward, since
 $e_k$ ends up being $\rid$ and we just need an extremely reasonable
- $\eta$-like principle to say that $(\blet \underline k = i \bin \theta) \equiv \theta$ when $k$ doesn't occur in $\theta$. What about checking that
+ $\eta$-like principle to say that $(\blet \atm k = i \bin \theta) \equiv \theta$ when $k$ doesn't occur in $\theta$. What about checking that
 
-\[\langle p = q, \theta = \blet \underline k = i \bin e_k(\theta), g = \rid, e = \lambda k . \rid, \pi = \lambda k . \ridp\rangle \equiv \]
+\[\langle p = q, \theta = \blet \atm k = i \bin e_k(\theta), g = \rid, e = \lambda k . \rid, \pi = \lambda k . \ridp\rangle \equiv \]
 \[\langle p = p, \theta = \theta, g = g, e = e, \pi = \pi . \ridp\rangle  \]
 In other words $\mathsf{into} \o \mathsf{out} = \rid$? I don't even know how to get
 started showing that $p \equiv q$, because although I have $g : \forall p \to \forall q$, I
@@ -306,7 +307,7 @@ where $\to_g$ is a notion of span morphism {\em along} a function $g : n \to m$.
 
 What happens if I introduce a sort of `global element' $\gamma \in \sharp n$
 such that alongside
-\[\langle \fC, \fA, \ff\rangle \star \underline k \equiv \fA\ k\]
+\[\langle \fC, \fA, \ff\rangle \star \atm k \equiv \fA\ k\]
 I also have
 \[\langle \fC, \fA, \ff\rangle \star \gamma \equiv \fC\]
 and then if my intro rule for $S \star i$ is the simple thing derived
@@ -317,35 +318,35 @@ from $R_1$ that I started out thinking of, like
 { c * i : \langle \fC, \fA, \ff\rangle \star i}
 \]
 then alongside
-\[(c * \underline k) \equiv \ff_k(c)\]
+\[(c * \atm k) \equiv \ff_k(c)\]
 I also have
 \[(c * \gamma) \equiv c\]
 Then maybe I could say an elim rule like
 \[
 \erule
 {  \begin{tabular}{ll}
-&$a_1 : A_1  \prov N_1 : D(\underline 1)$\\
+&$a_1 : A_1  \prov N_1 : D(\atm 1)$\\
 &\hfill $\vdots$ \hfill\\
-&$a_n : A_n  \prov N_n : D(\underline{n})$\\
+&$a_n : A_n  \prov N_n : D(\atm{n})$\\
 &$c : C  \prov N' : D(\gamma)$\\
 $ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  N'$
 \end{tabular}
 }
 {  \bcase M \bof a_1.N_1 \cdots a_n . N_n \celse c .N' : D(i)}
 \]
-Not quite right! There's a misalignment of the type $D(\underline k)$ with
+Not quite right! There's a misalignment of the type $D(\atm k)$ with
 $D(\gamma)$.
 
 But I know there should be a function
-$\rarm^D_k  : D\ \gamma \to D\ \underline k$, right?
+$\rarm^D_k  : D\ \gamma \to D\ \atm k$, right?
 For any $D : \sharp n \to \rset$? So then I can say
 
 \[
 \erule
 {  \begin{tabular}{ll}
-&$a_1 : A_1  \prov N_1 : D(\underline 1)$\\
+&$a_1 : A_1  \prov N_1 : D(\atm 1)$\\
 &\hfill $\vdots$ \hfill\\
-&$a_n : A_n  \prov N_n : D(\underline{n})$\\
+&$a_n : A_n  \prov N_n : D(\atm{n})$\\
 &$c : C  \prov N' : D(\gamma)$\\
 $ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  \rarm^D_k ( N')$
 \end{tabular}\using {\star E}
@@ -361,5 +362,128 @@ down above {\em isn't strong enough}. What it's really telling us is
 how to give points of $S \star i$ for $i = \gamma$, when we have
 an entire element of the tuple. Even if we have
 a lowly element $a \in \fA_k$ for some particular $k$, this is a legitimate
-element of $S \star \underline k$, isn't it?
+element of $S \star \atm k$, isn't it?
+
+\subsubsection{What's Dangerous about Global Elements}
+
+I was thinking that $\forall i . p\ i$ was equivalent to $p\ \gamma$.
+The equivalence in one direction is just instantiation with $\gamma$
+and in the other, use of $\rarm$.
+
+\[\mathsf{inj}_p : \forall i.p i \to p\ \gamma \]
+\[\mathsf{inj}_p \ t = t\ \gamma\]
+\[\mathsf{out}_p : p\ \gamma \to \forall i.p i  \]
+\[\mathsf{out}_p \ \pi\ i = \rarm^p_i(\pi)\]
+
+So I'd need to have
+\[\pi : p\ \gamma : \mathsf{inj}(\mathsf{out}(\pi)) \equiv \pi\]
+\[t : \forall i . p\ i : \mathsf{out}(\mathsf{inj}(t)) \equiv t\]
+i.e.
+\[\pi : p\ \gamma \prov \rarm^p_\gamma(\pi) \equiv \pi\]
+\[t : \forall i . p\ i, i : \sharp n \prov  \rarm^p_i(t\ \gamma) \equiv t\ i\]
+both which seem pretty sensible.
+
+Except! This makes $\forall i . A(i) \to B (i)$ equivalent to
+$(\forall A) \to (\forall B)$ which doesn't seem quite right to me.
+The type $\forall A$ should be essentially the $C$ part of a span,
+so $(\forall A) \to (\forall B)$ is the map $C_1 \to C_2$. Whereas
+$\forall i . A(i) \to B (i)$ is the {\em commuting bundle} consisting
+of map of  the $C$s and also all the maps of the $A$s. So I should find
+that
+\[\forall i . A(i) \to B (i) \prov (\forall A) \to (\forall B)\]
+but not the converse.
+\section{Introducing a new Judgment Form}
+
+I had an idea last night for a new judgment form that sort of internalizes
+$\forall i . p\ i$. Let me just consider the binary relation case
+for now so I don't fill up on indices.
+
+Let me go with the weird binding elim rule for $\star$ so that I get $R_1$,
+and a weird elim rule for $\ii$ will get me $R_2$.
+
+\[
+\erule
+{\Gamma \prov c : S.\fC\qquad \Gamma \prov i : \ii \using \star I}
+{\Gamma \prov c * i :  S \star i}
+\]
+\[
+\erule
+{\Gamma, i : \ii \prov e : S \star i\using \star E}
+{\Gamma \prov \ssem i . e  :  S.\fC }
+\]
+I have a judgment form
+\[ \Gamma, \ldots, x : i.A(i), \ldots, \Gamma' \]
+which I can eliminate with
+\[
+\erule
+{\Gamma, x : A(j) \prov e : C}
+{\Gamma, y : i.A(i) \prov [y\{j\}/x]e : C}
+\]
+And here's a special case of the weird left rule for $\ii$:
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma,  x_0 : A(\atm 0) \prov e_0 : D(\atm 0)$\\
+$\Gamma,  x_1 : A(\atm 1) \prov e_1 :  D(\atm 1)$\\
+$\Gamma, x' : i.A(i), i : \ii \prov e' :  D(i)$\\
+$[x'\{\atm 0\} / x_0]e_0 \equiv [\atm 0/i]e'$\\
+$[x'\{\atm 1\} / x_1]e_1 \equiv [\atm 1/i]e'$
+\end{tabular}
+}
+{\Gamma, i : \ii, x' : A(i) \prov \blet (\cdots) : D(i) }
+\]
+more generally something like
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma,  \Delta(\atm 0) \prov e_0 : D(\atm 0)$\\
+$\Gamma,  \Delta(\atm 1) \prov e_1 :  D(\atm 1)$\\
+$\Gamma, i.\Delta(i), i : \ii \prov e' :  D(i)$\\
+$[\Delta\{\atm 0\} / \Delta]e_0 \equiv [\atm 0/i]e'$\\
+$[\Delta\{\atm 1\} / \Delta]e_1 \equiv [\atm 1/i]e'$
+\end{tabular}
+}
+{\Gamma, i : \ii, \Delta(i) \prov \blet (\cdots) : D(i) }
+\]
+Let's now stare at
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, \pi : p\ i \prov \textcolor{red}{R_2^>} \pi : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+My proof obligation breaks up into making $p\ \atm 0$ and $p\ \atm 1$
+(which I can do by supplying $\pi$ directly)
+and
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, x : i . p\ i \prov {?} : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+which can be done because I effectively have a $\forall i . p\ i$ now.
+
+In the other direction,  I want
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, g  : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i  $\\
+$\prov \textcolor{red}{R_2^<}\ g : p\ i$
+\end{tabbing}
+And in the branches I use $g : p\ \atm 0$ to make $p\ \atm 0$ or
+$g : p\ \atm 1$ to make $p\ \atm 1$ or else I have
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$g  : i. $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i  $
+\end{tabbing}
+and I can do $(\ssem j g\{j\})(i)$ to get $p\ i$ out.
 \end{document}
