@@ -1,0 +1,489 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\rarm{\mathsf{rarm}}
+\def\embu{\mathsf{embu}}
+\def\coglue{\mathsf{coglue}}
+\def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\ff{\mathsf{f}}
+\def\B{\mathsf{B}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+\def\atm#1{\underline{#1}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{bluegray}{rgb}{0.4,0.4,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+
+\def\tensor{\otimes}
+\def\lol{\multimap}
+
+\def\wtf{{\color{red}???}}
+
+\def\zero{\texttt{0}}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Return to Syntax}
+
+\subsection{Setting up the Problem}
+An {\em $n$-span} is a record with
+\def\rspan{\mathsf{Span}}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $\fC : \rset$\\
+\> $\fA : n \to \rset$\\
+\> $\ff : (k : n) \to \fC \to \fA\ k$
+\end{tabbing}
+
+We want the canonical map taking a path in the universe to a span
+\begin{tabbing}
+\hspace*{2em}\=$\ \ff\ k\ c $ \= \kill
+$\embu : (p : \sharp n \to \rset) \to \rspan_n $  \\
+$\embu\ p = $  \\
+\> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\end{tabbing}
+to have an inverse.
+So there should be some type
+\[
+\erule
+{S : \rspan_n \qquad i : \sharp n}
+{S\star i}
+\]
+Such that $S : \rspan_n \prov S \equiv \embu(\lambda i . S \star i)$ i.e.
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$S : \rspan_n \prov \textcolor{red}{R_1} : S \equiv$\\
+\> $\langle \fC $\>$ = ( i : \sharp n) \to  S\star i$\\
+\> $\ \fA\ k $\>$ = S\star \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\end{tabbing}
+and $p : \sharp n \to \rset \prov p \equiv \lambda i . (\embu\ p)\star i$, i.e.
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \sharp n \to \rset, i  :\sharp n \prov \textcolor{red}{R_2} : p\ i \equiv $\\
+\> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+
+\subsection{Naive Thought \#1}
+What happens if we set
+\[\langle \fC, \fA, \ff\rangle \star i := (p : \sharp n \to \rset)(\theta : p\ i)(g : ((j : \sharp n) \to p\ j) \to \fC) \x \]
+\[(e : (k : n) \to p\ \atm k \to \fA_k) \x (\pi : (k : n) \to \ff_k g \equiv e_k (\lambda t . t\ \atm k))\]
+\[
+\begin{tikzcd}
+  \forall j . p\ j \ar[r, "g"]\ar[d, "\lambda t.t\ \atm k"'] & \fC\ar[d, "\ff_k"]\\
+p\ \atm k \ar[r, "e_k"']& \fA_k
+\end{tikzcd}
+\]
+
+Then we can build a function
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$q : \sharp n \to \rset, i  :\sharp n \prov q\ i \to $\\
+\> $\langle \fC $\>$ = ( i : \sharp n) \to  q\ i$\\
+\> $\ \fA\ k $\>$ = q\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+because in that case the codomain type is
+\[ T := (p : \sharp n \to \rset)(\theta : p\ i)(g : \forall p \to \forall q) \x \]
+\[(e : (k : n) \to p\ \atm k \to q\ \atm k) \x (\pi : (k : n) \to (\lambda t . t\ \atm k) g \equiv e_k (\lambda t . t\ \atm k))\]
+\[
+\begin{tikzcd}
+  \forall   p \ar[r, "g"]\ar[d, "\lambda t.t\ \atm k"'] & \forall   q\ar[d, "\lambda t.t\ \atm k"]\\
+p\ \atm k \ar[r, "e_k"']& q\ \atm k
+\end{tikzcd}
+\]
+
+and we can implement that as
+\[\mathsf{into} : \{q : \sharp n \to \rset\} \{i : \sharp n\} \to q\ i \to T\]
+\[\mathsf{into}\ \theta = \langle p = q, \theta = \theta, g = \rid, e = \lambda k . \rid, \pi = \lambda k . \ridp\rangle \]
+
+Can I get out of it, though? Seems like maybe not. I write down
+\[\mathsf{out} : \{q : \sharp n \to \rset\} \{i : \sharp n\} \to T \to q\ i \]
+\[\mathsf{out}\ \langle p, \theta, g, e, \pi\rangle = {?}\]
+and what I want to do is call $e_i(\theta)$, but that's no good; $i$
+isn't necessarily an endpoint. I really would like to write something like
+\[\mathsf{out}\ \langle p, \theta, g, e, \pi\rangle = \blet \atm k = i
+\bin e_k(\theta)\]
+Checking $\mathsf{out} \o \mathsf{into} = \rid$ seems fairly straightforward, since
+$e_k$ ends up being $\rid$ and we just need an extremely reasonable
+ $\eta$-like principle to say that $(\blet \atm k = i \bin \theta) \equiv \theta$ when $k$ doesn't occur in $\theta$. What about checking that
+
+\[\langle p = q, \theta = \blet \atm k = i \bin e_k(\theta), g = \rid, e = \lambda k . \rid, \pi = \lambda k . \ridp\rangle \equiv \]
+\[\langle p = p, \theta = \theta, g = g, e = e, \pi = \pi . \ridp\rangle  \]
+In other words $\mathsf{into} \o \mathsf{out} = \rid$? I don't even know how to get
+started showing that $p \equiv q$, because although I have $g : \forall p \to \forall q$, I
+ really need $\forall i . p\ i \equiv q\ i$ which is stronger both in the
+sense of promoting function to equivalence, and also in the larger
+scope of the $\forall i$!
+
+\subsection{Naive Thought \#2}
+
+If I know $R_2$, and I have that
+\[
+\erule
+{i : \sharp n \prov S_1 \star i \equiv S_2 \star i}
+{ \prov S_1 \equiv S_2 }
+\]
+then I can derive $R_1$ by substituting $p = \lambda i . S \star i$
+and applying the above principle. So I probably expect something like
+\[
+\erule
+{i : \sharp n \prov S_1 \star i \to S_2 \star i}
+{ \prov S_1 \to S_2 }
+\]
+to hold as well? For a suitable notion of morphisms between $n$-spans
+of course. This is a sort of converse to the principle
+ $G\sharp g\mathsf{trans}$ in the upper right corner of
+$\texttt{sketch/coglue2.png}$.
+I think it's basically saying something like
+\[
+\erule
+{ \prov S_1 \to_g S_2 }
+{i : \sharp n \prov S_1 \star i \to S_2 \star \sharp g(i)}
+\]
+where $\to_g$ is a notion of span morphism {\em along} a function $g : n \to m$.
+
+\subsection{Naive Thought \#3}
+
+What happens if I introduce a sort of `global element' $\gamma \in \sharp n$
+such that alongside
+\[\langle \fC, \fA, \ff\rangle \star \atm k \equiv \fA\ k\]
+I also have
+\[\langle \fC, \fA, \ff\rangle \star \gamma \equiv \fC\]
+and then if my intro rule for $S \star i$ is the simple thing derived
+from $R_1$ that I started out thinking of, like
+\[
+\erule
+{c : \fC\qquad i : \sharp n \using \star I}
+{ c * i : \langle \fC, \fA, \ff\rangle \star i}
+\]
+then alongside
+\[(c * \atm k) \equiv \ff_k(c)\]
+I also have
+\[(c * \gamma) \equiv c\]
+Then maybe I could say an elim rule like
+\[
+\erule
+{  \begin{tabular}{ll}
+&$a_1 : A_1  \prov N_1 : D(\atm 1)$\\
+&\hfill $\vdots$ \hfill\\
+&$a_n : A_n  \prov N_n : D(\atm{n})$\\
+&$c : C  \prov N' : D(\gamma)$\\
+$ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  N'$
+\end{tabular}
+}
+{  \bcase M \bof a_1.N_1 \cdots a_n . N_n \celse c .N' : D(i)}
+\]
+Not quite right! There's a misalignment of the type $D(\atm k)$ with
+$D(\gamma)$.
+
+But I know there should be a function
+$\rarm^D_k  : D\ \gamma \to D\ \atm k$, right?
+For any $D : \sharp n \to \rset$? So then I can say
+
+\[
+\erule
+{  \begin{tabular}{ll}
+&$a_1 : A_1  \prov N_1 : D(\atm 1)$\\
+&\hfill $\vdots$ \hfill\\
+&$a_n : A_n  \prov N_n : D(\atm{n})$\\
+&$c : C  \prov N' : D(\gamma)$\\
+$ M : S \star i$&$[f_k(c) / a_k]  N_k \equiv  \rarm^D_k ( N')$
+\end{tabular}\using {\star E}
+}
+{  \bcase M \bof a_1.N_1 \cdots a_n . N_n \celse c .N' : D(i)}
+\]
+
+Okay, so suppose I have $(i : \sharp n) \to S \star i$. I think I should
+be able to get back out a $C$ from this. How? Just plug in $\gamma$.
+
+Trying to think about $R_2$ again I feel like the intro rule written
+down above {\em isn't strong enough}. What it's really telling us is
+how to give points of $S \star i$ for $i = \gamma$, when we have
+an entire element of the tuple. Even if we have
+a lowly element $a \in \fA_k$ for some particular $k$, this is a legitimate
+element of $S \star \atm k$, isn't it?
+
+\subsubsection{What's Dangerous about Global Elements}
+
+I was thinking that $\forall i . p\ i$ was equivalent to $p\ \gamma$.
+The equivalence in one direction is just instantiation with $\gamma$
+and in the other, use of $\rarm$.
+
+\[\mathsf{inj}_p : \forall i.p i \to p\ \gamma \]
+\[\mathsf{inj}_p \ t = t\ \gamma\]
+\[\mathsf{out}_p : p\ \gamma \to \forall i.p i  \]
+\[\mathsf{out}_p \ \pi\ i = \rarm^p_i(\pi)\]
+
+So I'd need to have
+\[\pi : p\ \gamma : \mathsf{inj}(\mathsf{out}(\pi)) \equiv \pi\]
+\[t : \forall i . p\ i : \mathsf{out}(\mathsf{inj}(t)) \equiv t\]
+i.e.
+\[\pi : p\ \gamma \prov \rarm^p_\gamma(\pi) \equiv \pi\]
+\[t : \forall i . p\ i, i : \sharp n \prov  \rarm^p_i(t\ \gamma) \equiv t\ i\]
+both which seem pretty sensible.
+
+Except! This makes $\forall i . A(i) \to B (i)$ equivalent to
+$(\forall A) \to (\forall B)$ which doesn't seem quite right to me.
+The type $\forall A$ should be essentially the $C$ part of a span,
+so $(\forall A) \to (\forall B)$ is the map $C_1 \to C_2$. Whereas
+$\forall i . A(i) \to B (i)$ is the {\em commuting bundle} consisting
+of map of  the $C$s and also all the maps of the $A$s. So I should find
+that
+\[\forall i . A(i) \to B (i) \prov (\forall A) \to (\forall B)\]
+but not the converse.
+\section{Introducing a new Judgment Form}
+
+I had an idea last night for a new judgment form that sort of internalizes
+$\forall i . p\ i$. Let me just consider the binary relation case
+for now so I don't fill up on indices.
+
+Let me go with the weird binding elim rule for $\star$ so that I get $R_1$,
+and a weird elim rule for $\ii$ will get me $R_2$.
+
+\[
+\erule
+{\Gamma \prov c : S.\fC\qquad \Gamma \prov i : \ii \using \star I}
+{\Gamma \prov c * i :  S \star i}
+\]
+\[
+\erule
+{\Gamma, i : \ii \prov e : S \star i\using \star E}
+{\Gamma \prov \ssem i . e  :  S.\fC }
+\]
+I have a judgment form
+\[ \Gamma, \ldots, x : i.A(i), \ldots, \Gamma' \]
+which I can eliminate with
+\[
+\erule
+{\Gamma, x : A(j) \prov e : C}
+{\Gamma, y : i.A(i) \prov [y\{j\}/x]e : C}
+\]
+And here's a special case of the weird left rule for $\ii$:
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma,  x_0 : A(\atm 0) \prov e_0 : D(\atm 0)$\\
+$\Gamma,  x_1 : A(\atm 1) \prov e_1 :  D(\atm 1)$\\
+$\Gamma, x' : i.A(i), i : \ii \prov e' :  D(i)$\\
+$[x'\{\atm 0\} / x_0]e_0 \equiv [\atm 0/i]e'$\\
+$[x'\{\atm 1\} / x_1]e_1 \equiv [\atm 1/i]e'$
+\end{tabular}
+}
+{\Gamma, i : \ii, x' : A(i) \prov \blet (\cdots) : D(i) }
+\]
+more generally something like
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma,  \Delta(\atm 0) \prov e_0 : D(\atm 0)$\\
+$\Gamma,  \Delta(\atm 1) \prov e_1 :  D(\atm 1)$\\
+$\Gamma, i.\Delta(i), i : \ii \prov e' :  D(i)$\\
+$[\Delta\{\atm 0\} / \Delta]e_0 \equiv [\atm 0/i]e'$\\
+$[\Delta\{\atm 1\} / \Delta]e_1 \equiv [\atm 1/i]e'$
+\end{tabular}
+}
+{\Gamma, i : \ii, \Delta(i) \prov \blet (\cdots) : D(i) }
+\]
+Let's now stare at
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, \pi : p\ i \prov \textcolor{red}{R_2^>} \pi : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+My proof obligation breaks up into making $p\ \atm 0$ and $p\ \atm 1$
+(which I can do by supplying $\pi$ directly)
+and
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, x : i . p\ i \prov {?} : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i$
+\end{tabbing}
+which can be done because I effectively have a $\forall i . p\ i$ now.
+
+In the other direction,  I want
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \ii \to \rset, i  :\ii, g  : $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i  $\\
+$\prov \textcolor{red}{R_2^<}\ g : p\ i$
+\end{tabbing}
+And in the branches I use $g : p\ \atm 0$ to make $p\ \atm 0$ or
+$g : p\ \atm 1$ to make $p\ \atm 1$ or else I have
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$g  : i. $\\
+\> $\langle \fC $\>$ = ( i : \ii) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i  $
+\end{tabbing}
+and I can do $(\ssem j g\{j\})(i)$ to get $p\ i$ out.
+\end{document}

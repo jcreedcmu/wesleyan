@@ -14,10 +14,12 @@
 
 \def\pbind#1{\langle \! \langle #1 \rangle \! \rangle}
 \def\embu{\mathsf{embu}}
+\def\coglue{\mathsf{coglue}}
 \def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
 \def\A{\mathsf{A}}
+\def\B{\mathsf{B}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
 
@@ -601,4 +603,54 @@ We have
 {\Gamma \prov M : {a \in i . A}}
 {\Gamma \prov M * \zero : {[\zero/i] A}}
 \]
+
+\section{Looking Back to Syntax}
+Dan was telling me about `coglue' types as a way of thinking about what $\Psi$ is.
+We for sure have (just forgetting about universes and thinking $\rset : \rset$ for now)
+\begin{defnbox}
+  \begin{tabbing}
+    $\embu: \{A : \rset\}  (A \in i . \rset) \to ( A \to \rset)$\\
+    $\embu\ p\ a = a \in i .p * i$
+  \end{tabbing}
+\end{defnbox}
+and so we postulate
+\begin{declbox}
+  \begin{tabbing}
+    $\coglue: \{A : \rset\}  ( A \to \rset)  (i : \ii) \to \rset$\\
+    $\coglue\zero: \{A : \rset\}  (R : A \to \rset) \to \coglue\ R\ \zero \equiv A$
+  \end{tabbing}
+\end{declbox}
+Heck, I'm just going to go over to agda to do this.
+
+\section{Semantics in the Cartesian Case}
+
+Let's say $\ii$ isn't linear at all, and I want to compare
+\[(p : \ii \to \U) \x (p\ \zero \equiv \A)\]
+\[(\B : \U) \x \el \B \to \el \A\]
+I'm living in a category where objects $I$ are finite sets and maps
+between them are partial functions. The interval $\ii$ is just $y1$.
+
+An element of $\sem\U_I$ is a functor $\C \to \U$ together with a natural
+transformation into $yI$.
+\[\sem U_I = (F : \C \to_f \U) \x (F \to_n yI)\]
+
+The number of partial injections from 0 to $n$ is\\
+ $1$\\
+The number of partial injections from 1 to $n$ is\\
+ $1 + n$\\
+The number of partial injections from 2 to $n$ is\\
+ $1 + 2n + n(n-1)$\\
+The number of partial injections from 3 to $n$ is\\
+ $1 + 3n + 3n(n-1) + n(n-1)(n-2)$\\
+The number of partial injections from 4 to $n$ is\\
+ $1 + 4n + 6n(n-1) + 4n(n-1)(n-2) + {n!\over (n-4)!}$\\
+The number of partial injections from 5 to $n$ is
+\[ \sum_{i = 0}^5 {n! \over (n -i)!}{n \choose i}\]
+The number of partial injections from $m$ to $n$ is
+\[ \sum_{i = 0}^m {n! \over (n -i)!}{n \choose i}\]
+\[ = \sum_{i = 0}^m {n! \over (n -i)!}{n! \over i! (n-i!)}\]
+\[ = \sum_{i = 0}^m {n \choose i}^2 i!\]
+
+
+
 \end{document}
