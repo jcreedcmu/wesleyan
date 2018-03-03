@@ -486,4 +486,153 @@ $g  : i. $\\
 \> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star i  $
 \end{tabbing}
 and I can do $(\ssem j g\{j\})(i)$ to get $p\ i$ out.
+
+\section{Returning To Semantic Considerations}
+
+Let's say $\C$ is finite sets and functions in the $+n$ monad and
+we're doing a model in $\rset^\C$.
+
+We want to make an interpretation of the type
+\[
+\erule
+{\Gamma \prov S : \rspan \qquad \Gamma \prov i : \ii}
+{\Gamma \prov S \star i : \rset}
+\]
+So we have nice things like
+\[ \sem {\fA_k}_I, \sem \fC_I : \sem \Gamma_I \to \rset \]
+\[  \sem \fC_f : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem \Gamma_f(\rho)) \]
+\[  \sem {\fA_k}_f : \{\rho : \sem \Gamma_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem \Gamma_f(\rho)) \]
+\[  \sem {\ff_k}_I : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
+\[  \sem {i}_I :  \sem \Gamma_I \to \sem {\ii}_I \]
+
+Now $\sem \ii_I = n + I $.
+We're going to set
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
+$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
+\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse j \in I \mapsto \sem \fC_{I \setminus j}(\rho)$
+\end{tabbing}
+and (for a function $f : I \to J + n$, i.e. a morphism $f : I \to J$, i.e. a substitution
+$J \prov f : I$)
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
+\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
+$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
+\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
+\> \> $\celse \atm{k'} \in n = ?$\\
+\> \> $\celse j' \in J = \sem{\fC}_{f - j}(x)$
+\end{tabbing}
+If $\sem i_I(\rho)$ is $\atm k$, then $x : \sem {\fA_k}_I(\rho)$, and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. But what's
+$\sem i_J(\sem\Gamma_f(\rho))$? We know it's
+$\sem \ii_f(\sem i_I(\rho)) = \sem\ii_f(\atm k) = \atm k$.
+So we need to make
+$\sem {\fA_k}_J(\sem\Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$ does the trick.
+
+If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
+$x : \sem {\fC}_{I\setminus j}(\rho)$
+and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
+We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
+
+If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J\setminus j'}(\sem \Gamma_f(\rho))$.
+This is taken care of by $\sem{\fC}_{f - j}(x)$.
+
+If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
+Hmm...
+
+Wait a minute, there's a type error; I can't apply $\sem \fC_{I\setminus j}$ to
+a $\rho : \sem\Gamma_I$, and there's not a canonical way of getting from
+$\Gamma_I$ to $\Gamma_{I\setminus j}$ unless $n = 1$.
+
+But if I don't subtract $j$ from $I$ in that clause, how do I use $j$?
+\subsection{Trying again without linearity}
+Set
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
+$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
+\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse j \in I \mapsto \sem \fC_{I}(\rho)$
+\end{tabbing}
+and for a function $f : I \to J + n$
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
+\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
+$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
+\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
+\> \> $\celse \atm{k'} \in n = ?$\\
+\> \> $\celse j' \in J = \sem{\fC}_{f}(x)$
+\end{tabbing}
+If $\sem i_I(\rho) = \atm k$, things work like before.
+If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
+$x : \sem {\fC}_{I}(\rho)$
+and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
+We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
+
+If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J}(\sem \Gamma_f(\rho))$.
+This is taken care of by $\sem{\fC}_{f}(x)$.
+
+If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
+\textcolor{red}{This might work but I had another thought I want to follow up on first}.
+
+
+\subsection{Linearity with the rule written Properly}
+
+Probably what I have above is wrong because it doesn't enforce
+linearity of $i$ in the rule. I should instead write
+\[
+\erule
+{\Gamma \prov S : \rspan }
+{\Gamma, q : \ii \prov S \star q : \rset}
+\]
+So I must define
+$\sem {S \star i}_I : \sem {\Gamma, q  : \ii}_I \to \rset$ and I know
+from before that inhabitants of $\sem {\Gamma, q : \ii}_I$ look like
+$(\rho, q := \atm k)$ for $\rho \in \Gamma_I$ or $(\rho, q := i)$ for
+$\rho \in \Gamma_{I\setminus i}$ and $i \in I$. So I define
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem {\Gamma, q : \ii}_I \to \rset$\\
+$\sem {S \star i}_I(\rho') = \bcase \rho' \bof$\\
+\> $\celse (\rho, q := \underline k) \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse (\rho, q := i) \mapsto \sem \fC_{I \setminus i}(\rho)$
+\end{tabbing}
+That fixes my type error! Hooray. Next we do:
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho' : \sem {\Gamma, q : \ii}_I\} \to \sem {S\star i}_I(\rho') \to
+\sem {S\star i}_J(\sem{\Gamma, q : \ii}_f(\rho')) \)\\
+$\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
+\> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
+\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\setminus i}(x))$\\
+\> \> $\celse j  = \sem{\fC}_{f - i}(x)$
+\end{tabbing}
+Let's go through the case analysis again. Suppose $\rho' = (\rho, q := \atm k)$.
+Then $x : \sem{\fA_k}_I(\rho)$. We know that
+$\sem {\Gamma, q:\ii}_f(\rho, q := \atm k) = (\sem \Gamma_f(\rho), q := \atm k)$
+so our goal type is just $\sem{\fA_k}_J(\sem \Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$
+does the job.
+
+Let's go through the case analysis again. Suppose $\rho' = (\rho, q := i)$.
+Then $x : \sem{\fC}_{I\setminus i}(\rho)$.
+We know that
+\[\sem {\Gamma, q:\ii}_f(\rho, q := i) =  (\sem \Gamma_{f-i}(\rho), q := f(i))\]
+ so
+what happens now depends on $f(i)$.
+
+If $f(i) = \atm k$, then our goal type is $\sem{\fA_k}_J(\sem \Gamma_{f-i}(\rho))$.
+Observe that $\sem{\ff_k}_{I\setminus i}(x)$ has type $\sem{\fA_k}_{I\setminus i}(\rho)$,
+then hit that with $\sem {\fA_k}_{f - i}$.
+
+If $f(i) = j$, then our goal type is $\sem{\fC}_{J\setminus j}(\sem \Gamma_{f-i}(\rho))$.
+In this case $\sem{\fC}_{f -i}(x)$ does the job.
 \end{document}
