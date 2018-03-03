@@ -51,15 +51,6 @@ postulate
     → ★intro {S} c (ι k) ↦ S .f k c
   {-# REWRITE ★intro-rewrite #-}
 
-  -- An equational property I expect of the elimination rule.
-  -- If you have a (e : (i : #) → S ★ i) and apply it to an endpoint k,
-  -- you get the same thing if you ★-eliminate to the head C of the
-  -- span, then take the kth arm down to A_k.
-  -- Can't seem to orient this as a rewrite in a way that makes agda happy,
-  -- so just postulate a path.
-  ★elim-eqn : {S : Span} (k : n) (e : (i : #) → S ★ i) →
-    e (ι k) == S .f k (★elim e)
-
   -- The following is a fairly exotic (and probably not fully general)
   -- sequent left rule for #.
   -- The idea is that if you have an (i : #) on the left below the inference
@@ -79,6 +70,14 @@ postulate
     (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
  -- -----------------------------------------------------------
     ((i : #) → B i → D i)
+
+★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
+  e i == ★intro {S} (★elim e) i
+★elim-eqn-lem {S} e i = idp
+
+★elim-eqn : {S : Span} (k : n) (e : (i : #) → S ★ i) →
+  e (ι k) == S .f k (★elim e)
+★elim-eqn {S} k e = ★elim-eqn-lem {S} e (ι k)
 
 hardRoundTripλ : (p : # → Set) (i : #) → (embu p ★ i) == p i
 hardRoundTripλ p i = ua (equiv inj out zig zag) where
