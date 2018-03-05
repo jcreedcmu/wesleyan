@@ -635,4 +635,83 @@ then hit that with $\sem {\fA_k}_{f - i}$.
 
 If $f(i) = j$, then our goal type is $\sem{\fC}_{J\setminus j}(\sem \Gamma_{f-i}(\rho))$.
 In this case $\sem{\fC}_{f -i}(x)$ does the job.
+
+\subsubsection{Elim}
+
+\[
+\erule
+{\Gamma, q : \ii \prov e : S\star q \using \star E}
+{\Gamma \prov \ssem q e : \fC}
+\]
+For any $I$ we have
+$\sem e_I : (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$
+and we make
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+$\sem{\ssem q e}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$\\
+$\sem{\ssem q e}_I (\rho) = \sem e_{I,i}(\rho, q := i)$
+\end{tabbing}
+
+\subsubsection{Intro}
+\[
+\erule
+{\Gamma \prov c : \fC \using \star I}
+{\Gamma, q : \ii \prov c \star q : S\star q }
+\]
+For any $I$ we have
+$\sem{ c}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$
+and we make
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+$\sem{ c \star q}_I :  (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$\\
+$\sem{c \star q}_I (\rho, q := i) = \sem c_{I\setminus i}(\rho)$\\
+$\sem{c \star q}_I (\rho, q := \atm k) = \sem {\ff_k}_I(\sem c_{I}(\rho))$
+\end{tabbing}
+
+\subsubsection{$\eta$ equivalence}
+We want to confirm that
+\[ (\rho' : \sem{\Gamma, q : \ii}_I) \to \sem { (\ssem r e) \star q }_I(\rho') \equiv \sem {[q/r] e}_I(\rho')\]
+Split cases on $\rho'$.
+
+If $\rho' = (\rho, q := i)$, then we're looking for
+\[\sem { (\ssem r e) }_{I\setminus i}(\rho) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+in other words
+\[\sem { e }_{I}(\rho, r := i) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+which is true by $\alpha$-equivalence.
+
+If $\rho' = (\rho, q := \atm k)$, then we're looking for
+\[\sem {\ff_k}_I(\sem {\ssem r e}_I(\rho)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+in other words
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+by $\alpha$-equivalence
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
+which I suppose needs to be stated separately as a lemma.
+\begin{lemma}
+Suppose $\Gamma, r : \ii  \prov e : S \star r$.
+Then
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
+\end{lemma}
+
+\begin{proof}
+There is a morphism $[\atm k/i] : I, i \to I$ that maps $i$ `exceptionally' to $\atm k$.
+So
+\[\sem {S\star r}_{[\atm k/i]} : (\rho : \sem{ \Gamma, r: \ii}) \to \sem {S\star r}_{I, i}(\rho) \to \sem {S\star r}_I(\sem {\Gamma, r:\ii}_{[\atm k/i]}(\rho))\]
+and by
+\[(\rho : \sem \Gamma_c) \to \sem A_f (\sem M_c(\rho)) \equiv \sem M_d(\sem \Gamma_f(\rho)) \]
+we specifically have
+\[(\rho' : \sem \Gamma_{I,i}) \to \sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho')) \equiv \sem e_I(\sem \Gamma_{[\atm k/i]}(\rho')) \]
+but then we observe that
+$\sem \Gamma_{[\atm k/i]}(\rho, r := i) \equiv (\rho, r := \atm k)$ by definition,
+so we just need
+$\sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho, r:= i)) \equiv \sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i))$, but this follows from unpacking the definition of $\sem {S \star r}_{[\atm k/i]}$. \cqed
+\end{proof}
+
+
+\subsubsection{$\beta$ equivalence}
+We want to confirm that
+\[ (\rho : \sem{\Gamma}_I) \to \sem { (\ssem q (e \star q) }_I(\rho) \equiv \sem { e}_I(\rho)\]
+but this is just checking that
+\[ \sem {  e \star q }_{I,i}(\rho, q := i) \equiv \sem { e}_I(\rho)\]
+which is true by definition of $\sem{e\star q}_{I,i}$.
+
 \end{document}
