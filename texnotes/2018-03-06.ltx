@@ -1,0 +1,631 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\rarm{\mathsf{rarm}}
+\def\embu{\mathsf{embu}}
+\def\coglue{\mathsf{coglue}}
+\def\el#1{\textcolor{bluegray}{\texttt{[}}{#1}\textcolor{bluegray}{\texttt{]}}}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\ff{\mathsf{f}}
+\def\B{\mathsf{B}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+\def\atm#1{\underline{#1}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{bluegray}{rgb}{0.4,0.4,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\pbind#1{\langle {#1} \rangle}
+\def\ppbind#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+
+\def\tensor{\otimes}
+\def\lol{\multimap}
+
+\def\wtf{{\color{red}???}}
+
+\def\zero{\texttt{0}}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+
+\section{Introduction}
+Here I'm once again trying to reconstruct Moulin's thesis in my own words, with
+three improvements:
+
+\begin{enumerate}
+\item The notion of $I$-sets is not needed, thanks to careful attention to
+when isomorphism suffices in place of on-the-nose equality of sets.
+\item The things that need to be postulated on the syntactic side are
+better organized into type formers, introduction, and elimination rules.
+\item The arity of relations is generalized; not only generalized to a
+  single choice once and for all of which arity all relations have,
+  but rather relations of many different arities are simultaneously
+  present in the system, and can be transformed into one another
+  through projections.
+\end{enumerate}
+\section{Syntax}
+
+\subsection{Sharp Types}
+Assume the usual syntactic machinery of a dependent type theory.
+
+We postulate that there is a type operator $\sharp : \rfinset \to \rset$.
+It has at least an intro rule
+
+\[
+\erule
+{n \in \rfinset \qquad k \in n}
+{\Gamma \prov \atm k : \sharp n}
+\]
+
+These are the {\em endpoints} of the $n$-endpointed `interval' object.
+Naturally this most resembles an actual interval when $n = 2$, and
+the rays in Moulin's thesis are recovered when $n=1$. Generally
+one can picture $\sharp n$ as a type containing $n$ endpoints and some otherwise
+abstract `glue' by which the points cohere together, e.g. $\sharp 3$ as
+
+\[\begin{tikzpicture}[dot/.style={fill,circle,minimum size=1.5mm,inner sep=0pt,outer sep=0pt,fill=opfib}]
+\begin{scope}[shift={(0,0)}]
+  \node(aa) at (.2,1.5){};
+  \node(bb) at (1.5,0){};
+  \node(cc) at (.5,-1){};
+  \node(dd) at (-1.8,0){};
+  \fill [opfibl] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+  \draw [opfib] plot [smooth cycle, tension=1] coordinates { (cc)   (bb)   (aa)   (dd) };
+\end{scope}
+\node[dot,label={[opfib]left:$\atm 0$}] at (0,1){};
+\node[dot,label={[opfib]left:$\atm 1$}] at (-1,0){};
+\node[dot,label={[opfib]left:$\atm 2$}] at (1,0){};
+\end{tikzpicture}\]
+
+The eventual punchline is that the type $\sharp n \to \rset$ should be
+equivalent to the type of $n$-ary proof-relevant relations, i.e. spans
+of $n$ functions, with the endpoints of the $\sharp n$ giving the codomains
+of the $n$ arms of the span.
+
+We want $\sharp$ to be functorial: if $g : n_1 \to n_2$ is a function
+between finite sets, then we expect $\sharp g : \sharp n_1 \to \sharp n_2$ to exist.
+This can be baked into the rule for using $\sharp$-typed variables:
+\[
+\erule
+{n_1, n_2\in\rfinset\qquad g : n_1 \to n_2}
+{\Gamma, \nu : \sharp n_1 \prov \sharp g(\nu) : \sharp n_2}
+\]
+So the full syntax of expressions of interval type is simply
+\[\hbox{Interval Expressions }\mu ::= \sharp g(\nu) \celse \atm k\]
+either variables under a function, or endpoints. We may write simply
+$\nu$ for $\sharp \rid(\nu)$.
+
+Variables of this type will be treated {\em affinely} in the type theory.
+Substitution on interval expressions can be characterized by
+\[
+\erule
+{\Gamma, \nu : \sharp n \prov J \qquad \Delta \prov \mu : \sharp n}
+{\Gamma, \Delta \prov [\mu / \nu] J}
+\]
+\[ [\sharp g'(\nu') / \nu]\sharp g(\nu) = \sharp(g \o g')(\nu') \]
+\[ [\atm k / \nu]\sharp g(\nu) = \atm{g(k)} \]
+
+Here $\Delta$ stands for either the empty context or a context with
+one interval variable in it. Since interval variables are affine, we
+technically have a function type distinct from $\Pi$ types that binds
+them, but we write them the same as $\Pi$ types, with agda-style syntax:
+
+\[
+\erule
+{\Gamma, \nu : \sharp n \prov A : \rset}
+{\Gamma \prov  (\nu : \sharp n) \to A : \rset}
+\]
+\[
+\erule
+{\Gamma, \nu : \sharp n \prov M : A }
+{\Gamma \prov \lambda \nu.  M :   (\nu : \sharp n) \to A }
+\qquad
+\erule
+{\Gamma \prov  M :   (\nu : \sharp n) \to A \qquad \Delta \prov \mu : \sharp n}
+{\Gamma, \Delta \prov  M \ \mu :   [\mu/\nu] A}
+\]
+Functions $\sharp n \to X$ are called {\em $n$-paths in $X$} (or just {\em
+  paths in $X$} when $n$ is clear) by analogy with the case where $n = 2$, in
+which functions from intervals are naturally interpreted as paths.
+
+\subsection{Spans and Witness Types}
+An {\em $n$-span} is a record with fields
+\def\rspan{\mathsf{Span}}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $\fC : \rset$\\
+\> $\fA : n \to \rset$\\
+\> $\ff : (k : n) \to \fC \to \fA\ k$
+\end{tabbing}
+The type of these is called $\rspan_n$.
+There is a canonical map taking an $n$-path in the universe to a span.
+\begin{tabbing}
+\hspace*{2em}\=$\ \ff\ k\ c $ \= \kill
+$\embu : (p : \sharp n \to \rset) \to \rspan_n $  \\
+$\embu\ p = $  \\
+\> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\end{tabbing}
+
+We want this map to be an equivalence. Therefore we postulate that
+a type exists, called a {\em witness type}, for lack of a better term, since
+it witnesses the invertibility of \textsf{embu}.
+
+\[
+\erule
+{\Gamma \prov S : \rspan_n \qquad \Delta \prov \mu : \sharp n}
+{\Gamma, \Delta \prov S\star \mu : \rset}
+\]
+
+It has the property that if given an endpoint for its interval argument,
+it reduces to one of the span arm types:
+
+\[ S \star \atm k \equiv S.\fA_k \]
+
+It has the following introduction and elimination rules:
+\[
+\erule
+{\Gamma \prov c :S.\fC  \qquad \Delta \prov \mu : \sharp n \using \star I}
+{\Gamma, \Delta \prov c \star \mu : S\star \mu }
+\qquad
+\erule
+{\Gamma, \nu : \sharp n \prov M : S\star \nu \using \star E}
+{\Gamma \prov \pbind \nu M :S }
+\]
+and is to satisfy the following $\beta$ and $\eta$ equivalence laws:
+\[ \pbind \nu (c \star \nu) \equiv_\beta c \qquad (\pbind \nu M)\ \mu \equiv_\eta [\mu/\nu]M\]
+Notice how these seem exactly backwards from the usual $\beta$ and $\eta$!
+They're nonetheless named consistently according to how a typical
+$\beta$ redex is an elim applied to an intro form, and an $\eta$ is
+conversely an intro applied to an elim.
+
+
+The goal is now to make the type theory capable of showing  that
+\[S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star \nu)\]
+i.e.
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$S : \rspan_n \prov  S \equiv$\\
+\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star \nu$\\
+\> $\ \fA\ k $\>$ = S\star \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\end{tabbing}
+and $p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star \nu$, i.e.
+\begin{tabbing}
+\hspace*{2em}\=$\ f\ k\ c $ \= \kill
+$p : \sharp n \to \rset, \nu  :\sharp n \prov  p\ \nu \equiv $\\
+\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  p\ \nu$\\
+\> $\ \fA\ k $\>$ = p\ \atm k$\\
+\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star \nu$
+\end{tabbing}
+
+
+\section{Returning To Semantic Considerations}
+
+Let's say $\C$ is finite sets and functions in the $+n$ monad and
+we're doing a model in $\rset^\C$.
+
+We want to make an interpretation of the type
+\[
+\erule
+{\Gamma \prov S : \rspan \qquad \Gamma \prov i : \ii}
+{\Gamma \prov S \star i : \rset}
+\]
+So we have nice things like
+\[ \sem {\fA_k}_I, \sem \fC_I : \sem \Gamma_I \to \rset \]
+\[  \sem \fC_f : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem \Gamma_f(\rho)) \]
+\[  \sem {\fA_k}_f : \{\rho : \sem \Gamma_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem \Gamma_f(\rho)) \]
+\[  \sem {\ff_k}_I : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
+\[  \sem {i}_I :  \sem \Gamma_I \to \sem {\ii}_I \]
+
+Now $\sem \ii_I = n + I $.
+We're going to set
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
+$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
+\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse j \in I \mapsto \sem \fC_{I \setminus j}(\rho)$
+\end{tabbing}
+and (for a function $f : I \to J + n$, i.e. a morphism $f : I \to J$, i.e. a substitution
+$J \prov f : I$)
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
+\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
+$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
+\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
+\> \> $\celse \atm{k'} \in n = ?$\\
+\> \> $\celse j' \in J = \sem{\fC}_{f - j}(x)$
+\end{tabbing}
+If $\sem i_I(\rho)$ is $\atm k$, then $x : \sem {\fA_k}_I(\rho)$, and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. But what's
+$\sem i_J(\sem\Gamma_f(\rho))$? We know it's
+$\sem \ii_f(\sem i_I(\rho)) = \sem\ii_f(\atm k) = \atm k$.
+So we need to make
+$\sem {\fA_k}_J(\sem\Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$ does the trick.
+
+If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
+$x : \sem {\fC}_{I\setminus j}(\rho)$
+and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
+We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
+
+If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J\setminus j'}(\sem \Gamma_f(\rho))$.
+This is taken care of by $\sem{\fC}_{f - j}(x)$.
+
+If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
+Hmm...
+
+Wait a minute, there's a type error; I can't apply $\sem \fC_{I\setminus j}$ to
+a $\rho : \sem\Gamma_I$, and there's not a canonical way of getting from
+$\Gamma_I$ to $\Gamma_{I\setminus j}$ unless $n = 1$.
+
+But if I don't subtract $j$ from $I$ in that clause, how do I use $j$?
+\subsection{Trying again without linearity}
+Set
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
+$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
+\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse j \in I \mapsto \sem \fC_{I}(\rho)$
+\end{tabbing}
+and for a function $f : I \to J + n$
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
+\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
+$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
+\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
+\> \> $\celse \atm{k'} \in n = ?$\\
+\> \> $\celse j' \in J = \sem{\fC}_{f}(x)$
+\end{tabbing}
+If $\sem i_I(\rho) = \atm k$, things work like before.
+If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
+$x : \sem {\fC}_{I}(\rho)$
+and we need to make
+$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
+We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
+
+If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J}(\sem \Gamma_f(\rho))$.
+This is taken care of by $\sem{\fC}_{f}(x)$.
+
+If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
+\textcolor{red}{This might work but I had another thought I want to follow up on first}.
+
+
+\subsection{Linearity with the rule written Properly}
+
+Probably what I have above is wrong because it doesn't enforce
+linearity of $i$ in the rule. I should instead write
+\[
+\erule
+{\Gamma \prov S : \rspan }
+{\Gamma, q : \ii \prov S \star q : \rset}
+\]
+So I must define
+$\sem {S \star i}_I : \sem {\Gamma, q  : \ii}_I \to \rset$ and I know
+from before that inhabitants of $\sem {\Gamma, q : \ii}_I$ look like
+$(\rho, q := \atm k)$ for $\rho \in \Gamma_I$ or $(\rho, q := i)$ for
+$\rho \in \Gamma_{I\setminus i}$ and $i \in I$. So I define
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star i}_I : \sem {\Gamma, q : \ii}_I \to \rset$\\
+$\sem {S \star i}_I(\rho') = \bcase \rho' \bof$\\
+\> $\celse (\rho, q := \underline k) \mapsto \sem {\fA_k}_I(\rho)$\\
+\> $\celse (\rho, q := i) \mapsto \sem \fC_{I \setminus i}(\rho)$
+\end{tabbing}
+That fixes my type error! Hooray. Next we do:
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho' : \sem {\Gamma, q : \ii}_I\} \to \sem {S\star i}_I(\rho') \to
+\sem {S\star i}_J(\sem{\Gamma, q : \ii}_f(\rho')) \)\\
+$\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
+\> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
+\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\setminus i}(x))$\\
+\> \> $\celse j  = \sem{\fC}_{f - i}(x)$
+\end{tabbing}
+Let's go through the case analysis again. Suppose $\rho' = (\rho, q := \atm k)$.
+Then $x : \sem{\fA_k}_I(\rho)$. We know that
+$\sem {\Gamma, q:\ii}_f(\rho, q := \atm k) = (\sem \Gamma_f(\rho), q := \atm k)$
+so our goal type is just $\sem{\fA_k}_J(\sem \Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$
+does the job.
+
+Let's go through the case analysis again. Suppose $\rho' = (\rho, q := i)$.
+Then $x : \sem{\fC}_{I\setminus i}(\rho)$.
+We know that
+\[\sem {\Gamma, q:\ii}_f(\rho, q := i) =  (\sem \Gamma_{f-i}(\rho), q := f(i))\]
+ so
+what happens now depends on $f(i)$.
+
+If $f(i) = \atm k$, then our goal type is $\sem{\fA_k}_J(\sem \Gamma_{f-i}(\rho))$.
+Observe that $\sem{\ff_k}_{I\setminus i}(x)$ has type $\sem{\fA_k}_{I\setminus i}(\rho)$,
+then hit that with $\sem {\fA_k}_{f - i}$.
+
+If $f(i) = j$, then our goal type is $\sem{\fC}_{J\setminus j}(\sem \Gamma_{f-i}(\rho))$.
+In this case $\sem{\fC}_{f -i}(x)$ does the job.
+
+\subsubsection{Elim}
+
+\[
+\erule
+{\Gamma, q : \ii \prov e : S\star q \using \star E}
+{\Gamma \prov \ssem q e : \fC}
+\]
+For any $I$ we have
+$\sem e_I : (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$
+and we make
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+$\sem{\ssem q e}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$\\
+$\sem{\ssem q e}_I (\rho) = \sem e_{I,i}(\rho, q := i)$
+\end{tabbing}
+
+\subsubsection{Intro}
+\[
+\erule
+{\Gamma \prov c : \fC \using \star I}
+{\Gamma, q : \ii \prov c \star q : S\star q }
+\]
+For any $I$ we have
+$\sem{ c}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$
+and we make
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+$\sem{ c \star q}_I :  (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$\\
+$\sem{c \star q}_I (\rho, q := i) = \sem c_{I\setminus i}(\rho)$\\
+$\sem{c \star q}_I (\rho, q := \atm k) = \sem {\ff_k}_I(\sem c_{I}(\rho))$
+\end{tabbing}
+
+\subsubsection{$\eta$ equivalence}
+We want to confirm that
+\[ (\rho' : \sem{\Gamma, q : \ii}_I) \to \sem { (\ssem r e) \star q }_I(\rho') \equiv \sem {[q/r] e}_I(\rho')\]
+Split cases on $\rho'$.
+
+If $\rho' = (\rho, q := i)$, then we're looking for
+\[\sem { (\ssem r e) }_{I\setminus i}(\rho) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+in other words
+\[\sem { e }_{I}(\rho, r := i) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+which is true by $\alpha$-equivalence.
+
+If $\rho' = (\rho, q := \atm k)$, then we're looking for
+\[\sem {\ff_k}_I(\sem {\ssem r e}_I(\rho)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+in other words
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+by $\alpha$-equivalence
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
+which I suppose needs to be stated separately as a lemma.
+\begin{lemma}
+Suppose $\Gamma, r : \ii  \prov e : S \star r$.
+Then
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
+\end{lemma}
+
+\begin{proof}
+There is a morphism $[\atm k/i] : I, i \to I$ that maps $i$ `exceptionally' to $\atm k$.
+So
+\[\sem {S\star r}_{[\atm k/i]} : (\rho : \sem{ \Gamma, r: \ii}) \to \sem {S\star r}_{I, i}(\rho) \to \sem {S\star r}_I(\sem {\Gamma, r:\ii}_{[\atm k/i]}(\rho))\]
+and by
+\[(\rho : \sem \Gamma_c) \to \sem A_f (\sem M_c(\rho)) \equiv \sem M_d(\sem \Gamma_f(\rho)) \]
+we specifically have
+\[(\rho' : \sem \Gamma_{I,i}) \to \sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho')) \equiv \sem e_I(\sem \Gamma_{[\atm k/i]}(\rho')) \]
+but then we observe that
+$\sem \Gamma_{[\atm k/i]}(\rho, r := i) \equiv (\rho, r := \atm k)$ by definition,
+so we just need
+$\sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho, r:= i)) \equiv \sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i))$, but this follows from unpacking the definition of $\sem {S \star r}_{[\atm k/i]}$. \cqed
+\end{proof}
+
+
+\subsubsection{$\beta$ equivalence}
+We want to confirm that
+\[ (\rho : \sem{\Gamma}_I) \to \sem { (\ssem q (e \star q) }_I(\rho) \equiv \sem { e}_I(\rho)\]
+but this is just checking that
+\[ \sem {  e \star q }_{I,i}(\rho, q := i) \equiv \sem { e}_I(\rho)\]
+which is true by definition of $\sem{e\star q}_{I,i}$.
+
+\subsection{$\sharp$ elim}
+We want to interpret
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, x :  B(\atm k) \prov e : D(\atm k)$\\
+$\Gamma, x' : \forall r . B(r), q : \ii  \prov e' : D(q)$\\
+$\Gamma, k : n, x' : \forall r . B(r) \prov [x'\ \atm k/x]e \equiv [\atm k/q]e' : D(\atm k)$
+\end{tabular}
+}
+{\Gamma, q : \ii, y : B(q) \prov \bcase (q,y) \bof k.x.e \celse q.x'.e' : D(q)}
+\]
+which tacitly assumes
+\[\Gamma, r : \ii \prov B(r) : \rset\]
+\[\Gamma, q : \ii \prov D(q) : \rset\]
+So we get to assume
+\[\sem e_I : (\rho : \sem \Gamma_I) (k : n) (x : \sem B_I(\rho, r := \atm k)) \to
+\sem D_I(\rho, q := \atm k)
+\]
+%
+\[\sem {e'}_I : (\rho' : \sem {\Gamma, x' : \forall r . B(r), q : \ii}_I)  \to
+\sem D_I(\rho')
+\]
+%
+and that
+\[(\rho : \sem \Gamma_I) (k : n) (x' : \sem {\forall r . B(r)}_I(\rho)) \to\]
+\[\sem e_I(\rho)(k)(x'\ \atm k) = \sem {e'}_I(\rho, x' := x', q := \atm k) \]
+or something like that.
+
+Let $E := \bcase (q,y) \bof k.x.e \celse q.x'.e'$.
+Define
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem E_I : (\rho' : \sem {\Gamma, r : \ii}_I) (y : \sem {B}_I(\rho')) \to
+\sem D_I(\rho')\)\\
+$\sem E_I(\rho, r := \atm k)(y) = \sem e_I(\rho)(k)(y)$\\
+$\sem E_I(\rho, r := i)(y) = \sem{e'}_I (\rho, x' := y, q := i)$
+\end{tabbing}
+
+We have in the $r := i$ case that $y : \sem B_I(\rho, r := i)$,
+for some $\rho : \sem \Gamma_{I\setminus i}$.
+We need to check that the thing being substituted for $x'$
+ has type $\sem {\forall r.B(r)}_{I\setminus i}(\rho)$.
+But recall that
+\[\sem {\forall q . A(q)}_I (\rho) = \sem {A}_{I, i}(\rho, q : i)\]
+so indeed $y : \sem{B}_{I\setminus i, i}(\rho, r := i)$ as required.
+
+\end{document}

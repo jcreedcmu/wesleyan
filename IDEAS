@@ -3545,4 +3545,5 @@ A: https://github.com/brendanzab/pikelet
 
 Q: Wait, what happens when interval variables sneak into types in the context? Don't you
 get the usual problems with linearity and dependency?
-A: ???
+A: It seems not to be the case, because 𝕀-typed things themselves can't depend on
+other variables, but this is real fiddly and delicate and surprising.
