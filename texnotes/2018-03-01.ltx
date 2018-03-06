@@ -714,4 +714,52 @@ but this is just checking that
 \[ \sem {  e \star q }_{I,i}(\rho, q := i) \equiv \sem { e}_I(\rho)\]
 which is true by definition of $\sem{e\star q}_{I,i}$.
 
+\subsection{$\sharp$ elim}
+We want to interpret
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, x :  B(\atm k) \prov e : D(\atm k)$\\
+$\Gamma, x' : \forall r . B(r), q : \ii  \prov e' : D(q)$\\
+$\Gamma, k : n, x' : \forall r . B(r) \prov [x'\ \atm k/x]e \equiv [\atm k/q]e' : D(\atm k)$
+\end{tabular}
+}
+{\Gamma, q : \ii, y : B(q) \prov \bcase (q,y) \bof k.x.e \celse q.x'.e' : D(q)}
+\]
+which tacitly assumes
+\[\Gamma, r : \ii \prov B(r) : \rset\]
+\[\Gamma, q : \ii \prov D(q) : \rset\]
+So we get to assume
+\[\sem e_I : (\rho : \sem \Gamma_I) (k : n) (x : \sem B_I(\rho, r := \atm k)) \to
+\sem D_I(\rho, q := \atm k)
+\]
+%
+\[\sem {e'}_I : (\rho' : \sem {\Gamma, x' : \forall r . B(r), q : \ii}_I)  \to
+\sem D_I(\rho')
+\]
+%
+and that
+\[(\rho : \sem \Gamma_I) (k : n) (x' : \sem {\forall r . B(r)}_I(\rho)) \to\]
+\[\sem e_I(\rho)(k)(x'\ \atm k) = \sem {e'}_I(\rho, x' := x', q := \atm k) \]
+or something like that.
+
+Let $E := \bcase (q,y) \bof k.x.e \celse q.x'.e'$.
+Define
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem E_I : (\rho' : \sem {\Gamma, r : \ii}_I) (y : \sem {B}_I(\rho')) \to
+\sem D_I(\rho')\)\\
+$\sem E_I(\rho, r := \atm k)(y) = \sem e_I(\rho)(k)(y)$\\
+$\sem E_I(\rho, r := i)(y) = \sem{e'}_I (\rho, x' := y, q := i)$
+\end{tabbing}
+
+We have in the $r := i$ case that $y : \sem B_I(\rho, r := i)$,
+for some $\rho : \sem \Gamma_{I\setminus i}$.
+We need to check that the thing being substituted for $x'$
+ has type $\sem {\forall r.B(r)}_{I\setminus i}(\rho)$.
+But recall that
+\[\sem {\forall q . A(q)}_I (\rho) = \sem {A}_{I, i}(\rho, q : i)\]
+so indeed $y : \sem{B}_{I\setminus i, i}(\rho, r := i)$ as required.
+
 \end{document}
