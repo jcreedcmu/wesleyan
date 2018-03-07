@@ -12,6 +12,7 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 
+\def\wo{\setminus}
 \def\rarm{\mathsf{rarm}}
 \def\embu{\mathsf{embu}}
 \def\coglue{\mathsf{coglue}}
@@ -185,7 +186,7 @@ Here I'm once again trying to reconstruct Moulin's thesis in my own words, with
 three improvements:
 
 \begin{enumerate}
-\item The notion of $I$-sets is not needed, thanks to careful attention to
+\item The notion of $I$-sets is not used, and instead careful attention is paid to
 when isomorphism suffices in place of on-the-nose equality of sets.
 \item The things that need to be postulated on the syntactic side are
 better organized into type formers, introduction, and elimination rules.
@@ -236,7 +237,7 @@ of the $n$ arms of the span.
 
 We want $\sharp$ to be functorial: if $g : n_1 \to n_2$ is a function
 between finite sets, then we expect $\sharp g : \sharp n_1 \to \sharp n_2$ to exist.
-This can be baked into the rule for using $\sharp$-typed variables:
+This can be baked into the rule for how $\sharp$-typed variables can be used:
 \[
 \erule
 {n_1, n_2\in\rfinset\qquad g : n_1 \to n_2}
@@ -246,20 +247,17 @@ So the full syntax of expressions of interval type is simply
 \[\hbox{Interval Expressions }\mu ::= \sharp g(\nu) \celse \atm k\]
 either variables under a function, or endpoints. We may write simply
 $\nu$ for $\sharp \rid(\nu)$.
-
-Variables of this type will be treated {\em affinely} in the type theory.
+Variables of this type will be treated {\em affinely}.
 Substitution on interval expressions can be characterized by
 \[
 \erule
-{\Gamma, \nu : \sharp n \prov J \qquad \Delta \prov \mu : \sharp n}
-{\Gamma, \Delta \prov [\mu / \nu] J}
+{(\Gamma \wo \mu), \nu : \sharp n \prov J \qquad \Gamma \prov \mu : \sharp n}
+{\Gamma \prov [\mu / \nu] J}
 \]
 \[ [\sharp g'(\nu') / \nu]\sharp g(\nu) = \sharp(g \o g')(\nu') \]
 \[ [\atm k / \nu]\sharp g(\nu) = \atm{g(k)} \]
-
-Here $\Delta$ stands for either the empty context or a context with
-one interval variable in it. Since interval variables are affine, we
-technically have a function type distinct from $\Pi$ types that binds
+ Since interval variables are affine, we
+technically have a function type distinct from ordinary $\Pi$ types that binds
 them, but we write them the same as $\Pi$ types, with agda-style syntax:
 
 \[
@@ -279,6 +277,8 @@ them, but we write them the same as $\Pi$ types, with agda-style syntax:
 Functions $\sharp n \to X$ are called {\em $n$-paths in $X$} (or just {\em
   paths in $X$} when $n$ is clear) by analogy with the case where $n = 2$, in
 which functions from intervals are naturally interpreted as paths.
+When $\nu : \sharp n \prov B : \rset$, we sometimes abbreviate
+$(\nu : \sharp n) \to B$  as $\forall B$.
 
 \subsection{Spans and Witness Types}
 An {\em $n$-span} is a record with fields
@@ -287,17 +287,17 @@ An {\em $n$-span} is a record with fields
 \hspace*{2em}\=\hspace*{2em}\= \kill
 \> $\fC : \rset$\\
 \> $\fA : n \to \rset$\\
-\> $\ff : (k : n) \to \fC \to \fA\ k$
+\> $\ff : (k : n) \to \fC \to \fA_k$
 \end{tabbing}
 The type of these is called $\rspan_n$.
 There is a canonical map taking an $n$-path in the universe to a span.
 \begin{tabbing}
-\hspace*{2em}\=$\ \ff\ k\ c $ \= \kill
+\hspace*{2em}\=$\ \ff_k\ c $ \= \kill
 $\embu : (p : \sharp n \to \rset) \to \rspan_n $  \\
 $\embu\ p = $  \\
 \> $\langle \fC $\>$ = ( i : \sharp n) \to  p\ i$\\
-\> $\ \fA\ k $\>$ = p\ \atm k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\> $\ \fA_k $\>$ = p\ \atm k$\\
+\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
 
 We want this map to be an equivalence. Therefore we postulate that
@@ -306,150 +306,201 @@ it witnesses the invertibility of \textsf{embu}.
 
 \[
 \erule
-{\Gamma \prov S : \rspan_n \qquad \Delta \prov \mu : \sharp n}
-{\Gamma, \Delta \prov S\star \mu : \rset}
+{\Gamma\wo \mu \prov S : \rspan_n \qquad \Gamma \prov \mu : \sharp n}
+{\Gamma \prov S\star \mu : \rset}
 \]
+where $\Gamma \wo \mu$ is defined by cases
+on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
+variable $\nu$ from $\Gamma$, otherwise do nothing and return $\Gamma$.
+This is a somewhat nonstandard way of expressing the affineness constraint,
+but it makes calculations easier later.
 
-It has the property that if given an endpoint for its interval argument,
-it reduces to one of the span arm types:
+We postulate that if given an endpoint for its interval argument,
+a witness type reduces to one of the span arm types:
 
 \[ S \star \atm k \equiv S.\fA_k \]
 
 It has the following introduction and elimination rules:
 \[
 \erule
-{\Gamma \prov c :S.\fC  \qquad \Delta \prov \mu : \sharp n \using \star I}
-{\Gamma, \Delta \prov c \star \mu : S\star \mu }
+{\Gamma\wo \mu \prov c :S.\fC  \qquad \Gamma \prov \mu : \sharp n \using \star I}
+{\Gamma \prov c \star \mu : S\star \mu }
 \qquad
 \erule
 {\Gamma, \nu : \sharp n \prov M : S\star \nu \using \star E}
 {\Gamma \prov \pbind \nu M :S }
 \]
-and is to satisfy the following $\beta$ and $\eta$ equivalence laws:
-\[ \pbind \nu (c \star \nu) \equiv_\beta c \qquad (\pbind \nu M)\ \mu \equiv_\eta [\mu/\nu]M\]
-Notice how these seem exactly backwards from the usual $\beta$ and $\eta$!
+and is to satisfy the following equivalence laws:
+\[
+c \star \atm k \equiv S.\ff_k\ c\qquad
+\pbind \nu (c \star \nu) \equiv_\beta c \qquad (\pbind \nu M)\ \mu \equiv_\eta [\mu/\nu]M\]
+Notice that the ones labelled $\beta$ and $\eta$ seem exactly backwards from
+usual!
 They're nonetheless named consistently according to how a typical
 $\beta$ redex is an elim applied to an intro form, and an $\eta$ is
 conversely an intro applied to an elim.
 
 
-The goal is now to make the type theory capable of showing  that
+The goal is now to somehow arrive at an equivalence
 \[S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star \nu)\]
 i.e.
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $S : \rspan_n \prov  S \equiv$\\
 \> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star \nu$\\
-\> $\ \fA\ k $\>$ = S\star \atm k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle$
+\> $\ \fA_k $\>$ = S\star \atm k$\\
+\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
 and $p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star \nu$, i.e.
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $p : \sharp n \to \rset, \nu  :\sharp n \prov  p\ \nu \equiv $\\
 \> $\langle \fC $\>$ = ( \nu : \sharp n) \to  p\ \nu$\\
-\> $\ \fA\ k $\>$ = p\ \atm k$\\
-\> $\ \ff\ k\ c $\>$ = c\ \atm k\rangle \star \nu$
+\> $\ \fA_k $\>$ = p\ \atm k$\\
+\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle \star \nu$
 \end{tabbing}
 
+To do this we add one more rule, which might be reasonable to think of
+as an elimination rule for $\sharp$:
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, x :  [\atm k / \nu]B \prov e : [\atm k / \nu]D$\\
+$\Gamma, x' : \forall B, \nu' : \sharp n  \prov e' : [\nu'/\nu]D$\\
+ $[x'\ \atm k/x]e \equiv [\atm k/\nu']e'$
+\end{tabular}
+}
+{\Gamma, \nu : \sharp n, y : B \prov \bcase (\nu,y) \bof (\atm k,x).e \celse (\nu',x').e' : D}
+\]
 
-\section{Returning To Semantic Considerations}
 
-Let's say $\C$ is finite sets and functions in the $+n$ monad and
-we're doing a model in $\rset^\C$.
+\section{Semantics}
+We're going to describe the category $\C$, and give a semantics in $\rset^\C$.
+The objects of $\C$ are contexts of $\sharp$-typed variables:
 
+\[\hbox{Objects }I, J ::= \cdot \celse (I, i : \sharp n) \]
+
+Calculations tend to be clearer if the range of letters
+for the `variables' in $\C$-objects differs from the actual variables
+in contexts in the type theory, so we use $i, j, k$ for objects of $\C$,
+and $\nu$ for variables in the type theory.
+
+A morphism $I \to J$ in $\C$ is an (affine) substitution $J \prov \sigma : I$.
+\[
+\erule
+{}
+{J \prov \cdot : \cdot}
+\qquad
+\erule
+{J \prov \sigma : I \qquad J' \prov \mu : \sharp n }
+{J, J' \prov (\sigma, i := \mu) : (I, i : \sharp n)}
+\]
+
+The semantics consists of the interpretation functions
+\begin{declbox}
+  $\sem \Gamma_I : \rset$\\
+  $\sem \Gamma_\sigma : \sem \Gamma_I \to \sem \Gamma_J$\\
+  $\sem A_I : \sem \Gamma_I \to \rset$\\
+  $\sem A_\sigma : \{\rho : \sem \Gamma_I\} \to \sem A_I(\rho) \to \sem A_J(\sem \Gamma_\sigma(\rho))$\\
+  $\sem M_I : (\rho : \sem \Gamma_I) \to \sem A_I(\rho)$
+\end{declbox}
+
+Which are expected to satisfy
+\begin{thmbox}
+  $ \sem \Gamma_{\rid} \equiv \rid$\qquad
+  $ \sem \Gamma_{\sigma \o \tau} \equiv \sem \Gamma_\sigma \o \sem \Gamma_\tau$\\
+  $ \sem A_{\rid} \equiv \rid$\qquad
+  $ \sem A_{\sigma \o \tau} \equiv \sem A_\sigma \o \sem A_\tau$\\
+  $(\rho : \sem \Gamma_I) \to \sem A_\sigma (\sem M_I(\rho)) \equiv \sem M_J(\sem \Gamma_\sigma(\rho)) $
+\end{thmbox}
+
+\subsection{Definitions}
+\subsubsection{Contexts}
+The set $\sem \Gamma_I$ is essentially
+the set of substitutions $I \prov \rho : \Gamma $.
+\begin{defnbox}
+\[
+\erule
+{}
+{ \prov \cdot \in \sem \cdot_I}
+\qquad\qquad
+\erule
+{\rho \in \sem \Gamma_I\qquad M \in \sem A_I(\rho) }
+{ \prov (\rho, x := M) \in  \sem{\Gamma, x : A}_{I}}
+\]
+%% \[
+%% \erule
+%% {\rho \in \sem \Gamma_I  }
+%% { \prov (\rho, \nu := \atm k) \in  \sem{\Gamma, \nu : \sharp n}_{I}}
+%% \quad
+%% \erule
+%% {\rho \in \sem \Gamma_{I\wo i} \quad i : \sharp m \in I\quad g : m \to n }
+%% { \prov (\rho, \nu := \sharp g(i)) \in  \sem{\Gamma, \nu : \sharp n}_{I}}
+%% \]
+\[
+\erule
+{\rho \in \sem \Gamma_{I\wo \mu} \quad I \prov  \mu : \sharp m  }
+{ \prov (\rho, \nu := \mu) \in  \sem{\Gamma, \nu : \sharp n}_{I}}
+\]
+\end{defnbox}
+and for $J \prov \sigma : I$ the morphism part of the functor $\sem \Gamma$ is
+essentially substitution composition:
+\begin{defnbox}
+\begin{tabular}{lll}
+$\sem {\cdot}_\sigma(\cdot)$&$=$&$\cdot$\\
+%% $\sem {\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := \atm k)$&$=$&$(\sem{\Gamma}_{\sigma} (\rho), \nu := \sigma(\atm k))$\\
+%% $\sem {\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := \sharp g(i))$&$=$&$(\sem{\Gamma}_{\sigma\wo i} (\rho), \nu := \sigma(\sharp g(i)))$\\
+$\sem {\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := \mu)$&$=$&$(\sem{\Gamma}_{\sigma\wo \mu} (\rho), \nu := \sigma(\mu))$\\
+$\sem {\Gamma, x : A}_\sigma(\rho, x := M)$&$=$&$(\sem{\Gamma}_\sigma (\rho), x := \sigma(M))$
+\end{tabular}
+\end{defnbox}
+\noindent where $I\wo \mu$ and $\sigma\wo \mu$ are defined by cases
+on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
+variable $\nu$ from $I$ or $\sigma$, otherwise do nothing.
+It is easy to check that $J \prov \sigma : I$ implies
+$(J \wo \sigma(\mu)) \prov (\sigma \wo \mu) : (I \wo \mu)$.
+\subsubsection{Witness Types}
 We want to make an interpretation of the type
 \[
 \erule
-{\Gamma \prov S : \rspan \qquad \Gamma \prov i : \ii}
-{\Gamma \prov S \star i : \rset}
+{\Gamma\wo \mu \prov S : \rspan_n \qquad \Gamma \prov \mu : \sharp n}
+{\Gamma \prov S\star \mu : \rset}
 \]
-So we have nice things like
-\[ \sem {\fA_k}_I, \sem \fC_I : \sem \Gamma_I \to \rset \]
-\[  \sem \fC_f : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem \Gamma_f(\rho)) \]
-\[  \sem {\fA_k}_f : \{\rho : \sem \Gamma_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem \Gamma_f(\rho)) \]
-\[  \sem {\ff_k}_I : \{\rho : \sem \Gamma_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
-\[  \sem {i}_I :  \sem \Gamma_I \to \sem {\ii}_I \]
+Suppose $S = \langle \fC, \fA, \ff\rangle$.
+Therefore we have
+\[ \sem {\fA_k}_I, \sem \fC_I : \sem {\Gamma'}_I \to \rset \]
+\[  \sem \fC_f : \{\rho : \sem {\Gamma'}_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem {\Gamma'}_f(\rho)) \]
+\[  \sem {\fA_k}_f : \{\rho : \sem {\Gamma'}_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem {\Gamma'}_f(\rho)) \]
+\[  \sem {\ff_k}_I : \{\rho : \sem {\Gamma'}_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
+for $\Gamma' = \Gamma \setminus \mu$. We set
 
-Now $\sem \ii_I = n + I $.
-We're going to set
-\begin{tabbing}
-\hspace*{2em}\=\kill
-$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
-$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
-\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
-\> $\celse j \in I \mapsto \sem \fC_{I \setminus j}(\rho)$
-\end{tabbing}
-and (for a function $f : I \to J + n$, i.e. a morphism $f : I \to J$, i.e. a substitution
-$J \prov f : I$)
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
-\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
-$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
-\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
-\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
-\> \> $\celse \atm{k'} \in n = ?$\\
-\> \> $\celse j' \in J = \sem{\fC}_{f - j}(x)$
-\end{tabbing}
-If $\sem i_I(\rho)$ is $\atm k$, then $x : \sem {\fA_k}_I(\rho)$, and we need to make
-$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. But what's
-$\sem i_J(\sem\Gamma_f(\rho))$? We know it's
-$\sem \ii_f(\sem i_I(\rho)) = \sem\ii_f(\atm k) = \atm k$.
-So we need to make
-$\sem {\fA_k}_J(\sem\Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$ does the trick.
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\kill
+    $\sem {S \star \mu}_I : \sem {\Gamma}_I \to \rset$\\
+    $\sem {S \star \mu}_I(\rho) = \bcase {\sem \mu_I(\rho)} \bof$\\
+    \> $\celse \underline k \mapsto \sem {\fA_k}_I(\rho)$\\
+    \> $\celse  \sharp g(i) \mapsto \sem \fC_{I \wo i}(\rho)$
+  \end{tabbing}
+\end{defnbox}
+What's the argument that this is type-correct?
+Ok, well, $\sem\mu_I(\rho)$ can be two things.
+If it is $\atm k$, then
 
-If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
-$x : \sem {\fC}_{I\setminus j}(\rho)$
-and we need to make
-$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
-We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
-
-If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J\setminus j'}(\sem \Gamma_f(\rho))$.
-This is taken care of by $\sem{\fC}_{f - j}(x)$.
-
-If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
-Hmm...
-
-Wait a minute, there's a type error; I can't apply $\sem \fC_{I\setminus j}$ to
-a $\rho : \sem\Gamma_I$, and there's not a canonical way of getting from
-$\Gamma_I$ to $\Gamma_{I\setminus j}$ unless $n = 1$.
-
-But if I don't subtract $j$ from $I$ in that clause, how do I use $j$?
-\subsection{Trying again without linearity}
-Set
-\begin{tabbing}
-\hspace*{2em}\=\kill
-$\sem {S \star i}_I : \sem \Gamma_I \to \rset$\\
-$\sem {S \star i}_I(\rho) = \bcase {\sem i_I(\rho)} \bof$\\
-\> $\celse \underline k \in n \mapsto \sem {\fA_k}_I(\rho)$\\
-\> $\celse j \in I \mapsto \sem \fC_{I}(\rho)$
-\end{tabbing}
-and for a function $f : I \to J + n$
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-\(\sem {S \star i}_f : \{\rho : \sem \Gamma_I\} \to \sem {S\star i}_I(\rho) \to
-\sem {S\star i}_J(\sem\Gamma_f(\rho)) \)\\
-$\sem {S \star i}_f(x) = \bcase{\sem i_I(\rho)} \bof$\\
-\> $\celse \atm k \in n \mapsto \sem {\fA_k}_f(x)$\\
-\> $\celse j \in I \mapsto \bcase f(j) \bof$\\
-\> \> $\celse \atm{k'} \in n = ?$\\
-\> \> $\celse j' \in J = \sem{\fC}_{f}(x)$
-\end{tabbing}
-If $\sem i_I(\rho) = \atm k$, things work like before.
-If on the other hand $\sem i_I(\rho)$ is $j \in I$, then
-$x : \sem {\fC}_{I}(\rho)$
-and we need to make
-$\sem {S \star i}_J(\sem\Gamma_f(\rho))$. What's $\sem i_J(\sem\Gamma_f(\rho))$?
-We know it's $\sem \ii_f(\sem i_I(\rho)) = \sem \ii_f( j) = f(j)$. So case-analyze that.
-
-If $f(j) = j' \in J$, then we need to make $\sem {\fC}_{J}(\sem \Gamma_f(\rho))$.
-This is taken care of by $\sem{\fC}_{f}(x)$.
-
-If $f(j) = \atm{k'}$, then we need to make $\sem {\fA_{k'}}_J(\sem \Gamma_f(\rho))$.
-\textcolor{red}{This might work but I had another thought I want to follow up on first}.
-
-
+For a $J \prov \sigma : I$ set
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    \(\sem {S \star \mu}_\sigma : \{\rho : \sem {\Gamma}_I\} \to \sem {S\star \mu}_I(\rho) \to
+    \sem {S\star \mu}_J(\sem{\Gamma}_\sigma(\rho)) \)\\
+    $\sem {S \star \mu}_\sigma\{\rho\}(x) = \bcase {\sem \mu_I(\rho)} \bof$\\
+    \> $\celse \atm k \mapsto \sem {\fA_k}_\sigma(x)$\\
+    \> $\celse \sharp g(i) \mapsto \bcase \sigma(\sharp g(i)) \bof$\\
+    \> \> $\celse \atm{k}  = \sem{\fA_k}_{\sigma\wo\mu}(\sem{\ff_k}_{I\wo \mu}(x))$\\
+    \> \> $\celse \sharp g'(i')  = \sem{\fC}_{\sigma \wo i}(x)$
+  \end{tabbing}
+\end{defnbox}
 \subsection{Linearity with the rule written Properly}
 
 Probably what I have above is wrong because it doesn't enforce
@@ -463,13 +514,13 @@ So I must define
 $\sem {S \star i}_I : \sem {\Gamma, q  : \ii}_I \to \rset$ and I know
 from before that inhabitants of $\sem {\Gamma, q : \ii}_I$ look like
 $(\rho, q := \atm k)$ for $\rho \in \Gamma_I$ or $(\rho, q := i)$ for
-$\rho \in \Gamma_{I\setminus i}$ and $i \in I$. So I define
+$\rho \in \Gamma_{I\wo i}$ and $i \in I$. So I define
 \begin{tabbing}
 \hspace*{2em}\=\kill
 $\sem {S \star i}_I : \sem {\Gamma, q : \ii}_I \to \rset$\\
 $\sem {S \star i}_I(\rho') = \bcase \rho' \bof$\\
 \> $\celse (\rho, q := \underline k) \mapsto \sem {\fA_k}_I(\rho)$\\
-\> $\celse (\rho, q := i) \mapsto \sem \fC_{I \setminus i}(\rho)$
+\> $\celse (\rho, q := i) \mapsto \sem \fC_{I \wo i}(\rho)$
 \end{tabbing}
 That fixes my type error! Hooray. Next we do:
 \begin{tabbing}
@@ -479,7 +530,7 @@ That fixes my type error! Hooray. Next we do:
 $\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
 \> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
 \> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
-\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\setminus i}(x))$\\
+\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\wo i}(x))$\\
 \> \> $\celse j  = \sem{\fC}_{f - i}(x)$
 \end{tabbing}
 Let's go through the case analysis again. Suppose $\rho' = (\rho, q := \atm k)$.
@@ -489,17 +540,17 @@ so our goal type is just $\sem{\fA_k}_J(\sem \Gamma_f(\rho))$, and $\sem {\fA_k}
 does the job.
 
 Let's go through the case analysis again. Suppose $\rho' = (\rho, q := i)$.
-Then $x : \sem{\fC}_{I\setminus i}(\rho)$.
+Then $x : \sem{\fC}_{I\wo i}(\rho)$.
 We know that
 \[\sem {\Gamma, q:\ii}_f(\rho, q := i) =  (\sem \Gamma_{f-i}(\rho), q := f(i))\]
  so
 what happens now depends on $f(i)$.
 
 If $f(i) = \atm k$, then our goal type is $\sem{\fA_k}_J(\sem \Gamma_{f-i}(\rho))$.
-Observe that $\sem{\ff_k}_{I\setminus i}(x)$ has type $\sem{\fA_k}_{I\setminus i}(\rho)$,
+Observe that $\sem{\ff_k}_{I\wo i}(x)$ has type $\sem{\fA_k}_{I\wo i}(\rho)$,
 then hit that with $\sem {\fA_k}_{f - i}$.
 
-If $f(i) = j$, then our goal type is $\sem{\fC}_{J\setminus j}(\sem \Gamma_{f-i}(\rho))$.
+If $f(i) = j$, then our goal type is $\sem{\fC}_{J\wo j}(\sem \Gamma_{f-i}(\rho))$.
 In this case $\sem{\fC}_{f -i}(x)$ does the job.
 
 \subsubsection{Elim}
@@ -530,7 +581,7 @@ and we make
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\=\kill
 $\sem{ c \star q}_I :  (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$\\
-$\sem{c \star q}_I (\rho, q := i) = \sem c_{I\setminus i}(\rho)$\\
+$\sem{c \star q}_I (\rho, q := i) = \sem c_{I\wo i}(\rho)$\\
 $\sem{c \star q}_I (\rho, q := \atm k) = \sem {\ff_k}_I(\sem c_{I}(\rho))$
 \end{tabbing}
 
@@ -540,7 +591,7 @@ We want to confirm that
 Split cases on $\rho'$.
 
 If $\rho' = (\rho, q := i)$, then we're looking for
-\[\sem { (\ssem r e) }_{I\setminus i}(\rho) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+\[\sem { (\ssem r e) }_{I\wo i}(\rho) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
 in other words
 \[\sem { e }_{I}(\rho, r := i) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
 which is true by $\alpha$-equivalence.
@@ -621,11 +672,11 @@ $\sem E_I(\rho, r := i)(y) = \sem{e'}_I (\rho, x' := y, q := i)$
 \end{tabbing}
 
 We have in the $r := i$ case that $y : \sem B_I(\rho, r := i)$,
-for some $\rho : \sem \Gamma_{I\setminus i}$.
+for some $\rho : \sem \Gamma_{I\wo i}$.
 We need to check that the thing being substituted for $x'$
- has type $\sem {\forall r.B(r)}_{I\setminus i}(\rho)$.
+ has type $\sem {\forall r.B(r)}_{I\wo i}(\rho)$.
 But recall that
 \[\sem {\forall q . A(q)}_I (\rho) = \sem {A}_{I, i}(\rho, q : i)\]
-so indeed $y : \sem{B}_{I\setminus i, i}(\rho, r := i)$ as required.
+so indeed $y : \sem{B}_{I\wo i, i}(\rho, r := i)$ as required.
 
 \end{document}
