@@ -190,9 +190,9 @@ three improvements:
 when isomorphism suffices in place of on-the-nose equality of sets.
 \item The things that need to be postulated on the syntactic side are
 better organized into type formers, introduction, and elimination rules.
-\item The arity of relations is generalized; not only generalized to a
-  single choice once and for all of which arity all relations have,
-  but rather relations of many different arities are simultaneously
+\item We generalize to arbitrary (single) arity.
+  Eventually I want to get to the generalization where
+  relations of many different arities are simultaneously
   present in the system, and can be transformed into one another
   through projections.
 \end{enumerate}
@@ -235,30 +235,33 @@ equivalent to the type of $n$-ary proof-relevant relations, i.e. spans
 of $n$ functions, with the endpoints of the $\sharp n$ giving the codomains
 of the $n$ arms of the span.
 
-We want $\sharp$ to be functorial: if $g : n_1 \to n_2$ is a function
-between finite sets, then we expect $\sharp g : \sharp n_1 \to \sharp n_2$ to exist.
-This can be baked into the rule for how $\sharp$-typed variables can be used:
-\[
-\erule
-{n_1, n_2\in\rfinset\qquad g : n_1 \to n_2}
-{\Gamma, \nu : \sharp n_1 \prov \sharp g(\nu) : \sharp n_2}
-\]
-So the full syntax of expressions of interval type is simply
-\[\hbox{Interval Expressions }\mu ::= \sharp g(\nu) \celse \atm k\]
-either variables under a function, or endpoints. We may write simply
-$\nu$ for $\sharp \rid(\nu)$.
+%% We want $\sharp$ to be functorial: if $g : n_1 \to n_2$ is a function
+%% between finite sets, then we expect $\sharp g : \sharp n_1 \to \sharp n_2$ to exist.
+%% This can be baked into the rule for how $\sharp$-typed variables can be used:
+%% \[
+%% \erule
+%% {n_1, n_2\in\rfinset\qquad g : n_1 \to n_2}
+%% {\Gamma, \nu : \sharp n_1 \prov \sharp g(\nu) : \sharp n_2}
+%% \]
+%% So the full syntax of expressions of interval type is simply
+%% \[\hbox{Interval Expressions }\mu ::= \sharp g(\nu) \celse \atm k\]
+%% either variables under a function, or endpoints. We may write simply
+%% $\nu$ for $\sharp \rid(\nu)$.
+The syntax of expressions of interval type is simply
+\[\hbox{Interval Expressions }\mu ::=  \nu \celse \atm k\]
+
 Variables of this type will be treated {\em affinely}.
-Substitution on interval expressions is defined by
-\[ [\sharp g'(\nu') / \nu]\sharp g(\nu) = \sharp(g \o g')(\nu') \]
-\[ [\atm k / \nu]\sharp g(\nu) = \atm{g(k)} \]
-\[ [\mu / \nu] \atm k  = \atm{k} \]
-and satisfies
-\[
-\erule
-{\Gamma, \nu : \sharp n \prov J \qquad \Delta \prov \mu : \sharp n}
-{\Gamma, \Delta \prov [\mu / \nu] J}
-\]
-Since interval variables are affine, we
+%% Substitution on interval expressions is defined by
+%% \[ [\sharp g'(\nu') / \nu]\sharp g(\nu) = \sharp(g \o g')(\nu') \]
+%% \[ [\atm k / \nu]\sharp g(\nu) = \atm{g(k)} \]
+%% \[ [\mu / \nu] \atm k  = \atm{k} \]
+%% and satisfies
+%% \[
+%% \erule
+%% {\Gamma, \nu : \sharp n \prov J \qquad \Delta \prov \mu : \sharp n}
+%% {\Gamma, \Delta \prov [\mu / \nu] J}
+%% \]
+Because interval variables are affine, we
 technically have a function type distinct from ordinary $\Pi$ types that binds
 them, but we write them the same as $\Pi$ types, with agda-style syntax:
 
@@ -309,7 +312,7 @@ it witnesses the invertibility of \textsf{embu}.
 \[
 \erule
 {\Gamma \prov S : \rspan_n \qquad g : m \to n}
-{\Gamma, \nu : \sharp m \prov S \star_g \nu : \rset}
+{\Gamma, \nu : \sharp m \prov S \star \nu : \rset}
 \]
 %% where $\Gamma \wo \mu$ is defined by cases
 %% on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
@@ -317,30 +320,45 @@ it witnesses the invertibility of \textsf{embu}.
 %% This is a somewhat nonstandard way of expressing the affineness constraint,
 %% but it makes calculations easier later.
 
-We postulate reductions so that witness types are
+We postulate the following reduction so that witness types are
  appropriately compatible with substitution:
-\[ S \star_g \atm k \equiv S.\fA_{g(k)}
-\qquad S \star_g  {\sharp g'(\nu)} \equiv S \star_{g\o g'} \nu\]
-(Since the intro rule for witness types requires a variable, what I'm really
-doing is just defining what it means to substitute an interval
-expression for that variable)
+%% \[ S \star_g \atm k \equiv S.\fA_{g(k)}
+%% \qquad S \star_g  {\sharp g'(\nu)} \equiv S \star_{g\o g'} \nu\]
+\[ S \star \atm k \equiv S.\fA_{k}\]
+(Actually, since the intro rule for witness types requires a variable, what's
+really happening is we're defining what it means to substitute an endpoint
+for an interval variable in a witness type: $[\atm k / \nu](S \star \nu) = S.\fA_k$)
 
 There are the following introduction and elimination rules:
+%% \[
+%% \erule
+%% {\Gamma \prov c :S.\fC   \qquad g : m \to n \using \star I}
+%% {\Gamma, \nu : \sharp m \prov c \star_g \nu : S\star_g \nu }
+%% \qquad
+%% \erule
+%% {\Gamma, \nu : \sharp n \prov M : S\star_{\rid_n} \nu \using \star E}
+%% {\Gamma \prov \pbind \nu M :S.\fC }
+%% \]
 \[
 \erule
-{\Gamma \prov c :S.\fC   \qquad g : m \to n \using \star I}
-{\Gamma, \nu : \sharp m \prov c \star_g \nu : S\star_g \nu }
+{\Gamma \prov c :S.\fC    \using \star I}
+{\Gamma, \nu : \sharp n \prov c \star \nu : S\star \nu }
 \qquad
 \erule
-{\Gamma, \nu : \sharp n \prov M : S\star_{\rid_n} \nu \using \star E}
+{\Gamma, \nu : \sharp n \prov M : S\star \nu \using \star E}
 {\Gamma \prov \pbind \nu M :S.\fC }
 \]
 and we require the following equivalence laws:
+%% \[
+%% c \star_g \atm k \equiv S.\ff_{g(k)}\ c\qquad
+%% c \star_g  \sharp g'(\nu) \equiv c \star_{g\o g'} \nu
+%% \]\[
+%% \pbind \nu (c \star_{\rid_n} \nu) \equiv_\beta c \qquad (\pbind \nu M)\star_g \nu' \equiv_\eta [\sharp g(\nu')/\nu]M\]
 \[
-c \star_g \atm k \equiv S.\ff_{g(k)}\ c\qquad
-c \star_g  \sharp g'(\nu) \equiv c \star_{g\o g'} \nu
+c \star \atm k \equiv S.\ff_{k}\ c\qquad
 \]\[
-\pbind \nu (c \star_{\rid_n} \nu) \equiv_\beta c \qquad (\pbind \nu M)\star_g \nu' \equiv_\eta [\sharp g(\nu')/\nu]M\]
+\pbind \nu (c \star \nu) \equiv_\beta c \qquad (\pbind \nu M)\star \nu' \equiv_\eta [\nu'/\nu]M\]
+
 Notice that the ones labelled $\beta$ and $\eta$ seem exactly backwards from
 usual!
 They're nonetheless named consistently according to how a typical
@@ -349,15 +367,19 @@ conversely an intro applied to an elim.
 
 
 The goal is now to somehow arrive at the following two equivalences
+%% \begin{thmbox}
+%% $S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star_{\rid_n} \nu)$\\
+%% $p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star_{\rid_n} \nu$
+%% \end{thmbox}
 \begin{thmbox}
-$S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star_{\rid_n} \nu)$\\
-$p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star_{\rid_n} \nu$
+$S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star \nu)$\\
+$p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star \nu$
 \end{thmbox}
 i.e.
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $S : \rspan_n \prov  S \equiv$\\
-\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star_{\rid_n} \nu$\\
+\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star \nu$\\
 \> $\ \fA_k $\>$ = S.\fA_k$\\
 \> $\ \ff_k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
@@ -367,7 +389,7 @@ and
 $p : \sharp n \to \rset, \nu  :\sharp n \prov  p\ \nu \equiv $\\
 \> $\langle \fC $\>$ = ( \nu : \sharp n) \to  p\ \nu$\\
 \> $\ \fA_k $\>$ = p\ \atm k$\\
-\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle \star_{\rid_n} \nu$
+\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle \star \nu$
 \end{tabbing}
 Toward this goal we add one more rule, which might be reasonable to think of
 as an elimination rule for $\sharp$:
