@@ -190,10 +190,9 @@ three improvements:
 when isomorphism suffices in place of on-the-nose equality of sets.
 \item The things that need to be postulated on the syntactic side are
 better organized into type formers, introduction, and elimination rules.
-\item We generalize to arbitrary (single) arity.
+\item We generalize to arbitrary arities cohabiting in the same system.
   Eventually I want to get to the generalization where
-  relations of many different arities are simultaneously
-  present in the system, and can be transformed into one another
+  relations of different arities can be transformed into one another
   through projections.
 \end{enumerate}
 \section{Syntax}
@@ -416,6 +415,8 @@ for the `variables' in $\C$-objects differs from the actual variables
 in contexts in the type theory, so we use $i, j$ for variables found in
 objects of $\C$,
 and keep $\nu$ for variables in the type theory.
+We also sometimes write a context $I, i : \sharp n, i', \sharp {n'}$ as
+simply $I,i,i'$ when the types are clear.
 
 A morphism $I \to J$ in $\C$ is an (affine) substitution $J \prov \sigma : I$.
 \[
@@ -446,6 +447,12 @@ Which are expected to satisfy
   $(\rho : \sem \Gamma_I) \to \sem A_\sigma (\sem M_I(\rho)) \equiv \sem M_J(\sem \Gamma_\sigma(\rho)) $
 \end{thmbox}
 
+Also
+
+\begin{thmbox}
+  If $\Gamma, \nu : \sharp n \prov A : \rset$ then
+$\sem{[\atm k / \nu]A}_I(\rho) \equiv \sem A_I(\rho, \nu := \atm k)$.
+\end{thmbox}
 \subsection{Definitions}
 \subsubsection{Contexts}
 The set $\sem \Gamma_I$ is essentially
@@ -487,19 +494,30 @@ $\sem {\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := \mu)$&$=$&$(\sem{\Gamma}_{\si
 $\sem {\Gamma, x : A}_\sigma(\rho, x := M)$&$=$&$(\sem{\Gamma}_\sigma (\rho), x := \sigma(M))$
 \end{tabular}
 \end{defnbox}
-\noindent where $I\wo \mu$ and $\sigma\wo \mu$ are defined by cases
-on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
-variable $\nu$ from $I$ or $\sigma$, otherwise do nothing.
+\noindent where $I\wo \mu$ (resp. $\sigma\wo \mu$) are defined by cases
+on $\mu$: If $\mu = i$, then actually remove the
+variable $i$ from $I$ (resp. $\sigma$), otherwise if it's an endpoint, simply
+return $I$ (resp. $\sigma$) unchanged.
 It is easy to check that $J \prov \sigma : I$ implies
 $(J \wo \sigma(\mu)) \prov (\sigma \wo \mu) : (I \wo \mu)$,
 which suffices to see that the interval variable clause of functoriality
 is well-typed.
+
+\subsubsection{Interval Function Types}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\sem {(\nu : \sharp n) \to  A}_I(\rho) = \sem A_{I, i} (\rho, \nu := i)$\\
+$\sem {(\nu : \sharp n) \to  A}_\sigma\ \{\rho\}\ (x) = \sem A_{(\sigma,\,i := i)}\ \{\rho, \nu := i \}\ (x)$
+\end{tabbing}
+\end{defnbox}
+
 \subsubsection{Witness Types}
 We want to make an interpretation of the type
 \[
 \erule
-{\Gamma \prov S : \rspan_n \qquad g : m \to n}
-{\Gamma, \nu : \sharp m \prov S \star_g \nu : \rset}
+{\Gamma \prov S : \rspan_n }
+{\Gamma, \nu : \sharp n \prov S \star \nu : \rset}
 \]
 Suppose $S = \langle \fC, \fA, \ff\rangle$.
 Therefore we have
@@ -511,158 +529,149 @@ We set
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\kill
-$\sem {S \star_g \nu}_I : \sem {\Gamma, \nu : \sharp m}_I \to \rset$\\
-$\sem {S \star_g \nu}_I(\rho') = \bcase \rho' \bof$\\
-\> $\celse (\rho, \nu := \underline k) \mapsto \sem {\fA_{g(k)}}_I(\rho)$\\
-\> $\celse (\rho, \nu := \sharp g'(i)) \mapsto \sem \fC_{I \setminus i}(\rho)$
+$\sem {S \star \nu}_I : \sem {\Gamma, \nu : \sharp n}_I \to \rset$\\
+$\sem {S \star \nu}_I(\rho') = \bcase \rho' \bof$\\
+\> $\celse (\rho, \nu := \underline k) \mapsto \sem {\fA_{k}}_I(\rho)$\\
+\> $\celse (\rho, \nu := i) \mapsto \sem \fC_{I \wo i}(\rho)$
 \end{tabbing}
 \end{defnbox}
-We know $\rho : \sem \Gamma_{I\setminus i}$
-$g' : \ell \to m$ and $g : m \to n$.
-\hrule
-
 For a $J \prov \sigma : I$ set
 \begin{defnbox}
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\=\kill
-\(\sem {S \star i}_f : \{\rho' : \sem {\Gamma, q : \ii}_I\} \to \sem {S\star i}_I(\rho') \to
-\sem {S\star i}_J(\sem{\Gamma, q : \ii}_f(\rho')) \)\\
-$\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
-\> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
-\> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
-\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\setminus i}(x))$\\
-\> \> $\celse j  = \sem{\fC}_{f - i}(x)$
+\(\sem {S \star \nu}_\sigma : \{\rho' : \sem {\Gamma, \nu : \sharp n}_I\}
+\to \sem {S\star \nu}_I(\rho') \)\\
+\> \(  \to \sem {S\star \nu}_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho')) \)\\
+$\sem {S \star \nu}_\sigma\{\rho'\}(x) = \bcase \rho' \bof$\\
+\> $\celse (\rho, \nu := \atm k) \mapsto \sem {\fA_k}_\sigma(x)$\\
+\> $\celse (\rho, \nu := i) \mapsto \bcase \sigma(i) \bof$\\
+\> \> $\celse \atm{k}  \mapsto \sem{\fA_k}_{\sigma\wo i}(\sem{\ff_k}_{I\wo i}(x))$\\
+\> \> $\celse j  \mapsto \sem{\fC}_{\sigma\wo i}(x)$
 \end{tabbing}
 \end{defnbox}
-\subsection{Linearity with the rule written Properly}
 
-Probably what I have above is wrong because it doesn't enforce
-linearity of $i$ in the rule. I should instead write
-\[
-\erule
-{\Gamma \prov S : \rspan }
-{\Gamma, q : \ii \prov S \star q : \rset}
+Let's check the case analysis there because it gets slightly hairy.
+When $\rho' = (\rho, \nu := i)$ we know $\rho \in \sem \Gamma_{I \wo i}$
+and $x : \sem{\fC}_{I\wo i}(\rho)$.
+
+
+When $\sigma(i) = \atm k$, then  $\sem {\ff_k}_{I \wo i}(x) : \sem{\fA_k}_{I\wo i}(\rho)$
+and so
+\[\sem{\fA_k}_{\sigma\wo i}(\sem {\ff_k}_{I \wo i}(x)) :
+\sem {\fA_k}_{J \wo \sigma(i)}(\sem{\Gamma}_{\sigma\wo i}(\rho))
 \]
-So I must define
-$\sem {S \star i}_I : \sem {\Gamma, q  : \ii}_I \to \rset$ and I know
-from before that inhabitants of $\sem {\Gamma, q : \ii}_I$ look like
-$(\rho, q := \atm k)$ for $\rho \in \Gamma_I$ or $(\rho, q := i)$ for
-$\rho \in \Gamma_{I\wo i}$ and $i \in I$. So I define
-\begin{tabbing}
-\hspace*{2em}\=\kill
-$\sem {S \star i}_I : \sem {\Gamma, q : \ii}_I \to \rset$\\
-$\sem {S \star i}_I(\rho') = \bcase \rho' \bof$\\
-\> $\celse (\rho, q := \underline k) \mapsto \sem {\fA_k}_I(\rho)$\\
-\> $\celse (\rho, q := i) \mapsto \sem \fC_{I \wo i}(\rho)$
-\end{tabbing}
-That fixes my type error! Hooray. Next we do:
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-\(\sem {S \star i}_f : \{\rho' : \sem {\Gamma, q : \ii}_I\} \to \sem {S\star i}_I(\rho') \to
-\sem {S\star i}_J(\sem{\Gamma, q : \ii}_f(\rho')) \)\\
-$\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
-\> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
-\> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
-\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\wo i}(x))$\\
-\> \> $\celse j  = \sem{\fC}_{f - i}(x)$
-\end{tabbing}
-Let's go through the case analysis again. Suppose $\rho' = (\rho, q := \atm k)$.
-Then $x : \sem{\fA_k}_I(\rho)$. We know that
-$\sem {\Gamma, q:\ii}_f(\rho, q := \atm k) = (\sem \Gamma_f(\rho), q := \atm k)$
-so our goal type is just $\sem{\fA_k}_J(\sem \Gamma_f(\rho))$, and $\sem {\fA_k}_f(x)$
-does the job.
+\[ \equiv \sem {\fA_k}_J(\sem\Gamma_{\sigma\wo i}(\rho)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem\Gamma_{\sigma\wo i}(\rho), \nu := \atm k) \]
+\[ \equiv \sem {S\star \nu}_J(\sem\Gamma_{\sigma\wo i}(\rho), \nu := \sigma(i)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := i)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho')) \]
+as required.
 
-Let's go through the case analysis again. Suppose $\rho' = (\rho, q := i)$.
-Then $x : \sem{\fC}_{I\wo i}(\rho)$.
-We know that
-\[\sem {\Gamma, q:\ii}_f(\rho, q := i) =  (\sem \Gamma_{f-i}(\rho), q := f(i))\]
- so
-what happens now depends on $f(i)$.
+When $\sigma(i) = j \in J$, we know
+\[ \sem\fC_{\sigma\wo i}(x) : \sem\fC_{J \wo \sigma(i)}(\sem \Gamma_{\sigma\wo i}(\rho))\]
+\[ \equiv \sem {C}_{J\setminus j}(\sem\Gamma_{\sigma\wo i}(\rho)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem\Gamma_{\sigma\wo i}(\rho), \nu := j) \]
+\[ \equiv \sem {S\star \nu}_J(\sem\Gamma_{\sigma\wo i}(\rho), \nu := \sigma(i)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho, \nu := i)) \]
+\[ \equiv \sem {S\star \nu}_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho')) \]
+as required.
 
-If $f(i) = \atm k$, then our goal type is $\sem{\fA_k}_J(\sem \Gamma_{f-i}(\rho))$.
-Observe that $\sem{\ff_k}_{I\wo i}(x)$ has type $\sem{\fA_k}_{I\wo i}(\rho)$,
-then hit that with $\sem {\fA_k}_{f - i}$.
 
-If $f(i) = j$, then our goal type is $\sem{\fC}_{J\wo j}(\sem \Gamma_{f-i}(\rho))$.
-In this case $\sem{\fC}_{f -i}(x)$ does the job.
-
-\subsubsection{Elim}
+\subsubsection{Witness Elimination}
 
 \[
 \erule
-{\Gamma, q : \ii \prov e : S\star q \using \star E}
-{\Gamma \prov \ssem q e : \fC}
+{\Gamma, \nu : \sharp n \prov e : S\star \nu \using \star E}
+{\Gamma \prov \pbind \nu e : S.\fC}
 \]
 For any $I$ we have
-$\sem e_I : (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$
-and we make
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-$\sem{\ssem q e}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$\\
-$\sem{\ssem q e}_I (\rho) = \sem e_{I,i}(\rho, q := i)$
-\end{tabbing}
-
-\subsubsection{Intro}
+$\sem e_I : (\rho : \sem {\Gamma, \nu : {\sharp n}}_I) \to \sem {S \star \nu}_I(\rho)$
+so we set
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    $\sem{\pbind \nu e}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I(\rho)$\\
+    $\sem{\pbind \nu e}_I (\rho) = \sem e_{I,i}(\rho, \nu := i)$
+  \end{tabbing}
+\end{defnbox}
+The type of
+$\sem e_{I,i}(\rho, \nu := i)$ is
+$\sem {S \star \nu}_{I,i}(\rho, \nu := i) = \sem \fC_{I,i\wo i}(\rho)$
+as required.
+\subsubsection{Witness Introduction}
 \[
 \erule
 {\Gamma \prov c : \fC \using \star I}
-{\Gamma, q : \ii \prov c \star q : S\star q }
+{\Gamma, \nu : {\sharp n} \prov c \star \nu : S\star \nu }
 \]
 For any $I$ we have
 $\sem{ c}_I : (\rho : \sem \Gamma_I) \to \sem {\fC}_I$
-and we make
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-$\sem{ c \star q}_I :  (\rho : \sem {\Gamma, q : \ii}_I) \to \sem {S \star i}_I(\rho)$\\
-$\sem{c \star q}_I (\rho, q := i) = \sem c_{I\wo i}(\rho)$\\
-$\sem{c \star q}_I (\rho, q := \atm k) = \sem {\ff_k}_I(\sem c_{I}(\rho))$
-\end{tabbing}
-
+and we set
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    $\sem{ c \star \nu}_I :  (\rho : \sem {\Gamma, \nu : {\sharp n}}_I) \to \sem {S \star \nu}_I(\rho)$\\
+    $\sem{c \star \nu}_I (\rho, \nu := i) = \sem c_{I\wo i}(\rho)$\\
+    $\sem{c \star \nu}_I (\rho, \nu := \atm k) = \sem {\ff_k}_I(\sem c_{I}(\rho))$
+  \end{tabbing}
+\end{defnbox}
 \subsubsection{$\eta$ equivalence}
 We want to confirm that
-\[ (\rho' : \sem{\Gamma, q : \ii}_I) \to \sem { (\ssem r e) \star q }_I(\rho') \equiv \sem {[q/r] e}_I(\rho')\]
+\begin{thmbox}
+  \[ (\pbind \nu M)\star \nu' \equiv_\eta [\nu'/\nu]M\]
+\end{thmbox}
+or semantically that
+\[ (\rho' : \sem{\Gamma, \nu' : {\sharp n}}_I) \to \sem { (\pbind \nu M) \star \nu' }_I(\rho') \equiv \sem {[\nu'/\nu] M}_I(\rho')\]
 Split cases on $\rho'$.
 
-If $\rho' = (\rho, q := i)$, then we're looking for
-\[\sem { (\ssem r e) }_{I\wo i}(\rho) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+If $\rho' = (\rho, \nu' := i)$, then we're trying to show
+\[\sem { (\pbind \nu M) }_{I\wo i}(\rho) \equiv \sem {[\nu'/\nu]M}_I(\rho, \nu' := i)\]
 in other words
-\[\sem { e }_{I}(\rho, r := i) \equiv \sem {[q/r]e}_I(\rho, q := i)\]
+\[\sem { M }_{I}(\rho, \nu := i) \equiv \sem {[\nu'/\nu]M}_I(\rho, \nu' := i)\]
 which is true by $\alpha$-equivalence.
 
-If $\rho' = (\rho, q := \atm k)$, then we're looking for
-\[\sem {\ff_k}_I(\sem {\ssem r e}_I(\rho)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+If $\rho' = (\rho, \nu' := \atm k)$, then we're trying to show
+\[\sem {\ff_k}_I(\sem {\pbind \nu M}_I(\rho)) \equiv \sem {[\nu'/\nu]M}_I(\rho, \nu' := \atm k)\]
 in other words
-\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {[q/r]e}_I(\rho, q := \atm k)\]
+\[\sem {\ff_k}_I(\sem { M}_{I,i}(\rho, \nu := i)) \equiv \sem {[\nu'/\nu]M}_I(\rho, \nu' := \atm k)\]
 by $\alpha$-equivalence
-\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
-which I suppose needs to be stated separately as a lemma.
+\[\sem {\ff_k}_I(\sem { M}_{I,i}(\rho, \nu := i)) \equiv \sem {M}_I(\rho, \nu := \atm k)\]
+which I suppose ought to be stated on its own as a lemma.
 \begin{lemma}
-Suppose $\Gamma, r : \ii  \prov e : S \star r$.
+Suppose $\Gamma, \nu : {\sharp n}  \prov e : S \star \nu$.
 Then
-\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i)) \equiv \sem {e}_I(\rho, r := \atm k)\]
+\[\sem {\ff_k}_I(\sem { e}_{I,i}(\rho, \nu := i)) \equiv \sem {e}_I(\rho, \nu := \atm k)\]
 \end{lemma}
 
 \begin{proof}
-There is a morphism $[\atm k/i] : I, i \to I$ that maps $i$ `exceptionally' to $\atm k$.
+There is a substitution $I \prov (i := \atm k) : I, i $
+which is the identity on the rest of $I$.
 So
-\[\sem {S\star r}_{[\atm k/i]} : (\rho : \sem{ \Gamma, r: \ii}) \to \sem {S\star r}_{I, i}(\rho) \to \sem {S\star r}_I(\sem {\Gamma, r:\ii}_{[\atm k/i]}(\rho))\]
-and by
-\[(\rho : \sem \Gamma_c) \to \sem A_f (\sem M_c(\rho)) \equiv \sem M_d(\sem \Gamma_f(\rho)) \]
+\[\sem {S\star \nu}_{i := \atm k} : (\rho' : \sem{ \Gamma, \nu: {\sharp n}}_{I,i}) \to \sem {S\star \nu}_{I, i}(\rho') \to \sem {S\star \nu}_I(\sem {\Gamma, \nu:{\sharp n}}_{i := \atm k}(\rho'))\]
+and by the general fact that
+\[(\rho : \sem \Gamma_I) \to \sem A_\sigma (\sem M_I(\rho)) \equiv \sem M_J(\sem \Gamma_\sigma(\rho)) \]
 we specifically have
-\[(\rho' : \sem \Gamma_{I,i}) \to \sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho')) \equiv \sem e_I(\sem \Gamma_{[\atm k/i]}(\rho')) \]
+\[(\rho' : \sem {\Gamma, \nu : \sharp n}_{I,i}) \to \sem {S\star \nu}_{i := \atm k} (\sem e_{I,i}(\rho')) \equiv \sem e_I(\sem {\Gamma, \nu : \sharp n}_{i := \atm k}(\rho')) \]
 but then we observe that
-$\sem \Gamma_{[\atm k/i]}(\rho, r := i) \equiv (\rho, r := \atm k)$ by definition,
-so we just need
-$\sem {S\star r}_{[\atm k/i]} (\sem e_{I,i}(\rho, r:= i)) \equiv \sem {\ff_k}_I(\sem { e}_{I,i}(\rho, r := i))$, but this follows from unpacking the definition of $\sem {S \star r}_{[\atm k/i]}$. \cqed
+\[\sem {\Gamma, \nu : \sharp n}_{i := \atm k}(\rho, \nu := i) \equiv
+(\rho, \nu := \atm k)\]
+by definition of $i := \atm k$.
+From this, the only remaining proof burden is
+\[\sem {S\star \nu}_{i := \atm k} (\sem e_{I,i}(\rho, \nu:= i)) \equiv \sem {\ff_k}_I(\sem { e}_{I,i}(\rho, \nu := i))\]
+but this follows from unpacking the definition of $\sem {S \star \nu}_{i := \atm k}$. \cqed
 \end{proof}
 
 
 \subsubsection{$\beta$ equivalence}
 We want to confirm that
-\[ (\rho : \sem{\Gamma}_I) \to \sem { (\ssem q (e \star q) }_I(\rho) \equiv \sem { e}_I(\rho)\]
+\begin{thmbox}
+  \[ \pbind \nu (e \star \nu) \equiv_\beta e \]
+\end{thmbox}
+i.e. semantically
+\[ (\rho : \sem{\Gamma}_I) \to \sem { (\pbind \nu (e \star \nu) }_I(\rho) \equiv \sem { e}_I(\rho)\]
 but this is just checking that
-\[ \sem {  e \star q }_{I,i}(\rho, q := i) \equiv \sem { e}_I(\rho)\]
-which is true by definition of $\sem{e\star q}_{I,i}$.
+\[ \sem {  e \star \nu }_{I,i}(\rho, \nu := i) \equiv \sem { e}_I(\rho)\]
+which is true by definition of $\sem{e\star \nu}_{I,i}$.
 
 \subsection{$\sharp$ elim}
 We want to interpret
@@ -670,46 +679,77 @@ We want to interpret
 \erule
 {
 \begin{tabular}{c}
-$\Gamma, k : n, x :  B(\atm k) \prov e : D(\atm k)$\\
-$\Gamma, x' : \forall r . B(r), q : \ii  \prov e' : D(q)$\\
-$\Gamma, k : n, x' : \forall r . B(r) \prov [x'\ \atm k/x]e \equiv [\atm k/q]e' : D(\atm k)$
+$\Gamma, k : n, x :  [\atm k / \nu]B \prov e : [\atm k / \nu]D$\\
+$\Gamma, x' : \forall B, \nu : \sharp n  \prov e' : D$\\
+ $[x'\ \atm k/x]e \equiv [\atm k/\nu']e'$
 \end{tabular}
 }
-{\Gamma, q : \ii, y : B(q) \prov \bcase (q,y) \bof k.x.e \celse q.x'.e' : D(q)}
+{\Gamma, \nu : \sharp n, y : B \prov \bcase (\nu,y) \bof (\atm k,x).e \celse (\nu',x').e' : D}
 \]
 which tacitly assumes
-\[\Gamma, r : \ii \prov B(r) : \rset\]
-\[\Gamma, q : \ii \prov D(q) : \rset\]
-So we get to assume
-\[\sem e_I : (\rho : \sem \Gamma_I) (k : n) (x : \sem B_I(\rho, r := \atm k)) \to
-\sem D_I(\rho, q := \atm k)
+\[\Gamma, \nu : {\sharp n} \prov B : \rset\]
+\[\Gamma, \nu : {\sharp n} \prov D : \rset\]
+So we get to assume that
+\[\sem e_I : (\rho : \sem {\Gamma, k : n, x : [\atm k/\nu]B}_I) \to
+\sem D_I(\rho \adjust_\Gamma, \nu := \atm k)
 \]
 %
-\[\sem {e'}_I : (\rho' : \sem {\Gamma, x' : \forall r . B(r), q : \ii}_I)  \to
-\sem D_I(\rho')
+\[\sem {e'}_I : (\rho' : \sem {\Gamma, x' : \forall  B, \nu : {\sharp n}}_I)  \to
+\sem D_I(\rho'\adjust_{\Gamma,\nu})
 \]
 %
 and that
-\[(\rho : \sem \Gamma_I) (k : n) (x' : \sem {\forall r . B(r)}_I(\rho)) \to\]
-\[\sem e_I(\rho)(k)(x'\ \atm k) = \sem {e'}_I(\rho, x' := x', q := \atm k) \]
-or something like that.
+\[\sem e_I(\rho, k := k, x := x'\ \atm k)  \equiv \sem {e'}_I(\rho, x' := x', \nu := \atm k) \]
 
-Let $E := \bcase (q,y) \bof k.x.e \celse q.x'.e'$.
-Define
-\begin{tabbing}
-\hspace*{2em}\=\hspace*{2em}\=\kill
-\(\sem E_I : (\rho' : \sem {\Gamma, r : \ii}_I) (y : \sem {B}_I(\rho')) \to
-\sem D_I(\rho')\)\\
-$\sem E_I(\rho, r := \atm k)(y) = \sem e_I(\rho)(k)(y)$\\
-$\sem E_I(\rho, r := i)(y) = \sem{e'}_I (\rho, x' := y, q := i)$
-\end{tabbing}
-
-We have in the $r := i$ case that $y : \sem B_I(\rho, r := i)$,
-for some $\rho : \sem \Gamma_{I\wo i}$.
+\noindent We define
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    \(\sem {\bcase \cdots}_I : (\rho' : \sem {\Gamma, \nu : {\sharp n}, y : B}_I) \to
+    \sem D_I(\rho')\)\\
+    $\sem {\bcase \cdots}_I(\rho, \nu := \atm k, y := y) = \sem e_I(\rho, k := k, x := y)$\\
+    $\sem {\bcase \cdots}_I(\rho, \nu := i, y := y) = \sem{e'}_I (\rho, x' := y, \nu := i)$
+  \end{tabbing}
+\end{defnbox}
+Why is this type-correct?
+We have in the $\nu := i$ case that $\rho : \sem \Gamma_{I\wo i}$
+and  $y : \sem B_I(\rho, \nu := i)$.
 We need to check that the thing being substituted for $x'$
- has type $\sem {\forall r.B(r)}_{I\wo i}(\rho)$.
-But recall that
-\[\sem {\forall q . A(q)}_I (\rho) = \sem {A}_{I, i}(\rho, q : i)\]
-so indeed $y : \sem{B}_{I\wo i, i}(\rho, r := i)$ as required.
+ has type $\sem {\forall B}_{I\wo i}(\rho)$.
+But by definition
+\[\sem {\forall  B}_I (\rho) = \sem {B}_{I, i}(\rho, \nu : i)\]
+so indeed $y : \sem{B}_{I\wo i, i}(\rho, \nu := i)$ as required.
 
+For the functoriality part,
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    \(\sem {\bcase \cdots}_\sigma : (\rho' : \sem {\Gamma, \nu : {\sharp n}, y : B}_I) \to\)\\
+   \> \( \sem D_I(\rho'\adjust_{\Gamma,\nu}) \to \sem D_J(\sem {\Gamma,\nu:\sharp n}_\sigma(\rho'\adjust_{\Gamma,\nu}))\)\\
+    $\sem {\bcase \cdots}_\sigma\{\rho, \nu := \atm k, y := y\}(z) = \sem e_\sigma\{\rho, k := k, x := y\}(z)$\\
+    $\sem {\bcase \cdots}_\sigma\{\rho, \nu := i, y := y\}(z) = \sem{e'}_\sigma \{\rho, x' := y, \nu := i\}(z)$
+  \end{tabbing}
+\end{defnbox}
+We get to assume generally about $e$ and $e'$ that
+\[\sem e_\sigma : (\rho' : \sem {\Gamma, k : n, x : [\atm k/\nu]B}_I)
+\to \sem D_I(\rho' \adjust_\Gamma, \nu := \atm k)\]
+\[\to \sem {D}_J(\sem {\Gamma}_\sigma(\rho' \adjust_\Gamma), \nu := \atm k)
+\]
+%
+\[\sem {e'}_\sigma : (\rho' : \sem {\Gamma, x' : \forall  B, \nu : {\sharp n}}_I)  \to
+\sem D_I(\rho'\adjust_{\Gamma,\nu})
+\]
+\[ \to \sem D_J(\sem{\Gamma, \nu : \sharp n}_\sigma(\rho'\adjust_{\Gamma,\nu})) \]
+%
+
+In the $\nu = \atm k$ case we get to assume $\rho : \sem \Gamma_I$ and $y : \sem B_I(\rho, \nu := \atm k)$ and $z : \sem D_I(\rho, \nu := \atm k)$. The goal type
+is $\sem D_J(\sem\Gamma_\sigma(\rho), \nu = \atm k)$ and this is exactly what
+$\sem e_\sigma\{\rho, k := k, x := y\}(z)$ gives.
+
+In the $\nu = i$ case we get to assume $\rho : \sem \Gamma_{I\wo i}$ and $y : \sem B(\rho, \nu := i)$ and $z : \sem D_I(\rho, \nu := i)$.
+ The goal type is $\sem D_J(\sem \Gamma_{\sigma \wo i}, \nu := \sigma(i))$
+and this is exactly what $ \sem{e'}_\sigma \{\rho, x' := y, \nu := i\}(z)$ gives.
+
+\textbf{Why haven't I used the equation premise of the rule yet?}
+I expect it is required for a substitution compatibility lemma.
 \end{document}
