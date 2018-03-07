@@ -248,15 +248,17 @@ So the full syntax of expressions of interval type is simply
 either variables under a function, or endpoints. We may write simply
 $\nu$ for $\sharp \rid(\nu)$.
 Variables of this type will be treated {\em affinely}.
-Substitution on interval expressions can be characterized by
-\[
-\erule
-{(\Gamma \wo \mu), \nu : \sharp n \prov J \qquad \Gamma \prov \mu : \sharp n}
-{\Gamma \prov [\mu / \nu] J}
-\]
+Substitution on interval expressions is defined by
 \[ [\sharp g'(\nu') / \nu]\sharp g(\nu) = \sharp(g \o g')(\nu') \]
 \[ [\atm k / \nu]\sharp g(\nu) = \atm{g(k)} \]
- Since interval variables are affine, we
+\[ [\mu / \nu] \atm k  = \atm{k} \]
+and satisfies
+\[
+\erule
+{\Gamma, \nu : \sharp n \prov J \qquad \Delta \prov \mu : \sharp n}
+{\Gamma, \Delta \prov [\mu / \nu] J}
+\]
+Since interval variables are affine, we
 technically have a function type distinct from ordinary $\Pi$ types that binds
 them, but we write them the same as $\Pi$ types, with agda-style syntax:
 
@@ -306,34 +308,39 @@ it witnesses the invertibility of \textsf{embu}.
 
 \[
 \erule
-{\Gamma\wo \mu \prov S : \rspan_n \qquad \Gamma \prov \mu : \sharp n}
-{\Gamma \prov S\star \mu : \rset}
+{\Gamma \prov S : \rspan_n \qquad g : m \to n}
+{\Gamma, \nu : \sharp m \prov S \star_g \nu : \rset}
 \]
-where $\Gamma \wo \mu$ is defined by cases
-on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
-variable $\nu$ from $\Gamma$, otherwise do nothing and return $\Gamma$.
-This is a somewhat nonstandard way of expressing the affineness constraint,
-but it makes calculations easier later.
+%% where $\Gamma \wo \mu$ is defined by cases
+%% on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
+%% variable $\nu$ from $\Gamma$, otherwise do nothing and return $\Gamma$.
+%% This is a somewhat nonstandard way of expressing the affineness constraint,
+%% but it makes calculations easier later.
 
-We postulate that if given an endpoint for its interval argument,
-a witness type reduces to one of the span arm types:
+We postulate reductions so that witness types are
+ appropriately compatible with substitution:
+\[ S \star_g \atm k \equiv S.\fA_{g(k)}
+\qquad S \star_g  {\sharp g'(\nu)} \equiv S \star_{g\o g'} \nu\]
+(Since the intro rule for witness types requires a variable, what I'm really
+doing is just defining what it means to substitute an interval
+expression for that variable)
 
-\[ S \star \atm k \equiv S.\fA_k \]
-
-It has the following introduction and elimination rules:
+There are the following introduction and elimination rules:
 \[
 \erule
-{\Gamma\wo \mu \prov c :S.\fC  \qquad \Gamma \prov \mu : \sharp n \using \star I}
-{\Gamma \prov c \star \mu : S\star \mu }
+{\Gamma \prov c :S.\fC   \qquad g : m \to n \using \star I}
+{\Gamma, \nu : \sharp m \prov c \star_g \nu : S\star_g \nu }
 \qquad
 \erule
-{\Gamma, \nu : \sharp n \prov M : S\star \nu \using \star E}
-{\Gamma \prov \pbind \nu M :S }
+{\Gamma, \nu : \sharp n \prov M : S\star_{\rid_n} \nu \using \star E}
+{\Gamma \prov \pbind \nu M :S.\fC }
 \]
-and is to satisfy the following equivalence laws:
+and we require the following equivalence laws:
 \[
-c \star \atm k \equiv S.\ff_k\ c\qquad
-\pbind \nu (c \star \nu) \equiv_\beta c \qquad (\pbind \nu M)\ \mu \equiv_\eta [\mu/\nu]M\]
+c \star_g \atm k \equiv S.\ff_{g(k)}\ c\qquad
+c \star_g  \sharp g'(\nu) \equiv c \star_{g\o g'} \nu
+\]\[
+\pbind \nu (c \star_{\rid_n} \nu) \equiv_\beta c \qquad (\pbind \nu M)\star_g \nu' \equiv_\eta [\sharp g(\nu')/\nu]M\]
 Notice that the ones labelled $\beta$ and $\eta$ seem exactly backwards from
 usual!
 They're nonetheless named consistently according to how a typical
@@ -341,26 +348,28 @@ $\beta$ redex is an elim applied to an intro form, and an $\eta$ is
 conversely an intro applied to an elim.
 
 
-The goal is now to somehow arrive at an equivalence
-\[S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star \nu)\]
+The goal is now to somehow arrive at the following two equivalences
+\begin{thmbox}
+$S : \rspan_n \prov S \equiv \embu(\lambda \nu . S \star_{\rid_n} \nu)$\\
+$p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star_{\rid_n} \nu$
+\end{thmbox}
 i.e.
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $S : \rspan_n \prov  S \equiv$\\
-\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star \nu$\\
-\> $\ \fA_k $\>$ = S\star \atm k$\\
+\> $\langle \fC $\>$ = ( \nu : \sharp n) \to  S\star_{\rid_n} \nu$\\
+\> $\ \fA_k $\>$ = S.\fA_k$\\
 \> $\ \ff_k\ c $\>$ = c\ \atm k\rangle$
 \end{tabbing}
-and $p : \sharp n \to \rset \prov p \equiv \lambda \nu . (\embu\ p)\star \nu$, i.e.
+and
 \begin{tabbing}
 \hspace*{2em}\=$\ f\ k\ c $ \= \kill
 $p : \sharp n \to \rset, \nu  :\sharp n \prov  p\ \nu \equiv $\\
 \> $\langle \fC $\>$ = ( \nu : \sharp n) \to  p\ \nu$\\
 \> $\ \fA_k $\>$ = p\ \atm k$\\
-\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle \star \nu$
+\> $\ \ff_k\ c $\>$ = c\ \atm k\rangle \star_{\rid_n} \nu$
 \end{tabbing}
-
-To do this we add one more rule, which might be reasonable to think of
+Toward this goal we add one more rule, which might be reasonable to think of
 as an elimination rule for $\sharp$:
 \[
 \erule
@@ -380,11 +389,11 @@ We're going to describe the category $\C$, and give a semantics in $\rset^\C$.
 The objects of $\C$ are contexts of $\sharp$-typed variables:
 
 \[\hbox{Objects }I, J ::= \cdot \celse (I, i : \sharp n) \]
-
 Calculations tend to be clearer if the range of letters
 for the `variables' in $\C$-objects differs from the actual variables
-in contexts in the type theory, so we use $i, j, k$ for objects of $\C$,
-and $\nu$ for variables in the type theory.
+in contexts in the type theory, so we use $i, j$ for variables found in
+objects of $\C$,
+and keep $\nu$ for variables in the type theory.
 
 A morphism $I \to J$ in $\C$ is an (affine) substitution $J \prov \sigma : I$.
 \[
@@ -440,10 +449,11 @@ the set of substitutions $I \prov \rho : \Gamma $.
 %% \]
 \[
 \erule
-{\rho \in \sem \Gamma_{I\wo \mu} \quad I \prov  \mu : \sharp m  }
+{\rho \in \sem \Gamma_{I\wo \mu} \quad I \prov  \mu : \sharp n  }
 { \prov (\rho, \nu := \mu) \in  \sem{\Gamma, \nu : \sharp n}_{I}}
 \]
 \end{defnbox}
+\noindent
 and for $J \prov \sigma : I$ the morphism part of the functor $\sem \Gamma$ is
 essentially substitution composition:
 \begin{defnbox}
@@ -459,47 +469,48 @@ $\sem {\Gamma, x : A}_\sigma(\rho, x := M)$&$=$&$(\sem{\Gamma}_\sigma (\rho), x 
 on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
 variable $\nu$ from $I$ or $\sigma$, otherwise do nothing.
 It is easy to check that $J \prov \sigma : I$ implies
-$(J \wo \sigma(\mu)) \prov (\sigma \wo \mu) : (I \wo \mu)$.
+$(J \wo \sigma(\mu)) \prov (\sigma \wo \mu) : (I \wo \mu)$,
+which suffices to see that the interval variable clause of functoriality
+is well-typed.
 \subsubsection{Witness Types}
 We want to make an interpretation of the type
 \[
 \erule
-{\Gamma\wo \mu \prov S : \rspan_n \qquad \Gamma \prov \mu : \sharp n}
-{\Gamma \prov S\star \mu : \rset}
+{\Gamma \prov S : \rspan_n \qquad g : m \to n}
+{\Gamma, \nu : \sharp m \prov S \star_g \nu : \rset}
 \]
 Suppose $S = \langle \fC, \fA, \ff\rangle$.
 Therefore we have
-\[ \sem {\fA_k}_I, \sem \fC_I : \sem {\Gamma'}_I \to \rset \]
-\[  \sem \fC_f : \{\rho : \sem {\Gamma'}_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem {\Gamma'}_f(\rho)) \]
-\[  \sem {\fA_k}_f : \{\rho : \sem {\Gamma'}_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem {\Gamma'}_f(\rho)) \]
-\[  \sem {\ff_k}_I : \{\rho : \sem {\Gamma'}_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
-for $\Gamma' = \Gamma \setminus \mu$. We set
-
+\[ \sem {\fA_k}_I, \sem \fC_I : \sem {\Gamma}_I \to \rset \]
+\[  \sem \fC_f : \{\rho : \sem {\Gamma}_I\} \to \sem \fC_I(\rho) \to \sem \fC_I(\sem {\Gamma}_f(\rho)) \]
+\[  \sem {\fA_k}_f : \{\rho : \sem {\Gamma}_I\} \to \sem {\fA_k}_I(\rho) \to \sem {\fA_k}_I(\sem {\Gamma}_f(\rho)) \]
+\[  \sem {\ff_k}_I : \{\rho : \sem {\Gamma}_I\} \to \sem \fC_I(\rho) \to \sem {\fA_k}_I(\rho) \]
+We set
 \begin{defnbox}
-  \begin{tabbing}
-    \hspace*{2em}\=\kill
-    $\sem {S \star \mu}_I : \sem {\Gamma}_I \to \rset$\\
-    $\sem {S \star \mu}_I(\rho) = \bcase {\sem \mu_I(\rho)} \bof$\\
-    \> $\celse \underline k \mapsto \sem {\fA_k}_I(\rho)$\\
-    \> $\celse  \sharp g(i) \mapsto \sem \fC_{I \wo i}(\rho)$
-  \end{tabbing}
+\begin{tabbing}
+\hspace*{2em}\=\kill
+$\sem {S \star_g \nu}_I : \sem {\Gamma, \nu : \sharp m}_I \to \rset$\\
+$\sem {S \star_g \nu}_I(\rho') = \bcase \rho' \bof$\\
+\> $\celse (\rho, \nu := \underline k) \mapsto \sem {\fA_{g(k)}}_I(\rho)$\\
+\> $\celse (\rho, \nu := \sharp g'(i)) \mapsto \sem \fC_{I \setminus i}(\rho)$
+\end{tabbing}
 \end{defnbox}
-What's the argument that this is type-correct?
-Ok, well, $\sem\mu_I(\rho)$ can be two things.
-If it is $\atm k$, then
+We know $\rho : \sem \Gamma_{I\setminus i}$
+$g' : \ell \to m$ and $g : m \to n$.
+\hrule
 
 For a $J \prov \sigma : I$ set
 \begin{defnbox}
-  \begin{tabbing}
-    \hspace*{2em}\=\hspace*{2em}\=\kill
-    \(\sem {S \star \mu}_\sigma : \{\rho : \sem {\Gamma}_I\} \to \sem {S\star \mu}_I(\rho) \to
-    \sem {S\star \mu}_J(\sem{\Gamma}_\sigma(\rho)) \)\\
-    $\sem {S \star \mu}_\sigma\{\rho\}(x) = \bcase {\sem \mu_I(\rho)} \bof$\\
-    \> $\celse \atm k \mapsto \sem {\fA_k}_\sigma(x)$\\
-    \> $\celse \sharp g(i) \mapsto \bcase \sigma(\sharp g(i)) \bof$\\
-    \> \> $\celse \atm{k}  = \sem{\fA_k}_{\sigma\wo\mu}(\sem{\ff_k}_{I\wo \mu}(x))$\\
-    \> \> $\celse \sharp g'(i')  = \sem{\fC}_{\sigma \wo i}(x)$
-  \end{tabbing}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\=\kill
+\(\sem {S \star i}_f : \{\rho' : \sem {\Gamma, q : \ii}_I\} \to \sem {S\star i}_I(\rho') \to
+\sem {S\star i}_J(\sem{\Gamma, q : \ii}_f(\rho')) \)\\
+$\sem {S \star i}_f\{\rho'\}(x) = \bcase \rho' \bof$\\
+\> $\celse (\rho, q := \atm k) \mapsto \sem {\fA_k}_f(x)$\\
+\> $\celse (\rho, q := i) \mapsto \bcase f(i) \bof$\\
+\> \> $\celse \atm{k}  = \sem{\fA_k}_{f-i}(\sem{\ff_k}_{I\setminus i}(x))$\\
+\> \> $\celse j  = \sem{\fC}_{f - i}(x)$
+\end{tabbing}
 \end{defnbox}
 \subsection{Linearity with the rule written Properly}
 
