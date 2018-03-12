@@ -285,5 +285,40 @@ interpretation of weakening? Let's first consider what happens when $B$ and $D$
 do properly depend on $\nu$. The former supposes that I have an $M$
 such that
 \[\sem \bcase_I : (\rho : \sem {\Gamma, \nu : \sharp n, b : B}_I) \to \sem D_I(\rho\adjust_{\Gamma, \nu})\]
-and here we are doing ordinary weakening of $D$ along $b : B$
+and here we are doing ordinary weakening of $D$ along $b : B$.
+
+\subsection{What Is Surjectivity}
+Recall that we're dealing with the rule
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, b :[\atm k / \nu]B \prov e : [\atm k / \nu]D$\\
+$\Gamma, b' : \forall \nu . B, \nu : \sharp n \prov e' : [b'\ \nu / b]D$\\
+$[\atm k / \nu]e' \equiv [b'\ \atm k / b] e$
+\end{tabular}
+}
+{\Gamma, \nu : \sharp n, b : B \prov \bcase (\nu,b) \bof (\atm k,b).e \celse (b',\nu).e' : D}
+\]
+I want to think of this chiefly as a tuple of its branches $e$ and $e'$.
+If I have $\Gamma, \nu : \sharp n, b : B \prov M : D$ there are two `projections'
+I can take of it,
+\[\Gamma, k : n, b : [\atm k / \nu]B \prov [\atm k / \nu]M : [\atm k / \nu]D\]
+\[\Gamma,  b' : \forall \nu. B, \nu : \sharp n \prov [b'\ \nu / b]M : [b'\ \nu / b]D\]
+So I want to demand a couple of $\beta$-laws
+\[\bcase (\atm k,b) \bof (\atm k,b).e \celse (b',\nu).e' \equiv_\beta e\]
+\[\bcase (\nu,b'\ \nu) \bof (\atm k,b).e \celse (b',\nu).e' \equiv_\beta e'\]
+and an $\eta$-law
+\[\bcase (\nu,b) \bof (\atm k,b).[\atm k/\nu]M \celse (b',\nu).[b'\ \nu/b]M \equiv_\eta M\]
+
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\=\kill
+    \(\sem {\bcase \cdots}_I : (\rho' : \sem {\Gamma, \nu : {\sharp n}, y : B}_I) \to
+    \sem D_I(\rho')\)\\
+    $\sem {\bcase \cdots}_I(\rho, \nu := \atm k, y := y) = \sem e_I(\rho, k := k, x := y)$\\
+    $\sem {\bcase \cdots}_I(\rho, \nu := i, y := y) = \sem{e'}_I (\rho, x' := y, \nu := i)$
+  \end{tabbing}
+\end{defnbox}
+
 \end{document}

@@ -3547,3 +3547,8 @@ Q: Wait, what happens when interval variables sneak into types in the context? D
 get the usual problems with linearity and dependency?
 A: It seems not to be the case, because 𝕀-typed things themselves can't depend on
 other variables, but this is real fiddly and delicate and surprising.
+
+=== 2018.03.12
+
+Q: What's the analogue of Surj-Fun?
+A: I think it's like β and η laws thinking of case as a tuple.
