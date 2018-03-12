@@ -310,8 +310,8 @@ it witnesses the invertibility of \textsf{embu}.
 
 \[
 \erule
-{\Gamma \prov S : \rspan_n \qquad g : m \to n}
-{\Gamma, \nu : \sharp m \prov S \star \nu : \rset}
+{\Gamma \prov S : \rspan_n}
+{\Gamma, \nu : \sharp n \prov S \star \nu : \rset}
 \]
 %% where $\Gamma \wo \mu$ is defined by cases
 %% on $\mu$: If $\mu = \sharp g(\nu)$, then actually remove the
@@ -508,7 +508,7 @@ is well-typed.
 \begin{tabbing}
 \hspace*{2em}\=\hspace*{2em}\= \kill
 $\sem {(\nu : \sharp n) \to  A}_I(\rho) = \sem A_{I, i} (\rho, \nu := i)$\\
-$\sem {(\nu : \sharp n) \to  A}_\sigma\ \{\rho\}\ (x) = \sem A_{(\sigma,\,i := i)}\ \{\rho, \nu := i \}\ (x)$
+$\sem {(\nu : \sharp n) \to  A}_\sigma\ \{\rho\}\ (x) = \sem A_{(\sigma,\,\nu := i)}\ \{\rho, \nu := i \}\ (x)$
 \end{tabbing}
 \end{defnbox}
 
@@ -752,4 +752,91 @@ and this is exactly what $ \sem{e'}_\sigma \{\rho, x' := y, \nu := i\}(z)$ gives
 
 \textbf{Why haven't I used the equation premise of the rule yet?}
 I expect it is required for a substitution compatibility lemma.
+
+\section{Generalizing to Functorial $\sharp$}
+\subsection{Syntax}
+We can expand syntax of expressions of interval type to include functions
+applied to variables, so that $\sharp$ is a functor.
+\[\hbox{Interval Expressions }\mu ::=  \sharp g(\nu) \celse \atm k\]
+with variable rule
+\[
+\erule
+{g : m \to n}
+{\Gamma, \nu : \sharp m \prov \sharp g(\nu) : \sharp n}
+\]
+A bare occurrence of a variable $\nu : \sharp n$ is then an abbreviation
+for $\sharp \rid_n(\nu)$. The definition of formation, introduction, and elimination
+of $\star$ doesn't change, but we need to generalize the definition of substitution
+of interval expressions into $\star$-types. Say $\nu' : \sharp n$ and $\nu : \sharp n'$. Then
+\begin{tabbing}
+\hspace*{2em}\=$\langle$\=\hspace*{1em}\=\kill
+$ [\sharp g(\nu) / \nu'](S \star \nu') =$\\
+\>$\langle$\> $ \fC $\>$= S.\fC, $\\
+\>\> $ \fA $\>$= \lambda k. S.\fA_{g(k)}, $\\
+\>\> $ \ff $\>$= \lambda k. S.\ff_{g(k)}  \rangle \star \nu $
+\end{tabbing}
+For terms of $\star$-type,
+\[ [\sharp g(\nu) / \nu'](c \star \nu') = c \star \nu\]
+
+We leave the $\bcase$ rule
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, b :  [\atm k / \nu]B \prov e : [\atm k / \nu]D$\\
+$\Gamma, b' : \forall B, \nu : \sharp n  \prov e' : [b'\ \nu/b]D$\\
+ $[b'\ \atm k/b]e \equiv [\atm k/\nu]e'$
+\end{tabular}
+}
+{\Gamma, \nu : \sharp n, y : B \prov \bcase (\nu,y) \bof (\atm k,b).e \celse (\nu,b').e' : D}
+\]
+ as it is, (although I've silently generalized it to the dependent case, \textcolor{red}{XXX go back and fix that in the earlier bits})
+ but now we have to say what it means when we substitute in some
+$\sharp g(\nu_0)$ for $\nu$ and $g : n_0 \to n$.
+
+\[ [\sharp g(\nu_0) / \nu](\bcase (\nu,y) \bof (\atm k,b).e \celse (\nu,b').e') = \]
+\[ \bcase (\nu,y) \bof (\atm k,b).e \celse (\nu,b').e' \]
+Let $B_0 = [\sharp g(\nu_0) / \nu]B$
+and $D_0 = [\sharp g(\nu_0) / \nu]D$
+and $e_0 = [g(k_0)/k]e$
+and we can check
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k_0 : n_0, b :  [\atm k / \nu_0]B_0 \prov e_0 : [\atm k / \nu_0]D_0$\\
+$\Gamma, b'_0 : \forall B_0, \nu_0 : \sharp n  \prov \textcolor{red}{???} : [b'_0\ \nu_0/b]D_0$
+\end{tabular}
+}
+{\Gamma, \nu_0 : \sharp n, y : B_0 \prov \bcase (\nu_0,y) \bof (\atm k,b).e \celse (\nu_0,b'_0).e' : D_0}
+\]
+
+The first premise expands to
+$\Gamma, k_0 : n_0, b :  [\atm {g(k_0)} / \nu]B \prov [g(k_0)/k]e : [\atm {g(k_0)} / \nu]D$
+which is a substitution instance of the typing of $e$.
+
+The second premise expands to... oh whoops. I can't seem to find anything
+to substitute for $b'$ that I can make out of $b'_0$.
+The type $(\nu_0 : \sharp n_0) \to [\sharp g(\nu_0)/\nu] B$
+is {\em less} general than
+$(\nu : \sharp n) \to  B$!
+\subsection{A Fix For This Problem}
+
+I think the solution is to generalize the rule slightly. Since
+in the semantics there are more possibilities for a `value' of type $\sharp n$,
+we have to do a more wide-ranging case analysis.
+
+Maybe the rule goes
+\[
+\erule
+{
+\begin{tabular}{c}
+$\Gamma, k : n, b :  [\atm k / \nu]B \prov e : [\atm k / \nu]D$\\
+$\Gamma, b' : ( \omega : \sharp m) \to [\sharp g(\omega)/\nu]B, \nu : \sharp n  \prov e' : [b'\ \nu/b]D$\\
+ $[b'\ \atm k/b]e \equiv [\atm k/\nu]e'$
+\end{tabular}
+}
+{\Gamma, \nu : \sharp n, y : B \prov \bcase (\nu,y) \bof (\atm k,b).e \celse (\nu,b').e' : D}
+\]
+
 \end{document}
