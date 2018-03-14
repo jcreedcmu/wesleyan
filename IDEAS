@@ -3552,3 +3552,9 @@ other variables, but this is real fiddly and delicate and surprising.
 
 Q: What's the analogue of Surj-Fun?
 A: I think it's like β and η laws thinking of case as a tuple.
+
+=== 2018.03.14
+
+Q: What was the thing that the semantics of the shifts collapsed into?
+A: Something involving the 'ninja yoneda lemma' from loregian's 'this
+is the coend my only cofriend'.
