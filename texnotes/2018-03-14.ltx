@@ -13,6 +13,8 @@
 \tcbuselibrary{breakable}
 \input{linear}
 
+\def\rto{\twoheadrightarrow}
+\def\lto{\rightarrowtail}
 \def\P{\mathbf{P}}
 \def\N{\mathbf{N}}
 \def\one{\mathbf{1}}
@@ -105,6 +107,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
 \def\C{\mathbf{C}}
 \def\S{\mathbf{S}}
 \def\D{\mathbf{D}}
@@ -112,6 +116,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
+\def\ltri{\triangleleft}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\del{\partial}
@@ -278,11 +283,17 @@ k :
 P_1  \tri (P_2 \lol N)
 \end{prooftree}
 \]
-exists, i.e. an invertible 2-cell between profunctors
+exists, i.e. an invertible 2-cell in the horizontal category
 \[\begin{tikzcd}
-  \P \x \P \x \N \ar[d, "\P \x \lol"']\ar[r, "\tensor \x \N"]& \P \x \N\ar[d, "\tri"]\\
-\P \x \N \ar[r, "\tri"']& \one
+\P \x \P \x \N \ar[r, "\tensor \x \N"]\ar[dd, equal]
+ & \P \x \N\ar[r, "\tri"]
+ & \one\ar[dd, equal]\\
+&\Updownarrow\\
+\P \x \P \x \N \ar[r, "\P \x \lol"']
+ & \P \x \N \ar[r, "\tri"']
+ & \one
 \end{tikzcd}\]
+where we're tacitly promoting the arrows $\tensor, \lol$ to proarrows.
 (all of these arrows should be slashed but I haven't figured out how
 to get slashed arrows in tikzcd yet)
 
@@ -290,4 +301,115 @@ to get slashed arrows in tikzcd yet)
 $\eta$ of atoms $a^+$ (resp. $a^-$) to proarrows $\P \pto \one$ (resp.
 $ \N \pto \one $)
 \end{enumerate}
+
+How to interpret shifts?
+
+\subsection{Ends and Exponentials}
+
+Suppose $\hom(H \odot K, L) \cong \hom(H, K \tri L) \cong \hom(K,  L \ltri H)$
+for $\odot$ being composition of profunctors in diagrammatic order, for $H : \A \pto \B$
+and $K : \B \pto \C$ and $L : \A \pto \C$. That is,
+\[(H \odot K)(c, a) = \int^{b : \B} H(b, a) \x K(c, b)\]
+then we want to claim that
+\[(K \tri L)(b, a) = \int_{c : \C} K(c, b) \imp L(c, a)\]
+\[(L \ltri H)(c, b) = \int_{a : \A} H(b, a) \imp L(c, a)\]
+
+Hm, I might prefer the notation to be like so instead:
+Suppose $\hom(H \bullet K, L) \cong \hom(H, K \rto L) \cong \hom(K,  H \lto L)$
+for $\bullet$ being composition of profunctors in diagrammatic order, for $H : \A \pto \B$
+and $K : \B \pto \C$ and $L : \A \pto \C$. That is,
+\[(H \bullet K)(c, a) = \int^{b : \B} H(b, a) \x K(c, b)\]
+then we want to claim that
+\[(K \rto L)(b, a) = \int_{c : \C} K(c, b) \imp L(c, a)\]
+\[(H \lto L)(c, b) = \int_{a : \A} H(b, a) \imp L(c, a)\]
+So how can I convince myself that, for example,
+\[\hom\left(\lambda ca . \int^{b : \B} H(b, a) \x K(c, b), L\right)
+\cong
+\hom\left(H, \lambda ba.\int_{c : \C} K(c, b) \imp L(c, a)\right)\]
+Well, a natural transformation
+\[\left(\lambda ca . \int^{b : \B} H(b, a) \x K(c, b)\right) \to L\]
+is a family of arrows
+\[\forall c \in \C . \forall a \in \A . \int^{b : \B} H(b, a) \x K(c, b) \to L(c, a)\]
+and we recall that the coend is the same as the coequalizer of
+\[
+\begin{tikzcd}
+  \displaystyle\coprod_{\beta : b_1 \to b_2\in \B } H(b_2, a) \x K(c, b_1)
+\ar[r, shift right, "b_2"'] \ar[r, shift left, "b_1"]
+& \displaystyle\coprod_{b\in \B}H(b, a) \x K(c, b)\ar[d, two heads]\\
+&\displaystyle\int^{b : \B} H(b, a) \x K(c, b)
+\end{tikzcd}
+\]
+And a morphism out of the coequalizer into $L(c, a)$ is the same as a morphism
+\[\coprod_{b\in \B}H(b, a) \x K(c, b) \to L(c, a)\]
+that coequalizes $b_1$ and $b_2$, so the raw data we need to express such a thing
+is, for every $b \in \B$, a function
+\[H(b, a) \x K(c, b) \to L(c, a)\]
+that is suitably compatible with morphisms in $\B$.
+
+Similarly if we unpack the definition of a natural transformation
+\[H\to \left(\lambda ba.\int_{c : \C} K(c, b) \imp L(c, a)\right)\]
+we need for all $b \in \B$ and $a \in \A$ to come up with a natural transformation
+\[H(b, a) \to \int_{c : \C} K(c, b) \imp L(c, a)\]
+for which we need, for all $c \in \C$ (in a suitably dinatural way), a function
+\[H(b, a) \x K(c, b) \to L(c, a)\]
+
+\subsection{Understanding Shifts as Exponentials}
+I have an equality
+\[\sem {\ups P} = \int_{\alpha : \P} \sem P(\alpha) \to (\alpha \tri \dash)\]
+on profunctors $\N \to \one$. I could expand this out to
+\[\sem {\ups P}(*, \phi) = \int_{\alpha : \P} \sem P(*, \alpha) \to (\alpha \tri \phi)\]
+$\sem {\ups P}$ is $\N \pto \one$ and $P$ is $\P \pto \one$ and $\tri$ is $\P \x \N \pto \one$
+but maybe it could act like $\P \pto \N^\op$? and I could think of $\ups P$ as $\one \pto \N^\op$?
+So then what I'd really say is
+\[\sem {\ups P}(\phi, *) = \int_{\alpha : \P} \sem P(*, \alpha) \to (\phi \ltri \alpha)\]
+So this is
+\[ \sem{\ups P} = \sem P \lto {\tri} \]
+Then on the other side we have
+\[\sem {\ups N}(*, \alpha) = \int_{\phi : \N} \sem N(\phi, *) \to (\phi \ltri \alpha)\]
+so we say
+\[ \sem{\ups N} = \sem N \rto {\tri} \]
+
+\subsection{Back to Dualizing $\N$}
+So this kinda forces my hand to think of $\N^\op$ as the primary thing
+rather than my original covariant notion of $\N$, in order to get these compositions to work out.
+
+
+
+A model $M$ consists of the following data:
+\begin{enumerate}
+\item a closed double category with equipment $\C$, with products.
+\item objects $\P, \N \in \C$
+\item a profunctorial comonoid object structure on $\P$, i.e. proarrows
+\[\tensor : \P \pto \P \x \P \]
+\[I : \P \pto \one\]
+ satisfying the usual diagrams.
+\item  a proarrow $\lol : \P \x \N \pto \N$ and
+a proarrow $\tri : \P \pto \N$
+\item there is an invertible 2-cell in the horizontal category
+\[\begin{tikzcd}
+\P \x \P  \ar[r, "\tensor "]\ar[dd, equal]
+ & \P \ar[r, " \tri"]
+ & \N \ar[dd, equal]\\
+&\Updownarrow\\
+\P \x \P  \ar[r, "\P \x \tri"']
+ & \P \x \N \ar[r, "\lol"']
+ & \N
+\end{tikzcd}\]
+where we're tacitly promoting the arrow $\tensor$ to a proarrow.
+(all of these arrows should be slashed but I haven't figured out how
+to get slashed arrows in tikzcd yet)
+
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to proarrows $\P \pto \one$ (resp.
+$ \one \pto \N $)
+\end{enumerate}
+
+We carry out the semantics mapping positive props $P$ into profunctors $\P \pto\one$
+and negative props into profunctors $\one \pto\N$.
+
+\[ \sem {\ups P} = \sem P \lto \tri \]
+\[ \sem {\dns N} = \sem N \rto \tri \]
+\[ \sem {P_1 \tensor P_2} =  \tensor \bullet (\sem {P_1} \x \sem {P_2}) \]
+\[ \sem {P \lol N}(\phi) =  \int^{(\phi', \alpha) \in (\N \x \P)} \sem P(\alpha)  \x \sem N(\phi') \x \N(\alpha\lol \phi' , \phi)\]
+\textcolor{red}{no this is garbage}
 \end{document}

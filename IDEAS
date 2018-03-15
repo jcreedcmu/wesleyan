@@ -3558,3 +3558,7 @@ A: I think it's like β and η laws thinking of case as a tuple.
 Q: What was the thing that the semantics of the shifts collapsed into?
 A: Something involving the 'ninja yoneda lemma' from loregian's 'this
 is the coend my only cofriend'.
+
+Q: Do I need to keep track of the fact that interpretation of propositions
+are not just proarrows but actual morphisms with companion and conjoint?
+A: Hm doubtful.
