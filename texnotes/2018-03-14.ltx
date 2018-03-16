@@ -412,4 +412,199 @@ and negative props into profunctors $\one \pto\N$.
 \[ \sem {P_1 \tensor P_2} =  \tensor \bullet (\sem {P_1} \x \sem {P_2}) \]
 \[ \sem {P \lol N}(\phi) =  \int^{(\phi', \alpha) \in (\N \x \P)} \sem P(\alpha)  \x \sem N(\phi') \x \N(\alpha\lol \phi' , \phi)\]
 \textcolor{red}{no this is garbage}
+
+\subsection{Back to Not Dualizing $\N$}
+
+I keep thinking that I should be able to get away with mere profunctors
+$\tensor : \P \pto \P \x \P$ and $\lol : \N \pto \P \x \N$, at least in the world
+where I have positives as $\P \pto \one$ and negatives as $\N \pto \one$
+and $\tri : \P \x \N \pto \one$. Then at least I can interpret
+\[ \sem {P_1 \tensor P_2} =  {\tensor} \bullet (\sem {P_1} \x \sem {P_2}) \]
+\[ \sem {P \lol N} =  {\lol} \bullet (\sem {P} \x \sem {N}) \]
+What then of the adjunction between $\tensor$ and $\lol$?
+If I have $\sem P : \P \pto \one$ and $\sem N : \N \pto \one$, what does it mean
+to have $\sem {P \prov N}$? It's a natural transformation from $\sem P \x \sem N$
+to $\tri$ or something, right? Right.
+
+So I should have a correspondence between natural transformations
+\[\sem {P_1 \tensor P_2} \x \sem {N} \to \tri\]
+and
+\[\sem {P_1} \x \sem {P_2 \lol N} \to \tri\]
+so it might be appropriate to demand simply that
+\[\sem {P_1 \tensor P_2} \x \sem {N} \cong \sem {P_1} \x \sem {P_2 \lol N} \]
+i.e.
+\[\tensor \bullet (\sem {P_1} \x \sem {P_2}) \x \sem {N} \cong \sem {P_1} \x {\lol} \bullet (\sem {P_2} \x \sem{N}) \]
+without even mentioning $\tri$.
+Just like, for any $X, Y : \P \pto \one$ and $Z : \N \pto \one$, we should have
+\[\tensor \bullet (X \x Y) \x Z \cong X \x {\lol} \bullet (Y \x Z) : \P \x \N \pto \one\]
+I don't know how to dualize this. The farthest I get is guessing
+\[\tensor  : \P \pto \P \x \P\]
+\[\lol  : \N \pto \P \x \N\]
+\[X, Y: \P\pto \one \qquad Z : \one \pto \N\]
+\[\tensor \bullet (X \x Y) \x Z \cong X \x {\lol} \bullet (Y \x Z) : \P \pto \N\]
+which is wrong in several ways.
+
+Let me think about
+\[
+\erule
+{\sem {\Gamma} : \P \pto \one\qquad \sem {P} : \P \pto \one }
+{\sem {\Gamma \prov [P]} : \one \pto \one}
+\]
+\[\sem {\Gamma \prov [P]}(*, *) = \int_{\alpha \in \P} \sem\Gamma(*, \alpha) \to \sem P(*, \alpha)\]
+\[\sem {\Gamma \prov [P]} = \sem\Gamma \lto \sem P\]
+and
+\[
+\erule
+{\sem {\Gamma} : \P \pto \one\qquad \sem {N} : \N \pto \one
+\qquad \sem {Q}^> : \N \pto \one}
+{\sem {\Gamma [N] \prov Q} : \one \pto \one}
+\]
+\[\sem {\Gamma [N] \prov Q}(*, *) = \int_{\phi \in \N} (\sem \Gamma \hlol \sem Q)(*, \phi) \to \sem N(*, \phi)\]
+\[ = \int_{\phi \in \N} \lol \bullet (\sem \Gamma \x \sem Q)(*, \phi) \to \sem N(*, \phi)\]
+\[ = (\lol \bullet (\sem \Gamma \x \sem Q)) \lto \sem N\]
+and
+\[
+\erule
+{\sem {\Gamma} : \P \pto \one
+\qquad \sem {\Omega} : \P \pto \one
+\qquad \sem {R}^> : \N \pto \one}
+{\sem {\Gamma; \Omega \prov R} : \one \pto \one}
+\]
+\[ \sem {\Gamma; \Omega \prov R^>}(*, *) = \int_{\alpha\in \P, \phi \in \N} \tensor \bullet (\sem \Gamma \x \sem \Omega)(*, \alpha) \x \sem R^>(*, \phi) \to \alpha \tri \phi\]
+% \[  = \int_{\alpha \in \P} \tensor \bullet (\sem \Gamma \x \sem \Omega)(*, \alpha) \to \int_{\phi \in \N}   \sem R^>(*, \phi) \to \alpha \tri \phi\]
+% \[  = (\tensor \bullet (\sem \Gamma \x \sem \Omega)) \lto \lambda {*} \alpha . \int_{\phi \in \N}   \sem R^>(*, \phi) \to \alpha \tri \phi\]
+\[  = ((\tensor \bullet (\sem \Gamma \x \sem \Omega)) \x \sem R^>) \lto \tri \]
+
+So hmm maybe I could more weakly demand
+\[
+\erule
+{X, Y : \P \pto \one \qquad Z : \N \pto \one}
+{({\tensor} \bullet (X \x Y)) \x Z \lto {\tri} \cong  (X \x {\lol} \bullet (Y \x Z)) \lto {\tri}}
+\]
+\subsection{But How do I do Shifts without Dualizing?}
+I have $\tri : \P \x \N \to \one$. I want
+\[\sem {\ups P}(*, \phi) = \int_{\alpha \in \P} \sem P(*, \alpha) \to \alpha \tri \phi\]
+It's not true that
+\[ \sem {\ups P} = \sem P \lto \tri \]
+because the direction of arguments doesn't line up.
+I want to define, in an equipment, given $\tri : \P \x \N \pto \one$ and $X : \P \pto \one$,
+a thing called $X \lol \tri : \N \pto \one$.
+
+I want to characterize $X \lol \tri$ with an isomorphism like we characterized $\lto$ and $\rto$ above. In $\mathbf{Prof}$, I will have that
+\[X \lol \tri(*, \phi) = \int_{\alpha \in \P} X(*, \alpha) \to \alpha \tri \phi\]
+So since this is an end, it should be characterized by the maps into it.
+I should be able to say something about $\hom (Y, X \lol \tri)$ for any $Y : \N \pto \one$.
+
+Perhaps it's just that $\hom (Y, X \lol \tri) \cong \hom(X \x Y , \tri)$?
+For a $\hom (Y, X \lol \tri)$ says that for any $\phi \in \N$
+that we can achieve
+\[ Y(*, \phi) \to \int_{\alpha \in \P} X(*, \alpha) \to \alpha \tri \phi \]
+and a $\hom(X \x Y , \tri)$ says that for any $\phi \in \N$
+and for any $\alpha \in \P$ we can achieve
+\[ Y(*, \phi) \x X(*, \alpha) \to \alpha \tri \phi \]
+\vfil\eject
+\section{From the Top (not dualized)}
+A model $M$ consists of the following data:
+\begin{enumerate}
+\item an equipment $\C$, with finite products $(\x, \one)$.
+Proarrow composition is written $\odot$, in diagrammatic order.
+\item $\C$ is `additive' in the sense that proarrows can be added. We
+require finite coproducts to exist in the category whose
+objects are proarrows $\A \pto \B$ and whose morphisms are 2-cells
+between them.
+\item  operations $\lto$ and $\rto$, that work as follows:
+for any $\A, \B \in \C$ if we have proarrows $f : \A \pto \one$
+$g : \B \pto \one$ and $h : \A \x \B \pto \one$, then
+\[f \lto h : \B \pto \one\]
+\[g \rto h : \A \pto \one\]
+and these are right adjoint to $\x$ in the sense that there are
+natural isomorphisms
+\[\hom(f \x g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
+in the horizontal category.
+\item distinguished objects $\P, \N \in \C$
+\item a `procomonoid' structure on $\P$, i.e. proarrows
+\[\tensor : \P \pto \P \x \P \]
+\[I : \P \pto \one\]
+ satisfying the usual diagrams.
+\item  a proarrow $\lol : \N \pto \P \x \N $ and
+a proarrow $\tri : \P \x \N \pto \one$
+\item An isomorphism 2-cell in the horizontal category for every $X, Y, Z$: \[
+\erule
+{X, Y : \P \pto \one \qquad Z : \N \pto \one}
+{({\tensor} \odot (X \x Y)) \x Z  \cong  (X \x {\lol} \odot (Y \x Z)) : \P \x \N}
+\]
+
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to proarrows $\P \pto \one$ (resp.
+$ \N \pto \one  $)
+\end{enumerate}
+
+The interpretation of propositions naturally follows that of atoms:
+positive props become proarrows $\P \pto \one$, negative props become
+proarrows $\N \pto \one$.
+
+\[ \sem {P_1 \tensor P_2} = {\tensor} \odot (\sem{P_1} \x \sem{P_2}) \]
+\[ \sem {P \lol N} = {\lol} \odot (\sem{P} \x \sem{N}) \]
+\[ \sem {P_1 \oplus P_2} =  \sem{P_1} + \sem{P_2} \]
+\[ \sem {N_1 \& N_2} =  \sem{N_1} + \sem{N_2} \]
+\[ \sem {\dns N} = \sem N \rto \tri \]
+\[ \sem {\ups P} = \sem P \lto \tri \]
+
+\section{Generalizing Past Equipments}
+Further discussion revealed that we don't seem to use either
+\begin{enumerate}
+\item the non-proarrows of the equipment, or
+\item the cartesianness of the product structure
+\end{enumerate}
+Try this instead:
+
+A model $\M$ consists of the following data:
+\begin{enumerate}
+\item A bicategory $\M$, with a (weak?) monoidal product $(\bullet, \one)$,
+where the hom-categories have finite coproducts.
+\item  operations $\lto$ and $\rto$, that work as follows:
+for any $\A, \B \in \M$ if we have morphisms $f : \one \to \A$
+$g : \one \to \B$ and $h : \one \to \A \bullet \B$, then
+\[f \lto h : \one \to \B \qquad g \rto h : \one \to \A \]
+and these are right adjoint to $\bullet$ in the sense that there are
+natural isomorphisms
+\[\hom(f \bullet g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
+in the hom-categories.
+\item distinguished objects $\P, \N \in \M$
+\item a monoid structure on $\P$, i.e. morphisms
+\[\tensor : \P \bullet \P \to \P  \qquad 1 : \one \to \P\]
+ satisfying the usual diagrams.
+\item  a morphism $\lol :   \P \bullet \N \to \N$ and
+a morphism $\tri :\one\to \P \bullet \N $
+\item For every $f, g, h$ an invertible 2-cell
+%% \[
+%% \erule
+%% {f, g : \one \to \P \qquad h : \one \to \N  }
+%% {({\tensor} \o (f \bullet g)) \bullet h  \cong  (f \bullet {\lol} \o (g \bullet h)) : \one \to \P \bullet \N}
+%% \]
+
+\[
+\erule
+{f, g : \one \to \P \qquad h : \one \to \N  }
+{({\tensor} \o (f \bullet g)) \lto h  \rto \tri \cong  f \lto ({\lol} \o (g \bullet h)) \rto \tri : \one \to \one}
+\]
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to morphisms $\one \to \P$ (resp.
+$ \one \to \N  $)
+\end{enumerate}
+
+The syntactic model takes $\M$ to be the bicategory where objects are
+categories and morphisms $\C \to \D$ are profunctors $\D \pto \C$,
+i.e. functors $\C^\op \x \D \to \rset$, the monoidal product is
+cartesian product of categories. The distinguished object $\P$ is the
+category whose objects are contexts $\Gamma$ and whose morphisms are
+permutations. Similarly $\N$ is the category of `sequent frames'
+$\Gamma \prov Q$ that are expecting perhaps some further context
+extension. (In ordered logic, they'd have a cursor in the middle of
+the context for where that extension would be placed) The monoid
+object multiplication $\tensor : (\P \x \P)^\op \x \P \to \rset$ is the context concatenation relation.
+The morphism $\tri : \one \to \P \bullet \N$ is a functor $\P \x \N
+\to \rset$, and given a $\Gamma\in\P$ and $Q \in \N$ it's the set of
+derivations $\Gamma \prov Q$.
+
 \end{document}

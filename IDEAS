@@ -3562,3 +3562,9 @@ is the coend my only cofriend'.
 Q: Do I need to keep track of the fact that interpretation of propositions
 are not just proarrows but actual morphisms with companion and conjoint?
 A: Hm doubtful.
+
+=== 2018.03.16
+
+Q: Interesting paper about algebraic databases I found searching for
+the relationship between profunctors and coproducts?
+A: https://arxiv.org/pdf/1602.03501.pdf

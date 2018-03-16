@@ -1,0 +1,418 @@
+\documentclass{article}
+\usepackage[framestyle=fbox,framefit=yes,heightadjust=all,framearound=all]{floatrow}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\input{linear}
+
+%\def\nto{\mathrel{\dot\to}}
+\def\nto{\Rightarrow}
+\def\susp#1{\langle {#1} \rangle}
+\def\nulls{0}
+\def\rto{\twoheadrightarrow}
+\def\lto{\rightarrowtail}
+\def\P{\mathbf{P}}
+\def\N{\mathbf{N}}
+\def\one{\mathbf{1}}
+\def\pto{\relbar\joinrel\mapstochar\joinrel\rightarrow}
+\def\htensor{\otimes}
+\def\lol{\multimap}
+\def\hlol{\multimap}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\ff{\mathsf{f}}
+\def\B{\mathsf{B}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+\def\atm#1{\underline{#1}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{bluegray}{rgb}{0.4,0.4,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\pbind#1{\langle {#1} \rangle}
+\def\ppbind#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\ltri{\triangleleft}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+
+\def\tensor{\otimes}
+\def\lol{\multimap}
+
+\def\wtf{{\color{red}???}}
+
+\def\zero{\texttt{0}}
+
+\title{Bicategorical Phase Semantics of ILL}
+% \author{Jason Reed}
+\bibliographystyle{alpha}
+\begin{document}
+\maketitle
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+
+\section{Introduction}
+We discuss a generalization of the categorical semantics presented in the previous note
+\cite{jcreed.csfill}. We use the same definition of the syntax of linear logic used there.
+
+\section{Semantics}
+\subsection{Models}
+A model $\M$ consists of the following data:
+\begin{enumerate}
+\item A bicategory $\M$, with a monoidal product $(\bullet, \one)$,
+where the hom-categories have finite coproducts.
+\item  operations $\lto$ and $\rto$ that are right adjoints to $\bullet$ in the sense that
+% \[f \lto h : \one \to \B \qquad g \rto h : \one \to \A \]
+\[\hom(f \bullet g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
+when $f : \one \to \A$
+$g : \one \to \B$ and $h : \one \to \A \bullet \B$.
+
+\item distinguished objects $\P, \N \in \M$
+\item  morphisms $\tensor : \P \bullet \P \to \P$ and $1 : \one \to \P$
+ and $\lol :   \P \bullet \N \to \N$ and
+a morphism $\tri :\one\to \P \bullet \N $
+\item 2-cells making $(\tensor, 1)$ a monoid object
+\item For every $f, g, h$ an invertible 2-cell
+%% \[
+%% \erule
+%% {f, g : \one \to \P \qquad h : \one \to \N  }
+%% {({\tensor} \o (f \bullet g)) \bullet h  \cong  (f \bullet {\lol} \o (g \bullet h)) : \one \to \P \bullet \N}
+%% \]
+\textcolor{red}
+{
+\[
+\erule
+{f, g : \one \to \P \qquad h : \one \to \N  }
+{k_{fgh} : ({\tensor} \o (f \bullet g)) \lto h  \rto \tri \nto  f \lto ({\lol} \o (g \bullet h)) \rto \tri : \one \to \one}
+\]
+(not sure about this)}
+\item a mapping
+$\eta$ of atoms $a^+$ (resp. $a^-$) to morphisms $\one \to \P$ (resp.
+$ \one \to \N  $)
+\end{enumerate}
+
+\subsection{Interpretation}
+We interpret positive propositions $P$ as morphisms $\sem P : \one \to \P$ in $\M$,
+and negative propositions $N$ as morphisms $\sem N : \one \to \N$.
+We say
+\begin{enumerate}
+\item $\Gamma;\Omega \models_M R$ iff there is a two-cell $(\sem \Gamma \htensor \sem \Omega) \bullet \sem R^> \nto \tri : \one \to \P \bullet \N$
+\item $\Gamma \models_M [P]$ iff there is a two-cell $\sem \Gamma \nto \sem P : \one \to \P $
+\item $\Gamma[N] \models_M Q$ iff there is a two-cell $(\sem \Gamma \hlol \sem Q^>) \nto \sem N : \one \to \N $
+\end{enumerate}
+When we drop the subscript $M$ and just write $\models$, it  means that the statement
+holds for all $M$.
+
+
+\begin{figure}
+\begin{center}
+\[
+\erule{p : \one \to \P \qquad n : \one \to \N}
+{p \hlol n := {\lol} \o (p \bullet n)}
+\qquad
+\erule{p_1, p_2 : \one \to \P }
+{p_1 \htensor p_2 := {\tensor} \o (p_1 \bullet p_2)}
+\]
+\[\sem{a^\pm} = \eta(a^\pm) \qquad \qquad \sem{1} = 1\]
+\[\sem{P_1 \oplus P_2} =  \sem{P_1} + \sem{P_2}\qquad
+\sem{0} = \nulls\]
+\[\sem{N_1 \amp N_2} =  \sem{N_1} + \sem{N_2}\qquad
+\sem{\top} = \nulls\]
+\[\sem{P \lol N} = \sem P \hlol \sem N\]
+\[\sem{P_1 \tensor P_2} = \sem {P_1} \htensor \sem{P_2}\]
+\[\sem{\ups P } = \sem P \lto \tri\]
+\[\sem{\dns N } = \sem N \rto \tri\]
+\[\erule{\Gamma = H_1, \ldots, H_n}{\sem{\Gamma} = \sem{ H_1}^< \htensor \cdots \htensor \sem{ H_n}^<}
+\qquad
+\erule{\Omega = P_1, \ldots, P_n}{\sem{\Omega} = \sem{P_1}^< \htensor \cdots \htensor \sem{P_n}^<}\]
+\[\sem P^< = \sem{P} \qquad \sem N^< = \sem{\dns N} \qquad \sem{\susp{a^+}}^< = \eta(a^+)\]
+\[\sem N^> = \sem{N} \qquad \sem P^> = \sem{\ups P} \qquad \sem{\susp{a^-}}^> = \eta(a^-)\]
+\end{center}
+\caption{Interpreting Propositions \label{semantics}}
+\end{figure}
+
+\section{Soundness}
+
+\begin{lemma}
+The operation $\htensor$ on morphisms $\one \to \P$ is associative.
+\end{lemma}
+
+\begin{proof}
+Follows from associativity of $\bullet$ and $\tensor$.
+\cqed
+\end{proof}
+
+\begin{theorem}[Soundness]\ %
+  \begin{enumerate}
+  \item If $\Gamma; \Omega \prov R$ then $\Gamma ; \Omega \models R$
+  \item If $\Gamma \prov [P]$ then $\Gamma \models [P]$
+  \item If $\Gamma[N] \prov Q$ then $\Gamma[N] \models Q$
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By induction on the derivation.
+Some example cases:
+\begin{itemize}
+\item[Case:]
+\[
+\erule
+{\Gamma; P \prov Q}
+{\Gamma[\ups P] \prov Q}
+\]
+By induction we have the existence of a 2-cell
+\[\xi : (\sem\Gamma \htensor \sem P) \bullet  \sem Q^> \nto \tri\]
+and need to produce a 2-cell
+\[\zeta : (\sem\Gamma \hlol \sem Q^>) \nto \sem{\ups P}\]
+Expanding definitions, we have
+\[\xi : (\tensor \o (\sem\Gamma \bullet \sem P)) \bullet  \sem Q^> \nto \tri\]
+and we need
+\[\zeta : {\lol} \o (\sem \Gamma \bullet \sem Q^>) \nto  \sem P \lto \tri\]
+which is essentially the same thing as
+\[\zeta : \sem P \bullet {\lol} \o (\sem \Gamma \bullet \sem Q^>) \nto  \tri\]
+and by $k$ we are done. \textcolor{red}{(at least this is where I expect to use $k$)}
+\item[Case:]
+\[
+\erule
+{\Gamma \prov [P]}
+{\Gamma \prov P}
+\]
+We assume a 2-cell $\zeta :\sem \Gamma \nto \sem P : \one \to \P$,
+and need to produce a 2-cell
+$\xi : \sem \Gamma \bullet \sem{\ups P}\nto \tri : \one \to \P \x \N$.
+Expanding definitions,
+\[\xi : \sem \Gamma \bullet (\sem{P} \lto \tri) \nto \tri : \one \to \P \x \N\]
+but we can consider the counit of the adjunction defining $\lto$
+\[\epsilon_{\sem P} : \sem P \bullet (\sem{P} \lto \tri) \nto \tri \]
+and compose it with $\zeta$ to get
+\[ \epsilon_{\sem P} \o (\zeta \bullet \rid_{\sem P \lto \tri}) : \sem \Gamma \bullet \sem{\ups P}\nto \tri\]
+as required.
+\item[Case:]
+$$
+\erule
+{\Gamma_1 \prov [P_1]\qquad \Gamma_2 \prov [P_1]}
+{\Gamma_1, \Gamma_2 \prov [P_1\tensor P_2]}
+$$
+We assume 2-cells $\zeta_1 : \sem {\Gamma_1} \nto \sem{P_1}$
+and $\zeta_2 : \sem {\Gamma_2} \nto \sem{P_2}$, and we produce
+$$\tensor * (\zeta_1 \bullet \zeta_2) : \sem {\Gamma_1} \htensor \sem {\Gamma_2} \nto \sem{P_1 \tensor P_2}$$
+with the type of the horizontal composition expanding to
+\[ \tensor \o (\sem {\Gamma_1} \bullet \sem {\Gamma_2}) \nto \tensor \o (\sem {P_1} \bullet \sem {P_2})\]
+as required.
+
+\item[Case:]
+$$
+\erule
+{\Gamma; P_1, P_2 \prov Q}
+{\Gamma; P_1\tensor P_2 \prov Q}
+$$
+We have a 2-cell
+$$ \sem \Gamma \htensor \sem{P_1} \htensor \sem{P_2} \htensor \sem{\ups Q} \nto \tri$$
+and need to produce
+$$ \sem \Gamma \htensor \sem{P_1 \tensor P_2} \htensor \sem{\ups Q} \nto \tri$$
+which is essentially the same thing, by associativity of $\htensor$.
+\end{itemize}
+\cqed
+\end{proof}
+
+\section{Completeness}
+We build a  syntactic model. Fix a collection of atoms.
+\begin{itemize}
+\item Let $\M$ be the bicategory whose objects are categories and
+whose hom-category $\C \to \D$ is the profunctor category $\D \pto \C$, i.e.
+the functor category
+$\C^\op \x \D \to \rset$. The monoidal product is taken to be cartesian product
+of categories. The hom-categories easily have finite coproducts because presheaf categories
+have all colimits.
+\item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
+  whose morphisms are permutations.
+\item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
+  morphisms are context permutations.
+
+\item The morphism $\tensor : \P \bullet \P \to \P $ is to be a
+  functor $(\P \x \P)^\op \x \P \to \rset$, and is defined as a {\em
+    context concatenation relation}. When $\Gamma = \Gamma_1, \Gamma_2$
+ (up to permutation) then $\tensor(\Gamma_1, \Gamma_2,  \Gamma)$
+ is a singleton, else it is empty. $1$ is the empty context.
+
+\item Similarly $\lol : \P \bullet \N \to \N $ is to be a
+  functor $(\P \x \N)^\op \x \N \to \rset$, and is defined
+such that
+   when $\Gamma = \Gamma_1, \Gamma_2$
+ (up to permutation) then $\lol(\Gamma_1, (\Gamma_2, Q),  (\Gamma, Q))$
+ is a singleton, else it is empty.
+
+\item $1$ is to be a functor $\P \to \rset$. If $\Gamma$ is empty,
+  then $1(\Gamma)$ is a singleton, else it is empty.
+
+\item The functor $\tri$ is to be a functor $\P \x \N \to \rset$. Given
+ an object $\Gamma_1$ of $\P$ and an object $(\Gamma_2, Q)$ of $\N$,
+we say $\tri(\Gamma_1, (\Gamma_2, Q))$ is
+ the set of proofs of $\Gamma_1, \Gamma_2 \prov Q$.
+\item $k$ is \textcolor{red}{supposed to be} easy to check by simply constructing proofs and using cut.
+\item
+  We choose as interpretations of the atoms as follows
+  \[\eta(a^+)(\Gamma) =
+\begin{cases}
+\{*\}&\hbox{if $\Gamma = (\susp{a^+})$;} \\
+\nulls & \hbox{otherwise.}
+\end{cases}\]
+  \[\eta(a^-)(\Gamma, Q) = \begin{cases}\{*\}&\hbox{if $(\Gamma, Q) = (\cdot, \susp{a^-})$;} \\
+ \nulls & \hbox{otherwise.}\end{cases}\]
+\end{itemize}
+
+The thing we need to do is show that this model is in fact universal ---
+that the interpretation of every proposition reflects its (focused)
+provability. We first claim that
+
+\begin{lemma}\label{syntactic}
+In the syntactic model, for all $P$ and $N$ we have
+  \begin{itemize}
+  \item If $\sem{P}(\Gamma)$, then $\Gamma \prov [P]$
+  \item If $\sem{N}(\Gamma, Q)$, then $\Gamma[N] \prov Q$
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+$\cdots$
+\end{proof}
+\bibliography{../wes}
+
+\end{document}
