@@ -14,7 +14,7 @@
 \tcbuselibrary{breakable}
 \input{linear}
 
-%\def\nto{\mathrel{\dot\to}}
+\def\natto{\mathrel{\dot\to}}
 \def\nto{\Rightarrow}
 \def\susp#1{\langle {#1} \rangle}
 \def\nulls{0}
@@ -358,9 +358,27 @@ We build a  syntactic model. Fix a collection of atoms.
 \item Let $\M$ be the bicategory whose objects are categories and
 whose hom-category $\C \to \D$ is the profunctor category $\D \pto \C$, i.e.
 the functor category
-$\C^\op \x \D \to \rset$. The monoidal product is taken to be cartesian product
+$\C^\op \x \D \to \rset$. The monoidal product $\bullet$ is the cartesian product
 of categories. The hom-categories easily have finite coproducts because presheaf categories
 have all colimits.
+
+In what follows we freely conflate a morphism $\one \to \A$ of $\M$
+(which is technically a functor $\one^\op \x \A \to \rset$) with simply a
+$\rset$-valued functor $\A \to \rset$.
+
+\item The operation $\lto$ taking
+ $f : \one \to \A$ and $h : \one \to \A \bullet \B$ to
+$f \lto h : \one \to \B$ is the end (taken in $\rset$)
+\[ (f \lto h)(b) = \int_{a : \A} f(a) \to h(a, b) \]
+which is the set of natural transformations $f \natto h(\dash, b) : \A \to \rset$
+\item The operation $\rto$ taking
+ $g : \one \to \B$ and $h : \one \to \A \bullet \B$ to
+$f \lto h : \one \to \A$ is the end (taken in $\rset$)
+\[ (g \rto h)(a) = \int_{b : \B} g(b) \to h(a, b) \]
+which is the set of natural transformations $g \natto h(a, \dash) : \B \to \rset$
+%% $g : \one \to \B$ and .
+%% \[\hom(f \bullet g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
+
 \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
   whose morphisms are permutations.
 \item Let $\N$ be the category whose objects are pairs $(\Gamma, Q)$ and whose
@@ -411,8 +429,116 @@ In the syntactic model, for all $P$ and $N$ we have
 \end{lemma}
 
 \begin{proof}
-$\cdots$
+By induction on the proposition.
+\begin{itemize}
+\item[Case:] $P_1 \tensor P_2$. If $\rho \in \sem {P_1 \tensor P_2}(\Gamma)$,
+then by definition $\rho \in ({\tensor} \o (\sem {P_1} \x \sem{P_2}))(\Gamma)$ is inhabited.
+By the definition of profunctor composition, and of $\tensor$,
+ this means that $\Gamma$ does
+in fact split as $\Gamma_1, \Gamma_2$ with some $\rho_1 \in \sem{P_1}(\Gamma_1)$
+and $\rho_2 \in \sem{P_2}(\Gamma_2)$, to which we can apply the induction hypothesis
+to obtain $\Gamma_1 \prov [P_1]$ and $\Gamma_2 \prov [P_2]$, from which we can
+derive $\Gamma_1, \Gamma_2 \prov [P_1 \tensor P_2]$, as required.
+\item[Case:] $\dns N$. If $\rho \in \sem{\dns N}(\Gamma)$, then by definition
+$\rho \in (\sem{N} \rto \tri)(\Gamma)$. That is, $\rho$ is a natural transformation
+$\sem N \to \tri(\Gamma, \dash) : \N \to \rset$. In order to use the rule
+\[
+\erule
+{\Gamma \prov N}
+{\Gamma \prov [\dns N]}
+\]
+we need to come up with $\Gamma \prov N$, and by identity
+(lemma 2.2 in \cite{jcreed.csfill}) it would
+suffice to show that $\Gamma_0[N] \prov Q$ implies $\Gamma, \Gamma_0 \prov Q$
+for every $\Gamma_0$ and $Q$. But a natural transformation
+$\sem N \to \tri(\Gamma, \dash)$ lets us show exactly this:
+suppose $\Gamma_0[N] \prov Q$, by soundness there is an inhabitant of
+$\sem{N}(\Gamma_0, Q)$, apply the natural transformation to get
+into $\tri(\Gamma, (\Gamma_0, Q))$, and by the definition of $\tri$, this is
+a proof of $\Gamma, \Gamma_0 \prov Q$, as required.
+\end{itemize}
 \end{proof}
+
+\begin{lemma}\label{inhabit}
+In the syntactic model,
+\begin{enumerate}
+\item $\sem{\dns N}(N)$ is inhabited.
+\item $\sem{\ups P}(\cdot, P)$ is inhabited.
+\item  $\sem{\Gamma}(\Gamma)$ is inhabited.
+\item  $(\sem \Gamma \hlol \sem Q^>)(\Gamma, Q)$ is inhabited.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}\ %
+\begin{enumerate}
+\item Expanding the definition of $\sem{\dns N}(N)$, we get
+$(\sem N \rto \tri)(N)$ which is the same thing as a natural transformation
+$\sem N \to \tri(N, \dash)$. So let $\Gamma, Q$ be given and
+suppose that $\sem N(\Gamma, Q)$ --- by definition of $\tri$, our goal
+ is to show that $\Gamma, N \prov Q$.
+ By previous lemma, $\Gamma[N] \prov Q$.
+By the rule $focL$, we have $\Gamma, N \prov Q$.
+\item Expanding the definition of $\sem{\dns P}(\cdot, P)$, we get
+$(\sem P \lto \tri)(\cdot, P)$ which is the same thing as a natural transformation
+$\sem P \to \tri(\dash, (\cdot, P))$. So let $\Gamma$ be given and
+suppose that $\sem P(\Gamma)$ --- by definition of $\tri$, our goal is to show that $\Gamma \prov P$.
+ By previous lemma, $\Gamma \prov [P]$.
+By the rule $focR$, we have $\Gamma \prov P$.
+\item Suppose $\Gamma = H_1, \ldots, H_n$. We need to show
+$(\sem {H_1}^< \tensor \cdots \tensor \sem{H_n}^<)(H_1, \ldots, H_n)$ is inhabited.
+But by definition of $\tensor$, it suffices to split up the context into singletons and
+prove inhabitation of
+ $\sem {H_i}^<(H_i)$ for each $i$, which follows by induction hypothesis (part 1) if $H_i = N$
+for some $N$, and directly from definition of $\eta(a^+)$ if $H_i = \susp{a^+}$.
+\item Suppose $\Gamma = H_1, \ldots H_n$. We need to show
+\[(\sem {H_1}^< \tensor \cdots \tensor \sem{H_n}^< \lol \sem Q^>)((H_1, \ldots, H_n), Q)\]
+is inhabited.
+We can, similarly to the previous case, divide this obligation up
+by definition of $\tensor$ and $\lol$ into showing
+that all of $\sem{H_i}^<(H_i)$ and $\sem{Q}^>(\cdot, Q)$ are inhabited.
+Analysis of the $H_i$ works exactly as before, and we can check whether $Q$ of
+the form $P$, in which case the induction hypothesis (part 2) applies,
+or of the form $\susp{a^-}$, which case the definition of $\eta(a^-)$ suffices.
+\end{enumerate}
+\cqed
+\end{proof}
+
+\begin{lemma}
+In the syntactic model,
+\begin{enumerate}
+\item  If  $(\sem \Gamma \htensor \sem \Omega) \x \sem{R}^> \natto \tri$, then $\Gamma; \Omega \prov R$.
+\item  If $\sem \Gamma   \natto \sem{ P}$, then $\Gamma \prov [P]$.
+\item  If $(\sem \Gamma \hlol \sem Q^>) \natto \sem N$, then $\Gamma[N] \prov Q$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}\ %
+%% By combining Lemmas~\ref{syntactic} and~\ref{inhabit}.
+%% For example:
+  \begin{enumerate}
+  \item Lemma~\ref{inhabit} tells us that $\sem{\Gamma}(\Gamma)$ \textcolor{red}{Should explicitly fill out these edge cases I claim to have proved}
+    and $\sem{\Omega}(\Omega)$ and $\sem{R}^>(R)$ are inhabited.
+    Therefore $((\sem{\Gamma} \tensor \sem{\Omega}) \x \sem{R}^>)((\Gamma, \Omega), R)$
+    is as well. By applying the assumed natural transformation, we have
+    $\Gamma, \Omega \prov R$.
+  \item Lemma~\ref{inhabit} tells us that $\sem{\Gamma}(\Gamma)$ is inhabited, so by
+applying the assumed natural transformation, we have $\sem{P}(\Gamma)$. By
+Lemma~\ref{syntactic}, we know $\Gamma \prov [P]$.
+  \item Lemma~\ref{inhabit} tells us that $(\sem\Gamma \lol  \sem{Q}^>)(\Gamma, Q)$ is inhabited, so by
+applying the assumed natural transformation, we have $\sem{N}(\Gamma, Q)$. By
+Lemma~\ref{syntactic}, we know $\Gamma[N] \prov Q$.
+  \end{enumerate}
+  \cqed
+\end{proof}
+
+\begin{corollary}[Completeness]\ %
+  \begin{enumerate}
+  \item If $\Gamma; \Omega \models R$ then $\Gamma ; \Omega \prov R$
+  \item If $\Gamma \models [P]$ then $\Gamma \prov [P]$
+  \item If $\Gamma[N] \models Q$ then $\Gamma[N] \prov Q$
+  \end{enumerate}
+\end{corollary}
+
 \bibliography{../wes}
 
 \end{document}
