@@ -203,17 +203,17 @@ A {\em judgmental model} $\M$ consists of the following data:
 \item A bicategory $\M$, with a monoidal product $(\bullet, \one)$,
 where the hom-categories have finite coproducts.
 \item  operations $\lto$ and $\rto$ that are right adjoints to $\bullet$ in the sense that
-% \[f \lto h : \one \to \B \qquad g \rto h : \one \to \A \]
-\[\hom(f \bullet g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
-when $f : \one \to \A$
-$g : \one \to \B$ and $h : \one \to \A \bullet \B$.
-That is, $\dash \bullet g \dashv g \rto \dash$ and
-$f\bullet\dash \dashv f \lto \dash$.
+\[\hom(f_1 \bullet f_2, g) \cong \hom(f_1, f_2 \rto g) \cong \hom(f_2, f_1 \lto g)\]
+whenever $f_1 : \A_1 \to \B_1$
+$f_2 : \A_1 \to \B_2$ and $g : \A_1 \bullet \A_2 \to \B_1 \bullet \B_2$
+are morphisms in $\M$.
+That is, we have the adjunctions $\dash \bullet f_2 \dashv f_2 \rto \dash$ and
+$f_1\bullet\dash \dashv f_1 \lto \dash$.
 \item an operation $\sto$ that is a right adjoint to morphism composition $\o$
 in the sense that
-\[\hom(g \o f, h) \cong \hom(f, g \sto h)\]
-when $f : \one \to \B$, $g : \B\to \C$, and $h : \one \to \C$.
-That is, $g\o \dash \dashv g \sto \dash$.
+\[\hom(\ell \o k, m) \cong \hom(k, \ell \sto m)\]
+when $k : \A \to \B$, $\ell : \B\to \C$, and $m : \A \to \C$.
+That is, $\ell\o \dash \dashv \ell \sto \dash$.
 \end{enumerate}
 
 \subsection{A Note about the Generality of this Definition}
@@ -227,53 +227,57 @@ to be cartesian product of categories. The hom-categories easily have
 finite coproducts because presheaf categories have all colimits.
 
 The required adjoints can be defined as ends:
-(we freely conflate below a morphism $\one \to \A$ of $\rprof^\op$
-(which is technically a functor $\one^\op \x \A \to \rset$) with simply a
-one-argument $\rset$-valued functor $\A \to \rset$)
-
+\label{adjoints}
 \[
 \erule
-{g : \one \to \B\qquad h: \one\to \A \x \B}
-{g \rto h = \int_{b \in \B} g(b)\to h(\dash, b) }
-\qquad
-\erule
-{f : \one \to \A\qquad h: \one\to \A \x \B}
-{f \lto h = \int_{a \in \A} f(a)\to h(a, \dash) }
+{g : \A_2 \to \B_2\qquad h: \A_1 \x \A_2 \to \B_1\x \B_2}
+{(f_2 \rto g)(a_1, b_1) = \int_{a_2 \in \A_2, b_2 \in \B_2} f_2(a_2, b_2)\to h(a_1, a_2, b_1, b_2) }
 \]
 \[
 \erule
-{ g: \B \to \C \qquad h: \one \to \C}
-{g \sto h = \int_{c \in \C} g(\dash, c)\to h(c) }
+{f : \A_1 \to \B_1 \qquad h: \A_1 \x \A_2 \to \B_1\x \B_2}
+{(f_1 \lto g)(a_2, b_2) = \int_{a_1\in\A_1, b_1 \in \B_1} f_1(a_1, b_1)\to h(a_1, a_2, b_1, b_2) }
+\]
+\[
+\erule
+{ \ell: \B \to \C \qquad m: \A \to \C}
+{(\ell \sto m)(a, b) = \int_{c \in \C} \ell(b, c)\to m(a, c) }
 \]
 For we can easily check
-\[\hom(f \bullet g, h)  \cong  \int_{a \in \A, b\in \B} f(a) \x g(b) \to h(a, b) \]
-\[ \cong \int_{b\in \B} g(b) \to   \int_{a \in \A} f(a)   \to h(a, b) \cong \hom(g, f \lto h)\]
+\[\hom(f_1 \bullet f_2, g)  \cong \]
+\[ \int_{(a_1,b_1,a_2,b_2) \in \A_1 \x \B_1 \x \A_2 \x \B_2} f_1(a_1, b_1) \x f_2(a_2, b_2) \to g(a_1, a_2, b_1,  b_2) \]
+\[ \cong \int_{(a_2, b_2) \in \A_2 \x \B_2} f_2(a_2, b_2) \to   \int_{(a_1, b_1) \in \A_1 \x \B_1} f_1(a_1, b_1)   \to g(a_1, a_2, b_1,  b_2) \]
+\[\cong \hom(f_2, f_1 \lto g)\]
+and a symmetric calculation for
+\[\hom(f_1 \bullet f_2, g)  \cong \hom(f_1, f_2 \rto g)\]
 and
-\[\hom(f \bullet g, h)  \cong  \int_{a \in \A, b\in \B} f(a) \x g(b) \to h(a, b) \]
-\[\cong \int_{a\in \A} f(a) \to   \int_{b \in \B} g(b)   \to h(a, b) \cong \hom(f, g \rto h) \]
-and
-\[\hom(g \o f, h) \cong \int_{c\in C} (g\o f)(c) \to h(c)\]
-\[ \cong \int_{c\in \C} \left(\int^{b \in \B} f(b) \x  g(b, c)\right) \to h(c) \]
-\[ \cong \int_{b \in \B} f(b) \to \int_{c\in \C} g(b, c)\to h(c) \cong \hom(f, g \sto h)\]
+\[\hom(\ell \o k, m) \cong \int_{a\in\A, c\in \C} (\ell\o k)(a, c) \to m(a,c)\]
+\[ \cong \int_{a\in\A,c\in \C} \left(\int^{b \in \B} k(a,b) \x  \ell(b, c)\right) \to m(a,c) \]
+\[ \cong \int_{a\in \A,b \in \B} k(a,b) \to \int_{ c\in \C} \ell(b, c)\to m(a,c) \cong \hom(k, \ell \sto m)\]
 
 \begin{remark}[Open Question]
 Are there other interesting judgmental models
 that don't look anything like $\rprof^\op$?
+
+How about if we only require $\lto$ and $\rto$ to work when $\A_1 = \A_2 = \one$
+and only require $\sto$ to work when $\A = \one$? (For these are the only situations
+we invoke them in when interpreting linear logic below)
 \end{remark}
 
 \subsection{Linear Models}
 A {\em linear model} is a judgmental model additionally equipped with
 \begin{enumerate}
-\item[4.] distinguished objects $\P, \N \in \M$
-\item[5.]  morphisms $\tensor : \P \bullet \P \to \P$ and $1 : \one \to \P$
+\addtocounter{enumi}{3}
+\item distinguished objects $\P, \N \in \M$
+\item  morphisms $\tensor : \P \bullet \P \to \P$ and $1 : \one \to \P$
  and $\lol :   \P \bullet \N \to \N$ and
 a morphism $\tri :\one\to \P \bullet \N $
-\item[6.] 2-cells making $(\tensor, 1)$ a monoid object
-\item[7.] An invertible 2-cell
+\item 2-cells making $(\tensor, 1)$ a monoid object
+\item An invertible 2-cell
 \[
 k : ((\tensor \bullet \rid_\N)  \sto \tri) \Leftrightarrow  ((\rid_\P \bullet {\lol}) \sto \tri) : \one \to \P \bullet \P \bullet \N
 \]
-\item[8.] a mapping
+\item a mapping
 $\eta$ of atoms $a^+$ (resp. $a^-$) to morphisms $\one \to \P$ (resp.
 $ \one \to \N  $)
 \end{enumerate}
@@ -413,28 +417,29 @@ which is essentially the same thing, by associativity of $\htensor$.
 We build a  syntactic model. Fix a collection of atoms.
 
 \begin{enumerate}
-\item Let $\M$ be $\rprof^\op$ as above.
+\item[1-3.] Let $\M$ be $\rprof^\op$ as above in Section~\ref{adjoints}.
 
-\item The operation $\lto$ taking
- $f : \one \to \A$ and $h : \one \to \A \bullet \B$ to
-$f \lto h : \one \to \B$ is the end (taken in $\rset$)
-\[ (f \lto h)(b) = \int_{a : \A} f(a) \to h(a, b) \]
-which is the set of natural transformations $f \natto h(\dash, b) : \A \to \rset$
+% \item
+%% The operation $\lto$ taking
+%%  $f : \one \to \A$ and $h : \one \to \A \bullet \B$ to
+%% $f \lto h : \one \to \B$ is the end (taken in $\rset$)
+%% \[ (f \lto h)(b) = \int_{a : \A} f(a) \to h(a, b) \]
+%% which is the set of natural transformations $f \natto h(\dash, b) : \A \to \rset$
 
- The operation $\rto$ taking
- $g : \one \to \B$ and $h : \one \to \A \bullet \B$ to
-$f \lto h : \one \to \A$ is the end (taken in $\rset$)
-\[ (g \rto h)(a) = \int_{b : \B} g(b) \to h(a, b) \]
-which is the set of natural transformations $g \natto h(a, \dash) : \B \to \rset$
+%%  The operation $\rto$ taking
+%%  $g : \one \to \B$ and $h : \one \to \A \bullet \B$ to
+%% $f \lto h : \one \to \A$ is the end (taken in $\rset$)
+%% \[ (g \rto h)(a) = \int_{b : \B} g(b) \to h(a, b) \]
+%% which is the set of natural transformations $g \natto h(a, \dash) : \B \to \rset$
 
-\item The operation $\sto$ taking
- $g : \B \to \C$ and $h : \one \to \C$ to
-$g \sto h : \one \to \B$ is the end (taken in $\rset$)
-\[ (g \sto h)(b) = \int_{c : \C} g(b, c) \to h(c) \]
-which is the set of natural transformations $g(b, \dash) \natto h : \C \to \rset$
+% \item
+%% The operation $\sto$ taking
+%%  $g : \B \to \C$ and $h : \one \to \C$ to
+%% $g \sto h : \one \to \B$ is the end (taken in $\rset$)
+%% \[ (g \sto h)(b) = \int_{c : \C} g(b, c) \to h(c) \]
+%% which is the set of natural transformations $g(b, \dash) \natto h : \C \to \rset$
 
-%% $g : \one \to \B$ and .
-%% \[\hom(f \bullet g, h) \cong \hom(f, g \rto h) \cong \hom(g, f \lto h)\]
+\addtocounter{enumi}{3}
 
 \item Let $\P$ be the category whose objects are all contexts $\Gamma$, and
   whose morphisms are permutations.
