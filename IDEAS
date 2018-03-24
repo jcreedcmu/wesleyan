@@ -3965,8 +3965,78 @@ So picking γ = β works fine, as long as ~v is reflexive.
 
 How about □N ⊢ □□N?
 
+↑P @ (β, φ) = ∀α . P @ α → α ~ β → #(φ)
+↓N @ α      = ∀(β,φ) . N @ (β,φ) → α ~ β → #(φ)
+
 · ⊢ [↑(F↓UN ⊸ ↑F↓U↑F↓UN)]
-· ⊢ ↑(F↓UN ⊸ ↑F↓U↑F↓UN) @ ε
-(F↓UN ⊸ ↑F↓U↑F↓UN) @ (β, φ), ε ~t β ⊢ #(φ)
-F↓UN @ β, (↑F↓U↑F↓UN) @ (β, φ), ε ~t β ⊢ #(φ)
-↓UN @ β, (↑F↓U↑F↓UN) @ (β, φ), ... ⊢ #(φ)
+· ⊢ ↑(F↓UN ⊸ ↑F↓U↑F↓UN) @ α0
+(F↓UN ⊸ ↑F↓U↑F↓UN) @ (β1, φ1), α0 ~ β1 ⊢ #(φ1)
+(F↓UN) @ β1, (↑F↓U↑F↓UN) @ (β1, φ1), α0 ~ β1 ⊢ #(φ1)
+[choose α = α0]
+(F↓UN) @ β1, α0 ~ β1 ⊢ F↓U↑F↓UN @ α0
+(F↓UN) @ β1, α0 ~ β1 ⊢ ↓U↑F↓UN @ α0
+β2, φ2, (F↓UN) @ β1, α0 ~ β1, α0 ~v β2, (U↑F↓UN) @ (β2, φ2) ⊢ ...
+BAH
+
+this is too fiddly. time to break out the agda.
+
+---
+
+Q: What's the deal with the last talk of the day?
+A: Suppose we have a modality I with unit η : {A : Set} → A → I A.
+
+Then the 'formal disc' at a point, sort of like the tangent space at a point, is
+
+D : A → Set
+D a = (x : A) × (η x ≡ η a)
+
+The tangent bundle is the total space
+
+T : Set → Set
+T A = (a : A) × D a
+
+Notice that for any f : A → B there is an induced map
+
+diff : (f : A → B) (a : A) → D a → D (f a)
+diff f a (x , path : η x ≡ η a) → (f x , ? : η (f x) ≡ η (f a))
+
+that implication from η x ≡ η a →to→ η (f x) ≡ η (f a) seems slightly
+nonobvious and must be something that uses elimination in book-HoTT
+modalities or something.
+
+
+f : X → Y is formally etale if the naturality square for the modality
+
+X - f -→ Y
+|        |
+η        η
+v        v
+IX -If→ IY
+
+happens to be a pullback.
+
+Examples:
+- Equivalences
+- Inclusions of formal discs D a ↪ A
+
+etale means something like 'local diffeomorphisms'
+
+if f etale then (x : A) → diff x is an equivalence
+the converse doesn't quite obtain unless 'the modality has surjective unit' he said, I think?
+
+Suppose V is homogeneous.
+The M is a V-manifold if there is a formally etale span
+
+  U
+ / \
+v   v
+V   M
+
+V plays the role of R^n --- homogeneity is getting across the triviality of the tangent spaces
+U plays the role of the big coproduct of all your open sets in your chart
+M plays the role of the manifold itself
+
+the etaleness of the morphisms in the span explain how M is locally like parts of R^n
+
+thm: the tangent space of a V-manifold a (V × D e)-manifold
+(e is a basepoint of V coming from homogeneity)
