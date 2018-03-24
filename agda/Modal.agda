@@ -13,6 +13,7 @@ data Lev : Set where
 data Prop : Lev → Sgn → Set where
   ↑ : {ℓ : Lev} → Prop ℓ s+ → Prop ℓ s-
   ↓ : {ℓ : Lev} → Prop ℓ s- → Prop ℓ s+
+  𝟙 : Prop tru s+
   F : Prop val s+ → Prop tru s+
   U : Prop tru s- → Prop val s-
   _⊸_ : {ℓ : Lev} → Prop ℓ s+ → Prop ℓ s- → Prop ℓ s-
@@ -43,6 +44,7 @@ data ⊸rel {ℓ : Lev} : res ℓ s+ → res ℓ s- → res ℓ s- → Set where
 interp : {ℓ : Lev} {s : Sgn} → Prop ℓ s → res ℓ s → Set
 interp {ℓ} (↑ p) φ = (α : res ℓ s+) → interp p α → ▹ ℓ α φ
 interp {ℓ} (↓ p) α = (φ : res ℓ s-) → interp p φ → ▹ ℓ α φ
+interp 𝟙 α = Unit
 interp (F p) α = interp p α
 interp (U p) φ = interp p φ
 interp {ℓ} (p ⊸ n) φ =
@@ -61,6 +63,8 @@ Prov p = (α : kripke s+) → interp p α
 --  refl : (ℓ : Lev) (β : kripke) → (≤ ℓ β β)
 --  incl : {α β : kripke} → (≤ tru α β) → (≤ val α β)
 
+-- easyCase : {n : Neg} → Prov (↓ (□ □ 1))
+-- easyCase {n} α (β , φ) ((α' , _) , prem , conc , same σ) R = prem (β , φ) conc {!!}
 
 axiomT : {n : Neg} → Prov (↓ (□ n ⊸ n))
 axiomT {n} α (β , φ) ((α' , _) , prem , conc , same σ) R = prem (β , φ) conc {!!}
