@@ -78,3 +78,6 @@ axiomT {n} α k (β , φ) pf R = k (β , φ) pf (incl R)
 
 axiom4 : {n : Neg} → Entail (□ n) (□ (↑ (□ n)))
 axiom4 α prem (β , φ) conc R = conc β (λ { (γ , φ') pfn R' → prem (γ , φ') pfn (trans R R')}) (/≤t β)
+
+sameThing : {p q : Pos} → Entail p q → Prov (↓ (p ⊸ ↑ q))
+sameThing ent α (β , φ) (ppf , k) R = k β (ent β ppf) (/≤t β)
