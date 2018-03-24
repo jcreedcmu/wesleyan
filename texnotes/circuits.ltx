@@ -13,10 +13,11 @@
 \tcbuselibrary{breakable}
 \input{linear}
 
+\def\elc#1{\textsf{\textbf{C}}({#1})}
+\def\ela#1{\textsf{\textbf{E}}({#1})}
 \def\rto{\twoheadrightarrow}
 \def\lto{\rightarrowtail}
-\def\P{\mathbf{P}}
-\def\N{\mathbf{N}}
+\def\N{\mathbb{N}}
 \def\one{\mathbf{1}}
 \def\pto{\relbar\joinrel\mapstochar\joinrel\rightarrow}
 \def\htensor{\mathrel{\hat\otimes}}
@@ -27,7 +28,7 @@
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
 \def\ff{\mathsf{f}}
-\def\B{\mathsf{B}}
+\def\B{\mathbf{2}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
 \def\atm#1{\underline{#1}}
@@ -108,8 +109,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\A{\mathbf{A}}
-\def\B{\mathbf{B}}
-\def\C{\mathbf{C}}
+\def\C{\mathsf{C}}
 \def\S{\mathbf{S}}
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
@@ -171,6 +171,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\zero{\texttt{0}}
 \def\mbox{\square}
 \def\bbox{\mathbf{box}\,}
+\def\bunbox{\mathbf{unbox}\,}
 \def\fuse{\bullet}
 \begin{document}
 
@@ -264,4 +265,56 @@ so they're `above' the code that generates them. So this is a nice
 naturally occurring situation where there's a nontrivial poset of
 modes.
 
+\section{Dependency}
+
+There might be something more subtle than I expected about how this interacts
+with dependent types. I'd like to be able to directly use `generator' variables
+in specifying circuit {\em types}, even though I'm confident I shouldn't be able to,
+for instance, case analyze a generator sum type in the middle of a circuit expression.
+
+\[\lambda x : 1 + 1 . \mbox (\lambda y : \B . \bcase x \bof \binl \mapsto \hbox{some circuit using $y$} \]
+\[ \binr \mapsto \hbox{ some other circuit using $y$}) :
+(1 + 1) \to \mbox(\B \to \B)\]
+
+\[ \lambda n : \N . \mbox (\lambda c : \B^n . c) : (n : \N) \to \mbox(\B^n \to \B^n)\]
+
+\subsection{Refuting that thought}
+
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Value Types&$A$&$\mbox C\celse (x : A) \to A \celse (x : A) \x A \celse \U \celse \C \celse \ela e \celse \cdots$\\
+  Value Expressions&$e$&$\bbox c\celse \bcase \celse \cdots$\\
+  Circuit Types&$C$&$\one \celse \B \celse C \imp C \celse C \fuse C \celse \elc e$\\
+  Circuit Expressions&$c$&$* \celse \mathsf{t} \celse \mathsf{f} \celse \mathsf{nand}\celse c\ c \celse \lambda \sigma . c \celse  \sigma \celse \bfix \sigma.c \celse \bunbox e$\\
+\end{tabular}
+\]
+The idea is that $\C$ is a universe for circuit types; something like
+\[
+\erule
+{\Gamma \prov e : \C}
+{\Gamma \prov \elc e :: \rset}
+\]
+\def\rvec{\mathsf{vec}}
+\def\rmap{\mathsf{map}}
+\begin{tabbing}
+\hskip 2em \=\kill
+$\rvec: \C \to (n : \N) \to \C $\\
+$\rvec\ C\ \mathsf{0} = \one$\\
+$\rvec\ C\ (\mathsf{S}\ n) = C \fuse \rvec\ C\ n$\\
+\\
+$\rmap: \{A\ B : \C\} (n : \N) \to \mbox \elc {A \imp B} \to \mbox \elc {\rvec\ A\ n \imp \rvec\ B\ n }$\\
+$\rmap\ \mathsf{0}\ f = \bbox(\lambda * . *)$\\
+$\rmap\ (\mathsf{S}\ n)\ f = \bbox(\lambda (h, t) .  (\bunbox (f)\ h , \bunbox(\rmap\ n\ f)\ t))$
+\end{tabbing}
+Except $\bunbox$ is making me logically uncomfortable, even though I think I can
+macro-expand it away. Better perhaps to write it honestly as
+\begin{tabbing}
+\hskip 2em \=\kill
+$\rmap: \{A\ B : \C\} (n : \N) \to \mbox \elc {A \imp B} \to \mbox \elc {\rvec\ A\ n \imp \rvec\ B\ n }$\\
+$\rmap\ \mathsf{0}\ f = \bbox(\lambda * . *)$\\
+$\rmap\ (\mathsf{S}\ n)\ f = $\\
+\>$\blet \bbox f' = f \bin $\\
+\>$\blet \bbox r = \rmap\ n\ f \bin $\\
+\> $\bbox(\lambda (h, t) .  (f'\ h , r\ t))$
+\end{tabbing}
 \end{document}

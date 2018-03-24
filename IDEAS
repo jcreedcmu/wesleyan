@@ -3568,3 +3568,346 @@ A: Hm doubtful.
 Q: Interesting paper about algebraic databases I found searching for
 the relationship between profunctors and coproducts?
 A: https://arxiv.org/pdf/1602.03501.pdf
+
+=== 2018.03.21
+
+Q: Some bookmarks on grungy debruijn stuff:
+A:
+https://arxiv.org/pdf/1009.2789.pdf
+https://www.lri.fr/~keller/Documents-recherche/Stage08/report.pdf
+http://www.cse.chalmers.se/~abela/HereditarySubstitutionSTLC.agda
+http://www.cse.chalmers.se/~abela/ParallelSubstitution.agda
+http://www.cse.chalmers.se/~abela/projects.html
+http://www.cs.nott.ac.uk/~psztxa/publ/msfp10.pdf "Normalization by Hereditary Substitutions"
+https://arxiv.org/pdf/1111.0085.pdf "A Lambda Term Representation Inspired by Linear Ordered Logic"
+
+=== 2018.03.22
+
+Q: Can I firm up my intuitions about what ought to happen in a modal
+dependent type theory where runtime 'low' values can appear in 'high' types?
+A:
+Like let's suppose I have some typical types at both levels
+
+valid types A ::= UB | ℕ | (x : A) → A | (x : A) x A | A + A | ...
+ true types B ::= FA | ℕ | (x : B) → B | (x : B) x B | B + B | ...
+
+Or if I think of stuff in A as being circuits, then it's more like
+
+   circuits A ::= UB | 𝔹 | 1 | A × A | A → A
+ true types B ::= FA | ℕ | (x : B) → B | (x : B) x B | B + B | ...
+
+the interpretation of a type
+
+x1 : A, x2 : A, y1 : B, y2: B ⊢ B* : set
+
+is a morphism
+
+⟦ Γ, B* ⟧ → ⟦ Γ ⟧ for Γ = x1 : A, x2 : A, y1 : B, y2: B
+
+as usual, but this is taking place in the 'low' category --- how do I interpret
+the 'high' types? By applying the semantic version of F to them, somehow, clearly.
+Any 'high' context can be hit with F to yield a 'low' context.
+
+of course a term
+x1 : A, x2 : A, y1 : B, y2: B ⊢ M : B*
+
+is a section
+
+⟦ Γ ⟧  → ⟦ Γ, B* ⟧...
+
+How do I think about
+
+    pow : (n : ℕ) → Set
+    pow 0 = 1
+    pow (S n) = 𝔹 × (pow n)
+
+I have that 𝔹 is a 'high' type so I should be saying something like
+
+    pow : (n : ℕ) → HighSet
+    pow 0 = F 1
+    pow (S n) = let F r = (pow n) in F (𝔹 × r)
+
+and then we could imagine doing a 'list map' like
+
+    map : (n : ℕ) → F (𝔹 → 𝔹) → F (pow n → pow n)
+    map 0 f = F (λ * → *)
+    map (S n) f = let F r = (map n f) in F (λ (b, tl) → (f b, r tl))
+
+But this use of n inside an F seems suspect!
+Maybe what I really want is somehting like the typing
+
+    map : (n : ℕ) → F (𝔹 → 𝔹) → let F t = pow n in F (t → t)
+
+?
+
+If I can imagine a more 'applicative elim rule' syntax for these lets
+--- something kind of lisp back-quotey -- this all might look like
+
+    pow : (n : ℕ) → { Set }
+    pow 0 = { 1 }
+    pow (S n) = { 𝔹 × [ pow n ] }
+
+    map : (n : ℕ) → { 𝔹 → 𝔹 } → { [ pow n ] → [ pow n ] }
+    map 0 f = { λ * → * }
+    map (S n) f = { λ (b, tl) → ( [ f ] b, [ map n f ] tl) }
+
+or, more realistically, I'd want a polymorphic vector
+
+    pow : (n : ℕ) → { Set } → { Set }
+    pow 0 A = { 1 }
+    pow (S n) A = { [ A ] × [ pow n ] }
+
+    map : (n : ℕ) (A B : {Set}) → { [A] → [B] } → { [pow n A] → [pow n B] }
+    map 0 f = { λ * → * }
+    map (S n) f = { λ (a, as) → ( [f] a, [ map n A B f ] as) }
+
+what would datatype definitions look like?
+
+    data Vec (A : { Set }) : (n : ℕ) → { Set } where
+      nil : {[ Vec A 0 ]} → {[ Vec 0 A ]}
+      cons : { [ A ] × [ Vec n A ] } → {[ Vec (S n) A ]}
+
+    map : (n : ℕ) (A B : {Set}) → { [A] → [B] } → { [Vec n A] → [Vec n B] }
+    map 0 f = { λ nil → nil }
+    map (S n) f = { λ (cons a as) → ( cons ([f] a) ([ map n A B f ] as) }
+
+this seems maybe wrong? Do I actually have datatype definitions at the
+circuit level? Maybe not...
+
+Q: Is something wrong about my belief that
+□(D → 𝔹 → 𝔹) → □(D → 𝔹)
+suffices?
+A:
+I think I was wrong. Here's some options:
+
+bitwise fix: (basically what my question is about)
+Γ, x : 𝔹 ⊢ e : 𝔹
+----------------
+Γ ⊢ bfix x.e : 𝔹
+
+wide fix at C
+Γ, x : C ⊢ e : C
+--------------------
+Γ ⊢ wfix_C x.e : C
+
+medium [generality] fix:
+(this is a 'run' for the store monad for specifically 𝔹)
+Γ, x : 𝔹 ⊢ e : A • 𝔹
+--------------------
+Γ ⊢ mfix x.e : A
+
+general fix at C:
+(a 'run' for the store monad at C)
+Γ, x : C ⊢ e : A • C
+--------------------
+Γ ⊢ gfix_C x.e : A
+
+
+I think what I'd convinced myself of was that I could derive
+(a) general fix from wide fix.
+(b) general fix from medium fix.
+(because I convinced myself that if I had gfix at C1 and C2,
+I could make gfix at C1 • C2)
+
+but I got turned around and thought that somehow bitwise fix implied
+anything at all.
+
+Recapitulating:
+(a)
+    gfix_C x.e = ([(wfix x. e.2)/x]e).1
+but this is sort of scary because it duplicates e!
+Maybe wide-fix is the wrong abstraction anyhow.
+
+(b) Suppose gfix_C1 and gfix_C2. Then basically
+
+    gfix_{C1 • C2} x.e = gfix_C1 x1. gfix_C2 x2. let (v, (c1, c2)) = [(x1,x2)/x]e in ((v, c2), c1)
+
+I could have also said a directly
+'pairwise' fix:
+Γ, x : C ⊢ e : A
+Γ, x : C ⊢ c : C
+--------------------
+Γ ⊢ pfix_C x.(e, c) : A
+
+but this seems to lead to messier programs with less evident sharing.
+
+So probably 'medium fix' is the right primitive to add.
+
+=== 2018.03.23
+
+Q: What's the deal Bob's talk on CHiTT?
+A:
+First the usual bedtime story about univalence: it's great,
+but you can't just add axioms. What is their computational significance?
+We know what the equality elim rule is supposed to do when it encounters
+refl, but what about ua? What about loop in the circle?
+
+Type-dependent vs. type-independent identifications.
+
+Cubical accounts. With diagonals? Without diagonals? With demorgan algebra?
+
+Uniform Kan condition. Uniformity ~ naturality. Avoids deciding
+degeneracy, which we can't do.
+
+Types describe programs; computation precedes typing. (!)
+Types are certain programs.
+
+A ≡ B type: A and B behave equally as types
+M ≡ N ∈ A: M and N are equal according to A
+
+Open terms defined extensionally
+
+a : A ⟫ B ≡ B' type if for any M ≡ M' ∈ A then [M/a]B ≡ [M'/a]B' type
+a : A ⟫ N ≡ N' ∈ B if for any M ≡ M' ∈ A then [M/a]N ≡ [M'/a]N' ∈ B[M/a]
+
+These judgments are *synthetic*, where a proof theory is *analytic*.
+
+There is no privileged proof theory; they just need to be sound.
+
+Cartesian cubes are described by a little term theory with variables
+and constants 0, 1, weakening, context, exchange.
+
+Why is the programming language a 'cubical' one? Because some defined
+transitions relations are sensitive to the dimension variables'
+values.
+
+You don't get any nice coherence/commutativity/stability of
+substitution for substitution variables, but this is ok --- executing
+programs are untyped! So give them types. Something can *be* a type
+or *inhabit* a type if it's suitably coherent.
+
+"Kan composition admits diagonal constraints"
+
+What is this subtle issue about Path types that don't compute vs. the
+'Jdentity' type?
+
+Q: What's the deal with cangiuli's talk?
+A: Another take on computing univalence. Guillaume's number is 2, but
+arises from a pseudo-constructive proof that pi4(s3) is... some
+natural number k, but it uses ua, so it can't compute yet.
+
+We also have some untyped preterms, but we do have a sensible
+'absolute' notion of equality on them; alpha-equivalence.
+
+Types are PERs again.
+
+Oh, here's ≡ again --- this is really a recapitulation of Bob's
+philosophical commitments after all, this is fine.
+
+This is all just a logical relations argument for
+canonicity/termination/consistency.
+
+This is not the initial/syntactic model! You have principles like
+
+M ⇓ true
+--------
+M ∈ bool
+
+for *any* crazy program M that just happens to evaluate to true.
+
+degeneracies <-> weakening
+diagonals <-> contraction
+faces <-> substitution of constants for variables
+
+Q: Is the *meaning* of one of the synthetic judgments extensional over
+closed interval-valued things (i.e. enedpoints) or over open things as well?
+I think it's open.
+A: Right, yes, it is, because
+
+A ≡ B type [Ψ]
+
+is the actual judgment, whereas Γ --- the assumptions for which we're
+quantifying extensionally over closed thingies --- is to the left of
+⟫.
+
+Q: What's weirding me out about this setup more deeply than the untypedness?
+A: The fact that since they lay down a chosen set of what terms are,
+there's no concern about category-theoretic evil. Since everything's
+PER-refinements of that set, there's nothing hard about demanding
+exact equality of sets or terms or whatever.
+
+Q: So you don't have to define glue types with *equivalences* like CCHM does?
+A: ???
+
+Q: Path satisfies weak J, can define Jdentity types somehow, how does this work?
+A: ???
+
+Q: What's the deal with Anders's talk?
+A:
+Making HITs compute.
+
+Guillaume's number still fails to compute on a machine with 64G ram and 60 hours of compute...
+
+Divide comp into hcomp (homogeneous --- do kan completion within a fiber)
+and generalized transport (across fibers)
+
+Q: What's the deal with ecavallo's talk?
+A: HITs again, but this looks like it's treating how we actually
+schematize description of HITs in general.
+
+---
+
+Q: What's favonia's talk about?
+A: Multiverses.
+example: voevodsky's HTS
+example: 2-level system (the two levels are non-fibrant and fibrant types)
+
+for instance we can consider
+
+pre <--- kan
+
+because every kan fibration is surely also a pretype
+but also if we think of (cumulative) universe levels, then we'd have
+
+pre0 <--- kan0
+ |         |
+ v         v
+pre1 <--- kan1
+...       ...
+
+with these arrows indicating both membership (kan0 *is a* type coded
+in kan1) and also subsethood (every kan0 is a kan1 by cumulativity,
+and every kan_n is a pre_n)
+
+minimum thing we need out of our 'kind algebra' is that it's a meet-semilattice
+
+because we need to show that ∧ k_i ≤ khat and min(ℓ_i) ≤ lhat then
+A ∈ U^{k_1}_{ℓ_1} , ... , A ∈ U^{k_n}_{ℓ_n} ⟫ A ∈ U^khat
+
+Q: What's the deal with jon sterling's talk?
+A: The main thing I'm wondering about is that if the operational
+semantics is sensitive to dimension-apartness (which they deal with
+with a 'nominal abstract machine') which is to say that it's not
+compatible with arbitrary *substitution* of dimensions for dimensions,
+then how is it compatible with diagonals? Is there some substructural
+stuff happening?
+
+---
+
+Q: What alternatives do I have to the sad situation where, when define
+a pair of modal levels that are both nonsubstructural, I seem to be pressured
+into talking about weakening and contraction explicitly?
+A:
+Let me first depict the `sad situation' precisely.
+
+I have two modal levels H and L, so I have worlds αH and αL and frames φH and φL.
+I have * and ⊸ at both levels.
+I say things like contraction:
+    αH * αH ≤ αH and αL * αL ≤ αL
+and weakening
+    αH ≤ αH * βH and αL ≤ αL * βL
+
+The alternative is some version of
+'Focused Linear Semantics of Modal Logic'
+except adjoint-logic-ized, I guess?
+
+↓N @ α
+↑P
+
+Q: Are polycategories relevant to relation meshes?
+A: Mmmmaybe? But they do have two sets of endpoints, not one.
+
+Q: What else is the circuit application a good example of?
+A: A situation when I want F and not U, which justifies perhaps having
+an F in worlds the mode theory, but leaving out the corresponding U on frames ---
+an option I *don't have* if all U types are generated from positive mode operations.
