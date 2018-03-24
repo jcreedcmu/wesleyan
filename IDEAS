@@ -3909,5 +3909,64 @@ A: Mmmmaybe? But they do have two sets of endpoints, not one.
 
 Q: What else is the circuit application a good example of?
 A: A situation when I want F and not U, which justifies perhaps having
-an F in worlds the mode theory, but leaving out the corresponding U on frames ---
-an option I *don't have* if all U types are generated from positive mode operations.
+an F in worlds the mode theory, but leaving out the corresponding U on frames.
+
+=== 2018.03.24
+
+Q: What was the old story about polarizing kripke worlds?
+A:
+I think what would otherwise be α ▹ φ is instead something
+I want to think about as
+α ~ β → #(φ)
+where the erstwhile α-data is just α and the erstwhile φ-data is (β, φ)
+
+Actually since I have ▹ at different modes, what it's really going to
+be is different things like
+    α ~v β → #(φ)
+    α ~t β → #(φ)
+
+so
+Γ ⊢ [P]
+goes to
+Γ @ αs ⊢ P @ α
+
+Γ [N] ⊢ Q
+goes to
+Γ @ αs, Q @ (β', φ') ⊢ N @ (β, φ)
+
+Γ ⊢ Q true
+goes to
+Γ @ αs, Q @ (β, φ), α ~t β ⊢ #(φ)
+
+Γ ⊢ Q valid
+goes to
+Γ @ αs, Q @ (β, φ), α ~v β ⊢ #(φ)
+
+Under what circumstances can I prove □N ⊢ N?
+Polarized, that's trying to prove
+
+· ⊢ [↓(F↓UN ⊸ N)]
+
+so we make up a fresh α, and try to prove the progressivley refined sequence of goals
+
+· ⊢ ↓(F↓UN ⊸ N) @ α
+F↓UN ⊸ N @ (β, φ), α ~t β ⊢ #(φ)
+F↓UN @ β, N @ (β, φ), α ~t β ⊢ #(φ)
+
+oh wait so I need to reuse the β-worlds as α-worlds to unpack ⊸! Ok.
+
+↓UN @ β, N @ (β, φ), α ~t β ⊢ #(φ)
+
+↓UN @ β at valid is ∀(γ, φ). N @ (γ, φ) → β ~v γ → #(φ)
+
+our choice of φ is forced; we have to pick a γ such that a ~t β ⊢ β ~v γ.
+But we also have to pick the γ such that N @ (β, φ) ⊢ N @ (γ, φ).
+So picking γ = β works fine, as long as ~v is reflexive.
+
+How about □N ⊢ □□N?
+
+· ⊢ [↑(F↓UN ⊸ ↑F↓U↑F↓UN)]
+· ⊢ ↑(F↓UN ⊸ ↑F↓U↑F↓UN) @ ε
+(F↓UN ⊸ ↑F↓U↑F↓UN) @ (β, φ), ε ~t β ⊢ #(φ)
+F↓UN @ β, (↑F↓U↑F↓UN) @ (β, φ), ε ~t β ⊢ #(φ)
+↓UN @ β, (↑F↓U↑F↓UN) @ (β, φ), ... ⊢ #(φ)
