@@ -2,7 +2,9 @@ open import HoTT
 open import Modal
 open import ExampleModalTheory as EMT
 open import Proofs
-open Proofs.TurnCrank (EMT.mt)
+open Proofs.TurnCrank (EMT.mt) using ( Prop ; pft )
+open Prop
+open ProofTheory pft using ( _⋆_ )
 
 -- some abbreviations
 Pos = Prop (tru , s+)
