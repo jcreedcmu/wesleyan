@@ -15,8 +15,7 @@ record ProofTheory (MT : ModeTheory) : Set₁ where
 module TurnCrank (MT : ModeTheory) where
   open ModeTheory MT
 
-  data Prop : Signed Mode → Set
-  data Prop where
+  data Prop : Signed Mode → Set where
     ↑ : {μ : Mode} → Prop (μ , s+) → Prop (μ , s-)
     ↓ : {μ : Mode} → Prop (μ , s-) → Prop (μ , s+)
     C : (ω : Opr) → Mlist Prop (Input ω) → Prop (Output ω)
