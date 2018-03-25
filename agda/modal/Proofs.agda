@@ -26,7 +26,7 @@ module TurnCrank (MT : ModeTheory) where
 
   ↑ p ⋆ φ = (α : Res _) → p ⋆ α → ▹ _ α φ
   ↓ n ⋆ α = (φ : Res _) → n ⋆ φ → ▹ _ α φ
-  C ω ps ⋆ α = Σ (Mlist Res (Input ω)) (λ βs → Reln ω βs α × (ps ⋆s βs))
+  C ω ps ⋆ α = Σ (Mlist Res (Input ω)) (λ βs → (ps ⋆s βs) × Reln ω βs α)
 
   nil ⋆s nil = Unit
   (p :: ps) ⋆s (β :: βs) = (p ⋆ β) × (ps ⋆s βs)

@@ -46,19 +46,19 @@ module _ where
     → p ⋆⋆ α → p ⋆ α
   into (↑ p) φ z α pfp = z α (out p α pfp)
   into (↓ n) α z φ pfn = z φ (out n φ pfn)
-  into (C F (p :: nil)) α ((.α :: nil) , /FR .α , z , unit) = into p α z
-  into (C U (n :: nil)) (β , φ) ((.(β , φ) :: nil) , /UR .β .φ , z , unit) = into n (β , φ) z
+  into (C F (p :: nil)) α ((.α :: nil) , (z , unit) , /FR .α) = into p α z
+  into (C U (n :: nil)) (β , φ) ((.(β , φ) :: nil) , (z , unit) , /UR .β .φ) = into n (β , φ) z
   into (C (⊸ μ) (p :: (n :: nil))) .(β , φ)
-    ((β :: (.(β , φ) :: nil)) , /⊸R .μ .β φ , zp , zn , unit) = into p β zp , into n (β , φ) zn
+    ((β :: (.(β , φ) :: nil)) , (zp , zn , unit) , /⊸R .μ .β φ) = into p β zp , into n (β , φ) zn
   into (C (𝟙 μ) nil) α z = tt
 
   out (↑ p) α z φ pfp = z φ (into p φ pfp)
   out (↓ n) φ z α pfn = z α (into n α pfn)
-  out (C F (p :: nil)) α  z = (α :: nil) , (/FR α , out p α z , tt)
-  out (C U (n :: nil)) (β , φ) z = ((β , φ) :: nil) , (/UR β φ , out n (β , φ) z , tt)
+  out (C F (p :: nil)) α  z = (α :: nil) , (out p α z , tt) , /FR α
+  out (C U (n :: nil)) (β , φ) z = ((β , φ) :: nil) , (out n (β , φ) z , tt) , /UR β φ
   out (C (⊸ μ) (p :: n :: nil)) (β , φ) (zp , zn) = (β :: (β , φ) :: nil) ,
-    /⊸R μ β φ , out p β zp , out n (β , φ) zn , tt
-  out (C (𝟙 μ) nil) α tt = nil , ((/𝟙R μ α) , tt)
+    (out p β zp , out n (β , φ) zn , tt) , /⊸R μ β φ
+  out (C (𝟙 μ) nil) α tt = nil , tt , (/𝟙R μ α)
 
 Prov : (p : Pos) → Set
 Prov p = (α : kripke) → p ⋆⋆ α

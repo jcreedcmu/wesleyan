@@ -14,6 +14,7 @@ data Post : Set where
 module Opaque where
 
 record OpaqueModeTheory : Set₁ where
+  constructor OMTh
   field
     Mode : Set
     Res : Mode → Set

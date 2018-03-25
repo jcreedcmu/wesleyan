@@ -19,6 +19,7 @@ Signed T = T × Sgn
 
 -- A mode theory consists of
 record ModeTheory : Set₁ where
+  constructor MTh
   field
     -- A set of modes
     Mode : Set
