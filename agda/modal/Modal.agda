@@ -1,4 +1,4 @@
-module ModalDefs where
+module Modal where
 
 open import HoTT hiding ( _▹_ )
 
