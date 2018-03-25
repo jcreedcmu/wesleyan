@@ -1,9 +1,18 @@
 open import HoTT
 open import Modal
 
-module TurnCrank where
+module Proofs where
 
-module DoIt (MT : ModeTheory) where
+-- A theory of what goes on `upstairs'
+record ProofTheory (MT : ModeTheory) : Set₁ where
+  open ModeTheory MT
+  field
+    -- A set of props
+    Prop : Signed Mode → Set
+    -- with an interpretation function
+    _⋆_ : {μs : Signed Mode} → Prop μs → Res μs → Set
+
+module TurnCrank (MT : ModeTheory) where
   open ModeTheory MT
 
   data Prop : Signed Mode → Set
@@ -23,5 +32,5 @@ module DoIt (MT : ModeTheory) where
   nil ⋆s nil = Unit
   (p :: ps) ⋆s (β :: βs) = (p ⋆ β) × (ps ⋆s βs)
 
-TurnCrank : (MT : ModeTheory) → ProofTheory MT
-TurnCrank MT = record { Prop = Prop ; _⋆_ = _⋆_ } where open DoIt MT
+  pft : ProofTheory MT
+  pft = record { Prop = Prop ; _⋆_ = _⋆_ }

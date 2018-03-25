@@ -1,10 +1,8 @@
 open import HoTT
 open import Modal
 open import ExampleModalTheory as EMT
-open import TurnCrank
-
-open ProofTheory (TurnCrank EMT.mt)
-open DoIt.Prop -- Kind of surprised that this works, tbqh
+open import Proofs
+open Proofs.TurnCrank (EMT.mt)
 
 -- some abbreviations
 Pos = Prop (tru , s+)
