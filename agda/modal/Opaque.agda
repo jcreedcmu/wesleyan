@@ -1,5 +1,5 @@
 open import HoTT
-open import Modal
+open import Modes
 
 -- The goal of this file is to forget that the positive and negative
 -- aspects of a mode are special, and think of them as merely two

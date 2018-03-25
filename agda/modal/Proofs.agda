@@ -1,5 +1,5 @@
 open import HoTT
-open import Modal
+open import Modes
 
 module Proofs where
 

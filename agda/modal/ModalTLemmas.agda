@@ -1,8 +1,8 @@
 open import HoTT
-open import Modal
-open import ExampleModalTheory as EMT
+open import Modes
+open import ModalT as MT
 open import Proofs
-open Proofs.TurnCrank (EMT.mt) using ( Prop ; pft )
+open Proofs.TurnCrank (MT.mt) using ( Prop ; pft )
 open Prop
 open ProofTheory pft using ( _⋆_ )
 
@@ -13,16 +13,16 @@ Posv = Prop (val , s+)
 Negv = Prop (val , s-)
 
 F : Posv → Pos
-F pv = C EMT.Opr.F (pv :: nil)
+F pv = C MT.Opr.F (pv :: nil)
 
 _⊸_ : Pos → Neg → Neg
-p ⊸ n = C (EMT.Opr.⊸ tru) (p :: n :: nil)
+p ⊸ n = C (MT.Opr.⊸ tru) (p :: n :: nil)
 
 𝟙 : Pos
-𝟙 = C (EMT.Opr.𝟙 tru) nil
+𝟙 = C (MT.Opr.𝟙 tru) nil
 
 U : Neg → Negv
-U n = C EMT.Opr.U (n :: nil)
+U n = C MT.Opr.U (n :: nil)
 
 □ : Neg → Pos
 □ n = F (↓ (U n))
@@ -31,7 +31,7 @@ U n = C EMT.Opr.U (n :: nil)
 function for this particular mode theory -}
 
 module _ where
-  open EMT.Opr
+  open MT.Opr
   _⋆⋆_ : {μ : Mode} {s : Sgn} → Prop (μ , s) → Res (μ , s) → Set
   _⋆⋆_ {μ} (↑ p) φ = (α : Res (μ , s+)) → p ⋆⋆ α → ▹ μ α φ
   _⋆⋆_ {μ} (↓ p) α = (φ : Res (μ , s-)) → p ⋆⋆ φ → ▹ μ α φ

@@ -1,6 +1,6 @@
 open import HoTT
 
-module Modal where
+module Modes where
 
 -- Kind of like HList except we parametrize by a custom little
 -- universe (U, El) of codes of types which works better than levels.

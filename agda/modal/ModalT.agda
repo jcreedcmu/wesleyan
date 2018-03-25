@@ -1,7 +1,7 @@
 open import HoTT
-open import Modal
+open import Modes
 
-module ExampleModalTheory where
+module ModalT where
 
 data Mode : Set where
   val : Mode

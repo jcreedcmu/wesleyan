@@ -1,7 +1,7 @@
 module All where
 
-import Modal
+import Modes
 import Proofs
-import ExampleModalTheory
-import ExampleModalTheoryLemmas
+import ModalT
+import ModalTLemmas
 import Opaque
