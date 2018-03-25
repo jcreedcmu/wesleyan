@@ -4049,4 +4049,29 @@ thm: the tangent space of a V-manifold a (V × D e)-manifold
 Q: What did I get from Guillaume's talk?
 A:
 steve awodey mentioning something about ∞-relations as opposed to category?
+due to Egbert Rijke?
 'methodology of contractible contexts' to sort of get definitional equalities?
+
+Q: Can I think of orientability like
+<<<
+open import HoTT
+
+postulate
+ I : Set → Set
+ η : {A : Set} → A → I A
+
+z = S¹
+
+disc : {A : Set} → A → Set
+disc {A} a = Σ A (λ a' → η a == η a')
+
+spins : Set → Set
+spins A = (s : S¹) (a : A) → disc a → disc a
+>>>
+?
+A: ???
+
+Q: What's good about directly describing these semantics as
+bisimplicial/bicubical rather than staging it as a merely simplicial/cubical
+explanation whose destination is a type theory with univalence or something?
+A: ???
