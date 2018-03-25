@@ -4004,6 +4004,9 @@ that implication from η x ≡ η a →to→ η (f x) ≡ η (f a) seems slightl
 nonobvious and must be something that uses elimination in book-HoTT
 modalities or something.
 
+Nope I'm wrong! It's just naturality of η!
+η (f x) ≡ f (η x) ≡ f (η a) ≡ η (f a)
+Lovely.
 
 f : X → Y is formally etale if the naturality square for the modality
 
