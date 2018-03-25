@@ -35,3 +35,12 @@ record ModeTheory : Set₁ where
     Output : Opr → Signed Mode
     -- and specified resource relations
     Reln : (ω : Opr) → Mlist Res (Input ω) → Res (Output ω) → Set
+
+-- A theory of what goes on `upstairs'
+record ProofTheory (MT : ModeTheory) : Set₁ where
+  open ModeTheory MT
+  field
+    -- A set of props
+    Prop : Signed Mode → Set
+    -- with an interpretation function
+    _⋆_ : {μs : Signed Mode} → Prop μs → Res μs → Set

@@ -1,13 +1,11 @@
 open import HoTT
-open import ModalDefs
+open import Modal
 
 module ExampleModalTheory where
-
 
 data Mode : Set where
   val : Mode
   tru : Mode
-
 
 module Opr where
   data Opr : Set where
