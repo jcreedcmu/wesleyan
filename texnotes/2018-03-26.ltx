@@ -235,28 +235,34 @@ where $\Pi = \{\mathbf{m}, \mathbf{s}\}$, the set of `postures', multiplicative 
 \vfil\eject
 
 So what's the dependent case like?
-The {\em theory} part is someone tells me
-what mode types exist in what contexts.
+The {\em signature} part is someone tells me
+what mode types exist in what contexts, what mode terms exist in what contexts,
+and what {\em connectives} there are.
 \[
 \begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
   Mode Contexts&$\Delta$&$\cdot \celse \Delta, x: \alpha$\\
   Mode Types&$\alpha$&$\cdots $\\
+  Mode Terms&$\mu$&$\cdots$\\
+  Connectives&$c$&$\cdots$
 \end{tabular}
 \]
-and what connectives there are
-\[
-\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
-  Connectives&$c$&${\lol} \celse {\tensor} \celse F \celse U$
-\end{tabular}
-\]
+These are given perhaps by a signature $\Sigma$ of declarations.
 
 For linear logic (including a modal zone of unrestrictedly true assumptions) this is like
-\[
-\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
-  Mode Types&$\alpha$&$\ell^+ \celse \ell^- \celse t^- \celse t^+ $\\
-  Mode Terms&$\mu$&$x \celse \mu \lol \mu \celse {\mu \tensor \mu} \celse F \mu \celse U \mu$
-\end{tabular}
-\]
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$\cdot \prov \ell^+, \ell^-, t^+, t^- : \rtype$\\
+$\ell^-, \ell^+ \prov {\lol} : \ell^-$\\
+$\ell^+ \prov {\ups_\ell} : \ell^-$\\
+\end{tabbing}
+
+
+%%   Mode Types&$\alpha$&$\ell^+ \celse \ell^- \celse t^- \celse t^+ $\\
+%%   Mode Terms&$\mu$&$x \celse \mu \lol \mu \celse {\mu \tensor \mu} \celse F \mu \celse U \mu$\\
+%%   Connectives&$c$&${\lol} \celse {\tensor} \celse F \celse U$
+%% \end{tabular}
+%% \]
+
 The mode terms valid in a context would be given by some typing rules, e.g.
 \[
 \erule

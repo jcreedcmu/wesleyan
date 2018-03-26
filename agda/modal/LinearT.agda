@@ -23,6 +23,10 @@ postulate
   aU : frame → tframe
   ▹res : world → frame → Set
   # : tframe → Set
+  assoc : (α β γ : world) → a⊗ (a⊗ α β) γ == a⊗ α (a⊗ β γ)
+  commute : (α β γ : world) → (a⊗ α β) == (a⊗ β α)
+  unitlaw : (α : world) → (a⊗ a𝟙 α) == α
+  adjoint : (α β : world) (φ : frame) → ▹res (a⊗ α β) φ ≃ ▹res α (a⊸ β φ)
 
 Input : Opr → List (Signed Mode)
 Input F = (tru , s+) :: nil
