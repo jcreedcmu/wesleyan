@@ -4075,3 +4075,23 @@ Q: What's good about directly describing these semantics as
 bisimplicial/bicubical rather than staging it as a merely simplicial/cubical
 explanation whose destination is a type theory with univalence or something?
 A: ???
+
+=== 2018.03.27
+
+Q: What's a passing thought I had about the meaning of the synthetic
+differential geometry stuff?
+A:
+So when I talk about A and IA and such, one way to think about it is
+that the type A 'already contained' the bare points of A and also all
+the tangent vectors at the points of A. In this way, IA is just sort
+of a Σ-type-like first projection from the pair
+ (point of a, tangent vector at a)
+to the raw point of a.
+
+If I think this way, it's almost as if IA is the more 'real' type, but
+certainly that can't be entirely correct, as I can continue hitting
+the type with I repeatedly. Right? Just because I's a monad and IIA
+and IA have morphisms going back and forth doesn't mean they're
+isomorphic necessarily. No, I'm wrong --- at least vis-a-vis section
+7.7 of the hott book --- the intended definition of a `modality' is
+idempotent.

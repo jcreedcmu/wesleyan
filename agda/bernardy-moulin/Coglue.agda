@@ -51,8 +51,11 @@ postulate
     → ★intro {S} c (ι k) ↦ S .f k c
   {-# REWRITE ★intro-rewrite #-}
 
-  -- The following is a fairly exotic (and probably not fully general)
-  -- sequent left rule for #.
+  -- The following is a fairly exotic rule. It might be reasonable to
+  -- think of it as a sequent left rule for #, or a sort of exchange
+  -- rule between substructural interval variables and ordinary
+  -- variables.
+
   -- The idea is that if you have an (i : #) on the left below the inference
   -- line, you can instead have the proof obligation of
   --   - s : proving the sequent for all endpoints of #
@@ -62,14 +65,29 @@ postulate
   --          conceivably the fully general rule allows many)
   --   - ν : these proofs s and t are compatible
 
-  -- Also it is likely this rule is not ok for arbitrary D, but only some
-  -- D that are suitably lax/codiscrete/something/etc...
+  -- Also it is possible this rule is not ok for arbitrary D, but only
+  -- some D that are suitably lax/codiscrete/something/etc... but maybe
+  -- in the B-M model it's still fine for all types.
   #left : {B D : # → Set} →
     (s : (k : n) → B (ι k) → D (ι k)) →
     (t : ((j : #) → B j) → (i : #) → D i) →
     (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
  -- -----------------------------------------------------------
     ((i : #) → B i → D i)
+
+  -- Dependent version, with D depending on B:
+  #dleft : {B : # → Set} {D : (j : #) → B j → Set} →
+    (s : (k : n) (b : B (ι k)) → D (ι k) b) →
+    (t : (b : (j : #) → B j) → (i : #) → D i (b i)) →
+    (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
+ -- -----------------------------------------------------------
+    ((i : #) (b : B i) → D i b)
+
+  -- these exchange rules are appropriately surjective
+  surj-#dleft : {B : # → Set} {D : (j : #) → B j → Set} →
+    (t : (i : #) (b : B i) → D i b) →
+    t == #dleft {B} {D} (λ k b → t (ι k) b)
+      (λ b i → t i (b i)) (λ k b → idp)
 
 ★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
   e i == ★intro {S} (★elim e) i
