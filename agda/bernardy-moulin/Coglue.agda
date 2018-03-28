@@ -68,14 +68,6 @@ postulate
   -- Also it is possible this rule is not ok for arbitrary D, but only
   -- some D that are suitably lax/codiscrete/something/etc... but maybe
   -- in the B-M model it's still fine for all types.
-  #left : {B D : # → Set} →
-    (s : (k : n) → B (ι k) → D (ι k)) →
-    (t : ((j : #) → B j) → (i : #) → D i) →
-    (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
- -- -----------------------------------------------------------
-    ((i : #) → B i → D i)
-
-  -- Dependent version, with D depending on B:
   #dleft : {B : # → Set} {D : (j : #) → B j → Set} →
     (s : (k : n) (b : B (ι k)) → D (ι k) b) →
     (t : (b : (j : #) → B j) → (i : #) → D i (b i)) →
@@ -86,9 +78,26 @@ postulate
   -- these exchange rules are appropriately surjective
   surj-#dleft : {B : # → Set} {D : (j : #) → B j → Set} →
     (t : (i : #) (b : B i) → D i b) →
-    t == #dleft {B} {D} (λ k b → t (ι k) b)
+    t == #dleft (λ k b → t (ι k) b)
       (λ b i → t i (b i)) (λ k b → idp)
 
+-- Nondependent version of #dleft
+#left : {B D : # → Set} →
+  (s : (k : n) → B (ι k) → D (ι k)) →
+  (t : ((j : #) → B j) → (i : #) → D i) →
+  (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
+-- ---------------------------------------------------------
+  ((i : #) → B i → D i)
+#left s t ν = #dleft s t ν
+
+-- Nondependent version of surj-#left
+surj-#left : {B D : # → Set} →
+  (t : (i : #) (b : B i) → D i) →
+  t == #left (λ k b → t (ι k) b)
+    (λ b i → t i (b i)) (λ k b → idp)
+surj-#left t = surj-#dleft t
+
+-- Some lemmas
 ★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
   e i == ★intro {S} (★elim e) i
 ★elim-eqn-lem {S} e i = idp
