@@ -73,10 +73,10 @@ postulate
 #left : {B D : # → Set} → Pkg B D → Fpath B D
 #left {B} {D} p = #left-equiv .is-equiv.g p
 
-general-lemma : {# : Set} {B1 B2 B3 : # → Set}
-  {K1 K2 : (B1 B2 : # → Set) → Set}
-  (mk : {B1 B2 : # → Set} → K1 B1 B2 → K2 B1 B2)
-  → (eq : {B1 B2 : # → Set} → is-equiv (mk {B1} {B2}))
+general-lemma : {sh : Set} {B1 B2 B3 : sh → Set}
+  {K1 K2 : (B1 B2 : sh → Set) → Set}
+  (mk : {B1 B2 : sh → Set} → K1 B1 B2 → K2 B1 B2)
+  → (eq : {B1 B2 : sh → Set} → is-equiv (mk {B1} {B2}))
   → (μ1 : K1 B1 B2 → K1 B2 B3 → K1 B1 B3)
   → (μ2 : K2 B1 B2 → K2 B2 B3 → K2 B1 B3)
   → (commute : (y12 : K1 B1 B2) (y23 : K1 B2 B3) →
@@ -85,7 +85,7 @@ general-lemma : {# : Set} {B1 B2 B3 : # → Set}
   → (x12 : K2 B1 B2) (x23 : K2 B2 B3)
     → μ1 (eq .is-equiv.g x12) (eq .is-equiv.g x23) ==
     eq .is-equiv.g (μ2 x12 x23)
-general-lemma {#} {B1} {B2} {B3} {K1} mk eq μ1 μ2 commute x12 x23 =
+general-lemma {sh} {B1} {B2} {B3} {K1} mk eq μ1 μ2 commute x12 x23 =
   expr
   =⟨ ! (eq .g-f expr) ⟩
   eq .g (mk expr)
@@ -103,16 +103,24 @@ general-lemma {#} {B1} {B2} {B3} {K1} mk eq μ1 μ2 commute x12 x23 =
     μ2 x12 x23
     =∎
 
+FpathFunc : {B D F : # → Set} → Fpath B D → Fpath D F → Fpath B F
+FpathFunc π1 π2 = λ i b → π2 i (π1 i b) -- violation of affineness???
 
-  -- {!!} where
-  -- milestone : eq .is-equiv.g
-  --     (mk (μ1 (eq .is-equiv.g x12) (eq .is-equiv.g x23)))
-  --     ==
-  --     eq .is-equiv.g
-  --     (μ2 (mk (eq .is-equiv.g x12)) (mk (eq .is-equiv.g x23)))
-  -- milestone = ap (eq .is-equiv.g)
-  --   (commute (eq .is-equiv.g x12) (eq .is-equiv.g x23))
+PkgFunc : {B D F : # → Set} → Pkg B D → Pkg D F → Pkg B F
+PkgFunc
+  record { s = s1 ; t = t1 ; ν = ν1 }
+  record { s = s2 ; t = t2 ; ν = ν2 } =
+  record {
+    s = λ k b → s2 k (s1 k b) ;
+    t = λ b i → t2 (λ j → t1 b j) i ;
+    ν = λ k b → ap (λ z → s2 k z) (ν1 k b) ∙ ν2 k (t1 b) }
 
+specific-lemma : {B D F : # → Set} →
+      (pack1 : Pkg B D) (pack2 : Pkg D F) →
+      FpathFunc (#left pack1) (#left pack2) == #left (PkgFunc pack1 pack2)
+specific-lemma {B} {D} {F} =
+  general-lemma {#} {B} {D} {F} {Fpath} {Pkg}
+   mkPkg #left-equiv FpathFunc PkgFunc (λ y12 y23 → idp)
 
 -- Some more lemmas
 ★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
@@ -125,23 +133,43 @@ general-lemma {#} {B1} {B2} {B3} {K1} mk eq μ1 μ2 commute x12 x23 =
 
 hardRoundTripλ : (p : # → Set) (i : #) → (embu p ★ i) == p i
 hardRoundTripλ p i = ua (equiv inj out zig zag) where
-  inj : embu p ★ i → p i
-  inj = #left (record {
+  injPack : Pkg (λ i → embu p ★ i) p
+  injPack = record {
     s = (λ _ x → x) ;
     t = ★elim ;
-    ν = ★elim-eqn }) i
-  out : p i → embu p ★ i
-  out = #left (record {
+    ν = ★elim-eqn }
+  outPack : Pkg p (λ i → embu p ★ i)
+  outPack = record {
     s = λ _ x → x ;
     t = ★intro ;
-    ν = λ k b → idp }) i
+    ν = λ k b → idp }
+  inj : embu p ★ i → p i
+  inj = #left injPack i
+  out : p i → embu p ★ i
+  out = #left outPack i
 
-  -- I think I need to define some equational properties of #left
-  -- before any of this is going to work
   zig : (b : p i) → inj (out b) == b
-  zig b = {!!}
+  zig b =
+    inj (out b)
+    =⟨ app= (app= (specific-lemma outPack injPack) i) b  ⟩
+    #left (PkgFunc outPack injPack) i b
+    =⟨ idp ⟩
+    #left (mkPkg λ i' b' → b') i b
+    =⟨ app= (app= (#left-equiv .is-equiv.g-f (λ i' b' → b')) i) b ⟩
+    (λ (i' : #) (b' : p i) → b') i b
+    =⟨ idp  ⟩
+    b =∎
+
   zag : (a : embu p ★ i) → out (inj a) == a
-  zag = {!!}
+  zag a = out (inj a)
+    =⟨ app= (app= (specific-lemma injPack outPack) i) a ⟩
+    #left (PkgFunc injPack outPack) i a
+    =⟨ idp ⟩
+    #left (mkPkg λ i' a' → a') i a
+    =⟨ app= (app= (#left-equiv .is-equiv.g-f (λ i' a' → a')) i) a  ⟩
+    (λ (i' : #) (a' : embu p ★ i) → a') i a
+    =⟨ idp ⟩
+    a =∎
 
 hardRoundTrip : (p : # → Set) → _★_ (embu p) == p
 hardRoundTrip p = λ= (hardRoundTripλ p)
