@@ -51,53 +51,56 @@ postulate
     → ★intro {S} c (ι k) ↦ S .f k c
   {-# REWRITE ★intro-rewrite #-}
 
-  -- The following is a fairly exotic rule. It might be reasonable to
-  -- think of it as a sequent left rule for #, or a sort of exchange
-  -- rule between substructural interval variables and ordinary
-  -- variables.
 
-  -- The idea is that if you have an (i : #) on the left below the inference
-  -- line, you can instead have the proof obligation of
-  --   - s : proving the sequent for all endpoints of #
-  --   - t : proving the sequent where any assumptions depending on i
-  --         are promoted to (b) universally quantified versions of themselves
-  --         (the thing I've written here only allows one assumption, but
-  --          conceivably the fully general rule allows many)
-  --   - ν : these proofs s and t are compatible
+record Pkg (B : # → Set) (D : (j : #) → B j → Set) : Set where
+  field
+    s : (k : n) (b : B (ι k)) → D (ι k) b
+    t : (b : (j : #) → B j) → (i : #) → D i (b i)
+    ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)
 
-  -- Also it is possible this rule is not ok for arbitrary D, but only
-  -- some D that are suitably lax/codiscrete/something/etc... but maybe
-  -- in the B-M model it's still fine for all types.
-  #dleft : {B : # → Set} {D : (j : #) → B j → Set} →
-    (s : (k : n) (b : B (ι k)) → D (ι k) b) →
-    (t : (b : (j : #) → B j) → (i : #) → D i (b i)) →
-    (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
- -- -----------------------------------------------------------
-    ((i : #) (b : B i) → D i b)
+nonDep : ({B} D : # → Set) →  (j : #) → B j → Set
+nonDep D = (λ i b → D i)
 
-  -- these exchange rules are appropriately surjective
-  surj-#dleft : {B : # → Set} {D : (j : #) → B j → Set} →
-    (t : (i : #) (b : B i) → D i b) →
-    t == #dleft (λ k b → t (ι k) b)
-      (λ b i → t i (b i)) (λ k b → idp)
+PkgNd : (B D : # → Set) → Set
+PkgNd B D = Pkg B (nonDep D)
+
+Fpath : (B : # → Set) (D : (j : #) → B j → Set) → Set
+Fpath B D = (i : #) (b : B i) → D i b
+
+mkPkg : {B : # → Set} {D : (j : #) → B j → Set} → Fpath B D → Pkg B D
+mkPkg fp = record {
+  s = λ k b → fp (ι k) b ;
+  t = λ b i → fp i (b i) ;
+  ν = λ k b → idp }
+
+postulate
+  #dleft : {B : # → Set} {D : (j : #) → B j → Set}
+    → is-equiv (mkPkg {B} {D})
+
+--   -- these exchange rules are appropriately surjective
+--   surj-#dleft : {B : # → Set} {D : (j : #) → B j → Set} →
+--     (t : Fpath B D) → t == #dleft (mkPkg t)
+
+-- -- Nondependent version of surj-#left
+-- surj-#left : {B D : # → Set} →
+--   (t : Fpath B (λ i b → D i)) →
+--   t == #left (mkPkg t)
+-- surj-#left = surj-#dleft
 
 -- Nondependent version of #dleft
-#left : {B D : # → Set} →
-  (s : (k : n) → B (ι k) → D (ι k)) →
-  (t : ((j : #) → B j) → (i : #) → D i) →
-  (ν : (k : n) (b : (j : #) → B j) → s k (b (ι k)) == t b (ι k)) →
--- ---------------------------------------------------------
-  ((i : #) → B i → D i)
-#left s t ν = #dleft s t ν
+#left : {B D : # → Set} → PkgNd B D → Fpath B (nonDep D)
+#left {B} {D} p = #dleft .is-equiv.g p
 
--- Nondependent version of surj-#left
-surj-#left : {B D : # → Set} →
-  (t : (i : #) (b : B i) → D i) →
-  t == #left (λ k b → t (ι k) b)
-    (λ b i → t i (b i)) (λ k b → idp)
-surj-#left t = surj-#dleft t
+functorial : {B D F : # → Set} → PkgNd B D → PkgNd D F → PkgNd B F
+functorial
+  record { s = s1 ; t = t1 ; ν = ν1 }
+  record { s = s2 ; t = t2 ; ν = ν2 } =
+  record {
+    s = λ k b → s2 k (s1 k b) ;
+    t = λ b i → t2 (λ j → t1 b j) i ;
+    ν = λ k b → ap (λ z → s2 k z) (ν1 k b) ∙ ν2 k (t1 b) }
 
--- Some lemmas
+-- Some more lemmas
 ★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
   e i == ★intro {S} (★elim e) i
 ★elim-eqn-lem {S} e i = idp
@@ -109,14 +112,20 @@ surj-#left t = surj-#dleft t
 hardRoundTripλ : (p : # → Set) (i : #) → (embu p ★ i) == p i
 hardRoundTripλ p i = ua (equiv inj out zig zag) where
   inj : embu p ★ i → p i
-  inj = #left (λ _ x → x) ★elim ★elim-eqn i
+  inj = #left (record {
+    s = (λ _ x → x) ;
+    t = ★elim ;
+    ν = ★elim-eqn }) i
   out : p i → embu p ★ i
-  out = #left (λ _ x → x) ★intro (λ k b → idp) i
+  out = #left (record {
+    s = λ _ x → x ;
+    t = ★intro ;
+    ν = λ k b → idp }) i
 
   -- I think I need to define some equational properties of #left
   -- before any of this is going to work
   zig : (b : p i) → inj (out b) == b
-  zig = {!!}
+  zig b = {!!}
   zag : (a : embu p ★ i) → out (inj a) == a
   zag = {!!}
 
