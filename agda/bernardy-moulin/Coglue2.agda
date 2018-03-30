@@ -122,6 +122,14 @@ specific-lemma {B} {D} {F} =
   general-lemma {#} {B} {D} {F} {Fpath} {Pkg}
    mkPkg #left-equiv FpathFunc PkgFunc (λ y12 y23 → idp)
 
+specific-lemma2 : {B D F : # → Set} →
+      (pack1 : Pkg B D) (pack2 : Pkg D F) (i : #) (b : B i) →
+      #left pack2 i (#left pack1 i b) == #left (PkgFunc pack1 pack2) i b
+specific-lemma2 {B} {D} {F} pack1 pack2 i b =
+  app= (app= (
+  general-lemma {#} {B} {D} {F} {Fpath} {Pkg}
+   mkPkg #left-equiv FpathFunc PkgFunc (λ y12 y23 → idp) pack1 pack2) i) b
+
 -- Some more lemmas
 ★elim-eqn-lem : {S : Span} (e : (i : #) → S ★ i) (i : #)→
   e i == ★intro {S} (★elim e) i
@@ -151,7 +159,7 @@ hardRoundTripλ p i = ua (equiv inj out zig zag) where
   zig : (b : p i) → inj (out b) == b
   zig b =
     inj (out b)
-    =⟨ app= (app= (specific-lemma outPack injPack) i) b  ⟩
+    =⟨ specific-lemma2 outPack injPack i b  ⟩
     #left (PkgFunc outPack injPack) i b
     =⟨ idp ⟩
     #left (mkPkg λ i' b' → b') i b
@@ -162,7 +170,7 @@ hardRoundTripλ p i = ua (equiv inj out zig zag) where
 
   zag : (a : embu p ★ i) → out (inj a) == a
   zag a = out (inj a)
-    =⟨ app= (app= (specific-lemma injPack outPack) i) a ⟩
+    =⟨ specific-lemma2 injPack outPack i a ⟩
     #left (PkgFunc injPack outPack) i a
     =⟨ idp ⟩
     #left (mkPkg λ i' a' → a') i a
