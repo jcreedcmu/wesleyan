@@ -28,6 +28,6 @@ module ProofTheory (OT : ModeTheory) where
   nil ✯ nil = Unit
   (p :: ps) ✯ (β :: βs) = p β × (ps ✯ βs)
 
-  Mult Shift : (i : List Mode) {o : Mode} (ω : Reln i o) → Mlist Prop i → Prop o
+  Mult Shft : (i : List Mode) {o : Mode} (ω : Reln i o) → Mlist Prop i → Prop o
   Mult i ω ps α = Σ (Mlist Res i) (λ βs → (ps ✯ βs) × ω βs α)
-  Shift i ω ps α = Π (Mlist Res i) (λ βs → (ps ✯ βs) → ω βs α)
+  Shft i ω ps α = Π (Mlist Res i) (λ βs → (ps ✯ βs) → ω βs α)
