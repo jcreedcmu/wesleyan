@@ -17,17 +17,12 @@ record ModeTheory : Set₁ where
 module ProofTheory (OT : ModeTheory) where
   open ModeTheory OT
 
-  Reln : List Mode → Mode → Set₁
-  Reln In Out = Mlist Res In → Res Out → Set
-
-  Prop : Mode → Set₁
-  Prop μs = Res μs → Set
-
   _✯_ : ∀ {ℓ ℓ'} {A : Set ℓ'} {F : A → Set ℓ} {ms : List A}
     → Mlist (λ μ → F μ → Set) ms → Mlist F ms → Set
   nil ✯ nil = Unit
   (p :: ps) ✯ (β :: βs) = p β × (ps ✯ βs)
 
-  Mult Shft : (i : List Mode) {o : Mode} (ω : Reln i o) → Mlist Prop i → Prop o
+  Mult Shft : (i : List Mode) {o : Mode} (ω : Mlist Res i → Res o → Set)
+    → Mlist (λ μ → Res μ → Set) i → (Res o → Set)
   Mult i ω ps α = Σ (Mlist Res i) (λ βs → (ps ✯ βs) × ω βs α)
   Shft i ω ps α = Π (Mlist Res i) (λ βs → (ps ✯ βs) → ω βs α)
