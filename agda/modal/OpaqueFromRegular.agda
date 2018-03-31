@@ -1,7 +1,7 @@
 {-# OPTIONS --without-K #-}
 
 open import HoTT
-open import Modal
+open import Modes
 import Opaque
 import Proofs
 

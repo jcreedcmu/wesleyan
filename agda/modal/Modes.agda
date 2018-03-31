@@ -4,7 +4,7 @@ module Modes where
 
 -- Kind of like HList except we parametrize by a custom little
 -- universe (U, El) of codes of types which works better than levels.
-data Mlist {U : Set} (El : U → Set) : List U → Set where
+data Mlist {ℓ ℓ'} {U : Set ℓ} (El : U → Set ℓ') : List U → Set (lmax ℓ ℓ') where
   nil : Mlist El nil
   _::_ : {A : U} {L : List U} → El A → Mlist El L → Mlist El (A :: L)
 

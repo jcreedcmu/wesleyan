@@ -13,6 +13,7 @@
 \tcbuselibrary{breakable}
 \input{linear}
 
+\def\provc{\prov_c}
 \def\elc#1{\textsf{\textbf{C}}({#1})}
 \def\ela#1{\textsf{\textbf{E}}({#1})}
 \def\rto{\twoheadrightarrow}
@@ -317,4 +318,89 @@ $\rmap\ (\mathsf{S}\ n)\ f = $\\
 \>$\blet \bbox r = \rmap\ n\ f \bin $\\
 \> $\bbox(\lambda (h, t) .  (f'\ h , r\ t))$
 \end{tabbing}
+
+\vfill\eject
+\section{Just Compiling}
+I imagine I have a totally separate language of `circuit normal forms'
+which can express sharing and register fixpoints, that looks like
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+  Circuit Expressions&$e$&$ x\celse\mathsf{nand}\celse \blet x = e\bin e\celse \bfix x.e $\\
+  &&${}\celse \pi_1\celse \pi_2\celse (e, e) $\\
+  Circuit Types&$A$&$1 \celse \B \celse A \x A $\\
+\end{tabular}
+\]
+
+\[
+\erule
+{x : A \in \Gamma }
+{\Gamma \prov x : A}
+\qquad
+\erule
+{\Gamma \prov e_1 : \B \qquad \Gamma \prov e_2 : \B}
+{\Gamma \prov \mathsf{nand}(e_1, e_2) : \B}
+\]
+\[
+\erule
+{\Gamma, x : \B \prov e : \B \x A }
+{\Gamma \prov \bfix x . e :  A}
+\qquad
+\erule
+{\Gamma \prov e_1 : A \qquad \Gamma, x : A \prov e_2 : B }
+{\Gamma \prov \blet x = e_1 \bin e_2 : B}
+\]
+
+The target language has the same stuff, only $\bfix$ is forbidden.
+We write $\provc$ for it.
+\def\stype#1{||#1||}
+\def\ap{\bullet}
+We want to describe two functions:
+\begin{itemize}
+\item one that takes $ e $ and yields a type $\stype {e}$.
+\item one that takes $ e $ and a variable name $b$ yields an expression $e \ap b$
+\end{itemize}
+
+\[\stype{x} = 1 \qquad \stype{\mathsf{nand}(e_1, e_2)} = \stype{e_1} \x \stype{e_2}\]
+\[\stype{\bfix x . e} = \B \x \stype{e} \qquad \stype{\blet x = e_1 \bin e_2} = \stype{e_1} \x \stype{e_2}\]
+
+\begin{tabbing}
+\hskip 2em \=\kill
+$x \ap b = (b, x) $\\
+$(\bfix x . e) \ap b = \blet (v, (\beta, a)) =  (\blet (x, b') = b \bin (e \ap b')) \bin ((\beta, v), a)$\\
+$(\mathsf{nand}(e_1, e_2)) \ap b = $\\
+\> $\blet (b_1, b_2) = b \bin$\\
+\> $\blet (v_1, \beta_1) = (e_1 \ap b_1) \bin$\\
+\> $\blet (v_2, \beta_2) = (e_2 \ap b_2) \bin ((v_1, v_2), \mathsf{nand}(\beta_1, \beta_2))$\\
+$(\blet x = e_1 \bin e_2) \ap b =$\\
+\> $\blet (b_1, b_2) = b \bin$\\
+\> $\blet (v_1, x) =  (e_1 \ap b_1) \bin$ \\
+\> $\blet (v_2, \beta) =  (e_2 \ap b_2) \bin ((v_1, v_2), \beta)$
+\end{tabbing}
+and similarly for pairs and projections.
+
+
+\begin{lemma}
+   If $\Gamma \prov e : A$, then $\Gamma, b : \stype{e} \prov_c e \ap b : \stype{e} \x A$.
+\end{lemma}
+
+\begin{proof}
+For $\blet$, we have by i.h. that
+\[\Gamma, b_1 : \stype{e_1} \prov_c  e_1 \ap b_1 : \stype{ e_1} \x A\]
+\[\Gamma, x : A, b_2 : \stype{e_2} \prov_c  e_2 \ap b_2 : \stype{ e_2} \x B\]
+and we need to check that
+\[\Gamma, b : \stype{e_1} \x \stype{e_2} \prov_c  (\blet x = e_1 \bin e_2) \ap b : (\stype{e_1} \x \stype{e_2}) \x B\]
+
+For $\mathsf{nand}$, we have by i.h. that
+\[\Gamma, b_i : \stype{e_i} \prov_c  e_i \ap b_i : \stype{ e_i} \x \B\]
+and we need to check that
+\[\Gamma, b : \stype{e_1} \x \stype{e_2} \prov_c  (\mathsf{nand}(e_1, e_2)) \ap b : (\stype{e_1} \x \stype{e_2}) \x \B\]
+
+For $\bfix$, we have by i.h. that
+\[\Gamma, x : \B, b' : \stype{e} \prov_c  e \ap b' : \stype{ e} \x (\B \x A)\]
+and we need to check that
+\[\Gamma, b : (\B \x \stype e) \prov_c \bfix x . e \ap b : (\B \x \stype e) \x A\]
+
+\cqed
+\end{proof}
+
 \end{document}

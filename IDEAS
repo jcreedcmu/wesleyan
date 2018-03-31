@@ -4095,3 +4095,140 @@ and IA have morphisms going back and forth doesn't mean they're
 isomorphic necessarily. No, I'm wrong --- at least vis-a-vis section
 7.7 of the hott book --- the intended definition of a `modality' is
 idempotent.
+
+=== 2018.03.30
+
+Q: What really is the deal with an equality between types in a context containing a path variable?
+Univalence tells me it's
+A: ???
+
+Q: What *could* a diagonal-having cube category mean for relationy things?
+A:
+I stare at
+
+Γ, x : #, y : # ⊢ M : A
+-----------------------
+Γ, z : # ⊢ [z/x][z/y]M : [z/x][z/y]A
+
+and I think of the special case
+
+Γ, x : #, y : # ⊢ t : U
+-----------------------
+Γ, z : # ⊢ [z/x][z/y]t : U
+
+and recall the intent that for sure the bottom line is the same as the choice of n types
+and a relation among them, and the top line is something like the choice of n^2 types
+and some relations among them, so contraction would require the existence
+of some reasonable operation on relations.
+
+Q: Where's the computation I did to feel out what a point in the universe in a context
+with two interval variables should look like, concluding that it was a
+commutative square after all?
+A:
+texnotes//2018-02-09.ltx section 1.5
+
+Q: What's notable about that?
+A: I am using the #-elim/exchange/Φ principle as given by B-M, so
+maybe it has to go out the window if I'm to do anything
+nonsubstructural.
+
+=== 2018.03.30
+
+Q: what commit did I have agda-lib at?
+A: was 659857f, I think because of circuit stuff, now 9b67f6b1e, which seems ok with agda 2.5.3.
+
+Q: How do I write simple haskell-style code in agda?
+A:
+<<<
+module StringDump where
+
+open import Data.String
+open import Data.Unit.Base
+open import Agda.Builtin.IO
+
+{-# FOREIGN GHC import qualified Data.Text.IO #-}
+
+postulate
+  putStr : String → IO ⊤
+  getLine : IO String
+  return : {A : Set} → A → (IO A)
+  _>>=_  : {A B : Set} → (IO A) → (A → (IO B)) → (IO B)
+
+{-# COMPILE GHC putStr = Data.Text.IO.putStr #-}
+{-# COMPILE GHC _>>=_ = (\ _ _ a f -> a >>= f) #-}
+{-# COMPILE GHC return = (\ _ a -> return a) #-}
+{-# COMPILE GHC getLine = Data.Text.IO.getLine #-}
+
+main : IO ⊤
+main = getLine >>= (λ line → putStr line)
+>>>
+in a directory src a level up from which I have deb.agda-lib containing
+<<<
+name: deb  -- Comment
+depend:
+  standard-library
+include:
+  src
+>>>
+and then I do
+$ agda --compile src/StringDump.agda
+
+Q: Where's a good source of ideas to crib from?
+A:
+https://github.com/guillaumebrunerie/SmashProduct/blob/master/SmashGenerate.agda
+
+Q: Where's a reflection prelude that does some instances for showing things as strings?
+A: https://github.com/UlfNorell/agda-prelude/blob/master/src/Builtin/Reflection.agda
+found on
+https://stackoverflow.com/questions/36209339/haskell-deriving-mechanism-for-agda
+
+Q: What was an interesting couple of PHOAS-y ekmett posts that I still
+couldn't figure out how to implement in agda?
+A:
+https://www.schoolofhaskell.com/user/edwardk/phoas
+https://www.schoolofhaskell.com/user/edwardk/bound
+I got as far as
+<<<
+data ExpF : Set → Set → Set where
+   App : {a b : Set} → b → b → ExpF a b
+   Lam : {a b : Set} → (a → b) → ExpF a b
+
+record Profunctor {ℓ} (p : Set ℓ → Set ℓ → Set ℓ) : Set (lsuc ℓ) where
+  field
+    dimap : {a b c d : Set ℓ} → (a → b) → (c → d) → p b c → p a d
+
+instance
+  ExpFProfunctor : Profunctor ExpF
+  ExpFProfunctor = record { dimap = dimap } where
+    dimap : {a b c d : Set} → (a → b) → (c → d) → ExpF b c → ExpF a d
+    dimap f g (App e1 e2) = App (g e1) (g e2)
+    dimap f g (Lam e) = Lam λ x → g (e (f x))
+
+data Rec (p : Set → Set → Set) {{_ : Profunctor p}} : Set → Set → Set where
+  Place : {a b : Set} → b → Rec p a b
+  Roll : {a b : Set} → p a (Rec p a b) → Rec p a b
+>>>
+but agda's positivity checker still didn't like the occurrence of Rec in Roll.
+
+=== 2018.03.31
+
+Q: Does it make sense to say
+● A = Σ (□ ℕ) (λ n → Vec (unbox n) 𝕓 → Vec (unbox n) 𝕓 × A)
+A:
+The obstacle that I need to overcome is getting from something like
+
+A → □B
+
+to
+
+B
+
+which I just don't think I can do, at least not without substantial
+changes to my assumptions. Even if the modality guarantees me that the
+function is invariant to different As, I don't know that A isn't ⊥!
+
+Q: What kind of mileage can I get out of thinking of substructural types
+as not living in Set, but rather in P → Set or N → Set according to their polarity,
+as concerns specifically the mysterious linearity violations in my proof that
+witness types + #-elim ⟹ maps from the interval into the universe are relations?
+A: ???
