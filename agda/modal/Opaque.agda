@@ -1,15 +1,13 @@
 open import HoTT
 open import Modes
 
--- The goal of this file is to forget that the positive and negative
--- aspects of a mode are special, and think of them as merely two
--- different modes. By doing this we can see multiplicatives
--- and shifts as very similar kinds of connectives.
+-- This is like Opaque.agda, but we're not even thinking of the
+-- translation as a translation per se, just a design pattern whereby
+-- we simply show how to construct substructural propositions from
+-- others.
 
--- The two Postures, multiplicative and shift-like
 data Post : Set where
-  mult : Post
-  shft : Post
+  mult shft : Post
 
 module Opaque where
 
@@ -22,12 +20,6 @@ record OpaqueModeTheory : Set₁ where
     Input : {π : Post} → Opr π → List Mode
     Output : {π : Post} → Opr π → Mode
     Reln : {π : Post} (ω : Opr π) → Mlist Res (Input ω) → Res (Output ω) → Set
-
-record ProofTheory (MT : OpaqueModeTheory) : Set₁ where
-  open OpaqueModeTheory MT
-  field
-    Prop : Mode → Set
-    _⋆_ : {μs : Mode} → Prop μs → Res μs → Set
 
 module TurnCrank (OT : OpaqueModeTheory) where
   open OpaqueModeTheory OT
@@ -43,6 +35,3 @@ module TurnCrank (OT : OpaqueModeTheory) where
 
   nil ⋆s nil = Unit
   (p :: ps) ⋆s (β :: βs) = (p ⋆ β) × (ps ⋆s βs)
-
-  pft : ProofTheory OT
-  pft = record { Prop = Prop ; _⋆_ = _⋆_ }
