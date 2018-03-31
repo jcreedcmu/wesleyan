@@ -9,9 +9,6 @@ data Mlist {ℓ ℓ'} {U : Set ℓ} (El : U → Set ℓ') : List U → Set (lmax
   nil : Mlist El nil
   _::_ : {A : U} {L : List U} → El A → Mlist El L → Mlist El (A :: L)
 
-data Post : Set where -- postures
-  mult shft : Post
-
 record ModeTheory : Set₁ where
   field
     Mode : Set
@@ -20,12 +17,8 @@ record ModeTheory : Set₁ where
 module ProofTheory (OT : ModeTheory) where
   open ModeTheory OT
 
-  record Opr (π : Post) : Set₁ where
-    field
-      Input : List Mode
-      Output : Mode
-      Reln : Mlist Res Input → Res Output → Set
-  open Opr
+  Reln : List Mode → Mode → Set₁
+  Reln In Out = Mlist Res In → Res Out → Set
 
   Prop : Mode → Set₁
   Prop μs = Res μs → Set
@@ -35,6 +28,6 @@ module ProofTheory (OT : ModeTheory) where
   nil ✯ nil = Unit
   (p :: ps) ✯ (β :: βs) = p β × (ps ✯ βs)
 
-  C : {π : Post} (ω : Opr π) → Mlist Prop (Input ω) → Prop (Output ω)
-  C {mult} ω ps α = Σ (Mlist Res (Input ω)) (λ βs → (ps ✯ βs) × Reln ω βs α)
-  C {shft} ω ps α = Π (Mlist Res (Input ω)) (λ βs → (ps ✯ βs) → Reln ω βs α)
+  Mult Shift : (i : List Mode) {o : Mode} (ω : Reln i o) → Mlist Prop i → Prop o
+  Mult i ω ps α = Σ (Mlist Res i) (λ βs → (ps ✯ βs) × ω βs α)
+  Shift i ω ps α = Π (Mlist Res i) (λ βs → (ps ✯ βs) → ω βs α)
