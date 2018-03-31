@@ -16,13 +16,16 @@ record ModeTheory : Set₁ where
   field
     Mode : Set
     Res : Mode → Set
-    Opr : Post → Set
-    Input : {π : Post} → Opr π → List Mode
-    Output : {π : Post} → Opr π → Mode
-    Reln : {π : Post} (ω : Opr π) → Mlist Res (Input ω) → Res (Output ω) → Set
 
 module ProofTheory (OT : ModeTheory) where
   open ModeTheory OT
+
+  record Opr (π : Post) : Set₁ where
+    field
+      Input : List Mode
+      Output : Mode
+      Reln : Mlist Res Input → Res Output → Set
+  open Opr
 
   Prop : Mode → Set₁
   Prop μs = Res μs → Set
