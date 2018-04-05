@@ -1,0 +1,386 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\ff{\mathsf{f}}
+\def\rspan{\mathsf{Span}}
+\def\El#1{\mathsf{El}({#1})}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\W{\mathbf{W}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Thinking about Dependency and Substructurality in Bernardy-Moulin}
+
+If interval variables are supposed to be substructural, then I figure I should be
+able to fruitfully think about $\ii/\sharp n$ not being a {\em type}, but rather a
+function from worlds/resource-things to types.
+
+Indeed, the failure of exchange makes me think that it might be appropriate to
+think that there is sort of an intrinsic
+difference between types that sit before and after an interval variable: that the things
+after are higher-dimensional than the things before. Although maybe this is a regression
+to the big complicated cube notation that Moulin had earlier in his thesis?
+
+How would I be inclined to notate this, though? I could say that there
+is such thing as a $\rtype_\Delta$ for a context $\Delta$ that's specifically
+made of only $\sharp$ed variables, such that a $\rtype_\cdot$ is
+just a type, and a $\rtype_{\Delta, \nu:\sharp n}$ is an $n$-span made of things in $\rtype_n$.
+
+\[
+\erule
+{\Gamma \prov C, A_i : \rtype_\Delta \qquad \Gamma \prov f_i :  C \to_{\Delta} A_i}
+{\Gamma \prov [C, A, f] : \rtype_{\Delta, \nu : \sharp n}}
+\]
+
+But I would need to explain what $\to_\Delta$ means; and actually, there's something missing
+from that judgment, because I would expect $\to_\Delta$ to take two things in $\rtype_\Delta$
+and yield another such thing, and things in $\rtype_\Delta$ aren't themselves able to have
+inhabitants unless $\Delta$ is empty.
+
+Ok, so if $\rtype_{\Delta, \nu : \sharp n}$ is like a substructural
+kind, let me turn to how that would work in the resource semantics
+mindset I've employed before. If I had `linear types', I'd have kinds
+$r^+ \to \rtype$ and $r^- \to \rtype$ for positive and negative
+`linear types' where $r^+$ is the type of resources and $r^-$ is the
+type of frames. So here I have a different type of resource for every possible $\Delta$, it's
+like I have a family of types $r_\Delta$, and a $\rtype_\Delta$ is a $r_\Delta \to \rtype$.
+I know right off the bat that $r_\cdot$ should be the unit type $1$, so that
+$\rtype_\cdot = r_\cdot \to \rtype = 1 \to \rtype = \rtype$.
+
+But what about $r_{\Delta, \nu : \sharp n}$? I know I should be able to go from $\rtype_{\Delta, \nu : \sharp n}$ to $\rtype_{\Delta}$ in at least $n$ specific ways by projection, so I should be able to go
+from $r_{\Delta}$ to $r_{\Delta, \nu : \sharp n}$ in at least $n$ specific ways.
+
+So maps from $r_\Delta$ to $r_{\Gamma}$ are probably at least like (affine)
+substitutions $\Delta \prov \theta : \Gamma$.
+How might I think about witness types? Maybe $\rspan$ is a thing that takes
+a number $n$ (for how many branches {\em this} particular span has) and
+a resource expression $\rho : r_{\Delta}$ for how much higher-dimensional stuff the type is supposed to have.
+\[
+\erule
+{\Gamma \prov S : \rspan^\Delta_n(\rho) \qquad \Gamma \prov \rho : r_{\Delta}}
+{\Gamma, \alpha : r_{\sharp n}, \nu : \sharp_n(\alpha) \prov S \star \nu : \rtype_{\Delta, \nu : \sharp n}}
+\]
+What {\em is} a $\rspan^\Delta_n(\rho)$, then?
+Perhaps a member of $\rspan^\Delta_n(\rho)$ is a record with fields
+\def\rspan{\mathsf{Span}}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $\fC : \rtype_\Delta$\\
+\> $\fA : n \to \rtype_\Delta$\\
+\> $\ff : (k : n) \to \fC(\rho) \to \fA_k(\rho)$
+\end{tabbing}
+
+How does quantification over interval variables work?
+I'd expect
+\[
+\erule
+{\Gamma, \nu : \sharp n \prov A : \rtype}
+{\Gamma \prov \forall \nu . A : \rtype}
+\qquad
+\erule
+{\Gamma \prov M : \forall \nu . A}
+{\Gamma, \nu : \sharp n \prov M\ \nu : A}
+\]
+to translate into something like
+
+\[
+\erule
+{\Gamma, \alpha : r_{\sharp n}, \nu : \sharp_n(\alpha) \prov A : \rtype_{\Delta, \nu : \sharp n}}
+{\Gamma \prov \forall \nu . A : \rtype_{\Delta}}
+\]
+
+\[
+\erule
+{\Gamma \prov M : (\rho : r_\Delta) \to (\forall \nu . A)(\rho)}
+{\Gamma, \alpha : r_{\sharp n}, \nu : \sharp_n(\alpha) \prov \lambda \rho . M(\rho\adjust_\Delta )(\alpha)(\nu) : (\rho : r_{\Delta, \nu : \sharp n}) \to  A(\rho)}
+\]
+
+where
+\[(\forall \nu . A) := \lambda (\rho : r_\Delta) . (\alpha : r_{\sharp n})(\nu : \sharp_n(\alpha)) \to A(\rho \tensor \alpha)\]
+
+So yeah maybe I do have an operation $\tensor$ that takes $r_{\Delta}$ and $r_{\sharp n}$ and yields $r_{\Delta, \nu : \sharp n}$? The restriction operation $\rho\adjust_\Delta$ is sketching me out a lot more.
+
+\subsection{Could it be the case that I just have $r$, not $r_\Delta$?}
+It seem like maybe $\sharp_n(\alpha)$ could do all the work of keeping
+track of the $n$-span-ness of things without additionally tracking it
+in the kinds of worlds.
+
+Could I say something as simple as
+\[
+\erule
+{\Gamma \prov \rho : r \qquad \Gamma \prov S : \rspan_n(\rho) \qquad  \Gamma \prov \nu : \sharp_n(\rho)}
+{\Gamma \prov S \star \nu :\rtype}
+\]
+or is it more like
+\[(\Gamma \prov S \star \nu) : r \to \rtype\]
+such that
+\[(\Gamma \prov S \star \nu)(\rho) := \exists \rho_1 \rho_2 . (\nu : \sharp_n(\rho_1)) \x (S : \rspan_n(\rho_2)) \x (\rho = \rho_1 \tensor \rho_2)\]
+That actually looks pretty good as expressing the multiplicativity involved!
+and perhaps $\rspan_n(\rho)$ is still something like
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+\> $\fC : r \to \rtype$\\
+\> $\fA : n \to r \to \rtype$\\
+\> $\ff : (k : n) \to \fC(\rho) \to \fA_k(\rho)$
+\end{tabbing}
+No, wait, something's wrong; $\nu$ is given to the type constructor, but it's not really checked on the right side of the $:=$.
+
+%% \[
+%% \begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+%%   Mode Contexts&$\Delta$&$\cdot \celse \Delta, x: \alpha$\\
+%% \end{tabular}
+%% \]
+%% \begin{tabbing}
+%% \hspace*{2em}\=\hspace*{2em}\= \kill
+%% $\cdot \prov \ell^+, \ell^-, t^+, t^- : \rtype$\\
+%% \end{tabbing}
+\section{Backing up}
+
+Irrespective of how different-dimensioned types are translationally realized, let
+me remind myself of what I do know about their behavior.
+
+Let me write $\rtype_\Delta$ as a type depending on the interval variables in $\Delta$.
+An expression of kind $\rtype_\Delta$ always binds those variables; so something in bernardy-moulin
+written
+\[\Gamma, i : \ii, z : C, j : \ii, x : A \prov M : B\]
+I would think of as perhaps something like
+\[\Gamma, z : i.\sem C^i, x : ij.\sem A^{ij} \prov M : ij.\sem B^{ij}\]
+where for example $ij.\sem A^{ij}  : \rtype_{i, j}$, and the $i,j$ in the superscript of $\sem{\dash}$ are {\em occurrences} of the bound variables that are fed to the translation of $A$.
+The subscripts in $\rtype_{i,j}$ are neither binding or occurrences of variables; in fact they're
+kind of a convenient lie.
+The more correct thing to say would be like $\rtype_{\sharp n, \sharp n'}$ or something, I suppose.
+This all for the moment leaves unanswered the question:
+what kind of things are allowed to be {\em inhabitants} of a member of $\rtype_\Delta$?
+
+Putting that aside, we can at least observe that we probably have a
+more normal form of exchange between non-dependent hypotheses, for the
+local binders account for the dimension variables.
+
+Let's look however at the phenomenon that was otherwise the `mysterious exchange variant':
+\[
+\erule
+{\Gamma, k : n,  [\ep k/i]A \prov [\ep k /i]C
+\qquad
+\Gamma, \forall i . A, i : \ii  \prov C
+\qquad
+\hbox{(some equality)}}
+{\Gamma, i : \ii, A \prov C}
+\]
+What I'd rather say, when $A : \rtype_{\Delta, i : \ii}$
+and $C : \rtype_{\Delta, i : \ii}$, is something like
+\[
+\erule
+{\Gamma, k : n,  [\ep k/i]A \prov [\ep k /i]C
+\qquad
+\Gamma, \forall i . A \prov C
+\qquad
+\hbox{(some equality)}}
+{\Gamma, A \prov C}
+\]
+Where I still need operations `$[\ep k/i]$' and `$\forall i.$' that
+both take a $\rtype_{\Delta,i:\ii}$ to a $\rtype_\Delta$.
+Though I kind of think that I need to express more about the term parts of what's going on.
+If indeed $\rtype_\Delta$ is like $r_\Delta \to \rtype$, then maybe the term-building proof
+\[\Gamma, \forall i . A \prov C\]
+is really
+\[\Gamma, \rho : r_{\Delta,i:\ii}, (\forall i . A)(r\adjust_\Delta) \prov C(r)\]
+Ok, fine, maybe I am thinking about $\rtype_\Delta = r_\Delta \to \rtype$ again.
+
+\[\nu_1 : \sharp n_1, x : A, \nu_2 : \sharp n_2, y : B, \nu_3 : \sharp n_3 \prov M : C\]
+becomes
+\[\rho : r_{n_1,n_2,n_3}, x : \sem A(\rho\adjust_{n_1}), y : \sem B(\rho\adjust_{n_1,n_2}) \prov \sem M(\rho\adjust_{n_1,n_2,n_3}) : \sem C(\rho\adjust_{n_1,n_2,n_3})\]
+with the understanding that {\em since} for example $B$ is a well-defined type in
+the context where $\nu_1,\nu_2$ exist, then $\sem B$ is a $r_{n_1,n_2} \to \rtype$.
+At this point it seems hard not to justify postulating that $r_{n_1,n_2}$ literally
+is $r_{n_1} \x r_{n_2}$, hm.
+
+\subsection{Trying a Clean Description}
+
+In the target language there is a type $r_n$ for each $n$. Define a translation
+of contexts like so:
+\[
+\begin{tabular}{r@{$\quad=\quad$ }l}
+$\ssem{\cdot}  $&$\cdot$\\
+$\ssem{\Gamma, \nu : \sharp n}  $&$\ssem \Gamma, (\alpha_\nu, \nu)$\\
+$\ssem{\Gamma, x : A}  $&$\ssem \Gamma$\\
+$\sem{\cdot}  $&$\cdot$\\
+$\sem{\Gamma, \nu : \sharp n}  $&$\sem \Gamma, \alpha_\nu : r_n, \nu : \sharp_n(\alpha_\nu)$\\
+$\sem{\Gamma, x : A}  $&$\sem \Gamma, \sem A(\ssem \Gamma)$\\
+$\usem{\cdot}  $&$\cdot$\\
+$\usem{\Gamma, \nu : \sharp n}  $&$\usem \Gamma, \alpha_\nu : r_n, \nu : \sharp_n(\alpha_\nu)$\\
+$\usem{\Gamma, x : A}  $&$\usem \Gamma$\\
+\end{tabular}
+\]
+With the idea that if $\Gamma \prov A : \rtype$ then $\sem \Gamma \prov \sem A : \usem \Gamma \to \rtype$, and that $\sem \Gamma \prov \ssem \Gamma : \usem \Gamma$.
+
+Hm but I fear that making $\sharp n = \Sigma (\alpha \cn r_n) . \sharp_n(\alpha)$ doesn't seem
+any more special than just making $\sharp n$ persistent.
+
+\end{document}
