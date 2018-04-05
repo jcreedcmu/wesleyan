@@ -412,4 +412,71 @@ weakening principle that allows you to take $A$ sitting at $\Delta$
 and migrate it up to $A'$ sitting at $\Delta, \nu : \sharp n$, which
 is what corresponds to identity extension, I think, that
 thing whose importance Bob Atkey is always going on about.
+
+\subsection{Staring at $\forall$ rules}
+
+\[
+\erule
+{\Delta, i : \ii; \Gamma \prov  A : \rtype}
+{\Delta; \Gamma \prov \forall i . A : \rtype}
+\qquad
+\erule
+{\Delta, i : \ii; \Gamma \prov  M : A }
+{\Delta; \Gamma \prov \susp i M : \forall i . A }
+\]
+
+\begin{thmbox}
+  If $\Delta \prov \Gamma \rctx$, then $\prov \sem \Gamma^\Delta : \sem \Delta \to \rtype$\\
+  If $\Delta ; \Gamma \prov A : \rtype$, then $\prov \sem A^\Delta : (\delta : \sem \Delta) \to \sem \Gamma^{\Delta}(\delta)  \to \rtype$.\\
+  If $\Delta ; \Gamma \prov M : A$, then $\prov \sem M^\Delta : (\delta : \sem \Delta) (\gamma : \sem \Gamma^{\Delta}(\delta))  \to \sem A^\Delta(\delta, \gamma)$.
+\end{thmbox}
+
+But $\sem\Delta$ is kind of a category, so $\sem\Delta \to \rtype$ is really a functor,
+ talking about a bunch of choices of types and (commuting) functions. As a category, $\sem\Delta$
+is straightforwardly a product of the things in $\Delta$; the category $\sharp 1$ is the arrow
+category, $\sharp 2$ is the span category, etc.
+
+To see that the $\forall$ formation rule is sensible, we assume
+we have by induction hypothesis
+\[\sem A^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii) \to \sem \Gamma^{\Delta, i : \ii}(\delta) \to \rtype\]
+At this point we assume that the way $\Gamma$ gets weakened from $\Delta$ to $\Delta, i : \ii$
+is determinate, so we might as well say
+\[\sem A^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii) \to \sem \Gamma^{\Delta}(\pi_1 \delta) \to \rtype\]
+And we set
+\[\sem {\forall i.A}^{\Delta}(\delta : \sem \Delta, \gamma : \sem \Gamma^\Delta(\delta)) = (i : \sem{\ii}) \to \sem A^{\Delta, i : \ii}\langle\delta, i\rangle(\gamma)\]
+
+For the abstraction rule, we suppose that we have
+\[\sem M^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem{\ii})(\gamma : \sem \Gamma^{\Delta, i : \ii}(\delta)) \to \sem A^{\Delta, i: \ii}(\delta, \gamma)\]
+which is more or less the same as
+\[\sem M^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem{\ii})(\gamma : \sem \Gamma^{\Delta}(\pi_1 \delta)) \to \sem A^{\Delta, i: \ii}(\delta, \gamma)\]
+so we want to come up with
+\[ \sem{\susp i M}^\Delta : (\delta : \sem \Delta)(\gamma : \sem \Gamma^{\Delta}(\delta)) \to \sem {\forall i . A}^{\Delta}(\delta, \gamma) \]
+i.e.
+\[ \sem{\susp i M}^\Delta : (\delta : \sem \Delta)(\gamma : \sem \Gamma^{\Delta}(\delta))  (i : \sem{\ii}) \to \sem A^{\Delta, i : \ii}\langle\delta, i\rangle(\gamma) \]
+so we can simply set
+\[ \sem{\susp i M}^\Delta(\delta, \gamma, i) = \sem M^{\Delta, i:\ii}(\langle \delta, i\rangle, \gamma)\]
+
+\subsection{Application}
+\[
+\erule
+{\Delta; \Gamma \prov M : \forall i . A }
+{\Delta, i : \ii; \Gamma \prov  M \bullet i : A }
+\]
+We start with an assumption that
+\[ \sem{ M}^\Delta : (\delta : \sem \Delta)(\gamma : \sem \Gamma^{\Delta}(\delta)) \to \sem {\forall i . A}^{\Delta}(\delta, \gamma) \]
+i.e.
+\[ \sem{ M}^\Delta : (\delta : \sem \Delta)(\gamma : \sem \Gamma^{\Delta}(\delta))  (i : \sem{\ii}) \to \sem A^{\Delta, i : \ii}\langle\delta, i\rangle(\gamma) \]
+and we need to come up with
+\[\sem {M \bullet i}^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem{\ii})(\gamma : \sem \Gamma^{\Delta}(\pi_1 \delta)) \to \sem A^{\Delta, i: \ii}(\delta, \gamma)\]
+so we set
+\[\sem {M \bullet i}^{\Delta, i : \ii}\langle \delta , i\rangle (\gamma) = \sem M^{\Delta}(\delta, \gamma, i)\]
+And pretty clearly $\beta$ and $\eta$ hold here!
+\subsection{An important question}
+Why is this `substructural', if we're taking $\sem \Delta$ to be the
+categorical {\em product} as opposed to some mere monoidal product of
+its constituents' interpretations? I think I have a chance of this
+being ok, because the application rule intrinsically, explicitly
+widens the context. Although... no, I'm still kind of worried, I'm not
+sure that a non-context-widening application rule is {\em ruled out}.
+Will have to see how spans play out.
 \end{document}
