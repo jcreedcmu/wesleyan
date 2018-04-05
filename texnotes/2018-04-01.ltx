@@ -383,4 +383,33 @@ With the idea that if $\Gamma \prov A : \rtype$ then $\sem \Gamma \prov \sem A :
 Hm but I fear that making $\sharp n = \Sigma (\alpha \cn r_n) . \sharp_n(\alpha)$ doesn't seem
 any more special than just making $\sharp n$ persistent.
 
+\section{The Meaning of Types under interval variables}
+
+Let me instead try to think of all the interval variables as occurring
+all the way to the left. The interpretation of a type expression $A$
+in light of an interval context $\Delta = x_1 : \sharp n_1, \ldots, x_n : \sharp n_m$
+is nothing more than a choice of sets
+\[ \sem A : (z_1 : n_1^+) \cdots (z_m : n_m^+) \to \rset \]
+where $X^+ = X \cup \{\bullet\}$ and commuting maps
+\[ \sem A (\cdots z_i = \bullet \cdots) \to \sem A(\cdots z_i = z_i \cdots) \]
+that go from apexes of spans to feet.
+
+If I think of $\sharp n$ as literally the $n$-legged free walking span category in the sense of dHoTT,
+$\sem A$ in context $\Delta$ is literally then of type $\sharp n_1 \to \cdots \to \sharp n_m \to \rset$,
+assuming $\rset$ is a covariant universe.
+
+What $S \star (\nu : \sharp n)$ is interpreted as, then, is quite straightforward; it just is the appropriate span.
+
+So the feeling I'm getting is that what I want to describe is not a single presheaf semantics
+for Bernardy-Moulin, but a adjoint-logicky semantics, where each choice of how many interval
+variables are around is its own possibility of which presheaf category we're presently
+interpreting into. This may end up being equivalent, but I think it may fit in my brain better.
+
+The quantifiers over interval variables --- and the applications that
+linearly consume them --- are then perhaps like $F/U$ operators that
+move from one category to another. There could be some kind of
+weakening principle that allows you to take $A$ sitting at $\Delta$
+and migrate it up to $A'$ sitting at $\Delta, \nu : \sharp n$, which
+is what corresponds to identity extension, I think, that
+thing whose importance Bob Atkey is always going on about.
 \end{document}
