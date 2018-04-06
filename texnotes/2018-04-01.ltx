@@ -445,6 +445,7 @@ is determinate, so we might as well say
 And we set
 \[\sem {\forall i.A}^{\Delta}(\delta : \sem \Delta, \gamma : \sem \Gamma^\Delta(\delta)) = (i : \sem{\ii}) \to \sem A^{\Delta, i : \ii}\langle\delta, i\rangle(\gamma)\]
 
+\subsubsection{Abstraction}
 For the abstraction rule, we suppose that we have
 \[\sem M^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem{\ii})(\gamma : \sem \Gamma^{\Delta, i : \ii}(\delta)) \to \sem A^{\Delta, i: \ii}(\delta, \gamma)\]
 which is more or less the same as
@@ -456,7 +457,7 @@ i.e.
 so we can simply set
 \[ \sem{\susp i M}^\Delta(\delta, \gamma, i) = \sem M^{\Delta, i:\ii}(\langle \delta, i\rangle, \gamma)\]
 
-\subsection{Application}
+\subsubsection{Application}
 \[
 \erule
 {\Delta; \Gamma \prov M : \forall i . A }
@@ -479,4 +480,127 @@ being ok, because the application rule intrinsically, explicitly
 widens the context. Although... no, I'm still kind of worried, I'm not
 sure that a non-context-widening application rule is {\em ruled out}.
 Will have to see how spans play out.
+
+\subsection{Ordinary Function Types}
+\[
+\erule
+{\Delta;\Gamma, x : A \prov B : \rtype}
+{\Delta;\Gamma \prov  (x : A) \to B : \rtype}
+\]
+We know
+\[ \sem B^\Delta : (\delta : \sem \Delta) \to \sem {\Gamma, x : A}^{\Delta}(\delta)  \to \rtype\]
+and want to construct
+\[ \sem {(x:A) \to B}^\Delta : (\delta : \sem \Delta) \to \sem \Gamma^{\Delta}(\delta)  \to \rtype\]
+Assume
+$\sem {\Gamma, x : A}^{\Delta}(\delta) = (\gamma : \sem \Gamma^\Delta(\delta)) \x (x : \sem A(\delta, \gamma))$
+we can set
+\[ \sem {(x:A) \to B}^\Delta(\delta, \gamma) = (x : \sem A^\Delta(\delta, \gamma))\to \sem B^\Delta(\delta, \langle \gamma, x\rangle)\]
+\[
+\erule
+{\Delta;\Gamma, x : A \prov M : B}
+{\Delta;\Gamma \prov \lambda x . M : (x : A) \to B}
+\]
+We get to assume
+\[\sem M^\Delta : (\delta : \sem \Delta) (\gamma : \sem {\Gamma, x : A}^{\Delta}(\delta))  \to \sem B^\Delta(\delta, \gamma)\]
+and
+want to construct
+\[\sem {\lambda x . M}^\Delta : (\delta : \sem \Delta) (\gamma : \sem \Gamma^{\Delta}(\delta))  \to \sem {(x:A)\to B}^\Delta(\delta, \gamma)\]
+so we set
+\[\sem {\lambda x . M}^\Delta(\delta, \gamma) = \lambda x . \sem M^\Delta(\delta, \langle \gamma, x\rangle) \]
+\subsection{Witness types}
+\[
+\erule
+{\Delta; \Gamma \prov S : \rspan_n}
+{\Delta, i : \ii; \Gamma \prov S \star i : \rtype}
+\]
+
+We get to assume
+\[\sem S^\Delta : (\delta : \sem \Delta) (\gamma : \sem {\Gamma}^{\Delta}(\delta))  \to \sem {\rspan_n}^\Delta(\delta, \gamma)\]
+and we need to construct
+\[\sem {S\star i}^{\Delta, i : \ii} : (\delta : \sem {\Delta} \x \sem{\ii}) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta))  \to \rtype\]
+so we set
+\[\sem {S\star i}^{\Delta, i : \ii}(\delta, \gamma) = \blet (\fC, \fA, \ff) = \sem S^\Delta(\pi_1 \delta, \gamma) \]
+\[\bin \bcase i \bof \bullet \mapsto \fC \celse \ep k \mapsto \fA \celse f\mapsto \ff\]
+Knowing that $\fC : \sem\rset^\Delta(\pi_1 \delta, \gamma) = \rset$ etc.
+
+\subsubsection{intro}
+\[
+\erule
+{\Delta; \Gamma \prov M : \fC }
+{\Delta, i : \ii; \Gamma \prov M \star i : S \star i}
+\]
+Assume
+\[\sem M^{\Delta} : (\delta : \sem \Delta) (\gamma : \sem {\Gamma}^{\Delta}(\delta))  \to \fC(\delta, \gamma)\]
+Need to construct
+\[\sem {M\star i}^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta))  \to \sem {S \star i}^{\Delta, i :\ii}(\delta, \gamma)\]
+i.e.
+\[\sem {M\star i}^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii ) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta))  \to \blet (\fC, \fA, \ff) = \sem S^\Delta(\pi_1 \delta, \gamma) \]
+\[\bin \bcase i \bof \bullet \mapsto \fC \celse \ep k \mapsto \fA \celse f\mapsto \ff\]
+so we set
+\[\sem {M\star i}^{\Delta, i : \ii}\langle \delta, i\rangle (\gamma) = \blet c = \sem M^\Delta(\delta, \gamma) \]
+\[\bin \bcase i \bof \bullet \to c \celse \ep k \to \ff(c)\]
+\subsubsection{elim}
+\[
+\erule
+{\Delta, i : \ii; \Gamma \prov M : S \star i}
+{\Delta; \Gamma \prov \ssusp i M : \fC }
+\]
+Assume
+\[\sem M^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta))  \to \sem {S \star i}^{\Delta, i :\ii}(\delta, \gamma)\]
+i.e.
+\[\sem M^{\Delta, i : \ii} : (\delta : \sem \Delta \x \sem \ii ) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta))  \to \blet (\fC, \fA, \ff) = \sem S^\Delta(\pi_1 \delta, \gamma) \]
+\[\bin \bcase i \bof \bullet \mapsto \fC \celse \ep k \mapsto \fA \celse f\mapsto \ff\]
+and we need
+\[\sem {\ssusp i M}^\Delta : (\delta : \sem \Delta ) (\gamma : \sem {\Gamma}^{\Delta}( \delta))  \to \fC(\delta, \gamma)\]
+
+So just set
+$\sem {\ssusp i M}^\Delta(\delta, \gamma) = \sem M^{\Delta, i:\ii}\langle \delta, \bullet \rangle (\gamma)$
+\subsection{$\sharp$-elimination}
+\[
+\erule
+{\[
+\Delta, i : \ii ; \Gamma, y : \forall i . A  \prov N : [y\ i/x]C
+\djust
+\Delta; [\ep k/i]\Gamma,   x : [\ep k/i]A \prov M_k : [\ep k /i]C
+\]}
+{\Delta, i : \ii; \Gamma, x : A \prov \bcase : C}
+\]
+We get to assume (letting $\Gamma_k = [\ep k / i]\Gamma$ and
+$C_k = [\ep k / i]C$ and
+$A_k = [\ep k / i]A$ and
+$\Delta' = \Delta, i : \ii$)
+\[\sem N^{\Delta'} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem \Gamma^{\Delta'}(\delta)) (y : \sem {\forall i . A}^{\Delta'}(\delta, \gamma)) \to \sem {[y\ i/x]C}^{\Delta'}(\delta, \gamma)\]
+\[\sem {M_k}^{\Delta} : (\delta : \sem \Delta) (\gamma : \sem {\Gamma_k}^{\Delta}(\delta)) (x : \sem{A_k}^\Delta(\delta, \gamma)) \to \sem {C_k}^{\Delta}(\delta, \gamma)\]
+we need to construct
+\[\sem {\bcase}^{\Delta'} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem {\Gamma}^{\Delta'}(\delta)) (x : \sem{A}^{\Delta'}(\delta, \gamma)) \to \sem {C}^{\Delta'}(\delta, \gamma)\]
+so we set
+\[\sem {\bcase}^{\Delta'}  (\langle \delta, i\rangle , \gamma) (x) = \bcase i \bof\]
+\[\celse \bullet \mapsto \sem N^{\Delta'}(\langle \delta, \bullet\rangle, \gamma ) \]
+\[\celse \ep k \mapsto \sem{M_k}^\Delta( )\]
+$\cdots$ actually no, this is kind of broken, because $\forall i$ formation requires the $\Gamma$ be free of $i$.
+
+\subsection{$\sharp$-elimination for the special case where $i \not\in \Gamma$}
+\[
+\erule
+{\[
+\Delta, i : \ii ; \Gamma, y : \forall i . A  \prov N : [y\ i/x]C
+\djust
+\Delta; \Gamma,   x : [\ep k/i]A \prov M_k : [\ep k /i]C
+\]}
+{\Delta, i : \ii; \Gamma, x : A \prov \bcase : C}
+\]
+We get to assume (letting
+$C_k = [\ep k / i]C$ and
+$A_k = [\ep k / i]A$ and
+$\Delta' = \Delta, i : \ii$)
+\[\sem N^{\Delta'} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem \Gamma^{\Delta}(\pi_1\delta)) (y : \sem {\forall i . A}^{\Delta}(\pi_1\delta, \gamma)) \to \sem {[y\ i/x]C}^{\Delta'}(\delta, \gamma)\]
+\[\sem {M_k}^{\Delta} : (\delta : \sem \Delta) (\gamma : \sem {\Gamma}^{\Delta}(\delta)) (x : \sem{A_k}^\Delta(\delta, \gamma)) \to \sem {C_k}^{\Delta}(\delta, \gamma)\]
+we need to construct
+\[\sem {\bcase}^{\Delta'} : (\delta : \sem \Delta \x \sem \ii) (\gamma : \sem {\Gamma}^{\Delta}(\pi_1 \delta)) (x : \sem{A}^{\Delta'}(\delta, \gamma)) \to \sem {C}^{\Delta'}(\delta, \gamma)\]
+so we set
+\[\sem {\bcase}^{\Delta'}  (\langle \delta, i\rangle , \gamma) (x) = \bcase i \bof\]
+\[\celse \bullet \mapsto \sem N^{\Delta'}(\langle \delta, \bullet\rangle, \gamma )(x) \]
+\[\celse \ep k \mapsto \sem{M_k}^\Delta(\delta, \gamma)(x)\]
+Or something like this perhaps?
+
 \end{document}
