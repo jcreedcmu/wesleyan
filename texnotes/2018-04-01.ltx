@@ -11,6 +11,8 @@
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
@@ -602,5 +604,105 @@ so we set
 \[\celse \bullet \mapsto \sem N^{\Delta'}(\langle \delta, \bullet\rangle, \gamma )(x) \]
 \[\celse \ep k \mapsto \sem{M_k}^\Delta(\delta, \gamma)(x)\]
 Or something like this perhaps?
+
+\section{Trying to Figure Out What's Absolutely Necessary}
+
+Let's say $\Delta$ is a list of variables associated with categories (or maybe just reflexive graphs? Maybe while demanding an initial object?)
+\[\Delta ::= \cdot \celse \Delta, i : \C\]
+The interpretation of
+\[\Delta ; \Gamma \rctx\]
+is a functor (or reflexive graph homomorphism? maybe preserving
+initial objects?) $\sem \Gamma$ of type $\prod \Delta \to \rset$.
+The thing to say of greater generality might be that $\C$ has
+to be merely an object in {\em some} finite-product-having category
+--- or merely that $\Delta$ itself is an object in that category ---
+and talking about fibered objects $\sem \Gamma \to \Delta$ over
+$\Delta$.
+
+Let me put that off for now --- $\C$ is definitely
+specifically a {\em category}, there are no dependencies within $\Delta$ so
+the object $\sem \Delta \in \rcat$ that $\Delta$ represents is simply the product of categories,
+(although ---
+in the reflexive graph case, maybe the tensor product of graphs?)
+and the interpretation of a well-formed context of ordinary variables
+is a functor $\sem \Gamma : \sem \Delta \to \rset$.
+
+I want to say that the interpretation of
+\[\Delta ; \Gamma \prov A : \rtype\]
+is $\sem A : (\delta : \sem \Delta) \to \sem \Gamma(\delta) \to \rset$,
+but since $\sem \Delta$ isn't literally a {\em type}, I need to explain what this means,
+and what coherences it has. For every object $\delta \in \sem \Delta$, there should indeed
+be a fiber
+\[\sem A(\delta) : \sem \Gamma(\delta) \to \rset\]
+For every morphism $\phi : \delta_1 \to \delta_2 \in \sem \Delta$, there should be a
+function
+\[\sem A(\phi) : (\gamma : \sem\Gamma(\delta_1)) \to \sem A(\delta_1)(\gamma) \to
+ \sem A(\delta_2)(\sem \Gamma(\phi)(\gamma))\]
+probably satisfying unsurprising coherence laws.
+This smells like a morphism in a category of elements.
+
+The interpretation of $\Gamma \prov M : A$ is, for every object $\delta \in \sem \Delta$,
+a function
+\[ \sem M(\delta) : (\gamma : \sem \Gamma(\delta)) \to \sem A(\delta)(\gamma)\]
+and for every $\phi : \delta_1 \to \delta_2$, an equality
+\[ \sem M(\phi) : (\gamma : \sem\Gamma(\delta_1))  \to
+\sem A(\phi)(\gamma)(\sem M(\delta_1)(\gamma))
+\equiv
+\sem M(\delta_2)( \sem \Gamma(\phi)(\gamma))
+\]
+
+\begin{lstlisting}[mathescape=true]
+postulate
+  Ctxd : Set
+  Ctx : Ctxd $\to$ Set
+  Tp : {$\Delta$ : Ctxd} $\to$ Ctx $\Delta$ $\to$ Set
+  Tm : {$\Delta$ : Ctxd} {$\Gamma$ : Ctx $\Delta$} $\to$ Tp $\Gamma$ $\to$ Set
+  Obj : Set
+  Mor : Obj $\to$ Obj $\to$ Set
+  iCtxObj : {$\Delta$ : Ctxd} ($\Gamma$ : Ctx $\Delta$)
+    $\to$ Obj $\to$ Set
+  iCtxMor : {$\Delta$ : Ctxd} ($\Gamma$ : Ctx $\Delta$)
+    $\to$ {$\delta$1 $\delta$2 : Obj} ($\phi$ : Mor $\delta$1 $\delta$2)
+    $\to$ iCtxObj $\Gamma$ $\delta$1 $\to$ iCtxObj $\Gamma$ $\delta$2
+  iTpObj : {$\Delta$ : Ctxd} {$\Gamma$ : Ctx $\Delta$} (A : Tp $\Gamma$)
+    $\to$ ($\delta$ : Obj) $\to$ iCtxObj $\Gamma$ $\delta$ $\to$ Set
+  iTpMor : {$\Delta$ : Ctxd} {$\Gamma$ : Ctx $\Delta$} (A : Tp $\Gamma$)
+    $\to$ {$\delta$1 $\delta$2 : Obj} ($\phi$ : Mor $\delta$1 $\delta$2)
+    $\to$ ($\gamma$ : iCtxObj $\Gamma$ $\delta$1) $\to$ iTpObj A $\delta$1 $\gamma$ $\to$ iTpObj A $\delta$2 (iCtxMor $\Gamma$ $\phi$ $\gamma$)
+  iTmObj : {$\Delta$ : Ctxd} {$\Gamma$ : Ctx $\Delta$} {A : Tp $\Gamma$} (M : Tm A)
+    $\to$ ($\delta$ : Obj) ($\gamma$ : iCtxObj $\Gamma$ $\delta$) $\to$ iTpObj A $\delta$ $\gamma$
+  iTmMor : {$\Delta$ : Ctxd} {$\Gamma$ : Ctx $\Delta$} {A : Tp $\Gamma$} (M : Tm A)
+    $\to$ {$\delta$1 $\delta$2 : Obj} ($\phi$ : Mor $\delta$1 $\delta$2)
+    $\to$ ($\gamma$ : iCtxObj $\Gamma$ $\delta$1) $\to$
+      iTpMor A $\phi$ $\gamma$ (iTmObj M $\delta$1 $\gamma$) == iTmObj M $\delta$2 (iCtxMor $\Gamma$ $\phi$ $\gamma$)
+\end{lstlisting}
+
+%% module a where
+
+%% data _==_ {A : Set} : A → A → Set where
+%%   refl : {a : A} → a == a
+
+%% postulate
+%%   Ctxd : Set
+%%   Ctx : Ctxd → Set
+%%   Tp : {Δ : Ctxd} → Ctx Δ → Set
+%%   Tm : {Δ : Ctxd} {Γ : Ctx Δ} → Tp Γ → Set
+%%   Obj : Set
+%%   Mor : Obj → Obj → Set
+%%   iCtxObj : {Δ : Ctxd} (Γ : Ctx Δ)
+%%     → Obj → Set
+%%   iCtxMor : {Δ : Ctxd} (Γ : Ctx Δ)
+%%     → {δ1 δ2 : Obj} (φ : Mor δ1 δ2)
+%%     → iCtxObj Γ δ1 → iCtxObj Γ δ2
+%%   iTpObj : {Δ : Ctxd} {Γ : Ctx Δ} (A : Tp Γ)
+%%     → (δ : Obj) → iCtxObj Γ δ → Set
+%%   iTpMor : {Δ : Ctxd} {Γ : Ctx Δ} (A : Tp Γ)
+%%     → {δ1 δ2 : Obj} (φ : Mor δ1 δ2)
+%%     → (γ : iCtxObj Γ δ1) → iTpObj A δ1 γ → iTpObj A δ2 (iCtxMor Γ φ γ)
+%%   iTmObj : {Δ : Ctxd} {Γ : Ctx Δ} {A : Tp Γ} (M : Tm A)
+%%     → (δ : Obj) (γ : iCtxObj Γ δ) → iTpObj A δ γ
+%%   iTmMor : {Δ : Ctxd} {Γ : Ctx Δ} {A : Tp Γ} (M : Tm A)
+%%     → {δ1 δ2 : Obj} (φ : Mor δ1 δ2)
+%%     → (γ : iCtxObj Γ δ1) → iTpMor A φ γ (iTmObj M δ1 γ) == iTmObj M δ2 (iCtxMor Γ φ γ)
 
 \end{document}
