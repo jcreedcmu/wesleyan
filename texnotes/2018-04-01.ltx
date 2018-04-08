@@ -651,6 +651,9 @@ and for every $\phi : \delta_1 \to \delta_2$, an equality
 \sem M(\delta_2)( \sem \Gamma(\phi)(\gamma))
 \]
 
+\subsection{As Agda}
+Probably kinda pointless to put this here because it's too much manual work to turn
+unicode back into \TeX.
 \begin{lstlisting}[mathescape=true]
 postulate
   Ctxd : Set
@@ -704,5 +707,48 @@ postulate
 %%   iTmMor : {Δ : Ctxd} {Γ : Ctx Δ} {A : Tp Γ} (M : Tm A)
 %%     → {δ1 δ2 : Obj} (φ : Mor δ1 δ2)
 %%     → (γ : iCtxObj Γ δ1) → iTpMor A φ γ (iTmObj M δ1 γ) == iTmObj M δ2 (iCtxMor Γ φ γ)
+
+\subsection{Witness Types}
+\[
+\erule
+{\[\forall c \in \C: \qquad \Delta; \Gamma \prov A_c : \rtype
+\djust
+\forall f : c \to d \in \C: \qquad \Delta; \Gamma, x : A_c \prov M_f : A_d
+\]}
+{\Delta, i : \C; \Gamma \prov (A_c, M_f) \star i : \rtype}
+\]
+
+We get to assume for every object $\delta\in\sem \Delta$ that
+\[\sem {A_c}(\delta) : (\gamma : \sem {\Gamma}(\delta))  \to \rset\]
+\[\sem {M_f}(\delta) : (\gamma : \sem {\Gamma}(\delta)) (x : \sem{A_c}(\delta, \gamma))  \to \sem {A_d}(\delta, \gamma)\]
+and every $\phi : \delta_1 \to \delta_2$ that
+\[\sem A_c(\phi) : (\gamma : \sem\Gamma(\delta_1)) \to \sem A_c(\delta_1)(\gamma) \to
+ \sem A_c(\delta_2)(\sem \Gamma(\phi)(\gamma))\]
+\[ \sem {M_f}(\phi) : (\gamma : \sem{\Gamma}(\delta_1))(x : \sem {A_c}(\delta_1, \gamma))  \to\]
+\[\sem {A_d}(\phi)(\gamma)(\sem {M_f}(\delta_1)(\gamma, x))
+\equiv
+\sem {M_f}(\delta_2)( \sem {\Gamma}(\phi)(\gamma), \sem {A_c}(\phi)(x))
+\]
+
+
+and we need to construct for each $(\delta, c) \in \sem {\Delta, i : \C}$
+(letting $S = ((A_c)_{c\in \C}, (M_f)_{f\in \C})$)
+\[\sem {S \star i}(\delta, c) : (\gamma : \sem {\Gamma}(\delta))  \to \rset\]
+and for each $(\phi, f) : (\delta_1, c) \to (\delta_2, d)$ construct
+\[\sem {S \star i}(\phi, f) : (\gamma : \sem {\Gamma}(\delta_1))
+ \to \sem {S \star i}((\delta_1, c), \gamma)
+ \to \sem {S \star i}((\delta_2, d), \sem \Gamma(\phi)(\gamma)) \]
+
+(note that silently what's going on is that $\sem \Gamma$, already a
+functor from $\sem \Delta$ to $\rset$, is {\em also} weakenable to a
+functor $\sem {\Delta, i : \C} \to \rset$, by outputting identity
+morphisms for any morphism between $\C$-objects --- I think this is
+why we need identities to exist, so at least reflexive graphs if not
+categories? --- or maybe it's not really happening here, maybe it's
+just projection, but I think it will come up)
+
+But we can just set
+\[\sem {S \star i}(\delta, c)(\gamma) = \sem {A_c}(\delta)(\gamma)\]
+\[\sem {S \star i}(\phi, f)(\gamma)(x) = \sem {M_f}(\delta)(\gamma)(x)\]
 
 \end{document}
