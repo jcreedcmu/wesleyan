@@ -749,6 +749,102 @@ just projection, but I think it will come up)
 
 But we can just set
 \[\sem {S \star i}(\delta, c)(\gamma) = \sem {A_c}(\delta)(\gamma)\]
-\[\sem {S \star i}(\phi, f)(\gamma)(x) = \sem {M_f}(\delta)(\gamma)(x)\]
+\[\textcolor{red}{\sem {S \star i}(\phi, f)(\gamma)(x) = \sem {M_f}(\delta)(\gamma)(x)}\]
+\textcolor{red}{this isn't quite right but it seems like it should work somehow}
 
+\section{Back to Substitutions}
+All the object-level stuff should read like substitutions, and then
+maybe I get weakening without syntactic bureacracy. Suppose $\prov \sigma : \Delta$
+is a set of objects:
+\begin{thmbox}
+  If $\Delta \prov \Gamma \rctx$, then $\sigma \Gamma : \rctx$\\
+  If $\Delta ; \Gamma \prov A : \rtype$, then $\sigma \Gamma \prov \sigma A : \rtype$.\\
+  If $\Delta ; \Gamma \prov M : A$, then $\sigma \Gamma \prov \sigma M : \sigma A$.
+\end{thmbox}
+easy peasy! How about morphism stuff?
+Suppose $\prov \theta : \sigma_1 \to \sigma_2 : \Delta$ is a collection
+of morphisms in $\Delta$.
+
+\begin{thmbox}
+If $\prov \Gamma \rctx$, then $\sigma_1 \Gamma \prov \theta \Gamma : \sigma_2 \Gamma$\\
+If $\Gamma \prov A : \rtype$, then
+$\sigma_1 \Gamma, x : \sigma_1 A \prov \theta^A(x) : (\theta \Gamma)(\sigma_2 A)$\\
+If $\Gamma \prov M :  A$, then
+$\sigma_1 \Gamma \prov [\sigma_1 M/x] (\theta^A(x)) \equiv (\theta \Gamma)(\sigma_2 M)$
+\end{thmbox}
+
+could have also phrased this as
+
+\begin{thmbox}
+If $\prov \Gamma \rctx$, then $\sigma_1 \Gamma \prov \theta \Gamma : \sigma_2 \Gamma$\\
+If $\Gamma \prov A : \rtype$ and  $\sigma_1 \Gamma \prov N : \sigma_1 A$, then \\
+$\sigma_1 \Gamma \prov \theta^A N : (\theta \Gamma)(\sigma_2 A)$\\
+If $\Gamma \prov M :  A$, then
+$\sigma_1 \Gamma \prov \theta^A (\sigma_1 M)\equiv (\theta \Gamma)(\sigma_2 M)$
+\end{thmbox}
+
+\subsection{Contexts}
+\begin{defnbox}
+\begin{tabular}{r@{$\quad=\quad$ }l}
+$\sigma \cdot  $&$\cdot$\\
+$\sigma(\Gamma, x : A)  $&$\sigma \Gamma, x : \sigma A$\\
+$\theta{\cdot}  $&$\cdot$\\
+$\theta(\Gamma, x : A)  $&$\theta \Gamma   [\theta^A(x)/x]$\\
+\end{tabular}
+\end{defnbox}
+Suppose $\prov \theta : \sigma_1 \to \sigma_2 : \Delta$
+and $\Delta \prov \Gamma \rctx$ and $\Delta; \Gamma \prov A : \rtype$.
+Need $\sigma_1(\Gamma, x : A) \prov \theta(\Gamma, x : A) : \sigma_2(\Gamma, x : A)$, i.e.
+\[\sigma_1\Gamma, x : \sigma_1 A \prov \theta(\Gamma, x : A) : (\sigma_2\Gamma, x : \sigma_2 A)\]
+The general substitution rule is
+\[
+\erule
+{\Gamma_1 \prov \sigma : \Gamma_2 \qquad \Gamma_1 \prov M : \sigma A}
+{\Gamma_1 \prov \sigma[M/x] : (\Gamma_2, x : A)}
+\]
+and we already have $\sigma_1 \prov \theta \Gamma : \sigma_2 \Gamma$ by i.h.
+so we just need
+\[\sigma_1 \Gamma, x : \sigma_1 A \prov \theta^A(x) : (\theta \Gamma)(\sigma_2 A)\]
+ which follows by i.h. as well.
+\subsection{Forall $i$}
+\[
+\erule
+{\Delta, i : \C ; \Gamma \prov A : \rtype \qquad i \not\in \Gamma}
+{\Delta; \Gamma \prov \forall i . A : \rtype}
+\]
+Suppose $\prov \sigma : \Delta$ and
+ $\prov \theta : \sigma_1 \to \sigma_2  : \Delta$.
+We need to show
+\[\sigma\Gamma \prov \sigma(\forall i. A) : \rtype\]
+\[\sigma_1\Gamma, x : \sigma_1(\forall i . A) \prov \theta^{\forall i . A}(x) : (\theta\Gamma)(\sigma_2 (\forall i . A))\]
+
+We get to assume that for any $c, f : c_1 \to c_2$
+that  \[\sigma\Gamma \prov \sigma[c/i] A : \rtype\]
+\[\sigma_1\Gamma, x : \sigma_1[c_1/i]A \prov (\theta[f/i])^A(x) : (\theta\Gamma)(\sigma_2[c_2/i]A)\]
+
+So we set
+\begin{defnbox}
+\begin{tabular}{r@{$\quad=\quad$ }l}
+$\sigma (\forall i . A)  $&$\sigma[\bot/i] A$\\
+$\theta^{\forall i . A}(x)  $&$(\theta[\rid_\bot/i])^A(x)$
+\end{tabular}
+\end{defnbox}
+where $\bot$ is the initial object of $\C$.
+\subsubsection{Terms}
+\[
+\erule
+{\Delta, i : \C; \Gamma \prov M : A\qquad i \not\in\Gamma}
+{\Delta; \Gamma \prov \susp i M : \forall i . A}
+\]
+Going to say $\sigma(\susp i M) = (\sigma[\bot/i])M$.
+\[
+\erule
+{\Delta; \Gamma \prov M : \forall i . A}
+{\Delta, i : \C; \Gamma \prov M * i : A}
+\]
+Going to somehow use the initiality of $\bot$ here. We get in
+a substitution $\sigma[c/i]$, and there is a morphism $!_c : \bot \to i$.
+We have $\sigma M : \sigma [\bot / i ] A$, and we can turn that into the
+$\sigma[c/i]A$ we need, by constructing the identity morphism at $\sigma$,
+and tacking on $!_c$.
 \end{document}
