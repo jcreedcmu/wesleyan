@@ -4232,3 +4232,47 @@ as not living in Set, but rather in P → Set or N → Set according to their po
 as concerns specifically the mysterious linearity violations in my proof that
 witness types + #-elim ⟹ maps from the interval into the universe are relations?
 A: ???
+
+=== 2018.04.09
+
+Q: Actually, I'm being kind of dumb not demanding injectivity of automorphisms of
+tangent spaces. How would I do that?
+A: Like so:
+<<<
+{-# OPTIONS --without-K --rewriting #-}
+
+module a where
+
+open import HoTT hiding ( O )
+
+postulate
+  I : Set → Set
+  η : {A : Set} → A → I A
+  ind : {A : Set} {B : I A → Set} → ((a : A) → I (B(η a))) → (z : I A) → I (B z)
+
+  I-β : {A : Set} {B : I A → Set} {f : ((a : A) → I (B(η a)))} (a : A) →
+    ind {A} {B} f (η a) ↦ f a
+  {-# REWRITE I-β #-}
+
+𝔻 : {A : Set} (a : A) → Set
+𝔻 {A} a = Σ A (λ b → η a == η b)
+
+O : {A : Set} (a : A) → 𝔻 a
+O {A} a = a , idp
+
+isO : {A : Set} {a : A} → 𝔻 a → Set
+isO {A} {a} d = d == O a
+
+swirl : {A : Set} (a : A) → Set
+swirl {A} a = Σ (𝔻 a → 𝔻 a) (λ f → (x : 𝔻 a) → isO x ≃ isO (f x))
+>>>
+
+=== 2018.04.10
+
+Q: Is there a way I can cleverly pick ℙ and ℕ so that the presheafesque semantics
+of focused logic turns into the straightforward presheaf semantics on a given ℂ?
+A: Somehow I keep thinking I ought to be able to pick
+    ℙ = ℂ and
+    ℕ = ℂ × 𝔽
+for some category 𝔽 of frames that's sufficiently `abstract', but
+I don't know what I mean by that.
