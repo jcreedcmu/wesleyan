@@ -16,7 +16,9 @@
 
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
 \def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
 \def\rspan{\mathsf{Span}}
 \def\El#1{\mathsf{El}({#1})}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
@@ -116,6 +118,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\tri{\triangleright}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
 \def\del{\partial}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \newcounter{nodemaker}
@@ -210,4 +213,173 @@ $\beta' \ge \beta$, I get that
 \[\dns (P_1 \lol \ups P_2) \wat \alpha =\]
 \[= \forall \alpha'\psi \beta' . \alpha' \ge \alpha \to P_1 \wat \alpha' \to \ups P_2 \wat (\beta', \psi) \to \beta' \ge \alpha' \to \#(\psi)\]
 \[= \forall \alpha' . \alpha' \ge \alpha \to P_1 \wat \alpha' \to \dns\ups P_2 \wat \alpha'\]
+
+
+\section{Focusing on What actually Matters for Presheaf Semantics}
+
+Say $\prov \Delta : \rdctx$ is a context $i_1 : \C_1, \ldots, i_n : \C_n$ consisting
+of variables typed by finite categories $\C_i$ with initial objects.
+
+These are the things we intend to be true;
+throughout them when appropriate suppose $\delta, \delta' :  \Delta_\bullet, \phi :  \Delta_{\delta\to \delta'}$.
+\begin{thmbox}
+If $\prov \Delta : \rdctx$ then $\prov  \Delta_\bullet : \rtype$.\\
+If $\prov \Delta : \rdctx$ then $\prov  \Delta_{\delta\to\delta'} : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $ \prov \Gamma_\delta : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $\gamma : \Gamma_{\delta} \prov \Gamma_\phi(\gamma) : \Gamma_{\delta'}$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+$ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+  If $\Delta; \Gamma\prov M: A$ then $ \gamma : \Gamma_\delta \prov M_\delta(\gamma) : A_\delta(\gamma)$.\\
+  If $\Delta; \Gamma\prov M: A$ then
+$\gamma : \Gamma_\delta \prov A_\phi(M_\delta(\gamma)) \equiv M_{\delta'}(\Gamma_\phi(\gamma))$.
+\end{thmbox}
+This should all be routine canonical presheaf semantics {\em except} when we don't leave
+ $\Delta$ constant.
+There are three nontrivial types of constructions that do this:
+quantification over variables $i : \C$ in $\Delta$, witness types, and
+the mysterious generalized exchange rule.
+
+I also want to be clear about how types arise from $\Delta$s, and
+what happens to contexts and types when I
+weaken them across a growing $\Delta$, even though it is trivial.
+\subsection{Categorical Contexts}
+\begin{defnbox}
+\begin{tabular}{r@{$\quad=\quad$ }l}
+$(\cdot)_\bullet   $&$\top$\\
+$(\Delta, i : \C)_\bullet  $&$\Delta_\bullet \x \C_\bullet$\\
+$(\cdot)_{* \to *}   $&$\top$\\
+$(\Delta, i : \C)_{(\delta, c) \to (\delta', c')}  $&$\Delta_{\delta\to\delta'} \x \C(c, c')$\\
+\end{tabular}
+\end{defnbox}
+\subsection{Weakening \& Exchange}
+If $\Delta \prov \Gamma\rctx$, then also $\Delta, i : \C \prov \Gamma \rctx$,
+with $\Gamma_{\delta, c} = \Gamma_\delta$ and $\Gamma_{\phi, f} = \Gamma_\phi$.
+We can do the same thing for permutations of $\Delta$, i.e. reflect them as permutations
+of $\delta$.
+Down at the level of types we'd also say $A_{\delta, c}(\gamma) = A_\delta(\gamma)$
+for $\gamma$ being of type $\Gamma_{\delta, c}$ in the left side of the equation
+turns out to actually be $\Gamma_\delta$ so is suitable for the rhs of the equation.
+Similarly $A_{\phi, f} = A_\phi$, and $M_{\delta, c} = M_\delta$ when weakening, similarly
+with everything for exchange.
+\subsection{Forall}
+\[
+\erule
+{\Delta, i : \C; \Gamma \prov A : \rtype \using \forall }
+{\Delta; \Gamma \prov \forall i . A : \rtype}
+\]
+\[
+\erule
+{\Delta, i : \C; \Gamma \prov M : A \using \forall I}
+{\Delta; \Gamma \prov \susp i M : \forall i . A }
+\qquad
+\erule
+{\Delta; \Gamma \prov M : \forall i . A \using \forall E}
+{\Delta, i : \C; \Gamma \prov M[i] : A }
+\]
+\begin{defnbox}
+  $(\forall i . A)_\delta(\gamma) = A_{\delta, 0}(\gamma)$\\
+  $(\forall i . A)_\phi(x) = A_{\phi, \rid_0}(\gamma)$\\
+  $(\susp i M)_\delta(\gamma) = M_{\delta, 0}(\gamma)$\\
+  $(M[i])_{\delta,c}(\gamma) = A_{\rid_\delta, !_c}(M_\delta(\gamma))$
+\end{defnbox}
+Check term/morphism equality?
+Need
+\[(\forall i . A)_\phi(M_\delta(\gamma)) = M_{\delta'}(\Gamma_\phi(\gamma))\]
+which is
+\[A_{\phi, \rid_0}(M_{\delta, 0}(\gamma)) = M_{\delta', 0}(\Gamma_{\phi, \rid_0}(\gamma))\]
+because of weakening of $M$ and $\Gamma$, which follows by i.h.
+
+Check $\beta$ and $\eta$?
+First, $(\susp i (M[i]))_{\delta}(\gamma) =(M[i])_{\delta,0}(\gamma) = A_{\rid_{\delta, c}}(M_\delta(\gamma)) = M_\delta(\gamma)$. Second, $((\susp i M)[i])_{\delta, c} = A_{\rid_\delta, !_c}((\susp i M)_\delta(\gamma))$
+\[ = A_{\rid_\delta, !_c}(M_{\delta, 0}(\gamma))
+ = M_{\delta, c}(\Gamma_{\rid_\delta, !_c}(\gamma))
+ = M_{\delta, c}(\gamma) \]
+
+\subsection{Witness}
+\[
+\erule
+{ \Delta; \Gamma \prov \fX_c : \rtype \qquad \Delta;\Gamma, y : \fX_c \prov  \fm_f : \fX_{c'}
+\quad (\forall c,c', f:c\to c'\in \C) \using \star }
+{\Delta, i : \C; \Gamma \prov (\fX,\fm) \star i : \rtype}
+\]
+\[
+\erule
+{\Delta; \Gamma \prov M : \fX_0 \using \star I}
+{\Delta, i : \C; \Gamma \prov  M \wat i : (\fX, \fm) \star i }
+\qquad
+\erule
+{\Delta, i : \C; \Gamma \prov M : (\fX, \fm) \star i \using \star E}
+{\Delta; \Gamma \prov \ssusp i M : \fX_0 }
+\]
+(I'm not mentioning the commutativity requirement in $\star$-formation,
+but surely it has to hold, too)
+\begin{thmbox}
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+  $ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+\end{thmbox}
+ \begin{defnbox}
+   $((\fX, \fm) \star i)_{\delta, c}(\gamma) = (\fX_c)_\delta(\gamma)$\\
+   $((\fX, \fm) \star i)_{\phi, f}(x) = (\fX_{c'})_{\phi}((\fm_f)_\delta(x))$\\
+   $(M \wat i)_{\delta, c}(\gamma) = (\fm_{!_c})_\delta(M_\delta(\gamma))$\\
+   $(\ssusp i M)_{\delta}(\gamma) = M_{\delta, 0}(\gamma)$
+ \end{defnbox}
+I think I should anyway have
+\[(\fX_{c'})_{\phi}((\fm_f)_\delta(x)) = (\fm_f)_{\delta'}((\fX_{c})_{\phi, \rid_c}(x)) : (\fX_{c'})_{\delta'}(\Gamma_\phi(\gamma))\]
+from existing lemmas, so I have those two equally good options for how to define
+$((\fX, \fm) \star i)_{\phi, f}(x)$.
+
+%% For $(M \wat i)_{\delta, c}(\gamma)$, we have $M_\delta(\gamma) : (\fX_0)_\delta(\gamma)$,
+%% and need
+%% $(M\wat i)_{\delta, c}(\gamma) : ((\fX, \fm) \star i)_{\delta, c}(\gamma)$.
+%% which is the same as
+%% $(M\wat i)_{\delta, c}(\gamma) : (\fX_c)_{\delta}(\gamma)$.
+
+%% For $(\ssusp i M)_{\delta}(\gamma)$, we have
+%% $M_{\delta, c}(\gamma) : ((\fX, \fm) \star i)_{\delta, c}(\gamma)$ which is the same as
+%% \[M_{\delta, c}(\gamma) : (\fX_c)_{\delta}(\gamma)\]
+%% and we need
+%% $(\ssusp i M)_{\delta}(\gamma) : (\fX_0)_\delta(\gamma)$, which is easy to get.
+Check term/morphism equality?
+We need to show
+\[((\fX, \fm) \star i)_{\phi,f}(M_{\delta,c}(\gamma)) \equiv M_{\delta',c'}(\Gamma_\phi(\gamma))\]
+i.e.
+\[(\fX_{c'})_\phi((\fm_f)_{\delta}(M_{\delta,c}(\gamma)) \equiv M_{\delta',c'}(\Gamma_\phi(\gamma))\]
+\[(\fm_f)_{\delta'}((\fX_{c})_{\phi,\rid_c}(M_{\delta,c}(\gamma))) \equiv M_{\delta',c'}(\Gamma_\phi(\gamma))\]
+\[(\fm_f)_{\delta'}(M_{\delta',c}(\Gamma_\phi(\gamma))) \equiv M_{\delta',c'}(\Gamma_\phi(\gamma))\]
+which should follow from commutativity properties of $\fm_f$, I think? To be
+completely honest, this is a proof gap and I need to spell out more carefully
+what I'm requiring, but I feel optimistic about things lining up here in the right way.
+\subsection{Exchange}
+\[
+\erule
+{\begin{tabular}{c}
+$\Delta;\Gamma, x : [c/i]A \prov M_c : [c/i]B$\\
+$\Delta, i : \C;\Gamma, y : \forall i.A  \prov N : [y[i]/x]B$\\
+$\Delta;\Gamma, y : \forall i .A \prov [y[c]/x]M \equiv [c/i]N$\\
+\end{tabular}}
+{\Delta, i : \C;\Gamma, x : A \prov \bcase : B}
+\]
+This makes me realize that I missed some syntactic rules:
+I need to say that $(\fX, \fm) \star c$ actually $\beta$-reduces to $\fX_c$.
+I need to allow $M[c]$ to be a real term, with rule
+\[
+\erule
+{\Delta; \Gamma \prov M : \forall i . A \using \forall E}
+{\Delta; \Gamma \prov M[c] : [c/i]A }
+\]
+and say that
+\begin{defnbox}
+  $(M[c])_{\delta}(\gamma) = A_{\rid_\delta, !_c}(M_\delta(\gamma))$
+\end{defnbox}
+For this to even make sense I already have to have a theorem that
+\begin{thmbox}
+$  ([c/i]A)_\delta(\gamma) = A_{\delta, c}(\gamma)$
+\end{thmbox}
+So we know that
+
+\[x : A_{\delta, c}(\gamma) \prov (M_c)_{\delta}(\gamma, x) : B_{\delta, c}(\gamma, x)\]
+\[y : A_{\delta, 0}(\gamma) \prov (N)_{\delta, c}(\gamma, y) : B_{\delta, c}(\gamma, A_{\rid_\delta, !_c}(y))\]
+And this seems like this should be enough to generate the $\bcase$!
 \end{document}
