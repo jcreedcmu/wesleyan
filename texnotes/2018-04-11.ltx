@@ -14,6 +14,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\wo{\setminus}
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
 \def\fX{\mathsf{X}}
@@ -383,6 +384,23 @@ So we know that
 \[y : A_{\delta, 0}(\gamma) \prov (N)_{\delta, c}(\gamma, y) : B_{\delta, c}(\gamma, A_{\rid_\delta, !_c}(y))\]
 And this seems like this should be enough to generate the $\bcase$!
 
+\subsection{Universe and Small Type Constructors}
+Nothing should be terrifically surprising here.
+\[
+\erule
+{}
+{\Delta;\Gamma \prov \U : \rtype}
+\qquad
+\erule
+{\Delta;\Gamma \prov t : \U}
+{\Delta;\Gamma \prov \El t : \rtype}
+\]
+\begin{defnbox}
+  $\U_\delta(\gamma) = (\phi : \mor{\delta}{\delta'}) \to \U$\ (functorial?)\\
+  $\U_{\phi: \delta \to \delta'}(x) = \lambda (\phi' : \mor{\delta'}{\delta''}).x(\phi' \o \phi)$\\
+  $(\El{t})_\delta(\gamma) = (\phi : \mor{\delta}{\delta'}) \to \El{t_{\delta}(\gamma)(\phi)}$\ (natural?)\\
+  $(\El{t}_{\phi : \delta \to \delta'})(\gamma) = {?}$
+\end{defnbox}
 \section{Compressing}
 I wonder if I can categorically streamline the concrete syntax.
 I know that
