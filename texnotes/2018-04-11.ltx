@@ -382,4 +382,66 @@ So we know that
 \[x : A_{\delta, c}(\gamma) \prov (M_c)_{\delta}(\gamma, x) : B_{\delta, c}(\gamma, x)\]
 \[y : A_{\delta, 0}(\gamma) \prov (N)_{\delta, c}(\gamma, y) : B_{\delta, c}(\gamma, A_{\rid_\delta, !_c}(y))\]
 And this seems like this should be enough to generate the $\bcase$!
+
+\section{Compressing}
+I wonder if I can categorically streamline the concrete syntax.
+I know that
+\begin{thmbox}
+  \begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \item   $\sem \Delta$ is a category
+  \item   If $\Delta \prov \Gamma : \rctx$ then $\prov \sem \Gamma : \sem \Delta \imp \rtype$.
+  \item ?
+  \end{enumerate}
+\end{thmbox}
+Where 1 means
+\begin{thmbox}
+If $\prov \Delta : \rdctx$ then $\prov  \Delta_\bullet : \rtype$.\\
+If $\prov \Delta : \rdctx$ then $\prov  \Delta_{\delta\to\delta'} : \rtype$.
+\end{thmbox}
+where $\imp\rtype$ means a functor into the category of rtypes and functions,
+so that 2 means
+\begin{thmbox}
+  If $\Delta\prov  \Gamma: \rctx$ then $ \prov \Gamma_\delta : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $\gamma : \Gamma_{\delta} \prov \Gamma_\phi(\gamma) : \Gamma_{\delta'}$.
+\end{thmbox}
+And then we come to the $A$- and $M$-properties, and the ordinary language of
+categories and functors and natural transformations seems to fall
+apart, and I guess I want to talk about fibrations instead?
+\begin{thmbox}
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+$ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+  If $\Delta; \Gamma\prov M: A$ then $ \gamma : \Gamma_\delta \prov M_\delta(\gamma) : A_\delta(\gamma)$.\\
+  If $\Delta; \Gamma\prov M: A$ then
+$\gamma : \Gamma_\delta \prov A_\phi(M_\delta(\gamma)) \equiv M_{\delta'}(\Gamma_\phi(\gamma))$.
+\end{thmbox}
+
+\subsection{Second try, with fibrations}
+\begin{thmbox}
+  \begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \item   $\sem \Delta$ is a category
+  \item   If $\Delta \prov \Gamma : \rctx$ then $\Gamma$ is a category over $\Delta$,
+\[\prov f_\Gamma : \sem \Gamma \imp \sem\Delta^\op\]
+where $\imp$ indicates a fibration. The fiber $f_\Gamma^*(\delta)$ is the thing that
+corresponds to what I would have written $\Gamma_\delta$ before, and
+the fibration structure $f^*_\Gamma(\phi)$ is what would have been $\Gamma_\phi$.
+  \item If $\Delta ; \Gamma \prov A : \rtype$, then $\sem A : \sem {\Gamma, A} \to \sem \Gamma$ over $\sem \Delta^\op$.
+    \begin{tikzcd}
+      \sem {\Gamma, A} \ar[r, "\sem A"]\ar[d, "f_{\Gamma, A}"'] & \sem \Gamma \ar[dl, "f_\Gamma"]\\
+\sem \Delta^\op
+    \end{tikzcd}
+  \item A term is a slice of its type, as usual.
+    \begin{tikzcd}
+      \sem \Gamma \ar[rr, equal, bend left]\ar[ddr, bend right]\ar[dr, "\sem M"]
+      & & \sem \Gamma\ar[ddl, bend left]\\
+      &\sem {\Gamma, A}\ar[d]\ar[ur, "\sem A"]\\
+      & \sem \Delta^\op
+    \end{tikzcd}
+  \end{enumerate}
+\end{thmbox}
+
 \end{document}
