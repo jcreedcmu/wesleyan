@@ -24,7 +24,8 @@
 \def\ff{\mathsf{f}}
 \def\fm{\mathsf{m}}
 \def\rspan{\mathsf{Span}}
-\def\El#1{\mathsf{El}({#1})}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
 \def\uni{\U}
@@ -483,7 +484,7 @@ I think a $\bpush$ operation always exists:
 \[
 \erule
 {\Gamma\prov f : A \to B \qquad \Gamma \prov g : B \to C \qquad \Gamma \prov M : \reln g}
-{\Gamma \prov \bpush_f M : \reln {gf}}
+{\Gamma \prov \bpush^g_f M : \reln {gf}}
 \]
 and a $\bpull$ may exist only for some types, but when it does, it's supposed to be some kind
 of right adjoint to $\bpush$:
@@ -504,4 +505,100 @@ Plus some coproducty things
 {\Gamma \prov [] : \reln{f}}
 \]
 This might be a better way of formalizing things than talking about explicit copairing, hmm.
+\vfil\eject
+\subsection{Explaining $\reln{}$}
+
+I might try to define $\reln{f}$ for $f : A \to B$ by induction on $B$,
+and define $\bpush^g_f$ for $f : A \to B$ and $g : B \to C$ by induction on $C$.
+
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$B$&$\reln{f}$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$\U  $&$(C : \U) \x (a : A) \to \El C \to \El{f\ a}$\\
+$B_1 \to B_2$&$ (\kappa : A \to B_1) \to \reln\kappa \to \reln{\lambda a . f\ a\ (\kappa\ a)}$
+\end{tabular}
+\end{defnbox}
+
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$C$&$\bpush_f^g(M)$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$\U  $&$\pair {\bfst M} {\lambda a c . (\bsnd M)\ (f\ a)\ c}$\\
+$C_1 \to C_2$&$ \lambda \ell \rho .  ???$
+\end{tabular}
+\end{defnbox}
+For the $\U$ case, we have $f : A \to B$ and $g : B \to \U$, so we're going from
+$\reln{g}$ to $\reln{gf}$, i.e. from
+\[M : (C : \U) \x (b : B) \to \El C \to \El{g\ b}\]
+to
+\[(C : \U) \x (a : A) \to \El C \to \El{g(f\ a)}\]
+
+
+For the $C_1 \to C_2$ case, we have
+ $f : A \to B$ and $g : B \to C_1 \to C_2$. We need to go from
+$\reln{g}$ to $\reln{gf}$, i.e. from
+\[ M : (\kappa : B \to C_1) \to \reln\kappa \to \reln{\lambda b . g\ b\ (\kappa\ b)}\]
+to
+\[ (\ell : A \to C_1) \to \reln\ell \to \reln{\lambda a . g\ (f\ a)\ (\ell\ a)}\]
+And this seems to break down! Huh, interesting.
+\subsection{Attempt at Kripke Gambit}
+Can I say instead
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$B$&$\reln{f}$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$\U  $&$(C : \U) \x (a : A) \to \El C \to \El{f\ a}$\\
+$B_1 \to B_2$&$ (\alpha : \U) (\phi : A \to \El\alpha) (\kappa : \El\alpha \to B_1)$\\
+&$ \to \reln\kappa \to \reln{\lambda a . f\ a\ (\kappa\ (\phi\ a))}$
+\end{tabular}
+\end{defnbox}
+so that For the $C_1 \to C_2$ case, we still have
+ $f : A \to B$ and $g : B \to C_1 \to C_2$, and we now need to go from
+\[ M : (\beta : \U) (\psi : B \to \El \beta)(\kappa : \El \beta \to C_1) \to \reln\kappa \to \reln{\lambda b . g\ b\ (\kappa\ (\psi\ b))}\]
+to
+\[ (\alpha : \U) (\phi : A \to \El \alpha)(\ell : \El \alpha \to C_1) \to \reln\ell \to \reln{\lambda a . g\ (f\ a)\ (\ell\ (\phi\ a))}\]
+Nah, this doesn't seem to get me any traction.
+\subsection{Separate, Much More Conjectural Thought}
+What if $\kappa$  is itself relationy? Then maybe I could $\bpull$ it somehow.
+I say
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$B$&$\reln{f}$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$\U  $&$(C : \U) \x (a : A) \to \El C \to \El{f\ a}$\\
+$B_1 \to B_2$&$ (\kappa : A \sim B_1) \to \reln\kappa \to \reln{\lambda a . f\ a\ (\kappa\ a)}$
+\end{tabular}
+\end{defnbox}
+in which case I need to get from
+\[ M : (\kappa : B \sim C_1) \to \reln\kappa \to \reln{\lambda b . g\ b\ (\kappa\ b)}\]
+to
+\[ (\ell : A \sim C_1) \to \reln\ell \to \reln{\lambda a . g\ (f\ a)\ (\ell\ a)}\]
+so I start off by saying $ \lambda \ell \rho .  ?$ and maybe try to invoke $M$
+on something I'll call $\bpull_f \ell$ which has type $B \sim C_1$.
+Now I have a $\reln{\ell}$ and I need a $\reln{\bpull_f \ell}$. Since $\bpull_f\ell$
+is `smaller' than $\ell$, this feels like again some kind of (higher-order?) $\bpull$.
+But now I want to push along $f$ to get the right type. I need the equality
+\[ g\ (f\ a)\ (\bpull_f \ell\ (f\ a)) = g\ (f\ a)\ (\ell\ a)\]
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$C$&$\bpush_f^g(M)$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$\U  $&$\pair {\bfst M} {\lambda a c . (\bsnd M)\ (f\ a)\ c}$\\
+$C_1 \to C_2$&$ \lambda \ell \rho .  \bpush_f\ (M\ (\bpull_f \ell)\ (\bpull'_f \rho))$
+\end{tabular}
+\end{defnbox}
+But I'm playing very fast and loose with relationy things and
+application. What would it really mean for $f$ itself to be a relation
+in $\reln{f}$?
 \end{document}
