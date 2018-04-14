@@ -14,6 +14,9 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
 \def\wo{\setminus}
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
@@ -462,4 +465,43 @@ the fibration structure $f^*_\Gamma(\phi)$ is what would have been $\Gamma_\phi$
   \end{enumerate}
 \end{thmbox}
 
+\section{Going Way Back}
+Here's some axiomatic-flavored thinking, back to how I was thinking about it
+last August (cf. \texttt{https://twitter.com/jcreed/status/898212084114128896})
+ Suppose that for every function $f : A \to B$ that there's a type.
+\def\reln#1{{\mathsf R}[#1]}
+\[
+\erule
+{\Gamma \prov f : A \to B}
+{\Gamma \prov \reln f : \rtype}
+\]
+With the idea being that this is standing in for the type
+of functions $\sharp A \to B$ such that when you precompose them
+with $\eta : A \to \sharp A$, you get precisely $f$.
+
+I think a $\bpush$ operation always exists:
+\[
+\erule
+{\Gamma\prov f : A \to B \qquad \Gamma \prov g : B \to C \qquad \Gamma \prov M : \reln g}
+{\Gamma \prov \bpush_f M : \reln {gf}}
+\]
+and a $\bpull$ may exist only for some types, but when it does, it's supposed to be some kind
+of right adjoint to $\bpush$:
+\[
+\erule
+{\Gamma\prov f : A \to B \qquad \Gamma \prov g : B \to C \qquad \Gamma \prov M : \reln {gf}}
+{\Gamma \prov \bpull_f M : \reln {g}}
+\]
+Plus some coproducty things
+\[
+\erule
+{{\Gamma\prov f : A + B \to C} \qquad
+{\Gamma\prov M : \reln {f \o \binl} \atop \Gamma \prov N : \reln {f \o \binr}}}
+{\Gamma \prov [M, N] : \reln{f}}
+\qquad
+\erule
+{\Gamma \prov f : 0 \to C}
+{\Gamma \prov [] : \reln{f}}
+\]
+This might be a better way of formalizing things than talking about explicit copairing, hmm.
 \end{document}

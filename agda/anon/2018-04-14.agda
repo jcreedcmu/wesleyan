@@ -4,7 +4,8 @@ module 2018-04-14 where
 
 open import HoTT hiding ( O ; Span )
 
-copair : ∀ {n} {A B C : Set n} (f : A → C) (g : B → C) → (A ⊔ B) → C
+copair : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
+         (f : A → C) (g : B → C) → (A ⊔ B) → C
 copair f g (inl x) = f x
 copair f g (inr x) = g x
 
@@ -23,7 +24,8 @@ module Idea3 where
    R : ∀ {ℓ ℓ'} {A : Set ℓ'} {B : Set ℓ} → (A → B) → Set (lmax ℓ ℓ')
    push : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
      (f : A → B) {g : B → C} → R g → R (g ∘ f)
-   coprod : ∀ {ℓ} {A B C : Set ℓ} {f : A → C} {g : B → C} → R f → R g → R (copair f g)
+   coprod : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
+     {f : A → C} {g : B → C} → R f → R g → R (copair f g)
    empty : ∀ {ℓ} {C : Set ℓ} → R (abort C)
    pull : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
      (f : A → B) (g : B → C) → R (g ∘ f) → R g
@@ -37,15 +39,51 @@ module Idea3 where
  UnitBridge : ∀ {ℓ} {A : Set ℓ} (a : A) → Set ℓ
  UnitBridge a = R (λ { tt → a })
 
- data isTriv {ℓ} {A : Set ℓ} : (a : A) → UnitBridge a → Set ℓ where
-   isTriv/ : (a : A) → isTriv a (pull (abort ⊤) (λ _ → a) (transport R (λ= abortLem) empty))
+ TrivUnitBridge : ∀ {ℓ} {A : Set ℓ} (a : A) → UnitBridge a
+ TrivUnitBridge a = pull (abort ⊤) (λ _ → a) (transport R (λ= abortLem) empty)
 
  isFunctional : ∀ {ℓ} {A : Set ℓ} {a a' : A} → Bridge a a' → Set ℓ
- isFunctional {A = A} {a} {a'} β = isTriv a (push takeFst β)
+ isFunctional {A = A} {a} {a'} β = push takeFst β == TrivUnitBridge a
+
+ data Tern : Set where
+   t1 t2 t3 : Tern
 
  compose : ∀ {ℓ} {A : Set ℓ} {a b c : A} → Bridge a b → Bridge b c → Bridge a c
- compose = {!!}
+ compose {A = A} {a} {b} {c} f g = transport R (λ= p') (push twoToThree interm) where
+   fourToThree : Bool ⊔ Bool → Tern
+   fourToThree (inl false) = t1
+   fourToThree (inl true) = t2
+   fourToThree (inr false) = t2
+   fourToThree (inr true) = t3
 
+   threeToA : Tern → A
+   threeToA t1 = a
+   threeToA t2 = b
+   threeToA t3 = c
+
+   p : (bb : Bool ⊔ Bool) →
+     copair (λ x → if x then b else a) (λ x → if x then c else b) bb ==
+     threeToA (fourToThree bb)
+   p (inl false) = idp
+   p (inl true) = idp
+   p (inr false) = idp
+   p (inr true) = idp
+
+   twoToThree : Bool → Tern
+   twoToThree false = t1
+   twoToThree true = t3
+
+   interm : R threeToA
+   interm = pull fourToThree threeToA (transport R (λ= p) (coprod f g))
+
+   p' : (bb : Bool) →
+     threeToA (twoToThree bb) == (if bb then c else a)
+   p' false = idp
+   p' true = idp
+
+
+-- 2 + 2 → A
+-- 2 + 2 → 3 → A
 module Idea2 where
  _✯_ : ∀ {n} → Set n → Set n → Set n
  A ✯ B = Σ (A → B) Idea3.R
