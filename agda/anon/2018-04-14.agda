@@ -27,6 +27,11 @@ module Idea3 where
    coprod : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
      {f : A → C} {g : B → C} → R f → R g → R (copair f g)
    empty : ∀ {ℓ} {C : Set ℓ} → R (abort C)
+
+   coprod' : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
+     {f : A ⊔ B → C} → R (λ x → f (inl x)) → R (λ x → f (inr x)) → R f
+   empty' : ∀ {ℓ} {C : Set ℓ} (f : ⊥ → C) → R f
+
    pull : ∀ {ℓ ℓ' ℓ''} {A : Set ℓ} {B : Set ℓ'} {C : Set ℓ''}
      (f : A → B) (g : B → C) → R (g ∘ f) → R g
    -- somehow express that push ⊣ pull?
@@ -40,13 +45,29 @@ module Idea3 where
  UnitBridge a = R (λ { tt → a })
 
  TrivUnitBridge : ∀ {ℓ} {A : Set ℓ} (a : A) → UnitBridge a
- TrivUnitBridge a = pull (abort ⊤) (λ _ → a) (transport R (λ= abortLem) empty)
+ TrivUnitBridge a = pull _ _ (empty' _)
 
  isFunctional : ∀ {ℓ} {A : Set ℓ} {a a' : A} → Bridge a a' → Set ℓ
  isFunctional {A = A} {a} {a'} β = push takeFst β == TrivUnitBridge a
 
  data Tern : Set where
    t1 t2 t3 : Tern
+
+ -- Bah, I don't seem to actually avoid the annoying case-by-case equality proofs
+ -- even when I use coprod'
+
+ -- compose' : ∀ {ℓ} {A : Set ℓ} {a b c : A} → Bridge a b → Bridge b c → Bridge a c
+ -- compose' {A = A} {a} {b} {c} f g = {!!} where
+ --   fourToThree : Bool ⊔ Bool → Tern
+ --   fourToThree z = Coprod-elim (λ x → if x then t2 else t1) (λ x → if x then t3 else t2) z
+
+ --   threeToA : Tern → A
+ --   threeToA t1 = a
+ --   threeToA t2 = b
+ --   threeToA t3 = c
+
+ --   interm : R threeToA
+ --   interm = pull fourToThree threeToA (coprod' {f = λ w → threeToA (fourToThree w)} {!f!} {!!})
 
  compose : ∀ {ℓ} {A : Set ℓ} {a b c : A} → Bridge a b → Bridge b c → Bridge a c
  compose {A = A} {a} {b} {c} f g = transport R (λ= p') (push twoToThree interm) where
