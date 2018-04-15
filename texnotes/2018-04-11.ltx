@@ -28,6 +28,7 @@
 \def\El#1{\ulcorner{#1}\urcorner}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
 
@@ -471,6 +472,7 @@ Here's some axiomatic-flavored thinking, back to how I was thinking about it
 last August (cf. \texttt{https://twitter.com/jcreed/status/898212084114128896})
  Suppose that for every function $f : A \to B$ that there's a type.
 \def\reln#1{{\mathsf R}[#1]}
+\def\rela#1#2{{\mathsf R}_{#1}[#2]}
 \[
 \erule
 {\Gamma \prov f : A \to B}
@@ -641,6 +643,7 @@ $(\alpha : \U)$ is probably not right; I want to quantify over a much smaller un
 maybe just the collection of finite types, so that the size of $\reln f$ is no `bigger',
 in the universe-level sense, than the size of the codomain of $f$.
 
+\subsection{Dependent Functions}
 Can I do dependent functions?
 \begin{defnbox}
 \begin{tabular}{l@{$\qquad$ }l}
@@ -692,4 +695,85 @@ And this is slightly problematic! I need to commit to a $(X : \U)$
 before I have the $(x : A)$ I want to deliver to the recursive call
 which gives me an (even more unfortunately $x$-dependent) $X : \U$.
 Bummer.
+
+\subsection{Maybe Don't $\bpush$ {\em Along} Dependent Functions}
+What if the $\bpush$ rule
+expects $\Gamma \prov A, B : \rtype$ and $\Gamma, y : B \prov C : \rtype$
+and goes
+\[
+\erule
+{\Gamma \prov f : A \to B
+\qquad \Gamma \prov g : (y : B) \to C(y)
+\qquad \Gamma \prov M :  \reln{g}}
+{\Gamma \prov \bpush^{gf}_{y.C} (M) : \reln{gf}}
+\]
+with $gf$ being, spelling it out
+\[\Gamma \prov \lambda x . g(f\ x) : (x : A) \to C(f\ x)\]
+This feels sort of right and consistent with the fact that the domain type
+of a function $(y : B) \to C(y)$ coming from a restricted universe, which
+definitely consists of fewer than all types, and maybe even doesn't have a notion
+of dependency when it comes to morphisms in that smaller category that you $\bpush$
+or $\bpull$ along? But you still can have ordinary types dependent on {\em them}.
+
+Ok, supposing $g : (y : B) \to C$, and redoing my notation a little so that
+\[
+\erule
+{\Gamma \prov g : (y : B) \to C}
+{\Gamma \prov \rela C g : \rtype}
+\]
+we try to guess (abbreviating
+$\Pi C = (z : C_1(y)) \to C_2(y, z)$)
+\begin{defnbox}
+\begin{tabular}{r@{$\ $}c@{$\ $}l}
+$\rela \U g$&$=$&$(P : \U) \x (y : B) \to \El P \to \El {g\ y}$\\
+$\rela {\Pi C} g$
+%
+&$=$&$  (\beta : \uu) (\phi : \El\beta \to B)(\kappa : (b:\El\beta) \to C_1(\phi\ b))$\\
+&&$ \to \reln\kappa \to \reln{\lambda b . g\ (\phi\ b)\ (\kappa\ b)}$
+\end{tabular}
+\end{defnbox}
+And we can then say
+\begin{defnbox}
+\begin{tabular}{r@{$\ $}c@{$\ $}l}
+$\bpush^{gf}_\U(M) $&$=$&$\pair {M.1 } {\lambda xp  . (M.2)\ (f\ x)\ p}$\\
+$\bpush^{gf}_{\Pi C}(M)$
+%
+&$=$&$ \lambda \beta \psi \kappa \rho . M\ \beta\ (f \o \psi)\ \kappa\ \rho$
+\end{tabular}
+\end{defnbox}
+Which is all well-typed because the push for $\U$ goes from
+\[(P : \U) \x (y : B) \to \El P \to \El {g\ y}\]
+to
+\[(P : \U) \x (x : A) \to \El P \to \El {g\ (f\ x)}\]
+and the push for $\Pi C$ goes from
+\[  (\beta : \uu) (\phi : \El\beta \to B)(\kappa : (b:\El\beta) \to C_1(\phi\ b))
+ \to \reln\kappa \to \reln{\lambda b . g\ (\phi\ b)\ (\kappa\ b)}\]
+to
+\[  (\beta : \uu) (\psi : \El\beta \to A)(\kappa : (b:\El\beta) \to C_1(f\ (\psi\ b)))
+ \to \reln\kappa \to \reln{\lambda b . g\ (f\ (\psi\ b))\ (\kappa\ b)}\]
+
+What about product types?
+Abbreviate $\Sigma C = (z : C_1(y)) \x C_2(y, z)$ and suppose
+$g : (y : B) \to (z : C_1(y)) \x C_2(y, z)$ and say perhaps simply
+\begin{defnbox}
+\begin{tabular}{r@{$\ $}c@{$\ $}l}
+$\rela {\Sigma C} g$
+%
+&$=$&$ \rela{C_1} {\bfst \o g} \x \rela{y.C_2(y, \bfst(g\ y))}{\bsnd \o g}$
+\end{tabular}
+\end{defnbox}
+for we know $\lambda y . \bsnd(g(y))$ has type $(y : B) \to C_2(y, \bfst(g(y)))$.
+Can we do $\bpush$?
+\begin{defnbox}
+\begin{tabular}{r@{$\ $}c@{$\ $}l}
+$\bpush^{gf}_{\Sigma C}(M_1, M_2)$
+%
+&$=$&$ \pair{ \bpush_{C_1}^{\bfst \o g; f}(M_1)}{\bpush_{C_2}^{\bsnd \o g; f}(M_2)}$
+\end{tabular}
+\end{defnbox}
+because we need to get from
+\[ \rela{C_1} {\bfst \o g} \x \rela{y.C_2(y, \bfst(g\ y))}{\bsnd \o g}\]
+to
+\[ \rela{C_1} {\bfst \o g \o f} \x \rela{y.C_2(y, \bfst(g\ (f\ y)))}{\bsnd \o g \o f}\]
+So yeah, that looks like it might be ok!
 \end{document}
