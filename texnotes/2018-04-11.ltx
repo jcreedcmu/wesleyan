@@ -640,4 +640,56 @@ A separate thing I want to say clearly here is that the $\U$ in the quantificati
 $(\alpha : \U)$ is probably not right; I want to quantify over a much smaller universe,
 maybe just the collection of finite types, so that the size of $\reln f$ is no `bigger',
 in the universe-level sense, than the size of the codomain of $f$.
+
+Can I do dependent functions?
+\begin{defnbox}
+\begin{tabular}{l@{$\qquad$ }l}
+$B$&$\reln{f}$\\
+\noalign{\vskip 0.3em}
+\hline
+\noalign{\vskip 0.3em}
+$(y : B_1) \to B_2$&$ (\alpha : \U) (\phi : \El\alpha \to A) (\kappa : \El\alpha \to B_1)$\\
+&$ \to \reln\kappa \to \reln{\lambda a . f\ (\phi\ a)\ (\kappa\ a)}$
+\end{tabular}
+\end{defnbox}
+Here I'm assuming $f$ is of type $A \to (y : B_1) \to B_2$, since I'm imagining
+the dependency doesn't extend to $f$ itself. But the function
+$\lambda a . f\ (\phi\ a)\ (\kappa\ a)$ has the type
+$(a : \El\alpha) \to [\kappa\ a / y]B_2$! So I do actually need to consider
+$\reln f$ for dependent $f$ to get the induction going.
+
+Ok, let me step back and suppose $f : (x : A) (y : B_1(x)) \to B_2(x, y)$.
+I don't need to do anything special for the $\U$ case since $\U$, being closed,
+can't actually mention the $A$-typed variable even if it wanted to.
+When $B(x) = (y : B_1(x)) \to B_2(x, y)$, we say
+
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{4em}\=\hspace*{2em}\= \kill
+$\reln{f} =$\>$  (\alpha : \U) (\phi : \El\alpha \to A) (\kappa : (a:\El\alpha) \to B_1(\phi\ a))$\\
+\>$ \to \reln\kappa \to \reln{\lambda a . f\ (\phi\ a)\ (\kappa\ a)}$
+\end{tabbing}
+\end{defnbox}
+and the function $\lambda a . f\ (\phi\ a)\ (\kappa\ a)$ has the type
+\[(a : \El\alpha) \to B_2(\phi\ a, \kappa\ a)\]
+which seems just fine.
+
+How about the $\bpush$ now? Actually, I need to be more careful about the type of
+$\bpush$ per se.
+\[
+\erule
+{\Gamma \prov f : (x : A) \to B
+\qquad \Gamma, x : A \prov g : (y : B) \to C
+\qquad \Gamma \prov M : (x : A) \to \reln{g}}
+{\Gamma \prov \bpush_f^g (M) : \reln{gf}}
+\]
+
+Maybe I do have to rethink about $\U$, then. Suppose $C = \U$. Then I have
+\[(x : A) \to (X : \U) \x (y : B) \to \El C \to \El{g\ b}\]
+and need to produce
+\[(X : \U) \x (x : A) \to \El C \to \El{g\ (f\ x)}\]
+And this is slightly problematic! I need to commit to a $(X : \U)$
+before I have the $(x : A)$ I want to deliver to the recursive call
+which gives me an (even more unfortunately $x$-dependent) $X : \U$.
+Bummer.
 \end{document}
