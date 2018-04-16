@@ -4276,3 +4276,37 @@ A: Somehow I keep thinking I ought to be able to pick
     ℕ = ℂ × 𝔽
 for some category 𝔽 of frames that's sufficiently `abstract', but
 I don't know what I mean by that.
+
+=== 2018.04.16
+
+Q: So if the dogma is 'different kinds of types go with different judgments',
+what is the judgment that corresponds to propositions/types/spaces that have
+relational structure?
+A:
+The simplest, non-nested baby version of Bernardy-Moulin is observing
+that, since any presheaf category has all the good stuff to be a topos,
+we might as well consider types *over* the arrow category * → * .
+
+So let's say an 'atype' is a thing that's a "functor (* → *) → type".
+We don't really have any such object as * → * living in our type
+system as a type (or an atype!) but we can explicitly formalize what
+it means to be such a functor: a choice of two types and a map from
+one to the other.
+
+We know that we can interpret and derive things of the form
+
+Γ, x : atype ⊢ B : atype
+-----------------------
+Γ ⊢ (x : A) → B : atype
+
+and
+
+Γ ⊢ A : atype
+Γ, x : atype ⊢ B : atype     Γ, x : A ⊢ M : B
+---------------------------------------------
+Γ ⊢ λx.M : (x : A) → B
+
+because the presheaf category is lccc, for instance. But this is all
+fine when *everything* in sight is an atype. I think the critical
+question is: what does it mean to have atype and type judgments in the
+same sequent?
