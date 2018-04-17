@@ -28,6 +28,7 @@
 \def\El#1{\ulcorner{#1}\urcorner}
 \def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
+\def\T{\mathsf{T}}
 \def\uu{\mathsf{u}}
 \def\uni{\U}
 \def\mor#1#2{#1 \to \underline{#2}}
@@ -87,6 +88,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\rjust{\mathsf{just}}
 \def\rcvt{\mathsf{cvt}}
 \def\rtype{\mathsf{type}}
+\def\ritype{\mathsf{itype}}
 \def\rkind{\mathsf{kind}}
 \def\rmode{\mathsf{mode}}
 \def\rprel{\mathbf{Prel}}
@@ -295,6 +297,158 @@ we'd interpret $\U_\Delta$ as something smelling like
 \[ \lambda (\delta : \Delta) . (\Delta' : \rdctx) (\Delta' \prov \theta : \Delta) \x \U_\Delta'(\theta \delta)\]
 except I'm aware that's not quite type-correct yet.
 
+\section{Equivocating about Syntax of Course}
+
+I think there's not any fundamental difference between writing
+things like
+\[\Delta;\Gamma \prov M : A : \rtype\]
+and
+\[\Gamma \prov M :_\Delta A :_\Delta \rtype_\Delta\]
+The latter is what I want to keep in mind --- that $\rtype_\Delta$ really is a different
+thing from bare $\rtype$, and what it means is a $\Delta$-cube in $\rtype$ --- but
+the former seems more lightweight to type in to the emacs buffer, and to read.
+
+Most of the rules I write for ordinary connnectives just consist of
+`stick a $\Delta$ out front', not even caring that $\Pi$ duplicates $\Delta$s in
+its two branches. Maybe Dan was right that $\Delta$ is sort of... bunchy somehow,
+or at least I have to conclude that $\Pi$ is additive.
+
+The thing that occurs to me is that, for the universe, I might not only need
+a type of codes for types, but also a type of codes for $\Delta$-shaped contexts.
+And/or maybe I need to extend the kind of types that are allowed to appear in $\Delta$
+to include products --- or tensors, or whatever.
+
+I also need a type of interval type variables, I guess, $t$? Oof.
+That's a lot of contexts, but I think it might make sense of the --- I
+don't know how else to put it --- `$\Delta$ polymorphism' of the
+universe of types, the fact that when you're polymorphic over a type, it might
+be an ordinary type (relative to your current universe) or a larger cube, and that's
+what actually gives us the ability to get parametricity free theorems.
+\[\begin{tabular}{lc@{$\quad::=\quad$ }l}
+Interval Type Variable Contexts&$\Omega$&$ \cdot \celse \Omega, t$\\
+Interval Types&$\tau$&$ \sharp n \celse \tau_1 \tensor \tau_2 \celse t$\\
+Interval Contexts&$\Delta$&$\cdot \celse \Delta, \nu : \tau$\\
+\end{tabular}\]
+Ok, so everywhere I don't mention $\Omega$, there's implicit $\Omega$s, maybe, and likewise implicit $\Delta$s.
+
+
+\[
+\erule
+{\Omega \prov \tau : \ritype}
+{\Omega;\Delta;\Gamma \prov \U_\tau : \rtype}
+\]
+No, wait, I can't have codes for interval types because recursion from expressions
+back into interval contexts makes my head hurt. Maybe an explicit $\Sigma$
+for interval types?
+\[
+\erule
+{\Omega, t;\Delta;\Gamma \prov A : \rtype}
+{\Omega;\Delta;\Gamma \prov \exists t . A : \rtype}
+\qquad
+\erule
+{\Omega \prov \tau : \ritype \qquad \Omega;\Delta;\Gamma \prov M : [\tau/t]A}
+{\Omega;\Delta;\Gamma \prov \pair t M : \exists t . A }
+\]
+This would let me construct concretely the interval type $\sharp 2$ to get a binary
+relation parametricity theorem or something. I think what I mean
+by ordinary polymorphism is then quantification over the type $\exists t . \U_t$.
+
+So I think the idea is that $\U_\tau$ represents codes for type-cubes that are
+`$\tau$ bigger' than the current $\Delta$. Which means, eek, maybe some duplication
+of rules that consume variables from $\Delta$, to give them the ability to consume
+{\em either} from the real $\Delta$ or the extension $\tau$? Like, for witness types,
+something like
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \rtype \qquad \Delta; \Gamma, x : C \prov f_k : A_k}
+{\Delta, \nu : \sharp n; \Gamma \prov (C,A,f) \star \nu : \rtype}
+\]
+becomes something like the pair of rules
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \U_{\tau} \qquad \Delta, \mu : \tau; \Gamma, x : \El{C}_{\mu} \prov f_k : \El{A_k}_\mu}
+{\Delta, \nu : \sharp n; \Gamma \prov (C,A,f) \star \nu : \U_\tau}
+\]
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \U_{\tau} \qquad \Delta, \mu : \tau; \Gamma, x : \El{C}_{\mu} \prov f_k : \El{A_k}_\mu}
+{\Delta; \Gamma \prov (\_,\mu).(C,A,f) \star \mu : \U_{\tau\tensor \sharp n}}
+\]
+But this is becoming something of a notational disaster already. The expressions
+of type $\U_\tau$ really want to be regarded as binding variables that collectively
+have type $\tau$.
+
+So let me try to not be scared of variables standing for contexts (!) and say
+\[\begin{tabular}{lc@{$\quad::=\quad$ }l}
+Interval Context Variables&$\Omega$&$ \cdot \celse \Omega, \delta : \rdctx$\\
+Interval Contexts&$\Delta$&$\cdot \celse \Delta, \nu : \sharp n\celse \Delta, \delta$\\
+Interval Substitutions&$\theta$&$\cdot \celse \theta[\ep k / \nu]\celse \theta[\sigma/\delta]$\\
+\end{tabular}\]
+
+Then the $\U$ and $\El{}$ formation rules are like
+\[
+\erule
+{\Omega \prov \Delta' : \rdctx}
+{\Omega;\Delta;\Gamma\prov \U_{\Delta'} :\rtype}
+\qquad
+\erule
+{\Omega;\Delta;\Gamma \prov e : \U_{\Delta'} }
+{\Omega;\Delta, \Delta';\Gamma\prov \El{e} :\rtype}
+\]
+and the small witness type formation rules go like
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \U_{\Delta'} \qquad \Delta, \Delta'; \Gamma, x : \El{C} \prov f_k : \El{A_k}}
+{\Delta, \nu : \sharp n; \Gamma \prov (C, A, f) \star \nu : \U_{\Delta'}}
+\]
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \U_{\Delta'} \qquad \Delta, \Delta'; \Gamma, x : \El{C} \prov f_k : \El{A_k}}
+{\Delta; \Gamma \prov (C, A, f) \star \nu : \U_{\Delta', \nu : \sharp n}}
+\]
+with the understanding that expressions of type $\U_{\Delta'}$ get to refer
+to bound variables in $\Delta'$. Could make this explicit by saying
+$(|\Delta'|,\nu).(C, A, f)\star\nu$ or something like that.
+
+Now I still intend to have
+\[
+\erule
+{\Omega, \delta;\Delta;\Gamma \prov A : \rtype}
+{\Omega;\Delta;\Gamma \prov \exists \delta . A : \rtype}
+\qquad
+\erule
+{\Omega \prov \Delta' : \rdctx \qquad \Omega;\Delta;\Gamma \prov M : [\Delta'/\delta]A}
+{\Omega;\Delta;\Gamma \prov \pair {\Delta'} M : \exists \delta . A}
+\]
+
+So that the thing I really quantify over to be polymorphic is $\exists \delta . \U_\delta$.
+
+But there's still some risk of bad mutual recursion here, I think.
+For I want to give some typing rule to $\bfst$ of such a pair, but how
+do I do that? Is the $: \rdctx$ judgment sensitive to $\Gamma$ after all?
+
+What I really need is some element type to exist
+\[\Delta; \Gamma, c : \exists \delta. \U_\delta \prov \El{c} : \rtype\]
+and I want $\El{c}$ to sort of be... $(\delta : \bfst c) \to \U_\delta$? Ish?
+No, more like:
+\[
+\erule
+{\[
+{\Omega;\Delta;\Gamma \prov \bsnd c : \U_{\bfst c} }
+\justifies
+{\Omega;\Delta, \bfst c;\Gamma\prov \El{\bsnd c} :\rtype}
+\]}
+{\Omega;\Delta;\Gamma\prov \forall (\bfst c) . \El{\bsnd c} :\rtype}
+\]
+Assuming $c : \exists \delta . \U_\delta \in \Gamma$.
+
+One major problem with this is the `phase separation violation' involving
+$c$ appearing to the left of $\Gamma$ in the second line. Also it is interesting/weird
+that I seem to want to use $\forall$ --- the kind of thing that depends on the interval
+variable types having initial objects.
+
+Anyway maybe the right thing is to characterize $\exists \delta .
+\U_\delta$ directly after all? Not sure.
 %% \[
 %% \erule
 %% {\Gamma , x : A \prov M : B}
