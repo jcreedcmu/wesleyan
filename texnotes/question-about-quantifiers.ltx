@@ -1,0 +1,359 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\bpush{\mathbf{push}}
+\def\bpack{\mathop\mathbf{pack}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\T{\mathsf{T}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\ritype{\mathsf{itype}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\W{\mathbf{W}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{A Question about Variables of Categorical Type}
+
+I conjecture that a reasonable way to think about Bernardy-Moulin internalized parametricity
+is that you have two kinds of context, $\Delta$ and $\Gamma$, where $\Delta$ (whose
+variables are treated as affine)
+has all the `interval' variables, and $\Gamma$ has all the ordinary variables. Instead
+of talking about presheaf semantics over a big cube category, you can mostly get away
+with thinking about each judgment, e.g.
+\[\Delta ;\Gamma \prov M : A\]
+as being in the presheaf semantics over the particular category implied by the structure of
+$\Delta$.
+
+I want the grammar of a $\Delta$ to look like
+\[\begin{tabular}{lc@{$\quad::=\quad$ }l}
+Interval Contexts&$\Delta$&$\cdot \celse \Delta, i : \C$\\
+\end{tabular}\]
+Where each $\C$ is a category. What Bernardy-Moulin describe
+explicitly only treats unary parametricity relations, (although they
+suggest that generalizing to $n$-ary relations should be easy) in
+which case the category $\C$ in question is the arrow category $* \to *$. To treat
+an $n$-ary relation, we'd talk about the `walking $n$-span' category
+\[\begin{tikzcd}
+  &*\ar[dl]\ar[d]\ar[drr]\\
+*&*&\cdots&*
+\end{tikzcd}\]
+with $n+1$ objects and $n$ (nonidentity) morphisms. The fact that there {\em are no
+interesting morphisms} besides these span arms does {\em not} seem to be crucial
+for interpreting types like quantifiers over interval variables $\forall i . A$,
+but it {\em does} seem crucial that the category has an initial object.
+
+\subsection{Semantics}
+Let's sketch out what the semantics I'm alluding to actually looks like, so we
+can see how the initial object plays its role in interpreting $\forall i . A$.
+
+The judgments of the syntax are
+\begin{defnbox}
+  $\Delta \prov \Gamma \rctx$\\
+  $\Delta; \Gamma \prov A : \rtype$\\
+  $\Delta; \Gamma \prov M : A$
+\end{defnbox}
+and the semantics are such that everything looks roughly
+like a `functor out of the meaning of $\Delta$', where the meaning of a context
+\[\Delta = i_1 : \C_1, \ldots, i_n : \C_n\]
+is the product category $\sem \Delta = \C_1 \x \cdots \x \C_n$.
+Given an object $\delta$ of $\sem \Delta$, we define a type
+ $\Gamma_\delta$ (`the meaning of $\Gamma$ at $\delta$')
+and given a morphism $\phi : \delta \to \delta'$ in $\sem \Delta$,
+we define a function $\Gamma_\phi$ (`the meaning of $\Gamma$ along $\phi$').
+Similarly we would define $A_\delta$ and $A_\phi$ for types and $M_\delta$ for terms,
+with the intention that all the following theorems hold,
+\begin{thmbox}
+  If $\Delta\prov  \Gamma: \rctx$ then $ \prov \Gamma_\delta : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $\gamma : \Gamma_{\delta} \prov \Gamma_\phi(\gamma) : \Gamma_{\delta'}$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+$ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+  If $\Delta; \Gamma\prov M: A$ then $ \gamma : \Gamma_\delta \prov M_\delta(\gamma) : A_\delta(\gamma)$.\\
+  If $\Delta; \Gamma\prov M: A$ then
+$\gamma : \Gamma_\delta \prov A_\phi(M_\delta(\gamma)) \equiv M_{\delta'}(\Gamma_\phi(\gamma))$.
+\end{thmbox}
+which is probably more or less the same thing as a definition of a ($\Delta$-indexed family
+of?) CwF, I think.
+
+\subsection{Universal Quantifier over Interval Variable}
+Fix a category $\C$ with an initial object $0$ with unique morphisms
+$!_c : 0 \to c$ for each $c \in \C$. The syntax for $\forall$-types looks like so:
+\[
+\erule
+{\Delta, i : \C; \Gamma \prov  A : \rtype}
+{\Delta; \Gamma \prov \forall i . A : \rtype}
+\qquad
+\erule
+{\Delta, i : \C; \Gamma \prov  M : A }
+{\Delta; \Gamma \prov \susp i M : \forall i . A }
+\]
+\[
+\erule
+{\Delta;\Gamma \prov M : \forall i . A}
+{\Delta, i : \C;\Gamma \prov M \wat i :  A}
+\qquad
+\erule
+{\Delta;\Gamma \prov M : \forall i . A \qquad c \in \C}
+{\Delta;\Gamma \prov M \wat \ep c :  [\ep c / i]A}
+\]
+The formation rule and introduction rule don't do anything particularly suprising.
+The elim rule takes two forms, depending on whether we add an affine variable to the context
+and apply to it, or whether we choose to apply to a constant choice of object from
+the category $\C$. The semantics are given by
+\begin{defnbox}
+  $(\forall i . A)_\delta(\gamma) = A_{\delta, 0}(\gamma)$\\
+  $(\forall i . A)_\phi(x) = A_{\phi, \rid_{0}}(\gamma)$\\
+  $(\susp i M)_\delta(\gamma) = M_{\delta, 0}(\gamma)$\\
+  $(M \wat i)_{\delta,c}(\gamma) = A_{\rid_\delta, !_c}(M_\delta(\gamma))$\\
+  $(M \wat \ep c)_{\delta}(\gamma) = A_{\rid_\delta, !_c}(M_\delta(\gamma))$
+\end{defnbox}
+
+The intuition for why the {\em initial} object is used in the
+definition of the meaning of $\forall i . A$ at object $\delta$ of
+$\sem \Delta$ goes like this: if we have a putative $M : \forall i . A$,
+on the face of it all we know is what $M$ does {\em at the initial object}.
+But the transport laws baked into the semantics tell us that we can find out
+what $M$'s value is at any other object $c$, simply by transporting it there
+along the unique morphism from $0$ to $c$ --- and this is eqxactly what happens
+when it comes time to interpret $M \wat i$ at an {\em arbitrary} object $\delta,c$
+of $\sem{\Delta, i:\C}$. We use the morphism $!_c$, and apply $A$-transport along it
+to $M_\delta(\gamma)$.
+
+
+Side note about weakening: The fact that $\Gamma$ stays the same as we add $i : \C$ to $\Delta$
+means that we are tacitly using a weakening principle that says every judgment remains valid
+in a larger $\Delta$. Semantically, this appears to hinge on the fact that $\sem \Delta$
+is a product of categories. For if we write $\Delta \prov \Gamma \rctx$
+and distinguish for the moment the weakening by calling it $\Delta, i : \C\prov \Gamma^w \rctx$,
+then the semantic functions we need to define for $\Gamma^w$ are
+\[\prov \Gamma^w_{\delta,c}: \rtype\]
+for any object $\delta, c$ of $\sem{\Delta, i : \C}$
+\[\Gamma^w_{\delta,c} \prov \Gamma^w_{\phi,f}(\gamma) : \Gamma^w_{\delta',c'}\]
+for any morphism $\phi,f$ from $\delta,c$ to $\delta',c'$. But we can simply
+require that these be the projections
+\[ \Gamma^w_{\delta,c} = \Gamma_\delta\]
+\[ \Gamma^w_{\phi,f}(\gamma) = \Gamma_\phi(\gamma)\]
+
+\subsection{Existential Quantifier over Interval Variable}
+It seems like one can dualize this operation, by supposing that a
+particular $\C$ has a {\em terminal} object, thereby getting an {\em
+  existential} quantifier over $i : \C$. The fact that initial goes
+with universal and terminal goes with existential --- backwards from
+what I'd expect --- suggests that there is some dualizing going on
+that I don't fully understand the source of yet.
+
+\[
+\erule
+{\Delta, i : \C; \Gamma \prov  A : \rtype}
+{\Delta; \Gamma \prov \exists i . A : \rtype}
+\qquad
+\erule
+{\Delta; \Gamma \prov  M : \exists i . A \qquad \Delta, i : \C ; \Gamma, x : A \prov N :B}
+{\Delta; \Gamma \prov \blet \bpack (i, x) = M \bin N  : B }
+\]
+\[
+\erule
+{\Delta, i : \C;\Gamma \prov M :  A}
+{\Delta;\Gamma \prov \bpack (i.M) : \exists i . A}
+\qquad
+\erule
+{\Delta;\Gamma \prov M :  [\ep c / i]A \qquad c \in \C}
+{\Delta;\Gamma \prov \bpack (\ep c,M) : \exists i . A }
+\]
+
+\begin{defnbox}
+  $(\exists i . A)_\delta(\gamma) = A_{\delta, 1}(\gamma)$\\
+  $(\exists i . A)_\phi(x) = A_{\phi, \rid_{1}}(\gamma)$\\
+  $(\blet \bpack(i, x) = M \bin N)_\delta(\gamma) = N_{\delta, 1}(\gamma, M_\delta(\gamma))$\\
+  $(\bpack(i.M))_{\delta}(\gamma) = M_{\delta,1}(\gamma)$\\
+  $(\bpack(\ep c, M))_{\delta}(\gamma) = A_{\rid_\delta, !_c}(M_\delta(\gamma))$
+\end{defnbox}
+
+\subsection{Open Question}
+
+What other operations do I get from assuming other structure on $\C$? Products, coproducts, equalizers, coequalizers, cartesian closed structure?
+
+\end{document}
+%% \[
+%% \erule
+%% {\Gamma , x : A \prov M : B}
+%% {\Gamma \prov \lambda x . M : (x : A) \to B}
+%% \]

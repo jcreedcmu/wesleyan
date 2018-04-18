@@ -449,9 +449,308 @@ variable types having initial objects.
 
 Anyway maybe the right thing is to characterize $\exists \delta .
 \U_\delta$ directly after all? Not sure.
+
+This phase separation issue pressures me back into wanting to interleave
+ordinary and interval variables, which I don't like a lot.
+
+\section{Do I really need $\U$ over all future types explicitly?}
+
+Might it be enough to just talk about the $\U$ that doesn't extend
+$\Delta$? Is the type --- the honest-to-goodness {\em type}, not a
+cube of types --- $\forall \nu . A$ a good enough substitute for the
+type $\nu : \sharp n \prov A$ that has a free interval variable?
+\[
+\erule
+{}
+{\Delta;\Gamma\prov \U :\rtype}
+\qquad
+\erule
+{\Delta;\Gamma \prov e : \U }
+{\Delta;\Gamma\prov \El{e} :\rtype}
+\]
+Large:
+\[
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  A : \rtype}
+{\Delta; \Gamma \prov \forall \nu . A : \rtype}
+\qquad
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  M : A }
+{\Delta; \Gamma \prov \susp \nu M : \forall \nu . A }
+\]
+\[
+\erule
+{\Delta;\Gamma \prov M : \forall \nu . A}
+{\Delta, \nu : \sharp n;\Gamma \prov M \wat \nu :  A}
+\qquad
+\erule
+{\Delta;\Gamma \prov M : \forall \nu . A}
+{\Delta;\Gamma \prov M \wat \ep k :  [\ep k / \nu]A}
+\]
+Small:
+\[
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  A : \U}
+{\Delta; \Gamma \prov \forall \nu . A : \U}
+\qquad
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  M : \El A }
+{\Delta; \Gamma \prov \susp \nu M : \El {\forall \nu . A} }
+\]
+\[
+\erule
+{\Delta;\Gamma \prov M : \El{\forall \nu . A}}
+{\Delta, \nu : \sharp n;\Gamma \prov M \wat \nu :  \El A}
+\qquad
+\erule
+{\Delta;\Gamma \prov M : \El{\forall \nu . A}}
+{\Delta;\Gamma \prov M \wat \ep k :  [\ep k / \nu]\El A}
+\]
+Witness types go like large:
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \rtype \qquad \Delta; \Gamma, x : C \prov f_k : A_k}
+{\Delta, \nu : \sharp n ; \Gamma \prov (C, A, f) \star \nu : \rtype}
+\]
+\[
+\erule
+{\Delta; \Gamma \prov M : C}
+{\Delta, \nu : \sharp n ; \Gamma \prov M \star \nu : (C, A, f) \star \nu}
+\]
+\[
+\erule
+{\Delta, \nu : \sharp n ; \Gamma \prov M  : (C, A, f) \star \nu}
+{\Delta; \Gamma \prov \ssusp \nu M : C}
+\]
+and small:
+\[
+\erule
+{\Delta; \Gamma \prov C, A_k : \U \qquad \Delta; \Gamma, x : \El C \prov f_k : \El{A_k}}
+{\Delta, \nu : \sharp n ; \Gamma \prov (C, A, f) \star \nu : \U}
+\]
+\[
+\erule
+{\Delta; \Gamma \prov M : \El C}
+{\Delta, \nu : \sharp n ; \Gamma \prov M \star \nu : \El {(C, A, f) \star \nu}}
+\]
+\[
+\erule
+{\Delta, \nu : \sharp n ; \Gamma \prov M  : \El {(C, A, f) \star \nu}}
+{\Delta; \Gamma \prov \ssusp \nu M : \El C}
+\]
+So nothing seems to do anything unexpected yet?
+Let's try running through the usual dance.
+Suppose we have $g : (\alpha : \U) \to \El \alpha \to \El \alpha$.
+Suppose we have $C : \U$ and $A, B : \U$ and $f_1 : \El C \to \El{A}$
+and $f_2 : \El C \to \El{B}$.
+Further, we have an element $e : \El C$. We want to see that $g\ [A]\ (f_1\ c)$
+and $g\ [B]\ (f_2 \ c)$ are related by the relation.
+
+We first notice that $\nu : \sharp n \prov (C, A, f) \star \nu : \U$.
+So also $\prov \forall \nu . (C, A, f) \star \nu : \U$.
+The element $e : \El C$ gives us $\nu : \sharp n \prov e \star \nu : \El{(C, A, f) \star \nu}$
+and then we have $\prov \susp \nu ( e \star \nu) : \El{\forall \nu . (C, A, f) \star \nu}$.
+
+So
+\[\prov g\ (\forall \nu . (C, A, f) \star \nu)\ (\susp \nu ( e \star \nu)) : \El{\forall \nu . (C, A, f) \star \nu}\]
+and we can eliminate the variable to get
+\[\nu : \sharp n \prov g\ (\forall \nu . (C, A, f) \star \nu)\ (\susp \nu ( e \star \nu)) \wat \nu : \El{(C, A, f) \star \nu}\]
+and witness-eliminate it again to get
+\[ \prov \ssusp \nu (g\ (\forall \nu . (C, A, f) \star \nu)\ (\susp \nu ( e \star \nu)) \wat \nu) : \El{C}\]
+
+So that's our element call it $c_0$, of $\El C$ that supposedly proves that
+$g\ [A]\ (f_1\ c)$ and $g\ [B]\ (f_2 \ c)$ are related by the
+relation. How do we establish that it's actually them that it relates?
+
+We need to have the equality
+\[f_k (\ssusp \nu  e) \equiv [\ep k/\nu] e : A_k\]
+but this follows from $\eta$-expanding $e$ in
+\[f_k (  e) \equiv [\ep k/\nu] (e \star \nu) : A_k\]
+but given that, we find that $f_1\ c_0 = [\ep 1 / \nu](g\ (\forall \nu . (C, A, f) \star \nu)\ (\susp \nu ( e \star \nu)) \wat \nu)$
+\[ = g\  (\forall \nu . (C, A, f) \star \nu)\ (\susp \nu ( e \star \nu)) \wat \ep 1\]
+and I guess this is where I get stuck. I want to actually deal with the open type
+\[  g\  ((C, A, f) \star \nu)\  ( e \star \nu) \]
+So I can substitute $\ep 1$ for $\nu$ and get
+\[  g\   A\  ( f_1\  e) \]
+\subsection{But Is This All Still Ok?}
+Maybe I can still get by phase-separating variables like this.
+
+Let me start from the top:
+Suppose we have $g : (\alpha : \U) \to \El \alpha \to \El \alpha$.
+Suppose we have $C : \U$ and $A, B : \U$ and $f_1 : \El C \to \El{A}$
+and $f_2 : \El C \to \El{B}$.
+Further, we have an element $e : \El C$. We want to see that $g\ [A]\ (f_1\ c)$
+and $g\ [B]\ (f_2 \ c)$ are related by the relation.
+
+I can show
+\[\nu : \sharp n \prov  e \star \nu : \El{ (C, A, f) \star \nu}\]
+I still have, by weakening, that
+$\nu : \sharp n\prov g : (\alpha : \U) \to \El \alpha \to \El \alpha$, so
+\[\nu : \sharp n \prov g\ ((C, A, f) \star \nu)\ (e \star \nu) : \El{ (C, A, f) \star \nu}\]
+thence
+\[ \prov \ssusp \nu (g\ ((C, A, f) \star \nu)\ (e \star \nu)) : \El{ C}\]
+Call {\em that} my $c_0$. What then is $f_1(c_0)$? Well, it's
+\[ [\ep 1/\nu](g\ ((C, A, f) \star \nu)\ (e \star \nu)) = g\ A\ (f_1\ e) \]
+So that looks great!
+\subsection{Whatever Happened to $\sharp$-elim?}
+If I have a
+\[\Delta, \nu : \sharp n; x : A \prov M : B\]
+I can derive from it
+\[\Delta; x : [\ep k/\nu]A \prov [\ep k/\nu]M : [\ep k/\nu]B\]
+and also
+\[\Delta, \nu : \sharp n; y : \forall \nu . A \prov [y \wat \nu / x]M : [y \wat \nu / x]B\]
+I want to believe that these have essentially exactly all the information
+of the original $M$.
+\[
+\erule
+{\begin{tabular}{c}
+$\Delta; x : [\ep k / \nu] A \prov M_k : [\ep k / \nu] B$\\
+$\Delta, \nu :\sharp n; y : \forall \nu. A \prov N : [y\wat \nu / x] B$\\
+$[y \wat \ep k / x]M_k \equiv [\ep k / \nu] N$
+\end{tabular}}
+{\Delta, \nu :\sharp n; x :  A \prov \bcase \cdots :  B}
+\]
+
+\section{Rechecking Semantics with Phase Separation}
+So I think I should be able to phrase the `syntactic semantics' in such a way
+that it works with $\Delta$-contexts all the way out left.
+Not sure how much Kripke-ing I need to do, but it seems like the right
+amount in the right places ought to work.
+
+If $\Delta$ is a $\rdctx$, then $\sem\Delta$ is a category and $\delta \in \Delta_\bullet$
+ denotes a generic object in that category and $\phi \in \Delta_{\delta \to \delta'}$ a
+generic morphism.
+
+We still expect all of
+\begin{thmbox}
+  If $\Delta\prov  \Gamma: \rctx$ then $ \prov \Gamma_\delta : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $\gamma : \Gamma_{\delta} \prov \Gamma_\phi(\gamma) : \Gamma_{\delta'}$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+$ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+  If $\Delta; \Gamma\prov M: A$ then $ \gamma : \Gamma_\delta \prov M_\delta(\gamma) : A_\delta(\gamma)$.\\
+  If $\Delta; \Gamma\prov M: A$ then
+$\gamma : \Gamma_\delta \prov A_\phi(M_\delta(\gamma)) \equiv M_{\delta'}(\Gamma_\phi(\gamma))$.
+\end{thmbox}
+\noindent to hold. How do substitutions $\Delta' \prov \theta : \Delta$ interact
+with these? Not clear to me yet. But it seems like it might be
+essential? For although it's syntactically obvious that weakening (for example) works,
+and general $\Delta$-substitutions work, I still need to justify them semantically, don't I?
+Or at least show at some point that syntactic substitution is compatible with some semantic
+operation.
+
+One important nontrivial thing is that $\forall$ gets interpreted as a $0$-substitution.
+\[
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  A : \rtype}
+{\Delta; \Gamma \prov \forall \nu . A : \rtype}
+\qquad
+\erule
+{\Delta, \nu : \sharp n; \Gamma \prov  M : A }
+{\Delta; \Gamma \prov \susp \nu M : \forall \nu . A }
+\]
+\[
+\erule
+{\Delta;\Gamma \prov M : \forall \nu . A}
+{\Delta, \nu : \sharp n;\Gamma \prov M \wat \nu :  A}
+\qquad
+\erule
+{\Delta;\Gamma \prov M : \forall \nu . A}
+{\Delta;\Gamma \prov M \wat \ep k :  [\ep k / \nu]A}
+\]
+\begin{defnbox}
+  $(\forall \nu . A)_\delta(\gamma) = A_{\delta, \ep 0}(\gamma)$\\
+  $(\forall \nu . A)_\phi(x) = A_{\phi, \rid_{\ep 0}}(\gamma)$\\
+  $(\susp \nu M)_\delta(\gamma) = M_{\delta, \ep 0}(\gamma)$\\
+  $(M \wat \nu)_{\delta,\ep k}(\gamma) = A_{\rid_\delta, !_k}(M_\delta(\gamma))$\\
+  $(M \wat \ep k)_{\delta}(\gamma) = A_{\rid_\delta, !_k}(M_\delta(\gamma))$
+\end{defnbox}
+%% For this to even make sense I already have to have a theorem that
+%% \begin{thmbox}
+%% $  ([\ep k/\nu]A)_\delta(\gamma) = A_{\delta, \ep k}(\gamma)$
+%% \end{thmbox}
+
+Where we are doing some silent weakening of $\gamma : \Gamma_\delta$
+to $\gamma : \Gamma_{\delta, \ep 0}$. If we were explicit about this,
+then $\Delta, \nu : \sharp n \prov \theta : \Delta$ is
+ the weakening substitution, and we're relying on the fact that we can
+ convert $\gamma : \Gamma_{\theta(\delta, \ep 0)}$ to
+$\sem \theta \gamma : \Gamma_{\delta, \ep 0}$. In general, if
+$\Delta' \prov \theta : \Delta$ and $\Delta \prov \Gamma \rctx$
+and $\delta'$ is some choice of objects in $\Delta'$,
+which we might reasonably think of as a substitution $\cdot \prov \delta' : \Delta'$
+out of the empty context,
+then we should be able to take $\gamma : \Gamma_{ \delta' \o \theta}$ to
+$\sem \theta \gamma : (\theta \Gamma)_{\delta'}$.
+\subsection{Getting Away With Less Complexity?}
+Can I just define $M_\delta$ only at the $0$-object of the category $\Delta$?
+There's some sense in which it feels like I shouldn't need to define how
+$M_\delta$ looks for every type, as it ought to follow from what $A_\phi$ is. But
+that's... what the theorem about the interaction between $A_\phi$ and $\Gamma_\phi$ says,
+after all.
+
+Maybe what I'm conjecturing is that {\em defining $M_{\ep 0}$ never requires recursive
+computation of general $M'_\delta$ for subterms $M'$, merely of $M'_{\ep 0}$ }
+
+This would mean the theorems would
+be
+\begin{thmbox}
+  If $\Delta\prov  \Gamma: \rctx$ then $ \prov \Gamma_\delta : \rtype$.\\
+  If $\Delta\prov  \Gamma: \rctx$ then $\gamma : \Gamma_{\delta} \prov \Gamma_\phi(\gamma) : \Gamma_{\delta'}$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then $ \gamma : \Gamma_\delta \prov A_\delta(\gamma) : \rtype$.\\
+  If $\Delta; \Gamma\prov A: \rtype$ then
+$ \gamma : \Gamma_\delta, x : A_\delta(\gamma) \prov A_\phi(x) : A_{\delta'}(\Gamma_\phi(\gamma)) $.
+  If $\Delta; \Gamma\prov M: A$ then $ \gamma : \Gamma_0 \prov M_\bullet(\gamma) : A_0(\gamma)$.
+\end{thmbox}
+Can I recover $M_\delta(\gamma)$ from this setup? I would have
+$ \gamma : \Gamma_\delta \prov M_\delta(\gamma) : A_\delta(\gamma)$
+and I do have a unique arrow ${!} : 0 \to \delta$, so I can construct
+$\gamma : \Gamma_0 \prov A_!(M_\bullet(\gamma)) : A_\delta(\Gamma_!(\gamma))$.
+which is strictly weaker.
+So maybe this shortcut is no good!
+
+\section{Questioning the Value of Phase Separation}
+
+If I am to be able to state a Segal condition for types that support
+all $\bpull$s, I'll need to quantify internally over natural numbers
+in a way that's logically prior to hypothesizing interval variables,
+which seems to make me want to mix up the context again. I can at
+least more clearly see what kind of exchange principles I think I want
+now, though. It's mostly the necessary weakening when exchanging in
+the other direction that's clear.
+
+When we (on the way up) move an ordinary type {\em into} the scope
+of an interval variable, we need to weaken it.
+\[
+\erule
+{\Gamma, \nu : \sharp n, x : A^w \prov J}
+{\Gamma, x : A, \nu : \sharp n \prov J }
+\]
+When we move it {\em out} of the scope of an interval variable, we
+are licensed to break it up into its components.
+\[
+\erule
+{\begin{tabular}{c}
+$\Gamma, x : [\ep k/ \nu]A \prov M_k : [\ep k/ \nu]B$\\
+$\Gamma, y : \forall \nu . A, \nu : \sharp n \prov N : [y\ \nu/x]B$\\
+$[y\ \ep k/x]M_k \equiv [\ep k/\nu]N$
+\end{tabular}}
+{\Gamma, \nu : \sharp n, x : A^w \prov  \bcase \cdots : B}
+\]
+How can I semantically account for nat variables being depended on?
+A context gets interpreted as... a category, maybe? Let's do some
+examples.
+A context like $\nu: \sharp 2, x : A$ should get interpreted
+as three sets for $[\ep 0/\nu]A$ and $[\ep 1/\nu]A$ and $[\ep 2/\nu]A$
+and two functions $[\ep 0/\nu]A \to [\ep 1/\nu]A$ and
+$[\ep 0/\nu]A \to [\ep 2/\nu]A$. A context like
+$n : \N, \nu: \sharp n, x : A$ has an interpretation which looks like
+the dependent sum of the interpretations of $\nu : \sharp 0, x : A$
+and $\nu : \sharp 1, x : A$ and $\nu : \sharp 2, x : A$ and so on.
+
+\end{document}
 %% \[
 %% \erule
 %% {\Gamma , x : A \prov M : B}
 %% {\Gamma \prov \lambda x . M : (x : A) \to B}
 %% \]
-\end{document}

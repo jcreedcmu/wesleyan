@@ -4310,3 +4310,35 @@ because the presheaf category is lccc, for instance. But this is all
 fine when *everything* in sight is an atype. I think the critical
 question is: what does it mean to have atype and type judgments in the
 same sequent?
+
+=== 2018.04.18
+
+Q: How does the push ⊣ pull adjunction play out when I have ♯ types around?
+A:
+push goes from R[g] to R[gf]
+supposing f : A → B and g : B → C
+a function k : ♯B → C such that k ∘ η_B = g
+to a function (push_f k) : ♯A → C such that push_f k ∘ η_A = g ∘ f
+and the way I obtain this is actually using functoriality
+    push_f k = k ∘ ♯(f)
+so that
+    push_f k ∘ η_A = k ∘ ♯(f) ∘ η_A = k ∘ η_B ∘ f = g ∘ f
+so then pull must from R[gf] to R[g]
+takes a function
+  ℓ : ♯A → C
+s.t.
+  ℓ ∘ η_A = g ∘ f
+yields a function
+  pull ℓ : ♯B → C
+s.t.
+  pull ℓ ∘ η_B = g
+I could also express this as
+  pull ℓ ∘ η_B ∘ f = ℓ ∘ η_A
+or
+  pull ℓ ∘ #(f) ∘ η_A = ℓ ∘ η_A
+which means
+  push (pull ℓ) ∘ η_A = ℓ ∘ η_A
+even though I don't expect
+  push (pull ℓ) = ℓ
+but merely some sort of inequality
+  push (pull ℓ) ≤ ℓ
