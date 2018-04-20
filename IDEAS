@@ -4342,3 +4342,120 @@ even though I don't expect
   push (pull ℓ) = ℓ
 but merely some sort of inequality
   push (pull ℓ) ≤ ℓ
+
+=== 2018.04.19
+
+Q: What's the first thought I had about cohesion and span categories?
+A: A trivial version of Kripke-like thinking goes like so, for
+explaining what ♭ means:
+
+We aim to have two levels of types, high and low.
+
+A *low type* is a type that varies over the type Ω of worlds ω. A
+'varying' type. A trivial presheaf, because the base category is just
+a set.
+
+A *high* type is just a type.
+
+  high = type
+  low = Ω → type
+
+The logical connective F takes a type to the non-varying varying type.
+  F : high → low
+  F X ω = X
+
+The logical connective U takes a varying type to its Pi.
+  U : low → high
+  U Y = (ω : Ω) → Y ω
+
+If the morphisms of 'high' are functions, and the morphisms Y1 → Y2 of
+'low' are natural transformations (ω : Ω) → Y1 ω → Y2 ω (with no
+naturality requirement since Ω is a set) then we can check that F ⊣ U.
+
+We can also do a dual thing that seems to be towards explaining ♯, by setting
+
+  high = Ω → type
+  low = type
+
+  F : high → low
+  F X = (ω : Ω) × X
+
+  U : low → high
+  U Y ω = Y
+
+But the problem with both of these as explanations of ♭ and ♯ is that they aren't
+idempotent! We pick up an `extra factor' of Ω on the round-trip of even a low-type
+that *is* a constant function.
+
+Q: So then what?
+A:
+I could try to think of Ω as a *pointed* set, with a canonical world ω₀.
+Instead of quantifying over all worlds, U just instantiates at the canonical one.
+
+  high = type
+  low = Ω → type
+
+  F : high → low
+  F X ω = X
+
+  U : low → high
+  U Y = Y ω₀
+
+But the problem here is that F and U are no longer adjoint.
+A morphism X ⊢ U Y is
+X → Y ω₀
+but a morphism F X ⊢ Y is
+(ω : Ω) → X → Y ω
+so we'd need a way of getting from ω₀ to an arbitrary ω.
+
+Q: So then what?
+A: Maybe put exactly that in! Ω needs morphisms from ω₀ to whatever, and
+low types are functors out of Ω. Generally, suppose ℂ is a category with initial object 0.
+
+  high = type
+  low = ℂat(ℂ, type)
+
+  -- constant functor returning X
+  F : high → low
+  F X c = X
+  F X (m : c → d) = id_X
+
+  U : low → high
+  U Y = Y 0
+
+Now a morphism X ⊢ U Y is
+X → Y 0
+but a morphism F X ⊢ Y is a *natural transformation*
+(c : ℂ) → X → Y c
+and these ought to be equivalent!
+
+And this adjunction is idempotent!
+If I start with an arbitrary functor Y ∈ ℂat(ℂ, type), and
+compute FU of it, I get the constant functor returning Y 0.
+If I hit it with FU again, I get Y 0 again.
+
+Q: Any mysterious problems with this?
+A: Yes, although it appears that (correctly) you can't semantically have
+Y ⊢ FUY
+because that would require a natural transformation
+(c : ℂ) → Y c → F (U Y) c
+= (c : ℂ) → Y c → F (Y 0) c
+= (c : ℂ) → Y c → Y 0
+it does look like you can semantically realize
+UFX → X
+= F X 0 → X
+= X → X
+
+Q: Can I dualize?
+A: Let's try this: suppose ℂ has a terminal object.
+
+  high = ℂat(ℂ, type)
+  low = type
+
+  -- constant functor returning X
+  F : high → low
+  F X = X 1
+
+  U : low → high
+  U Y c = Y
+  U Y (m : c → d) = id_Y

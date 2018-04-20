@@ -1,0 +1,282 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\W{\mathbf{W}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\null{\emptyset}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Models of Cohesive Type Theory}
+
+Trying to explore the space of really-simple-to-describe models of $\sharp$ and $\flat$.
+A nice one is, let $\C_*$ be a pointed category where $\C[*,*]=\{\rid_*\}$.
+\[\begin{tikzcd}
+  \rset\ar[from=d, "U" description]
+\ar[d, shift right=10, "\Delta"']
+\ar[d, shift right=5, phantom,  "\dashv"]
+\ar[d, shift left=5, phantom,  "\dashv"]
+\ar[d, shift left=10, "\nabla"]\\
+\rset^{\C_*}
+\end{tikzcd}\]
+where (for $p\in \rset^{\C_*}$ and $S \in \rset$)
+\[Up = p(*)\]
+\[\Delta S = \C[*, \dash] \x kS\]
+\[\nabla S = \C[\dash, *] \imp kS\]
+where $kS\in \rset^{\C_*}$ is the constant functor always returning $S$.
+The adjunctions can be seen from doing little yoneda calculations:
+\[[p, \nabla S] = [p, \C[\dash, *] \imp kS]\]
+\[ = [\C[\dash, *], p \imp kS]\]
+\[ = (p \imp kS)(*)\]
+\[ (?) = [Up , S] \]
+
+\[[\Delta S, p] = [\C[*, \dash] \x kS, p]\]
+\[= [\C[*, \dash] , kS \imp p]\]
+\[= (kS \imp p)(*) \]
+\[(?) = [ S, Up] \]
+
+Whoops, wait, are these adjoint? The (?) equalities don't hold.
+Maybe it's not really the standard product and exponential operations on presheaves
+that I'm talking about.
+
+What I originally wrote on twitter was
+\[Up = p(*)\]
+\[\Delta S = \C[*, \dash] \x S\]
+\[\nabla S = \C[\dash, *] \to S\]
+Let me define these explicitly:
+Given a functor $p : \rset^{\C}$ and a set $S$, I define $p\x S : \rset^\C$ to be
+\[(p \x S)(c) = p(c) \x S \]
+\[ (p \x S)(f) =\lambda (x, s) . (f\ x, s)\]
+And given a functor $p : \rset^{\C^\op}$ and a set $S$, I define $p\to S :\rset^\C$ to be
+\[(p \to S)(c) = p(c) \to S \]
+\[(p \to S)(f : c \to d) =\lambda g : (p(c) \to S) .\lambda x : p(d) . g (p\ f\ x)\]
+
+I should also make the additional auxiliary definition of,
+given a functor $p : \rset^{\C}$ and a set $S$, I define $S \to p : \rset^\C$ to be
+\[(S \to p)(c) = S \to p(c)\]
+\[ (S \to p)(f) =\lambda g : (S \to p(c)). \lambda s : S . p\ f (g s)\]
+
+
+In this case, the yoneda calculations are
+\[[p, \nabla S] = [p, \C[\dash, *] \to S]\]
+\[ =\!\!\langle ?\rangle\ [\C[\dash, *], p \to S]\]
+\[ =\!\!\langle \hbox{yoneda}\rangle\ (p \to S)(*)\]
+\[  = [Up , S] \]
+
+\[[\Delta S, p] = [\C[*, \dash] \x S, p]\]
+\[=\!\!\langle ?\rangle\ [\C[*, \dash] , S \to p]\]
+\[=\!\!\langle \hbox{yoneda}\rangle\  (S \to  p)(*) \]
+\[= [ S, Up] \]
+
+Now the dubious steps have moved up a bit.
+
+Let a covariant functor $q$ be given. Can I show $[q \x S, p]$ is the
+same as $[q, S \to p]$? It seems like I shouldn't.
+
+A nat trans in the former goes
+\[\begin{tikzcd}
+  qC \x S \ar[r, "\alpha_C"]\ar[d, "qf \x \rid_S"'] & p C\ar[d, "pf"]\\
+  qD \x S \ar[r, "\alpha_D"'] & p D
+\end{tikzcd}\]
+and in the latter goes
+\[\begin{tikzcd}
+  qC  \ar[r, "\beta_C"]\ar[d, "qf"'] & S \to p C\ar[d, "pf \o \dash"]\\
+  qD  \ar[r, "\beta_D"'] & S \to p D
+\end{tikzcd}\]
+It sure seems like the same data, just curried differently. Want to say that both
+of them are the same as an $S$-indexed family of natural transformations $[q,p]$.
+
+What about the contravariant one? Let $q : \rset^{\C^\op}$ and try to reason
+that $\rset^{\C}[p, q \to S] = \rset^{\C^\op}[q, p \to S]$
+Latter looks like
+\[\begin{tikzcd}
+  qD  \ar[r, "\beta_D"]\ar[d, "qf"'] &  p D \to S \ar[d, "\dash \o pf "]\\
+  qC  \ar[r, "\beta_C"'] & p C \to S
+\end{tikzcd}\]
+and former looks like
+\[\begin{tikzcd}
+  pC  \ar[r, "\alpha_C"]\ar[d, "qf"'] &  qC \to S \ar[d, "\dash \o qf "]\\
+  pD  \ar[r, "\alpha_D"'] & q D \to S
+\end{tikzcd}\]
+These look like the same data also.
+\end{document}
