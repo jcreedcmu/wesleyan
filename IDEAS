@@ -4459,3 +4459,16 @@ A: Let's try this: suppose ℂ has a terminal object.
   U : low → high
   U Y c = Y
   U Y (m : c → d) = id_Y
+
+=== 2018.04.22
+
+Q: What's a pleasant thought I just had?
+A: Suppose I have a f : ♯2 → X. Let 2 = {c, d}.
+I know f is functional whenever `restricting f to the ♯1-shaped part of its domain at d'
+(by composing with ♯d : ♯1 → ♯2) yields a constant function.
+I know f is cofunctional whenever `restricting f to the ♯1-shaped part of its domain at c'
+(by composing with ♯c : ♯1 → ♯2) yields a constant function.
+
+Q: So what's the relationship between these and equality?
+A: If f is functional and cofunctional, then f is a path --- that is, f is constant.
+So what's really going on is that somehow ♯d and ♯c *cover* ♯2.
