@@ -177,6 +177,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\wtf{{\color{red}???}}
 
 \def\re{\mathbf{E}}
+\def\sh{\sharp}
 \def\shp{\mathrel{\sharp}}
 \def\zero{\texttt{0}}
 \begin{document}
@@ -279,4 +280,171 @@ and former looks like
   pD  \ar[r, "\alpha_D"'] & q D \to S
 \end{tikzcd}\]
 These look like the same data also.
+
+\subsection{When $\Pi$ exists}
+Notice that $\Delta$ preserves products iff $\C[*, \dash]$ is always $1$ --- i.e.
+if $*$ is initial. So the special case where I'm talking about $\rset^{\C_0}$, I get
+\[\begin{tikzcd}
+\rset
+\ar[from=d, shift right=5, "U" description]
+\ar[from=d, shift left=15, "\Pi"]
+\ar[d, shift right=5, "\Delta" description]
+\ar[d, shift right=10, phantom,  "\dashv"]
+\ar[d, shift right=0, phantom,  "\dashv"]
+\ar[d, shift left=10, phantom,  "\dashv"]
+\ar[d, shift left=15, "\nabla"]\\
+\rset^{\C_0}
+\end{tikzcd}\]
+And it is basically the `connected components' functor I expect; the initial
+object of $\C$ gives the `vertices' of the structured object, and every projection
+from one type of hyperedge to another forces the identification of the hyperedge
+and the resulting domain/codomain/whatever.
+\subsection{After Talking To Dan}
+Dan says this model shows up in ``Internal Universes in Models of Homotopy Type Theory''
+although I don't see it upon skimming right now.
+
+\section{Having Pulls and Copairing as Modality}
+Switching gears: Look back at the category I specified in
+\texttt{2017-11-14.ltx} and \texttt{2017-02-20.ltx}, namely
+(using slightly more recent notation)
+\[
+\W =\qquad
+\begin{tikzcd}
+ 0\ar[r]\ar[d, "!"']
+&  1\ar[d, "!", shift left]\ar[from=d, "\ep 0", shift left]
+\ar[r, shift left]\ar[r, shift right]\ar[from=r, shift right=3]
+&  2\ar[d, "!", shift left]\ar[from=d, "{\frac{\ep 0}{\ep 1}}" , shift left]
+\ar[from=d]
+\ar[r, leftrightarrow]\ar[r, shift right, leftrightarrow]\ar[r, shift left, leftrightarrow]
+&\cdots
+\\
+\top \ar[r, equal]
+& \top\ar[r, equal]
+& \top\ar[r, equal]
+& \cdots
+\end{tikzcd}
+\]
+Although I ultimately want to take the free {\em mumble} category over this one,
+but let me just think about the `non-nested parametricity' case of just presheaves
+$p \in \rset^{\W^\op}$ for now. The structure of $\W$ tells me how to do $\bpush$es in $p$: it's
+just restriction along $\W$-morphisms. What I {\em don't} know is:
+\begin{enumerate}
+\item How to turn, say, an element of $p( n)$ and an element of $p( m)$ into an element
+of $p(n + m)$
+\item How to do $\bpull$s.
+\end{enumerate}
+And for all I know this kind of structure is {\em not} expressible by
+cleverly picking a different presheaf base category. I went through and thought about
+how function types behave with parametricity, and I think they may not satisfy (1) at all?
+
+But a reasonable way to proceed I think is to try to talk about the idempotent monadic modality
+that freely {\em adds} this structure to a {\em particular} presheaf, in much the same way
+that cohesive $\sharp$ freely (well, codiscretely) adds edges between all vertices.
+
+How to do this for (1) seems pretty clear to me: The modality $C$
+(named for `copairing'/`coproducts') takes in a $\hat\W$ and spits out a $\hat\W$.
+An element of $C(p)( n)$ is an
+ multiset $\{x_1 \in p( m_1), \ldots, x_N \in p( m_N)\}$
+such that $m_1 + \cdots + m_N = n$,
+\textcolor{red}{but we quotient by saying that for any $a, b$ and $x\in p(a + b)$,
+we consider having the two elements $x \adjust_{ a \to  (a + b)}$ and $x \adjust_{ b \to  (a + b)}$
+in your multiset the same as having the element $x$. Also having the element $x \in p( 0)$
+is the same as having nothing at all, I guess? So I guess this collapses any data that might
+have been in $p( 0)$. There is exactly one element of $Cp( 0)$, namely the empty multiset.}
+
+Wait, no, everything in red above is definitely wrong. Doing a $\bpush$ and then reaggreating
+is not at all the same relation. If I have a relation $R = \{(a, 1),(b, 2)\}$ the $\bpush$es
+to the individual columns give me $\{a, b\}$ and $\{1, 2\}$ and then the product
+of those two relations is the larger $R = \{(a, 1),(b, 2),(a,2),(b,1)\}$.
+
+But I'm not convinced that taking all the multisets with no
+identification at all yields an idempotent operation. Also, as a useful test case,
+I should expect that specifically the universe $\U$ made of sets and
+relations `has all copairings', and so $C \U = \U$.
+
+\subsection{Pulls}
+
+Let me defer that thought and see how far I get thinking about $\bpull$s, then.
+Recall that if I have an element
+ $r \in p(n)$ and a map $f : m \to n$, I can $\bpush$ r to $r\adjust_f : p(m)$.
+
+In the other direction, if I have an element $r\in p(m)$, and I have a map
+$g : n \to p(\top)$, and for every $k \in m$ I know $g(f(k)) = r\adjust_{\ep k}$, then
+I should have a $\bpull_f r : p(n)$, with the property that
+$(\bpull_f r)\adjust_{\ep {f(k)}} = r\adjust_{\ep k}$.
+The tantalizingly more general
+$(\bpull_f r)\adjust_{f \o h} = r\adjust_{h}$ is I guess not true, since it would imply
+(when $h = \rid$) that a $\bpush$ of a $\bpull$ of $r$ is always $r$.
+
+Still, as a first cut, if I'm to make a modality $P$ for `the $\bpull$ closure of a type',
+the occupants of $Pp(n)$ can {\em be specified} (but I assume there remains some
+quotienting that needs to be done)
+by the data of
+\begin{itemize}
+\item a choice of $m$
+\item a map $f : m \to n$
+\item a map $g : n \to p(\top)$
+\item a choice of $r \in p(m)$
+\item for every $k \in m$, that $g(f(k)) = r\adjust_k$
+\end{itemize}
+I even kind of think that I might already effectively
+know how to define presheaf restriction on these data, and that that would consistute
+a sort of Beck-Chevalley property.
+\subsection{Idempotence}
+I think for both copairing and pulls, that in order to make the modality idempotent, I need
+some kind of universal-property-smelling {\em something}. Surely at least to make the universe
+a fixedpoint of the modality, I need something like this. For otherwise I'm going to
+add structure to $\U$, and not be able to determine how to identify the added structure
+with the existing structure that's there.
+
+Let's compare this situation to the free-category-on-a-graph
+construction. When I go forget from categories to graphs, there's no
+trace of the composition structure left for me to tell that the added
+edges actually {\em go with} the original pairs of edges, so it's not
+idempotent at all. But if I thought about 2-graphs instead of
+1-graphs, then there should indeed be an operation that takes a
+1-graph with no interesting 1-cells, and adds enough 2-cells to make
+it into a category, and then even if you forget back to 2-graphs,
+forgetting that those 2-cells `are compositions', they're still there
+{\em as data}. If you do the same construction, you should be able to
+recognize that the 2-cells are somehow canonically situated in such a
+way as to {\em be the compositions}, and not duplicate them when you
+iterate the construction.
+
+What's an easy example I can make work? Is there a way of {\em
+  idempotently} freely adding, say, a terminal object to a category?
+Let's try this: Given a category $\C$, construct the category
+$\C^+$ whose objects are $\C_0 \cup \{ \bullet \}$, where the
+morphisms $C \to \bullet$ are $\{!\}$, and a morphism
+ $\bullet \to C$ is a family of morphisms $\{f_D : D \to C\}_{D \in \C_0}$.
+
+Is composition clearly defined? Composition of $\{f_D : D \to C\}_{D \in \C_0} : \bullet \to C$
+with $g : C \to E$ is obviously $\{g \o f_D : D \to E\}_{D \in \C_0} : \bullet \to E$.
+
+Is it associative? Ooh, I think maybe not. Consider
+\[\begin{tikzcd}
+A \ar[r, "g"] & B \ar[r, "!"] & \bullet \ar[r, "{\{f_D : D \to C\}_D}"]&[5em] C
+\end{tikzcd}\]
+Then notice $\{f_D : D \to C\}_D \o (!_B \o g) = \{f_D : D \to C\}_D \o !_A = f_A : A \to C$
+but
+$(\{f_D : D \to C\}_D \o !_B) \o g = f_B \o g : A \to C$.
+Oh, but maybe this just means I need to require that a morphism
+$\bullet \to C$ is a {\em coherent} family of morphisms $\{f_D : D \to C\}_{D \in \C_0}$
+compatible with composition.
+
+Then $\bullet$ is by definition terminal, but also if $\C$ already had a terminal
+object, there should be a unique
+morphism $\bullet \to 1$ given exactly by $\{! : D \to 1\}_D$.
+
+Here the morphism data of the category is what can {\em effectively}
+betray that the terminal object is terminal, even if it's not
+advertised as such in the interface I'm dealing with --- i.e. even if
+I'm not living in `the category of categories equipped with a terminal
+object'.
+
+I guess what I'm currently hoping for is that somehow the {\em higher}
+presheaf cell structure of a presheaf over the free {\em something
+  like symmetric monoidal cartesian mumble} category on $\W$ is the
+data that somehow betrays the universality of the copairing and pull
+operations.
 \end{document}
