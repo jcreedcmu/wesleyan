@@ -37,7 +37,7 @@
 
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
 \definecolor{orange}{rgb}{0.95,0.90,0.80}
-\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
 \definecolor{lgray}{gray}{0.9}
 \newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
@@ -459,4 +459,118 @@ those $yC$s is also constantly-one.
 This plainly generalizes to all limits; remember from kindergarten
 that the yoneda embedding gives you all limits, and they coincide with
 any that you already had.
+
+\section{A Relationy Definition of Adjunction}
+
+I'm trying to come up with a definition of adjoint functors in terms of relationy
+things such that I can prove reasonable things about it, e.g. adjoints are unique.
+
+Here's an attempt: supposing $F : \C \to \D : G$ an adjunction looks something like
+a relation $R : (s : \sharp 2) (t : \sharp 2) \to \rset$ such that things look like
+\[
+\begin{tikzcd}
+  \textcolor{bluegray}{1}\ar[d, <->, "s"', bluegray]
+&[-1em]\C \ar[r, "F"]\ar[d, <->, "\hom"']& \D\ar[d, <->, "\hom"]\\
+  \textcolor{bluegray}{2}&\C \ar[from=r, "U"]& \D\\[-1em]
+  &\textcolor{bluegray}{1} \ar[r, <->, "t"', bluegray]& \textcolor{bluegray}{2}
+\end{tikzcd}
+\]
+or, expanding this out,
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "s"', bluegray]
+  &[-1em]\C
+  & F \dns \D \ar[l, "\dom"']\ar[r, "\cod"]
+  & \D\\
+%
+  &\C^\to \ar[u]\ar[d]
+  &\forall s t . R \ar[u]\ar[l]\ar[r]\ar[d]
+  &\D^\to \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &\C
+  &\C\dns U \ar[l, "\dom"]\ar[r, "\cod"']
+  & \D\\[-1em]
+%
+  &\textcolor{bluegray}{1} \ar[rr, <->, "t"', bluegray]&& \textcolor{bluegray}{2}
+\end{tikzcd}
+\]
+So $\C^\to$ isn't all of $\sharp 2 \to \C$, it's just the functional subset of that.
+We want to require that
+\[ \rho : \forall s t . R \prov F(\rho\ 1\ 1) = \rho\ 1 \ 2  \]
+\[ \rho : \forall s t . R \prov U(\rho\ 2\ 2) = \rho\ 2 \ 1  \]
+\[ s : \sharp 2 \prov R\ s 1 = \hom_\C\ s \]
+\[ s : \sharp 2 \prov R\ s 2 = \hom_\D\ s \]
+And that the following maps are constant in $q$:
+\[ q : \sharp 1,  \rho : \forall s t . R \prov \lambda t . \rho\ \sharp(* \mapsto 1)(q)\ t : \forall t . R\ 1\ t\]
+\[ q : \sharp 1,  \rho : \forall s t . R \prov \lambda t . \rho\ \sharp(* \mapsto 2)(q)\ t : \forall t . R\ 2\ t\]
+
+Hm, but I'm not sure this captures that the thing in, for example, the $\C / U$
+position in the diagram, which is the type $\forall t . R\ 2\ t$, contains {\em all} the
+morphisms $c \to U d$.
+
+In somewhat more generality I want to have two relations that stand in
+for the hom-relations, and specify $F$ and $U$'s domain and comdain
+directly from interval-variable-substitutions of them. Call them $J, K : \sharp 2 \to \rset$.
+Suppose $F : J\ 1 \to K\ 1$ and $U : K\ 2 \to J\ 2$.
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "s"', bluegray]
+  &[-1em]J\ 1
+  & F \dns \dash \ar[l, "\dom"']\ar[r, "\cod"]
+  & K\ 1\\
+%
+  &\forall s . J \ar[u]\ar[d]
+  &\forall s t . R \ar[u]\ar[l]\ar[r]\ar[d]
+  &\forall s . K \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &J\ 2
+  &\dash \dns U \ar[l, "\dom"]\ar[r, "\cod"']
+  & K\ 2\\[-1em]
+%
+  &\textcolor{bluegray}{1} \ar[rr, <->, "t"', bluegray]&& \textcolor{bluegray}{2}
+\end{tikzcd}
+\]
+Now I want $F \dns \dash$ to be the same thing as the pullback
+\[(k : \forall s . K) (j : J\ 1) \x k\ 1 \equiv F\ j \]
+and $\dash\dns U$ the same thing as
+\[(j : \forall s . J) (k : K\ 2) \x j\ 2 \equiv U\ k \]
+\vfil\eject
+But wait, why am I giving a separate name to $J$ and $K$? If I swap $R$'s arguments
+around so that $t$ comes first, they're just $R\ 1$ and $R\ 2$.
+
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "s"', bluegray]
+  &[-1em]R\ 1\ 1 \ar[rr, bend left=30, "F"]
+  & F \dns \dash \ar[l, "\dom"']\ar[r, "\cod"]
+  & R\ 2\ 1\\
+%
+  &\forall s . R\ 1\ s \ar[u]\ar[d]
+  &\forall t s . R\ t\ s \ar[u]\ar[l]\ar[r]\ar[d]
+  &\forall s . R\ 2\ s \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &R\ 1\ 2
+  &\dash \dns U \ar[l, "\dom"]\ar[r, "\cod"']
+  & R\ 2\ 2\ar[ll, bend left=30, "U"]\\[1em]
+%
+  &\textcolor{bluegray}{1} \ar[rr, <->, "t"', bluegray]&& \textcolor{bluegray}{2}
+\end{tikzcd}
+\]
+Now I say $F : R\ 1\ 1 \to R\ 2\ 1$ and $U : R\ 2\ 2 \to R\ 1\ 2$.
+and I want $F \dns \dash$ --- which is $\forall t . R\ t\ 1$ ---
+to be the same thing as the pullback
+\[(k : \forall s . R\ 2\ s) (j : R\ 1\ 1) \x k\ 1 \equiv F\ j \]
+and $\dash\dns U$ --- which is $\forall t . R\ t\ 2$ --- the same thing as
+\[(j : \forall s . R\ 1\ s) (k : R\ 2\ 2) \x j\ 2 \equiv U\ k \]
+
+So look at the $F$ pullback specifically: one of the pullback projections
+is just the $\dom : F \dns \dash \to R\ 1\ 1$, but the other is a function
+\[ (\forall t . R\ t\ 1) \to (\forall s. R\ 2\ s)\]
+So that's interesting! Similarly, the $U$ pullback gives us
+\[ (\forall t . R\ t\ 2) \to (\forall s. R\ 1\ s)\]
+
+Both of these would derive if we had
+\[ u : \sharp 2 \prov (\forall t . R\ t\ u) \to (\forall t. R\ \tilde u\ t)\]
+And the `functors' $F$ and $U$ seem to come from
+\[ u : \sharp 2 \prov  R\ u\ u \to R\ \tilde u\ u\]
 \end{document}
