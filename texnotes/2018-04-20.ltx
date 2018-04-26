@@ -573,4 +573,169 @@ Both of these would derive if we had
 \[ u : \sharp 2 \prov (\forall t . R\ t\ u) \to (\forall t. R\ \tilde u\ t)\]
 And the `functors' $F$ and $U$ seem to come from
 \[ u : \sharp 2 \prov  R\ u\ u \to R\ \tilde u\ u\]
+
+\section{Push-Pull Adjunction in $\rset$}
+Trying to think about what specifically is going on with relations in $\rset$.
+Suppose $I, J$ are sets, and $h : J \to I$ is a reindexing function.
+Suppose we have a function $T :  \sharp 2 \to I \to \rset$.
+that we write as a span $(C_i, (A_i, B_i))$.
+Suppose a $I$-span $K, A_i, f_i$ and a $J$-span $L, B_{hj}, g_j$ are given to us.
+I think then that to have an $R : \sharp 2 \to \sharp J \to \rset$
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{hj_1}
+  & K \ar[l, "f_{hj_1}"']\ar[r, "f_{hj_2}"]
+  & A_{hj_2}\\
+%
+  &C_{hj_1} \ar[u]\ar[d]
+  &\forall t j . R\ t\ j \ar[u]\ar[l]\ar[r]\ar[d]
+  &C_{hj_2} \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &B_{hj_1}
+  &L \ar[l, "g_{j_1}"]\ar[r, "g_{j_2}"']
+  &B_{hj_2}\\[-1em]
+%
+  &\textcolor{bluegray}{j_1} \ar[rr, <->, "j"', bluegray]&& \textcolor{bluegray}{j_2}
+\end{tikzcd}
+\]
+is the same thing as having an $S : \sharp 2 \to \sharp I \to \rset$
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{i_1}
+  & K \ar[l, "f_{i_1}"']\ar[r, "f_{i_2}"]
+  & A_{i_2}\\
+%
+  &C_{i_1} \ar[u]\ar[d]
+  &\forall t i . S\ t\ i \ar[u]\ar[l]\ar[r]\ar[d]
+  &C_{i_2} \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &B_{i_1}
+  &\bpull \ar[l, "b\ i_1"]\ar[r, "b\ i_2"']
+  &B_{i_2}\\[-1em]
+%
+  &\textcolor{bluegray}{i_1} \ar[rr, <->, "i"', bluegray]&& \textcolor{bluegray}{i_2}
+\end{tikzcd}
+\]
+where $\bpull = (b : (i : I) \to B_i) (\ell : L) \x (j : J) \to b\ (h\ j)\equiv g_j\ \ell$.
+The move from the latter to the former is the easier direction.
+Project the $\ell$ out of the $\bpull$.
+
+In the other direction, we have a $\chi : \forall t j . R\ t\ j \to L$, we want to
+make a $(\sigma : \forall t i . S\ t\ i) \to \bpull$. We have $R\ t\ j = S\ t\ (h\ j)$
+ for endpoints $j : J$. How do we make the $b$ part of the pull?
+\[(\lambda i  . \sigma\ 2\ i) : (i : I) \to B_i\]
+How do we make the $\ell$ part?
+\[\chi\ (\lambda t j . \sigma\ t\ (h\ j)) : L\]
+How do we check that $b\ (h\ j) \equiv g_j\ \ell$ for any $j : J$? Just compute
+\[g_j \ell \equiv g_j\ (\chi\ (\lambda tj.\sigma\ t\ (h\ j)))  \]
+\[ \equiv (\lambda tj.\sigma\ t\ (h\ j))\ 2\ j\]
+\[ \equiv \sigma\ 2\ (h\ j)\]
+\[ \equiv b\ (h\ j)\]
+Wait, this isn't right, where are the horizontal morphisms out of $\forall t i . S\ t\ i$ coming from?
+
+\subsection{Backing Up To the Functional Case}
+
+Suppose $B : I \to \rset$.
+Suppose $\kappa : \sharp I \to \rset$.
+Suppose $\Lambda : \sharp J \to \rset$, with $\Lambda\ \ep j \equiv B_{hj}$.
+I'm going to just give the name $A_i$ to $\kappa\ \ep i$, and $K$ to $\forall i . \kappa\ i$,
+and $L$ to $\forall j . \Lambda\ j$. Suppose I have $\phi : (i : I) \to \kappa\ \ep i \to B\ i$.
+
+Can I establish a relationship between
+\[
+\begin{tikzcd}
+A_{hj_1}\ar[d, "\phi_{hj_1}"']
+  & K \ar[l, "f_{hj_1}"']\ar[r, "f_{hj_2}"]\ar[d]
+  & A_{hj_2}\ar[d, "\phi_{hj_2}"]\\
+%
+  B_{hj_1}
+  &L \ar[l, "g_{j_1}"]\ar[r, "g_{j_2}"']
+  &B_{hj_2}\\[-1em]
+\textcolor{bluegray}{j_1} \ar[rr, <->, "j"', bluegray]&& \textcolor{bluegray}{j_2}
+\end{tikzcd}
+\]
+and
+\[
+\begin{tikzcd}
+A_{i_1}\ar[d, "\phi_{i_1}"']
+  & K \ar[l, "f_{i_1}"']\ar[r, "f_{i_2}"]\ar[d]
+  & A_{i_2}\ar[d, "\phi_{i_2}"]\\
+%
+  B_{i_1}
+  &\bpull \ar[l, "b\ i_1"]\ar[r, "b\ i_2"']
+  &B_{i_2}\\[-1em]
+\textcolor{bluegray}{i_1} \ar[rr, <->, "i"', bluegray]&& \textcolor{bluegray}{i_2}
+\end{tikzcd}
+\]
+That is, between functions
+\[ z :  (\nu : \sharp J) \to \kappa (\sharp h (\nu)) \to \Lambda(\nu) \]
+such that $z\ \ep j = \phi_{hj}$
+and functions
+\[ w :  (\nu : \sharp I) \to \kappa (\nu) \to \bpull(\nu) \]
+such that $w\ \ep i = \phi_i$.
+
+with $\bpull$ I guess being
+\[(b : (i : I) \to B_i) (\ell : L) \x (j : J) \to b\ (h\ j)\equiv g_j\ \ell\]
+Or I could phrase this
+\[(b : (i : I) \to B_i) (\ell : \forall j . \Lambda\ j) \x (j : J) \to b\ (h\ j)\equiv \ell\ \ep j\]
+
+\subsection{Returning to the Relational Version}
+
+Can we define $S : \sharp 2 \to \sharp I \to \rset$ by saying
+that $\forall t i . S\ t\ i$ is, give me a $c : (i : I) \to C_i$,
+and give me a $\rho : \forall t j . R\ t\ j$ such that
+\[j : J \prov c\ (h\ j) \equiv \lambda t . \rho\ t\ j\]
+
+\vfil\eject
+\section{Trying That From the Start, then}
+For boundaries, I have $\Gamma : \sharp 2 \to I \to \rset$, and $\kappa : \sharp I \to \rset$
+and $\Lambda : \sharp J \to \rset$. I assume $\kappa \o \eta_I = \Gamma\ \ep 1$ and
+ $\Lambda \o \eta_J = (\Gamma\ \ep 2) \o h$. As abbreviations, I say $A_i = \Gamma\ \ep 1\ i$
+and $B_i = \Gamma\ \ep 2\ i$ and $C_i = \forall \nu . \Gamma\ \nu\ i$.
+
+Supposing that
+\[\bpull = (b : (i : I) \to B_i) (\ell : L) \x (j : J) \to b\ (h\ j)\equiv g_j\ \ell\]
+we can get from
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{i_1}
+  & K \ar[l, "f_{i_1}"']\ar[r, "f_{i_2}"]
+  & A_{i_2}\\
+%
+  &C_{i_1} \ar[u]\ar[d]
+  &\forall t i . S\ t\ i \ar[u]\ar[l]\ar[r]\ar[d]
+  &C_{i_2} \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &B_{i_1}
+  &\bpull \ar[l, "b\ i_1"]\ar[r, "b\ i_2"']
+  &B_{i_2}\\[-1em]
+%
+  &\textcolor{bluegray}{i_1} \ar[rr, <->, "i"', bluegray]&& \textcolor{bluegray}{i_2}
+\end{tikzcd}
+\]
+that is, a map $\sharp 2 \to \sharp I \to \rset$ from $\kappa$ to $\bpull$,
+to
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{hj_1}
+  & K \ar[l, "f_{hj_1}"']\ar[r, "f_{hj_2}"]
+  & A_{hj_2}\\
+%
+  &C_{hj_1} \ar[u]\ar[d]
+  &\forall t j . R\ t\ j \ar[u]\ar[l]\ar[r]\ar[d]
+  &C_{hj_2} \ar[u]\ar[d]\\
+\textcolor{bluegray}{2}
+  &B_{hj_1}
+  &L \ar[l, "g_{j_1}"]\ar[r, "g_{j_2}"']
+  &B_{hj_2}\\[-1em]
+%
+  &\textcolor{bluegray}{j_1} \ar[rr, <->, "j"', bluegray]&& \textcolor{bluegray}{j_2}
+\end{tikzcd}
+\]
+But is this an equivalence? It seems pretty clearly surjective, but not as obviously injective.
+
 \end{document}
