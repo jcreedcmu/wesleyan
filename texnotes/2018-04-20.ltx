@@ -706,7 +706,7 @@ we can get from
   & A_{i_2}\\
 %
   &C_{i_1} \ar[u]\ar[d]
-  &\forall t i . S\ t\ i \ar[u]\ar[l]\ar[r]\ar[d]
+  &S \ar[u]\ar[l, "\int_{i_1}"']\ar[r, "\int_{i_2}"]\ar[d]
   &C_{i_2} \ar[u]\ar[d]\\
 \textcolor{bluegray}{2}
   &B_{i_1}
@@ -726,7 +726,7 @@ to
   & A_{hj_2}\\
 %
   &C_{hj_1} \ar[u]\ar[d]
-  &\forall t j . R\ t\ j \ar[u]\ar[l]\ar[r]\ar[d]
+  &S \ar[u]\ar[l, "\sigma_{j_1}"']\ar[r, "\sigma_{j_2}"]\ar[d]
   &C_{hj_2} \ar[u]\ar[d]\\
 \textcolor{bluegray}{2}
   &B_{hj_1}
@@ -737,5 +737,47 @@ to
 \end{tikzcd}
 \]
 But is this an equivalence? It seems pretty clearly surjective, but not as obviously injective.
+What if, on the way up, instead of $S$ we produce
+\[(c : (i : I) \to C_i) (s : S) \x (j : J) \to \sigma_{j} s \equiv c\ (hj)\]
+
+\section{Can I Even Do this With Constants On Each Side?}
+
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{i_1}
+  & K \ar[l, "f_{i_1}"']\ar[r, "f_{i_2}"]
+  & A_{i_2}\\
+%
+  &A_{i_1} \ar[u, equal]\ar[d, equal]
+  &S \ar[u]\ar[l, "\int_{i_1}"']\ar[r, "\int_{i_2}"]\ar[d]
+  &A_{i_2} \ar[u, equal]\ar[d, equal]\\
+\textcolor{bluegray}{2}
+  &A_{i_1}
+  &\bpull \ar[l, "b\ i_1"]\ar[r, "b\ i_2"']
+  &A_{i_2}\\[-1em]
+%
+  &\textcolor{bluegray}{i_1} \ar[rr, <->, "i"', bluegray]&& \textcolor{bluegray}{i_2}
+\end{tikzcd}
+\]
+to
+\[
+\begin{tikzcd}
+\textcolor{bluegray}{1}\ar[dd, <->, "t"', bluegray]
+  &[-1em]A_{hj_1}
+  & K \ar[l, "f_{hj_1}"']\ar[r, "f_{hj_2}"]
+  & A_{hj_2}\\
+%
+  &A_{hj_1} \ar[u, equal]\ar[d, equal]
+  &S \ar[u]\ar[l, "\sigma_{j_1}"']\ar[r, "\sigma_{j_2}"]\ar[d]
+  &A_{hj_2} \ar[u, equal]\ar[d, equal]\\
+\textcolor{bluegray}{2}
+  &A_{hj_1}
+  &L \ar[l, "g_{j_1}"]\ar[r, "g_{j_2}"']
+  &A_{hj_2}\\[-1em]
+%
+  &\textcolor{bluegray}{j_1} \ar[rr, <->, "j"', bluegray]&& \textcolor{bluegray}{j_2}
+\end{tikzcd}
+\]
 
 \end{document}
