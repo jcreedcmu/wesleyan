@@ -4472,3 +4472,63 @@ I know f is cofunctional whenever `restricting f to the ♯1-shaped part of its 
 Q: So what's the relationship between these and equality?
 A: If f is functional and cofunctional, then f is a path --- that is, f is constant.
 So what's really going on is that somehow ♯d and ♯c *cover* ♯2.
+
+=== 2018.04.28
+
+Q: What's the promising set of thoughts I had this morning?
+A:
+The things that are special about the simplex category from the point of view
+of categorical composition is that
+
+ - each object of it arises as a 'composable situation', a sequence of n composable morphisms
+
+ - the internal structure that we intend for it as 'designers' of the
+ simplex category --- even though as an abstract category that
+ internal structure is not directly visible, but only visible through
+ the available morphisms --- is that it contains *all possible
+ compositions* of the composable morphisms.
+
+ - the morphisms in the simplex category give us a way of probing this
+ structure. We can map one simplex A into another B in as many ways as
+ we can map the 'raw stuff' of A into the 'derived stuff' of B, so
+ it's sort of a kleisli map.
+
+This gives me some hope I can repeat this picture for mesh-like
+instead of categorical things.
+
+Q: What does that start to look like?
+A: A 'composable situation' might be simply a map f : A → B between
+two finite sets, indicating that we have B distinct hyperedges, each
+of whose arity is given by inverse image under f. What we can do to these
+edges is copair some group of them together (maybe with repeated multiplicity?)
+then do a pull, then do a push.
+
+Q: What's missing from this description?
+A: I should only be able to do pulls when the endpoints actually match up, hmm.
+
+Q: What's a separate thought about modalities that seems nice?
+A: I do expect that there's a ♯-like modality that freely 'fills out'
+all the composites (i.e. copairs and pulls) of a given premesh. But I
+also could ask for a ♭-like modality that *restricts* to only the
+cells that are functional ♯2-paths. In which case the types ℂ such
+that ℂ ≡ ♯♭ℂ would be exactly the types that look like categories ---
+those that one the one hand *do have* all copairs and pulls (because
+they're in the image of ♯) but also ones for which their pulls and copairs
+are *entirely determined* by just the functional ♯2-paths of ℂ.
+
+Q: Ok, so I'm trying to write down this simplex-like category. When did I effectively already do this?
+A:
+There's one idea in
+  texnotes/2017-10-28.ltx
+  texnotes/2017-11-01.ltx
+that involves big pullback-y diagrams, and another in
+  https://twitter.com/jcreed/status/966065395164680192
+from february 20 2018, which I'm pretty sure is talking about
+  agda/BaseCategory.agda
+and at least
+  texnotes/2017-02-20.ltx
+which definitely mentions that agda file.
+
+Q: In git, how did I find which files were modified in a certain date range?
+A:
+$ git diff --name-only "@{2018-02-15}" "@{2018-02-21}"
