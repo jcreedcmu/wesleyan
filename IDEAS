@@ -4560,3 +4560,14 @@ general categories.
 Q: Is this (3) the same thing as inj if
 wes//agda/internal-categories/InternalCategories.agda
 A: I think not? Possibly (3) is more general.
+
+Q: What in the world was my reasoning behind the apparently
+quite false-sounding meaning of inj-equiv in
+wes//agda/internal-categories/InternalCategories.agda
+that all categories are Cayley categories? (cf. the fact that Yoneda
+says that all categories are *subcategories* of Cayley categories)
+A: Strangely, I think this makes sense after all: it's a very compact
+way of saying that representable types exist. Having specified a
+category ℂ : Cat X over object-set X, there *then exists* a type
+family F : X → Set such that a specified hom ℂ(C, D) of ℂ *is* the
+entire function space between F C and F D.
