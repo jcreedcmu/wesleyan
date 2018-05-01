@@ -14,6 +14,10 @@ record Cat (X : Set) : Set₁ where
     assoc : {x y z w : X} {f : hom x y} {g : hom y z} {h : hom z w}
       → ((f ⋆ g) ⋆ h) == (f ⋆ (g ⋆ h))
 
+    -- term : X
+    -- term! : {x : X} → hom x term
+    -- term!u : (x : X) (f : hom x term) → f == term!
+
 Hom = Cat.hom
 
 cay : {X : Set} (F : X → Set) → Cat X
@@ -130,5 +134,40 @@ cinterp {X} {F} S = record {
   presId = λ e → idp ;
   pres⋆ = λ f g e → idp }
 
+-- "concrete representation axiom"
 postulate
   crepna : {X : Set} {F : X → Set} → is-equiv (cinterp {X} {F})
+
+-- But maybe that's not reasonable... Maybe if we assume F represents
+-- a category with terminal object, it is true.
+
+data hasInitial {X : Set} (F : X → Set) : Set where
+  hasInitial/ : (x : X) → is-contr (F x) → hasInitial F
+
+crepnaPf : {X : Set} {F : X → Set} (hi : hasInitial F) → is-equiv (cinterp {X} {F})
+crepnaPf {X} {F} (hasInitial/ x₀ (fx , efx)) = is-eq cinterp out zig zag where
+  out : CPshOver F → Set
+  out cpo = CPshOver.opart cpo x₀
+
+  zig : (P : CPshOver F) → cinterp (out P) == P
+  zig = {!!}
+  -- Informally, suppose we have an F : X → Set and a presheaf
+  -- P over the category implied by F, whose objects are x ∈ X and whose
+  -- morphisms are all functions F x → F y.
+
+  -- We know there's some x₀ such that F x₀ is a singleton. We ask for
+  -- what P does at x₀; the set 'out P' is P(x₀). Now we claim we can
+  -- reconstruct the entire presheaf P(x₀) from this set. The reconstruction,
+  -- call it Q, is defined by saying
+  -- Q(x) = F x → P(x₀)
+  -- Q(f : F x → F y) = λ (q : Q(y)) . q ∘ f
+
+  -- Now how can we relate P(x) and Q(x)? Given a P(x) and an F(x), we
+  -- also have a F(x₀) → F(x), so we should be able to transport back
+  -- to P(x₀). So this is how we get from P(x) to Q(x).
+
+  -- How do we get from Q(x) to P(x)? Well, I have an F x₀, so I have
+  -- a P(x₀). I also have a unique map F x → F x₀, so I can
+  -- presheaf-restrict to P(x).
+  zag : (S : Set) → out (cinterp S) == S
+  zag S = ua (equiv (λ e → e fx) (λ z _ → z) (λ b → idp) (λ e → λ= λ fx' → ap e (efx fx') ))

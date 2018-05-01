@@ -4536,8 +4536,6 @@ $ git diff --name-only "@{2018-02-15}" "@{2018-02-21}"
 === 2018.05.01
 
 Q: So let's say I formalized, internally, a notion of finite category, what can I postulate from that?
-
-
 A:
 1. For every object C of every finite ℂ there's a representable type yC.
 
@@ -4571,3 +4569,17 @@ way of saying that representable types exist. Having specified a
 category ℂ : Cat X over object-set X, there *then exists* a type
 family F : X → Set such that a specified hom ℂ(C, D) of ℂ *is* the
 entire function space between F C and F D.
+
+Q: Ok, that's neat; can I justify the sort of 'a type is uniquely
+characterized by its presheaf representations over any particular
+category' axiom I was thinking of in terms of that, then?
+A: I run into a problem when the category in question is a little too degenerate.
+Like, what if X is 1 and F : X → Set is defined by F * = 0, then the
+induced presheaf for any other type S floating out in the world is just
+S at * is... { ! }. So every type is indistinguishable.
+
+Q: Hm... somehow thinking about what the semantics would have to look
+like in order to prove consistency of such axioms, maybe I should
+demand that each little category has a terminal object?
+What happens with that?
+A: ???
