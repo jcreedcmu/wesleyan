@@ -110,3 +110,25 @@ interp {X} {ℂ} S = record {
 -- The thing I really want to postulate:
 postulate
   repna : {X : Set} {ℂ : Cat X} → is-equiv (interp {X} {ℂ})
+
+-- But wait; if a finite category is the same thing as the cayley
+-- category on a finite collection of types, what I'm really saying is
+-- something about representations in terms of *concrete* presheaves.
+-- Defining this interpretation function is super easy!
+record CPshOver {X : Set} (F : X → Set) : Set₁ where
+  field
+    opart : X → Set
+    fpart : {x y : X} → (F y → F x) → opart x → opart y
+    presId : {x : X} (e : opart x) → fpart (idf _) e == e
+    pres⋆ : {x y z : X} (f : F y → F x) (g : F z → F y) (e : opart x)
+       → fpart (f ∘ g) e == fpart g (fpart f e)
+
+cinterp : {X : Set} {F : X → Set} → Set → CPshOver F
+cinterp {X} {F} S = record {
+  opart = λ x → F x → S ;
+  fpart =  λ f w → w ∘ f ;
+  presId = λ e → idp ;
+  pres⋆ = λ f g e → idp }
+
+postulate
+  crepna : {X : Set} {F : X → Set} → is-equiv (cinterp {X} {F})
