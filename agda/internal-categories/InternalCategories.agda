@@ -53,17 +53,15 @@ module lemmaMod {X : Set} (ℂ : Cat X) where
       funcOfMor {ℂ = ℂ} (g ⋆ f) == (funcOfMor f) ∘ (funcOfMor g)
   ⋆lemma = {!!}
 
-  generalize : ∀ {n} (x : X) {Catish : Set n} {ℂ 𝔻 : Catish} (p : 𝔻 == ℂ)
-    {hom : Catish → Set} {idish : hom ℂ}
-    → coe (! (ap hom p)) idish == idish [ hom ↓ p ]
-  generalize x idp = idp
+  generalizeIdLemma : ∀ {n} (x : X) {Catish : Set n} {ℂ 𝔻 : Catish} (p : 𝔻 == ℂ)
+    {hom : Catish → Set} {cc : hom ℂ} {dd : hom 𝔻}
+    → dd == cc [ hom ↓ p ]
+    → coe (! (ap hom p)) cc == dd
+  generalizeIdLemma x idp idp = idp
 
-  subgoal : {x : X} → funcOfMor {ℂ = ℂ} (id {x}) == (Cat.id ℂ) [ (λ z → Cat.hom z x x) ↓ round ℂ ]
-  subgoal {x} = generalize x (round ℂ)
-
-  idlemma : {x : X} →
-      funcOfMor {ℂ = ℂ} (id {x}) == (λ x → x)
-  idlemma = {!!}
+  idlemma : {x : X} → funcOfMor {ℂ = ℂ} (id {x}) == (λ x → x)
+  idlemma {x} = generalizeIdLemma x (round ℂ) (extractId x ℂ)
+open lemmaMod using ( idlemma )
 
 [_,_] = int
 
@@ -106,7 +104,7 @@ interp {X} {ℂ} S = record {
 -- Arg, actually proving these totally ought to be easy but so far I
 -- seems to involve so much equality and PathOver shenanigans that I
 -- get tired.
-  presId = λ e → ap (e ∘_) {!!} ;
+  presId = λ e → ap (e ∘_) (idlemma ℂ) ;
   pres⋆ = λ f g e → ap (e ∘_) {!!} }
 
 -- The thing I really want to postulate:
