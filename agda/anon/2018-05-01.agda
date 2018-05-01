@@ -1,5 +1,5 @@
 {-# OPTIONS --without-K #-}
-module InternalCategoriesStrippedDown where
+module 2018-05-01 where
 
 open import HoTT
 
@@ -60,6 +60,11 @@ module spanToType (A B C : Set) (f : C → A) (g : C → B) where
   intro : (c : C) → (γ → go)
   intro c g = left (c , g)
 
+  -- Oh, but I shouldn't expect to prove this, it's like proving
+  -- (A → (B + C)) → ((A → B) + (A → C))
+  -- ...although, if γ is a tiny object in the sense of
+  -- https://ncatlab.org/nlab/show/tiny+object
+  -- then it would go through?
   elim : (γ → go) → go2
   elim gg = {!!}
 
