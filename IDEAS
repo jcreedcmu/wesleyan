@@ -826,7 +826,7 @@ term = b (c k (b k))
 
 Q: Where did I put some notes about how 2-categorical modalities work
 in dependent types?
-A: texnotes//2017-09-23.ltx
+A: wes//texnotes/2017-09-23.ltx
 
 === 2017.09.24
 
@@ -1802,7 +1802,7 @@ appropriately.
 
 ♯n is the 'free mesh on an n-ary relation'. Its M0 is n. Its M1 has
 for objects comprehensions Γ; E ▹ σ that I described in
-texnotes//2017-10-13.ltx .
+wes//texnotes/2017-10-13.ltx .
 
 Except here E can have only relation symbols and equalities in it.
 
@@ -2137,7 +2137,7 @@ so that it becomes an instance of the top.
 transform the bottom to ([C] → Z) ≡ ([C] → X) + ([C] → Y) but whatevs)
 
 Q: Does this really preserve colimits?
-A: No! See texnotes//yoneda-and-colimits.ltx for a counterexample. I
+A: No! See wes//texnotes/yoneda-and-colimits.ltx for a counterexample. I
 think I was even a bit conservative in writing down all the mess that
 is 𝟚 → 𝟚 × 𝟚; there are also four knight's-move arrows down and to the
 right.
@@ -4125,7 +4125,7 @@ Q: Where's the computation I did to feel out what a point in the universe in a c
 with two interval variables should look like, concluding that it was a
 commutative square after all?
 A:
-texnotes//2018-02-09.ltx section 1.5
+wes//texnotes/2018-02-09.ltx section 1.5
 
 Q: What's notable about that?
 A: I am using the #-elim/exchange/Φ principle as given by B-M, so
@@ -4519,16 +4519,44 @@ are *entirely determined* by just the functional ♯2-paths of ℂ.
 Q: Ok, so I'm trying to write down this simplex-like category. When did I effectively already do this?
 A:
 There's one idea in
-  texnotes/2017-10-28.ltx
-  texnotes/2017-11-01.ltx
+  wes//texnotes/2017-10-28.ltx
+  wes//texnotes/2017-11-01.ltx
 that involves big pullback-y diagrams, and another in
   https://twitter.com/jcreed/status/966065395164680192
 from february 20 2018, which I'm pretty sure is talking about
-  agda/BaseCategory.agda
+  wes//agda/BaseCategory.agda
 and at least
-  texnotes/2017-02-20.ltx
+  wes//texnotes/2017-02-20.ltx
 which definitely mentions that agda file.
 
 Q: In git, how did I find which files were modified in a certain date range?
 A:
 $ git diff --name-only "@{2018-02-15}" "@{2018-02-21}"
+
+=== 2018.05.01
+
+Q: So let's say I formalized, internally, a notion of finite category, what can I postulate from that?
+
+
+A:
+1. For every object C of every finite ℂ there's a representable type yC.
+
+2. The space of functions between yC and yD is the (finite, discrete?)
+   set of specified morphisms between C and D.
+
+3. Observe that therefore, if you pick a finite category ℂ, any type X
+   can be turned into an internal presheaf over ℂ, in the sense of a
+   type for every object C of ℂ (the function space yC → X) and we
+   have a contravariant functorial action by 2 (given a morphism D →
+   C, we have a map yD → yC, so we can compose with a function yC → X
+   to get yD → X)
+
+   Postulate that this process (turn X into a presheaf) is an
+   equivalence.
+
+The thing to observe about 3 is it is basically 'witness types' for
+general categories.
+
+Q: Is this (3) the same thing as inj if
+wes//agda/internal-categories/InternalCategories.agda
+A: I think not? Possibly (3) is more general.
