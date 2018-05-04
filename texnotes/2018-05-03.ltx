@@ -281,4 +281,90 @@ where the rules are more like
 {  f_m([d/\nu]e) \equiv [c/\nu]e  }
 \]
 
+\section{Thinking About The Cube Category}
+Suppose $\square$ is, equvialently:
+\begin{itemize}
+\item the free cartesian category on
+\[\begin{tikzcd}
+  \top \ar[r, shift left]\ar[r, shift right] & \ii
+\end{tikzcd}\]
+\item the category of contexts and substitutions for
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma, \Delta$&$::=$&$\cdot \celse \Gamma, \nu : \ii$\\
+  Substitutions&$\theta$&$::=$&$\cdot \celse \theta[M/\nu]$\\
+  Terms&$M$&$::=$&$\nu \celse \ep 1 \celse \ep 2$\\
+\end{tabular}\]
+\[
+\erule
+{\Gamma \prov \theta: \Delta \qquad \Gamma \prov M : \ii}
+{\Gamma \prov \theta[M/\nu] : (\Delta, \nu : \ii)}
+\]
+\item the opposite of the Kleisli category whose objects
+are finite sets $n$, and whose morphisms are
+partial functions $m \to n + 2$.
+\end{itemize}
+I want to be very clear about what a morphism $h : A \to y\ii \in \hat \square$ can look like.
+Given such a thing, I can extract from it the information arising from some pullbacks:
+\[
+\begin{tikzcd}
+  h^1 \ar[r]\ar[d]\pbck & y\top\ar[d, "{y[\ep 1 / \nu]}"]\\
+  A \ar[r, "h"'] & y\ii
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  h^2 \ar[r]\ar[d]\pbck & y\top\ar[d, "{y[\ep 2 / \nu]}"]\\
+  A \ar[r, "h"'] & y\ii
+\end{tikzcd}
+\]
+and I should be able to also think about how there's a weakening substitution
+$\hat\square / y\top \to \hat\square / y\ii$  arising from pullback along
+ $\cdot : \ii \to \top$ --- but pullback along a morphism into the terminal object
+is just product.
+\[
+\begin{tikzcd}
+  B \x y\ii \ar[r]\ar[d]\pbck & y\ii\ar[d, "!"]\\
+  B \ar[r] & \top
+\end{tikzcd}
+\]
+So the right adjoint to this $\hat\square / y\top \to \hat\square / y\ii$
+(which is guaranteed to exist because presheaf categories are lccc)
+would be $(\nu : y\ii) \to  B : \hat\square  / y \top$.
+
+Let's bump up the generality slightly to include a context.
+We suppose we have $A : (\Gamma, \nu:\ii, x : A) \to (\Gamma, \nu:\ii)$.
+Then the pullback of this against a substitution for a constant
+\[
+\begin{tikzcd}
+  \Gamma,[\ep k/\nu]A \ar[r]\ar[d]\pbck & \Gamma\ar[d, "{[\ep k / \nu]}"]\\
+  \Gamma,\ii,A \ar[r, "A"'] & \Gamma,\ii
+\end{tikzcd}
+\]
+should still work.
+And then pullback against the weakening substitution
+\[
+\begin{tikzcd}
+  \Gamma,\ii, A \ar[r, "{A^w}"]\ar[d]\pbck & \Gamma,\ii\ar[d, "{w}"]\\
+  \Gamma,A \ar[r, "A"'] & \Gamma
+\end{tikzcd}
+\]
+should have a right adjoint
+\[
+\begin{tikzcd}
+  \Gamma,\ii, A \ar[r, "A"]\ar[d, mapsto] & \Gamma,\ii\ar[d, mapsto]\\
+  \Gamma, \Pi A \ar[r, "\Pi A"'] & \Gamma
+\end{tikzcd}
+\]
+in which we get a correspondence
+\[
+\begin{tikzcd}
+  \Gamma,\ii,A \ar[r, "A^w"] \ar[d] & \Gamma, \ii\\
+\Gamma,\ii, B \ar[ur, "B"']
+\end{tikzcd}
+\longleftrightarrow
+\begin{tikzcd}
+  \Gamma,A \ar[r, "A"] \ar[d] & \Gamma\\
+\Gamma, \Pi B \ar[ur, "\Pi B"']
+\end{tikzcd}
+\]
+So concretely, what is going on with this?
 \end{document}

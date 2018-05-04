@@ -4772,3 +4772,53 @@ C → Π (g ∘ f)
 Hm, dunno. The total collection of morphisms in 𝔻 carries a lot of
 information! About which cells are 'less than' each other. Which is how I can actually
 phrase UMPs for pull and copair.
+
+Q: What's the most generality I can squeeze out of the way the interval
+appears as a tiny object in the cube category?
+A:
+Suppose U : ^ℂ → ^𝔻 and F : ^𝔻 → ^ℂ such that F ⊣ U.
+Suppose we have G : 𝔻 → ℂ such that
+F ∘ y = y ∘ G
+then for any p : ^ℂ we can reason that
+Up(C) = ^ℂ[yC, Up] = ^ℂ[F(yC), p] = ^ℂ[y(GC), p] = p(GC)
+in which case U is a precomposition functor and has a right adjoint
+that can be computed as a Kan extension.
+
+Q: But what's the relationship between, say, 2-spans of presheaves and
+presheaves over the representable 𝕀 in ^□?
+A:
+I could start with presheaves C, A, B ∈ ^□ with natural transformations
+f : C → A and g : C → B. (to be clear, I'm working in the
+cartesian □, not the symmetric monoidal variant)
+
+Or I could start with a natural transformation Z → 𝕀 ∈ ^□.
+From this I would extract the preimage in Z of 0 and 1, and those would be my
+A and B, and the preimage of the 2-cell in 𝕀, shifted down a dimension, would
+be my C.
+
+Q: What can I just barely begin to understand about why the substructurality of
+the symmetric monoidal version of □ is relevant?
+A: At least there's a breakdown in the naive correspondence between
+    a) a spans of presheaves in ^□ *with* diagonals and
+    b) a map of some presheaf into 𝕀
+For I'd try to go (a) ⇒ (b) by saying: take the span A ← C → B,
+for every cell of A, throw in a same-dimension cell over endpoint 1,
+for every cell of B, throw in a same-dimension cell over endpoint 2,
+for every cell of C, throw in a one-higher-dimension cell between the
+cells of its two projections.
+
+I'd try to go (b) ⇒ (a) by saying: compute A as the stuff living over
+endpoint 1, B as the stuff living over endpoint 2, and C as the stuff living
+over the edge of 𝕀, downshifted one dimension.
+
+But if start with (a) the identity span 𝕀 ← 𝕀 → 𝕀, then I compute (b)
+as: it's got *five* distinct nontrivial one-cells, because the diagonal
+has to get thrown in, too. So if I try to go back to finish the round-trip,
+I get 3 vertices in 𝕀 instead of 2!
+
+Q: What might save this?
+A: I wonder if I can characterize what data actually *is* in
+"(b) a map of some presheaf into 𝕀" ─ like, is it *more* structure than just
+a span of presheaves? Is there a parametricity phenomenon going on that's over
+something a little bit more richly structured than a relation, but which I can
+still use to prove parametricity theorems?
