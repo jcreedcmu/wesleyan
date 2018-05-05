@@ -115,7 +115,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
-\def\W{\mathbf{W}}
+\def\G{\mathbf{G}}
 \def\S{\mathbf{S}}
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
@@ -367,4 +367,43 @@ in which we get a correspondence
 \end{tikzcd}
 \]
 So concretely, what is going on with this?
+
+\vfil\eject
+
+\section{Grothendieck Thoughts}
+Say we have some $\C$ and $F :\C \to \rcat$. The idea is that objects of $\C$
+are contexts $\Delta$ and morphisms $\Delta_1 \to \Delta_2$ are valid substitutions
+among such contexts.
+I'll conflate an object $\Delta$ of $\C$ with the category $F\Delta$, and
+a morphism $\theta : \Delta_1 \to \Delta_2$ of $\C$ with the functor
+$F\theta : F\Delta_1 \to F\Delta_2$.
+
+
+The semantics of
+\[ \Delta ; \Gamma \prov A : \rtype \]
+Is supposed to be that for every $\delta\in\Delta$, we have
+\[ \Gamma_\delta : \rtype \qquad  A_\delta : (\gamma : \Gamma_\delta) \to \rtype \]
+and for every $\phi : \delta_1 \to \delta_2 \in \Delta $ we have
+\[ \Gamma_\phi : \Gamma_{\delta_1} \to \Gamma_{\delta_2} \]
+\[ A_\phi : (\gamma : \Gamma_{\delta_1}) \to A_{\delta_1}(\gamma) \to A_{\delta_2}(\Gamma_\phi(\gamma)) \]
+But also I want to support transport across $\Delta$s, not just within $\Delta$s.
+This isn't essential for just making a type theory work {\em at all}, but it is
+essential for achieving internalized parametricity: for what that requires is that
+a lambda sitting in an empty $\Delta$ already anticipates extensions to $\Delta$.
+Something of type $(A : \U) \to \El A \to \El A$ should accept an $A : \U$
+that is over $\nu : \sharp 2$, not just a $\U$ in the empty context.
+
+So I essentially want to pick out the grothendieck construction $\G$ of $F$.
+
+An object of $\G$ is a pair $(\Delta, \delta)$ where $\delta \in \Delta$.
+A morphism $(\Delta_1, \delta_1) \to (\Delta_2, \delta_2)$ in $\G$ is
+a pair $(\theta, \phi)$ such that $\theta : \Delta_1 \to \Delta_2 $ and
+$\phi : \theta\delta_1 \to \delta_2$.
+
+Then can I say that the semantics has type
+\[ \Gamma_G : \rtype \qquad  A_G : (\gamma : \Gamma_G) \to \rtype \]
+\[ \Gamma_g : \Gamma_{G_1} \to \Gamma_{G_2} \]
+\[ A_g : (\gamma : \Gamma_{G_1}) \to A_{G_1}(\gamma) \to A_{G_2}(\Gamma_g(\gamma)) \]
+? No, this seems wrong; types are defined {\em relative to a particular $\Delta$} even
+if they do anticipate all extensions to $\Delta$.
 \end{document}
