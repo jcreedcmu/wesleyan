@@ -581,4 +581,75 @@ It's really just expressing consistency of $M$ as a global section.
 Ach, right, the real problem with variables is that I don't get a
 clean notion of substitution with, like, function types. I have to
 Kripke. Boo to that.
+
+It's as is the type $(x : A) \to B$ is actually more like
+\[ (C : \C) (g : C \to \nu) \to (x : [C/\nu]A) \to [C/\nu]B\]
+or if I had a yoneda-ish type or something, maybe I could say
+\[ (\gamma : y\nu) (x : [\gamma/\nu]A) \to [\gamma/\nu]B\]
+But I don't know how to make sense of that.
+
+Is it the downshift that's the locus of this variable dance somehow?
+This would mean that there's an aggregate type that both uses
+up the ambient $\nu$ and binds another one
+\[\begin{tabular}{rccl}
+  Types&$A$&$::=$&$\cdots \dns_\nu\nu. (x : A) \to B \cdots$\\
+\end{tabular}\]
+and we have like
+
+\[
+\erule
+{\Psi;\nu;\Gamma \prov A : \rtype \qquad \Psi;\nu;\Gamma, x : A \prov B : \rtype}
+{\Psi;\nu;\Gamma \prov \dns_\nu \nu . (x : A) \to B : \rtype }
+\]
+which means that things like
+\[\dns_C \nu . (x : A) \to B : \rdtype\]
+for particular $C$ must be ordinary discrete types. If we feed this a morphism
+of $\C$, we should get out something useful:
+\[
+\erule
+{e : \dns_C\nu.(x : A) \to B \qquad g : D \to C \qquad N : [D/\nu]A}
+{e \star_g N : [N/x][D/\nu] B}
+\]
+But this shouldn't be specific to function types, but should work at all negative types,
+or something like that:
+\[
+\erule
+{e : \dns_C\nu.A \qquad g : D \to C }
+{e \star g  : [D/\nu] A}
+\]
+
+\subsection{Yoneda Syntactically}
+
+A positive type is a presheaf over $\C$. And $yC$ for each $C \in \C$ is such a thing.
+
+\[
+\erule
+{}
+{\Psi ; \nu : \C ; \Gamma \prov y_\nu C : \rtype}
+\qquad
+\erule
+{g : D \to C \in \C}
+{\Psi  \prov g : y_D C }
+\]
+\[
+\erule
+{\Psi, [C/\nu]\Gamma  \prov e : [C/\nu]A \qquad \Psi ; \nu : \C ; \Gamma \prov f : y_\nu C }
+{\Psi ;\nu : \C; \Gamma  \prov e \star_\nu f : A}
+\]
+\[
+\erule
+{\Psi, [C/\nu]\Gamma  \prov e : [C/\nu]A \qquad \Psi  \prov f : y_D C }
+{\Psi, [D/\nu]\Gamma  \prov e \cdot f : [D/\nu]A}
+\]
+\[
+\erule
+{\Psi ; \nu : \C ;  \Gamma \prov M : B}
+{\Psi ;\nu : \C; \Gamma \prov [] M :  \dns_\nu \nu . B ???}
+\]
+\[
+\erule
+{\Psi ; \nu : \C ;  t : y_\nu C \prov M : B}
+{\Psi  \prov \susp{\nu, t}M :  \dns_C \nu . B}
+\]
+Nah, something's not right.
 \end{document}
