@@ -87,6 +87,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\rjust{\mathsf{just}}
 \def\rcvt{\mathsf{cvt}}
 \def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
 \def\rkind{\mathsf{kind}}
 \def\rmode{\mathsf{mode}}
 \def\rprel{\mathbf{Prel}}
@@ -489,4 +490,95 @@ weird. But contraction being absent seems essential, because then I
 can't analyze the non-endpoint substitutions
 of type $ \Omega, \nu : \ii$ as necessarily
 coming in two separable parts, the $\Omega' \prov \theta :\Omega$ and the $[\nu'/\nu]$.
+
+\section{Another Pass at Syntax For Programming over Presheaves}
+Let me stare again at
+\[
+\begin{tikzcd}
+  \rset \ar[d, "\Delta"', shift right=5]\ar[d, "\dashv", phantom]\ar[from=d, "\forall"', shift right=5] \\
+{\hat \C}
+\end{tikzcd}
+\]
+and let's have a syntax for a type theory where the default sort of thing, the
+thing we call $\rtype$, is in $\hat \C$, and the things that live in merely $\rset$
+are discrete types, members of $\rdtype$.
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A$\\
+  Discrete Contexts&$\Psi$&$::=$&$\cdot \celse \Psi, y : E$\\
+  Types&$A$&$::=$&$\U \celse \Delta E \celse (x : A) \to A \celse (x : A) \x A$\\
+  Discrete Types&$E$&$::=$&$\uu \celse A_C \celse \forall A \celse (y : E) \to E \celse (y : E) \x E$\\
+  Terms&$M$&$::=$&$\Delta e$\\
+  Discrete Terms&$e$&$::=$&$e\cdot f \celse \forall M \celse M_C$\\
+\end{tabular}\]
+So we can instantiate a type at an object $C \in \C$ and get a discrete type.
+We can also ask for the discrete type of global sections $\forall A$.
+\[
+\erule
+{\Psi  \prov e : A_D \qquad f : C \to D \in \C }
+{\Psi  \prov e \cdot f : A_C}
+\]
+\[e \cdot (f \o g) = (e \cdot f) \cdot g\]
+\[
+\erule
+{\Psi \prov E : \rdtype}
+{\Psi; \cdot \prov  \Delta E : \rtype}
+\qquad
+\erule
+{\Psi; \cdot \prov A : \rtype}
+{\Psi \prov  \forall A : \rdtype}
+\qquad
+\erule
+{\Psi; \cdot \prov A : \rtype \qquad C \in \C}
+{\Psi \prov  A_C : \rdtype}
+\]
+
+\[
+\erule
+{\Psi \prov e : E }
+{\Psi; \cdot \prov  \Delta e :  \Delta E }
+\qquad
+\erule
+{\Psi; \cdot \prov M : A}
+{\Psi \prov  \forall M : \forall A}
+\qquad
+\erule
+{\Psi; \cdot \prov M : A }
+{\Psi \prov  M_C : A_C }
+\]
+\[M_D \cdot f = M_C \qquad (\Delta E)_C = E \qquad (\Delta e)_C = e\]
+
+\subsection{Can't Decide if I Want Variables}
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A$\\
+  Discrete Contexts&$\Psi$&$::=$&$\cdot \celse \Psi, y : E$\\
+  LHSs&$\Omega$&$::=$&$\Psi; \nu : \C; \Gamma$\\
+  Types&$A$&$::=$&$\U_\nu \celse  E \celse (x : A) \to A \celse (x : A) \x A$\\
+  Discrete Types&$E$&$::=$&$\uu  \celse \forall \nu . A \celse (y : E) \to E \celse (y : E) \x E$\\
+   Terms&$e$&$::=$&$e\cdot f \celse \Lambda\nu. M $\\
+\end{tabular}\]
+
+If I do have a variable to distinguish what's going on in `plain types' that I can
+substitute for, then $\Delta$ can just vanish to be an inclusion of discrete
+types into regular types.
+
+We have substitution principles that say that
+\begin{thmbox}
+If $\Psi; \nu : \C \prov \Gamma \rctx $ then $\Psi \prov [C/\nu]\Gamma\rdctx$\\
+If $\Psi; \nu : \C; \Gamma \prov A: \rtype $ then $\Psi, [C/\nu]\Gamma \prov [C/\nu]A : \rdtype$\\
+If $\Psi; \nu : \C; \Gamma \prov M : A$ then $\Psi, [C/\nu]\Gamma \prov [C/\nu]M : [C/\nu]A$
+\end{thmbox}
+For morphisms we have a term former:
+\[
+\erule
+{\Psi; \nu : \C; \Gamma \prov A : \rtype \qquad
+\Psi, [D/\nu]\Gamma  \prov e : [D/\nu]A \qquad f : C \to D \in \C }
+{\Psi, [C/\nu]\Gamma  \prov e \cdot f : [C/\nu]A}
+\]
+This is something like associativity of substitutions, I think:
+\[([D/\nu]M) \cdot f \equiv [C/\nu]M\]
+It's really just expressing consistency of $M$ as a global section.
+
+Ach, right, the real problem with variables is that I don't get a
+clean notion of substitution with, like, function types. I have to
+Kripke. Boo to that.
 \end{document}
