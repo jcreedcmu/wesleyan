@@ -69,7 +69,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
 
-\def\N{{\mathbb N}}
 \def\munit{I}
 \def\tt{{\mathsf t}}
 \def\rr{{\mathsf r}}
@@ -708,5 +707,44 @@ So let's try to calculate
 
 This almost works! I just had to use a different sort of downshift to abstract away
 the $\sharp$ nonsense at the end.
+
+So if I have three classes of propositions, the $A$ which don't vary at all,
+the $P$ which are $\rset^{\P}$ and the $N$ which are $\rset^{\N}$, and I say things
+like
+\[(\dns N) @ C = \int_{\Phi \in \N} N(\Phi) \to \tri(C, \Phi)\]
+I should be able to read this as a type former
+\[
+\erule
+{\phi : \N \prov N : \rtype}
+{\alpha : \P \prov \dns_\alpha \phi . N : \rtype}
+\qquad
+\erule
+{\phi : \N \prov N : \rtype\qquad p \in \P}
+{ \prov \dns_p \phi . N : \rtype}
+\]
+\[
+\erule
+{\phi : \N, t : N \prov e : \tri(p, \phi) }
+{ \prov \lambda \phi t . e : \dns_p \phi . N }
+\qquad
+\erule
+{n \in \N \qquad  \prov t : [n/\phi]N \qquad \prov e : \dns_p \phi . N}
+{ \prov e\ n\ t : \tri(p, n)}
+\]
+
+\[
+\erule
+{\alpha : \P \prov P : \rtype}
+{\phi : \N \prov \ups_\phi \alpha . P : \rtype}
+\qquad
+\erule
+{\alpha : \P \prov P : \rtype\qquad n \in \N}
+{ \prov \ups_n \alpha . P : \rtype}
+\]
+\[
+\erule
+{\alpha : \P, t : P \prov e : \tri(\alpha, n) }
+{ \prov \lambda \alpha t . e : \ups_n \alpha . P }
+\]
 
 \end{document}
