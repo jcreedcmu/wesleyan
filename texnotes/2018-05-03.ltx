@@ -652,4 +652,61 @@ A positive type is a presheaf over $\C$. And $yC$ for each $C \in \C$ is such a 
 {\Psi  \prov \susp{\nu, t}M :  \dns_C \nu . B}
 \]
 Nah, something's not right.
+
+\subsection{Can \texttt{ModalT.agda} help me at all?}
+
+I thought it could, but I think the $\C$ in question is really about
+resources/positive worlds, not negatives. And not... whatever \texttt{kripke}
+is, which applies to both positives and negatives.  What makes me think so is
+the fact that the quantification in the yoneda-calculated definition
+is coming up for {\em functions} in presheaves. So it should be something more like
+the calculation in the `world where we have only positive propositions, and
+functions carry along a $\dns$ disguise so they can pretend to be positive'
+where we have $P_1$ and $P_2$ and we say
+\[\dns (P_1 \lol \ups P_2) \wat \alpha
+= \forall \phi . (P_1 \lol \ups P_2) \wat \phi \to \alpha \tri \phi\]
+\[ = \forall \phi . (\exists \beta \psi . \phi = \beta \lol \psi \land P_1 \wat \beta \land \ups P_2 \wat \psi)  \to \alpha \tri \phi\]
+\[ = \forall \phi  \beta \psi . \phi = \beta \lol \psi \to P_1 \wat \beta \to \ups P_2 \wat \psi  \to \alpha \tri \phi\]
+\[ = \forall   \beta \psi .  P_1 \wat \beta \to \ups P_2 \wat \psi  \to \alpha \tri \beta \lol \psi\]
+\[ = \forall   \beta \psi .  P_1 \wat \beta \to \ups P_2 \wat \psi  \to \alpha \tensor \beta \tri \psi\]
+\[ = \forall   \beta  .  P_1 \wat \beta \to \forall \psi. \ups P_2 \wat \psi  \to  \alpha \tensor \beta \tri \psi\]
+\[ = \forall   \beta  .  P_1 \wat \beta \to \dns \ups P_2 \wat \alpha \tensor \beta \]
+
+What I want to arrive at is something where
+$\dns (P_1 \lol \ups P_2) \wat C$ for $C \in \C$ looks like
+$\forall( D : \C) \to  \C[D, C] \to P_1 \wat D \to \dns \ups P_2 \wat D$
+
+So wait maybe the above calculation is encouraging me to think about what happens
+with \texttt{kripke}. What is \texttt{ModalT.agda} telling me?
+Positive resource specifiers are identical to kripke worlds. Negative resource
+specifiers are pairs of kripke worlds and an abstract type of frames made
+up just to make things intuitionistic.
+{\obeylines \texttt{
+Res : Signed Mode $\to$ Set -- worlds, frames
+Res ($\mu$ , s+) = kripke
+Res ($\mu$ , s-) = kripke $\x$ frame
+}}
+So I guess a \texttt{kripke} should be an object of $\C$, or maybe $\C^\op$, depending
+on whether I've confused myself up to an odd number of dualizations.
+The relation $\tri$ on these positive and negative thingies is
+\[C \tri (D , \phi) = \C[C, D] \to \sharp(D, \phi) \]
+and the $\lol$ relation is defined inductively such that only
+\[ \lol (D, (D, \phi), (D, \phi)) \]
+holds for any $D, \phi$.
+
+So let's try to calculate
+\[\dns (P_1 \lol \ups P_2) \wat C
+= \forall (D, \phi) . (P_1 \lol \ups P_2) \wat (D, \phi) \to \C[C, D] \to \sharp(D, \phi)\]
+\[ = \forall (D, \phi) . (\exists E (F, \psi) . P_1 \wat E \x (\ups P_2) \wat (F, \psi)
+\x {\lol} (E, (F, \psi), (D, \phi))) \]
+\[   \to \C[C, D] \to \sharp(D, \phi)\]
+\[ = \forall (D, \phi) . ( P_1 \wat D \x (\ups P_2) \wat (D, \phi) )
+ \to \C[C, D] \to \sharp(D, \phi)\]
+\[ = \forall D .  \C[C, D] \to P_1 \wat D \to  \forall \phi . (\ups P_2) \wat (D, \phi)
+ \to  \sharp(D, \phi)\]
+\[ = \forall D .  \C[C, D] \to P_1 \wat D \to  {\Downarrow} \ups P_2 \wat D\]
+
+This almost works! I just had to use a different sort of downshift to abstract away
+the $\sharp$ nonsense at the end.
+
 \end{document}
