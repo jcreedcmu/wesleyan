@@ -747,4 +747,21 @@ I should be able to read this as a type former
 { \prov \lambda \alpha t . e : \ups_n \alpha . P }
 \]
 
+Or maybe more like
+\[
+\erule
+{\Gamma, \phi : \N \prov N : \rtype\qquad \Gamma \prov p : \P}
+{ \Gamma \prov \dns_p \phi . N : \rtype}
+\]
+\[
+\erule
+{\Gamma, \phi : \N, t : N \prov e : \tri(p, \phi) \qquad \Gamma \prov p : \P}
+{ \Gamma \prov \lambda \phi t . e : \dns_p \phi . N }
+\]
+\[
+\erule
+{\Gamma \prov p : \P, n : \N \qquad  \Gamma \prov t : [n/\phi]N \qquad \Gamma \prov e : \dns_p \phi . N}
+{ \Gamma \prov e\ n\ t : \tri(p, n)}
+\]
+
 \end{document}
