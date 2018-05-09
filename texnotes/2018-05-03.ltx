@@ -750,18 +750,91 @@ I should be able to read this as a type former
 Or maybe more like
 \[
 \erule
-{\Gamma, \phi : \N \prov N : \rtype\qquad \Gamma \prov p : \P}
-{ \Gamma \prov \dns_p \phi . N : \rtype}
+{\Gamma, \phi : \N \prov N : \rtype\qquad \Delta \prov p : \P}
+{ \Gamma, \Delta \prov \dns_p \phi . N : \rtype}
 \]
 \[
 \erule
-{\Gamma, \phi : \N, t : N \prov e : \tri(p, \phi) \qquad \Gamma \prov p : \P}
-{ \Gamma \prov \lambda \phi t . e : \dns_p \phi . N }
+{\Gamma, \phi : \N, t : N \prov e : \tri(p, \phi) \qquad \Delta \prov p : \P}
+{ \Gamma, \Delta \prov \lambda \phi t . e : \dns_p \phi . N }
 \]
 \[
 \erule
-{\Gamma \prov p : \P, n : \N \qquad  \Gamma \prov t : [n/\phi]N \qquad \Gamma \prov e : \dns_p \phi . N}
-{ \Gamma \prov e\ n\ t : \tri(p, n)}
+{\Gamma^+ \prov p : \P\quad \Gamma^- \prov n : \N \quad  \Gamma, \Gamma^- \prov t : [n/\phi]N \quad \Gamma, \Gamma^+ \prov e : \dns_p \phi . N}
+{ \Gamma, \Gamma^-, \Gamma^+ \prov e\ n\ t : \tri(p, n)}
 \]
 
+\subsection{The Sequent as an End}
+
+What follows is emphatically only sensible so far for the simply-typed case.
+
+What if the meaning of $\Delta; \Gamma \prov M : A$ for $\Delta$ being a bunch
+of categorical variables --- not necessarily treated substructurally, I think?
+since $\rcat$ itself is certainly cartesian? --- is that $M$ is an inhabitant
+of the {\em end}
+\[ \int_{\delta\in\Delta} \Gamma \to A \]
+where the variables in $\Delta$ are free to have contravariant occurrences as they
+occur in $\Gamma$ and covariant occurrences as they occur in $A$.
+The type $A$ is a functor $\rset^\Delta$, as is the functor $\Gamma$. The
+meaning of the functor $\Gamma \to A : \rset^{\Delta^\op \x \Delta}$ is
+given by (for $f : \delta'_2 \to \delta'_1$ and $g : \delta_1 \to \delta_2$ in $\Delta$)
+\[(\Gamma \to A)(\delta', \delta) = \Gamma(\delta') \to A(\delta)\]
+\[(\Gamma \to A)(f, g) = \lambda h. A(g) \o h \o \Gamma(f)  \]
+In this case the shift operator intro rule looks like
+\[
+\erule
+{\Delta, \rho : \P;\Gamma, x : P \prov e : \tri(\rho, n)}
+{\Delta; \Gamma \prov \susp{\rho, x} e : \ups^\tri_n \rho . P}
+\]
+Or wait! The migration of $P$ from the rhs to the lhs of the sequent suggests
+that {\em other} variables in $\Delta$ besides $\rho$ maybe oughtn't appear in it.
+Let's interrogate the type formation rule.
+
+If I say
+\[
+\erule
+{\Delta \prov n : \N \qquad \Delta, \rho : \P \prov P : \rtype \qquad \Delta, \rho:\P \prov \tri(\rho, n) : \rtype}
+{\Delta \prov \ups^\tri_n \rho . P : \rtype}
+\]
+then this opens me up to the possibility that $n$ appears in $P$. I guess
+this would suggest again that substructurality of $\Delta$ might be relevant,
+but it seems more perspicuous to suspect {\em modality} instead of substructurality;
+maybe I should clear $\Delta$ before inserting $\rho$?
+
+I still don't have a clear picture of what goes wrong here, but I really do suspect that
+\[
+\erule
+{\Delta \prov n : \N \qquad  \rho : \P \prov P : \rtype \qquad \Delta, \rho:\P \prov \tri(\rho, n) : \rtype}
+{\Delta \prov \ups^\tri_n \rho . P : \rtype}
+\]
+is a more fruitful thing to try.
+
+Anyway, what would the elim rule look like?
+\[
+\erule
+{\Delta \prov p : \P \qquad \Delta;\Gamma \prov t : [p/\rho]P \qquad \Delta;\Gamma \prov e : \ups^\tri_n \rho . P }
+{\Delta;\Gamma \prov e(p, t) : \tri(p, n)}
+\]
+What would a coend look like?
+\[
+\erule
+{  \begin{tabular}{c}
+$\Delta, \rho : \P^\op, \nu : \N^\op \prov [\rho \lol \nu, n] : \rtype$\\
+\(\Delta \prov n : \N \qquad \rho : \P \prov P : \rtype
+\qquad \nu:\N \prov N : \rtype\)
+\end{tabular}}
+{\Delta \prov   (\rho.P \lol \nu.N)_n : \rtype}
+\]
+Then effectively I'm going to say that
+\[(\rho.P \lol \nu.N)_n \equiv \int^{\rho \in \P, \nu \in \N} P \x N \x [\rho \lol \nu, n]\]
+but I'm not entirely sure making the sequent an end lets me express this syntactically?
+Or... maybe it does, by duality, or something. Let's look at the left rule.
+
+Oh wait, I can't write it quite yet as-is. Maybe I need a way of marking
+elements of $\Gamma$ as dual --- so that they appear on the other side of the end.
+\[
+\erule
+{\Delta, \rho : \P, \nu : \N; \Gamma, P, N, \overline{[\rho \lol \nu, n]} \prov  \cdots : C}
+{\Delta; \Gamma, (\rho . P \lol \nu . N)_n \prov \blet \cdots : C}
+\]
 \end{document}
