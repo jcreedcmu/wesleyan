@@ -420,4 +420,269 @@ terms of existing category theoretic terminology, who knows. Anyway, I
 think I'm going to proceed with thinking about the simply-typed case
 with some confidence that the dependently-typed case might work out
 somewhat naturally, with less complication than I feared.
+\subsubsection{Starting Again Then}
+The meaning of a variable $\alpha : \C$ in $\Delta$ is really
+a pair $\alpha : \C \x \C^\op$. The meaning of a whole context is a category
+$\sem \Delta$ that's a big product of these dual-and-not-dual pairs.
+
+So variable {\em uses} can come in the form of either regular $\alpha$ or a dualized
+ $\bar \alpha$. The variable rule says things like
+\[
+\erule
+{}
+{\Delta, \alpha : \C \prov \alpha : \C}
+\qquad
+\erule
+{}
+{\Delta, \alpha : \C \prov \bar \alpha : \C^\op}
+\]
+Semantically what's happening is $\bar \alpha$ just swaps around the
+two parts; it's not a functor $\C \to \C^\op$, which would be impossible in general,
+but rather a functor $\C \x \C^\op \to \C^\op \x \C$, which is fine.
+
+So in general we write $\bar A$ for taking every $\alpha$ in $A$ and replacing it
+with $\bar\alpha$, and we'd have as an admissible rule
+\[
+\begin{prooftree}
+\Delta \prov A : \rtype
+\Justifies
+\Delta^\op \prov \bar A : \rtype
+\end{prooftree}
+\]
+For contexts we say
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta \prov \bar A : \rtype}
+{\Delta \prov \Gamma, A \rctx}
+\]
+So that the meaning of a context $\sem \Gamma$ when $\Delta \prov \Gamma \rctx$
+is a functor in $\rset^{\sem\Delta^\op}$.
+Specifically, if $\Gamma = x_1 : A_1, \ldots, x_n : A_n$ we'd say
+$\sem \Gamma(\delta) = \sem{A_1}(\delta) \x \cdots \x \sem {A_n}(\delta)$ for
+$\delta \in \sem \Delta^\op$.
+
+For terms, the meaning of
+\[ \Delta; \Gamma \prov e : A \]
+is
+\[\sem e \in \int_{\delta \in \sem{\Delta}} \sem \Gamma(\bar \delta) \to \sem A(\delta)\]
+
+For if $\delta \in \sem\Delta$, then
+$\bar \delta \in \sem \Delta^\op$.
+
+Ok, let's look at a nice easy asynchronous rule at first, like $\to$ introduction.
+\[
+\erule
+{\Delta; \Gamma, x : A \prov e : B}
+{\Delta;\Gamma \prov \lambda x . e : A \to B}
+\]
+From type formation of $A \to B$ we have $\Delta \prov \bar A : \rtype$
+so it's okay to put it in the context. The top thing means
+\[\sem {\Gamma, x \prov e} \in \int_{\delta \in \sem{\Delta}} \sem \Gamma(\bar \delta) \x \sem A(\bar\delta) \to
+ \sem B(\delta)\]
+and the bottom thing means
+\[\sem {\Gamma \prov \lambda x . e} \in \int_{\delta \in \sem{\Delta}} \sem \Gamma(\bar \delta)
+\to \sem A(\bar\delta) \to  \sem B(\delta)\]
+and it's just a matter of currying functors. No real interaction with the end, even.
+Is it more correct to write $\sem{\bar A} (\delta)$ than $\sem A(\bar \delta)$? They
+should work out to just about the same thing. But no, I think what I wrote is
+most correct; it's a contravariant functor $\to$ a covariant functor that is the thing
+I can easily slap together.
+
+How about the introduction rule for $\forall$?
+\[
+\erule
+{\Delta, \alpha : \C ; \Gamma \prov e :  A }
+{\Delta ; \Gamma \prov \Lambda \alpha . e :  \forall \alpha : \C .A }
+\]
+The thing up top says
+\[\sem {\Gamma\prov e} \in \int_{(\delta, c) \in \sem{\Delta} \x \C^*}
+\sem \Gamma(\bar \delta) \to \sem A(\delta, c)\]
+where $\C^*$ is $\C \x \C^\op$ and $c \in \C^*$. I should note here that I'm
+not quite actually using standard end syntax; the usual way of doing it would only
+write each variable once. I'm explicitly conisdering the $\C$ and the $\C^\op$ bits
+separately. Since $\Gamma$ below doesn't refer to $\alpha$ and is weakened
+upstairs, I've used the fact that the semantics of $\Delta$-variable weakening is just
+projection by writing merely $\sem\Gamma(\bar \delta)$. Anyway, the thing downstairs says
+\[\sem {\Gamma\prov \Lambda \alpha. e} \in \int_{\delta \in \sem{\Delta}}
+\sem \Gamma(\bar \delta) \to \int_{c\in\C^*} \sem A(\delta, c)\]
+which is the same thing, I should expect.
+
+What about $\to$ elim?
+\[\erule
+{\Delta; \Gamma \prov e : A \to B \qquad \Delta; \Gamma \prov e' : \bar A}
+{\Delta;\Gamma \prov e\ e' : B}
+\]
+We need to go from both
+\[\int_{\delta\in\sem{\Delta}} \sem \Gamma(\bar\delta) \to \sem A(\bar \delta) \to \sem B(\delta)
+\qquad
+\int_{\delta\in\sem{\Delta}} \sem \Gamma(\bar\delta) \to \sem {\bar A}( \delta)\]
+to having
+\[\int_{\delta\in\sem{\Delta}} \sem \Gamma(\bar\delta) \to \sem {B}( \delta)\]
+and, aha, I make the distinction between $\sem A(\bar\delta)$
+and $\sem {\bar A}(\delta)$ to mesh well with the definition of the end,
+but at the end of the day, they're the same set, so this should all be ok.
+
+What about $\forall$ elim?
+\[
+\erule
+{\Delta ; \Gamma \prov  e :  \forall \alpha : \C. A \qquad \Delta \prov \nu : \C}
+{\Delta ; \Gamma \prov e[\nu] :  [\nu/\alpha] A }
+\]
+There's some functor $\sem\nu : \sem\Delta\to\C^*$. We have to get
+from
+\[\int_{\delta\in\sem{\Delta}} \sem \Gamma(\bar\delta) \to \int_{c \in \C^*}\sem {A}( \delta, c)\]
+to
+\[\int_{\delta\in\sem{\Delta}} \sem \Gamma(\bar\delta) \to \sem {A}( \delta, \sem \nu (c))\]
+Hm, actually this is a little sketchy. Am I free to choose a completely arbitrary
+pair of objects in $\C$? This would be a constant functor $\sem \nu$. But the end
+$\int_c\in\C^*$ only gives me a canonical way to reach the bifunctor when I use
+the same object twice $(c,c)$ for arguments; or else when I supply a morphism telling
+how to get from $c$ to $d$, in which case I could get to $(d, c)$ (either
+covariantly from $(c,c)$ or contravariantly $(d,d)$, and the end's equalizer
+condition tells me that either one gives me the same answer)
+
+But any functor I can reasonably make syntactically out of $\Delta$ has this property
+that when the variables coming in are the same, they go out the same. Or is
+it even a syntactic property I need to require? Is it automatically guaranteed
+semantically? Let
+me specifically imagine that I have a functor $G : \D \x \D^\op \to \rset$.
+and $A : \D \x \D^\op \x \C \x \C^\op$ and a functor $\nu : \D \to \C$.
+I want to start with the end
+\[ \int_{d \in \D, c \in \C} G(d, c) \to A(d, d, c, c) \]
+
+which is to say the equalizer
+\[
+\begin{tikzcd}
+  E \ar[r, >->, "e"] &
+\displaystyle\prod\limits_{ d \in \D, c \in \C}G(d, d) \to A(d, d, c, c)
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{\begin{tabular}{l}$\scriptstyle d,d' \in \D$\\
+$\scriptstyle c,c' \in \C$ \end{tabular} } G(d', d) \to A(d, d', c, c')
+\end{tikzcd}
+\]
+and somehow get to
+\[ \int_{d \in \D} G(d, c) \to A(d, d, \nu(d), \nu(d)) \]
+which is to say
+\[
+\begin{tikzcd}
+  E' \ar[r, >->, "e'"] &
+\displaystyle\prod\limits_{ d \in \D}G(d, d) \to A(d, d, \nu(d), \nu(d))
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{d,d' \in \D} G(d', d) \to A(d, d', \nu(d), \nu(d'))
+\end{tikzcd}
+\]
+Okay, so at least this type-checks, since $\nu : \D \to \C$ implies that I also have
+$\nu^\op : \D^\op \to \C^\op$.
+
+If I am to get from $E$ to $E'$, then I need to get from $E$ to
+\[\prod_{ d \in \D}G(d, d) \to A(d, d, \nu(d), \nu(d))\] in such a way as to
+satisfy the equalizer condition. But I do actually have the ability to choose the projection
+from
+\[\displaystyle\prod\limits_{ d \in \D, c \in \C}G(d, d) \to A(d, d, c, c)\]
+down to the choice of $c$ being specifically $\nu(d)$. And thanks to functoriality of $\nu$,
+I think I get the equalizer condition downstairs from the one upstairs.
+
+Ah, what have I shown? I think it goes like this. Let's give a name to
+the `non-doubled' semantics of $\Delta$. Say when $\Delta = x_1 :
+\C_1, \ldots, x_n: \C_n$ that $\ssem \Delta$ is just plain old $\C_1
+\x \cdots \x \C_n$. So I think I've shown suggestively that when there
+is a functor $\nu : \ssem \Delta \to \C$ --- which is strictly
+stronger than asking for $\sem \Delta \to \C^*$ --- {\bf then} I can
+get from the meaning of $\Delta ; \Gamma \prov e : \forall \alpha :
+\C. A$ to the meaning of $\Delta ; \Gamma \prov e[\nu] : [\nu/\alpha]
+A $.
+
+Just above I effectively went through this thinking
+for the special case that $\Delta$ is a singleton, but I think
+it extends. So, yeah, the moral of everything is that the meaning of
+ $\Delta \prov \nu : \C$ should be
+that there is a functor $\sem \nu : \ssem \Delta \to \C$.
+
+Hm, although, wait, right at the outset I said that I could do
+\[
+\erule
+{}
+{\Delta, \alpha : \C \prov \bar \alpha: \C^\op}
+\]
+and this isn't at all a functor $\ssem \Delta \to \C$, it's directly contravariant to
+such a thing. I don't see anything broken just yet --- the swap
+also takes equal pairs of objects to equal pairs, at least ---
+but I do need to tread more carefully.
+Maybe I just need to convince myself that another legitimate form of
+$\Delta \prov \nu : \C$ is the swap, that there is a valid interpretation of
+the above rule that's compatible with $\forall$-elim.
+
+Ok, to analyze this, let me observe that probably the $\sem \Gamma$
+context isn't that crucial, and what I really need to believe in is
+just that I can get out of a single end in the appropriate way. Moreover
+it's not about the $\forall$ so much as the substitution principle involved.
+If I have $\alpha : \C^\op, \beta : \C \prov e : A$
+and I observe that $\beta : \C \prov \bar \beta : \C^\op$, I should be able
+to substitute $\bar\beta$ for $\alpha$ in $e$ and get an expression
+$ \beta : \C \prov [\bar\beta/\alpha]e : A$.
+
+Semantically, I start by knowing that $A : \C^\op \x \C \x \C \x \C^\op \to \rset$
+and I have something in
+\[ \int_{\alpha \in \C^\op, \beta \in \C} \sem A(\alpha, \beta)\]
+and I want to get to
+\[ \int_{ \beta \in \C} \sem A(\bar \beta, \beta)\]
+More explicitly, I start in the equalizer
+\[
+\begin{tikzcd}
+  E \ar[r, >->, "e"] &
+\displaystyle\prod\limits_{ \alpha \in \C^\op, \beta\in\C}  A(\alpha, \alpha, \beta, \beta)
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{\alpha, \beta' \in \C^\op ,\beta,\alpha'\in \C}
+A(\alpha, \alpha', \beta, \beta')
+\end{tikzcd}
+\]
+and I want to get to
+\[
+\begin{tikzcd}
+  E' \ar[r, >->, "e'"] &
+\displaystyle\prod\limits_{  \beta\in\C}  A(\beta, \beta, \beta, \beta)
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{ \beta' \in \C^\op ,\beta\in \C}
+A(\beta', \beta, \beta, \beta')
+\end{tikzcd}
+\]
+Okay, let's say we have $f : \alpha \to \alpha'$ and $g : \beta' \to \beta$.
+We can make an $A(\alpha, \alpha', \beta, \beta')$ in two
+ways. We can start with $A(\alpha, \alpha, \beta, \beta)$ and
+transport via $A(\alpha, f, \beta, g)$,
+covariantly along $f$ and contravariantly along $g$ (from
+the perspective of $\C$ being called `covariant') or we can
+start from
+$A(\alpha', \alpha', \beta', \beta')$ and do the opposite,
+$A(f, \alpha', g, \beta')$. If we're in $E$, these are the same. That is,
+for any $\epsilon\in E$, we have
+\[ A(\alpha, f, \beta, g) ( e(\epsilon)(\alpha, \beta)) = A( f, \alpha', g, \beta') (e(\epsilon)(\alpha', \beta'))\]
+Ok, so there definitely {\em is} a map
+\[ \lambda x . \lambda \beta . x(\beta, \beta) : \prod_{ \alpha \in \C^\op, \beta\in\C}  A(\alpha, \alpha, \beta, \beta) \to
+\prod_{  \beta\in\C}  A(\beta, \beta, \beta, \beta)\]
+I just want to confirm it preserves the equalizer property.
+The property some $y \in \Pi_\beta A(\beta, \beta, \beta, \beta)$ is
+ supposed to have to be in $E'$ is that for any $g : \beta' \to \beta$
+\[ A(g, \beta, \beta, g)(y(\beta)) = A(\beta', g, g, \beta')(y(\beta'))\]
+So I think this follows from a diagram chase, I'm just going to write
+$0$ for $\beta$ and $1$ for $\beta'$
+\[
+\begin{tikzcd}
+&& E \ar[d, >->]\\
+  A(0000) \ar[dr] \ar[ddrr, bend right] && \Pi_{\alpha\beta} A(\alpha\alpha\beta\beta) \ar[ll]\ar[rr]\ar[d]
+ && A(1111) \ar[dl] \ar[ddll, bend left]\\
+& A(1000)\ar[dr] & A(1100)  \ar[l]\ar[r]\ar[d] & A(1101) \ar[dl]\\
+&& A(1001)
+\end{tikzcd}
+\]
+The fact that composition with the injection from the equalizer makes both top squares
+commute is the assumption about the end we had coming in. The commutativity of the other
+triangles is just functoriality of $A$.
+
+Ok, so I suppose this all works, but I still wish I had a better handle on {\em semantically}
+what sort of property of functors $\C \x \C^\op \to \D \x \D^\op$ sufficies to make this work.
 \end{document}
