@@ -296,7 +296,7 @@ $\sem{A \x B}(\delta)$&$=$&$\sem A( \delta) \x \sem B(\delta)$\\
 }
 Where $\bar \delta$ means the object-wise swap of every variable piece of $\delta$.
 
-\subsubsection{Hom Types}
+\subsection{Hom Types}
 
 So I should be able to just say
 \[
@@ -351,4 +351,73 @@ Okay, I think a rule like this makes sense as an elim for $\hom$, but
 I may need to be more careful about inserting some sort notion of
 swaps at certain points to account for what I'm doing by essentially
 requiring $\C \x \C^\op$ thingies to be flying around everywhere.
+
+\subsection{Trying to Smell-Check the Semantics At Least}
+So the meaning of
+\[ \Delta; \Gamma \prov M : A \]
+is
+\[\sem M \in \int_{\delta \in \sem{\Delta}} \sem \Gamma(\bar \delta) \to \sem A(\delta)\]
+
+For if $\Delta \prov \Gamma \rctx$ then we should have $\sem \Gamma
+\in \rset^{\sem \Delta^\op}$. And if $\delta \in \sem\Delta$, then
+$\bar \delta \in \sem \Delta^\op$.
+
+\subsubsection{Speculating Tangentially about the Dependent Case}
+
+Maybe I could have
+\[\sem M \in \int_{\delta \in \sem{\Delta}} (\gamma : \sem \Gamma(\bar \delta)) \to \sem A(\delta, \gamma)\]
+
+Ooh, this is hard to tell what precisely this means.
+Suppose $\sem \gamma : \C \x \C^\op \to \rset$
+and $\sem A : \C \x \C^\op \to \rset$ and there's a...
+natural transformation $\pi : A \to \gamma$? Projecting the fibers
+onto the base? Hmm, no. What about the special case where $A$ is $\rset^\C$
+and $\Gamma : \rset^{\C^\op}$. In that case there definitely is a functor
+$\Gamma \to A : \rset^\C$ given by
+\[(\Gamma \to A)(c) = \Gamma(c) \to A(c)\]
+\[(\Gamma \to A)(f) = \lambda g : (\Gamma(c) \to A(c)).  A(f) \o g \o \Gamma(f) \]
+Okay, so suppose $\Gamma : \rset^{\C^\op}$ still, and maybe like...
+\[A : (c : \C) (c' : \C^\op) (\gamma : \Gamma(c')) \to \rset\]
+In such a way that it's functorial in $c$ and $c'$ at the same time?
+For a morphism $f : c \to d$ and a fixed $c'$, we'd require that
+\[A\ f\ c'\ \gamma : A\ c\ c'\ \gamma \to A\ d\ c'\ \gamma\]
+and for a $g : d' \to c'$ we'd want something like (for every $\gamma : \Gamma(c')$)
+\[A\ c\ g\ \gamma : A\ c\ c'\ \gamma \to A\ c\ d'\ (\Gamma\ g\ \gamma)\]
+
+Ok, so what's $\Pi \Gamma A$ then? Something of type
+\[ (c : \C) (c' : \C^\op) (\gamma : \Gamma(c')) \to A(c, c', \gamma)\]
+But can we establish some reasonable notion functoriality for this, out
+of the functoriality of $\gamma$ and $A$? Given $f : c \to d$, we should be
+able to get from $(\gamma : \Gamma(c')) \to A(c, c', \gamma)$
+to $(\gamma : \Gamma(c')) \to A(d, c', \gamma)$.
+We can do this with $A(f, c', \gamma)$, no problem. Given $g : d' \to c'$, we should
+be able to get from
+$(\gamma : \Gamma(c')) \to A(c, c', \gamma)$
+to,
+$(\psi : \Gamma(d')) \to A(c, d', \psi)$.
+
+Ok, suppose I have $z : (\gamma : \Gamma(c')) \to A(c, c', \gamma)$.
+Suppose also $\psi : \Gamma(d')$. Oh, dang, this seems like I have things oriented wrong.
+
+Surely I can't get away with just saying
+\[A : (c : \C)  (\gamma : \Gamma(c)) \to \rset\]
+can I? Functoriality of $A$ could be the
+requirement that if $f : c \to d$ and $\gamma : \Gamma(d)$ then
+\[A(f, \gamma) : A(c, \Gamma(f, \gamma)) \to A(d, \gamma)\]
+Then $\Pi \Gamma A$ would be something of type
+\[ (c : \C)  (\gamma : \Gamma(c)) \to A(c, \gamma)\]
+And we try to say that for any $f : c \to d$ we can get from
+$(\gamma : \Gamma(c)) \to A(c, \gamma)$ to $(\psi : \Gamma(d)) \to A(d, \psi)$.
+Let $z : (\gamma : \Gamma(c)) \to A(c, \gamma)$ and $\psi : \Gamma(d)$ be
+given. Now $\Gamma(f, \psi)$ is the right shape to put into $z$ and we get
+$z (\Gamma(f, \psi)) : A(c, \Gamma(f, \psi))$. And, magically, this is
+the right type to put into the `functoriality' of the type $A$,
+and we have $A(f, \psi)(z(\Gamma(f, \psi))) : A(d, \psi)$ as required.
+
+\textcolor{blue}{This actually seems like a good way of thinking about
+  things}. Maybe this has a standard snappy name or compression in
+terms of existing category theoretic terminology, who knows. Anyway, I
+think I'm going to proceed with thinking about the simply-typed case
+with some confidence that the dependently-typed case might work out
+somewhat naturally, with less complication than I feared.
 \end{document}
