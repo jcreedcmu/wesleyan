@@ -294,4 +294,61 @@ $\sem{A \x B}(\delta)$&$=$&$\sem A( \delta) \x \sem B(\delta)$\\
 \end{tabular}
 \end{defnbox}
 }
+Where $\bar \delta$ means the object-wise swap of every variable piece of $\delta$.
+
+\subsubsection{Hom Types}
+
+So I should be able to just say
+\[
+\erule
+{}
+{\Delta, \alpha : \C \prov \hom(\alpha^-, \alpha^+) : \rtype}
+\]
+or something like that, right? Or should I write simply
+\[
+\erule
+{}
+{\Delta, \alpha : \C \prov \hom(\alpha) : \rtype}
+\]
+? Or maybe even like
+\[
+\erule
+{}
+{\Delta, \alpha_1, \alpha_2 : \C \prov \hom(\alpha_1, \alpha_2) : \rtype}
+\]
+to represent the type of pairs of morphisms
+\[\begin{tikzcd}
+  \alpha_1^- \ar[from=d, "f"]& \alpha_1^+ \ar[d, "g"]\\
+  \alpha_2^- & \alpha_2^+
+\end{tikzcd}\]
+For which I could expect to do transport something like
+\[
+\erule
+{\Delta \prov \nu : \C \qquad \Delta, \alpha; \Gamma \prov f : \hom(\alpha, \nu) \qquad
+\Delta, \alpha ; \Gamma \prov e : A}
+{\Delta; [\nu/\alpha]\Gamma \prov e\adjust_f : [\nu/\alpha]A }
+\]
+Maybe need to require somehow that $\alpha \not\in f$? Or maybe more like
+\[
+\erule
+{\Delta \prov \nu_1, \nu_2 : \C \qquad \Delta; \Gamma \prov f : \hom(\nu_1, \nu_2) \qquad
+\Delta; [\nu_1/\alpha]\Gamma \prov e : [\nu_1/\alpha]A }
+{\Delta; [\nu_2/\alpha]\Gamma \prov e\adjust_f : [\nu_2/\alpha]A }
+\]
+Because... yeah, that second to last rule is redundant, isn't it? I
+don't need a $\hom(\alpha, \nu)$ to tell me that I can substitute into
+$\Delta, \alpha ; \Gamma \prov e : A$ to get
+$\Delta; [\nu/\alpha]\Gamma \prov e\adjust_f : [\nu/\alpha]A $, I can already do that.
+I really want to ask for the {\em weaker} premise
+$\Delta; [\nu_1/\alpha]\Gamma \prov e : [\nu_1/\alpha]A $
+that I merely have some {\em substitution instance} of
+$\Delta, \alpha ; \Gamma \prov e : A$
+at some {\em particular} $\nu_1$ ---
+but a $\nu_1$ for which I have a hom out of it,
+critically.
+
+Okay, I think a rule like this makes sense as an elim for $\hom$, but
+I may need to be more careful about inserting some sort notion of
+swaps at certain points to account for what I'm doing by essentially
+requiring $\C \x \C^\op$ thingies to be flying around everywhere.
 \end{document}
