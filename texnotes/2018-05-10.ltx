@@ -685,4 +685,203 @@ triangles is just functoriality of $A$.
 
 Ok, so I suppose this all works, but I still wish I had a better handle on {\em semantically}
 what sort of property of functors $\C \x \C^\op \to \D \x \D^\op$ sufficies to make this work.
+
+\subsection{What That Property Is}
+
+Maybe it's just being literally a functor $F : \C \x \C^\op \to \D$.
+Or, in a way, it's being {\em either} a functor
+$F : \C \x \C^\op \to \D$
+or
+$F : \C \x \C^\op \to \D^\op$, but I can convert either one of those to the other
+by taking $F$ to $F^\op$ and swapping the arguments.
+
+Then if I have a functor $A : \D \x \D^\op \to \rset$ and I have
+\[e \in \int_{d \in \D} A(d, d)\]
+corresponding to $y : \D \prov A : \rtype$ and I want to carry out the substitution
+and find $x : \C \prov [F(x)/y]A : \rtype$ which semantically is
+\[e' \in \int_{c \in \C} A(F(c, c), F(c, c))\]
+In equalizer terms, I'm trying to go from
+\[
+\begin{tikzcd}
+  E \ar[r, >->, "e"] &
+\displaystyle\prod\limits_{  d\in\D}  A(d, d)
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{ d' \in \D^\op ,d\in \D}
+A(d, d')
+\end{tikzcd}
+\]
+to
+\[
+\begin{tikzcd}
+  E' \ar[r, >->, "e'"] &
+\displaystyle\prod\limits_{  c\in\C}  A(F(c, c), F(c, c))
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{ c' \in \C^\op ,c\in \C}
+A(F(c, c'), F(c', c))
+\end{tikzcd}
+\]
+And I do this by sending the $\prod_{d\in\D}$ to the $\prod_{c\in\C}$ in the evident way,
+and I need to check the equalizer property. The thing I know, given $h : d_1 \to d_0$, is that
+\[\begin{tikzcd}
+  E \ar[r, "\pi e", >->]\ar[d, "\pi e"', >->] & A(d_0, d_0)\ar[d, "{A(d_0, h)}"]\\
+A(d_1, d_1)\ar[r, "{A(h, d_1)}"'] & A(d_0,d_1)
+\end{tikzcd}\]
+and the thing I need is, for any $k : c_1 \to c_0$, that
+\[\begin{tikzcd}
+  E \ar[r, "\pi e", >->]\ar[d, "\pi e"', >->] & A(F(c_0, c_0), F(c_0, c_0))\ar[d]\\
+A(F(c_1, c_1), F(c_1, c_1))\ar[r] & A(F(c_0, c_1), F(c_1, c_0))
+\end{tikzcd}\]
+and I think this follows from chasing
+\[
+\begin{tikzcd}
+  E \ar[rrr]\ar[dr]\ar[ddd] &&& 0000\ar[ddd]\ar[dl]\\
+&0101\ar[r]\ar[d]&0100\ar[d]\\
+&0111\ar[r]&0110\ar[dr, equal]\\
+1111 \ar[rrr]\ar[ur]&&&0110
+\end{tikzcd}
+\]
+where $b_1b_2b_3b_4$ abbreviates $A(F(c_{b_1}, c_{b_2}), F(c_{b_3}, c_{b_4}))$. The top
+two trapezoids follow by the equalizer property assumed, and the remaining cells
+follow by functoriality of $A$ and $F$.
+
+\subsubsection{$\forall$ elim}
+Let's look at $\forall$-elim again.
+\[
+\erule
+{\Delta ; \Gamma \prov  e :  \forall \alpha : \C. A \qquad \Delta \prov \nu : \C}
+{\Delta ; \Gamma \prov e[\nu] :  [\nu/\alpha] A }
+\]
+So it sort of doesn't make any difference whether we say $\forall \alpha : \C$ or
+$\forall \alpha : \C^\op$. Semantically, the $\nu$ is going to be flipped around whichever
+way fits, and we use the same underlying mathematical data. This is consistent with the
+end/coend computation being indifferent to whether we use $\C$ or $\C^\op$.
+
+So if we have
+\[\sem e\in \int_{\delta\in\ssem\Delta} \sem \Gamma(\delta, \delta) \to \int_{c\in \C}\sem A((\delta, c), (\delta, c)) \]
+\[\nu : \ssem \Delta \x \ssem \Delta^\op \to \C\]
+then yeah sure we can probably get from that to
+\[\sem {e[\nu]}\in \int_{\delta\in\ssem\Delta} \sem \Gamma(\delta, \delta) \to \sem A((\delta, \nu(\delta, \delta)), (\delta, \nu(\delta, \delta))) \]
+
+\subsubsection{$\exists$ intro}
+\[
+\erule
+{\Delta ; \Gamma \prov e :  [\nu/\alpha] A  \qquad \Delta \prov \nu : \C}
+{\Delta ; \Gamma \prov  \susp{e, \nu} :  \exists \alpha : \C. A}
+\]
+We need to get from
+\[\sem {e}\in \int_{\delta\in\ssem\Delta} \sem \Gamma(\delta, \delta) \to \sem A((\delta, \nu(\delta, \delta)), (\delta, \nu(\delta, \delta))) \]
+\[\nu : \ssem \Delta \x \ssem \Delta^\op \to \C\]
+to
+\[\sem {\pair e \nu}\in \int_{\delta\in\ssem\Delta} \sem \Gamma(\delta, \delta) \to \int^{c\in \C}\sem A((\delta, c), (\delta, c)) \]
+
+This is probably just a dual situation to $\forall$ elim, but I want
+to go through it a little carefully anyhow. At least in the simple case that shows
+I can go from
+$\int_{d\in\D} \sem A(\nu(d, d), \nu(d, d))$
+to
+$\int^{c\in\C} \sem A(c, c)$
+given functors $\nu: \D \x \D^\op \to \C$ and $A : \C\x\C^\op \to \rset$.
+
+The coequalizer that is
+the coend is
+\[
+\begin{tikzcd}
+  Q \ar[from=r, ->>, "q"] &
+\displaystyle\coprod\limits_{  c\in\C}  A(c, c)
+\ar[from=r, shift left]\ar[from=r, shift right]
+&
+\displaystyle\coprod\limits_{ c' \in \C^\op ,c\in \C}
+A(c, c')
+\end{tikzcd}
+\]
+the equalizer that is the end is
+\[
+\begin{tikzcd}
+  E \ar[r, >->, "e"] &
+\displaystyle\prod\limits_{  d\in\D}  A(\nu(d,d), \nu(d,d))
+\ar[r, shift left]\ar[r, shift right]
+&
+\displaystyle\prod\limits_{ d' \in \D^\op ,d\in \D}
+A(\nu(d, d'), \nu(d', d))
+\end{tikzcd}
+\]
+Oh, wait, there actually is no problem at all getting {\em into} the coend,
+of course; I just take the $\nu(d, d)$ injection for each $d$, and proceed
+through $q$.
+Maybe the elim will have more challenge checking that things line up?
+\subsubsection{$\exists$ elim}
+
+ \[
+\erule
+{\Delta; \Gamma \prov e :  \exists \alpha : \C . A \qquad\Delta, \alpha : \C;\Gamma, x : \bar A \prov e' : B}
+{\Delta ; \Gamma \prov \blet \susp{x,\alpha} = e \bin e':  B }
+\]
+We have
+\[\sem {e}\in \int_{\delta\in\ssem\Delta} \sem \Gamma(\delta, \delta) \to \int^{c\in\C}\sem A((\delta, c), (\delta, c)) \]
+\[\sem {e'}\in \int_{\delta\in\ssem\Delta}  \sem \Gamma(\delta, \delta) \to \int_{c\in\C} \sem A((\delta, c), (\delta, c)) \to \sem B(\delta, \delta) \]
+and we need
+\[\sem {\blet \cdots}\in \int_{\delta\in\ssem\Delta}  \sem B(\delta, \delta) \]
+and this is a simple matter of remembering that coends and ends realize the
+logical tautology $\forall x . A(x) \imp B \equiv (\exists x . A(x)) \imp B$,
+so that $\sem {e'}$ is effectively
+\[\sem {e'}\in \int_{\delta\in\ssem\Delta}  \sem \Gamma(\delta, \delta) \to \left(\int^{c\in\C} \sem A((\delta, c), (\delta, c))\right) \to \sem B(\delta, \delta) \]
+
+\subsubsection{Homset types}
+I want to declare
+\[
+\erule
+{\Delta \prov \nu : \C^\op \qquad \Delta \prov \mu : \C}
+{\Delta, \Gamma \prov \C[\nu, \mu] : \rtype}
+\]
+and the semantics of $\C[\nu,\mu]$, given that we know $\sem \nu : \sem \Delta \to \C^\op$
+and $\sem \mu : \sem \Delta \to \C$, can be given straightforwardly perhaps as
+\[\sem{\C[\nu,\mu]}(\delta) = \C[\sem\nu(\delta), \sem\mu(\delta)]\]
+Then I hope for some kind of transport principle like
+\[
+\erule
+{\Delta;\Gamma \prov h : \C[\nu, \mu] \quad \Delta, \alpha : \C \prov A : \rtype
+ \quad \Delta;\Gamma \prov e : [\bar \nu/\alpha] A  }
+{\Delta;\Gamma \prov \mathsf{coe}_h e : [\mu/\alpha] A}
+\]
+Semantically we have
+\[\sem h \in \int_{\delta \in \ssem \Delta} \sem \Gamma(\delta, \delta) \to \C[ \sem\nu(\delta, \delta), \sem\mu(\delta, \delta) ]\]
+\[ \sem A : \sem \Delta \x (\C \x \C^\op)\to \rset\]
+\[ \sem e \in \int_{\delta \in \ssem \Delta}
+\sem \Gamma(\delta, \delta) \to
+\sem A (\delta, \delta, \sem{\bar\nu}(\delta, \delta), \sem \nu(\delta, \delta)) \]
+and we want
+\[ \sem {\mathsf{coe}_h e} \in \int_{\delta \in \ssem \Delta}
+\sem \Gamma(\delta, \delta) \to
+ \sem A (\delta, \delta, \sem{\mu}(\delta, \delta), \sem {\bar \mu}(\delta, \delta)) \]
+Ignoring $\Gamma$s for now, for each $\delta \in \ssem\Delta$ we have to make a
+$\sem A (\delta, \delta, \sem{\mu}(\delta, \delta), \sem {\bar \mu}(\delta, \delta))$.
+
+But $\sem A$'s last argument is contravariant. I can't get from $\sem{\bar\mu}(\delta, \delta)$
+to $\sem{\nu}(\delta, \delta)$.
+
+\subsubsection{Homset Types Again}
+Let's try:
+\[\sem{\C[\nu,\mu]}(\delta) = \C[\sem\nu(\delta), \sem\mu(\delta)] \x \C[\sem{\bar \mu}(\delta), \sem{\bar \nu}(\delta)]\]
+
+Then we have
+\[\sem h \in \int_{\delta \in \ssem \Delta} \sem \Gamma(\delta, \delta) \to  \]
+\[
+\C[ \sem\nu(\delta, \delta), \sem\mu(\delta, \delta) ]
+\x
+\C[ \sem{\bar\mu}(\delta, \delta), \sem{\bar \nu}(\delta, \delta) ]
+\]
+\[ \sem A : \sem \Delta \x (\C \x \C^\op)\to \rset\]
+\[ \sem e \in \int_{\delta \in \ssem \Delta}
+\sem \Gamma(\delta, \delta) \to
+\sem A (\delta, \delta, \sem{\bar\nu}(\delta, \delta), \sem \nu(\delta, \delta)) \]
+and we want
+\[ \sem {\mathsf{coe}_h e} \in \int_{\delta \in \ssem \Delta}
+\sem \Gamma(\delta, \delta) \to
+ \sem A (\delta, \delta, \sem{\mu}(\delta, \delta), \sem {\bar \mu}(\delta, \delta)) \]
+
+And it looks like this goes through, but it means that I can't just use a
+single  $f : C \to D \in \C$
+as a constructor for the hom-type, can I?
 \end{document}
