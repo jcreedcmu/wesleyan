@@ -884,4 +884,61 @@ and we want
 And it looks like this goes through, but it means that I can't just use a
 single  $f : C \to D \in \C$
 as a constructor for the hom-type, can I?
+
+This seems a little broken.
+
+\subsection{Backing Up}
+
+What happens if I'm explicit about the doubling-up of variables that
+happens with quantifiers? I'd say more like
+
+\[\begin{tabular}{rccl}
+  Categories&$\C$&$::=$&$\cdots$\\
+  Category Contexts&$\Delta$&$::=$&$\cdot \celse \Delta, \alpha : \C$\\
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A$\\
+  Types&$A$&$::=$&$\forall \alpha \bar \alpha . A \celse \exists \alpha \bar \alpha . A \celse A \to A \celse A \x A
+ \celse a(\alpha, \ldots, \alpha)$\\
+\end{tabular}\]
+
+With rules like
+
+\[
+\erule
+{\Delta, \alpha : \C, \bar \alpha : \C^\op \prov A : \rtype}
+{\Delta \prov \forall \alpha \bar \alpha . A : \rtype}
+\qquad
+\erule
+{\Delta, \alpha : \C, \bar \alpha : \C^\op \prov A : \rtype}
+{\Delta \prov \exists \alpha \bar \alpha . A : \rtype}
+\]
+The semantics of a type is then a functor $\sem \Delta \to \rset$
+where $\sem \Delta$ doesn't double anything at duals?
+\[
+\erule
+{\Delta^\op \prov A : \rtype \qquad \Delta \prov B : \rtype}
+{\Delta \prov A \to B : \rtype}
+\]
+There's no guarantee that {\em every} variable in $\Delta$ has a mate, so we
+can't talk about $\bar A$ necessarily, but we can take $\Delta$ and
+derive ${\Delta}^\op$ from it.
+
+and given $A :  \D^\op \to \rset$ and $B : \D \to \rset$, we certainly
+can make the functor $A \to B$ such that
+$(A \to B)(D) = A(D) \to B(D)$, and $(A \to B)(f : D_1 \to D_2)$ is given
+by the composition
+\[
+\begin{tikzcd}
+  A(D_2)\ar[r, "{A(f)}"]& A(D_1)\ar[r]& B(D_1)\ar[r,"{B(f)}"]& B(D_2)
+\end{tikzcd}
+\]
+So then I guess term-typing sequents are just natural transformations or something?
+
+Let's consider the special case where I'm taking the hom of two variables.
+
+\[
+\erule
+{}
+{\Delta, \alpha : \C, \bar \alpha : \C^\op \prov \hom(\bar \alpha, \alpha) : \rtype}
+\]
+No, I'm still confused how transport can `pull apart' the linkage between the mated variables.
 \end{document}
