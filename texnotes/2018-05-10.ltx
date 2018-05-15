@@ -14,6 +14,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\coe{\mathsf{coe}}
 \def\bpush{\mathbf{push}}
 \def\bpull{\mathbf{pull}}
 
@@ -843,7 +844,7 @@ Then I hope for some kind of transport principle like
 \erule
 {\Delta;\Gamma \prov h : \C[\nu, \mu] \quad \Delta, \alpha : \C \prov A : \rtype
  \quad \Delta;\Gamma \prov e : [\bar \nu/\alpha] A  }
-{\Delta;\Gamma \prov \mathsf{coe}_h e : [\mu/\alpha] A}
+{\Delta;\Gamma \prov \coe_h e : [\mu/\alpha] A}
 \]
 Semantically we have
 \[\sem h \in \int_{\delta \in \ssem \Delta} \sem \Gamma(\delta, \delta) \to \C[ \sem\nu(\delta, \delta), \sem\mu(\delta, \delta) ]\]
@@ -852,7 +853,7 @@ Semantically we have
 \sem \Gamma(\delta, \delta) \to
 \sem A (\delta, \delta, \sem{\bar\nu}(\delta, \delta), \sem \nu(\delta, \delta)) \]
 and we want
-\[ \sem {\mathsf{coe}_h e} \in \int_{\delta \in \ssem \Delta}
+\[ \sem {\coe_h e} \in \int_{\delta \in \ssem \Delta}
 \sem \Gamma(\delta, \delta) \to
  \sem A (\delta, \delta, \sem{\mu}(\delta, \delta), \sem {\bar \mu}(\delta, \delta)) \]
 Ignoring $\Gamma$s for now, for each $\delta \in \ssem\Delta$ we have to make a
@@ -877,7 +878,7 @@ Then we have
 \sem \Gamma(\delta, \delta) \to
 \sem A (\delta, \delta, \sem{\bar\nu}(\delta, \delta), \sem \nu(\delta, \delta)) \]
 and we want
-\[ \sem {\mathsf{coe}_h e} \in \int_{\delta \in \ssem \Delta}
+\[ \sem {\coe_h e} \in \int_{\delta \in \ssem \Delta}
 \sem \Gamma(\delta, \delta) \to
  \sem A (\delta, \delta, \sem{\mu}(\delta, \delta), \sem {\bar \mu}(\delta, \delta)) \]
 
@@ -941,4 +942,92 @@ Let's consider the special case where I'm taking the hom of two variables.
 {\Delta, \alpha : \C, \bar \alpha : \C^\op \prov \hom(\bar \alpha, \alpha) : \rtype}
 \]
 No, I'm still confused how transport can `pull apart' the linkage between the mated variables.
+
+\section{After Talking To Dan}
+
+I quickly want to figure out which way the following yoneda-like property works. Suppose
+$F : \C^\op \x \C \to \rset$. Then I think either it must be the case that
+
+\[ \int_{c \in \C} F(c, c) \cong \int_{a,b\in \C} \C[a, b]\to F(a, b)\]
+or
+\[ \int_{c \in \C} F(c, c) \cong \int_{a,b\in \C} \C[b, a]\to F(a, b)\]
+To be an element of $\int_{c \in \C} F(c, c)$ is to be in $\Pi_{c\in\C} F(c, c)$
+such that for any $g : a \to b \in \C$, we have
+\[\begin{tikzcd}
+\Pi_{c\in\C}F(c, c) \ar[r, "\pi_b"]\ar[d, "\pi_a"'] & F(b, b) \ar[d, "{F(g, b)}"]\\
+  F(a, a) \ar[r, "{F(a, g)}"'] & F(a, b)\\
+\end{tikzcd}\]
+So, hm, yeah, this seems like
+\[ \int_{c \in \C} F(c, c) \cong \int_{a,b\in \C} \C[a, b]\to F(a, b)\]
+But this is the same as a natural transformation from $\C[a,b]$ to $F(a, b)$, natural
+in both arguments. Where does that naturality come from? Let's just look at naturality
+in the second argument. Assuming we have $e : \Pi_{c\in\C} F(c,c)$,
+the induced mapping from $\C[a,b]$ to $F(a, b)$ is either
+of $\lambda g . F(c, g)(\pi_c(e))$ or $\lambda g . F(g, d)(\pi_d(e))$.
+If we have $h : b \to b'$, we can stare at the diagram
+\[
+\begin{tikzcd}
+  \C[a,b] \ar[r, "{\lambda g . F(a,g)(\pi_a(e))}"]\ar[d, "{ h \o \dash}"']
+&[5em] F(a,b)\ar[d, "{F(a, h)}"]\\
+  \C[a,b'] \ar[r, "{\lambda g' . F(a,g')(\pi_a(e))}"'] & F(a,b')
+\end{tikzcd}
+\]
+So we then want to compare $F(a, h \o g)(\pi_a(e))$ with $F(a, h)F(a, g)(\pi_a(e))$
+but of course those are equal just by functoriality of $F$.
+
+Consequently, what path-induction inference rule does this semantic fact support?
+\[
+\erule
+{\Delta, c : \C;\Gamma \prov e : [c/a][c/b]F \qquad \Delta, a:^- \C, b :^+ \C \prov  F : \rtype}
+{\Delta, a : \C, b : \C ;\Gamma, h :  \hom(a, b) \prov \coe_h e : F}
+\]
+So this makes it clear that the occurrences in the hom are of {\em
+  opposite} polarity to those occurring in $F$. Even though the kindings
+of $F$ and $\hom$ are the same, $\hom$ appears contravariantly, in the context.
+
+%% What would this look like with more general expressions in place of variables?
+%% Still under the well-formedness assumption $ \Delta, a:^- \C, b :^+ \C \prov  F : \rtype$,
+%% we might say
+%% \[
+%% \erule
+%% {\Delta \prov t_1 : \C \qquad \Delta \prov t_2 : \C \qquad \Delta, c : \C \prov e : [c/a][c/b]F}
+%% {\Delta, h :  \hom(t_1, t_2) \prov \coe_h e : [t_1/a][t_2/b]F}
+%% \]
+%% Hm, this is just the same as composing the rule above with some substitutions.
+%% So nevermind, the first thing I wrote down is the left rule, I guess?
+
+So can I use this to show that you can actually compose morphisms?
+Let's observe the special cases that we have of this rule:
+The version where $F$ is purely covariant:
+\[
+\erule
+{\Delta, a : \C;\Gamma \prov e : F(a) \qquad \Delta,  b :^+ \C \prov  F(b) : \rtype}
+{\Delta, a : \C, b : \C ;\Gamma, h :  \hom(a, b) \prov \coe_h e : F(b)}
+\]
+and the version where $F$ is purely contravariant:
+\[
+\erule
+{\Delta, b : \C;\Gamma \prov e : F(b) \qquad \Delta, a:^- \C, \prov  F(a) : \rtype}
+{\Delta, a : \C, b : \C ;\Gamma, h :  \hom(a, b) \prov \coe_h e : F(a)}
+\]
+
+So if I have $h_1 : \hom(a, b)$ and $h_2 : \hom(b, c)$, I can surely use either
+one to extend the other to $\hom(a, c)$.
+
+Ok, then if I have the attempted theorem:
+\[ a\ b\ c : \C; f : [a,b], g : [b, c] \prov \coe_f g \equiv \coe_g f \]
+I guesssss maybe I could imagine first inducting away the $f$ to
+\[ \alpha\ c : \C;  g : [\alpha, c] \prov \coe_{\mathsf{refl}_\alpha} g \equiv \coe_g {\mathsf{refl}_\alpha} \]
+and then the $g$ to
+\[ \cdot   \prov \coe_{\mathsf{refl}_\beta} \mathsf{refl}_\beta \equiv \coe_{\mathsf{refl}_\beta} {\mathsf{refl}_\beta} \]
+but no I'm not obeying any kind of reasonable discipline about
+occurrence polarity of the involved variables at all.
+Maybe need to be more particular about what $\equiv$ means at type $[a,b]$ anyhow.
+
+Although... it seems like maybe separately I could establish $\coe_{\refl_\alpha} g = g$
+as sort of a $\beta$-rule. So is it possible to in some principled way transport
+\[g \equiv \coe_g \mathsf{refl}_\alpha \]
+to
+\[g \equiv \coe_g \mathsf{refl}_c \]
+? Nah, I'm just severely confused about what's going on, here.
 \end{document}
