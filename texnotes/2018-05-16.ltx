@@ -246,8 +246,26 @@ and I could imagine generalizing this to
 {\Delta \prov (x : B) \to A : \rtype }
 \]
 
-But can I support additional assumptions in $\Gamma$?
+More generally, we would expect well-formed contexts to be contravariant functors
+functors out of $\Delta$; so still in the case of singleton $\Delta$,
+we expect the well-formedness $\alpha + \C \prov \Gamma  \rctx$ to mean
+ $\sem\Gamma : \C^\op \to \rset$ and $\alpha + \C ; \Gamma \prov A : \rtype$
+to mean that $\sem A$ is a functor-ish thing whose object part is
+\[(c : \C) \to \sem \Gamma(c) \to \rset \]
+and whose morphism part is
+\[(f : c \to d) (\gamma : \sem \Gamma(d)) \to \sem A_c (\sem \Gamma(\gamma)) \to \sem A_d(\gamma) \]
 
+So we might expect a $\Pi$-intro-shaped variance rule to look like
+\[
+\erule
+{\Delta^\op; \Gamma \prov A : \rtype \qquad \Delta ; \Gamma \prov B : \rtype}
+{\Delta; \Gamma \prov (x : A) \to B}
+\]
+$\ldots$ errr nope, I generalized too fast, again. $\Gamma$ appearing under both $\Delta$
+and $\Delta^\op$ is weird.
+
+
+Wait, how can I support additional assumptions in $\Gamma$?
 Suppose $B$ is itself dependent on some other regular (i.e. in $\Gamma$) variable
 $z : C$. That means
 $B$'s object part is, what, $(c : \C^\op) \to C(z) \to \rset$?
@@ -267,22 +285,107 @@ because then there's a type mismatch of $\gamma$.
 
 Should I be asking for a $\gamma : \Gamma(\delta', \delta)$ {\em and}
 a $\gamma' : \Gamma(\delta, \delta')$? No, I can't do that, because I can't
-apply $\Gamma$ to those arguments.
-%% More generally, we would expect well-formed contexts to be contravariant functors
-%% functors out of $\Delta$; so still in the case of singleton $\Delta$,
-%% we expect the well-formedness $\alpha + \C \prov \Gamma  \rctx$ to mean
-%%  $\sem\Gamma : \C^\op \to \rset$ and $\alpha + \C ; \Gamma \prov A : \rtype$
-%% to mean that $\sem A$ is a functor-ish thing whose object part is
-%% \[(c : \C) \to \sem \Gamma(c) \to \rset \]
-%% and whose morphism part is
-%% \[(f : c \to d) (\gamma : \sem \Gamma(d)) \to \sem A_c (\sem \Gamma(\gamma)) \to \sem A_d(\gamma) \]
+apply $\Gamma$ to those arguments. Hmm.
 
-%% So we might expect a $\Pi$-intro-shaped variance rule to look like
-%% \[
-%% \erule
-%% {\Delta^\op; \Gamma \prov A : \rtype \qquad \Delta ; \Gamma \prov B : \rtype}
-%% {\Delta; \Gamma \prov (x : A) \to B}
-%% \]
-%% $\ldots$ errr nope, I generalized too fast, again. $\Gamma$ appearing under both $\Delta$
-%% and $\Delta^\op$ is weird.
+\subsection{A Potential Way Out of the Confusion}
+
+Maybe the way that I'm talking about a type depending on a term of another type isn't
+canonical, but one of two symmetric possibilities.
+
+Suppose there are such things as variance-polarized {\em non-categorical} assumptions, like
+\[\alpha + \C ;  x + A \prov B : \rtype \eqno(+)\]
+and
+\[\alpha + \C ;  x - A \prov B : \rtype \eqno(-)\]
+except what those mean semantically is that, regardless of variance,
+\[B_c : A_c \to \rtype\]
+but then a variance-dependent morphism part for any $f : c \to d$,
+\[B_f : (x : A_c) \to B_c(x) \to B_c(A_f(x)) \eqno(+)\]
+\[B_f : (x : A_d) \to B_c(A_f(x)) \to B_d(x) \eqno(-)\]
+which means that I should have said in the first place that there's
+a variance-dependent presupposition that
+\[\alpha + \C \prov A : \rtype\eqno(+)\]
+\[\alpha - \C \prov A : \rtype\eqno(-)\]
+and with this stuff in place I should be able to at least be
+able to talk about about $\Sigma$ types, as well as $\Pi$s.
+\[
+\erule
+{\alpha + \C \prov A : \rtype \qquad \alpha + \C; x + A \prov B : \rtype}
+{\alpha + \C \prov (x : A) \x B : \rtype}
+\]
+\[
+\erule
+{\alpha - \C \prov A : \rtype \qquad \alpha + \C; x - A \prov B : \rtype}
+{\alpha + \C \prov (x : A) \to B : \rtype}
+\]
+Let's try to grind through semantically justifying the $\Sigma$ rule, then.
+We have $A$ a functor $\C \to \rset$. We have $B$ with $B_c : A_c \to \rset$
+and $B_f : (x : A_c) \to B_c(x) \to B_d(A_f(x))$ because $x + A$ is positive.
+We set
+\[((x:A) \x B)_c = (x: A_c) \x B_c(x)\]
+\[((x:A) \x B)_f : ((x: A_c) \x B_c(x)) \to ((x: A_d) \x B_d(x))\]
+\[((x:A) \x B)_f(x, b) = (A_f(x), B_f(x)(b))\]
+yeah, nice and easy!
+\subsection{$\Pi$ and $\Sigma$ interacting}
+Ok, let's say we want to have types $A$, $B$, and $C$ such that $B$ depends on $x:A$ and $C$
+depends on $x:A$ and $y:B$. We might as well have said that $C$ depends on $z : (x :A) \x B$.
+So like
+\[\Delta ; z :^m (x : A) \x B \prov C : \rtype\]
+for some mode $m \in \{-,+\}$. So this probably ought to be the same thing as
+\[\Delta ; x :^m A, y :^m B \prov C : \rtype\]
+Does this mean everything in the context has to be at the same $m$?
+Hopefully not --- but maybe that governs what can {\em depend} on
+what. Maybe the context formation rules look like
+\[
+\erule
+{\Delta\prov \Gamma \rctx \qquad \Delta^\op ; \Gamma^\op \prov A : \rtype}
+{\Delta\prov (\Gamma, x - A) \rctx}
+\]
+\[
+\erule
+{\Delta\prov \Gamma \rctx \qquad \Delta; \Gamma \prov A : \rtype}
+{\Delta\prov (\Gamma, x + A) \rctx}
+\]
+or as one rule I could say
+\[
+\erule
+{\Delta\prov \Gamma \rctx \qquad \Delta^m ; \Gamma^m \prov A : \rtype}
+{\Delta\prov (\Gamma, x :^m A) \rctx}
+\]
+
+Then maybe the hom intro and elim rules are like
+\[
+\erule
+{}
+{\Delta, \alpha : \C;\Gamma \prov \ridp : \alpha^\alpha}
+\]
+\[
+\erule
+{\Delta, \gamma : \C ; \Gamma \prov e : [\gamma/\alpha][\gamma/\beta][\ridp/h]A }
+{\Delta, \alpha - \C, \beta + \C;\Gamma, h + \beta^\alpha \prov \coe_h e : A}
+\]
+And somehow the moral of the story might be, math gods willing, that
+the two variances of {\em term} dependency collapse into the same
+thing when the assumption is an end-like ambivariant $\alpha : \C$, by
+the end's equalizer condition?
+
+Or wait, maybe this is wrong. For yoneda purposes, I absolutely want to form a $\Pi$
+type with the $h$, so it needs to be $h - \beta^\alpha$. But that asks for the opposite
+variance of $\alpha$ and $\beta$. So maybe
+\[
+\erule
+{\Delta, \gamma : \C ; \Gamma \prov e : [\gamma/\alpha][\gamma/\beta][\ridp/h]A
+\qquad
+\Delta, \alpha - \C, \beta + \C;\Gamma, h - \beta^\alpha \prov A : \rtype
+}
+{\Delta, \alpha : \C, \beta : \C;\Gamma, h - \beta^\alpha \prov \coe_h e : A}
+\]
+and separately I'd want to say
+\[
+\erule
+{}
+{\Delta, \alpha - \C, \beta + \C;\Gamma \prov  \beta^\alpha : \rtype}
+\]
+Arg, but this means that $\coe$ doesn't use $\alpha, \beta$ with a
+consistent variance. That seems to spell likely doom for reasonable
+higher-dimensional proofs about `directed equality'.
 \end{document}
