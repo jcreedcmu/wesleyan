@@ -525,4 +525,18 @@ I think then
 
 Okay, any more of this and I need agda. Check out
 \[\texttt{/Users/jreed/wes/agda/anon/2018-05-16.agda}\]
+
+Let's see if I can figure out the pattern in that.\\
+The thing I'm calling $\texttt{A+}$ in it is a type
+\[\Delta;\cdot \prov A^+ : \rtype\]
+and the thing I'm calling $\texttt{A-}$ is
+\[\Delta^\op;\cdot \prov A^- : \rtype\]
+The thing I'm calling $\texttt{B++}$ is
+\[\Delta;x + A^+ \prov B^{++} : \rtype\]
+The thing I'm calling $\texttt{B-+}$ is
+\[\Delta;x - A^- \prov B^{-+} : \rtype\]
+But then also I have
+\[\Delta^\op ;x - A^+ \prov B^{+-} : \rtype\]
+\[\Delta^\op ;x + A^- \prov B^{--} : \rtype\]
+
 \end{document}
