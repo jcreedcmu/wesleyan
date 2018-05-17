@@ -36,6 +36,7 @@
 \def\ridp{\mathsf{idp}}
 \def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
 
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
 \definecolor{orange}{rgb}{0.95,0.90,0.80}
 \definecolor{bluegray}{rgb}{0.6,0.6,0.85}
@@ -531,12 +532,76 @@ The thing I'm calling $\texttt{A+}$ in it is a type
 \[\Delta;\cdot \prov A^+ : \rtype\]
 and the thing I'm calling $\texttt{A-}$ is
 \[\Delta^\op;\cdot \prov A^- : \rtype\]
-The thing I'm calling $\texttt{B++}$ is
+\vfil\eject
+The  $\texttt{B}$ types are
 \[\Delta;x + A^+ \prov B^{++} : \rtype\]
-The thing I'm calling $\texttt{B-+}$ is
-\[\Delta;x - A^- \prov B^{-+} : \rtype\]
-But then also I have
 \[\Delta^\op ;x - A^+ \prov B^{+-} : \rtype\]
+\[\Delta;x - A^- \prov B^{-+} : \rtype\]
 \[\Delta^\op ;x + A^- \prov B^{--} : \rtype\]
+And the full complement of $C$-types is
+\[\Delta ; x + A^+, y + B^{++} \prov C^{+++} : \rtype\]
+\[\Delta^\op ; x - A^+, y - B^{++} \prov C^{++-} : \rtype\]
+\[\Delta ; x + A^+, y - B^{+-} \prov C^{+-+} : \rtype\]
+\[\Delta^\op ; x - A^+, y + B^{+-} \prov C^{+--} : \rtype\]
+\[\Delta ; x - A^-, y + B^{-+} \prov C^{-++} : \rtype\]
+\[\Delta^\op ; x + A^-, y - B^{-+} \prov C^{-+-} : \rtype\]
+\[\Delta ; x - A^-, y - B^{--} \prov C^{--+} : \rtype\]
+\[\Delta^\op ; x + A^-, y + B^{--} \prov C^{---} : \rtype\]
+Ok, so I think the context formation rules I have above are good.
 
+Now let's look at the morphism actions. Suppose $\phi : \delta \to \epsilon$ \\
+\[A^+_\phi : A_\delta \to A_\epsilon\]
+\[A^-_\phi : A_\epsilon \to A_\delta\]
+\[B^{++}_\phi : (a : A_\delta) \to B_\delta(a) \to B_\epsilon(A^+_\phi(a)) \]
+\[B^{+-}_\phi : (a : A_\delta) \to B_\epsilon(A^+_\phi(a))  \to B_\delta(a) \]
+\[B^{-+}_\phi : (a : A_\epsilon) \to  B_\delta(A^-_\phi(a)) \to B_\epsilon(a)\]
+\[B^{--}_\phi : (a : A_\epsilon) \to  B_\epsilon(a) \to B_\delta(A^-_\phi(a)) \]
+\[C^{+++}_\phi : (a : A_\delta) (b : B_\delta(a)) \to C_\delta(a,b) \to C_\epsilon(A^+_\phi(a), B^{++}_\phi(a, b)) \]
+\[C^{+-+}_\phi : (a : A_\delta) (b : B_\epsilon(A^+_\phi(a))) \to C_\delta(a,B_\phi^{+-}(a, b)) \to C_\epsilon(A^+_\phi(a), b) \]
+\[C^{-++}_\phi : (a : A_\epsilon) (b : B_\delta(A^-_\phi(a))) \to C_\delta(A^-_\phi(a), b) \to C_\epsilon(a, B^{-+}_\phi(a, b)) \]
+
+So this makes me think that I need to define
+some notion of $\Gamma_\phi$ which for example takes $x - A^-, y + B^{-+}$ and yields
+the $\Sigma$ type
+\[(a : A_\epsilon) (b : B_\delta(A^-_\phi(a)))\]
+
+\subsubsection{Bolding Trying}
+Surely we have $(\cdot)_\phi = \top$.
+Then I think
+\[ (\Gamma, x + A)_\phi = (\gamma : \Gamma_\phi) \x A_\delta( S^+(\gamma) ) \]
+\[ (\Gamma, x - A)_\phi = (\gamma : \Gamma_\phi) \x A_\epsilon( S^-(\gamma) ) \]
+for some $S$ I don't understand yet.
+Then when $\Delta ; \Gamma \prov A : \rtype$, we should have
+\[ A_\phi : (\gamma : \Gamma_\phi) \to A_\delta(? (\gamma)) \to A_\epsilon(?(\gamma))\]
+Ah, but I know what type the merely object-typed function  $A_\delta$ has: it's $\Gamma_\delta \to \rset$.
+So there's got to be some kind of way of getting from $\Gamma_\phi$ to $\Gamma_\delta$, and from $\Gamma_\phi$ to $\Gamma_\epsilon$. Great, this solves the gap for both bits. I declare
+\begin{declbox}
+  $\Gamma_\delta : \rset$.\\
+  $\Gamma_\phi : \rset$.\\
+  $\Gamma^< : \Gamma_\phi \to \Gamma_\delta $\\
+  $\Gamma^> : \Gamma_\phi \to \Gamma_\epsilon $\\
+  $A_\delta : \Gamma_\delta \to \rset$\\
+  $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma^< \psi) \to A_\epsilon(\Gamma^> \psi)$
+\end{declbox}
+and define
+\begin{defnbox}
+ $(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
+ $(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
+\\
+ $(\Gamma, x + A)_\phi = (\psi : \Gamma_\phi) \x A_\delta( \Gamma^< (\psi) )$\\
+ $(\Gamma, x - A)_\phi = (\psi : \Gamma_\phi) \x A_\epsilon( \Gamma^> (\psi) )$\\
+\\
+% $(\Gamma, x + A)^< :  (\psi : \Gamma_\phi) \x A_\delta(\Gamma^< (\psi)) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
+ $(\Gamma, x + A)^< (\psi , a) = (\Gamma^<(\psi), a)$\\
+% $(\Gamma, x - A)^< :  (\psi : \Gamma_\phi) \x A_\epsilon( \Gamma^> (\psi) ) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
+ $(\Gamma, x - A)^< (\psi , a) = (\Gamma^<(\psi), A_\phi(\psi, a))\star$\\
+ $(\Gamma, x + A)^> (\psi , a) = (\Gamma^>(\psi), A_\phi(\psi, a))$\\
+ $(\Gamma, x - A)^> (\psi , a) = (\Gamma^>(\psi), a)$
+\end{defnbox}
+$\star$ some contravariance is going on here that I need to carefully explain, but I think it's right.
+The statement of the theorem is that if $\Delta; \Gamma \prov A : \rtype$, and
+$\phi : \delta \to \epsilon \in \sem \Delta$, then
+ $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma^<\psi) \to A_\epsilon(\Gamma^> \psi)$.
+But since $x - A$ is the type appearing in the context, it's actually
+$\Delta^\op ;\Gamma^\op \prov A : \rtype$ that holds.
 \end{document}
