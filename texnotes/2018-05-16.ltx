@@ -565,7 +565,7 @@ some notion of $\Gamma_\phi$ which for example takes $x - A^-, y + B^{-+}$ and y
 the $\Sigma$ type
 \[(a : A_\epsilon) (b : B_\delta(A^-_\phi(a)))\]
 
-\subsubsection{Bolding Trying}
+\subsubsection{Bolding Trying Anyway Despite Not Really Understanding What I'm Doing}
 Surely we have $(\cdot)_\phi = \top$.
 Then I think
 \[ (\Gamma, x + A)_\phi = (\gamma : \Gamma_\phi) \x A_\delta( S^+(\gamma) ) \]
@@ -585,16 +585,20 @@ So there's got to be some kind of way of getting from $\Gamma_\phi$ to $\Gamma_\
 \end{declbox}
 and define
 \begin{defnbox}
+ $(\cdot)_\delta = \bone$\\
  $(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
  $(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
 \\
+ $(\cdot)_\phi = \bone$\\
  $(\Gamma, x + A)_\phi = (\psi : \Gamma_\phi) \x A_\delta( \Gamma^< (\psi) )$\\
  $(\Gamma, x - A)_\phi = (\psi : \Gamma_\phi) \x A_\epsilon( \Gamma^> (\psi) )$\\
 \\
+ $(\cdot)^< = {!}$\\
 % $(\Gamma, x + A)^< :  (\psi : \Gamma_\phi) \x A_\delta(\Gamma^< (\psi)) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
  $(\Gamma, x + A)^< (\psi , a) = (\Gamma^<(\psi), a)$\\
 % $(\Gamma, x - A)^< :  (\psi : \Gamma_\phi) \x A_\epsilon( \Gamma^> (\psi) ) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
  $(\Gamma, x - A)^< (\psi , a) = (\Gamma^<(\psi), A_\phi(\psi, a))\star$\\
+ $(\cdot)^> = {!}$\\
  $(\Gamma, x + A)^> (\psi , a) = (\Gamma^>(\psi), A_\phi(\psi, a))$\\
  $(\Gamma, x - A)^> (\psi , a) = (\Gamma^>(\psi), a)$
 \end{defnbox}
@@ -604,4 +608,23 @@ $\phi : \delta \to \epsilon \in \sem \Delta$, then
  $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma^<\psi) \to A_\epsilon(\Gamma^> \psi)$.
 But since $x - A$ is the type appearing in the context, it's actually
 $\Delta^\op ;\Gamma^\op \prov A : \rtype$ that holds.
+
+Maybe I could even sensibly define $\Gamma^<$ as $(\Gamma^\op)^>$, since
+ $\Delta \prov \Gamma \rctx$ means  $\Delta^\op \prov \Gamma^\op \rctx$.
+Yeah, I like that.
+
+Great, this tells me what the morphism part of a type has to be. What about identities and composition?
+Should guarantee that for $\phi : \delta \to \epsilon$ and $\sigma : \epsilon \to \beta$.
+\begin{thmbox}
+$\Gamma^<_\rid(\psi) = \Gamma^>_\rid(\psi)$\\
+$A_\rid(\psi, a) = a$\\
+$\Gamma^<_{\sigma \o \phi}(\psi) : \Gamma_{\sigma \o \phi} \to \Gamma_\delta$\\
+$\Gamma^>_{\sigma \o \phi}(\psi) : \Gamma_{\sigma \o \phi} \to \Gamma_\beta$\\
+$\Gamma^<_{\phi}(\psi) : \Gamma_{\phi} \to \Gamma_\delta$\\
+$\Gamma^>_{\phi}(\psi) : \Gamma_{\phi} \to \Gamma_\epsilon$\\
+$\Gamma^<_{\sigma}(\psi) : \Gamma_{\sigma} \to \Gamma_\epsilon$\\
+$\Gamma^>_{\sigma}(\psi) : \Gamma_{\sigma} \to \Gamma_\beta$
+\end{thmbox}
+Hm, not as sure what to do with this. Do I need to generalize $<$ and $>$ to generate things
+like $\Gamma_{\sigma \o \phi} \to \Gamma_\sigma$, for example, so I can assert commutative triangles?
 \end{document}
