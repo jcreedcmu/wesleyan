@@ -531,7 +531,7 @@ The thing I'm calling $\texttt{A+}$ in it is a type
 \[\Delta;\cdot \prov A^+ : \rtype\]
 and the thing I'm calling $\texttt{A-}$ is
 \[\Delta^\op;\cdot \prov A^- : \rtype\]
-\vfil\eject
+
 The  $\texttt{B}$ types are
 \[\Delta;x + A^+ \prov B^{++} : \rtype\]
 \[\Delta^\op ;x - A^+ \prov B^{+-} : \rtype\]
@@ -626,4 +626,96 @@ $\Gamma^>_{\sigma}(\psi) : \Gamma_{\sigma} \to \Gamma_\beta$
 \end{thmbox}
 Hm, not as sure what to do with this. Do I need to generalize $<$ and $>$ to generate things
 like $\Gamma_{\sigma \o \phi} \to \Gamma_\sigma$, for example, so I can assert commutative triangles?
+
+\section{So What About Terms}
+
+I'm reasonably confident that what
+\(c : \C;\cdot \prov M : A \)
+means is that
+\[ \sem M \in \int_{c \in \C}  A_c \]
+What about
+\(c + \C;\cdot \prov M : A \)? In this case, $A$ is a covariant functor out of $\C$. It could
+be weakened to a functor $\C \x \C^\op$, and I could still take the end
+\[ \int_{c \in \C}  A_c \]
+of the resulting bifunctor that simply doesn't depend on one of its arguments.
+What is the result of that? It's the equalizer
+\[
+\begin{tikzcd}
+  E \ar[r, >->] & \Pi_{c\in \C} A_c \ar[r, shift left]\ar[r, shift right] & \Pi_{c,c'\in \C} A_c
+\end{tikzcd}
+\]
+where I'm requiring a choice of element $a_c \in A_c$ for every $c$, subject to
+the constraint that for every $c, c'$,
+\vfil\eject
+\[
+\begin{tikzcd}
+  a_c : A_{c} \ar[r] & A_{c'} & \ar[l, equal] a_{c'} : A_{c'}
+\end{tikzcd}
+\]
+Oh, right, it's just a global section.
+If $f : c \to d$, it's the requirement that $A_f(M_c) = M_d$.
+If we have two linked variables $c : \C$ and $c' : \C^\op$ then
+the end-equalizer requirement is like $A_{fc}(M_{cc}) = A_{df}(M_{dd}) : A_{dc}$.
+
+Ok, what could happen when we have term variables around? Let's say
+\[ c + \C ; x + A \prov M : B\]
+assuming
+\[ c + \C ; \cdot \prov A : \rtype \]
+\[ c + \C ; x + A \prov B : \rtype \]
+meaning that we have $A_c : \rtype$ and $A_f : A_c \to A_d$
+and $B_c : (a : A_c) \to \rtype$ and $B_f : (a : A_c) \to B_c(a) \to B_d(A_f(a))$.
+We would expect $M_c : (a : A_c) \to B_c(a)$, and a transport principle like
+\[(a : A_c) \to B_f(a, M_c(a)) = M_d(A_f(a))\]
+
+Great, what about
+\[ c + \C ; x - A \prov M : B\]
+?
+We have $A_c : \rtype$ and $A_f : A_d \to A_c$
+and $B_c : (a : A_c) \to \rtype$ and $B_f : (a : A_d) \to B_c(A_f(a)) \to B_d(a)$.
+We would expect still $M_c : (a : A_c) \to B_c(a)$ and
+\[(a : A_d) \to B_f(a, M_c(A_f(a))) = M_d(a)\]
+
+No problem. What about
+\[ c : \C ; x + A \prov M : B\]
+with two linked variables? Then
+\[ c : \C ; \cdot \prov A : \rtype \]
+\[ c : \C ; x + A \prov B : \rtype \]
+and when $f : c \to d$ and $f' : d' \to c'$ we have
+$A_{ff'} : A_{cc'} \to A_{dd'}$ and
+$B_{ff'} : (a : A_{cc'}) \to B_{cc'}(a) \to B_{dd'}(A_{ff'}(a))$.
+Then $M_{cc'} : (a : A_{cc'}) \to B_{cc'}(a)$, and
+for every $c$ and $d$ and $f : c \to d$ we would ask for
+\[ (a : A_{cd}) \to B_{fc}(A_{cf}(a), M_{cc}(A_{cf}(a))) = B_{df}(A_{fd}(a), M_{dd}(A_{fd}(a)))\]
+Observe
+\[B_{fc} (A_{cf}(a), M_{cc}(A_{cf}(a))):   B_{dc}(A_{fc}(A_{cf}(a)))\]
+\[B_{df} (A_{fd}(a), M_{dd}(A_{fd}(a))) :  B_{dc}(A_{df}(A_{fd}(a)))\]
+And these are the same type by functoriality of $A$.
+
+Interesting! I was expecting the end-property for $A$ to be used.
+But I don't suppose any actual terms are in play, just variables.
+
+\subsection{On Contexts}
+Ok, so there are two notions of $\Delta$-context that I can reasonably
+imagine right now. There's one in which everything is polarized, and one
+in which nothing is. Let me call the unpolarized one $\Omega$ or something.
+The term judgment more naturally takes $\Omega$, and the type judgment $\Delta$.
+There's noninverse operations going back and forth between them:
+\[
+\begin{tabular}{rcl}
+  $\cdot^0$&$=$&$\cdot$\\
+  $(\Delta, x + \C)^0$&$=$&$\Delta^0, x : \C$\\
+  $(\Delta, x - \C)^0$&$=$&$\Delta^0, x : \C$\\
+  $\cdot^\pm$&$=$&$\cdot$\\
+  $(\Omega, x : \C)^\pm$&$=$&$\Omega^\pm, x_0 + \C, x_1 - \C$\\
+\end{tabular}
+\]
+Plausibly these might be adjoint somehow. The $\hom$ rule might then look something like
+\[
+\erule
+{\Omega, \gamma : \C ; \Gamma \prov e : A \qquad \Omega^\pm, \alpha - \C, \beta + \C; \Gamma \prov A : \rtype}
+{\Omega, \alpha : \C, \beta : \C;\Gamma, h : \hom(\alpha, \beta) \prov \coe_h e : A}
+\]
+allowing ambivalent use of most of the things in $\Omega$, but requiring contravariant use of $\alpha$
+and covariant use of $\beta$. Still missing from this rule is a required assignment of variance to the
+term variable $h$, but I don't know how to pick that yet.
 \end{document}
