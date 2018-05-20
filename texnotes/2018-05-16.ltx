@@ -719,8 +719,11 @@ allowing ambivalent use of most of the things in $\Omega$, but requiring contrav
 and covariant use of $\beta$. Still missing from this rule is a required assignment of variance to the
 term variable $h$, but I don't know how to pick that yet.
 
-\section{Thinking about What That Adjunction Means}
-I think $\pm \dashv 0$.
+\subsection{Thinking about What That Adjunction Means}
+I think $\pm \dashv 0$, in the sense that there is a weakening
+\[\Delta^{0\pm} \prov w_\Delta : \Delta\]
+and a contraction
+\[\Omega \prov c_\Omega : \Omega^{\pm 0}\]
 
 Assume a reasonable notion of substitution within signed contexts, and
 within unsigned contexts, that at least lets me do weakening and
@@ -758,4 +761,42 @@ set of variables $+ \C$ and $- \C$ in $\Delta$. I suppose there's a right-kan-ex
  adjoint on the other side
 that generates a (unsigned) variable for {\em every} way I can choose
 a pair of opposite-polarity variables at the same category.
+\subsection{Contexts in the Term Judgment}
+
+So when I say a thing like
+\[\Omega; \Gamma \prov M : A\]
+what do I mean? I presuppose that $\Omega^\pm \prov \Gamma : \rctx$, and
+$\Omega^\pm ; \Gamma \prov  A : \rtype$.
+
+Or, actually, there's a slight confusion here of even variable binding. Given a well-formed
+type $\Omega^\pm ; \Gamma \prov  A : \rtype$, then syntactically sensible thing I can write
+in context $\Omega$ is $c_\Omega A$.
+
+So do I want the term judgment itself to specify what $\Delta$ is? Just for $A$'s sake?
+\[\Omega; \Delta; \Gamma \prov M : A\]
+And require that $\Delta = \Omega^\pm$? Or, really, I'd only want to require
+that $\Delta$ is {\em smaller} than $\Omega^\pm$,
+for the type of $A$ might actually be covariant or contravariant in some variables. So I want,
+like a substitution
+\[\Omega^\pm \prov \theta : \Delta\]
+but, hey, this is a heteromorphism, and I could have equivalently asked for its adjoint transpose
+\[\Omega \prov \tilde\theta : \Delta^0\]
+So I guess I'm saying for now the term judgment is the big mess
+\[\Omega\theta\Delta;\Gamma \prov M : A\]
+where the only variables $M$ gets to directly mention are in $\Omega$, and the only
+variables allowed to appear {\em directly} in $\Gamma, A$
+are in $\Delta$. Of course, I probably expect terms to show up as arguments to
+$\Pi$-types, and I suppose I expect them to be declared in $\Omega$.
+
+Can I at least dream up what $\Pi$- and $\Sigma$-formation rules would
+look like if I added on $\Omega\theta$ noise to them?
+\[
+\erule
+{
+\Omega\theta\Delta^\op; \Gamma^\op \prov A : \rtype \qquad
+\Omega\theta\Delta; \Gamma, x - A  \prov B : \rtype
+}
+{\Omega\theta\Delta ; \Gamma \prov (x : A) \to B : \rtype}
+\]
+This is not yet yielding any clear insight at all.
 \end{document}
