@@ -718,4 +718,44 @@ Plausibly these might be adjoint somehow. The $\hom$ rule might then look someth
 allowing ambivalent use of most of the things in $\Omega$, but requiring contravariant use of $\alpha$
 and covariant use of $\beta$. Still missing from this rule is a required assignment of variance to the
 term variable $h$, but I don't know how to pick that yet.
+
+\section{Thinking about What That Adjunction Means}
+I think $\pm \dashv 0$.
+
+Assume a reasonable notion of substitution within signed contexts, and
+within unsigned contexts, that at least lets me do weakening and
+contraction and mapping similarly polarized variables onto one
+another.
+
+This means I guess that I'm taking the category of unpolarized
+contexts to be the free finite product category on a set (the set of
+allowed categories $\C$ --- or I guess it could be the category of
+allowed categories $\C$ if I mean to allow functors between them in
+substitutions) and the category of polarized contexts to be the free finite product
+category on, like, two copies of a set?
+
+ Actually, let me fix a set $D$. I do
+know what $\mathbf{FreeFinProd}(D)$ looks like. It's $(\rset / D)^\op$.
+The other category I'm interested in looks like I think
+$(\rset \x \rset / (D, D))^\op$
+
+Can I think of these instead as $(\rset^D)^\op$ and $(\rset^{D+D})^\op$?
+Yeah, that seems fine. For each element $\C\in D$, the functor gives the set of
+variables of that type. Because there is a function $\{\bullet, \bullet\} \to \{\bullet\}$,
+there is contravariantly
+ a substitution $\alpha : \C \prov [\alpha/\beta][\alpha/\gamma] : \beta : \C, \gamma : \C$.
+
+The operation $\pm : (\rset^D)^\op \to (\rset^{D+D})^\op$ is the $\op$ of the functor
+that precomposes $[\rid, \rid] : D + D \to D$. So if we want to find a right adjoint of it, we
+dually want to compute the {\em left} adjoint of the precomposition functor
+ $\rset^D \to \rset^{D+D}$. Ok, turning the crank on the Kan extension definition of this gives me the
+ $\dash^0$ operation I just defined, woo.Given $X : \rset^{D+D}$, I compute
+\[\mathrm{Lan}_{[\rid,\rid]} X : \rset^D\]
+\[\mathrm{Lan}_{[\rid,\rid]} X (d) = \varinjlim_{\{e \in D + D  \st [\rid,\rid](e) = d\}} X(e)\]
+\[ = X(\binl^*(d)) + X(\binr^*(d)) \]
+Which is correct; the set of variables I put in $\Omega$ at $: \C$ is the union of the
+set of variables $+ \C$ and $- \C$ in $\Delta$. I suppose there's a right-kan-extension
+ adjoint on the other side
+that generates a (unsigned) variable for {\em every} way I can choose
+a pair of opposite-polarity variables at the same category.
 \end{document}
