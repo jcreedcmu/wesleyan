@@ -124,6 +124,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
+\def\ltri{\triangleleft}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{cat}}
@@ -325,16 +326,16 @@ and the other includes dual categories:
 \[
 \sem {\Delta} = \ssem \Delta \x \ssem \Delta^\op
 \]
-We will write $\delta$ for objects $(\delta_0, \delta_1)$ of $\sem \Delta$
-where $\delta_0, \delta_1$ are objects of $\ssem \Delta$. We write $\phi : \delta \to \epsilon$
+We will write $\delta$ for objects $(d, d')$ of $\sem \Delta$
+where $d, d'$ are objects of $\ssem \Delta$. We write $\phi : \delta \to \epsilon$
 for a morphism of $\sem \Delta$ where the underlying morphisms in $\ssem \Delta$
-are $\phi_0 : \delta_0 \to \epsilon_0$ and $\phi_1 : \epsilon_1 \to \delta_1$.
-When $\delta = (\delta_0, \delta_1) \in \sem \Delta$, we write the swapping of the two objects as
-\[ \delta = (\delta_1, \delta_0) \in \sem \Delta\]
+are $f : d \to e$ and $f' : e' \to d'$.
+When $\delta = (d, d') \in \sem \Delta$, we write the swapping of the two objects as
+\[ \delta = (d', d) \in \sem \Delta\]
 We can swap morphisms as follows: if
-\[\phi = (\phi_0, \phi_1) : \delta \to \epsilon = (\delta_0, \delta_1) \to (\epsilon_0, \epsilon_1)\]
+\[\phi = (f, f') : \delta \to \epsilon = (d, d') \to (e, e')\]
 then define
-\[ \bar \phi = (\phi_1, \phi_0) : \bar \epsilon \to \bar \delta =  (\epsilon_1, \epsilon_0) \to (\delta_1, \delta_0) \]
+\[ \bar \phi = (f', f) : \bar \epsilon \to \bar \delta =  (e', e) \to (d', d) \]
 
 Next, we will declare the functions involved in the semantics of contexts and types.
 
@@ -541,6 +542,77 @@ and the morphism part needs to be
 \[  \to (x : A_{\bar\epsilon}(\Gamma_\phi^> \psi)) \to B_\epsilon(\Gamma_\phi^> \psi, x) \]
 and we define it
 \[((x:A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))\]
+\subsection{Terms}
+What's supposed to be the meaning of $\Delta ; \Gamma \prov M : A$?
+It should feel like an end. In the simply-typed case, we'd say:
+For each $c \in \ssem \Delta$, there should be a
+\[ M_{c} :  \Gamma_{cc} \to A_{cc} \]
+and given a morphism $f : c \to d \in \ssem \Delta $ there should be two canonical ways to get to
+$\Gamma_{cd} \to A_{dc}$, which should be equal.
+would look like
+\[\begin{tikzcd}
+& \Gamma_{cc} \ar[r, "M_c"] &A_{cc} \ar[dr, "A_{fc}"]\\
+  \Gamma_{cd} \ar[ur, "\Gamma_{cf}"] \ar[dr, "\Gamma_{fd}"'] &&& A_{dc}\\
+& \Gamma_{dd} \ar[r, "M_d"'] &A_{dd} \ar[ur, "A_{df}"']
+\end{tikzcd}\]
 
+But in the dependently-typed case, we say
+For each $c \in \ssem \Delta$, there should be a
+\[ M_{c} :  (\gamma : \Gamma_{cc}) \to A_{cc}(\gamma) \]
+and given a morphism $f : c \to d \in \ssem \Delta $ there should be two canonical ways to get to
+$(\gamma : \Gamma_{cd}) \to A_{dc}(\gamma)$, which should be equal.
+Incidentally, this makes it seem like the validity lemma should be that
+\begin{thmbox}
+If $\Delta ; \Gamma \prov M : A$, then $\Delta ; \Gamma^\op \prov A : \rtype$
+\end{thmbox}
+because then $(\gamma : \Gamma_{cd}) \to A_{dc}(\gamma)$ is actually well-typed.
 
+But we should require that for every $f : c \to d \in \ssem \Delta$, that
+
+\[ (\gamma : \Gamma_{cd}) \to A_{fc}(M_c(\Gamma_{cf}(\gamma))) = A_{df}(M_d(\Gamma_{fd}(\gamma)))\]
+
+Why is this well-typed? Oh, it's definitely not. We can't actually
+transport from $\Gamma_{cd}$ to other things just because we have a
+morphism from $cd$ to elsewhere. Hmm. Or at least I haven't defined
+how to, yet.
+
+Can I? Let's try to
+define $\Gamma^\phi : \Gamma_\delta \to \Gamma_\epsilon$ when $\phi : \delta \to \epsilon$.
+$(\Gamma, x + A)^\phi$ should be $(\Gamma, x + A)_\delta \to (\Gamma, x + A)_\epsilon$,
+which is
+\[ ((\gamma : \Gamma_\delta) \x A_\delta(\gamma)) \to ((\gamma : \Gamma_\epsilon) \x A_\epsilon(\gamma))\]
+We try
+\[ \lambda (\gamma, a) = (\Gamma^\phi \gamma, ?) \]
+where the hole is $A_\delta(\gamma) \to A_\epsilon(\Gamma^\phi \gamma)$.
+Recall that $A_\phi$ lets us feed in a $\psi : \Gamma_\phi$
+and then lets us go from $A_\delta(\Gamma^<_\phi \psi)$ to
+$A_\epsilon(\Gamma_\phi^> \psi)$. So my wish is that there's some way
+of going $\Gamma_\delta \to \Gamma_\phi$ such that $\Gamma_\phi^<$ of
+that reduces back to the $\gamma$ I started with, and $\Gamma_\phi^>$
+of that gives me $\Gamma^\phi \gamma$.
+
+%  $(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)$\\
+Ok, let's try:
+\begin{declbox}
+  $\Gamma^\ltri_\phi : \Gamma_\delta \to \Gamma_\phi$
+% \\
+%  $\Gamma^\tri_\phi : \Gamma_\epsilon \to \Gamma_\phi$
+\end{declbox}
+\begin{thmbox}
+% $ ( \Gamma^\op)^\ltri_\phi = \Gamma^\tri_{\bar \phi}$ \\
+% $ ( \Gamma^\op)^\tri_\phi = \Gamma^\ltri_{\bar \phi}$\\
+$ \Gamma^<_\phi( \Gamma^\ltri_\phi(\gamma)) = \gamma$
+\end{thmbox}
+\begin{defnbox}
+  $(\Gamma, x + A)^\ltri_\phi(\gamma, a) = (\Gamma^\ltri_\phi(\gamma), a)$\\
+  $(\Gamma, x - A)^\ltri_\phi(\gamma, a) = (\Gamma^\ltri_\phi(\gamma), ?)$
+\end{defnbox}
+Typecheck this: $(\Gamma, x + A)^\ltri_\phi$ has type
+$(\Gamma, x + A)_\delta \to (\Gamma, x + A)_\phi$, which is
+\[ ((\gamma : \Gamma_\delta) \x A_\delta(\gamma)) \to ((\psi : \Gamma_\phi) \x A_\delta(\Gamma^<_\phi(\psi)))\]
+It typechecks without problem. $(\Gamma, x - A)^\ltri_\phi$ has type
+$(\Gamma, x - A)_\delta \to (\Gamma, x - A)_\phi$
+\[ ((\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)) \to ((\psi : \Gamma_\phi) \x A_{\bar \epsilon}(\Gamma^>_\phi(\psi)))\]
+We have $A_{\bar \delta}(\gamma)$ and need to make $A_{\bar \epsilon}(\Gamma^>_\phi(\Gamma^\ltri_\phi(\gamma)))$.
+Oh, everything is pointing the wrong direction for this to even possibly work.
 \end{document}
