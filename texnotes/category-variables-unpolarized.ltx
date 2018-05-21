@@ -249,27 +249,27 @@ Context formation is defined by
 {\Delta \prov \Gamma, x + A \rctx}
 \qquad
 \erule
-{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^{\op} \prov \bar A : \rtype}
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^{\op} \prov  A : \rtype}
 {\Delta \prov \Gamma, x - A \rctx}
 \]
-There is an operation taking $A$ to $\bar A$, which is the replacement
-of every context term $t$ appearing in it with its dual $\bar t$. To
-be clear, not every subterm of that every term hereditarily;
-merely, when we reach a base type $a(t_1, \ldots, t_n)$ that has some category terms for
-arguments, we dualize each one of them, yielding $a(\bar t_1, \ldots, \bar t_n)$.
+%% There is an operation taking $A$ to $\bar A$, which is the replacement
+%% of every context term $t$ appearing in it with its dual $\bar t$. To
+%% be clear, not every subterm of that every term hereditarily;
+%% merely, when we reach a base type $a(t_1, \ldots, t_n)$ that has some category terms for
+%% arguments, we dualize each one of them, yielding $a(\bar t_1, \ldots, \bar t_n)$.
 
-I guess I ought to just say that every type $A$ needs to come equipped
-with a dual $\bar A$, satsifying some lemma to be determined, and what
-I just said above is the definition of duals for base types. I
-expect/hope the dualizing clause for function types, pair types, etc. to be mere
-homomorphisms.
+%% I guess I ought to just say that every type $A$ needs to come equipped
+%% with a dual $\bar A$, satsifying some lemma to be determined, and what
+%% I just said above is the definition of duals for base types. I
+%% expect/hope the dualizing clause for function types, pair types, etc. to be mere
+%% homomorphisms.
 
 There is an operation $\Gamma^\op$  defined by swapping every $+$ and $-$,
 and transposing every type:
 \[
 \begin{tabular}{rcl}
-  ${(\Gamma, x + A)^\op}$&$=$&$\Gamma^\op , x - \bar A$\\
-  ${(\Gamma, x - A)^\op}$&$=$&$\Gamma^\op , x + \bar A$\\
+  ${(\Gamma, x + A)^\op}$&$=$&$\Gamma^\op , x - A$\\
+  ${(\Gamma, x - A)^\op}$&$=$&$\Gamma^\op , x + A$\\
 \end{tabular}
 \]
 
@@ -287,27 +287,26 @@ By induction. Suppose
 \[\erule
 {\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma \prov A : \rtype}
 {\Delta \prov \Gamma, x + A \rctx}\]
-We need to show $\Delta \prov \Gamma^\op, x - \bar A \rctx$. By induction hypothesis,
+We need to show $\Delta \prov \Gamma^\op, x -  A \rctx$. By induction hypothesis,
 $\Delta \prov \Gamma^\op \rctx$. So we derive
 \[
 \erule
 {\Delta \prov \Gamma^\op \rctx \qquad \Delta ; \Gamma \prov  A : \rtype}
-{\Delta \prov \Gamma^\op, x - \bar A \rctx}
+{\Delta \prov \Gamma^\op, x -  A \rctx}
 \]
-We're silently using the fact that $\overline{\overline A} = A$ and
-$(\Gamma^\op)^\op = \Gamma$.
+We're silently using the fact that $(\Gamma^\op)^\op = \Gamma$.
 
 In the other case, we have
 \[\erule
-{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^\op \prov \bar A : \rtype}
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^\op \prov  A : \rtype}
 {\Delta \prov \Gamma, x - A \rctx}\]
 and need to show
-$\Delta \prov \Gamma^\op, x + \bar A \rctx$. By induction hypothesis,
+$\Delta \prov \Gamma^\op, x +  A \rctx$. By induction hypothesis,
 $\Delta \prov \Gamma^\op \rctx$. So we derive
 \[
 \erule
-{\Delta \prov \Gamma^\op \rctx \qquad \Delta ; \Gamma^\op \prov \bar A : \rtype}
-{\Delta \prov \Gamma^\op, x + \bar A \rctx}
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta ; \Gamma^\op \prov  A : \rtype}
+{\Delta \prov \Gamma^\op, x +  A \rctx}
 \]
 \cqed
 \end{proof}
@@ -331,7 +330,11 @@ where $\delta_0, \delta_1$ are objects of $\ssem \Delta$. We write $\phi : \delt
 for a morphism of $\sem \Delta$ where the underlying morphisms in $\ssem \Delta$
 are $\phi_0 : \delta_0 \to \epsilon_0$ and $\phi_1 : \epsilon_1 \to \delta_1$.
 When $\delta = (\delta_0, \delta_1) \in \sem \Delta$, we write the swapping of the two objects as
-\[\bar \delta = (\delta_1, \delta_0) \in \sem \Delta\]
+\[ \delta = (\delta_1, \delta_0) \in \sem \Delta\]
+We can swap morphisms as follows: if
+\[\phi = (\phi_0, \phi_1) : \delta \to \epsilon = (\delta_0, \delta_1) \to (\epsilon_0, \epsilon_1)\]
+then define
+\[ \bar \phi = (\phi_1, \phi_0) : \bar \epsilon \to \bar \delta =  (\epsilon_1, \epsilon_0) \to (\delta_1, \delta_0) \]
 
 Next, we will declare the functions involved in the semantics of contexts and types.
 
@@ -352,7 +355,19 @@ $\phi : \delta \to \epsilon$ is a morphism in $\sem \Delta$. Then we declare
   $A_\delta : \Gamma_\delta \to \rtype$\\
   $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)$
 \end{declbox}
-
+and forward-declare the following lemmas, to be proved mutually recursively with
+the well-typedness of the definitions below
+\textcolor{red}{ Actually I'm being a little sloppy here and kind of assuming UIP in a way
+I'd rather not.
+Not 100\% sure the best way to treat this.
+Maybe somehow use pairs of parallel functions,
+and then prove they're equivariant up to a swap after the fact?}
+\begin{thmbox}
+  $(\Gamma^\op)_\delta = \Gamma_{\bar \delta}$\\
+  $(\Gamma^\op)_\phi = \Gamma_{\bar \phi}$\\
+  $(\Gamma^\op)^<_\phi = \Gamma_{\bar \phi}^> : \Gamma_{\bar \phi} \to \Gamma_{\bar \delta}$\\
+  $(\Gamma^\op)^>_\phi = \Gamma_{\bar \phi}^< : \Gamma_{\bar \phi} \to \Gamma_{\bar \epsilon}$
+\end{thmbox}
 The meaning of a context $\Gamma$ consists of four parts. First, $\Gamma_\delta$ is a type, `the
 meaning of $\Gamma$ at object $\delta$'. The remaining three parts
 constitute a notion of relational transport. $\Gamma_\phi$ is a
@@ -375,41 +390,35 @@ semantics of types is given.
 \\
  $(\cdot)_\phi = \bone$\\
  $(\Gamma, x + A)_\phi = (\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )$\\
- $(\Gamma, x - A)_\phi = (\psi : \Gamma_\phi) \x A_\epsilon( \Gamma_\phi^> \psi )$\\
+ $(\Gamma, x - A)_\phi = (\psi : \Gamma_\phi) \x A_{\bar\epsilon}( \Gamma_\phi^> \psi )$\\
 \\
  $(\cdot)_\phi^< = {!}$\\
  $(\Gamma, x + A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, a)$\\
- $(\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_\phi(\psi, a))$\\
+ $(\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, a))$\\
 \\
  $(\cdot)_\phi^> = {!}$\\
  $(\Gamma, x + A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, A_\phi(\psi, a))$\\
  $(\Gamma, x - A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, a)$
 \end{defnbox}
-Let's carefully understand how all of these typecheck. When we say
-\[(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
-it's unproblematic that $\gamma$ has the right type to be fed to $A_\delta$.
-But in
-\[(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x {\bar A}_\delta(\gamma)\]
-we note that we have $\Delta \prov \Gamma \rctx$, but
-$\Delta ; \Gamma^\op \prov \bar A : \rtype$.
-So $A_\delta$ wants its argument to be an element of $\Gamma^\op_\delta$ rather than $\Gamma_\delta$, but we can,
-mutually recursively with the above definition, prove that
-\begin{lemma}\ %
-  \begin{enumerate}
-  \item ${\bar A}_\delta = A_{\bar \delta}$
-  \item $(\Gamma^\op)_\delta = \Gamma_\delta$
-  \end{enumerate}
-\end{lemma}
-so it's fine to give it $\gamma$.
+%% Let's carefully understand how all of these typecheck. When we say
+%% \[(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
+%% it's unproblematic that $\gamma$ has the right type to be fed to $A_\delta$.
+%% But in
+%% \[(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x { A}_\delta(\gamma)\]
+%% we note that we have $\Delta \prov \Gamma \rctx$, but
+%% $\Delta ; \Gamma^\op \prov  A : \rtype$.
+%% So $A_\delta$ wants its argument to be an element of $\Gamma^\op_\delta$ rather than $\Gamma_\delta$, but we can,
+%% mutually recursively with the above definition, prove that ???
+%% so it's fine to give it $\gamma$.
 
-\textcolor{red}{ Actually I'm being a little sloppy here and not 100\% sure the best way to treat this.
-Maybe two parallel functions, and then prove they're equivariant up to a swap after the fact?}
 
-Moving past that for the time being, we can see that $\Gamma_\phi^<\psi$ is the right type, namely
-$\Gamma_\delta$, to go into $A_\delta$, and $\Gamma_\phi^>\psi$ is of type $\Gamma_\epsilon$, appropriate
-to go into $A_\epsilon$.
+%% Moving past that for the time being, we can see that $\Gamma_\phi^<\psi$ is the right type, namely
+%% $\Gamma_\delta$, to go into $A_\delta$, and $\Gamma_\phi^>\psi$ is of type $\Gamma_\epsilon$, appropriate
+%% to go into $A_\epsilon$.
 
-The projection functions are a little more intricate. The type of $(\Gamma, x + A)_\phi^<$ needs
+Let's see how the projection functions typecheck.
+\subsubsection{Case 1}
+The type of $(\Gamma, x + A)_\phi^<$ needs
 to be is a function from $(\Gamma, x + A)_\phi$ to $(\Gamma, x + A)_\delta$, that is, of type
 \[((\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
 and we can check that the definition
@@ -417,31 +426,26 @@ and we can check that the definition
 satisfies this type: the second component out the output pair needs to be $A_\delta(\gamma)$ for $\gamma$
 specifically being the first component $\Gamma_\phi^<\psi$, and indeed $a$ has
 type $A_\delta(\Gamma_\phi^<\psi)$.
+\subsubsection{Case 2}
 
 The type of $(\Gamma, x - A)_\phi^<$ needs to be a function from
 $(\Gamma, x - A)_\phi$ to $(\Gamma, x - A)_\delta$, that is, of type
-\[((\psi : \Gamma_\phi) \x A_\epsilon( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
-and so we need to do some coercion to make the second component of the output. The reason that
-the definition
-\[ (\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_\phi(\psi, a)) \]
-works is that we know $\Delta^\op ; \Gamma^\op \prov A : \rtype$, so
-while $\phi$ is a morphism $\delta\to \epsilon \in \sem\Delta$, it's
-also a morphism $\epsilon \to \delta \in \sem \Delta^\op$. Moreover, we can prove, mutually recursively
-with this definition,
-
-\filbreak
-\begin{lemma}\ %
-  \begin{enumerate}
-  \item $(\Gamma^\op)_\phi = \Gamma_\phi$
-  \item $(\Gamma^\op)^<_\phi\psi = \Gamma^>_\phi\psi$
-  \item $(\Gamma^\op)^>_\phi\psi = \Gamma^<_\phi\psi$
-  \end{enumerate}
-\end{lemma}
-so $A_\phi$'s type is effectively
-\[(\psi : \Gamma_\phi) \to A_\epsilon(\Gamma_\phi^> \psi) \to A_\delta(\Gamma_\phi^< \psi) \]
+\[((\psi : \Gamma_\phi) \x A_{\bar \epsilon}( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)\]
+%
+and so since $A_{\bar \epsilon}( \Gamma_\phi^> \psi )$ is not
+straightforwardly a substitution instance of $A_{\bar\delta}(\gamma)$ like in the previous case, we
+need to do some coercion to make the second component of the output.
+Stare at the definition
+\[ (\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, a)) \]
+and take $A_{\bar \phi}$'s type, which is known from the fact that
+$\Delta ; \Gamma^\op \prov A : \rtype$ to be
+\[(\psi : (\Gamma^\op)_{\bar \phi}) \to A_{\bar \epsilon}((\Gamma^\op)_{\bar \phi}^< \psi) \to A_{\bar \delta}((\Gamma^\op)_{\bar \phi}^> \psi) \]
+and apply the above lemmas to see that it's the same thing as
+\[(\psi : \Gamma_{\phi}) \to A_{\bar \epsilon}(\Gamma_\phi^> \psi) \to A_{\bar \delta}(\Gamma_\phi^< \psi) \]
 which is just the right thing to make the definition type-check.
 
 That was the hardest case --- the remaining two are relatively easy.
+\subsubsection{Case 3}
 The type that $(\Gamma, x + A)_\phi^>$ needs to be is $(\Gamma, x + A)_\phi \to (\Gamma, x + A)_\epsilon$,
 i.e.
 \[ ((\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )) \to ((\gamma : \Gamma_\epsilon) \x A_\epsilon(\gamma)) \]
@@ -450,15 +454,24 @@ here we can stare at the definition
 and directly see from the fact that transport along $A$ is typed
 \[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)\]
 that it works, without any pesky contravariance going on to confuse us.
-
+\subsubsection{Case 4}
 Finally, the type that $(\Gamma, x - A)_\phi^>$ needs to be is
 $(\Gamma, x - A)_\phi \to (\Gamma, x - A)_\epsilon$, i.e.
-\[((\psi : \Gamma_\phi) \x A_\epsilon( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\epsilon) \x A_\epsilon(\gamma)\]
+\[((\psi : \Gamma_\phi) \x A_{\bar\epsilon}( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\epsilon) \x A_{\bar\epsilon}(\gamma)\]
 and we can stare at the definition
 \[ (\Gamma, x - A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, a) \]
 and see that it works without reference to the structure of $A$, just like the first case
-$(\Gamma, x + A)_\phi^<$ did. The term $a$ is already at type $A_\epsilon(\Gamma^>_\phi \psi)$ and needs
+$(\Gamma, x + A)_\phi^<$ did. The term $a$ is already at type $A_{\bar\epsilon}(\Gamma^>_\phi \psi)$ and needs
 no transport.
+\subsection{Checking the Lemma about Transport Dualization}
+By appealing to the induction hypothesis in both cases, we have
+ \[(\Gamma^\op, x + A)_\phi^< (\psi , a) = ((\Gamma^\op)_\phi^<\psi, a)\]
+ \[= (\Gamma_{\bar \phi}^>\psi, a) = (\Gamma, x - A)_{\bar \phi}^> (\psi , a)  \]
+and
+ \[(\Gamma^\op, x + A)_\phi^> (\psi , a) = ((\Gamma^\op)_\phi^>\psi, A_\phi(\psi, a))\]
+ \[= (\Gamma_{\bar \phi}^<\psi, A_{\phi}(\psi, a)) = (\Gamma, x - A)_{\bar \phi}^< (\psi , a) = \]
+
+
 
 \subsection{Defining Some Types}
 
@@ -503,7 +516,7 @@ and we define it
 \[
 \erule
 {
-\Delta^\op; \Gamma^\op \prov A : \rtype \qquad
+\Delta; \Gamma^\op \prov A : \rtype \qquad
 \Delta; \Gamma, x - A  \prov B : \rtype
 }
 {\Delta ; \Gamma \prov (x : A) \to B : \rtype}
@@ -512,22 +525,22 @@ and we define it
 Observe that the premises of this rule give us all of the following derived functions
 to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
-\[A_\delta : \Gamma_\delta \to \rtype \]
-\[B_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma) \to \rtype \]
-\[A_\phi : (\psi : \Gamma_\phi) \to A_\epsilon(\Gamma_\phi^> \psi) \to A_\delta(\Gamma_\phi^< \psi) \]
-\[B_\phi : (\psi : \Gamma_\phi)(x : A_\epsilon(\Gamma_\phi^>\psi)) \to B_\delta(\Gamma_\phi^<\psi, A_\phi(\psi, x))
+\[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (\gamma : \Gamma_\delta) \to A_{\bar \delta}(\gamma) \to \rtype \]
+\[A_{\bar \phi} : (\psi : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_\phi^> \psi) \to A_{\bar \delta}(\Gamma_\phi^< \psi) \]
+\[B_\phi : (\psi : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_\phi^>\psi)) \to B_\delta(\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, x))
 \to B_\epsilon(\Gamma_\phi^>\psi, x)\]
 
 We define the object part of this by
 \[((x : A) \to B)_\delta : \Gamma_\delta \to \rtype \]
-\[((x : A) \to B)_\delta (\gamma) = (x : A_\delta(\gamma)) \to B_\delta(\gamma, x) \]
+\[((x : A) \to B)_\delta (\gamma) = (x : A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) \]
 
 and the morphism part needs to be
-\[((x:A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_\delta(\Gamma_\phi^< \psi))
+\[((x:A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_\phi^< \psi))
 \to B_\delta(\Gamma_\phi^< \psi, x))\]
-\[  \to (x : A_\epsilon(\Gamma_\phi^> \psi)) \to B_\epsilon(\Gamma_\phi^> \psi, x) \]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_\phi^> \psi)) \to B_\epsilon(\Gamma_\phi^> \psi, x) \]
 and we define it
-\[((x:A)\x B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_\phi(\psi, x)))\]
+\[((x:A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))\]
 
 
 \end{document}
