@@ -799,4 +799,36 @@ look like if I added on $\Omega\theta$ noise to them?
 {\Omega\theta\Delta ; \Gamma \prov (x : A) \to B : \rtype}
 \]
 This is not yet yielding any clear insight at all.
+
+\section{Only Unpolarized Variables?}
+
+The twin facts, arising from the adjunction above, that
+\begin{itemize}
+\item I can appear to choose either unpolarized or polarized variables
+\item There is no canonical choice
+\end{itemize}
+seem to be the source of some confusion. Perhaps it is possible to do
+a lot of work in either a completely-polarized or
+completely-unpolarized system, and access the other via some modality.
+I'm going to try thinking about a completely unpolarized system for
+the moment.
+
+But to be clear, when I say `unpolarized', I mean that the variables
+in $\Delta$ have no polarization marked, and that their interpretation
+should in fact be ambipolar. I think quite possibly the variables in
+$\Gamma$ still need to be marked for whether they undergo forward or
+backward transport when being used.
+
+Recall that the meaning of
+\[\Delta; \Gamma, x + A \prov B : \rtype\]
+is that
+\[ \Gamma_\delta :  \rset \]
+\[ A_\delta : (\gamma : \Gamma_\delta) \to \rset \]
+\[ B_\delta : (\gamma : \Gamma_\delta) (a : A_\delta(\gamma)) \to \rset \]
+\[ \Gamma_\phi :  \Gamma_\delta \to \Gamma_\epsilon \]
+\[ A_\phi : (\gamma : \Gamma_\phi) \to A_\delta(\Gamma^<_\phi(\gamma)) \to A_\epsilon(\Gamma^>_\phi(\gamma)) \]
+\[ B_\phi : (\gamma : \Gamma_\phi) (a : A_\delta(\Gamma^<_\phi(\gamma)) \to B_\delta(a) \to B_\epsilon(A_\phi(\gamma,a)) \]
+oh, right, this works fine without even any modification if $\Delta$
+happens to include duals also. I'm just blindly quantifying over all
+objects and morphisms of the category induced by $\Delta$.
 \end{document}

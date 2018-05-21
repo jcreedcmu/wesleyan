@@ -953,6 +953,7 @@ https://emacs.stackexchange.com/questions/30344/how-to-link-and-open-a-pdf-file-
 links to org-mac.el at
 http://orgmode.org/worg/org-contrib/org-mac-link.html
 Or wait I can get by on the commandline with just
+$ # THIS IS THE THING THAT WORKS v
 $ open -a /Applications/Skim.app some.pdf
 and I don't even need to give a full path like I do with
 $ open /Applications/Skim.app --args `pwd`/some.pdf
@@ -4822,3 +4823,34 @@ A: I wonder if I can characterize what data actually *is* in
 a span of presheaves? Is there a parametricity phenomenon going on that's over
 something a little bit more richly structured than a relation, but which I can
 still use to prove parametricity theorems?
+
+=== 2018.05.20
+
+Q: In
+http://smallcultfollowing.com/babysteps/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+shouldn't
+<<<
+let p = 22;
+let q = 44;
+let x: &mut i32 = &mut p; // `x` points at `p`
+let y = &mut *x; // Loan L0, `y` points at `p` too
+// ...
+x = &mut q; // `x` points at `q`; kills L0
+>>>
+actually be
+<<<
+let mut p = 22;
+let mut q = 44;
+let mut x: &mut i32 = &mut p; // `x` points at `p`
+let y = &mut *x; // Loan L0, `y` points at `p` too
+// ...
+x = &mut q; // `x` points at `q`; kills L0
+>>>
+A: ???
+
+=== 2018.05.21
+
+Q: Do I get anything if I take seriously as modalities the pair of
+functors going back and forth between polarized and unpolarized
+category variables?
+A: ???
