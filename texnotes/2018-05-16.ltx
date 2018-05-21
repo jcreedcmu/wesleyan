@@ -831,4 +831,38 @@ is that
 oh, right, this works fine without even any modification if $\Delta$
 happens to include duals also. I'm just blindly quantifying over all
 objects and morphisms of the category induced by $\Delta$.
+
+\section{Problems Discovered in Defining Semantics For Terms}
+
+Okay, so I no longer have straightforward transport for contexts as if
+they were types. Can I stare at single-variable examples for $+$ and
+$-$ assumptions and see what they want for terms?
+
+First, suppose $\Delta; x + A \prov B : \rtype$.
+This means $\Delta \prov A : \rtype$.
+What is the meaning of $\Delta; x + A \prov M : B$? For every object $c \in \ssem\Delta$,
+we should have $M_c \in (a : A_{cc}) \to B_{cc}(a)$. Here we observe that we do have
+covariant transport in $A$. If $f : c \to d$, we can achieve $A_{cd} \to A_{cc}$ and $A_{cd} \to A_{dd}$.
+
+The transport principle for $B$ depends `forwardly' on that of $A$. If we have $\phi : \delta \to \epsilon$,
+we can do $B_{\phi} : (a : A_\delta) \to B_\delta(a) \to B_\epsilon(A_\phi(a))$.
+So we can observe that
+\[ a : A_{cd} \prov B_{fc}(A_{cf}(a), M_c( A_{cf}(a))) : B_{dc}(A_{ff}(a))\]
+\[ a : A_{cd} \prov B_{df}(A_{fd}(a), M_d( A_{fd}(a))) : B_{dc}(A_{ff}(a))\]
+so we demand that these are equal.
+
+What about when $\Delta; x - A \prov B : \rtype$? This means
+$\Delta \prov A : \rtype$. We have a different transport principle for $B$ since $A$ is marked $-$.
+We have $B_\delta : A_{\bar \delta} \to \rtype$.
+ The transport principle for $B$ depends `reversed' on that of $A$. If we have
+ $\phi : \delta \to \epsilon$,
+we can do $B_{\phi} : (a : A_{\bar \epsilon}) \to B_\delta(A_{\bar \phi}(a)) \to B_\epsilon(a)$.
+Now we still have the same transport principle for $A$ itself! So we can still form
+\[ a : A_{cd} \prov M_c(A_{cf}(a)) : B_{cc}(A_{cf}(a))\]
+\[ a : A_{cd} \prov M_d(A_{fd}(a)) : B_{dd}(A_{fd}(a))\]
+But now transporting at $B$ works like
+\[ a : A_{cd} \prov B_{fc}(a, M_c(A_{cf}(a)))  :  B_{dc}(a)\]
+\[ a : A_{cd} \prov B_{df}(a, M_d(A_{fd}(a))) :  B_{dc}(a)\]
+which still seems to permit equating these, even though I don't quite know how
+to make the general statement, yet! This gives me hope.
 \end{document}
