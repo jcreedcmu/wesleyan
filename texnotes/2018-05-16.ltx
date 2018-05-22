@@ -27,7 +27,6 @@
 \def\rspan{\mathsf{Span}}
 % \def\El#1{\mathsf{El}({#1})}
 \def\El#1{\ulcorner{#1}\urcorner}
-\def\quote#1{{\ulcorner {#1} \urcorner}}
 \def\U{\mathsf{U}}
 \def\uu{\mathsf{u}}
 \def\uni{\U}
@@ -890,6 +889,108 @@ Oh, I see, this is a little weird, but not terrible. I can't have both the super
 the sequence of polarities and also guarantee that it's $B^{\sigma}$ used as a recursive call
 in $C^{\sigma+}$ and $C^{\sigma-}$. I'll go with the former for now.
 
+\section{Having Finished The Agda Examples}
+
+What can I extract from them?
+
+I already know that, given a term
+\[ \Delta ; \Gamma \prov M : A \]
+that it should have an object-part semantics, in the sense
+that for any object $d \in \ssem \Delta$, it should be the case that
+\[ M_d : (\gamma : \Gamma_{dd}) \to A_{dd}(\gamma) \]
+This covers the agda terms I've written prefixed
+\texttt{tA}, \texttt{tB}, \texttt{tC}, \texttt{tD}.
+And \texttt{oA}, \texttt{oB}, \texttt{oC}, \texttt{oD} is just the
+realization of
+\[A_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma)\]
+\texttt{mA}, \texttt{mB}, \texttt{mC}, \texttt{mD}
+is the realization of the morphism part of the type,
+\[ A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma^<_\phi(\psi)) \to A_\epsilon(\Gamma^>_\phi(\psi))\]
+
+
+Ok, I see right away from all the modules in e.g. \texttt{2018-05-22c.agda}
+that for every type-in-context, there's a batch
+of data that needs to be universally quantified over, and it mentions
+the map $f : d \to e$. So I take a unification step in my mind and conclude that
+the statement of the property I want to require of terms that means that
+they satisfy the appropriate generalization of being `inhabitants of the end' looks like:
+
+\begin{quote}
+If $\Delta ; \Gamma \prov M : A$ and $f : d \to e \in \ssem \Delta$, then
+\[(\zeta \in \Gamma_f) \to M_f^<(\zeta) \equiv M_f^>(\zeta)\]
+\end{quote}
+
+I don't immediately see a way of constructing $\Gamma_f$ out of $\Gamma^<_\phi$ and/or $\Gamma^>_\phi$.
+Let's try to define it directly.
+
+\begin{declbox}
+  Assume $\Delta \prov \Gamma \rctx$ and $f : d\to e \in \ssem\Delta$.\\
+  $\Gamma_f : \rset$.\\
+  $\Gamma_{f}^+ : \Gamma_f \to \Gamma_{de}$.\\
+  $\Gamma_{f}^- : \Gamma_f \to \Gamma_{ed}$.\\
+  $\Gamma_{f}^* : \Gamma_f \to \Gamma_{ff}$.
+\end{declbox}
+\begin{defnbox}
+  $\cdot_f = \mathbf{1}$\\
+  $(\Gamma, x + A)_f = (\zeta : \Gamma_f) \x A_{de}(\Gamma^+_f(\zeta))$\\
+  $(\Gamma, x - A)_f = (\zeta : \Gamma_f) \x A_{de}(\Gamma^-_f(\zeta))$\\
+  \\
+  $(\Gamma, x + A)^+_f(\zeta, a) = (\Gamma^+_f(\zeta), a)$\\
+  $(\Gamma, x - A)^+_f(\zeta, a) = (\Gamma^+_f(\zeta), A_{ff}(\Gamma^*_f(\zeta), a))$\\
+  \\
+  $(\Gamma, x + A)^-_f(\zeta, a) = (\Gamma^-_f(\zeta), A_{ff}(\Gamma^*_f(\zeta), a))$\\
+  $(\Gamma, x - A)^-_f = (\Gamma^-_f(\zeta), a)$\\
+  \\
+  $(\Gamma, x + A)^*_f (\zeta, a) = (\Gamma^*_f (\zeta), a)$\\
+  $(\Gamma, x - A)^*_f (\zeta, a) = (\Gamma^*_f (\zeta), a)$\\
+\end{defnbox}
+\begin{thmbox}
+  $\Gamma^+_f(\zeta) = \Gamma^<_{ff}(\Gamma^*_f(\zeta))$\\
+  $\Gamma^-_f(\zeta) = \Gamma^>_{ff}(\Gamma^*_f(\zeta))$
+\end{thmbox}
+
+Oho, having gone through all of this makes it look like actually
+$\Gamma_f$ is just $\Gamma_{ff}$, and $\Gamma^*_f$ is acting like an
+inclusion. $\Gamma^+_f$ then simply {\em is} the same thing as
+$\Gamma^<_{ff}$, and $\Gamma^-_f$ is $\Gamma^>_{ff}$.
+
+%% Typing helper notes
+% $(\Gamma, x + A)^+_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^+_f(\zeta)) \to (\gamma : \Gamma_{de}) \x A_{de}(\gamma)$\\
+% $(\Gamma, x - A)^+_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^-_f(\zeta)) \to (\gamma : \Gamma_{de}) \x A_{ed}(\gamma)$\\
+% $(\Gamma, x + A)^-_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^+_f(\zeta)) \to (\gamma : \Gamma_{ed}) \x A_{ed}(\gamma)$\\
+% $(\Gamma, x - A)^-_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^-_f(\zeta)) \to (\gamma : \Gamma_{ed}) \x A_{de}(\gamma)$\\
+% $(\Gamma, x + A)^*_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^+_f(\zeta))
+%    \to (\psi : \Gamma_{ff}) \x A_{de}(\Gamma^<_{ff} \psi)$\\
+% $(\Gamma, x - A)^*_f : (\zeta : \Gamma_f) \x A_{de}(\Gamma^-_f(\zeta))
+%    \to (\psi : \Gamma_{ff}) \x A_{de}(\Gamma^>_{ff} \psi)$
+
+%   $A_{ff} : (\psi : \Gamma_{ff}) \to A_{de}(\Gamma_{ff}^< \psi) \to A_{ed}(\Gamma_{ff}^> \psi)$\\
+% and when $A$ is dual
+
+%   $A_{ff} : (\psi : \Gamma_{ff}) \to A_{de}(\Gamma_{ff}^> \psi) \to A_{ed}(\Gamma_{ff}^< \psi)$
+
+Okay, good, I can discard most everything I just wrote, and my end-constraint now looks like
+\begin{quote}
+If $\Delta ; \Gamma \prov M : A$ and $f : d \to e \in \ssem \Delta$, then
+\[(\psi : \Gamma_{ff}) \to M_f^<(\psi) \equiv M_f^>(\psi)\]
+\end{quote}
+What type is this equation taking place at? I can tell immediately looking at the agda
+that it's something of the shape $A_{ed}(\cdots)$ constructed out of $\psi$.
+Recall that
+  $A_{ed} : \Gamma_{ed} \to \rtype$ so I guess just it might be $A_{ed}(\Gamma^>_{ff}(\psi))$.
+Now I just ways of getting from $M_d$ and $M_e$ to that.
+\[ M_d : (\gamma : \Gamma_{dd}) \to A_{dd}(\gamma) \]
+\[ M_e : (\gamma : \Gamma_{ee}) \to A_{ee}(\gamma) \]
+\[ A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)\]
+Hard to see directly. Let's look back at the agda.
+
+I'm always doing transport at the type $A$ along the morphism $(f, \rid_d)$ for the lhs of the
+equation, and along $(\rid_e, f)$ for the rhs.
+\[ A_{fd} : (\psi : \Gamma_{fd}) \to A_{dd}(\Gamma_{fd}^< \psi) \to A_{ed}(\Gamma_{fd}^> \psi)\]
+\[ A_{ef} : (\psi : \Gamma_{ef}) \to A_{ee}(\Gamma_{ef}^< \psi) \to A_{ed}(\Gamma_{ef}^> \psi)\]
+So I'm somehow constructing $\Gamma_{fd}$ and $\Gamma_{ef}$ out of $\Gamma_{ff}$. This doesn't
+seem so crazy; it's just doing $<$ and $>$ selectively. Then $M_d$ and $M_e$ give me the next arguments,
+and perhaps by some magical equations, I get the right coinciding output types.
 
 
 \end{document}
