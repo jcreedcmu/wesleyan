@@ -56,8 +56,14 @@ module CLevel (c d : Obj1) (f : Mor1 c d) (a : oA (c , d)) where
     postulate
       cred : mC-- fc a b (mC-- cf (mA cf a) (mB+ cf a b) c) ↦ mC-- ff a b c
       dred : mC-- df a b (mC-- fd (mA fd a) (mB+ fd a b) c) ↦ mC-- ff a b c
-{- make rewrites for C+- -}
-
+  module C+- (b : oB- (c , d) (mA ff a)) (c : oC+- (c , d) a (mB- ff a b)) where
+    postulate
+      cred : mC+- fc (mA cf a) b (mC+- cf a (mB- cf (mA cf a) b) c) ↦ mC+- ff a b c
+      dred : mC+- df (mA fd a) b (mC+- fd a (mB- fd (mA fd a) b) c) ↦ mC+- ff a b c
 
 {-# REWRITE CLevel.C++.cred #-}
 {-# REWRITE CLevel.C++.dred #-}
+{-# REWRITE CLevel.C--.cred #-}
+{-# REWRITE CLevel.C--.dred #-}
+{-# REWRITE CLevel.C+-.cred #-}
+{-# REWRITE CLevel.C+-.dred #-}

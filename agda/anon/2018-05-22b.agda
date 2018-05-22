@@ -101,7 +101,6 @@ module eD++-
     β : oB+ (e , e) α
     β = mB+ fe a b
 
-
 module eD+-+
        (a : oA (d , e))
        (b : oB+ (d , e) a)
