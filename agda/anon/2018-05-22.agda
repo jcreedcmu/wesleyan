@@ -100,3 +100,13 @@ postulate
   tD+-- : (d : Obj1)
     → (a : oA (d , d)) (b : oB- (d , d) a) (c : oC-+ (d , d) a b)
     → oD+-- (d , d) a b c
+
+  -- Δ; x - A, y + B-, z + C-+ ⊢ D-++ : type
+  oD-++ : (δ : Obj) (a : oA (~ δ)) (b : oB- δ a) (c : oC-+ δ a b) → Set
+  mD-++ : {δ ε : Obj} (φ : Mor δ ε)
+    (a : oA (~ ε)) (b : oB- δ (mA (~m φ) a)) (c : oC-+ δ (mA (~m φ) a) b)
+    → oD-++ δ (mA (~m φ) a) b c
+    → oD-++ ε a (mB- φ a b) (mC-+ φ a b c)
+  tD-++ : (d : Obj1)
+    → (a : oA (d , d)) (b : oB- (d , d) a) (c : oC-+ (d , d) a b)
+    → oD-++ (d , d) a b c
