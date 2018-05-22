@@ -123,6 +123,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
+\def\ltri{\triangleleft}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{dctx}}
@@ -831,6 +832,80 @@ oh, right, this works fine without even any modification if $\Delta$
 happens to include duals also. I'm just blindly quantifying over all
 objects and morphisms of the category induced by $\Delta$.
 
+\subsection{Terms}
+What's supposed to be the meaning of $\Delta ; \Gamma \prov M : A$?
+It should feel like an end. In the simply-typed case, we'd say:
+For each $c \in \ssem \Delta$, there should be a
+\[ M_{c} :  \Gamma_{cc} \to A_{cc} \]
+and given a morphism $f : c \to d \in \ssem \Delta $ there should be two canonical ways to get to
+$\Gamma_{cd} \to A_{dc}$, which should be equal.
+would look like
+\[\begin{tikzcd}
+& \Gamma_{cc} \ar[r, "M_c"] &A_{cc} \ar[dr, "A_{fc}"]\\
+  \Gamma_{cd} \ar[ur, "\Gamma_{cf}"] \ar[dr, "\Gamma_{fd}"'] &&& A_{dc}\\
+& \Gamma_{dd} \ar[r, "M_d"'] &A_{dd} \ar[ur, "A_{df}"']
+\end{tikzcd}\]
+
+But in the dependently-typed case, we say
+For each $c \in \ssem \Delta$, there should be a
+\[ M_{c} :  (\gamma : \Gamma_{cc}) \to A_{cc}(\gamma) \]
+and given a morphism $f : c \to d \in \ssem \Delta $ there should be two canonical ways to get to
+$(\gamma : \Gamma_{cd}) \to A_{dc}(\gamma)$, which should be equal.
+Incidentally, this makes it seem like the validity lemma should be that
+\begin{thmbox}
+If $\Delta ; \Gamma \prov M : A$, then $\Delta ; \Gamma^\op \prov A : \rtype$
+\end{thmbox}
+because then $(\gamma : \Gamma_{cd}) \to A_{dc}(\gamma)$ is actually well-typed.
+
+But we should require that for every $f : c \to d \in \ssem \Delta$, that
+
+\[ (\gamma : \Gamma_{cd}) \to A_{fc}(M_c(\Gamma_{cf}(\gamma))) = A_{df}(M_d(\Gamma_{fd}(\gamma)))\]
+
+Why is this well-typed? Oh, it's definitely not. We can't actually
+transport from $\Gamma_{cd}$ to other things just because we have a
+morphism from $cd$ to elsewhere. Hmm. Or at least I haven't defined
+how to, yet.
+
+Can I? Let's try to
+define $\Gamma^\phi : \Gamma_\delta \to \Gamma_\epsilon$ when $\phi : \delta \to \epsilon$.
+$(\Gamma, x + A)^\phi$ should be $(\Gamma, x + A)_\delta \to (\Gamma, x + A)_\epsilon$,
+which is
+\[ ((\gamma : \Gamma_\delta) \x A_\delta(\gamma)) \to ((\gamma : \Gamma_\epsilon) \x A_\epsilon(\gamma))\]
+We try
+\[ \lambda (\gamma, a) = (\Gamma^\phi \gamma, ?) \]
+where the hole is $A_\delta(\gamma) \to A_\epsilon(\Gamma^\phi \gamma)$.
+Recall that $A_\phi$ lets us feed in a $\psi : \Gamma_\phi$
+and then lets us go from $A_\delta(\Gamma^<_\phi \psi)$ to
+$A_\epsilon(\Gamma_\phi^> \psi)$. So my wish is that there's some way
+of going $\Gamma_\delta \to \Gamma_\phi$ such that $\Gamma_\phi^<$ of
+that reduces back to the $\gamma$ I started with, and $\Gamma_\phi^>$
+of that gives me $\Gamma^\phi \gamma$.
+
+%  $(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)$\\
+Ok, let's try:
+\begin{declbox}
+  $\Gamma^\ltri_\phi : \Gamma_\delta \to \Gamma_\phi$
+% \\
+%  $\Gamma^\tri_\phi : \Gamma_\epsilon \to \Gamma_\phi$
+\end{declbox}
+\begin{thmbox}
+% $ ( \Gamma^\op)^\ltri_\phi = \Gamma^\tri_{\bar \phi}$ \\
+% $ ( \Gamma^\op)^\tri_\phi = \Gamma^\ltri_{\bar \phi}$\\
+$ \Gamma^<_\phi( \Gamma^\ltri_\phi(\gamma)) = \gamma$
+\end{thmbox}
+\begin{defnbox}
+  $(\Gamma, x + A)^\ltri_\phi(\gamma, a) = (\Gamma^\ltri_\phi(\gamma), a)$\\
+  $(\Gamma, x - A)^\ltri_\phi(\gamma, a) = (\Gamma^\ltri_\phi(\gamma), ?)$
+\end{defnbox}
+Typecheck this: $(\Gamma, x + A)^\ltri_\phi$ has type
+$(\Gamma, x + A)_\delta \to (\Gamma, x + A)_\phi$, which is
+\[ ((\gamma : \Gamma_\delta) \x A_\delta(\gamma)) \to ((\psi : \Gamma_\phi) \x A_\delta(\Gamma^<_\phi(\psi)))\]
+It typechecks without problem. $(\Gamma, x - A)^\ltri_\phi$ has type
+$(\Gamma, x - A)_\delta \to (\Gamma, x - A)_\phi$
+\[ ((\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)) \to ((\psi : \Gamma_\phi) \x A_{\bar \epsilon}(\Gamma^>_\phi(\psi)))\]
+We have $A_{\bar \delta}(\gamma)$ and need to make $A_{\bar \epsilon}(\Gamma^>_\phi(\Gamma^\ltri_\phi(\gamma)))$.
+Oh, everything is pointing the wrong direction for this to even possibly work.
+
 \section{Problems Discovered in Defining Semantics For Terms}
 
 Okay, so I no longer have straightforward transport for contexts as if
@@ -989,8 +1064,27 @@ equation, and along $(\rid_e, f)$ for the rhs.
 \[ A_{fd} : (\psi : \Gamma_{fd}) \to A_{dd}(\Gamma_{fd}^< \psi) \to A_{ed}(\Gamma_{fd}^> \psi)\]
 \[ A_{ef} : (\psi : \Gamma_{ef}) \to A_{ee}(\Gamma_{ef}^< \psi) \to A_{ed}(\Gamma_{ef}^> \psi)\]
 So I'm somehow constructing $\Gamma_{fd}$ and $\Gamma_{ef}$ out of $\Gamma_{ff}$. This doesn't
-seem so crazy; it's just doing $<$ and $>$ selectively. Then $M_d$ and $M_e$ give me the next arguments,
+seem so crazy; it smells sort of like
+ doing $<$ and $>$ selectively on one object or the other. Then $M_d$ and $M_e$ give me the next arguments,
 and perhaps by some magical equations, I get the right coinciding output types.
 
+\begin{declbox}
+  $\Gamma_f^\ltri : \Gamma_{ff} \to \Gamma_{fd}$\\
+  $\Gamma_f^\tri : \Gamma_{ff} \to \Gamma_{ef}$
+\end{declbox}
+\begin{defnbox}
+ $ (\Gamma, x + A)_{ff} = (\psi : \Gamma_{ff}) \x A_{de}(\Gamma^<_{ff} \psi)$\\
+ $ (\Gamma, x - A)_{ff} = (\psi : \Gamma_{ff}) \x A_{de}(\Gamma^>_{ff} \psi)$\\
 
+$(\Gamma, x + A)_f^\ltri : (\psi : \Gamma_{ff}) \x A_{de}(\Gamma^<_{ff} \psi) \to $
+$ (\psi : \Gamma_{fd}) \x A_{dd}(\Gamma^<_{fd} \psi) $\\
+$(\Gamma, x + A)_f^\ltri(\psi, a) = (\Gamma^\ltri_f \psi, ? : A_{dd}(\Gamma^<_{fd} \Gamma^\ltri_f \psi))$
+\end{defnbox}
+  $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)$\\
+  $A_{df} : (\psi : \Gamma_{df}) \to A_{de}(\Gamma_{df}^< \psi) \to A_{dd}(\Gamma_{df}^> \psi)$
+
+$\Gamma^<_{ff} : \Gamma_{ff} \to \Gamma_{de}$\\
+$\Gamma^<_{df} : \Gamma_{df} \to \Gamma_{de}$
+
+Arg, this is really hard to keep in my head, but I feel like I'm on the right track.
 \end{document}
