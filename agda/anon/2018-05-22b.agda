@@ -1,6 +1,10 @@
 {-# OPTIONS --without-K --rewriting #-}
 module 2018-05-22b where
 
+{- The point of this file is to specify the end-like equalizer
+   constraints at a bunch of example types until I can see the
+   pattern. -}
+
 open import HoTT
 open import 2018-05-22
 
@@ -52,3 +56,15 @@ module eC-+ (a : oA (c , d)) (b : oB- (c , d) (mA (f , f) a)) where
   R = mC-+ df a (mB- fd (mA fd a) b) (tC-+ d (mA fd a) (mB- fd (mA fd a) b))
 
 module eC+- (a : oA (c , d)) (b : oB- (c , d) (mA (f , f) a)) where
+  X : Set
+  X = oC+- (d , c) (mA (f , f) a) b
+  L R : X
+  L = mC+- fc (mA cf a) b (tC+- c (mA cf a) (mB- cf (mA cf a) b))
+  R = mC+- df (mA fd a) b (tC+- d (mA fd a) (mB- fd (mA fd a) b))
+
+module eC-- (a : oA (c , d)) (b : oB+ (c , d) a) where
+  X : Set
+  X = oC-- (d , c) a b
+  L R : X
+  L = mC-- fc a b (tC-- c (mA cf a) (mB+ cf a b))
+  R = mC-- df a b (tC-- d (mA fd a) (mB+ fd a b))
