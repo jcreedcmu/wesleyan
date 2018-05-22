@@ -45,3 +45,17 @@ module BLevel (c d : Obj1) (f : Mor1 c d) (a : oA (c , d)) where
 {-# REWRITE BLevel.B+.dred #-}
 {-# REWRITE BLevel.B-.cred #-}
 {-# REWRITE BLevel.B-.dred #-}
+
+module CLevel (c d : Obj1) (f : Mor1 c d) (a : oA (c , d)) where
+  open Abbrev c d f
+  module C++ (b : oB+ (c , d) a) (c : oC++ (c , d) a b) where
+    postulate
+      cred : mC++ fc (mA cf a) (mB+ cf a b) (mC++ cf a b c) ↦ mC++ ff a b c
+      dred : mC++ df (mA fd a) (mB+ fd a b) (mC++ fd a b c) ↦ mC++ ff a b c
+  module C-- (b : oB+ (c , d) a) (c : oC-- (c , d) (mA ff a) (mB+ ff a b)) where
+    postulate
+      cred : mC-- fc a b (mC-- cf (mA cf a) (mB+ cf a b) c) ↦ mC-- ff a b c
+      dred : mC-- df a b (mC-- fd (mA fd a) (mB+ fd a b) c) ↦ mC-- ff a b c
+
+{-# REWRITE CLevel.C++.cred #-}
+{-# REWRITE CLevel.C++.dred #-}
