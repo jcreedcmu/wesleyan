@@ -50,15 +50,19 @@ postulate
   oC++ : (δ : Obj) (a : oA δ) (b : oB+ δ a) → Set
   mC++ : {δ ε : Obj} (φ : Mor δ ε)
     (a : oA δ) (b : oB+ δ a) → oC++ δ a b → oC++ ε (mA φ a) (mB+ φ a b)
+  tC++ : (c : Obj1) → (a : oA (c , c)) (b : oB+ (c , c) a) → oC++ (c , c) a b
 
   oC-+ : (δ : Obj) (a : oA (~ δ)) (b : oB- δ a) → Set
   mC-+ : {δ ε : Obj} (φ : Mor δ ε)
     (a : oA (~ ε)) (b : oB- δ (mA (~m φ) a)) → oC-+ δ (mA (~m φ) a) b → oC-+ ε a (mB- φ a b)
+  tC-+ : (c : Obj1) → (a : oA (c , c)) (b : oB- (c , c) a) → oC-+ (c , c) a b
 
   oC+- : (δ : Obj) (a : oA δ) (b : oB- (~ δ) a) → Set
   mC+- : {δ ε : Obj} (φ : Mor δ ε)
     (a : oA δ) (b : oB- (~ ε) (mA φ a)) → oC+- δ a (mB- (~m φ) a b) → oC+- ε (mA φ a) b
+  tC+- : (c : Obj1) → (a : oA (c , c)) (b : oB- (c , c) a) → oC+- (c , c) a b
 
   oC-- : (δ : Obj) (a : oA (~ δ)) (b : oB+ (~ δ) a) → Set
   mC-- : {δ ε : Obj} (φ : Mor δ ε)
     (a : oA (~ ε)) (b : oB+ (~ ε) a) → oC-- δ (mA (~m φ) a) (mB+ (~m φ) a b) → oC-- ε a b
+  tC-- : (c : Obj1) → (a : oA (c , c)) (b : oB+ (c , c) a) → oC-- (c , c) a b
