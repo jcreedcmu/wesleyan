@@ -31,26 +31,71 @@ fd = (f , idm d)
 ff : Mor de ed
 ff = (f , f)
 
-module eD-++
+module eD-+-
        (a : oA de)
        (b : oB- de (mA ff a))
-       (c : oC-+ de (mA ff a) b) where
+       (c : oC+- de a (mB- ff a b)) where
   X : Set
-  X = oD-++ ed a (mB- ff a b) (mC-+ ff a b c)
+  X = oD-+- ed a (mB- ff a b) c
 
   L R : X
-  L = mD-++ fd a β (mC-+ df α b c) (tD-++ d α β γ) where
+  L = mD-+- fd a β c (tD-+- d α β γ) where
     α : oA dd
     α = mA df a
     β : oB- dd α
     β = mB- df α b
-    γ : oC-+ dd α (mB- df α b)
-    γ = mC-+ df α b c
-
-  R = mD-++ ef a β (mC-+ fe α b c) (tD-++ e α β γ) where
+    γ : oC+- dd α β
+    γ = mC+- df a β c
+  R = mD-+- ef a β c (tD-+- e α β γ) where
     α : oA ee
     α = mA fe a
     β : oB- ee α
     β = mB- fe α b
-    γ : oC-+ ee α (mB- fe α b)
-    γ = mC-+ fe α b c
+    γ : oC+- ee α β
+    γ = mC+- fe a β c
+
+module eD--+
+       (a : oA de)
+       (b : oB+ de a)
+       (c : oC-- de (mA ff a) (mB+ ff a b)) where
+  X : Set
+  X = oD--+ ed a b (mC-- ff a b c)
+
+  L R : X
+  L = mD--+ fd a b γ (tD--+ d α β γ) where
+    α : oA dd
+    α = mA df a
+    β : oB+ dd α
+    β = mB+ df a b
+    γ : oC-- dd α β
+    γ = mC-- df α β c
+  R = mD--+ ef a b γ (tD--+ e α β γ) where
+    α : oA ee
+    α = mA fe a
+    β : oB+ ee α
+    β = mB+ fe a b
+    γ : oC-- ee α β
+    γ = mC-- fe α β c
+
+module eD---
+       (a : oA de)
+       (b : oB+ de a)
+       (c : oC++ de a b) where
+  X : Set
+  X = oD--- ed a b c
+
+  L R : X
+  L = mD--- fd a b c (tD--- d α β γ) where
+    α : oA dd
+    α = mA df a
+    β : oB+ dd α
+    β = mB+ df a b
+    γ : oC++ dd α β
+    γ = mC++ df a b c
+  R = mD--- ef a b c (tD--- e α β γ) where
+    α : oA ee
+    α = mA fe a
+    β : oB+ ee α
+    β = mB+ fe a b
+    γ : oC++ ee α β
+    γ = mC++ fe a b c

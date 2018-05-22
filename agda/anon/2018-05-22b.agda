@@ -144,3 +144,27 @@ module eD+--
     α = mA fe a
     β : oB- ee α
     β = mB- fe α b
+
+module eD-++
+       (a : oA de)
+       (b : oB- de (mA ff a))
+       (c : oC-+ de (mA ff a) b) where
+  X : Set
+  X = oD-++ ed a (mB- ff a b) (mC-+ ff a b c)
+
+  L R : X
+  L = mD-++ fd a β γ (tD-++ d α β γ) where
+    α : oA dd
+    α = mA df a
+    β : oB- dd α
+    β = mB- df α b
+    γ : oC-+ dd α (mB- df α b)
+    γ = mC-+ df α b c
+
+  R = mD-++ ef a β γ (tD-++ e α β γ) where
+    α : oA ee
+    α = mA fe a
+    β : oB- ee α
+    β = mB- fe α b
+    γ : oC-+ ee α (mB- fe α b)
+    γ = mC-+ fe α b c
