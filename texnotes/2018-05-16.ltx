@@ -865,4 +865,31 @@ But now transporting at $B$ works like
 \[ a : A_{cd} \prov B_{df}(a, M_d(A_{fd}(a))) :  B_{dc}(a)\]
 which still seems to permit equating these, even though I don't quite know how
 to make the general statement, yet! This gives me hope.
+
+\subsection{What's The Object Part Of...}
+
+Suppose
+\[ \Delta ; x + A, y - B \prov C : \rtype \]
+What's the type of $C_\delta$? It's got to be
+$\Gamma_\delta \to \rtype$. What's
+$(x + A, y - B)_\delta$? It's
+
+\[(\gamma : (x + A)_\delta) \x B_{\bar \delta}(\gamma)\]
+\[(a : A_\delta) \x B_{\bar \delta}(a)\]
+Oh but this means that $\Delta ; x - A \prov B : \rtype$. Have I got my hierarchy messed up?
+
+\[\Delta \prov A : \rtype\]
+\[\Delta; x + A \prov B^+ : \rtype\]
+\[\Delta; x - A \prov B^- : \rtype\]
+\[\Delta; x + A, y + B^+ \prov C^{++} : \rtype\]
+\[\Delta; x - A, y + B^- \prov C^{-+} : \rtype\]
+\[\Delta; x + A, y - B^- \prov C^{+-} : \rtype\]
+\[\Delta; x - A, y - B^+ \prov C^{--} : \rtype\]
+
+Oh, I see, this is a little weird, but not terrible. I can't have both the superscript represent
+the sequence of polarities and also guarantee that it's $B^{\sigma}$ used as a recursive call
+in $C^{\sigma+}$ and $C^{\sigma-}$. I'll go with the former for now.
+
+
+
 \end{document}
