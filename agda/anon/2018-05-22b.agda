@@ -100,3 +100,9 @@ module eD++-
     α = mA fe a
     β : oB+ (e , e) α
     β = mB+ fe a b
+
+
+module eD+-+
+       (a : oA (d , e))
+       (b : oB+ (d , e) a)
+       (c : oC-- (d , e) (mA ff a) (mB+ ff a b)) where
