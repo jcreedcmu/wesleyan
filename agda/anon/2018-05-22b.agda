@@ -1,17 +1,14 @@
 {-# OPTIONS --without-K --rewriting #-}
-module 2018-05-22b where
-
-{- The point of this file is to specify the end-like equalizer
-   constraints at a bunch of example types until I can see the
-   pattern. -}
 
 open import HoTT
 open import 2018-05-22
 open import 2018-05-22-rewrites
 
-postulate
-  d e : Obj1
-  f : Mor1 d e
+{- The point of this file is to specify the end-like equalizer
+   constraints at a bunch of example types until I can see the
+   pattern. -}
+
+module 2018-05-22b (d e : Obj1) (f : Mor1 d e) where
 
 df : Mor (d , e) (d , d)
 df = (idm d , f)
@@ -103,5 +100,23 @@ module eD++-
 
 module eD+-+
        (a : oA (d , e))
-       (b : oB+ (d , e) a)
-       (c : oC-- (d , e) (mA ff a) (mB+ ff a b)) where
+       (b : oB- (d , e) (mA ff a))
+       (c : oC+- (d , e) a (mB- ff a b)) where
+  X : Set
+  X = oD+-+ (e , d) (mA ff a) b (mC+- ff a b c)
+  L R : X
+  L = mD+-+ fd α b γ (tD+-+ d α β γ) where
+    α : oA (d , d)
+    α = mA df a
+    β : oB- (d , d) α
+    β = mB- df α b
+    γ : oC+- (d , d) (mA df a) β
+    γ = mC+- df a β c
+
+  R = mD+-+ ef α b γ (tD+-+ e α β γ) where
+    α : oA (e , e)
+    α = mA fe a
+    β : oB- (e , e) α
+    β = mB- fe α b
+    γ : oC+- (e , e) (mA fe a) β
+    γ = mC+- fe a β c
