@@ -1248,4 +1248,34 @@ Suppose I have $\Delta ; \Gamma \prov M : A$. I know that for every $d \in \ssem
 Let $f : d \to e$ be given. It should be the case that
 \[ (\psi : \Gamma_{ff}) \to A_{fd}(\Gamma^>_{df,fd}\psi, M_d(\Gamma^\x_{df,dd,fd}\psi )) \equiv A_{ef}(\Gamma^>_{fe,ef} \psi, M_e( \Gamma^\x_{fe,ee,ef} \psi))\]
 I need some better notation for all this.
+
+Can I at least define the triple constriction operation as a first-class thing?
+\begin{declbox}
+  $\Gamma_\zeta : \rtype$\\
+  $\Gamma_{\zeta,\xi,\chi} : \Gamma_{\zeta\xi\chi} \to \Gamma_\zeta $\\
+  $A_\delta : \Gamma_{\delta} \to \rtype $\\
+  $A_\zeta : (\psi : \Gamma_\zeta) \to A_{\delta}(\Gamma_{\delta,\delta,\zeta}\psi)$
+  $\to A_{\epsilon}(\Gamma_{\zeta,\epsilon,\epsilon}\psi) $
+\end{declbox}
+\begin{defnbox}
+  $(\Gamma, x + A)_{\zeta} = (\psi : \Gamma_\zeta) \x A_\delta(\Gamma_{\delta,\delta,\zeta} \psi)$\\
+  $(\Gamma, x + A)_{\zeta,\xi,\chi}(\psi, a) = (\Gamma_{\zeta,\xi,\chi} \psi, A_\zeta(\Gamma_{\delta,\zeta,\xi\chi}\psi , a))$
+\end{defnbox}
+%% We need
+%% \[(\Gamma, x + A)_{\zeta,\xi,\chi} : (\Gamma, x + A)_{\zeta\xi\chi} \to (\Gamma, x + A)_{\xi}\]
+%% i.e.
+%% \[
+%% (\Gamma, x + A)_{\zeta,\xi,\chi} :
+%% ((\psi : \Gamma_{\zeta\xi\chi}) \x A_\delta(\Gamma_{\delta,\delta,\zeta\xi\chi} \psi))
+%%  \to
+%% ((\psi' : \Gamma_{\xi}) \x A_\epsilon(\Gamma_{\epsilon,\epsilon,\xi} \psi')) \]
+%% So we have to check
+%% \[A_\zeta(\Gamma_{\delta,\zeta,\xi\chi}\psi, a) : A_\epsilon(\Gamma_{\epsilon,\epsilon,\xi}\Gamma_{\zeta,\xi,\chi}\psi) \]
+%% and in fact
+%% \[A_\zeta(\Gamma_{\delta,\zeta,\xi\chi}\psi, a) : A_\epsilon(\Gamma_{\zeta,\epsilon,\epsilon}\Gamma_{\delta,\zeta,\xi\chi}\psi) \]
+\begin{thmbox}
+    $(\Gamma^\op)_{\zeta} = \Gamma_{\bar \zeta}$\\
+    $(\Gamma^\op)_{\zeta,\xi,\chi} = \Gamma_{\bar\chi,\bar \xi,\bar\zeta}$
+\end{thmbox}
+Starting to look better.
 \end{document}
