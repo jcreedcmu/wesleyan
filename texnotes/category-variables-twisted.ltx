@@ -193,47 +193,29 @@ boxrule=0pt,boxsep=0pt,breakable}
    diagrams={>=stealth}}
 
 \section{A Syntax for Category Variables}
-Let there be some syntax class
+Let there be some syntax
 \[\begin{tabular}{rccl}
   Categories&$\C$&$::=$&$\cdots$\\
   Category Contexts&$\Delta$&$::=$&$\cdot\celse \Delta, \alpha : \C$\\
 \end{tabular}\]
-We suppose that some collection of categories has been prescribed. One
-could think of $\C$ as `codes for categories', but we mostly just
+One could think of $\C$ as `codes for categories', but we mostly just
 pretend that they're literal mathematical objects sitting in the
-syntax. The intuitive (and soon to be described formal)
-meaning of $\alpha : \C$ is that $\alpha$ has type $\C \x \C^\op$.
+syntax.
 
-There is a notion of definable functor; terms of category type, in category context.
-\[\begin{tabular}{rccl}
-  Category Terms&$t$&$::=$&$\alpha \celse \bar t \celse F(t, \cdots, t)$\\
-\end{tabular}\]
-\[
-\erule
-{\alpha : \C \in\Delta}
-{\Delta \prov \alpha : \C}
-\qquad
-\erule
-{\Delta \prov t : \C}
-{\Delta \prov \bar t : \C^\op}
-\qquad
-\erule
-{F : \C_1 \x \cdots \C_n \to \C \qquad \Delta \prov t_i : \C_i }
-{\Delta \prov F(t_1, \ldots, t_n) : \C}
-\]
-We have reductions
-\[ \overline{\overline t} \mapsto t \]
-\[ \overline{F(t_1, \ldots, t_n)} \mapsto F(\bar t_1, \ldots, \bar t_n) \]
-We have term-level contexts, with types so far unspecified
+We also have term-level contexts, with types so far unspecified
 \[\begin{tabular}{rccl}
   Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x - A \celse \Gamma, x + A$\\
   Types&$A$&$::=$&$\cdots$\\
 \end{tabular}\]
 There is a polarity distinction between variables that undergo forward
-($+$) and backward ($-$) transport in the semantics.
+($+$) and backward ($-$) transport in the semantics. This polarity
+distinction is still a little mysterious to me, but it's something
+that seems to make other things work out. A telling fact about it that we can at least foreshadow is
+that $\Sigma$ types always bind $+$ variables, and $\Pi$ types always bind $-$ variables.
 
 \subsection{Judgments}
 
+These are the judgments; the usual suspects, except we have a $\Delta$ out in front of everything.
 \begin{declbox}
   $ \Delta \prov  \Gamma \rctx $\\
    $\Delta ; \Gamma \prov A : \rtype$\\
@@ -267,7 +249,7 @@ Context formation is defined by
 %% expect/hope the dualizing clause for function types, pair types, etc. to be mere
 %% homomorphisms.
 
-There is an operation $\Gamma^\op$  defined by swapping every $+$ and $-$,
+Where the operation $\Gamma^\op$  is defined by swapping every $+$ and $-$,
 and transposing every type:
 \[
 \begin{tabular}{rcl}
@@ -313,12 +295,41 @@ $\Delta \prov \Gamma^\op \rctx$. So we derive
 \]
 \cqed
 \end{proof}
-\subsection{Semantics of Types}
-Before we say what types we have, we'll say what it means to be a
-semantically meaningful type in a given pair of contexts.
 
-There are three categories that we want to talk about induced by any $\Delta$.
-One is $\ssem \Delta$, and it's just the product of all the categories in it
+\subsection{Category Terms}
+\textcolor{red}{So far this subsection is unused anywhere else}
+
+
+There is a notion of definable functor; terms of category type, in category context.
+\[\begin{tabular}{rccl}
+  Category Terms&$t$&$::=$&$\alpha \celse \bar t \celse F(t, \cdots, t)$\\
+\end{tabular}\]
+\[
+\erule
+{\alpha : \C \in\Delta}
+{\Delta \prov \alpha : \C}
+\qquad
+\erule
+{\Delta \prov t : \C}
+{\Delta \prov \bar t : \C^\op}
+\qquad
+\erule
+{F : \C_1 \x \cdots \C_n \to \C \qquad \Delta \prov t_i : \C_i }
+{\Delta \prov F(t_1, \ldots, t_n) : \C}
+\]
+We have reductions
+\[ \overline{\overline t} \mapsto t \]
+\[ \overline{F(t_1, \ldots, t_n)} \mapsto F(\bar t_1, \ldots, \bar t_n) \]
+
+\section{Semantics}
+\subsection{Types}
+We aim here to say what it is to be a
+semantically meaningful type in a given pair of contexts $\Delta$ and $\Gamma$.
+
+\subsubsection{Preliminaries}
+
+Given a $\Delta$, there are three categories induced by it that we'll want to talk about.
+The simplest is $\ssem \Delta$, and it's just the product of all the categories in it
 \[
 \begin{tabular}{rcl}
   $\ssem \cdot$&$=$&$\textbf{1}$\\
@@ -330,15 +341,15 @@ The second is $\sem \Delta$, and multiplies on a copy of the dual category also:
 \sem {\Delta} = \ssem \Delta \x \ssem \Delta^\op
 \]
 The third is $\T(\Delta)$, which is the twisted arrow category of $\sem \Delta$.
-Its objects are morphisms $\psi \in \sem \Delta$, and its morphisms $\psi \to \phi$ are commutative
+Its objects are morphisms $\psi \in \sem \Delta$, and its morphisms $\tau : \psi \to \phi$ are commutative
 squares showing how $\psi$ factors through $\phi$:
 \[\begin{tikzcd}
-  \cdot \ar[r, "\psi"]\ar[d] & \cdot\ar[from=d]\\
-  \cdot \ar[r, "\phi"']& \cdot\\
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
 \end{tikzcd}\]
-If $\tau : \psi \to \phi$, we can define a morphism $\bar\tau : \bar\psi \to\bar\phi$.
+We can of course write a $\tau$ as just the pair $(\tau_1, \tau_2)$ that determines it.
 
-Here's a dictionary of the symbols we'll use for typical members of these categories:
+Here's a summary of the symbols we'll use for typical members of the above categories:
 \[\begin{tabular}{rccl}
   Objects of $\ssem \Delta$&$d,e$\\
   Morphisms of $\ssem \Delta$&$f$\\
@@ -349,17 +360,34 @@ Here's a dictionary of the symbols we'll use for typical members of these catego
 \end{tabular}\]
 
 We allow writing the pairs that are objects and morphisms
-of $\sem \Delta$ without $( , )$ syntax, e.g. $de$ for $(d, e)$.
-There is a functor $(\delta \mapsto \bar \delta):  \sem \Delta^\op \to \sem \Delta$ by swapping components.
-If $\delta = dd' \in \sem \Delta$, then we define
-\[\bar \delta = dd' \in \sem \Delta\]
-and when
-\[\phi = ff' : \delta \to \epsilon = dd' \to ee'\]
-we define
-\[ \bar \phi = f'f : \bar \epsilon \to \bar \delta =  e'e \to d'd \]
+of $\sem \Delta$ without $(\dash , \dash)$ syntax, e.g. $de$ for $(d, e)$.
 We freely sometimes write an object of a category in a place where a morphism is required,
 intending the identity morphism at that object.
 
+\subsubsection{Swapping Operations}
+There is a functor $(\delta \mapsto \bar \delta):  \sem \Delta^\op \to \sem \Delta$ by swapping components.
+If $\delta = dd' \in \sem \Delta$, then we define
+\[\bar \delta = dd' \in \sem \Delta\]
+We can swap morphisms of $\sem \Delta$ as well. When
+\[\phi = ff' : \delta \to \epsilon = dd' \to ee'\]
+we define
+\[ \bar \phi = f'f : \bar \epsilon \to \bar \delta =  e'e \to d'd \]
+We can swap morphisms in the twisted arrow category as well.
+Whenever we have $\tau : \psi \to \phi$, we can define a morphism $\bar\tau : \bar\psi \to\bar\phi$ by
+$\overline{(\tau_1, \tau_2)} = (\bar \tau_2, \bar\tau_1)$. In a diagram,
+\[
+\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}
+\qquad\mapsto\qquad
+\begin{tikzcd}
+  \bar\delta' \ar[from=r, "\bar\psi"']\ar[from=d, "\bar{\tau_1}"] & \bar\epsilon'\ar[d, "\bar{\tau_2}"]\\
+  \bar\delta \ar[from=r, "\bar\phi"]& \bar\epsilon
+\end{tikzcd}\]
+
+
+\subsubsection{Semantics of Contexts}
 Next, we will declare the functions involved in the semantics of contexts and types.
 In general we will write $\rtype$ for the ambient metatheory's notion
 of type, and use agda-style syntax for dependent products and sums in
@@ -377,11 +405,12 @@ arranged like so:
   \delta \ar[r, "\phi"']& \epsilon
 \end{tikzcd}\]
 There are some useful operations on morphisms $\tau \in \T(\Delta)$ that `swing' the side morphisms
-around to the codomain.
+around to the codomain. We define
  \begin{declbox}
    $\ltri \tau : \psi \to \tau_1 \in \T(\Delta)$\\
    $\tri \tau : \psi \to \tau_2 \in \T(\Delta)$
  \end{declbox}
+by
  \begin{defnbox}
    \(
    \ltri \tau  = \begin{tikzcd}
@@ -403,7 +432,7 @@ A notable special case of this falls out when $\tau$ is an identity arrow:
      \delta \ar[r, "\phi"]\ar[d, equal] & \epsilon\ar[from=d, "\phi"']\\
      \delta \ar[r, equal]& \delta
    \end{tikzcd}
-\)\\
+\)\qquad
 \(
    \tri \phi : \phi \to \epsilon  = \begin{tikzcd}
      \delta \ar[r, "\phi"]\ar[d, "\phi"'] & \epsilon\ar[from=d, equal]\\
@@ -413,12 +442,13 @@ A notable special case of this falls out when $\tau$ is an identity arrow:
  \end{thmbox}
 
 Ok, now come the real definitions.
-And we're going to define them as if contexts were defined inductively by
+We're going to define them as if contexts were defined inductively by
 \[\begin{tabular}{rccl}
   Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma^\op \celse \Gamma, x + A$\\
 \end{tabular}
 \]
 because we can think of $\Gamma, x - A$ as $(\Gamma^\op, x + A)^\op$.
+
 We declare:
 \begin{declbox}
   $\Gamma_\phi : \rtype$.\\
@@ -426,6 +456,7 @@ We declare:
   $A_\delta : \Gamma_\delta \to \rtype$\\
   $A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g) \to A_\epsilon(\Gamma_{\tri\phi} g)$
 \end{declbox}
+and define:
 \begin{defnbox}
  $(\cdot)_\phi = \bone$\\
  $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$\\
@@ -477,7 +508,7 @@ and
   \delta' \ar[r, "\tau_1"']& \delta\\
   \delta \ar[r, equal]\ar[from=u, "\tau_1"']& \delta\ar[u, equal]
 \end{tikzcd}\]
-\subsection{Semantics of Terms}
+\subsection{Terms}
 We want to define what is required for a judgment
 \[\Delta; \Gamma \prov M : A\]
 so that in the special case where no type dependency is involved, it reduces to something like
@@ -567,6 +598,7 @@ So chase the following diagrams to see
 \end{tikzcd}\]
 
 \subsection{Defining Some Types}
+\textcolor{red}{This is all out of date now}
 
 Now that I've said what it means to be a type --- or at least the bare
 minimum of what's required; I'm probably still missing some
