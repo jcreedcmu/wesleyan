@@ -626,7 +626,7 @@ $\Gamma^>_{\sigma}(\psi) : \Gamma_{\sigma} \to \Gamma_\beta$
 \end{thmbox}
 Hm, not as sure what to do with this. Do I need to generalize $<$ and $>$ to generate things
 like $\Gamma_{\sigma \o \phi} \to \Gamma_\sigma$, for example, so I can assert commutative triangles?
-
+\label{commutative.triangles}
 \section{So What About Terms}
 
 I'm reasonably confident that what
@@ -1196,6 +1196,56 @@ Write composition in diagrammatic order.
 $\Gamma^<_{\rid_\delta,{\zeta\xi}} = \Gamma^<_{\rid_\delta,\zeta}\Gamma^<_{\zeta,\xi} \psi$\\
 $\Gamma^>_{\zeta,\rid_\epsilon}\Gamma^<_{\zeta,\xi}\psi  = \Gamma^<_{\rid_\epsilon,\xi} \Gamma^>_{\zeta,\xi}\psi$
 \end{thmbox}
-This seems to work great!
+This seems to work great! Nice, this is the generalization I'd predicted I might want at the end of
+Section~\ref{commutative.triangles} anyhow. After looking some stuff up in nLab, I see that
+what's really going on is that I'm interpreting
+$\Gamma$ as a presheaf over twisted arrow category of $\sem \Delta$.
 
+I should be able to derive what the $x - A$ cases have to be from the stated theorems.
+I can reason
+\[ (\Gamma, x - A)_{\zeta}  = ((\Gamma^\op, x + A)^\op)_{\zeta}  = (\Gamma^\op, x + A)_{\bar \zeta} \]
+\[ = (\psi : \Gamma^\op_{\bar \zeta}) \x A_{\bar \epsilon}((\Gamma^\op)^<_{\rid_{\bar \epsilon},\bar \zeta} \psi)
+ = (\psi : \Gamma_{ \zeta}) \x A_{\bar \epsilon}(\Gamma^>_{\zeta, \rid_{\bar \epsilon}} \psi)\]
+and
+\[(\Gamma, x - A)^<_{\zeta,\xi}(\psi, a) = ((\Gamma^\op, x + A)^\op)^<_{\zeta,\xi}(\psi, a)
+= (\Gamma^\op, x + A)^>_{\bar \xi, \bar \zeta}(\psi, a)\]
+\[  = ((\Gamma^\op)^>_{\bar\xi, \bar\zeta} \psi, A_{\bar\xi}((\Gamma^\op)^<_{\bar\xi,\bar\zeta} \psi, a))
+  = (\Gamma^<_{\zeta, \xi} \psi, A_{\bar\xi}(\Gamma^>_{\zeta, \xi} \psi, a))\]
+and
+\[(\Gamma, x - A)^>_{\zeta,\xi}(\psi, a) = ((\Gamma^\op, x + A)^\op)^>_{\zeta,\xi}(\psi, a)
+= (\Gamma^\op, x + A)^<_{\bar \xi, \bar \zeta}(\psi, a)\]
+\[  = ((\Gamma^\op)^<_{\bar\xi, \bar\zeta} \psi, a)
+  = (\Gamma^>_{\zeta, \xi} \psi, a)\]
+
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{3em}\=\hspace*{2em}\= \kill
+  $(\Gamma, x + A)_{\zeta} = (\psi : \Gamma_\zeta) \x A_\delta(\Gamma^<_{\rid_\delta,\zeta} \psi)$\\
+  $(\Gamma, x - A)_{\zeta} = (\psi : \Gamma_{ \zeta}) \x A_{\bar \epsilon}(\Gamma^>_{\zeta, \rid_{\bar \epsilon}} \psi)$\\
+\\
+  $(\Gamma, x + A)^<_{\zeta,\xi}(\psi, a) = (\Gamma^<_{\zeta,\xi} \psi, a)$\\
+$(\Gamma, x - A)^<_{\zeta,\xi}(\psi, a) = (\Gamma^<_{\zeta, \xi} \psi, A_{\bar\xi}(\Gamma^>_{\zeta, \xi} \psi, a))$\\
+\\
+  $(\Gamma, x + A)^>_{\zeta,\xi}(\psi, a) = (\Gamma^>_{\zeta,\xi} \psi, A_\zeta( \Gamma^<_{\zeta,\xi}\psi, a ))$\\
+$(\Gamma, x - A)^>_{\zeta,\xi}(\psi, a) = (\Gamma^>_{\zeta, \xi} \psi, a)$
+\end{tabbing}
+\end{defnbox}
+
+\subsection{Writing Down the Contract for Terms}
+
+When
+\[
+\begin{tikzcd}
+  \delta \ar[r, "\zeta"] &\epsilon \ar[r, "\xi"]&\phi \ar[r, "\chi"]& \eta
+\end{tikzcd}
+\]
+Let me make an abbreviation
+\[\Gamma^\x_{\zeta,\xi,\chi} = \Gamma^>_{\zeta,\xi}\Gamma^<_{\zeta\xi,\chi}
+= \Gamma^<_{\xi,\chi} \Gamma^>_{\zeta,\xi\chi} : \Gamma_{\zeta\xi\chi} \to \Gamma_\xi\]
+
+Suppose I have $\Delta ; \Gamma \prov M : A$. I know that for every $d \in \ssem \Delta$, I have
+\[ M_d : (\gamma : \Gamma_{dd}) \to A_{dd}(\gamma) \]
+Let $f : d \to e$ be given. It should be the case that
+\[ (\psi : \Gamma_{ff}) \to A_{fd}(\Gamma^>_{df,fd}\psi, M_d(\Gamma^\x_{df,dd,fd}\psi )) \equiv A_{ef}(\Gamma^>_{fe,ef} \psi, M_e( \Gamma^\x_{fe,ee,ef} \psi))\]
+I need some better notation for all this.
 \end{document}
