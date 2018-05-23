@@ -1087,4 +1087,81 @@ $\Gamma^<_{ff} : \Gamma_{ff} \to \Gamma_{de}$\\
 $\Gamma^<_{df} : \Gamma_{df} \to \Gamma_{de}$
 
 Arg, this is really hard to keep in my head, but I feel like I'm on the right track.
+
+\subsection{Relations}
+I surmise that I want all of the following transports to exist:
+\[
+\begin{tikzcd}
+\Gamma_{de} \ar[from=r, "\Gamma_{d<}"']\ar[from=d, "\Gamma_{<d}"]
+  &[1em]  \Gamma_{df}\ar[from=d, "\Gamma_{<f}" description]
+  &[1em] \Gamma_{dd}\ar[from=l, "\Gamma_{d>}"]\ar[from=d, "\Gamma_{<e}"']\\[1em]
+\Gamma_{fe} \ar[from=r, "\Gamma_{f<}" description]
+  &  \Gamma_{ff}
+  & \Gamma_{fd}\ar[from=l, "\Gamma_{f>}" description]\\[1em]
+\Gamma_{ee} \ar[from=r, "\Gamma_{e<}"]\ar[from=u, "\Gamma_{>d}"']
+  &  \Gamma_{ef}\ar[from=u, "\Gamma_{>f}" description]
+  & \Gamma_{ed}\ar[from=l, "\Gamma_{e>}"']\ar[from=u, "\Gamma_{>e}"]
+\end{tikzcd}
+\]
+So let $\C^*$ be the category whose objects are the objects of $\C$ together
+with the morphisms of $\C$, and whose morphisms are
+\[< : f \to \dom f\qquad > : f \to \cod f  \]
+So let $p$ stand for an object of $\ssem \Delta^*$,
+and $\pi, \rho$ stand for objects of $\ssem \Delta^* \x (\ssem \Delta^\op)^*$,
+and $\zeta : \pi \to \rho$ stand for a morphism
+of $\Delta_2 = \ssem \Delta^* \x (\ssem \Delta^\op)^*$.
+
+There are functors $\dom, \cod : \Delta_2 \to  \Delta_2$ that take
+the `morphism-like' objects down to object-like ones. For example, $\dom (f,f) = (d,e)$
+and $\cod(e,f) = (e, d)$. There are natural transformations $\eta^{\cod} : \rid \to \cod$
+and $\eta^{\dom} : \rid \to \dom$.
+
+\begin{declbox}
+  $\Gamma_\pi : \rset$\\
+  $\Gamma_\zeta : \Gamma_\pi \to \Gamma_\rho$
+\end{declbox}
+\begin{defnbox}
+\begin{tabbing}
+\hspace*{2em}\=\hspace*{2em}\= \kill
+$(\Gamma, x + A)_\pi = (\gamma : \Gamma_\pi) \x A_{\dom \pi}(\Gamma_{\eta^{\dom}_\pi (\gamma)})$\\
+$(\Gamma, x - A)_\pi = (\gamma : \Gamma_\pi) \x A_{\overline{\cod \pi}}(\Gamma_{\eta^{\cod}_\pi (\gamma)})$\\
+\\
+$(\Gamma, x + A)_\zeta : $\\
+\> $(\gamma : \Gamma_\pi) \x A_{\dom \pi}(\Gamma_{\eta^{\dom}_\pi (\gamma)}) \to $\\
+\> $  (\gamma : \Gamma_\rho) \x A_{\dom \rho}(\Gamma_{\eta^{\dom}_\pi (\gamma)})$\\
+\end{tabbing}
+\end{defnbox}
+Uh-oh, I seem to be in trouble. I don't know how to get from $A_{\dom \pi}$ to $A_{\dom \rho}$. I don't
+think $\dom$ is as functorial as I need it to be. Let's be more concrete.
+
+So for all objects $b, c$,  morphisms $f : d \to e$ and $f' : e' \to d'$, we declare
+\begin{declbox}
+  $\Gamma_{ff'}, \Gamma_{cf}, \Gamma_{fc}, \Gamma_{bc} : \rset$\\
+  $\Gamma_{< f'} : \Gamma_{ff'} \to \Gamma_{df'}$\\
+  $\Gamma_{> f'} : \Gamma_{ff'} \to \Gamma_{ef'}$\\
+  $\Gamma_{f <} : \Gamma_{ff'} \to \Gamma_{fd'}$\\
+  $\Gamma_{f >} : \Gamma_{ff'} \to \Gamma_{fe'}$\\
+  $\Gamma_{< c} : \Gamma_{fc} \to \Gamma_{dc}$\\
+  $\Gamma_{> c} : \Gamma_{fc} \to \Gamma_{ec}$\\
+  $\Gamma_{c <} : \Gamma_{cf'} \to \Gamma_{cd'}$\\
+  $\Gamma_{c >} : \Gamma_{cf'} \to \Gamma_{ce'}$
+\end{declbox}
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{2em}\=\hspace*{2em}\= \kill
+    $(\Gamma, x + A)_{bc} = (\gamma : \Gamma_{bc}) \x A_{bc}(\gamma)$\\
+    $(\Gamma, x - A)_{bc} = (\gamma : \Gamma_{bc}) \x A_{cb}(\gamma)$\\
+    $(\Gamma, x + A)_{fc} = (\gamma : \Gamma_{fc}) \x A_{dc}(\Gamma_{<c}\gamma)$\\
+    $(\Gamma, x - A)_{fc} = (\gamma : \Gamma_{fc}) \x A_{ce}(\Gamma_{>c}\gamma)$\\
+    $(\Gamma, x + A)_{cf'} = (\gamma : \Gamma_{cf'}) \x A_{cd'}(\Gamma_{c<}\gamma)$\\
+    $(\Gamma, x - A)_{cf'} = (\gamma : \Gamma_{cf'}) \x A_{e'c}(\Gamma_{c>}\gamma)$\\
+    $(\Gamma, x + A)_{ff'} = (\gamma : \Gamma_{ff'}) \x A_{dd'}(\Gamma_{<<}\gamma)$\\
+    $(\Gamma, x - A)_{ff'} = (\gamma : \Gamma_{ff'}) \x A_{e'e}(\Gamma_{>>}\gamma)$\\
+    \\
+    $(\Gamma, x + A)_{<f'} : (\gamma : \Gamma_{ff'}) \x A_{e'e}(\Gamma_{>>}\gamma)$\\
+    \> $\to (\gamma : \Gamma_{df'}) \x A_{dd'}(\Gamma_{d<}\gamma)$\\
+    $(\Gamma, x + A)_{<f'}(\gamma, a) = (\Gamma_{<f'}\gamma, ?)$
+  \end{tabbing}
+\end{defnbox}
+Hm, get stuck here, too. Maybe should go back to taking $\Gamma_{f d}$ seriously as $\Gamma_{f\rid_d}$.
 \end{document}
