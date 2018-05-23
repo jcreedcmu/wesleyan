@@ -1164,4 +1164,38 @@ So for all objects $b, c$,  morphisms $f : d \to e$ and $f' : e' \to d'$, we dec
   \end{tabbing}
 \end{defnbox}
 Hm, get stuck here, too. Maybe should go back to taking $\Gamma_{f d}$ seriously as $\Gamma_{f\rid_d}$.
+\subsection{Constricting Along Morphisms}
+Let me try the following. Suppose $\zeta : \delta \to \epsilon$ and $\xi : \epsilon \to \phi$.
+Write composition in diagrammatic order.
+\begin{declbox}
+  $\Gamma_\zeta : \rtype$\\
+  $\Gamma^<_{\zeta,\xi} : \Gamma_{\zeta\xi} \to \Gamma_\zeta $\\
+  $\Gamma^>_{\zeta,\xi} : \Gamma_{\zeta\xi} \to \Gamma_\xi $\\
+  $A_\delta : \Gamma_{\rid_\delta} \to \rtype $\\
+  $A_\zeta : (\psi : \Gamma_\zeta) \to A_{\delta}(\Gamma^<_{\rid_\delta,\zeta}\psi)$
+  $\to A_{\epsilon}(\Gamma^>_{\zeta,\rid_\epsilon}\psi) $
+\end{declbox}
+\begin{defnbox}
+  \begin{tabbing}
+    \hspace*{3em}\=\hspace*{2em}\= \kill
+  $(\Gamma, x + A)_{\zeta} = (\psi : \Gamma_\zeta) \x A_\delta(\Gamma^<_{\rid_\delta,\zeta} \psi)$\\
+\\
+%  $(\Gamma, x + A)^<_{\zeta,\xi} : (\psi : \Gamma_{\zeta\xi}) \x A_\delta(\Gamma^<_{\rid_\delta,{\zeta\xi}} \psi)$\\
+% \> \>  $\to (\psi' : \Gamma_\zeta) \x A_\delta(\Gamma^<_{\rid_\delta,\zeta} \psi')$\\
+  $(\Gamma, x + A)^<_{\zeta,\xi}(\psi, a) = (\Gamma^<_{\zeta,\xi} \psi, a)$\\
+\\
+%  $(\Gamma, x + A)^>_{\zeta,\xi} : (\psi : \Gamma_{\zeta\xi}) \x A_\delta(\Gamma^<_{\rid_\delta,{\zeta\xi}} \psi)$\\
+% \> \>  $\to (\psi' : \Gamma_\xi) \x A_\epsilon(\Gamma^<_{\rid_\epsilon,\xi} \psi')$\\
+  $(\Gamma, x + A)^>_{\zeta,\xi}(\psi, a) = (\Gamma^>_{\zeta,\xi} \psi, A_\zeta( \Gamma^<_{\zeta,\xi}\psi, a ))$
+\end{tabbing}
+\end{defnbox}
+\begin{thmbox}
+    $(\Gamma^\op)^<_{\zeta} = \Gamma_{\bar \zeta}$\\
+    $(\Gamma^\op)^<_{\zeta,\xi} = \Gamma^>_{\bar \xi,\bar\zeta}$\\
+  $(\Gamma^\op)^>_{\zeta,\xi} = \Gamma^<_{\bar \xi,\bar\zeta}$\\
+$\Gamma^<_{\rid_\delta,{\zeta\xi}} = \Gamma^<_{\rid_\delta,\zeta}\Gamma^<_{\zeta,\xi} \psi$\\
+$\Gamma^>_{\zeta,\rid_\epsilon}\Gamma^<_{\zeta,\xi}\psi  = \Gamma^<_{\rid_\epsilon,\xi} \Gamma^>_{\zeta,\xi}\psi$
+\end{thmbox}
+This seems to work great!
+
 \end{document}
