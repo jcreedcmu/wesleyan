@@ -348,13 +348,15 @@ Here's a dictionary of the symbols we'll use for typical members of these catego
   Morphisms of $\T(\Delta)$&$\tau$\\
 \end{tabular}\]
 
+We allow writing the pairs that are objects and morphisms
+of $\sem \Delta$ without $( , )$ syntax, e.g. $de$ for $(d, e)$.
 There is a functor $(\delta \mapsto \bar \delta):  \sem \Delta^\op \to \sem \Delta$ by swapping components.
-If $\delta = (d, d') \in \sem \Delta$, then we define
-\[\bar \delta = (d', d) \in \sem \Delta\]
+If $\delta = dd' \in \sem \Delta$, then we define
+\[\bar \delta = dd' \in \sem \Delta\]
 and when
-\[\phi = (f, f') : \delta \to \epsilon = (d, d') \to (e, e')\]
+\[\phi = ff' : \delta \to \epsilon = dd' \to ee'\]
 we define
-\[ \bar \phi = (f', f) : \bar \epsilon \to \bar \delta =  (e', e) \to (d', d) \]
+\[ \bar \phi = f'f : \bar \epsilon \to \bar \delta =  e'e \to d'd \]
 We freely sometimes write an object of a category in a place where a morphism is required,
 intending the identity morphism at that object.
 
@@ -474,6 +476,94 @@ and
   \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\tau_2 \o \phi"']\\
   \delta' \ar[r, "\tau_1"']& \delta\\
   \delta \ar[r, equal]\ar[from=u, "\tau_1"']& \delta\ar[u, equal]
+\end{tikzcd}\]
+\subsection{Semantics of Terms}
+We want to define what is required for a judgment
+\[\Delta; \Gamma \prov M : A\]
+so that in the special case where no type dependency is involved, it reduces to something like
+requiring that the interpretation of $M$ belongs to an end
+\[\sem M \in \int_{\delta\in\ssem\Delta} \sem\Gamma(\delta) \to \sem A(\delta)\]
+Things are a little more involved with dependent types, naturally.
+
+Assume $\Delta ; \Gamma \prov M : A$ and all the well-formedness judgments that presupposes.
+Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
+
+\def\fdom{f_0}
+\def\fcod{f_1}
+\begin{declbox}
+  $M_d : (\gamma : \Gamma_{dd}) \to A_{dd}$\\
+  $\fdom : ff \to dd \in \T(\Delta)$\\
+  $\fcod : ff \to ee \in \T(\Delta)$
+\end{declbox}
+\begin{defnbox}
+\(
+   \fdom = \begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, "fd"']\\
+     dd \ar[r, equal]& dd
+   \end{tikzcd}
+\qquad\qquad
+   \fcod = \begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
+     ee \ar[r, equal]& ee
+   \end{tikzcd}
+\)
+\end{defnbox}
+\begin{thmbox}
+For any $g : \Gamma_{ff}$, we have
+\[ A_{fd}(\Gamma_{\tri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\tri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+\end{thmbox}
+Here's an explanation of why the equality in this theorem is well-typed.
+ We have first of all
+\[ M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)\qquad
+ M_e(\Gamma_{\fcod} g) : A_{ee}(\Gamma_{\fcod} g)\]
+and also
+\[A_{fd} : (g : \Gamma_{fd}) \to A_{dd}(\Gamma_{\ltri{fd}} g) \to A_{ed}(\Gamma_{\tri{fd}} g)\]
+\[A_{ef} : (g : \Gamma_{ef}) \to A_{ee}(\Gamma_{\ltri{ef}} g) \to A_{ed}(\Gamma_{\tri{ef}} g)\]
+which means
+\[A_{fd}(\Gamma_{\tri \fdom}) :  A_{dd}(\Gamma_{\ltri{fd}}\Gamma_{\tri \fdom} g)
+\to A_{ed}(\Gamma_{\tri{fd}} \Gamma_{\tri \fdom} g)\]
+\[A_{ef}(\Gamma_{\tri\fcod}) :  A_{ee}(\Gamma_{\ltri{ef}} \Gamma_{\tri\fcod} g)
+\to A_{ed}(\Gamma_{\tri{ef}} \Gamma_{\tri\fcod} g)\]
+So chase the following diagrams to see
+\[ \fdom = \ltri fd \o \tri \fdom \qquad \fcod = \ltri ef \o \tri \fcod\]
+(`we're allowed to plug in $M_d$ and $M_e$ where we do') and
+\[ \tri fd \o \tri \fdom = \tri ef \o \tri \fcod \]
+(`the output types are the same')
+
+\[
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, "fd"']\\
+     dd \ar[r, equal]& dd
+   \end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, equal]\\
+     dd \ar[r, "fd"']& ed\\
+     dd \ar[r, equal]\ar[from=u, equal]&dd\ar[u, "fd"']
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
+     ee \ar[r, equal]& ee
+   \end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, equal]\\
+     ee \ar[r, "ef"']& ed\\
+     ee \ar[r, equal]\ar[from=u, equal]&ee\ar[u, "ef"']
+\end{tikzcd}
+\]
+\[\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, equal]\\
+     dd \ar[r, "fd"']& ed\\
+     ed \ar[r, equal]\ar[from=u, "fd"']&ed\ar[u, equal]
+\end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, equal]\\
+     ee \ar[r, "ef"']& ed\\
+     ed \ar[r, equal]\ar[from=u, "ef"']&ed\ar[u, equal]
 \end{tikzcd}\]
 
 \subsection{Defining Some Types}
