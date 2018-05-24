@@ -392,23 +392,29 @@ $\overline{(\tau_1, \tau_2)} = (\bar \tau_2, \bar\tau_1)$. In a diagram,
 \end{tikzcd}\]
 
 
-\subsubsection{Semantics of Contexts}
-Next, we will declare the functions involved in the semantics of contexts and types.
-In general we will write $\rtype$ for the ambient metatheory's notion
-of type, and use agda-style syntax for dependent products and sums in
-the ambient metatheory, i.e $(x : A) \to B$ and $(x : A) \x B$. We may
-be somewhat lax about currying and generally how arguments are
-written.
+\subsubsection{Other Operations on the Twisted Arrow Category}
 
-Throughout the following declarations and definitions, we'll assume
- $\Delta \prov \Gamma \rctx$, and $\delta$
-is an object in $\sem \Delta$, and $\tau : \psi \to \phi$ is a morphism in $\T(\Delta)$
-and $\phi : \delta \to \epsilon$ and $\psi : \delta' \to \epsilon'$ are morphisms in $\sem \Delta$,
-arranged like so:
-\[\begin{tikzcd}
-  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
-  \delta \ar[r, "\phi"']& \epsilon
-\end{tikzcd}\]
+Here's some ways we can build up morphisms in $\T(\Delta)$ from morphisms in $\sem \Delta$:
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+\begin{declbox}
+$\phi \gol \eta : \phi\eta \to \phi$\\
+$\phi \gor \eta : \phi\eta \to \eta$
+\end{declbox}
+\begin{defnbox}
+   \(
+   \phi \gol \eta  \quad = \quad \begin{tikzcd}
+     \gamma \ar[r, "\phi \o \eta"]\ar[d, "\eta"'] & \epsilon\ar[from=d, equal]\\
+     \delta \ar[r, "\phi"']& \epsilon
+   \end{tikzcd}
+   \qquad
+   \phi \gor \eta  \quad = \quad \begin{tikzcd}
+     \gamma \ar[r, "\phi \o \eta"]\ar[d, equal] & \epsilon\ar[from=d, " \phi"']\\
+     \gamma \ar[r, "\eta"']& \delta
+   \end{tikzcd}
+\)
+\end{defnbox}
+
 There are some useful operations on morphisms $\tau \in \T(\Delta)$ that `swing' the side morphisms
 around to the codomain. We define
  \begin{declbox}
@@ -416,7 +422,17 @@ around to the codomain. We define
    $\rtri \tau : \dd \tau \to \rr \tau$
  \end{declbox}
 by
- \begin{defnbox}
+\begin{defnbox}
+  $\ltri \tau = (\rr \tau \o \cc \tau) \gor \ll \tau$\\
+  $\rtri \tau = \rr \tau \gol (\cc \tau \o \ll \tau)$
+\end{defnbox}
+In a diagram, assuming
+\[\tau \quad = \quad \begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}\]
+this looks like
+ \begin{thmbox}
    \(
    \ltri \tau  = \begin{tikzcd}
      \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\tau_2 \o \phi"']\\
@@ -428,7 +444,7 @@ by
      \epsilon \ar[r, "\tau_2"']& \epsilon'
    \end{tikzcd}
 \)
- \end{defnbox}
+ \end{thmbox}
 
 A notable special case of this falls out when $\tau$ is an identity arrow:
  \begin{thmbox}
@@ -446,8 +462,25 @@ A notable special case of this falls out when $\tau$ is an identity arrow:
 \)
  \end{thmbox}
 
-Ok, now come the real definitions.
-We're going to define them as if contexts were defined inductively by
+\subsubsection{Semantics of Contexts}
+Next, we will declare the functions involved in the semantics of contexts and types.
+In general we will write $\rtype$ for the ambient metatheory's notion
+of type, and use agda-style syntax for dependent products and sums in
+the ambient metatheory, i.e $(x : A) \to B$ and $(x : A) \x B$. We may
+be somewhat lax about currying and generally how arguments are
+written.
+
+Throughout the following declarations and definitions, we'll assume
+ $\Delta \prov \Gamma \rctx$, and $\delta$
+is an object in $\sem \Delta$, and $\tau : \psi \to \phi$ is a morphism in $\T(\Delta)$
+and $\phi : \delta \to \epsilon$ and $\psi : \delta' \to \epsilon'$ are morphisms in $\sem \Delta$,
+arranged like so:
+\[\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}\]
+
+We're going treat contexts as if they were defined inductively by
 \[\begin{tabular}{rccl}
   Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma^\op \celse \Gamma, x + A$\\
 \end{tabular}
@@ -513,6 +546,93 @@ and
   \delta' \ar[r, "\tau_1"']& \delta\\
   \delta \ar[r, equal]\ar[from=u, "\tau_1"']& \delta\ar[u, equal]
 \end{tikzcd}\]
+\subsubsection{Functoriality}
+I used functoriality of $\Gamma_\tau$ in the proof of well-typedness
+of these definitions. This is how we show functoriality, and what's required of types.
+%% \begin{lemma}
+%% $\ltri (\tau \o \sigma) = ?$
+%% \end{lemma}
+
+%% \begin{proof}
+%% \[\begin{tikzcd}
+%%   \delta'' \ar[r, "\chi"]\ar[d, "\sigma_1"']\ar[dr, phantom, "\sigma"] & \epsilon''\ar[from=d, "\sigma_2"']\\
+%%   \delta' \ar[r, "\psi" description]\ar[d, "\tau_1"']\ar[dr, phantom, "\tau"] & \epsilon'\ar[from=d, "\tau_2"']\\
+%%   \delta \ar[r, "\phi"']& \epsilon\\
+%% \end{tikzcd}
+%% \qquad \mapsto \qquad
+%% \begin{tikzcd}
+%%   \delta'' \ar[r, "\chi"]\ar[d, "\sigma_1"']\ar[dr, phantom, "\sigma"] & \epsilon''\ar[from=d, "\sigma_2"']\\
+%%   \delta' \ar[r, "\psi" description]\ar[d, "\tau_1"']\ar[dr, phantom, "\tau"] & \epsilon'\ar[from=d, "\tau_2"']\\
+%%   \delta \ar[r, "\phi"']& \epsilon\\
+%% \end{tikzcd}
+%% \]
+%% \cqed
+%% \end{proof}
+Assuming
+\[\begin{tikzcd}
+  \gamma \ar[r, "\gamma"] & \delta \ar[r, "\phi"] & \epsilon
+\end{tikzcd}\]
+we claim the following are true
+\begin{thmbox}
+ $\Gamma_\rid g = g$\\
+ $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$\\
+  $A_{\rid_\delta}(g, a) = a$\\
+  $A_{\phi\eta}(g, a) = A_\phi(\Gamma_{\phi \gol \eta}g, A_\eta(\Gamma_{\phi \sqsupset \eta}g, a))$
+\end{thmbox}
+Too see that this last equation is well-typed, we observe that as long as
+we know ${\ltri \eta}  \o (\phi \gor \eta) = \ltri (\phi \eta)$
+we have
+\[
+a : A_{\gamma}(\Gamma_{\ltri \phi \eta} g)\prov A_\eta(\Gamma_{\phi \gor \eta} g, a) :
+A_\delta(\Gamma_{\rtri \eta} \Gamma_{\phi \gor \eta} g)
+\]
+and then the second argument of $A_\eta$ wants to be $A_\delta(\Gamma_{\ltri\phi} \Gamma_{\phi \gol \eta} g)$
+so we need the equation
+\[ \ltri\phi \o (\phi \gol \eta) = \rtri \eta \o (\phi \gor \eta)\]
+and finally the output we get from $A_\phi$ is $A_\epsilon(\Gamma_{\rtri\phi}\Gamma_{\phi \gol \eta}g )$
+but it needs to be $A_\epsilon(\Gamma_{\rtri\phi\eta}g )$, so we need to check
+\[ \rtri\phi \o (\phi \gol \eta) = \rtri(\phi\eta) \]
+but all three of these properties are true by diagram-chasing.
+\begin{lemma}\ %
+  \begin{enumerate}
+  \item $\Gamma_\rid g = g$ and
+\item    $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$ and
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+By induction on $\Gamma$
+\begin{enumerate}
+ %% $(\cdot)_\tau = {!}$\\
+ %% $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$\\
+ %% $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
+
+\item We need to check that
+$(\Gamma, x + A)_\rid (g, a) = (\Gamma_\rid g, A_{\rid}(\Gamma_{\rid}g , a) ) $ and that
+$(\Gamma^\op)_\rid(g) = \Gamma_{\rid}(g)$. It suffices to require that $A_\rid(g, a) = a$.
+\item
+It's easy to check that
+\[(\Gamma^\op)_{\tau\sigma}(g) = \Gamma_{\overline{\tau\sigma}}(g) = \Gamma_{\bar\tau\bar\sigma}(g)
+= \Gamma_{\bar\tau}\Gamma_{\bar\sigma}(g) = (\Gamma^\op)_{\tau}(\Gamma^\op)_{\sigma}(g)\]
+by induction hypothesis.
+Then we need to check that
+\[(\Gamma, x + A)_{\tau  \sigma} (g, a) = (\Gamma, x + A)_{\tau }(\Gamma, x + A)_{  \sigma} (g, a)\]
+The former immediately evaluates to
+\[ (\Gamma_{\tau\sigma} g, A_{\ll \tau \ll \sigma}(\Gamma_{\ltri (\tau  \sigma)}g , a) ) \]
+and the latter to
+\[ (\Gamma_{\tau} \Gamma_{\sigma} g, A_{ \ll \tau}(\Gamma_{\ltri   \tau}\Gamma_{\sigma} g , A_{ \ll \sigma}(\Gamma_{\ltri   \sigma}g , a)) ) \]
+
+We can observe that the first components are equal by induction hypothesis.
+By functoriality of $A$, we can break up the $A_{\ll \tau \ll \sigma}(\cdots)$ into
+\[A_{\ll \tau \ll \sigma}(\Gamma_{\ltri (\tau  \sigma)}g , a) \]
+\[A_{\ll \tau}(\Gamma_{(\ll\tau \gol \ll\sigma) \o\ltri (\tau  \sigma)}g, A_{\ll \sigma} (\Gamma_{(\ll\tau \gor \ll\sigma) \o \ltri (\tau  \sigma)}g , a)) \]
+so we just have to ensure
+\[(\ll\tau \gol \ll\sigma) \o\ltri (\tau  \sigma) = \ltri   \tau \o \sigma \]
+\[(\ll\tau \gor \ll\sigma) \o \ltri (\tau  \sigma) = \ltri \sigma \]
+and these are easy diagram chases. \cqed
+\end{enumerate}
+\end{proof}
+
 \subsection{Terms}
 We want to define what is required for a judgment
 \[\Delta; \Gamma \prov M : A\]
