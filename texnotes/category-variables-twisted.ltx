@@ -19,6 +19,8 @@
 \def\bpull{\mathbf{pull}}
 
 
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
 \def\wo{\setminus}
 \def\fA{\mathsf{A}}
 \def\fC{\mathsf{C}}
@@ -72,9 +74,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
 
-\def\munit{I}
-\def\tt{{\mathsf t}}
-\def\rr{{\mathsf r}}
+\def\ll{\mathsf{L}}
+\def\rr{\mathsf{R}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
 \def\ii{{\mathbb I}}
 \def\T{\mathbb{T}}
 \def\pp{\textsf{\textbf p}}
@@ -125,8 +128,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\E{\mathbf{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
-\def\tri{\triangleright}
-\def\ltri{\triangleleft}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{cat}}
@@ -348,6 +349,10 @@ squares showing how $\psi$ factors through $\phi$:
   \delta \ar[r, "\phi"']& \epsilon
 \end{tikzcd}\]
 We can of course write a $\tau$ as just the pair $(\tau_1, \tau_2)$ that determines it.
+To extract the parts of a morphism $\tau$, we define $\ll \tau = \tau_1$ (`left') and $\rr \tau = \tau_2$
+(`right')
+and $\cc \tau = \phi$ (`codomain') and $\dd \tau = \psi$ (`domain').
+We also write $\cc \phi$ and $\dd \phi$ for the (co)domain of a morphism $\phi \in \sem \Delta$.
 
 Here's a summary of the symbols we'll use for typical members of the above categories:
 \[\begin{tabular}{rccl}
@@ -407,8 +412,8 @@ arranged like so:
 There are some useful operations on morphisms $\tau \in \T(\Delta)$ that `swing' the side morphisms
 around to the codomain. We define
  \begin{declbox}
-   $\ltri \tau : \psi \to \tau_1 \in \T(\Delta)$\\
-   $\tri \tau : \psi \to \tau_2 \in \T(\Delta)$
+   $\ltri \tau : \dd \tau \to \ll \tau $\\
+   $\rtri \tau : \dd \tau \to \rr \tau$
  \end{declbox}
 by
  \begin{defnbox}
@@ -418,7 +423,7 @@ by
      \delta' \ar[r, "\tau_1"']& \delta
    \end{tikzcd}
    \qquad
-   \tri \tau  = \begin{tikzcd}
+   \rtri \tau  = \begin{tikzcd}
      \delta' \ar[r, "\psi"]\ar[d, "\phi \o \tau_1"'] & \epsilon'\ar[from=d, equal]\\
      \epsilon \ar[r, "\tau_2"']& \epsilon'
    \end{tikzcd}
@@ -434,7 +439,7 @@ A notable special case of this falls out when $\tau$ is an identity arrow:
    \end{tikzcd}
 \)\qquad
 \(
-   \tri \phi : \phi \to \epsilon  = \begin{tikzcd}
+   \rtri \phi : \phi \to \epsilon  = \begin{tikzcd}
      \delta \ar[r, "\phi"]\ar[d, "\phi"'] & \epsilon\ar[from=d, equal]\\
      \epsilon \ar[r, equal]& \epsilon
    \end{tikzcd}
@@ -452,19 +457,19 @@ because we can think of $\Gamma, x - A$ as $(\Gamma^\op, x + A)^\op$.
 We declare:
 \begin{declbox}
   $\Gamma_\phi : \rtype$.\\
-  $\Gamma_\tau : \Gamma_\psi \to \Gamma_\phi $\\
+  $\Gamma_\tau : \Gamma_{\dd \tau} \to \Gamma_{\cc \tau} $\\
   $A_\delta : \Gamma_\delta \to \rtype$\\
-  $A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g) \to A_\epsilon(\Gamma_{\tri\phi} g)$
+  $A_\phi : (g : \Gamma_\phi) \to A_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A_{\cc \phi}(\Gamma_{\rtri\phi} g)$
 \end{declbox}
 and define:
 \begin{defnbox}
  $(\cdot)_\phi = \bone$\\
  $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$\\
- $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_\delta( \Gamma_{\ltri\phi} g )$\\
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
   \\
  $(\cdot)_\tau = {!}$\\
  $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$\\
- $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\tau_1}(\Gamma_{\ltri \tau}g , a) ) $
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
 \end{defnbox}
 Here's a blow-by-blow of why the definition of $(\Gamma, x + A)_\tau(g, a)$ is well-typed.
 We know we're supposed to make it have type
@@ -472,17 +477,17 @@ We know we're supposed to make it have type
  (g' : \Gamma_\phi) \x A_\delta( \Gamma_{\ltri\phi} g' )\]
 We need $A_{\tau_1}(\Gamma_{\ltri \tau} g, a)$ to have type $A_\delta(\Gamma_{\ltri \phi} \Gamma_\tau g)$.
 Plugging $\Gamma_{\ltri \tau}g : \Gamma_{\tau_1}$ into
-\[A_{\tau_1} : (x : \Gamma_{\tau_1}) \to A_{\delta'}(\Gamma_{\ltri \tau_1} x) \to A_{\delta}(\Gamma_{\tri \tau_1} x)\]
+\[A_{\tau_1} : (x : \Gamma_{\tau_1}) \to A_{\delta'}(\Gamma_{\ltri \tau_1} x) \to A_{\delta}(\Gamma_{\rtri \tau_1} x)\]
 gives
 \[A_{\tau_1}(\Gamma_{\ltri \tau}g ) : A_{\delta'}(\Gamma_{\ltri \tau_1} \Gamma_{\ltri \tau}g )
-\to A_{\delta}(\Gamma_{\tri \tau_1} \Gamma_{\ltri \tau}g )\]
+\to A_{\delta}(\Gamma_{\rtri \tau_1} \Gamma_{\ltri \tau}g )\]
 In order to apply this to $a$ and be finished, we need
 \[\Gamma_{\ltri \tau_1} \Gamma_{\ltri \tau}  = \Gamma_{\ltri\psi} \]
-\[\Gamma_{\ltri \phi} \Gamma_\tau = \Gamma_{\tri \tau_1} \Gamma_{\ltri \tau}\]
+\[\Gamma_{\ltri \phi} \Gamma_\tau = \Gamma_{\rtri \tau_1} \Gamma_{\ltri \tau}\]
 to make everything match up.
 By the functoriality of $\Gamma_\tau$, we merely need to check
 \[{\ltri \tau_1} \o {\ltri \tau}  = {\ltri\psi} \qquad
-{\ltri \phi} \o \tau = {\tri \tau_1} \o {\ltri \tau}\]
+{\ltri \phi} \o \tau = {\rtri \tau_1} \o {\ltri \tau}\]
 and these are each settled by a diagram chase
 \[
 \begin{tikzcd}
@@ -519,8 +524,8 @@ Things are a little more involved with dependent types, naturally.
 Assume $\Delta ; \Gamma \prov M : A$ and all the well-formedness judgments that presupposes.
 Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
 
-\def\fdom{f_0}
-\def\fcod{f_1}
+\def\fdom{{\blacktriangleleft}f}
+\def\fcod{{\blacktriangleright}f}
 \begin{declbox}
   $M_d : (\gamma : \Gamma_{dd}) \to A_{dd}$\\
   $\fdom : ff \to dd \in \T(\Delta)$\\
@@ -541,47 +546,47 @@ Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
 \end{defnbox}
 \begin{thmbox}
 For any $g : \Gamma_{ff}$, we have
-\[ A_{fd}(\Gamma_{\tri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\tri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+\[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
 \end{thmbox}
 Here's an explanation of why the equality in this theorem is well-typed.
  We have first of all
 \[ M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)\qquad
  M_e(\Gamma_{\fcod} g) : A_{ee}(\Gamma_{\fcod} g)\]
 and also
-\[A_{fd} : (g : \Gamma_{fd}) \to A_{dd}(\Gamma_{\ltri{fd}} g) \to A_{ed}(\Gamma_{\tri{fd}} g)\]
-\[A_{ef} : (g : \Gamma_{ef}) \to A_{ee}(\Gamma_{\ltri{ef}} g) \to A_{ed}(\Gamma_{\tri{ef}} g)\]
+\[A_{fd} : (g : \Gamma_{fd}) \to A_{dd}(\Gamma_{\ltri{fd}} g) \to A_{ed}(\Gamma_{\rtri{fd}} g)\]
+\[A_{ef} : (g : \Gamma_{ef}) \to A_{ee}(\Gamma_{\ltri{ef}} g) \to A_{ed}(\Gamma_{\rtri{ef}} g)\]
 which means
-\[A_{fd}(\Gamma_{\tri \fdom}) :  A_{dd}(\Gamma_{\ltri{fd}}\Gamma_{\tri \fdom} g)
-\to A_{ed}(\Gamma_{\tri{fd}} \Gamma_{\tri \fdom} g)\]
-\[A_{ef}(\Gamma_{\tri\fcod}) :  A_{ee}(\Gamma_{\ltri{ef}} \Gamma_{\tri\fcod} g)
-\to A_{ed}(\Gamma_{\tri{ef}} \Gamma_{\tri\fcod} g)\]
+\[A_{fd}(\Gamma_{\rtri \fdom}) :  A_{dd}(\Gamma_{\ltri{fd}}\Gamma_{\rtri \fdom} g)
+\to A_{ed}(\Gamma_{\rtri{fd}} \Gamma_{\rtri \fdom} g)\]
+\[A_{ef}(\Gamma_{\rtri\fcod}) :  A_{ee}(\Gamma_{\ltri{ef}} \Gamma_{\rtri\fcod} g)
+\to A_{ed}(\Gamma_{\rtri{ef}} \Gamma_{\rtri\fcod} g)\]
 So chase the following diagrams to see
-\[ \fdom = \ltri fd \o \tri \fdom \qquad \fcod = \ltri ef \o \tri \fcod\]
+\[ \fdom = \ltri fd \o \rtri \fdom \qquad \fcod = \ltri ef \o \rtri \fcod\]
 (`we're allowed to plug in $M_d$ and $M_e$ where we do') and
-\[ \tri fd \o \tri \fdom = \tri ef \o \tri \fcod \]
+\[ \rtri fd \o \rtri \fdom = \rtri ef \o \rtri \fcod \]
 (`the output types are the same')
 
 \[
 \begin{tikzcd}
-     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, "fd"']\\
+     de \ar[r, "ff"]\ar[d, "df"']\ar[dr, phantom, "\fdom"] & ed\ar[from=d, "fd"']\\
      dd \ar[r, equal]& dd
    \end{tikzcd}
 \qquad = \qquad
 \begin{tikzcd}
-     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, equal]\\
-     dd \ar[r, "fd"']& ed\\
+     de \ar[r, "ff"]\ar[d, "df"']\ar[dr, phantom, "\rtri \fdom"] &[1em] ed\ar[from=d, equal]\\
+     dd \ar[r, "fd" description]\ar[dr, phantom, "\ltri fd"]& ed\\
      dd \ar[r, equal]\ar[from=u, equal]&dd\ar[u, "fd"']
 \end{tikzcd}
 \]
 \[
 \begin{tikzcd}
-     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
+     de \ar[r, "ff"]\ar[dr, phantom, "\fcod"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
      ee \ar[r, equal]& ee
    \end{tikzcd}
 \qquad = \qquad
 \begin{tikzcd}
-     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, equal]\\
-     ee \ar[r, "ef"']& ed\\
+     de \ar[r, "ff"]\ar[d, "fe"']\ar[dr, phantom, "\rtri\fcod"] &[1em] ed\ar[from=d, equal]\\
+     ee \ar[r, "ef" description]\ar[dr, phantom, "\ltri ef"] & ed\\
      ee \ar[r, equal]\ar[from=u, equal]&ee\ar[u, "ef"']
 \end{tikzcd}
 \]
@@ -598,8 +603,6 @@ So chase the following diagrams to see
 \end{tikzcd}\]
 
 \subsection{Defining Some Types}
-\textcolor{red}{This is all out of date now}
-
 Now that I've said what it means to be a type --- or at least the bare
 minimum of what's required; I'm probably still missing some
 preservation-of-composition lemma declarations --- let's try defining some.
@@ -620,18 +623,18 @@ to work with:
 
 \[A_\delta : \Gamma_\delta \to \rtype \]
 \[B_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma) \to \rtype \]
-\[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)\]
-\[B_\phi : (\psi : \Gamma_\phi)(x : A_\delta(\Gamma_\phi^<\psi)) \to B_\delta(\Gamma_\phi^<\psi, x)
-\to B_\epsilon(\Gamma_\phi^>\psi, A_\phi(\psi, x))\]
+\[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} \psi) \to A_\epsilon(\Gamma_{\rtri\phi} \psi)\]
+\[B_\phi : (\psi : \Gamma_\phi)(x : A_\delta(\Gamma_{\ltri\phi} \psi)) \to B_\delta(\Gamma_{\ltri\phi}\psi, x)
+\to B_\epsilon(\Gamma_{\rtri\phi}\psi, A_\phi(\psi, x))\]
 
 We define the object part of this by
 \[((x : A) \x B)_\delta : \Gamma_\delta \to \rtype \]
 \[((x : A) \x B)_\delta (\gamma) = (x : A_\delta(\gamma)) \x B_\delta(\gamma, x) \]
 
 and the morphism part needs to be
-\[((x:A)\x B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_\delta(\Gamma_\phi^< \psi))
-\x B_\delta(\Gamma_\phi^< \psi, x))\]
-\[  \to ((x : A_\epsilon(\Gamma_\phi^> \psi)) \x B_\epsilon(\Gamma_\phi^> \psi, x)) \]
+\[((x:A)\x B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_\delta(\Gamma_{\ltri\phi} \psi))
+\x B_\delta(\Gamma_{\ltri\phi} \psi, x))\]
+\[  \to ((x : A_\epsilon(\Gamma_{\rtri\phi} \psi)) \x B_\epsilon(\Gamma_{\rtri\phi} \psi, x)) \]
 and we define it
 \[((x:A)\x B)_\phi(\psi, (x, b)) = (A_\phi(\psi, x), B_\phi(\psi, x, b))\]
 
@@ -652,18 +655,18 @@ to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
 \[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
 \[B_\delta : (\gamma : \Gamma_\delta) \to A_{\bar \delta}(\gamma) \to \rtype \]
-\[A_{\bar \phi} : (\psi : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_\phi^> \psi) \to A_{\bar \delta}(\Gamma_\phi^< \psi) \]
-\[B_\phi : (\psi : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_\phi^>\psi)) \to B_\delta(\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, x))
-\to B_\epsilon(\Gamma_\phi^>\psi, x)\]
+\[A_{\bar \phi} : (\psi : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} \psi) \to A_{\bar \delta}(\Gamma_{\ltri\phi} \psi) \]
+\[B_\phi : (\psi : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}\psi)) \to B_\delta(\Gamma_{\ltri\phi}\psi, A_{\bar \phi}(\psi, x))
+\to B_\epsilon(\Gamma_{\rtri\phi}\psi, x)\]
 
 We define the object part of this by
 \[((x : A) \to B)_\delta : \Gamma_\delta \to \rtype \]
 \[((x : A) \to B)_\delta (\gamma) = (x : A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) \]
 
 and the morphism part needs to be
-\[((x:A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_\phi^< \psi))
-\to B_\delta(\Gamma_\phi^< \psi, x))\]
-\[  \to (x : A_{\bar\epsilon}(\Gamma_\phi^> \psi)) \to B_\epsilon(\Gamma_\phi^> \psi, x) \]
+\[((x:A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} \psi))
+\to B_\delta(\Gamma_{\ltri\phi} \psi, x))\]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} \psi)) \to B_\epsilon(\Gamma_{\rtri\phi} \psi, x) \]
 and we define it
 \[((x:A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))\]
 
