@@ -646,8 +646,9 @@ Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
 
 \def\fdom{\mathbf{d}f}
 \def\fcod{\mathbf{e}f}
+
 \begin{declbox}
-  $M_d : (\gamma : \Gamma_{dd}) \to A_{dd}$\\
+  $M_d : (\gamma : \Gamma_{dd}) \to A_{dd}(g)$\\
   $\fdom : ff \to dd \in \T(\Delta)$\\
   $\fcod : ff \to ee \in \T(\Delta)$
 \end{declbox}
@@ -668,6 +669,8 @@ Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
 For any $g : \Gamma_{ff}$, we have
 \[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
 \end{thmbox}
+
+
 Here's an explanation of why the equality in this theorem is well-typed.
  We have first of all
 \[ M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)\qquad
@@ -790,4 +793,24 @@ and the morphism part needs to be
 and we define it
 \[((x:A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))\]
 
+\subsubsection{Lambdas}
+
+\[
+\erule
+{\Delta ; \Gamma, x - A \prov M : B}
+{\Delta ; \Gamma \prov \lambda x . M : (x : A) \to B}
+\]
+
+We want to construct the object part
+\[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x : A) \to B)_{dd}(g)\]
+\[ = (g : \Gamma_{dd}) (x : A_{dd}(g)) \to B_{dd}(g, x)\]
+We get to assume the object part
+\[ M_d : (g : (\Gamma, x - A)_{dd}) \to B_{dd}(g)\]
+\[ =  (g : \Gamma_{dd}) (x : A_{dd}( g) ) \to B_{dd}(g, x)\]
+So $(\lambda x .M)_d(g)( x) = M(g, x)$.
+
+As for the end-condition, if we turn the crank on either the top or the bottom of the rule, we get
+\[(g : \Gamma_{ff})(a : A_{de}(\Gamma_{\rtri ff} g)) \to \]
+\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
+\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
 \end{document}

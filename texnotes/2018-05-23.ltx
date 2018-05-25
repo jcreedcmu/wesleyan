@@ -122,8 +122,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\E{\mathbf{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
-\def\tri{\triangleright}
-\def\ltri{\triangleleft}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{dctx}}
@@ -195,10 +195,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ls{{\sqsubset}}
 \def\ll{\mathsf{L}}
 \def\rr{\mathsf{R}}
-\def\cc{\mathsf{C}}
-\def\dd{\mathsf{D}}
-\def\ccc{\mathsf{c}}
-\def\ddd{\mathsf{d}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\ccc{\mathsf{C}}
+\def\ddd{\mathsf{D}}
 \def\tw{{\bullet}}
 
 What if, for
@@ -257,4 +257,12 @@ Want to prove things like
 \[{\ls \ll \tau} \o {\ls \tau}  = {\ls\dd \tau} \qquad
 {\ls \cc \tau} \o \tau = {\rs \ll \tau } \o {\ls \tau}\]
 Hm I don't think this is much easier than doing it diagrammatically.
+\section{Working Out Duals}
+\[(\Gamma, x - A)_\phi = (\Gamma^\op, x + A)^\op_\phi\]
+\[ = (\Gamma^\op, x + A)_{\bar \phi} \]
+\[ = (g : \Gamma^\op_{\bar \phi}) \x A_{\dd \bar \phi}( \Gamma^\op_{\ltri\bar\phi} g ) \]
+\[ = (g : \Gamma_\phi) \x A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g ) \]
+\[ (\Gamma, x - A)_\tau (g, a) = (\Gamma^\op, x + A)^\op_\phi \]
+\[ = (\Gamma^\op_{\bar \tau} g, A_{\ll \bar \tau}(\Gamma^\op_{\ltri \bar \tau}g , a) ) \]
+\[ = (\Gamma_\tau g, A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
 \end{document}
