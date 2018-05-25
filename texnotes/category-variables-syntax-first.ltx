@@ -760,6 +760,33 @@ and
   \delta' \ar[r, "\tau_1"']& \delta\\
   \delta \ar[r, equal]\ar[from=u, "\tau_1"']& \delta\ar[u, equal]
 \end{tikzcd}\]
+\subsubsection{Semantics of Minus Hypotheses}
+We can compute them directly from the definitions. It's handy to have them in this form for
+later calculations:
+\[(\Gamma, x - A)_\phi = (\Gamma^\op, x + \bar A)^\op_\phi\]
+\[ = (\Gamma^\op, x + \bar A)_{\bar \phi} \]
+\[ = (g : \Gamma^\op_{\bar \phi}) \x \bar A_{\dd \bar \phi}( \Gamma^\op_{\ltri\bar\phi} g ) \]
+\[ = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g ) \]
+and
+\[ (\Gamma, x -  A)_\tau (g, a) = (\Gamma^\op, x + \bar A)^\op_\tau \]
+\[ = (\Gamma^\op, x + \bar A)_{\bar \tau} \]
+\[ = (\Gamma^\op_{\bar \tau} g, \bar A_{\ll \bar \tau}(\Gamma^\op_{\ltri \bar \tau}g , a) ) \]
+\[ = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
+So we could have also defined
+\begin{defnbox}
+ $(\cdot)_\phi = \bone$\\
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
+ $(\Gamma, x - A)_\phi = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g )$\\
+  \\
+ $(\cdot)_\tau = {!}$\\
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $\\
+ $(\Gamma, x - A)_\tau (g, a) = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) )$
+\end{defnbox}
+\noindent and {\em proved} inductively that
+ $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$ and
+ $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$ as theorems, but it seems much easier to just do the calculation above.
+
+
 \subsubsection{Functoriality}
 I used functoriality of $\Gamma_\tau$ in the proof of well-typedness
 of these definitions. This is how we show functoriality, and what's required of types.
@@ -941,7 +968,6 @@ So chase the following diagrams to see
 
 \subsection{Semantics of Some Particular Types}
 
-\textcolor{red}{Probably need to replace a lot of $A$s with $\bar A$s in these still}
 \subsubsection{$\Sigma$ Types}
 
 
@@ -980,7 +1006,6 @@ and we define it
   $((x+A)\x B)_\phi(g, (x, b)) = (A_\phi(g, x), B_\phi(g, x, b))$
 \end{defnbox}
 
-\vfil\eject
 \subsubsection{$\Pi$ Types}
 
 
@@ -996,23 +1021,23 @@ Observe that the premises of the formation rule
  give us all of the following derived functions
 to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
-\[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
-\[B_\delta : (\gamma : \Gamma_\delta) \to A_{\bar \delta}(\gamma) \to \rtype \]
-\[A_{\bar \phi} : (g : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
-\[B_\phi : (g : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, A_{\bar \phi}(g, x))
+\[\bar A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (\gamma : \Gamma_\delta) \to \bar A_{\bar \delta}(\gamma) \to \rtype \]
+\[\bar A_{\bar \phi} : (g : \Gamma_{ \phi}) \to \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to \bar A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi)(x : \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, \bar A_{\bar \phi}(g, x))
 \to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
 
 We define the object part of this (of type $((x - A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
 \begin{defnbox}
-  $((x - A) \to B)_\delta (\gamma) = (x : A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) $
+  $((x - A) \to B)_\delta (\gamma) = (x : \bar A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) $
 \end{defnbox}
 and the morphism part needs to be
-\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} g))
+\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : \bar A_{\bar\delta}(\Gamma_{\ltri\phi} g))
 \to B_\delta(\Gamma_{\ltri\phi} g, x))\]
-\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
+\[  \to (x : \bar A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
 and we define it
 \begin{defnbox}
-  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (A_{\bar \phi}(g, x)))$
+  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (\bar A_{\bar \phi}(g, x)))$
 \end{defnbox}
 
 \subsubsection{Lambdas}
@@ -1025,14 +1050,14 @@ and we define it
 
 We want to construct the object part
 \[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x - A) \to B)_{dd}(g)\]
-\[ = (g : \Gamma_{dd}) (x : A_{dd}(g)) \to B_{dd}(g, x)\]
+\[ = (g : \Gamma_{dd}) (x : \bar A_{dd}(g)) \to B_{dd}(g, x)\]
 We get to assume the object part
 \[ M_d : (g : (\Gamma, x - A)_{dd}) \to B_{dd}(g)\]
-\[ =  (g : \Gamma_{dd}) (x : A_{dd}( g) ) \to B_{dd}(g, x)\]
+\[ =  (g : \Gamma_{dd}) (x : \bar A_{dd}( g) ) \to B_{dd}(g, x)\]
 So $(\lambda x .M)_d(g)( x) = M(g, x)$.
 
 As for the end-condition, if we turn the crank on either the top or the bottom of the rule, we get
-\[(g : \Gamma_{ff})(a : A_{de}(\Gamma_{\rtri ff} g)) \to \]
-\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
-\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
+\[(g : \Gamma_{ff})(a : \bar A_{de}(\Gamma_{\rtri ff} g)) \to \]
+\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, \bar A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
+\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, \bar A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
 \end{document}
