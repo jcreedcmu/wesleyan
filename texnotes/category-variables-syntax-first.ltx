@@ -1054,10 +1054,30 @@ We want to construct the object part
 We get to assume the object part
 \[ M_d : (g : (\Gamma, x - A)_{dd}) \to B_{dd}(g)\]
 \[ =  (g : \Gamma_{dd}) (x : \bar A_{dd}( g) ) \to B_{dd}(g, x)\]
-So $(\lambda x .M)_d(g)( x) = M(g, x)$.
+So we define
+\begin{defnbox}
+  $(\lambda x .M)_d(g)( x) = M_d(g, x)$
+\end{defnbox}
 
 As for the end-condition, if we turn the crank on either the top or the bottom of the rule, we get
 \[(g : \Gamma_{ff})(a : \bar A_{de}(\Gamma_{\rtri ff} g)) \to \]
 \[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, \bar A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
 \[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, \bar A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
+so the requirement needed for the conclusion is satisfied trivially by yielding to
+the requirement satisfied by the premise.
+\subsubsection{Hom-Types}
+
+We stare at the formation rule
+\[
+\erule
+{
+\Delta \prov t_1 : \C^\op \qquad \Delta \prov t_2 : \C
+}
+{\Delta ; \Gamma \prov \C[t_1,t_2] : \rtype}
+\]
+The object part should be easy. We just emit the actual homset from the resulting objects:
+\[(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]\]
+and the morphism part should follow from the functoriality of $t_1, t_2$ also
+\[(\C[t_1, t_2])_\phi(g) = \lambda m . \C[(t_1)_\phi, (t_2)_\phi](m)\]
+(we ignore the $g$; the hom-type doesn't depend on any term variables)
 \end{document}
