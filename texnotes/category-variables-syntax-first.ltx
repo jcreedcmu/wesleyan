@@ -202,7 +202,8 @@ Let there be some syntax
 \\
   Term Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x - A \celse \Gamma, x + A$\\
   Types&$A$&$::=$&$(x - A) \to B \celse (x + A) \x B  $\\
-&&&$\celse (\alpha : \C) \to B \celse (\alpha : \C) \x B\celse \cdots$\\
+&&&$\celse (\alpha : \C) \to B \celse (\alpha : \C) \x B$\\
+&&&$\celse \C[t, t] \celse \cdots$\\
   Terms&$M$&$::=$&$x \celse \lambda x . M \celse M\ M \celse \pair M M \celse \pi_1 M \celse \pi_2 M$\\
 &&&$\celse \Lambda \alpha . M \celse M[t] \celse \bpack(M, M) \celse \bunpack(M, \alpha.x.M)$\\
 \\
@@ -224,7 +225,8 @@ distinction is still a little mysterious to me, but it's something
 that seems to make other things work out. A telling fact about it that we can at least foreshadow is
 that dependent product types always bind $+$ variables, and dependent functions types always bind $-$ variables.
 
-We have type-formers for dependent function and product types, and quantifiers over category variables.
+We have type-formers for dependent function and product types. We have quantifiers over category variables.
+We have a hom-type $\C[t,t]$.
 There also may be a collection of base types, which may be thought of as constants $a : K \in \Sigma$
 in some signature that tacitly exists in every other definition. The signature can also include
 term constants $c : A$.
@@ -302,6 +304,14 @@ by swapping every $+$ and $-$, and transposing every type:
 \Delta, \alpha : \C; \Gamma \prov A : \rtype
 }
 {\Delta ; \Gamma \prov (\alpha : \C) \x A : \rtype}
+\]
+
+\[
+\erule
+{
+\Delta \prov t_1 : \C^\op \qquad \Delta \prov t_2 : \C
+}
+{\Delta ; \Gamma \prov \C[t_1,t_2] : \rtype}
 \]
 
 \subsubsection{Terms}
@@ -410,6 +420,42 @@ x - \bar A \in \Gamma
 {
 \Delta ; \Gamma \prov \bunpack(M, \alpha.x.N) : B
 }
+\]
+
+
+\sss{Hom-Types}
+
+\textcolor{red}{The main glaring uncertainty with the
+  following is whether the $\alpha$, $\beta$ in $\coe^{\alpha \beta h}$
+ and $\coe_{\alpha \beta h}$ count as covariant or
+  contravariant occurrences or neither or both or whatever.}
+\textcolor{bluegray}{Other than that, I like the notion that there should be one elim rule $\coe^{\alpha \beta h}$
+that expresses the Yoneda fact that
+\[A(y) = \forall x . \hom(y, x) \to A(x) \]
+and another $\coe_{\alpha \beta h}$ that expresses that
+\[A(y) = \exists x . \hom(x, y) \x A(x) \]
+}
+\[
+\erule
+{
+\Delta \prov t : \C
+}
+{\Delta; \Gamma \prov \rid_t : \C[\bar t, t]}
+\]
+\[
+\erule
+{
+\Delta; \gamma : \C; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \C^\op, \beta : \C ; \Gamma, h - \C[\bar\alpha,\bar\beta] \prov \coe^{\alpha \beta h}(\gamma.M) : A}
+\]
+
+\[
+\erule
+{
+\Delta; \gamma : \C; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \C^\op, \beta : \C ; \Gamma, h + \C[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
 \]
 
 \subsubsection{Category Terms}
@@ -895,6 +941,7 @@ So chase the following diagrams to see
 
 \subsection{Semantics of Some Particular Types}
 
+\textcolor{red}{Probably need to replace a lot of $A$s with $\bar A$s in these still}
 \subsubsection{$\Sigma$ Types}
 
 
@@ -913,9 +960,9 @@ to work with:
 
 \[A_\delta : \Gamma_\delta \to \rtype \]
 \[B_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma) \to \rtype \]
-\[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} \psi) \to A_\epsilon(\Gamma_{\rtri\phi} \psi)\]
-\[B_\phi : (\psi : \Gamma_\phi)(x : A_\delta(\Gamma_{\ltri\phi} \psi)) \to B_\delta(\Gamma_{\ltri\phi}\psi, x)
-\to B_\epsilon(\Gamma_{\rtri\phi}\psi, A_\phi(\psi, x))\]
+\[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g) \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+\[B_\phi : (g : \Gamma_\phi)(x : A_\delta(\Gamma_{\ltri\phi} g)) \to B_\delta(\Gamma_{\ltri\phi}g, x)
+\to B_\epsilon(\Gamma_{\rtri\phi}g, A_\phi(g, x))\]
 
 We define the object part of this, of type
   \( ((x + A) \x B)_\delta : \Gamma_\delta \to \rtype \)
@@ -925,12 +972,12 @@ as
 \end{defnbox}
 
 and the morphism part needs to be
-\[((x+A)\x B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_\delta(\Gamma_{\ltri\phi} \psi))
-\x B_\delta(\Gamma_{\ltri\phi} \psi, x))\]
-\[  \to ((x : A_\epsilon(\Gamma_{\rtri\phi} \psi)) \x B_\epsilon(\Gamma_{\rtri\phi} \psi, x)) \]
+\[((x+A)\x B)_\phi : (g : \Gamma_\phi) \to ((x : A_\delta(\Gamma_{\ltri\phi} g))
+\x B_\delta(\Gamma_{\ltri\phi} g, x))\]
+\[  \to ((x : A_\epsilon(\Gamma_{\rtri\phi} g)) \x B_\epsilon(\Gamma_{\rtri\phi} g, x)) \]
 and we define it
 \begin{defnbox}
-  $((x+A)\x B)_\phi(\psi, (x, b)) = (A_\phi(\psi, x), B_\phi(\psi, x, b))$
+  $((x+A)\x B)_\phi(g, (x, b)) = (A_\phi(g, x), B_\phi(g, x, b))$
 \end{defnbox}
 
 \vfil\eject
@@ -951,21 +998,21 @@ to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
 \[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
 \[B_\delta : (\gamma : \Gamma_\delta) \to A_{\bar \delta}(\gamma) \to \rtype \]
-\[A_{\bar \phi} : (\psi : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} \psi) \to A_{\bar \delta}(\Gamma_{\ltri\phi} \psi) \]
-\[B_\phi : (\psi : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}\psi)) \to B_\delta(\Gamma_{\ltri\phi}\psi, A_{\bar \phi}(\psi, x))
-\to B_\epsilon(\Gamma_{\rtri\phi}\psi, x)\]
+\[A_{\bar \phi} : (g : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, A_{\bar \phi}(g, x))
+\to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
 
 We define the object part of this (of type $((x - A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
 \begin{defnbox}
   $((x - A) \to B)_\delta (\gamma) = (x : A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) $
 \end{defnbox}
 and the morphism part needs to be
-\[((x-A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} \psi))
-\to B_\delta(\Gamma_{\ltri\phi} \psi, x))\]
-\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} \psi)) \to B_\epsilon(\Gamma_{\rtri\phi} \psi, x) \]
+\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} g))
+\to B_\delta(\Gamma_{\ltri\phi} g, x))\]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
 and we define it
 \begin{defnbox}
-  $((x-A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))$
+  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (A_{\bar \phi}(g, x)))$
 \end{defnbox}
 
 \subsubsection{Lambdas}
