@@ -966,8 +966,30 @@ So chase the following diagrams to see
      ed \ar[r, equal]\ar[from=u, "ef"']&ed\ar[u, equal]
 \end{tikzcd}\]
 
-\subsection{Semantics of Some Particular Types}
+\subsection{Semantics of Types}
 
+\begin{defnbox}
+  $((x + A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$\\
+  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x)$\\
+  $((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)$\\
+  $((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)$\\
+  $(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]$\\
+  \\
+  $((x + A)\x B)_\phi(g, (a, b)) = (A_\phi(g, a), B_\phi((g, a), b))$\\
+  $((x - A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (\bar A_{\bar \phi}(g, x)))$\\
+%  $((\alpha : \C) \x A)_{\phi}(g, K) = \bunpack(K, d.a.\bpack(d, A_{\phi d d}(g, a)  )) $\\
+  $((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2))$\\
+  $((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))$\\
+  $(\C[t_1, t_2])_\phi(g, m) = \C[(t_1)_\phi, (t_2)_\phi](m)$
+\end{defnbox}
+
+\subsection{Semantics Of Terms}
+
+\begin{defnbox}
+  $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$
+\end{defnbox}
+
+\subsection{Miscellaneous Notes Reasoning Through Semantics}
 \subsubsection{$\Sigma$ Types}
 
 
@@ -985,7 +1007,7 @@ Observe that the premises of the formation rule
 to work with:
 
 \[A_\delta : \Gamma_\delta \to \rtype \]
-\[B_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma) \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to A_\delta(g) \to \rtype \]
 \[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g) \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
 \[B_\phi : (g : \Gamma_\phi)(x : A_\delta(\Gamma_{\ltri\phi} g)) \to B_\delta(\Gamma_{\ltri\phi}g, x)
 \to B_\epsilon(\Gamma_{\rtri\phi}g, A_\phi(g, x))\]
@@ -994,7 +1016,7 @@ We define the object part of this, of type
   \( ((x + A) \x B)_\delta : \Gamma_\delta \to \rtype \)
 as
 \begin{defnbox}
-  $((x + A) \x B)_\delta (\gamma) = (x : A_\delta(\gamma)) \x B_\delta(\gamma, x)$
+  $((x + A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$
 \end{defnbox}
 
 and the morphism part needs to be
@@ -1022,14 +1044,14 @@ Observe that the premises of the formation rule
 to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
 \[\bar A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
-\[B_\delta : (\gamma : \Gamma_\delta) \to \bar A_{\bar \delta}(\gamma) \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to \bar A_{\bar \delta}(g) \to \rtype \]
 \[\bar A_{\bar \phi} : (g : \Gamma_{ \phi}) \to \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to \bar A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
 \[B_\phi : (g : \Gamma_\phi)(x : \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, \bar A_{\bar \phi}(g, x))
 \to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
 
 We define the object part of this (of type $((x - A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
 \begin{defnbox}
-  $((x - A) \to B)_\delta (\gamma) = (x : \bar A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) $
+  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x) $
 \end{defnbox}
 and the morphism part needs to be
 \[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : \bar A_{\bar\delta}(\Gamma_{\ltri\phi} g))
@@ -1080,4 +1102,77 @@ The object part should be easy. We just emit the actual homset from the resultin
 and the morphism part should follow from the functoriality of $t_1, t_2$ also
 \[(\C[t_1, t_2])_\phi(g) = \lambda m . \C[(t_1)_\phi, (t_2)_\phi](m)\]
 (we ignore the $g$; the hom-type doesn't depend on any term variables)
+
+\subsubsection{Forall}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
+\]
+Note that because $\Gamma$ appears in the conclusion independent of $\alpha$, its appearance
+in the premise is weakened to include $\alpha$. Therefore we immediately appear to have from the premise
+\[A_{\delta d d'} : \Gamma_{\delta d d'}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi f f'})  \to A_{\delta d d'}(\Gamma_{\ltri (\phi f f')} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri (\phi f f')} g)\]
+where $\delta \in \sem \Delta$, $\phi : \delta \to \epsilon \in \sem \Delta$,
+ $d,d' \in \C$, $f : d \to e \in \C$, and $f' : e' \to d' \in \C$. However the semantics of $\Gamma$
+ignores any dependency on $\alpha$, so this is really
+\[A_{\delta d d'} : \Gamma_{\delta}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+
+We need to construct
+\[((\alpha : \C) \to A)_{\delta} : \Gamma_{\delta}  \to \rtype\]
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to ((\alpha : \C) \to A)_{\delta}(\Gamma_{\ltri \phi} g) \to
+((\alpha : \C) \to A)_{\epsilon}(\Gamma_{\rtri \phi} g)\]
+
+So we set
+
+\[((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)\]
+observing that for any fixed $g$ and $\delta$,
+the expression $(d, d') \mapsto A_{\delta dd'}(g)$ is in fact a functor $\C \x \C^\op \to \rset$, for
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+specializes to
+\[A_{\rid_\delta f f'} : (g : \Gamma_{\delta})  \to A_{\delta d d'}( g) \to
+A_{\delta e e'}( g)\]
+
+Having made this choice, we find that for the morphism part, we need to construct
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to
+\left(\int_{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
+\to \left( \int_{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
+so we set
+\[((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))\]
+(thinking of an inhabitant $E$ of a end $\int^{d\in \C} F(d,d)$ as
+given by a function taking an object $d \in \C$ and returning
+$F(d, d)$, subject to the end equalizer constraint)
+
+\subsubsection{Exists}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \x A : \rtype}
+\]
+What we have from the premise and what we need to construct are identical to the forall case, but we take the coend instead of the end.
+
+We have
+\[A_{\delta d d'} : \Gamma_{\delta}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+and we set
+\[((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)\]
+For the morphism part, we must construct
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to
+\left(\int^{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
+\to \left( \int^{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
+so we set
+\[((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2)) \]
+(thinking of an inhabitant $K$ of a coend $\int^{d\in \C} F(d,d)$ as
+given by a pair consisting of an object $K_1 \in \C$ and an inhabitant
+$K_2 \in F(K_1, K_1)$, quotiented by the coend equivalence relation)
+
 \end{document}
