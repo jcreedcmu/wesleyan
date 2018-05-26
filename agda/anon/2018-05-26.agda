@@ -47,6 +47,9 @@ module del (Δ : Del) where
   tlift {δ} {ε} φ = tor (idm δ) φ (idm ε)
 
   module Tw {δ ε δ' ε' : Obj} {ψ : Mor δ' ε'} {φ : Mor δ ε} where
+    _t∙_ : ∀ {δ'' ε''} {ζ : Mor δ'' ε''} → Tor ψ φ → Tor ζ ψ → Tor ζ φ
+    (tor τ1 _ τ2) t∙ (tor σ1 _ σ2) = tor (τ1 ∙ σ1) _ (σ2 ∙ τ2)
+
     ~t : Tor ψ φ → Tor (~m ψ) (~m φ)
     ~t (tor τ1 φ τ2) = tor (~m τ2) (~m φ) (~m τ1)
 
@@ -83,7 +86,6 @@ module Stuff (Δ : Del) where
     ctx/op : Ctx → Ctx
     _:+_ : (Γ : Ctx) (A : Tp Γ) → Ctx
 
-
   postulate
     tp/op : {Γ : Ctx} → Tp Γ → Tp (ctx/op Γ)
 
@@ -96,7 +98,10 @@ module Stuff (Δ : Del) where
           ctx/mor Γ ψ → ctx/mor Γ φ
 
   postulate
-
+    ctx/tor/functorial : ∀ {δ ε δ' ε' δ'' ε''} {φ : Mor δ ε} {φ' : Mor δ' ε'} {φ'' : Mor δ'' ε''} →
+      (Γ : Ctx) (τ : Tor φ' φ) (σ : Tor φ'' φ') (g : ctx/mor Γ φ'')
+      → ctx/tor Γ τ (ctx/tor Γ σ g) ↦ ctx/tor Γ (τ t∙ σ) g
+    {-# REWRITE ctx/tor/functorial #-}
     tp/obj : {Γ : Ctx} (A : Tp Γ) (δ : Obj) → ctx/mor Γ (idm δ) → Set
     tp/mor : {Γ : Ctx} (A : Tp Γ) {δ ε : Obj} (φ : Mor δ ε) →
            (g : ctx/mor Γ φ) → tp/obj A δ (ctx/tor Γ (◅ φ) g) → tp/obj A ε (ctx/tor Γ (▻ φ) g)
@@ -107,4 +112,6 @@ module Stuff (Δ : Del) where
 
   ctx/tor ctx/· τ tt = tt
   ctx/tor (ctx/op Γ) τ = ctx/tor Γ (~t τ)
-  ctx/tor (Γ :+ A) τ (g , a) = (ctx/tor Γ τ g) , {!!}
+  -- This @-pattern is required to make the functoriality rewrite trigger
+  ctx/tor {δ} {ε} {δ'} {ε'} {φ} {ψ} (Γ :+ A) τ@(tor _ _ _) (g , a) =
+    (ctx/tor Γ τ g) , (tp/mor A (L τ) (ctx/tor Γ (◅t τ) g) a)
