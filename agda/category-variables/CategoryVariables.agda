@@ -10,7 +10,11 @@ postulate
      them. -}
   Del : Set
 
-module del (Δ : Del) where
+{- Everything in this module works for a fixed Δ. Later when we deal
+   with quantifiers over category variables, we'll need to think about
+   Δ explicitly -}
+
+module Main (Δ : Del) where
   postulate
 
     {- The category ⟪Δ⟫ -}
@@ -85,11 +89,8 @@ module del (Δ : Del) where
   ▻i : ∀ {δ ε} (φ : Mor δ ε) → Tor φ (idm ε)
   ▻i {δ} {ε} φ = ▻ (idt φ)
 
-module FixDel (Δ : Del) where
-  open del Δ
-
   {- A rather big mutual recursion starts now... -}
-  {- ---------------------------------------------}
+  {-----------------------------------------------}
 
   {- There is a type of contexts which we will actually define as a datatype -}
   data Ctx : Set
@@ -113,12 +114,12 @@ module FixDel (Δ : Del) where
           (Γ : Ctx) (τ : Tor ψ φ) →
           ctx/mor Γ ψ → ctx/mor Γ φ
 
-
   postulate
     {- The meaning of ctx is a functor from 𝕋(Δ) → Set -}
-    ctx/tor/comp : ∀ {δ ε δ' ε' δ'' ε''} {φ : Mor δ ε} {φ' : Mor δ' ε'} {φ'' : Mor δ'' ε''} →
-      (Γ : Ctx) (τ : Tor φ' φ) (σ : Tor φ'' φ') (g : ctx/mor Γ φ'')
-      → ctx/tor Γ τ (ctx/tor Γ σ g) ↦ ctx/tor Γ (τ ∙t σ) g
+    ctx/tor/comp : ∀ {δ ε δ' ε' δ'' ε''} {φ : Mor δ ε} {φ' : Mor δ' ε'} {φ'' : Mor δ'' ε''}
+                 (Γ : Ctx) (τ : Tor φ' φ) (σ : Tor φ'' φ') (g : ctx/mor Γ φ'') →
+                 ctx/tor Γ τ (ctx/tor Γ σ g) ↦  ctx/tor Γ (τ ∙t σ) g
+
     ctx/tor/id : ∀ {δ ε} {φ : Mor δ ε} →
       (Γ : Ctx)  (g : ctx/mor Γ φ)
       → ctx/tor Γ (idt φ) g ↦ g
@@ -140,6 +141,9 @@ module FixDel (Δ : Del) where
   -- This @-pattern is required to make the functoriality rewrite trigger
   ctx/tor {δ} {ε} {δ'} {ε'} {φ} {ψ} (Γ :+ A) τ@(tor _ _ _) (g , a) =
     (ctx/tor Γ τ g) , (tp/mor A (L τ) (ctx/tor Γ (◅ τ) g) a)
+  {-----------------------------------------------}
+  {- Mutual recursion done. -}
+  {-----------------------------------------------}
 
   {- Types can be dualized -}
   postulate
