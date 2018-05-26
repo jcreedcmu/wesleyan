@@ -986,7 +986,8 @@ So chase the following diagrams to see
 \subsection{Semantics Of Terms}
 
 \begin{defnbox}
-  $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$
+  $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$\\
+  $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$
 \end{defnbox}
 
 \subsection{Miscellaneous Notes Reasoning Through Semantics}
@@ -1175,4 +1176,24 @@ so we set
 given by a pair consisting of an object $K_1 \in \C$ and an inhabitant
 $K_2 \in F(K_1, K_1)$, quotiented by the coend equivalence relation)
 
+\subsubsection{Forall Intro}
+from
+\[
+\erule
+{
+\Delta, \alpha : \C ; \Gamma \prov M : A
+}
+{\Delta ; \Gamma \prov \Lambda \alpha . M : (\alpha : \C) \to A }
+\]
+we have, for any $d \in \ssem\Delta$ and $c\in \C$,
+\[M_{dc} : (g : \Gamma_{dd}) \to A_{ddcc}(g) \]
+
+ we need to construct
+\[(\Lambda \alpha : \C . A)_d : ((\alpha : \C) \to A)_{dd} \]
+i.e.
+\[(\Lambda \alpha : \C . A)_d : \lambda g : \Gamma_{dd} . \int_{c\in \C} A_{ddcc}(g) \]
+so we set
+\[(\Lambda \alpha : \C . A)_d(g) = \lambda c . M_{dc}(g) \]
+
+Trying to validate the end condition is turning into a mess of notation.
 \end{document}

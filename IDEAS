@@ -4854,3 +4854,12 @@ Q: Do I get anything if I take seriously as modalities the pair of
 functors going back and forth between polarized and unpolarized
 category variables?
 A: ???
+
+=== 2018.05.26
+
+Q: Where did I put all the tedious calculations that led me to the right definition of end condition?
+A:
+wes//agda/anon/2018-05-22-rewrites.agda
+wes//agda/anon/2018-05-22.agda
+wes//agda/anon/2018-05-22b.agda
+wes//agda/anon/2018-05-22c.agda
