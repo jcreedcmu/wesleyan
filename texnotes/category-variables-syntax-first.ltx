@@ -121,6 +121,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\I{\mathbf{I}}
 \def\C{\mathbf{C}}
 \def\G{\mathbf{G}}
 \def\S{\mathbf{S}}
@@ -906,6 +907,7 @@ Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
    \end{tikzcd}
 \)
 \end{defnbox}
+% end condition
 \begin{thmbox}
 For any $g : \Gamma_{ff}$, we have
 \[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
@@ -987,7 +989,9 @@ So chase the following diagrams to see
 
 \begin{defnbox}
   $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$\\
-  $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$
+  $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$\\
+  $(M[t])_d(g) = M_d(g)(t(dd))$\\
+  $(\rid_t)_d = \rid_{t_{dd}}$
 \end{defnbox}
 
 \subsection{Miscellaneous Notes Reasoning Through Semantics}
@@ -1088,7 +1092,7 @@ As for the end-condition, if we turn the crank on either the top or the bottom o
 \[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, \bar A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
 so the requirement needed for the conclusion is satisfied trivially by yielding to
 the requirement satisfied by the premise.
-\subsubsection{Hom-Types}
+\subsubsection{$\hom$ Types}
 
 We stare at the formation rule
 \[
@@ -1099,9 +1103,13 @@ We stare at the formation rule
 {\Delta ; \Gamma \prov \C[t_1,t_2] : \rtype}
 \]
 The object part should be easy. We just emit the actual homset from the resulting objects:
-\[(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]\]
+\begin{defnbox}
+  $(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]$
+\end{defnbox}
 and the morphism part should follow from the functoriality of $t_1, t_2$ also
-\[(\C[t_1, t_2])_\phi(g) = \lambda m . \C[(t_1)_\phi, (t_2)_\phi](m)\]
+\begin{defnbox}
+  $(\C[t_1, t_2])_\phi(g) = \lambda m . \C[(t_1)_\phi, (t_2)_\phi](m)$
+\end{defnbox}
 (we ignore the $g$; the hom-type doesn't depend on any term variables)
 
 \subsubsection{Forall}
@@ -1131,7 +1139,9 @@ We need to construct
 
 So we set
 
-\[((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)\]
+\begin{defnbox}
+  $((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)$
+\end{defnbox}
 observing that for any fixed $g$ and $\delta$,
 the expression $(d, d') \mapsto A_{\delta dd'}(g)$ is in fact a functor $\C \x \C^\op \to \rset$, for
 \[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
@@ -1145,7 +1155,9 @@ Having made this choice, we find that for the morphism part, we need to construc
 \left(\int_{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
 \to \left( \int_{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
 so we set
-\[((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))\]
+\begin{defnbox}
+  $((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))$
+\end{defnbox}
 (thinking of an inhabitant $E$ of a end $\int^{d\in \C} F(d,d)$ as
 given by a function taking an object $d \in \C$ and returning
 $F(d, d)$, subject to the end equalizer constraint)
@@ -1165,35 +1177,134 @@ We have
 \[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
 A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
 and we set
-\[((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)\]
+\begin{defnbox}
+  $((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)$
+\end{defnbox}
 For the morphism part, we must construct
 \[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to
 \left(\int^{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
 \to \left( \int^{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
 so we set
-\[((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2)) \]
+\begin{defnbox}
+  $((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2)) $
+\end{defnbox}
 (thinking of an inhabitant $K$ of a coend $\int^{d\in \C} F(d,d)$ as
 given by a pair consisting of an object $K_1 \in \C$ and an inhabitant
 $K_2 \in F(K_1, K_1)$, quotiented by the coend equivalence relation)
 
 \subsubsection{Forall Intro}
-from
+Let's use $\I$ for a category,
+with typical morphisms $m : i \to j$, to keep variables from colliding.
+From
 \[
 \erule
 {
-\Delta, \alpha : \C ; \Gamma \prov M : A
+\Delta, \alpha : \I ; \Gamma \prov M : A
 }
-{\Delta ; \Gamma \prov \Lambda \alpha . M : (\alpha : \C) \to A }
+{\Delta ; \Gamma \prov \Lambda \alpha . M : (\alpha : \I) \to A }
 \]
-we have, for any $d \in \ssem\Delta$ and $c\in \C$,
-\[M_{dc} : (g : \Gamma_{dd}) \to A_{ddcc}(g) \]
+we have, for any $d \in \ssem\Delta$ and $i\in \I$,
+\[M_{di} : (g : \Gamma_{dd}) \to A_{ddii}(g) \]
 
  we need to construct
-\[(\Lambda \alpha : \C . A)_d : ((\alpha : \C) \to A)_{dd} \]
+\[(\Lambda \alpha : \I . A)_d : ((\alpha : \I) \to A)_{dd} \]
 i.e.
-\[(\Lambda \alpha : \C . A)_d : \lambda g : \Gamma_{dd} . \int_{c\in \C} A_{ddcc}(g) \]
+\[(\Lambda \alpha : \I . A)_d : \lambda g : \Gamma_{dd} . \int_{i\in \I} A_{ddii}(g) \]
 so we set
-\[(\Lambda \alpha : \C . A)_d(g) = \lambda c . M_{dc}(g) \]
+\begin{defnbox}
+  $(\Lambda \alpha : \I . A)_d(g) = \lambda i . M_{di}(g) $
+\end{defnbox}
+Let's try to validate the end condition. The premise tells us that for any
+ $f : d \to e \in \ssem \Delta$  and $m : i \to j \in \I$, we have
+\[ (g : \Gamma_{ff}) \to A_{fdmi}(\Gamma_{\rtri \fdom}g, M_{di}(\Gamma_{\fdom}g )) \equiv \]
+\[ A_{efjm}(\Gamma_{\rtri \fcod} g, M_{ej}( \Gamma_{\fcod} g))\]
+We want to check that for any  $f : d \to e \in \ssem \Delta$, we have
+\[ (g : \Gamma_{ff}) \to ((\alpha : \ii) \to A)_{fd}(\Gamma_{\rtri \fdom}g, (\Lambda \alpha . M)_{d}(\Gamma_{\fdom}g )) \equiv \]
+\[ ((\alpha : \ii) \to A)_{ef}(\Gamma_{\rtri \fcod} g, (\Lambda \alpha . M)_{e}( \Gamma_{\fcod} g))\]
+so let's expand the latter. Expanding the definition of transport at $A$, we get
+\[ (g : \Gamma_{ff}) \to \lambda i . A_{fdii} (\Gamma_{\rtri \fdom}g, (\Lambda \alpha . M)_{d}(\Gamma_{\fdom}g )(i))  \equiv \]
+\[ \lambda i . A_{efii}(\Gamma_{\rtri \fcod} g, (\Lambda \alpha . M)_{e}( \Gamma_{\fcod} g)(i))\]
+and then expanding the meaning of $\Lambda$, we get
+\[ (g : \Gamma_{ff}) \to \lambda i . A_{fdii} (\Gamma_{\rtri \fdom}g, M_{di}(\Gamma_{\fdom}g ))  \equiv \]
+\[ \lambda i . A_{efii}(\Gamma_{\rtri \fcod} g, M_{ei}( \Gamma_{\fcod} g))\]
+Great, this follows from the premise by instantiating at $m = \rid_i$.
 
-Trying to validate the end condition is turning into a mess of notation.
+\subsubsection{Forall Elim}
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (\alpha : \I) \to A
+\qquad
+\Delta \prov t : \I
+}
+{
+\Delta ; \Gamma \prov M[t] : [t/\alpha]A
+}
+\]
+We have $M_d : (g : \Gamma_{dd}) \to \int_{i \in \I} A_{ddii}(g)$
+and we need to construct
+ \[(M[t])_d = (g : \Gamma_{dd}) \to ([t/\alpha] A)_{dd}(g)\]
+and I think I'm going to assume that works out to be
+ \[(M[t])_d = (g : \Gamma_{dd}) \to A_{ddt(dd)t(dd)}(g)\]
+and $\sem t : \sem \Delta \to \I$, so we set
+\begin{defnbox}
+  $(M[t])_d(g) = M_d(g)(t(dd))$
+\end{defnbox}
+
+\subsubsection{$\hom$ intro}
+
+\[
+\erule
+{
+\Delta \prov t : \C
+}
+{\Delta; \Gamma \prov \rid_t : \C[\bar t, t]}
+\]
+We have $\sem t : \sem \Delta \to \C$, we need to construct
+\[(\rid_t)_d : \C[\bar t_{dd}, t_{dd}]\]
+Well surely
+\begin{thmbox}
+  $\bar t_\delta = t_{\bar\delta}$
+\end{thmbox}
+so we can get away with
+\begin{defnbox}
+  $(\rid_t)_d = \rid_{t_{dd}}$
+\end{defnbox}
+\subsubsection{$\hom$ elim $+$}
+\[
+\erule
+{
+\Delta; \gamma : \I; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \I^\op, \beta : \I ; \Gamma, h - \I[\bar\alpha,\bar\beta] \prov \coe^{\alpha \beta h}(\gamma.M) : A}
+\]
+
+Let $d\in \ssem\Delta, a \in \I, b \in \I$ be given. From the fact that $\bar \alpha, \bar \beta \not \in A$
+we want to conclude that $A$, as a functor, only depends contravariantly on $\I$ through $\alpha$,
+ and only covariantly on $\I$ through $\beta$. So we can write its object part as $A_{ddab}$. To be more precise,
+it factors through some other semantic functor, which we can write as $A_{ddab}$.
+And $\Gamma$ doesn't depend on $\alpha, \beta$ at all. If we allowed stuff after the $h$ in the context,
+it'd have to be subject to the same constraint as $A$ is, I suppose. We want to construct
+\[(\coe^{\alpha \beta h}(\gamma.M))_{dab} : (g : \Gamma_{dd})(h : \I(a, b)) \to  A_{ddab}(g, h)\]
+and what we have from the premise is, for any $d \in \ssem \Delta$ and $i \in \I$, that
+\[M_{di} : (g : \Gamma_{dd}) \to  A_{ddii}(g, \rid_i)\]
+But aha, this is exactly where end-transport comes in! {\em Because} we have the morphism $h$,
+we can take either of $A_{ddaa}(g, \rid_a)$ or $A_{ddbb}(g, \rid_b)$ and transport to
+$A_{ddab}(g, h)$ and get the same thing.
+
+Let's see if I can formulate this in real syntax:
+\begin{defnbox}
+$(\coe^{\alpha \beta h}(\gamma.M))_{dab}(g, h) =  A_{ddah}(M_{da}(g)) = A_{ddhb}(M_{db}(g))$
+\end{defnbox}
+
+Something's going slightly wrong with the transport variance, but I think I can fix it.
+\subsubsection{$\hom$ elim $-$}
+\[
+\erule
+{
+\Delta; \gamma : \I; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \I^\op, \beta : \I ; \Gamma, h + \I[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
+\]
+
 \end{document}
