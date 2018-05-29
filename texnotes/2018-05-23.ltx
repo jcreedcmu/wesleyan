@@ -14,6 +14,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\thn{\mathrel|}
 \def\coe{\mathsf{coe}}
 \def\bpush{\mathbf{push}}
 \def\bpull{\mathbf{pull}}
@@ -265,4 +266,97 @@ Hm I don't think this is much easier than doing it diagrammatically.
 \[ (\Gamma, x - A)_\tau (g, a) = (\Gamma^\op, x + A)^\op_\phi \]
 \[ = (\Gamma^\op_{\bar \tau} g, A_{\ll \bar \tau}(\Gamma^\op_{\ltri \bar \tau}g , a) ) \]
 \[ = (\Gamma_\tau g, A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
+
+\section{Are Signed Variables Necessary?}
+
+If I have unsigned variables in $\Delta$, is there a way of
+`automatically doing the right thing' with respect to variables in
+$\Gamma$ without knowing a priori what sign they are?
+
+%% Recall that it's the $\Pi$ and $\Sigma$ rules that motivated this marking in the first place.
+%% $\alpha + \C ; \Gamma, x + A \prov B : \rtype$ has morphism interpretation
+%% \[(\alpha : \C) : \Gamma\]
+
+I think I can reduce confusion by being more explicit about how I've
+really been treating variables up to this point. There is an operation
+$\Delta\mapsto\Delta^\op$ which takes $\alpha : \C$ to $\alpha :
+\C^\op$ (or, if you like, $\alpha + \C$ to $\alpha - \C$ and
+vice-versa)
+
+The operation $\Gamma \mapsto \Gamma^\op$ does
+\begin{defnbox}
+  \begin{tabular}{lll}
+    $(\Gamma, x + A)^\op$&$=$&$\Gamma^\op, x - A$\\
+    $(\Gamma, x - A)^\op$&$=$&$\Gamma^\op, x + A$\\
+  \end{tabular}
+\end{defnbox}
+and satisfies
+\begin{thmbox}
+  If $\Delta \prov \Gamma \rctx$, then $\Delta^\op \prov \Gamma^\op \rctx$
+\end{thmbox}
+where context formation is given by
+\[
+\erule
+{\Delta \prov \Gamma \rctx\qquad \Delta \thn \Gamma \prov A :\rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\qquad
+\erule
+{\Delta \prov \Gamma \rctx\qquad \Delta^\op \thn \Gamma^\op \prov A :\rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+But there's also a substitution operation on $\Delta$s.
+We have
+\[
+\erule
+{\alpha : \C \in \Delta}
+{\Delta \prov \alpha : \C}
+\qquad
+\erule
+{\alpha : \C \in \Delta}
+{\Delta \prov \bar\alpha : \C^\op}
+\qquad
+\erule
+{\Delta \prov t_i : \C_i \qquad F : \C_1 \x \cdots \C_n \to \C}
+{\Delta \prov F(t_1, \ldots, t_n)  : \C}
+\]
+\[
+\erule
+{\Delta \prov \theta : \Delta' \qquad \Delta \prov t  : \C}
+{\Delta \prov \theta[t / \alpha] : \Delta', \alpha : \C}
+\]
+so we expect a substitution theorem
+\begin{thmbox}
+  If $\Delta \prov \theta : \Delta'$ and $\Delta' \prov J$, then $\Delta \prov \theta J$.
+\end{thmbox}
+The thing we can do to variables $\bar \alpha$ extends to a general operation
+ $t^\op$ on terms
+\begin{defnbox}
+  \begin{tabular}{lll}
+    $ \alpha^\op$&$=$&$\bar\alpha$\\
+    $ \bar\alpha^\op$&$=$&$\alpha$\\
+    $(F(t_1, \ldots, t_n))^\op$&$=$&$F^\op(t_1^\op, \ldots, t_n^\op)$\\
+  \end{tabular}
+\end{defnbox}
+which satisfies
+\begin{thmbox}
+  If $\Delta \prov t : \C$ then $\Delta \prov  t^\op : \C^\op$
+\end{thmbox}
+
+There's an operation we can do from the other side, which arises from a canonical
+substitution $\Delta^\op \prov \mathsf{rev}_\Delta : \Delta$. For every $\alpha : C$
+in $\Delta$, we have $[\bar\alpha / \alpha]$ in $\mathsf{rev}_\Delta$. We write
+$\mathsf{rev_\Delta}$ applied to some thing $A$, $t$, etc. as
+ $\bar A$, $\bar t$, etc. So the substitution theorem gives us that
+\begin{thmbox}
+  If $\Delta \prov t : \C$, then $\Delta^\op \prov \bar t : \C$\\
+  If $\Delta \thn \Gamma \prov A : \rtype$, then $\Delta^\op \thn \bar \Gamma \prov  \bar A : \rtype$
+\end{thmbox}
+
+Ok, what then is the definition of substitution when we hit variables?
+\[[t/\alpha]\bar\alpha =  ?\]
+We have $\Delta \prov t : \C$ and $\alpha : \C \in \Delta'$, so
+$\Delta \prov \bar \alpha : \C^\op$, so we need $\Delta \prov [t/\alpha]\bar \alpha : \C^\op$.
+The sensible thing to do is
+\[[t/\alpha]\bar\alpha =  t^\op\]
+Apart from that, carrying out substitutions is the homomorphism we expect it to be.
 \end{document}
