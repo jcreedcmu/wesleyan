@@ -1,0 +1,546 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\rr{{\mathsf r}}
+\def\ii{{\mathbb I}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\ltri{\triangleleft}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{cat}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{A Syntax for Category Variables}
+Let there be some syntax class
+\[\begin{tabular}{rccl}
+  Categories&$\C$&$::=$&$\cdots$\\
+  Category Contexts&$\Delta$&$::=$&$\cdot\celse \Delta, \alpha : \C$\\
+\end{tabular}\]
+We suppose that some collection of categories has been prescribed. One
+could think of $\C$ as `codes for categories', but we mostly just
+pretend that they're literal mathematical objects sitting in the
+syntax. The intuitive (and soon to be described formal)
+meaning of $\alpha : \C$ is that $\alpha$ has type $\C \x \C^\op$.
+
+There is a notion of definable functor; terms of category type, in category context.
+\[\begin{tabular}{rccl}
+  Category Terms&$t$&$::=$&$\alpha \celse \bar t \celse F(t, \cdots, t)$\\
+\end{tabular}\]
+\[
+\erule
+{\alpha : \C \in\Delta}
+{\Delta \prov \alpha : \C}
+\qquad
+\erule
+{\Delta \prov t : \C}
+{\Delta \prov \bar t : \C^\op}
+\qquad
+\erule
+{F : \C_1 \x \cdots \C_n \to \C \qquad \Delta \prov t_i : \C_i }
+{\Delta \prov F(t_1, \ldots, t_n) : \C}
+\]
+We have reductions
+\[ \overline{\overline t} \mapsto t \]
+\[ \overline{F(t_1, \ldots, t_n)} \mapsto F(\bar t_1, \ldots, \bar t_n) \]
+We have term-level contexts, with types so far unspecified
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x - A \celse \Gamma, x + A$\\
+  Types&$A$&$::=$&$\cdots$\\
+\end{tabular}\]
+There is a polarity distinction between variables that undergo forward
+($+$) and backward ($-$) transport in the semantics.
+
+\subsection{Judgments}
+
+\begin{declbox}
+  $ \Delta \prov  \Gamma \rctx $\\
+   $\Delta ; \Gamma \prov A : \rtype$\\
+   $\Delta ; \Gamma \prov M : A$
+\end{declbox}
+
+Context formation is defined by
+\[
+\erule
+{}
+{\Delta \prov \cdot \rctx}
+\]
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\qquad
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^{\op} \prov  A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+%% There is an operation taking $A$ to $\bar A$, which is the replacement
+%% of every context term $t$ appearing in it with its dual $\bar t$. To
+%% be clear, not every subterm of that every term hereditarily;
+%% merely, when we reach a base type $a(t_1, \ldots, t_n)$ that has some category terms for
+%% arguments, we dualize each one of them, yielding $a(\bar t_1, \ldots, \bar t_n)$.
+
+%% I guess I ought to just say that every type $A$ needs to come equipped
+%% with a dual $\bar A$, satsifying some lemma to be determined, and what
+%% I just said above is the definition of duals for base types. I
+%% expect/hope the dualizing clause for function types, pair types, etc. to be mere
+%% homomorphisms.
+
+There is an operation $\Gamma^\op$  defined by swapping every $+$ and $-$,
+and transposing every type:
+\[
+\begin{tabular}{rcl}
+  ${(\Gamma, x + A)^\op}$&$=$&$\Gamma^\op , x - A$\\
+  ${(\Gamma, x - A)^\op}$&$=$&$\Gamma^\op , x + A$\\
+\end{tabular}
+\]
+
+Well-formedness of contexts is preserved by this operation, which is an involution:
+\begin{lemma}
+$(\Gamma^\op)^\op = \Gamma$
+\end{lemma}
+
+\begin{lemma}
+If $\Delta \prov \Gamma \rctx$ then $\Delta \prov \Gamma^\op \rctx$.
+\end{lemma}
+
+\begin{proof}
+By induction. Suppose
+\[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}\]
+We need to show $\Delta \prov \Gamma^\op, x -  A \rctx$. By induction hypothesis,
+$\Delta \prov \Gamma^\op \rctx$. So we derive
+\[
+\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta ; \Gamma \prov  A : \rtype}
+{\Delta \prov \Gamma^\op, x -  A \rctx}
+\]
+We're silently using the fact that $(\Gamma^\op)^\op = \Gamma$.
+
+In the other case, we have
+\[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^\op \prov  A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}\]
+and need to show
+$\Delta \prov \Gamma^\op, x +  A \rctx$. By induction hypothesis,
+$\Delta \prov \Gamma^\op \rctx$. So we derive
+\[
+\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta ; \Gamma^\op \prov  A : \rtype}
+{\Delta \prov \Gamma^\op, x +  A \rctx}
+\]
+\cqed
+\end{proof}
+\subsection{Semantics of Types}
+Before we say what types we have, we'll say what it means to be a
+semantically meaningful type in a given pair of contexts. We're going to define two
+notions of the `meaning' of a context.
+One is just the product of all the categories in it
+\[
+\begin{tabular}{rcl}
+  $\ssem \cdot$&$=$&$\textbf{1}$\\
+  $\ssem {\Delta, \alpha : \C}$&$=$&$\ssem \Delta \x \C$\\
+\end{tabular}
+\]
+and the other includes dual categories:
+\[
+\sem {\Delta} = \ssem \Delta \x \ssem \Delta^\op
+\]
+We will write $\delta$ for objects $(d, d')$ of $\sem \Delta$
+where $d, d'$ are objects of $\ssem \Delta$. We write $\phi : \delta \to \epsilon$
+for a morphism of $\sem \Delta$ where the underlying morphisms in $\ssem \Delta$
+are $f : d \to e$ and $f' : e' \to d'$.
+When $\delta = (d, d') \in \sem \Delta$, we write the swapping of the two objects as
+\[ \delta = (d', d) \in \sem \Delta\]
+We can swap morphisms as follows: if
+\[\phi = (f, f') : \delta \to \epsilon = (d, d') \to (e, e')\]
+then define
+\[ \bar \phi = (f', f) : \bar \epsilon \to \bar \delta =  (e', e) \to (d', d) \]
+
+Next, we will declare the functions involved in the semantics of contexts and types.
+
+In general we will write $\rtype$ for the ambient metatheory's notion
+of type, and use agda-style syntax for dependent products and sums in
+the ambient metatheory, i.e $(x : A) \to B$ and $(x : A) \x B$. We may
+be somewhat lax about currying and generally how arguments are
+written.
+
+Suppose $\Delta \prov \Gamma \rctx$, and $\delta$
+is an object in $\sem \Delta$, and
+$\phi : \delta \to \epsilon$ is a morphism in $\sem \Delta$. Then we declare
+\begin{declbox}
+  $\Gamma_\delta : \rtype$.\\
+  $\Gamma_\phi : \rtype$.\\
+  $\Gamma_\phi^< : \Gamma_\phi \to \Gamma_\delta $\\
+  $\Gamma_\phi^> : \Gamma_\phi \to \Gamma_\epsilon $\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)$
+\end{declbox}
+and forward-declare the following lemmas, to be proved mutually recursively with
+the well-typedness of the definitions below
+\textcolor{red}{ Actually I'm being a little sloppy here and kind of assuming UIP in a way
+I'd rather not.
+Not 100\% sure the best way to treat this.
+Maybe somehow use pairs of parallel functions,
+and then prove they're equivariant up to a swap after the fact?}
+\begin{thmbox}
+  $(\Gamma^\op)_\delta = \Gamma_{\bar \delta}$\\
+  $(\Gamma^\op)_\phi = \Gamma_{\bar \phi}$\\
+  $(\Gamma^\op)^<_\phi = \Gamma_{\bar \phi}^> : \Gamma_{\bar \phi} \to \Gamma_{\bar \delta}$\\
+  $(\Gamma^\op)^>_\phi = \Gamma_{\bar \phi}^< : \Gamma_{\bar \phi} \to \Gamma_{\bar \epsilon}$
+\end{thmbox}
+The meaning of a context $\Gamma$ consists of four parts. First, $\Gamma_\delta$ is a type, `the
+meaning of $\Gamma$ at object $\delta$'. The remaining three parts
+constitute a notion of relational transport. $\Gamma_\phi$ is a
+type; the apex of a relation. The two arms are given by the functions
+$\Gamma^<_\phi$ of type $\Gamma_\phi \to \Gamma_\delta$, and
+$\Gamma^>_\phi$ of type $\Gamma_\phi \to \Gamma_\epsilon$ that project
+down to the meaning of the context at the two endpoints.
+
+The meaning of a type consists of two parts. The object part, given a member
+of the context's meaning at a certain object, yields a type. The morphism part,
+given a member of the apex of the relation of the context's morphism part,
+gives transport from the type's meaning at object to the other.
+
+We can now recursively define the semantics of contexts, assuming the
+semantics of types is given.
+\begin{defnbox}
+ $(\cdot)_\delta = \bone$\\
+ $(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)$\\
+ $(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)$\\
+\\
+ $(\cdot)_\phi = \bone$\\
+ $(\Gamma, x + A)_\phi = (\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )$\\
+ $(\Gamma, x - A)_\phi = (\psi : \Gamma_\phi) \x A_{\bar\epsilon}( \Gamma_\phi^> \psi )$\\
+\\
+ $(\cdot)_\phi^< = {!}$\\
+ $(\Gamma, x + A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, a)$\\
+ $(\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, a))$\\
+\\
+ $(\cdot)_\phi^> = {!}$\\
+ $(\Gamma, x + A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, A_\phi(\psi, a))$\\
+ $(\Gamma, x - A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, a)$
+\end{defnbox}
+%% Let's carefully understand how all of these typecheck. When we say
+%% \[(\Gamma, x + A)_\delta = (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
+%% it's unproblematic that $\gamma$ has the right type to be fed to $A_\delta$.
+%% But in
+%% \[(\Gamma, x - A)_\delta = (\gamma : \Gamma_\delta) \x { A}_\delta(\gamma)\]
+%% we note that we have $\Delta \prov \Gamma \rctx$, but
+%% $\Delta ; \Gamma^\op \prov  A : \rtype$.
+%% So $A_\delta$ wants its argument to be an element of $\Gamma^\op_\delta$ rather than $\Gamma_\delta$, but we can,
+%% mutually recursively with the above definition, prove that ???
+%% so it's fine to give it $\gamma$.
+
+
+%% Moving past that for the time being, we can see that $\Gamma_\phi^<\psi$ is the right type, namely
+%% $\Gamma_\delta$, to go into $A_\delta$, and $\Gamma_\phi^>\psi$ is of type $\Gamma_\epsilon$, appropriate
+%% to go into $A_\epsilon$.
+
+Let's see how the projection functions typecheck.
+\subsubsection{Case 1}
+The type of $(\Gamma, x + A)_\phi^<$ needs
+to be is a function from $(\Gamma, x + A)_\phi$ to $(\Gamma, x + A)_\delta$, that is, of type
+\[((\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )) \to (\gamma : \Gamma_\delta) \x A_\delta(\gamma)\]
+and we can check that the definition
+\[(\Gamma, x + A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, a)\]
+satisfies this type: the second component out the output pair needs to be $A_\delta(\gamma)$ for $\gamma$
+specifically being the first component $\Gamma_\phi^<\psi$, and indeed $a$ has
+type $A_\delta(\Gamma_\phi^<\psi)$.
+\subsubsection{Case 2}
+
+The type of $(\Gamma, x - A)_\phi^<$ needs to be a function from
+$(\Gamma, x - A)_\phi$ to $(\Gamma, x - A)_\delta$, that is, of type
+\[((\psi : \Gamma_\phi) \x A_{\bar \epsilon}( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\delta) \x A_{\bar \delta}(\gamma)\]
+%
+and so since $A_{\bar \epsilon}( \Gamma_\phi^> \psi )$ is not
+straightforwardly a substitution instance of $A_{\bar\delta}(\gamma)$ like in the previous case, we
+need to do some coercion to make the second component of the output.
+Stare at the definition
+\[ (\Gamma, x - A)_\phi^< (\psi , a) = (\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, a)) \]
+and take $A_{\bar \phi}$'s type, which is known from the fact that
+$\Delta ; \Gamma^\op \prov A : \rtype$ to be
+\[(\psi : (\Gamma^\op)_{\bar \phi}) \to A_{\bar \epsilon}((\Gamma^\op)_{\bar \phi}^< \psi) \to A_{\bar \delta}((\Gamma^\op)_{\bar \phi}^> \psi) \]
+and apply the above lemmas to see that it's the same thing as
+\[(\psi : \Gamma_{\phi}) \to A_{\bar \epsilon}(\Gamma_\phi^> \psi) \to A_{\bar \delta}(\Gamma_\phi^< \psi) \]
+which is just the right thing to make the definition type-check.
+
+That was the hardest case --- the remaining two are relatively easy.
+\subsubsection{Case 3}
+The type that $(\Gamma, x + A)_\phi^>$ needs to be is $(\Gamma, x + A)_\phi \to (\Gamma, x + A)_\epsilon$,
+i.e.
+\[ ((\psi : \Gamma_\phi) \x A_\delta( \Gamma_\phi^< \psi )) \to ((\gamma : \Gamma_\epsilon) \x A_\epsilon(\gamma)) \]
+here we can stare at the definition
+\[ (\Gamma, x + A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, A_\phi(\psi, a)) \]
+and directly see from the fact that transport along $A$ is typed
+\[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)\]
+that it works, without any pesky contravariance going on to confuse us.
+\subsubsection{Case 4}
+Finally, the type that $(\Gamma, x - A)_\phi^>$ needs to be is
+$(\Gamma, x - A)_\phi \to (\Gamma, x - A)_\epsilon$, i.e.
+\[((\psi : \Gamma_\phi) \x A_{\bar\epsilon}( \Gamma_\phi^> \psi )) \to (\gamma : \Gamma_\epsilon) \x A_{\bar\epsilon}(\gamma)\]
+and we can stare at the definition
+\[ (\Gamma, x - A)_\phi^> (\psi , a) = (\Gamma_\phi^>\psi, a) \]
+and see that it works without reference to the structure of $A$, just like the first case
+$(\Gamma, x + A)_\phi^<$ did. The term $a$ is already at type $A_{\bar\epsilon}(\Gamma^>_\phi \psi)$ and needs
+no transport.
+\subsection{Checking the Lemma about Transport Dualization}
+By appealing to the induction hypothesis in both cases, we have
+ \[(\Gamma^\op, x + A)_\phi^< (\psi , a) = ((\Gamma^\op)_\phi^<\psi, a)\]
+ \[= (\Gamma_{\bar \phi}^>\psi, a) = (\Gamma, x - A)_{\bar \phi}^> (\psi , a)  \]
+and
+ \[(\Gamma^\op, x + A)_\phi^> (\psi , a) = ((\Gamma^\op)_\phi^>\psi, A_\phi(\psi, a))\]
+ \[= (\Gamma_{\bar \phi}^<\psi, A_{\phi}(\psi, a)) = (\Gamma, x - A)_{\bar \phi}^< (\psi , a) = \]
+
+
+
+\subsection{Defining Some Types}
+
+Now that I've said what it means to be a type --- or at least the bare
+minimum of what's required; I'm probably still missing some
+preservation-of-composition lemma declarations --- let's try defining some.
+
+\subsubsection{$\Sigma$ Types}
+
+\[
+\erule
+{
+\Delta; \Gamma \prov A : \rtype \qquad
+\Delta; \Gamma, x + A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x : A) \x B : \rtype}
+\]
+
+Observe that the premises of this rule give us all of the following derived functions
+to work with:
+
+\[A_\delta : \Gamma_\delta \to \rtype \]
+\[B_\delta : (\gamma : \Gamma_\delta) \to A_\delta(\gamma) \to \rtype \]
+\[A_\phi : (\psi : \Gamma_\phi) \to A_\delta(\Gamma_\phi^< \psi) \to A_\epsilon(\Gamma_\phi^> \psi)\]
+\[B_\phi : (\psi : \Gamma_\phi)(x : A_\delta(\Gamma_\phi^<\psi)) \to B_\delta(\Gamma_\phi^<\psi, x)
+\to B_\epsilon(\Gamma_\phi^>\psi, A_\phi(\psi, x))\]
+
+We define the object part of this by
+\[((x : A) \x B)_\delta : \Gamma_\delta \to \rtype \]
+\[((x : A) \x B)_\delta (\gamma) = (x : A_\delta(\gamma)) \x B_\delta(\gamma, x) \]
+
+and the morphism part needs to be
+\[((x:A)\x B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_\delta(\Gamma_\phi^< \psi))
+\x B_\delta(\Gamma_\phi^< \psi, x))\]
+\[  \to ((x : A_\epsilon(\Gamma_\phi^> \psi)) \x B_\epsilon(\Gamma_\phi^> \psi, x)) \]
+and we define it
+\[((x:A)\x B)_\phi(\psi, (x, b)) = (A_\phi(\psi, x), B_\phi(\psi, x, b))\]
+
+\vfil\eject
+\subsubsection{$\Pi$ Types}
+
+\[
+\erule
+{
+\Delta; \Gamma^\op \prov A : \rtype \qquad
+\Delta; \Gamma, x - A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x : A) \to B : \rtype}
+\]
+
+Observe that the premises of this rule give us all of the following derived functions
+to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
+
+\[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (\gamma : \Gamma_\delta) \to A_{\bar \delta}(\gamma) \to \rtype \]
+\[A_{\bar \phi} : (\psi : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_\phi^> \psi) \to A_{\bar \delta}(\Gamma_\phi^< \psi) \]
+\[B_\phi : (\psi : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_\phi^>\psi)) \to B_\delta(\Gamma_\phi^<\psi, A_{\bar \phi}(\psi, x))
+\to B_\epsilon(\Gamma_\phi^>\psi, x)\]
+
+We define the object part of this by
+\[((x : A) \to B)_\delta : \Gamma_\delta \to \rtype \]
+\[((x : A) \to B)_\delta (\gamma) = (x : A_{\bar \delta}(\gamma)) \to B_\delta(\gamma, x) \]
+
+and the morphism part needs to be
+\[((x:A)\to B)_\phi : (\psi : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_\phi^< \psi))
+\to B_\delta(\Gamma_\phi^< \psi, x))\]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_\phi^> \psi)) \to B_\epsilon(\Gamma_\phi^> \psi, x) \]
+and we define it
+\[((x:A)\to B)_\phi(\psi, f, x) = B_\phi(\psi, x, f (A_{\bar \phi}(\psi, x)))\]
+
+\end{document}
