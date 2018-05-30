@@ -14,6 +14,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\fdom{\mathbf{d}f}
+\def\fcod{\mathbf{e}f}
 \def\thn{\mathrel|}
 \def\coe{\mathsf{coe}}
 \def\bpush{\mathbf{push}}
@@ -385,12 +387,12 @@ term variables.
 \[
 \erule
 {}
-{\Delta ; \Gamma, x - A \prov x^\dagger : \dagger \bar A}
+{\Delta ; \Gamma, x - A \prov x^\dag : \dag \bar A}
 \]
 
 We know $\Delta^\op ; \Gamma^\op \prov A : \rtype$. And so
-$\Delta ; \Gamma^\dagger \prov \bar A : \rtype$. Is there, like...
-a substitution $\Gamma^\dagger \prov \omega_\Gamma : \Gamma$? That seems like
+$\Delta ; \Gamma^\dag \prov \bar A : \rtype$. Is there, like...
+a substitution $\Gamma^\dag \prov \omega_\Gamma : \Gamma$? That seems like
 a lot to ask for.
 
 Let's try this with different syntax.
@@ -408,9 +410,9 @@ If $\Delta \prov \Gamma \rctx$, then $\flip \Delta \prov \flip \Gamma  \rctx$\\
 If $\Delta \prov J$, then $\flip \Delta \prov \flip J$\\
 \\
 $\opp \Gamma$ means flip the signs in $\Gamma$ everywhere\\
-$\dagger \Gamma = \opp \flip \Gamma = \flip \opp \Gamma$ \\
-Also $\dagger$ is a substitution. $\dagger \Gamma \prov \dagger : \Gamma$.\\
-If $\Delta ; \Gamma \prov J$, then $\Delta; \dagger \Gamma \prov \dagger J$.\\
+$\dag \Gamma = \opp \flip \Gamma = \flip \opp \Gamma$ \\
+Also $\dag$ is a substitution. $\dag \Gamma \prov \dag : \Gamma$.\\
+If $\Delta ; \Gamma \prov J$, then $\Delta; \dag \Gamma \prov \dag J$.\\
 \end{tabbing}
 Since we have
 \[
@@ -419,8 +421,8 @@ Since we have
 {\Delta \prov \bar \alpha : \C^\op}
 \]
 we need to define $\bar t$, but we can.
-The existence of the substitution $\dagger$ means that we must be able to do
-\[\Delta ; x - \flip A \prov \dagger x : A\]
+The existence of the substitution $\dag$ means that we must be able to do
+\[\Delta ; x - \flip A \prov \dag x : A\]
 So I can make this my variable rule
 \[
 \erule
@@ -443,8 +445,8 @@ It's normally
 and so here I have
 \[
 \erule
-{\dagger \Gamma \prov \theta : \dag_\Gamma \qquad \dag\Gamma, x - \flip A \prov x^* : \dagger_\Gamma A}
-{\dagger \Gamma, x - \flip A \prov \dagger_\Gamma[x^*/x] : \Gamma, x + A}
+{\dag \Gamma \prov \theta : \dag_\Gamma \qquad \dag\Gamma, x - \flip A \prov x^* : \dag_\Gamma A}
+{\dag \Gamma, x - \flip A \prov \dag_\Gamma[x^*/x] : \Gamma, x + A}
 \]
 Okay, it seems like the essence of this is that there is a
 substitution that swaps $x$ for $x^*$ everywhere.
@@ -459,12 +461,12 @@ At the bottom of category expressions, you can say $\alpha$ or $\bar \alpha$.
 At the bottom of term expressions, you can say $x$ or $x^*$. There's
 a substitution that flips all $\alpha$ variables, called $\flb$.
 There's a substitution that flips all $x$ variables to $x^*$, called $\fls$.
-$\dagger\Gamma$ abbreviates $\flb \Gamma^\op$.
+$\dag\Gamma$ abbreviates $\flb \Gamma^\op$.
 \begin{thmbox}
   If $\Delta \prov \Gamma \rctx$, then $\Delta^\op \prov \Gamma^\op \rctx$\\
   If $\Delta \prov J$, then $\Delta^\op \prov \flb J$\\
-  \textcolor{bluegray}{If $\Delta \prov \Gamma \rctx$, then $\Delta \prov \dagger\Gamma \rctx$}\\
-  If $\Delta; \Gamma \prov J$, then $\Delta; \dagger \Gamma \prov \fls J$
+  \textcolor{bluegray}{If $\Delta \prov \Gamma \rctx$, then $\Delta \prov \dag\Gamma \rctx$}\\
+  If $\Delta; \Gamma \prov J$, then $\Delta; \dag \Gamma \prov \fls J$
 \end{thmbox}
 \[
 \erule
@@ -715,7 +717,7 @@ I know that if $\Delta \prov J$, then $\Delta^\op \prov \bar J$.
   $(g : \Gamma_{\delta}) \to \bar A_{\bar \delta}( g ) =  A_{\delta}(g )$
 \end{thmbox}
 The object part of the interpretation of functions is
-\vfil\eject
+
 \[( (x : A) \to B)_\delta(g) = (x :  A_{ \delta}(g)) \to B_\delta(g, x)\]
 And the morphism part needs to be
 \[( (x : A) \to B)_\phi : (g : \Gamma_\phi)
@@ -748,4 +750,291 @@ So after plugging in the first two arguments to $B_\phi$ we have
   B_{\delta}(\Gamma_{\ltri\phi} g,  \bar A_{\bar \phi}(g, x) ) \to B_{\epsilon}(\Gamma_{\rtri \phi} g, A_{\phi}(g , \bar A_{\bar \phi}(g, x)) )\]
 And the whole thing works... as long as transport is an isomorphism,
 which it probably isn't. Darn.
+\section{Picking up the Pieces}
+Let's go back to something that at least conceptually held together.
+Specifically, try to forget that I tried to invent any concept of $x^*$, and see if
+that can pop out of the other things.
+
+$\Delta^\op$ means exchange $\C$ and $\C^\op$.
+$\Gamma^\op$ means exchange $+$ and $-$.
+At the bottom of category expressions, you can say $\alpha$ or $\bar \alpha$.
+There's
+a substitution that flips all $\alpha$ variables, called $\flb$.
+$\dag\Gamma$ abbreviates $\flb \Gamma^\op$.
+\begin{thmbox}
+  If $\Delta \prov \Gamma \rctx$, then $\Delta^\op \prov \Gamma^\op \rctx$\\
+  If $\Delta \prov J$, then $\Delta^\op \prov \flb J$\\
+  \textcolor{bluegray}{If $\Delta \prov \Gamma \rctx$, then $\Delta \prov \dag\Gamma \rctx$}
+\end{thmbox}
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx }
+\qquad
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta^\op;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx }
+\]
+\[
+\erule
+{ \alpha : \C \in \Delta}
+{\Delta  \prov \alpha : \C}
+\qquad
+\erule
+{ \alpha : \C \in \Delta}
+{\Delta  \prov \bar\alpha : \C^\op}
+\]
+\[
+\erule
+{ x+ A \in \Gamma}
+{\Delta ; \Gamma \prov x :  A}
+\]
+Category substitutions work like
+\[
+\erule
+{\Delta \prov \theta : \Delta' \qquad \Delta \prov t : \C}
+{\Delta \prov \theta[t/\alpha] : \Delta', \alpha : \C}
+\]
+For a warm-up, let's see if we can confirm how the semantics of the variable
+rule works. The semantics should be like
+\begin{declbox}
+  $\Gamma_\phi : \rtype$.\\
+  $\Gamma_\tau : \Gamma_{\psi} \to \Gamma_{\phi} $\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma_{\ltri\phi} g) \to A_{\epsilon}(\Gamma_{\rtri\phi} g)$
+\end{declbox}
+\begin{defnbox}
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\delta}( \Gamma_{\ltri\phi} g )$\\
+ $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$\\
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\tau_1}(\Gamma_{\ltri \tau}g , a) ) $\\
+ $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$
+\end{defnbox}
+And the term condition is
+that for any $g : \Gamma_{ff}$, we have
+\[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+
+So let's take
+\[
+\erule
+{ }
+{\Delta ; \Gamma, x + A \prov x :  A}
+\]
+And see what we have. The object part is
+\[ x_d : (g : \Gamma_{dd}) (x : A_{dd}(g)) \to A_{dd}(g) \]
+\[ x_d(g, x) = x \]
+and we check the term condition by expanding (under the assumption
+that for any $(g, a) = z \in (\Gamma, x + A)_{ff}$
+$ = (g : \Gamma_{ff}) \x A_{de}(\Gamma_{\ltri ff} g)$)
+\[ A_{fd}((\Gamma,x+A)_{\rtri \fdom}z, x_d((\Gamma,x+A)_{\fdom}z )) \equiv A_{ef}((\Gamma,x+A)_{\rtri \fcod} z, x_e( (\Gamma,x+A)_{\fcod} z))\]
+\[
+  A_{fd}(\Gamma_{\rtri \fdom} g,A_{df}(\Gamma_{\ltri \fdom} g , a)
+\equiv A_{ef}(\Gamma_{\rtri \fcod} g,A_{fe}(\Gamma_{\ltri \fcod} g , a)
+)\]
+and then by functoriality this is just
+\[
+  A_{ff}( g, a) \equiv  A_{ff}( g, a)
+\]
+Ok, that's fine. Let me go over the reasoning in the $\Pi$ type formation rule
+one more time to make sure the whole
+edifice doesn't come crashing down.
+
+\subsection{$\Pi$ types}
+Observe that the premises of the formation rule
+\[
+\erule
+{
+\Delta^\op; \Gamma^\op \prov A : \rtype \qquad
+\Delta; \Gamma, x - A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x : A) \to B : \rtype}
+\]
+ give us all of the following derived functions
+to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
+Remember that $(\Gamma^\op)_{\bar\delta} = \Gamma_{ \delta}$
+\[ A_{\bar\delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to A_{\bar \delta}(g) \to \rtype \]
+\[A_{\bar \phi} : (g : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, A_{\bar \phi}(g, x))
+\to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
+
+We define the object part of this (of type $((x : A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
+\begin{defnbox}
+  $((x : A) \to B)_\delta (g) = (x : A_{\bar \delta}(g)) \to B_\delta(g, x) $
+\end{defnbox}
+and the morphism part needs to be
+\[((x : A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} g))
+\to B_\delta(\Gamma_{\ltri\phi} g, x))\]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
+and we define it
+\begin{defnbox}
+  $((x : A)\to B)_\phi(g, f) = \lambda x. B_\phi((g, x), f (A_{\bar \phi}(g, x)))$
+\end{defnbox}
+Let's check all this carefully now.
+We have $x$ has type $A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)$ so
+\[ A_{\bar \phi}(g, x) : A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+and then
+\[ f(A_{\bar \phi}(g, x)) : A_{\bar \delta}(\Gamma_{\ltri\phi} g)
+: B_\delta(\Gamma_{\ltri\phi} g, A_{\bar \phi}(g, x))\]
+That all seems to be fine.
+
+ A critical thing seems to be that when computing
+the meaning of $B_\phi$, I get that the second argument $(\_ : A_{\bar \epsilon}(\cdots))$
+of it is at something $\epsilon$-like, so that I can plug in the naked variable $x$ that
+I have, rather than some transport expression. When I substitute a transport expression,
+then I get some constraint that has to be satisfied for the result to be well-typed.
+
+
+\section{Factoring The Term Condition}
+\def\Tw{\mathsf{Tw}}
+
+If $F : \Tw(\C)^\op \to \rset$ (where $\Tw(\C)$ has morphisms
+$f \to g$ where $f$ factors through $g$) then we say $\int F$
+is the set of mappings $k : (c : \C_0) \to F(\rid_c)$ such that transport
+along
+\[
+\begin{tikzcd}
+  c \ar[r,equals] \ar[dr, phantom, "\ltri f"] \ar[from=d, "1_c"] & c \ar[d, "f"]\\
+c \ar[dr, phantom, "\rtri f"] \ar[r, "f" description] & d\\
+  d \ar[r,equals] \ar[from=u, "f"'] & d \ar[u, "1_d"']
+\end{tikzcd}
+\]
+moving towards the middle row commutes, i.e. $F(\ltri f)(k(c)) = F(\rtri f)(k(d))$
+
+A context is interpreted as a {\em covariant} functor $\Gamma : \Tw(\C) \to \rset$.
+A type in a context $\Gamma$ is an object part $A_c : \Gamma_{1_c}$
+and a morphism part
+\[A_f : (g : \Gamma_f) \to A_c(\Gamma_{\ltri f} g) \to A_d(\Gamma_{\rtri f} g)\]
+
+We construct $\Gamma \to A$ of type $\Tw(\C)^\op \to \rset$, like so.
+Its object part for $f : c \to d \in \C$ is
+\[(\Gamma \to A)_f = (g : \Gamma_{f}) \to A_d(\Gamma_{\rtri f}g)\]
+% \[(\Gamma \to A)_f = (g : \Gamma_{f}) \to A_c(\Gamma_{\ltri f}g)\]
+and its morphism part for $\phi : f' \to f \in \Tw(\C)$
+\[
+\begin{tikzcd}
+  c' \ar[r,"f'"] \ar[d, "\phi_1"'] &d' \ar[from=d, "\phi_2"']\\
+c \ar[r, "f"'] & d
+\end{tikzcd}
+\]
+is
+\[(\Gamma \to A)_{\phi} (h, g') = A_{\phi_2}(\Gamma_{\rtri \phi} g' , h(\Gamma_\phi g')) \]
+Notes for typechecking:
+\[(\Gamma \to A)_{\phi} : (h : (g : \Gamma_{f}) \to A_d(\Gamma_{\rtri f}g)) \to
+(g' : \Gamma_{f'}) \to A_{d'}(\Gamma_{\rtri f'}g')\]
+\[h(\Gamma_\phi g') : A_d(\Gamma_{\rtri f} \Gamma_\phi g')\]
+\[A_{\phi_2} : (g : \Gamma_{\phi_2}) \to A_d(\Gamma_{\ltri \phi_2} g)
+\to A_{d'}(\Gamma_{\rtri \phi_2} g)\]
+\[A_{\phi_2}(\Gamma_{\rtri \phi} g') : A_d(\Gamma_{\ltri \phi_2} \Gamma_{\rtri \phi} g')
+\to A_{d'}(\Gamma_{\rtri \phi_2} \Gamma_{\rtri \phi} g')\]
+\[\ltri \phi_2 \o \rtri \phi = \rtri f \o \phi
+\qquad \rtri \phi_2 \o \rtri \phi = \rtri f'\]
+
+So what happens when I ask what's in $\int (\Gamma \to A)$? It should
+be things that for every $c \in \C_0$, you have to give a member
+\[M_c \in (\Gamma \to A)_{1_c} : (g : \Gamma_{c}) \to A_c(g)\]
+subject to
+\[(\Gamma \to A)_{\ltri f} (M_c) = (\Gamma \to A)_{\rtri f} (M_d) \]
+i.e.
+\[(g : \Gamma_f) \to (\Gamma \to A)_{\ltri f} (M_c, g) = (\Gamma \to A)_{\rtri f} (M_d, g) \]
+
+
+\[M_c \in (\Gamma \to A)_{1_c} : (g : \Gamma_{c}) \to A_c(g)\]
+\[(g : \Gamma_f) \to A_{f}( g , M_c(\Gamma_{\ltri f} g)) =   M_d(\Gamma_{\rtri f} g)\]
+
+\section{Trying To See What I Can Do For Negative Assumptions}
+
+Suppose I have a type $P$ with
+\[\alpha : \C \prov P(\alpha) : \rtype \]
+Can I find a semantics for
+\[\alpha : \C; x - P(\bar \alpha) \prov x^* : P(\alpha)\]
+?
+Semantically, I have
+\[P_\delta : \rtype \qquad P_\phi :  P_{\delta} \to P_{\epsilon}\]
+and I want to build something where the object part is
+\[(x^*)_d : (g : (x - P(\bar \alpha))_{dd} \to P_{dd}\]
+And if I'm careful I say
+\[
+\erule
+{\Delta \prov \Gamma \rctx}
+{\Delta^\op \prov \Gamma^\op \rctx}
+\]
+and $\Gamma_\delta : \rtype$
+and $(\Gamma^\op)_{\bar\delta} = \Gamma_\delta$
+So that's probably fine and I can say
+\[\alpha : \C; x - P(\bar \alpha) \prov x^* : P(\alpha)\]
+safely. At least as far as the object part's concerned. But what if I have
+now another type that depends negatively on an $x$ like this? Suppose I have
+\[\alpha : \C^\op ; x - P(\alpha) \prov Q(x, \alpha) : \rtype\]
+and I want to be assured that something like
+\[\alpha : \C ; x + P( \alpha), y - Q(x, \alpha) \prov y : Q(x^*, \bar\alpha)\]
+holds. What is $Q$, most readily? It has an object part
+for any $\delta \in \C \x \C^\op$,
+\[Q_{\bar\delta} : (p : P_\delta) \to \rtype\]
+and a morphism part
+\[Q_{\bar\phi} : (p : P_\delta) \to Q_{\bar\epsilon}(P_\phi(p)) \to Q_{\bar\delta}(p)\]
+Then the object part of the term looks like
+\[y_d : (g : (x + P(\alpha), y - Q(x, \alpha))_{dd}) \to Q_{dd}(g)\]
+\[y_d : (p : P_{dd})(q : Q_{dd}(p)) \to Q_{dd}(p)\]
+So I don't know if I'm going to detect any problems in the object part of terms this way.
+It's got to be in the end-condition.
+
+Suppose $\Delta^\op; \Gamma^\op \prov A : \rtype$.
+I want to give some semantics to
+\[\Delta; \Gamma, x - A \prov x^* : \dag A\]
+where $\dag A$ is some alternate version of $A$ that makes sense in $\Delta;\Gamma$.
+This means I'm saying something like
+\[
+\erule
+{\Delta \prov J}
+{\Delta^\op \prov \bar J}
+\qquad
+\erule
+{\Delta; \Gamma \prov J}
+{\Delta^\op ; \Gamma^\op \prov \dag J}
+\]
+Can I get a grip on what this operation is semantically?
+If I have $A$, then I have
+\[A_\delta : \Gamma_\delta \to \rtype\]
+\[A_\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma_{\ltri\phi} g) \to A_{\epsilon}(\Gamma_{\rtri\phi} g)\]
+If I have $\dag A$ which makes sense in $\Delta^\op; \Gamma^\op$,
+then
+ \[(\dag A)_{\bar \delta} : \Gamma_\delta \to \rtype\]
+(assuming $(\Gamma^\op)_{\bar\delta} = \Gamma_\delta$) and then  I conjecture
+\begin{thmbox}
+  $(\dag A)_{\bar \delta} = A_{\delta}$
+\end{thmbox}
+which means I would need
+\[(\dag A)_{\bar \phi} : (g : \Gamma_\phi) \to  A_{\epsilon}(\Gamma_{\rtri\phi} g) \to  A_{\delta}(\Gamma_{\ltri\phi} g)\]
+and such a thing is not at all forthcoming from $A$'s transport
+structure. So this doesn't seem right.
+
+Actually, wait, are the semantics of $\bar \Gamma$ and $\Gamma^\op$ identical?
+Do they at least both satisfy the same dualization identities?
+They're both valid in $\Delta^\op$, so the question at least makes sense.
+What if I say
+\[
+\erule
+{\Delta \prov J}
+{\Delta^\op \prov \bar J}
+\qquad
+\erule
+{\Delta; \Gamma \prov J}
+{\Delta ; \bar \Gamma^\op \prov \dag J}
+\]
+Then I start with
+\[A_\delta : \Gamma_\delta \to \rtype\]
+\[A_\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma_{\ltri\phi} g) \to A_{\epsilon}(\Gamma_{\rtri\phi} g)\]
+and try to build, uh,
+\[(\dag A) : \Gamma_\delta \to \rtype\]
+\[(\dag A)_\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma_{\ltri\phi} g) \to A_{\epsilon}(\Gamma_{\rtri\phi} g)\]
+so that seems perfectly easy and nice. The semantics of $\dag A$ and $A$ are basically identical. So this means what, that if I can do
+\[\Delta; \Gamma \prov  P  : \rtype\]
+which licenses asking if I can do
+\[\Delta; \Gamma, x + P  \prov ? : P\]
+I can also do
+\[\Delta; \bar\Gamma^\op \prov  \dag P  : \rtype\]
+thence
+\[\Delta^\op; \Gamma^\op \prov  \dag \bar P  : \rtype\]
+which licenses asking if I can do
+\[\Delta; \Gamma, x - \dag \bar P  \prov ? : P\]
 \end{document}
