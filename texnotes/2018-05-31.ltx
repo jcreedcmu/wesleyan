@@ -519,4 +519,54 @@ In this case $\Gamma = x - A$, so $\Gamma_{ff} = A_{de}$, and $\Gamma_{\fdom} = 
 and $\Gamma_{\fcod} = A_{fe}$, so we have to check
 \[ (g : \Gamma_{de}) \to A_{fd}( M_d(A_{df}g )) \equiv A_{ef}( M_e( A_{fe} g))\]
 so, yeah, everything's kosher here so far. I still fear higher dependencies.
+
+\subsection{Quick Check of Variable Rule}
+Actually, things are looking more or less ok now?
+\\ \vskip 1em
+Let's say in the  negative substitution principle
+\begin{thmbox}
+  If $\Delta ; \Gamma^\op \prov M :  A$ and $\Delta ; \Gamma, x - A \prov J$, then
+  $\Delta ; \Gamma \prov [M/x]J$.
+\end{thmbox}
+our $J$ is
+\[\erule
+{
+x -  A \in \Gamma
+}
+{\Delta ; \Gamma \prov x^* : A^* }
+\]
+Then we have indeed that
+$\Delta; \Gamma \prov M^* : A^*$.
+\subsection{Check that star operation can be synthesized}
+I want to convince myself that we could sort of define the operation
+$\dash^*$ as an explicit substitution, even though doing this check
+will look sort of circular, as we need to use $\dash^*$ to define what
+explicit substitutions are. Nonetheless, while not a reasonable way to
+{\em define} things, it serves as a nice sanity-check.
+
+In general we'd have
+\[
+\erule
+{\Gamma \prov \theta : \Gamma' \qquad \Delta;\Gamma \prov M : \theta A}
+{\Gamma \prov \theta[M/x] : \Gamma', x + A}
+\qquad
+\erule
+{\Gamma \prov \theta : \Gamma' \qquad \Delta;\Gamma^\op \prov M : (\theta (A^*))^*}
+{\Gamma \prov \theta[M/x] : \Gamma', x - A}
+\]
+and specifically for the substitution $\Gamma \prov \theta_\Gamma : \Gamma^\op$
+that's meant to have the property that $\theta_\Gamma J = J^*$, we inductively
+define
+\[\theta_{\Gamma, x \pm A} = \theta_\Gamma[x^*/x]\]
+so that
+\[
+\erule
+{\Gamma \prov \theta_\Gamma : \Gamma^\op \qquad \Delta;\Gamma, x - A \prov x^* :  A^*}
+{\Gamma, x - A \prov \theta_\Gamma[x^*/x] : \Gamma^\op, x + A}
+\qquad
+\erule
+{\Gamma \prov \theta_\Gamma : \Gamma^\op \qquad \Delta;\Gamma^\op, x - A \prov x^* : A^*}
+{\Gamma, x + A \prov \theta_\Gamma[x^*/x] : \Gamma^\op, x - A}
+\]
+
 \end{document}

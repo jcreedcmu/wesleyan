@@ -1,0 +1,1385 @@
+\documentclass{article}
+\usepackage[tmargin=0.5in, bmargin=0.5in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\sss#1{\noindent{\em{#1}}}
+\def\coe{\mathsf{coe}}
+\def\bpack{\mathbf{pack}}
+\def\bunpack{\mathbf{unpack}}
+
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\quote#1{{\ulcorner {#1} \urcorner}}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\ll{\mathsf{L}}
+\def\rr{\mathsf{R}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\I{\mathbf{I}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{cat}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{A Syntax for Category Variables}
+Let there be some syntax
+\[\begin{tabular}{r@{ }c@{ }c@{ }l}
+  Cat. Contexts&$\Delta$&$::=$&$\cdot\celse \Delta, \alpha : \C$\\
+  Categories&$\C$&$::=$&$\cdots$\\
+  Cat. Terms&$t$&$::=$&$\alpha  \celse \bar \alpha \celse F(t, \ldots, t)$\\
+%  Cat. Sub.&$\theta$&$::=$&$\cdot\celse \theta[t/\alpha]$\\
+\\
+  Term Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x - A \celse \Gamma, x + A$\\
+  Types&$A$&$::=$&$(x - A) \to B \celse (x + A) \x B  $\\
+&&&$\celse (\alpha : \C) \to B \celse (\alpha : \C) \x B$\\
+&&&$\celse \C[t, t] \celse \cdots$\\
+  Terms&$M$&$::=$&$x \celse x^* \celse  \lambda x . M \celse M\ M \celse \pair M M \celse \pi_1 M \celse \pi_2 M$\\
+&&&$\celse \Lambda \alpha . M \celse M[t] \celse \bpack(M, M) \celse \bunpack(M, \alpha.x.M)$\\
+\\
+  Signatures&$\Sigma$&$::=$&$\cdot \celse \Sigma, a : K \celse \Sigma, c : A $\\
+  Kinds&$K$&$::=$&$\rtype \celse (x - A) \to K \celse (\alpha : \C) \to K$\\
+\end{tabular}\]
+
+We a collection of categories $\C$ and functors $F$ between products of categories
+ as an unspecified parameter of the type system.
+One could think of them as `codes for
+categories (and functors)' the same way a universe is a set of codes for types, but
+we mostly just pretend that they're literal mathematical objects
+sitting in the syntax.
+
+There are category-variable contexts, and term-level contexts.
+There is a polarity distinction between term variables, which has to
+do with the direction they undergo transport in the semantics. This polarity
+distinction is still a little mysterious to me, but it's something
+that seems to make other things work out. A telling fact about it that we can at least foreshadow is
+that dependent product types always bind $+$ variables, and dependent functions types always bind $-$ variables.
+
+We have type-formers for dependent function and product types. We have quantifiers over category variables.
+We have a hom-type $\C[t,t]$.
+There also may be a collection of base types, which may be thought of as constants $a : K \in \Sigma$
+in some signature that tacitly exists in every other definition. The signature can also include
+term constants $c : A$.
+\subsection{Judgments}
+
+These are the typing judgments. There is a judgment for well-formedness
+of functor expressions, and the usual suspects for contexts, types, and terms, but
+with $\Delta$ out in front of everything.
+\begin{declbox}
+  $\Delta \prov  t : \C $\\
+%  $\Delta \prov  \theta : \Delta' $\\
+  $\Delta \prov  \Gamma \rctx $\\
+  $\Delta ; \Gamma \prov A : \rtype$\\
+  $\Delta ; \Gamma \prov M : A$
+\end{declbox}
+
+\subsection{Dualizing Operations}
+%% There's several notions of dualization that need to be kept straight.
+%% The operation $\Delta \mapsto \Delta^\op$ takes the opposite category
+%% of every assumption in $\Delta$
+%% \begin{defnbox}
+%%   \begin{tabular}{lll}
+%%     $\cdot^\op = \cdot$\\
+%%     $(\Delta, x : \C)^\op$&$=$&$\Delta^\op, x : \C^\op$\\
+%%   \end{tabular}
+%% \end{defnbox}
+%% For each $\Delta$ there is a substitution $\Delta^\op \prov \omega_\Delta : \Delta$ which
+%% rewrites the category variables to make sense in the opposite context:
+%% \begin{defnbox}
+%%   \begin{tabular}{lll}
+%%     $\omega_\cdot = \cdot$\\
+%%     $\omega_{\Delta, \alpha : \C}$&$=$&$\omega_{\Delta}[\alpha^\op / \alpha]$
+%%   \end{tabular}
+%% \end{defnbox}
+%% \noindent We generally abbreviate $\omega_\Delta \Gamma$ and $\omega_\Delta A$
+%% and $\omega_\Delta t$ as just
+%%  $\bar \Gamma$ and $\bar A$ and $\bar t$.
+
+%% There is an operation on category terms, $t \mapsto t^\op$, defined by
+%% \begin{defnbox}
+%%   \begin{tabular}{lll}
+%%     $(\alpha)^\op = \alpha^\op$\\
+%%     $(\alpha^\op)^\op = \alpha$\\
+%%     $F(t_1, \ldots, t_n)^\op = F^\op(t_1^\op, \ldots, t_n^\op) $
+%%   \end{tabular}
+%% \end{defnbox}
+
+
+The operation $\Gamma \mapsto \Gamma^\op$ is defined by
+\begin{defnbox}
+  \begin{tabular}{lll}
+    $\cdot^\op = \cdot$\\
+    $(\Gamma, x + A)^\op$&$=$&$\Gamma^\op, x - A$\\
+    $(\Gamma, x - A)^\op$&$=$&$\Gamma^\op, x + A$\\
+  \end{tabular}
+\end{defnbox}
+
+%% The definition of substitution of category terms for variables uses
+%% the operation $t \mapsto t^\op$ when it reaches a dualized variable:
+%% \[ [t/\alpha] (\alpha^\op) = t^\op \]
+
+%% As syntactic sugar, we define the operation $\Gamma \mapsto \Gamma^\dagger$
+%% as
+%% \[ \Gamma^\dagger = \bar \Gamma^\op \]
+
+There is an operation $A^*$ on terms (and a corresponding one $M^*$) on terms,
+which is defined to be the result of replacing of every free term variable $x$ in $A$
+ with $x^*$, and vice-versa.
+
+These are both involutions:
+
+\begin{thmbox}\(
+%  \overline{\overline \Gamma} = \Gamma\qquad
+%  \overline{\overline A} = A\qquad
+%  \overline{\overline t} = t\)\\
+%  \( (\Delta^\op)^\op = \Delta\qquad
+ (\Gamma^\op)^\op = \Gamma\qquad
+\qquad (A^*)^* = A
+\)
+\end{thmbox}
+
+
+\subsection{Rules}
+\subsubsection{Context Formation}
+\[
+\erule
+{}
+{\Delta \prov \cdot \rctx}
+\]
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\qquad
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^{\op} \prov    A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+%% For the function type rules below, it's convenient to write them
+%%  in such a way that we don't have
+%% to change $\Delta$ when passing from bottom to top, by replacing
+%%  $\Gamma^\op$ with $\Gamma^\dagger$ and $A$ with $\bar A$ where appropriate.
+%% This is more or less an arbitrary choice, since the substitution $\omega_\Delta$ is
+%% an involution.
+
+%% For example, we could have above instead equivalently written
+%% \[
+%% \erule
+%% {\Delta \prov \Gamma \rctx \qquad \Delta ; \Gamma^{\dagger} \prov   \bar A : \rtype}
+%% {\Delta \prov \Gamma, x - A \rctx}
+%% \]
+%% for the context rule.
+\subsubsection{Type Formation}
+
+\[
+\erule
+{
+\Delta; \Gamma^\op \prov  A : \rtype \qquad
+\Delta; \Gamma, x - A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x - A) \to B : \rtype}
+\]
+
+\[
+\erule
+{
+\Delta; \Gamma \prov A : \rtype \qquad
+\Delta; \Gamma, x + A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x + A) \x B : \rtype}
+\]
+
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
+\]
+
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \x A : \rtype}
+\]
+
+\[
+\erule
+{
+\Delta \prov t_1 : \C^\op \qquad \Delta \prov t_2 : \C
+}
+{\Delta ; \Gamma \prov \C[t_1,t_2] : \rtype}
+\]
+
+\subsubsection{Terms}
+
+\sss{Variables}
+\[
+\erule
+{
+x + A \in \Gamma
+}
+{\Delta ; \Gamma \prov x : A }
+\qquad
+\erule
+{
+x -  A \in \Gamma
+}
+{\Delta ; \Gamma \prov x^* : A^* }
+\]
+
+\sss{Functions}
+\[
+\erule
+{
+\Delta; \Gamma, x - A  \prov M : B
+}
+{\Delta ; \Gamma \prov \lambda x . M : (x - A) \to B }
+\]
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (x - A) \to B
+\qquad
+\Delta ; \Gamma^\op \prov N :  A
+}
+{
+\Delta ; \Gamma \prov M\ N : [N/x^*]B
+}
+\]
+
+\sss{Products}
+\[
+\erule
+{
+\Delta; \Gamma \prov M : A
+\qquad
+\Delta; \Gamma \prov N : [M/x]B
+}
+{\Delta ; \Gamma \prov \pair M N : (x + A) \x B }
+\]
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (x + A) \x B
+}
+{
+\Delta ; \Gamma \prov \pi_1 M : \bar A
+}
+\qquad
+\erule
+{
+\Delta ; \Gamma \prov M : (x + A) \x B
+}
+{
+\Delta ; \Gamma \prov \pi_2 M : [\pi_1 M/x]B
+}
+\]
+
+\sss{Forall}
+\[
+\erule
+{
+\Delta, \alpha : \C ; \Gamma \prov M : A
+}
+{\Delta ; \Gamma \prov \Lambda \alpha . M : (\alpha : \C) \to A }
+\]
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (\alpha : \C) \to A
+\qquad
+\Delta \prov t : \C
+}
+{
+\Delta ; \Gamma \prov M[t] : [t/\alpha]A
+}
+\]
+
+
+\sss{Exists}
+\[
+\erule
+{
+\Delta ; \Gamma \prov t : \C
+\qquad
+\Delta ; \Gamma \prov M : [t/\alpha]A
+}
+{\Delta ; \Gamma \prov \bpack(t, M) : (\alpha : \C) \x A }
+\]
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (\alpha : \C) \x A
+\qquad
+\Delta, \alpha : \C; \Gamma, x : A \prov N : B
+}
+{
+\Delta ; \Gamma \prov \bunpack(M, \alpha.x.N) : B
+}
+\]
+
+
+\sss{Hom-Types}
+
+\textcolor{red}{The main glaring uncertainty with the
+  following is whether the $\alpha$, $\beta$ in $\coe^{\alpha \beta h}$
+ and $\coe_{\alpha \beta h}$ count as covariant or
+  contravariant occurrences or neither or both or whatever.}
+\textcolor{bluegray}{Other than that, I like the notion that there should be one elim rule $\coe^{\alpha \beta h}$
+that expresses the Yoneda fact that
+\[A(y) = \forall x . \hom(y, x) \to A(x) \]
+and another $\coe_{\alpha \beta h}$ that expresses that
+\[A(y) = \exists x . \hom(x, y) \x A(x) \]
+}
+\[
+\erule
+{
+\Delta \prov t : \C
+}
+{\Delta; \Gamma \prov \rid_t : \C[\bar t, t]}
+\]
+\[
+\erule
+{
+\Delta; \gamma : \C; \Gamma \prov M : [\bar\gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha,  \bar\beta \not\in A
+}
+{\Delta, \alpha : \C^\op, \beta : \C ; \Gamma, h - \C[\bar\alpha,\bar\beta] \prov \coe^{\alpha \beta h}(\gamma.M) : A}
+\]
+
+\[
+\erule
+{
+\Delta; \gamma : \C; \Gamma \prov M : [\bar\gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar\beta \not\in A
+}
+{\Delta, \alpha : \C^\op, \beta : \C ; \Gamma, h + \C[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
+\]
+
+The definition of $\alpha \in A$ is not literal syntactic appearance, but needs to be
+defined separately to do the appropriate swap when, e.g. passing through function
+types' arguments.
+\subsubsection{Category Terms}
+\[
+\erule
+{\alpha : \C \in\Delta}
+{\Delta \prov \alpha : \C}
+\qquad
+\erule
+{\alpha : \C \in\Delta}
+{\Delta \prov \bar\alpha : \C^\op}
+\qquad
+\erule
+{F : \C_1 \x \cdots \x \C_n \to \C \qquad \Delta \prov t_i : \C_i }
+{\Delta \prov F(t_1, \ldots, t_n) : \C}
+\]
+Recall that we're being lazy and basically taking $\C$ and $F$ seriously as real categories and functors.
+For example, the first premise of the last rule above is asking for $F$ to be any functor at all from
+ product category $\C_1 \x \cdots \x \C_n$ to the category $\C$. What we should probably do instead
+is have a proper syntax for them.
+
+\subsection{Results}
+
+%% \begin{lemma}
+%%  $\Delta^\op \prov \omega_\Delta : \Delta$
+%% \end{lemma}
+
+%% \begin{lemma}[Cat. Substitution]
+%% If $\Delta' \prov J$ and $\Delta \prov \theta : \Delta'$,
+%% then $\Delta \prov \theta J$.
+%% \end{lemma}
+
+
+\begin{lemma}
+If $\Delta \prov \Gamma \rctx$ then $\Delta \prov \Gamma^\op \rctx$.
+\end{lemma}
+
+\begin{proof}
+By induction.
+
+If \[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\]
+we can show
+\[\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma^\op, x - A \rctx}\]
+and if
+\[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}\]
+then we can show
+\[
+\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma^\op, x + A \rctx}
+\]
+\cqed
+\end{proof}
+
+
+
+\begin{theorem}[Substitution]\ %
+  \begin{itemize}
+  \item If $\Delta ; \Gamma \prov J$ then $\Delta; \Gamma^\op \prov J^*$
+  \item If $\Delta ; \Gamma \prov M : A$ and $\Delta ; \Gamma, x + A \prov J$, then
+$\Delta ; \Gamma \prov [M/x]J$.
+  \item If $\Delta ; \Gamma^\op \prov M :  A$ and $\Delta ; \Gamma, x - A \prov J$, then
+$\Delta ; \Gamma \prov [M/x]J$.
+  \end{itemize}
+\end{theorem}
+
+
+\section{Semantics}
+\subsection{Types}
+We aim here to say what it is to be a
+semantically meaningful type in a given pair of contexts $\Delta$ and $\Gamma$.
+
+\subsubsection{Preliminaries}
+
+Given a $\Delta$, there are three categories induced by it that we'll want to talk about.
+The simplest is $\ssem \Delta$, and it's just the product of all the categories in it
+\[
+\begin{tabular}{rcl}
+  $\ssem \cdot$&$=$&$\textbf{1}$\\
+  $\ssem {\Delta, \alpha : \C}$&$=$&$\ssem \Delta \x \C$\\
+\end{tabular}
+\]
+The second is $\sem \Delta$, and multiplies on a copy of the dual category also:
+\[
+\sem {\Delta} = \ssem \Delta \x \ssem \Delta^\op
+\]
+The third is $\T(\Delta)$, which is the twisted arrow category of $\sem \Delta$.
+Its objects are morphisms $\psi \in \sem \Delta$, and its morphisms $\tau : \psi \to \phi$ are commutative
+squares showing how $\psi$ factors through $\phi$:
+\[\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}\]
+We can of course write a $\tau$ as just the pair $(\tau_1, \tau_2)$ that determines it.
+To extract the parts of a morphism $\tau$, we define $\ll \tau = \tau_1$ (`left') and $\rr \tau = \tau_2$
+(`right')
+and $\cc \tau = \phi$ (`codomain') and $\dd \tau = \psi$ (`domain').
+We also write $\cc \phi$ and $\dd \phi$ for the (co)domain of a morphism $\phi \in \sem \Delta$.
+
+Here's a summary of the symbols we'll use for typical members of the above categories:
+\[\begin{tabular}{rccl}
+  Objects of $\ssem \Delta$&$d,e$\\
+  Morphisms of $\ssem \Delta$&$f$\\
+  Objects of $\sem \Delta$&$\delta, \epsilon$\\
+  Morphisms of $\sem \Delta$&$\phi$\\
+  \textcolor{gray}{Objects of $\T(\Delta)$}&$\textcolor{gray}{\phi}$\\
+  Morphisms of $\T(\Delta)$&$\tau$\\
+\end{tabular}\]
+
+We allow writing the pairs that are objects and morphisms
+of $\sem \Delta$ without $(\dash , \dash)$ syntax, e.g. $de$ for $(d, e)$.
+We freely sometimes write an object of a category in a place where a morphism is required,
+intending the identity morphism at that object.
+
+\subsubsection{Swapping Operations}
+There is a functor $(\delta \mapsto \bar \delta):  \sem \Delta^\op \to \sem \Delta$ by swapping components.
+If $\delta = dd' \in \sem \Delta$, then we define
+\[\bar \delta = dd' \in \sem \Delta\]
+We can swap morphisms of $\sem \Delta$ as well. When
+\[\phi = ff' : \delta \to \epsilon = dd' \to ee'\]
+we define
+\[ \bar \phi = f'f : \bar \epsilon \to \bar \delta =  e'e \to d'd \]
+We can swap morphisms in the twisted arrow category as well.
+Whenever we have $\tau : \psi \to \phi$, we can define a morphism $\bar\tau : \bar\psi \to\bar\phi$ by
+$\overline{(\tau_1, \tau_2)} = (\bar \tau_2, \bar\tau_1)$. In a diagram,
+\[
+\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}
+\qquad\mapsto\qquad
+\begin{tikzcd}
+  \bar\delta' \ar[from=r, "\bar\psi"']\ar[from=d, "\bar{\tau_1}"] & \bar\epsilon'\ar[d, "\bar{\tau_2}"]\\
+  \bar\delta \ar[from=r, "\bar\phi"]& \bar\epsilon
+\end{tikzcd}\]
+
+
+\subsubsection{Other Operations on the Twisted Arrow Category}
+
+Here's some ways we can build up morphisms in $\T(\Delta)$ from morphisms in $\sem \Delta$:
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+\begin{declbox}
+$\phi \gol \eta : \phi\eta \to \phi$\\
+$\phi \gor \eta : \phi\eta \to \eta$
+\end{declbox}
+\begin{defnbox}
+   \(
+   \phi \gol \eta  \quad = \quad \begin{tikzcd}
+     \gamma \ar[r, "\phi \o \eta"]\ar[d, "\eta"'] & \epsilon\ar[from=d, equal]\\
+     \delta \ar[r, "\phi"']& \epsilon
+   \end{tikzcd}
+   \qquad
+   \phi \gor \eta  \quad = \quad \begin{tikzcd}
+     \gamma \ar[r, "\phi \o \eta"]\ar[d, equal] & \epsilon\ar[from=d, " \phi"']\\
+     \gamma \ar[r, "\eta"']& \delta
+   \end{tikzcd}
+\)
+\end{defnbox}
+
+There are some useful operations on morphisms $\tau \in \T(\Delta)$ that `swing' the side morphisms
+around to the codomain. We define
+ \begin{declbox}
+   $\ltri \tau : \dd \tau \to \ll \tau $\\
+   $\rtri \tau : \dd \tau \to \rr \tau$
+ \end{declbox}
+by
+\begin{defnbox}
+  $\ltri \tau = (\rr \tau \o \cc \tau) \gor \ll \tau$\\
+  $\rtri \tau = \rr \tau \gol (\cc \tau \o \ll \tau)$
+\end{defnbox}
+In a diagram, assuming
+\[\tau \quad = \quad \begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}\]
+this looks like
+ \begin{thmbox}
+   \(
+   \ltri \tau  = \begin{tikzcd}
+     \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\tau_2 \o \phi"']\\
+     \delta' \ar[r, "\tau_1"']& \delta
+   \end{tikzcd}
+   \qquad
+   \rtri \tau  = \begin{tikzcd}
+     \delta' \ar[r, "\psi"]\ar[d, "\phi \o \tau_1"'] & \epsilon'\ar[from=d, equal]\\
+     \epsilon \ar[r, "\tau_2"']& \epsilon'
+   \end{tikzcd}
+\)
+ \end{thmbox}
+
+A notable special case of this falls out when $\tau$ is an identity arrow:
+ \begin{thmbox}
+   \(
+   \ltri \phi  : \phi \to \delta = \begin{tikzcd}
+     \delta \ar[r, "\phi"]\ar[d, equal] & \epsilon\ar[from=d, "\phi"']\\
+     \delta \ar[r, equal]& \delta
+   \end{tikzcd}
+\)\qquad
+\(
+   \rtri \phi : \phi \to \epsilon  = \begin{tikzcd}
+     \delta \ar[r, "\phi"]\ar[d, "\phi"'] & \epsilon\ar[from=d, equal]\\
+     \epsilon \ar[r, equal]& \epsilon
+   \end{tikzcd}
+\)
+ \end{thmbox}
+
+\subsubsection{Semantics of Contexts}
+Next, we will declare the functions involved in the semantics of contexts and types.
+In general we will write $\rtype$ for the ambient metatheory's notion
+of type, and use agda-style syntax for dependent products and sums in
+the ambient metatheory, i.e $(x : A) \to B$ and $(x : A) \x B$. We may
+be somewhat lax about currying and generally how arguments are
+written.
+
+Throughout the following declarations and definitions, we'll assume
+ $\Delta \prov \Gamma \rctx$, and $\delta$
+is an object in $\sem \Delta$, and $\tau : \psi \to \phi$ is a morphism in $\T(\Delta)$
+and $\phi : \delta \to \epsilon$ and $\psi : \delta' \to \epsilon'$ are morphisms in $\sem \Delta$,
+arranged like so:
+\[\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}\]
+
+We're going treat contexts as if they were defined inductively by
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma^\dagger \celse \Gamma, x + A$\\
+\end{tabular}
+\]
+because we can think of $\Gamma, x - A$ as $(\Gamma^\dagger, x + A)^\op$.
+
+We declare:
+\begin{declbox}
+  $\Gamma_\phi : \rtype$.\\
+  $\Gamma_\tau : \Gamma_{\dd \tau} \to \Gamma_{\cc \tau} $\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (g : \Gamma_\phi) \to A_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A_{\cc \phi}(\Gamma_{\rtri\phi} g)$
+\end{declbox}
+and define:
+\begin{defnbox}
+ $(\cdot)_\phi = \bone$\\
+ $(\Gamma^\dagger)_\phi = \Gamma_{\bar\phi}$\\
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
+  \\
+ $(\cdot)_\tau = {!}$\\
+ $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$\\
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
+\end{defnbox}
+Here's a blow-by-blow of why the definition of $(\Gamma, x + A)_\tau(g, a)$ is well-typed.
+We know we're supposed to make it have type
+\[(\Gamma, x + A)_\tau : (g : \Gamma_\psi) \x A_{\delta'}( \Gamma_{\ltri\psi} g ) \to
+ (g' : \Gamma_\phi) \x A_\delta( \Gamma_{\ltri\phi} g' )\]
+We need $A_{\tau_1}(\Gamma_{\ltri \tau} g, a)$ to have type $A_\delta(\Gamma_{\ltri \phi} \Gamma_\tau g)$.
+Plugging $\Gamma_{\ltri \tau}g : \Gamma_{\tau_1}$ into
+\[A_{\tau_1} : (x : \Gamma_{\tau_1}) \to A_{\delta'}(\Gamma_{\ltri \tau_1} x) \to A_{\delta}(\Gamma_{\rtri \tau_1} x)\]
+gives
+\[A_{\tau_1}(\Gamma_{\ltri \tau}g ) : A_{\delta'}(\Gamma_{\ltri \tau_1} \Gamma_{\ltri \tau}g )
+\to A_{\delta}(\Gamma_{\rtri \tau_1} \Gamma_{\ltri \tau}g )\]
+In order to apply this to $a$ and be finished, we need
+\[\Gamma_{\ltri \tau_1} \Gamma_{\ltri \tau}  = \Gamma_{\ltri\psi} \]
+\[\Gamma_{\ltri \phi} \Gamma_\tau = \Gamma_{\rtri \tau_1} \Gamma_{\ltri \tau}\]
+to make everything match up.
+By the functoriality of $\Gamma_\tau$, we merely need to check
+\[{\ltri \tau_1} \o {\ltri \tau}  = {\ltri\psi} \qquad
+{\ltri \phi} \o \tau = {\rtri \tau_1} \o {\ltri \tau}\]
+and these are each settled by a diagram chase
+\[
+\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\tau_2 \o \phi"']\\
+  \delta' \ar[r, "\tau_1"']& \delta\\
+\delta' \ar[r,equal]\ar[u,equal] & \delta'\ar[u, "\tau_1"']
+\end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\psi"']\\
+  \delta' \ar[r, equal]& \delta'
+\end{tikzcd}
+\]
+and
+\[\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, "\tau_1"'] & \epsilon'\ar[from=d, "\tau_2"']\\
+  \delta \ar[r, "\phi"']& \epsilon\\
+  \delta \ar[r, equal]\ar[u, equal]& \delta\ar[u, "\phi"']
+\end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+  \delta' \ar[r, "\psi"]\ar[d, equal] & \epsilon'\ar[from=d, "\tau_2 \o \phi"']\\
+  \delta' \ar[r, "\tau_1"']& \delta\\
+  \delta \ar[r, equal]\ar[from=u, "\tau_1"']& \delta\ar[u, equal]
+\end{tikzcd}\]
+\subsubsection{Semantics of Minus Hypotheses}
+We can compute them directly from the definitions. It's handy to have them in this form for
+later calculations:
+\[(\Gamma, x - A)_\phi = (\Gamma^\dagger, x + \bar A)^\op_\phi\]
+\[ = (\Gamma^\dagger, x + \bar A)_{\bar \phi} \]
+\[ = (g : \Gamma^\dagger_{\bar \phi}) \x \bar A_{\dd \bar \phi}( \Gamma^\dagger_{\ltri\bar\phi} g ) \]
+\[ = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g ) \]
+and
+\[ (\Gamma, x -  A)_\tau (g, a) = (\Gamma^\dagger, x + \bar A)^\op_\tau \]
+\[ = (\Gamma^\dagger, x + \bar A)_{\bar \tau} \]
+\[ = (\Gamma^\dagger_{\bar \tau} g, \bar A_{\ll \bar \tau}(\Gamma^\dagger_{\ltri \bar \tau}g , a) ) \]
+\[ = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
+So we could have also defined
+\begin{defnbox}
+ $(\cdot)_\phi = \bone$\\
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
+ $(\Gamma, x - A)_\phi = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g )$\\
+  \\
+ $(\cdot)_\tau = {!}$\\
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $\\
+ $(\Gamma, x - A)_\tau (g, a) = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) )$
+\end{defnbox}
+\noindent and {\em proved} inductively that
+ $(\Gamma^\dagger)_\phi = \Gamma_{\bar\phi}$ and
+ $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$ as theorems, but it seems much easier to just do the calculation above.
+
+
+\subsubsection{Functoriality}
+I used functoriality of $\Gamma_\tau$ in the proof of well-typedness
+of these definitions. This is how we show functoriality, and what's required of types.
+%% \begin{lemma}
+%% $\ltri (\tau \o \sigma) = ?$
+%% \end{lemma}
+
+%% \begin{proof}
+%% \[\begin{tikzcd}
+%%   \delta'' \ar[r, "\chi"]\ar[d, "\sigma_1"']\ar[dr, phantom, "\sigma"] & \epsilon''\ar[from=d, "\sigma_2"']\\
+%%   \delta' \ar[r, "\psi" description]\ar[d, "\tau_1"']\ar[dr, phantom, "\tau"] & \epsilon'\ar[from=d, "\tau_2"']\\
+%%   \delta \ar[r, "\phi"']& \epsilon\\
+%% \end{tikzcd}
+%% \qquad \mapsto \qquad
+%% \begin{tikzcd}
+%%   \delta'' \ar[r, "\chi"]\ar[d, "\sigma_1"']\ar[dr, phantom, "\sigma"] & \epsilon''\ar[from=d, "\sigma_2"']\\
+%%   \delta' \ar[r, "\psi" description]\ar[d, "\tau_1"']\ar[dr, phantom, "\tau"] & \epsilon'\ar[from=d, "\tau_2"']\\
+%%   \delta \ar[r, "\phi"']& \epsilon\\
+%% \end{tikzcd}
+%% \]
+%% \cqed
+%% \end{proof}
+Assuming
+\[\begin{tikzcd}
+  \gamma \ar[r, "\gamma"] & \delta \ar[r, "\phi"] & \epsilon
+\end{tikzcd}\]
+we claim the following are true
+\begin{thmbox}
+ $\Gamma_\rid g = g$\\
+ $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$\\
+  $A_{\rid_\delta}(g, a) = a$\\
+  $A_{\phi\eta}(g, a) = A_\phi(\Gamma_{\phi \gol \eta}g, A_\eta(\Gamma_{\phi \sqsupset \eta}g, a))$
+\end{thmbox}
+Too see that this last equation is well-typed, we observe that as long as
+we know ${\ltri \eta}  \o (\phi \gor \eta) = \ltri (\phi \eta)$
+we have
+\[
+a : A_{\gamma}(\Gamma_{\ltri \phi \eta} g)\prov A_\eta(\Gamma_{\phi \gor \eta} g, a) :
+A_\delta(\Gamma_{\rtri \eta} \Gamma_{\phi \gor \eta} g)
+\]
+and then the second argument of $A_\eta$ wants to be $A_\delta(\Gamma_{\ltri\phi} \Gamma_{\phi \gol \eta} g)$
+so we need the equation
+\[ \ltri\phi \o (\phi \gol \eta) = \rtri \eta \o (\phi \gor \eta)\]
+and finally the output we get from $A_\phi$ is $A_\epsilon(\Gamma_{\rtri\phi}\Gamma_{\phi \gol \eta}g )$
+but it needs to be $A_\epsilon(\Gamma_{\rtri\phi\eta}g )$, so we need to check
+\[ \rtri\phi \o (\phi \gol \eta) = \rtri(\phi\eta) \]
+but all three of these properties are true by diagram-chasing.
+\begin{lemma}\ %
+  \begin{enumerate}
+  \item $\Gamma_\rid g = g$ and
+\item    $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$ and
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+By induction on $\Gamma$
+\begin{enumerate}
+ %% $(\cdot)_\tau = {!}$\\
+ %% $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$\\
+ %% $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
+
+\item We need to check that
+$(\Gamma, x + A)_\rid (g, a) = (\Gamma_\rid g, A_{\rid}(\Gamma_{\rid}g , a) ) $ and that
+$(\Gamma^\dagger)_\rid(g) = \Gamma_{\rid}(g)$. It suffices to require that $A_\rid(g, a) = a$.
+\item
+It's easy to check that
+\[(\Gamma^\dagger)_{\tau\sigma}(g) = \Gamma_{\overline{\tau\sigma}}(g) = \Gamma_{\bar\tau\bar\sigma}(g)
+= \Gamma_{\bar\tau}\Gamma_{\bar\sigma}(g) = (\Gamma^\dagger)_{\tau}(\Gamma^\dagger)_{\sigma}(g)\]
+by induction hypothesis.
+Then we need to check that
+\[(\Gamma, x + A)_{\tau  \sigma} (g, a) = (\Gamma, x + A)_{\tau }(\Gamma, x + A)_{  \sigma} (g, a)\]
+The former immediately evaluates to
+\[ (\Gamma_{\tau\sigma} g, A_{\ll \tau \ll \sigma}(\Gamma_{\ltri (\tau  \sigma)}g , a) ) \]
+and the latter to
+\[ (\Gamma_{\tau} \Gamma_{\sigma} g, A_{ \ll \tau}(\Gamma_{\ltri   \tau}\Gamma_{\sigma} g , A_{ \ll \sigma}(\Gamma_{\ltri   \sigma}g , a)) ) \]
+
+We can observe that the first components are equal by induction hypothesis.
+By functoriality of $A$, we can break up the $A_{\ll \tau \ll \sigma}(\cdots)$ into
+\[A_{\ll \tau \ll \sigma}(\Gamma_{\ltri (\tau  \sigma)}g , a) \]
+\[A_{\ll \tau}(\Gamma_{(\ll\tau \gol \ll\sigma) \o\ltri (\tau  \sigma)}g, A_{\ll \sigma} (\Gamma_{(\ll\tau \gor \ll\sigma) \o \ltri (\tau  \sigma)}g , a)) \]
+so we just have to ensure
+\[(\ll\tau \gol \ll\sigma) \o\ltri (\tau  \sigma) = \ltri   \tau \o \sigma \]
+\[(\ll\tau \gor \ll\sigma) \o \ltri (\tau  \sigma) = \ltri \sigma \]
+and these are easy diagram chases. \cqed
+\end{enumerate}
+\end{proof}
+
+\subsection{Terms}
+We want to define what is required for a judgment
+\[\Delta; \Gamma \prov M : A\]
+so that in the special case where no type dependency is involved, it reduces to something like
+requiring that the interpretation of $M$ belongs to an end
+\[\sem M \in \int_{\delta\in\ssem\Delta} \sem\Gamma(\delta) \to \sem A(\delta)\]
+Things are a little more involved with dependent types, naturally.
+
+Assume $\Delta ; \Gamma \prov M : A$ and all the well-formedness judgments that presupposes.
+Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
+
+\def\fdom{\mathbf{d}f}
+\def\fcod{\mathbf{e}f}
+
+\begin{declbox}
+  $M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$\\
+  $\fdom : ff \to dd \in \T(\Delta)$\\
+  $\fcod : ff \to ee \in \T(\Delta)$
+\end{declbox}
+\begin{defnbox}
+\(
+   \fdom = \begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, "fd"']\\
+     dd \ar[r, equal]& dd
+   \end{tikzcd}
+\qquad\qquad
+   \fcod = \begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
+     ee \ar[r, equal]& ee
+   \end{tikzcd}
+\)
+\end{defnbox}
+% end condition
+\begin{thmbox}
+For any $g : \Gamma_{ff}$, we have
+\[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+\end{thmbox}
+
+
+Here's an explanation of why the equality in this theorem is well-typed.
+ We have first of all
+\[ M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)\qquad
+ M_e(\Gamma_{\fcod} g) : A_{ee}(\Gamma_{\fcod} g)\]
+and also
+\[A_{fd} : (g : \Gamma_{fd}) \to A_{dd}(\Gamma_{\ltri{fd}} g) \to A_{ed}(\Gamma_{\rtri{fd}} g)\]
+\[A_{ef} : (g : \Gamma_{ef}) \to A_{ee}(\Gamma_{\ltri{ef}} g) \to A_{ed}(\Gamma_{\rtri{ef}} g)\]
+which means
+\[A_{fd}(\Gamma_{\rtri \fdom}) :  A_{dd}(\Gamma_{\ltri{fd}}\Gamma_{\rtri \fdom} g)
+\to A_{ed}(\Gamma_{\rtri{fd}} \Gamma_{\rtri \fdom} g)\]
+\[A_{ef}(\Gamma_{\rtri\fcod}) :  A_{ee}(\Gamma_{\ltri{ef}} \Gamma_{\rtri\fcod} g)
+\to A_{ed}(\Gamma_{\rtri{ef}} \Gamma_{\rtri\fcod} g)\]
+So chase the following diagrams to see
+\[ \fdom = \ltri fd \o \rtri \fdom \qquad \fcod = \ltri ef \o \rtri \fcod\]
+(`we're allowed to plug in $M_d$ and $M_e$ where we do') and
+\[ \rtri fd \o \rtri \fdom = \rtri ef \o \rtri \fcod \]
+(`the output types are the same')
+
+\[
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"']\ar[dr, phantom, "\fdom"] & ed\ar[from=d, "fd"']\\
+     dd \ar[r, equal]& dd
+   \end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"']\ar[dr, phantom, "\rtri \fdom"] &[1em] ed\ar[from=d, equal]\\
+     dd \ar[r, "fd" description]\ar[dr, phantom, "\ltri fd"]& ed\\
+     dd \ar[r, equal]\ar[from=u, equal]&dd\ar[u, "fd"']
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[dr, phantom, "\fcod"]\ar[d, "fe"'] & ed\ar[from=d, "ef"']\\
+     ee \ar[r, equal]& ee
+   \end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"']\ar[dr, phantom, "\rtri\fcod"] &[1em] ed\ar[from=d, equal]\\
+     ee \ar[r, "ef" description]\ar[dr, phantom, "\ltri ef"] & ed\\
+     ee \ar[r, equal]\ar[from=u, equal]&ee\ar[u, "ef"']
+\end{tikzcd}
+\]
+\[\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "df"'] & ed\ar[from=d, equal]\\
+     dd \ar[r, "fd"']& ed\\
+     ed \ar[r, equal]\ar[from=u, "fd"']&ed\ar[u, equal]
+\end{tikzcd}
+\qquad = \qquad
+\begin{tikzcd}
+     de \ar[r, "ff"]\ar[d, "fe"'] & ed\ar[from=d, equal]\\
+     ee \ar[r, "ef"']& ed\\
+     ed \ar[r, equal]\ar[from=u, "ef"']&ed\ar[u, equal]
+\end{tikzcd}\]
+
+\subsection{Semantics of Types}
+
+\begin{defnbox}
+  $((x + A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$\\
+  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x)$\\
+  $((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)$\\
+  $((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)$\\
+  $(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]$\\
+  \\
+  $((x + A)\x B)_\phi(g, (a, b)) = (A_\phi(g, a), B_\phi((g, a), b))$\\
+  $((x - A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (\bar A_{\bar \phi}(g, x)))$\\
+%  $((\alpha : \C) \x A)_{\phi}(g, K) = \bunpack(K, d.a.\bpack(d, A_{\phi d d}(g, a)  )) $\\
+  $((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2))$\\
+  $((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))$\\
+  $(\C[t_1, t_2])_\phi(g, m) = \C[(t_1)_\phi, (t_2)_\phi](m)$
+\end{defnbox}
+
+\subsection{Semantics Of Terms}
+
+\begin{defnbox}
+  $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$\\
+  $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$\\
+  $(M[t])_d(g) = M_d(g)(t(dd))$\\
+  $(\rid_t)_d = \rid_{t_{dd}}$
+\end{defnbox}
+
+\subsection{Miscellaneous Notes Reasoning Through Semantics}
+\subsubsection{$\Sigma$ Types}
+
+
+Observe that the premises of the formation rule
+
+\[
+\erule
+{
+\Delta; \Gamma \prov A : \rtype \qquad
+\Delta; \Gamma, x + A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x + A) \x B : \rtype}
+\]
+ give us all of the following derived functions
+to work with:
+
+\[A_\delta : \Gamma_\delta \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to A_\delta(g) \to \rtype \]
+\[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g) \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+\[B_\phi : (g : \Gamma_\phi)(x : A_\delta(\Gamma_{\ltri\phi} g)) \to B_\delta(\Gamma_{\ltri\phi}g, x)
+\to B_\epsilon(\Gamma_{\rtri\phi}g, A_\phi(g, x))\]
+
+We define the object part of this, of type
+  \( ((x + A) \x B)_\delta : \Gamma_\delta \to \rtype \)
+as
+\begin{defnbox}
+  $((x + A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$
+\end{defnbox}
+
+and the morphism part needs to be
+\[((x+A)\x B)_\phi : (g : \Gamma_\phi) \to ((x : A_\delta(\Gamma_{\ltri\phi} g))
+\x B_\delta(\Gamma_{\ltri\phi} g, x))\]
+\[  \to ((x : A_\epsilon(\Gamma_{\rtri\phi} g)) \x B_\epsilon(\Gamma_{\rtri\phi} g, x)) \]
+and we define it
+\begin{defnbox}
+  $((x+A)\x B)_\phi(g, (x, b)) = (A_\phi(g, x), B_\phi(g, x, b))$
+\end{defnbox}
+
+\subsubsection{$\Pi$ Types}
+
+
+Observe that the premises of the formation rule
+\[
+\erule
+{
+\Delta; \Gamma^\dagger \prov \bar A : \rtype \qquad
+\Delta; \Gamma, x - A  \prov B : \rtype
+}
+{\Delta ; \Gamma \prov (x - A) \to B : \rtype}
+\]
+ give us all of the following derived functions
+to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
+
+\[\bar A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to \bar A_{\bar \delta}(g) \to \rtype \]
+\[\bar A_{\bar \phi} : (g : \Gamma_{ \phi}) \to \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to \bar A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi)(x : \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, \bar A_{\bar \phi}(g, x))
+\to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
+
+We define the object part of this (of type $((x - A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
+\begin{defnbox}
+  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x) $
+\end{defnbox}
+and the morphism part needs to be
+\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : \bar A_{\bar\delta}(\Gamma_{\ltri\phi} g))
+\to B_\delta(\Gamma_{\ltri\phi} g, x))\]
+\[  \to (x : \bar A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
+and we define it
+\begin{defnbox}
+  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (\bar A_{\bar \phi}(g, x)))$
+\end{defnbox}
+
+\subsubsection{Lambdas}
+
+\[
+\erule
+{\Delta ; \Gamma, x - A \prov M : B}
+{\Delta ; \Gamma \prov \lambda x . M : (x - A) \to B}
+\]
+
+We want to construct the object part
+\[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x - A) \to B)_{dd}(g)\]
+\[ = (g : \Gamma_{dd}) (x : \bar A_{dd}(g)) \to B_{dd}(g, x)\]
+We get to assume the object part
+\[ M_d : (g : (\Gamma, x - A)_{dd}) \to B_{dd}(g)\]
+\[ =  (g : \Gamma_{dd}) (x : \bar A_{dd}( g) ) \to B_{dd}(g, x)\]
+So we define
+\begin{defnbox}
+  $(\lambda x .M)_d(g)( x) = M_d(g, x)$
+\end{defnbox}
+
+As for the end-condition, if we turn the crank on either the top or the bottom of the rule, we get
+\[(g : \Gamma_{ff})(a : \bar A_{de}(\Gamma_{\rtri ff} g)) \to \]
+\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, \bar A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
+\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, \bar A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
+so the requirement needed for the conclusion is satisfied trivially by yielding to
+the requirement satisfied by the premise.
+\subsubsection{$\hom$ Types}
+
+We stare at the formation rule
+\[
+\erule
+{
+\Delta \prov t_1 : \C^\op \qquad \Delta \prov t_2 : \C
+}
+{\Delta ; \Gamma \prov \C[t_1,t_2] : \rtype}
+\]
+The object part should be easy. We just emit the actual homset from the resulting objects:
+\begin{defnbox}
+  $(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]$
+\end{defnbox}
+and the morphism part should follow from the functoriality of $t_1, t_2$ also
+\begin{defnbox}
+  $(\C[t_1, t_2])_\phi(g) = \lambda m . \C[(t_1)_\phi, (t_2)_\phi](m)$
+\end{defnbox}
+(we ignore the $g$; the hom-type doesn't depend on any term variables)
+
+\subsubsection{Forall}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
+\]
+Note that because $\Gamma$ appears in the conclusion independent of $\alpha$, its appearance
+in the premise is weakened to include $\alpha$. Therefore we immediately appear to have from the premise
+\[A_{\delta d d'} : \Gamma_{\delta d d'}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi f f'})  \to A_{\delta d d'}(\Gamma_{\ltri (\phi f f')} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri (\phi f f')} g)\]
+where $\delta \in \sem \Delta$, $\phi : \delta \to \epsilon \in \sem \Delta$,
+ $d,d' \in \C$, $f : d \to e \in \C$, and $f' : e' \to d' \in \C$. However the semantics of $\Gamma$
+ignores any dependency on $\alpha$, so this is really
+\[A_{\delta d d'} : \Gamma_{\delta}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+
+We need to construct
+\[((\alpha : \C) \to A)_{\delta} : \Gamma_{\delta}  \to \rtype\]
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to ((\alpha : \C) \to A)_{\delta}(\Gamma_{\ltri \phi} g) \to
+((\alpha : \C) \to A)_{\epsilon}(\Gamma_{\rtri \phi} g)\]
+
+So we set
+
+\begin{defnbox}
+  $((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)$
+\end{defnbox}
+observing that for any fixed $g$ and $\delta$,
+the expression $(d, d') \mapsto A_{\delta dd'}(g)$ is in fact a functor $\C \x \C^\op \to \rset$, for
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+specializes to
+\[A_{\rid_\delta f f'} : (g : \Gamma_{\delta})  \to A_{\delta d d'}( g) \to
+A_{\delta e e'}( g)\]
+
+Having made this choice, we find that for the morphism part, we need to construct
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to
+\left(\int_{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
+\to \left( \int_{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
+so we set
+\begin{defnbox}
+  $((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))$
+\end{defnbox}
+(thinking of an inhabitant $E$ of a end $\int^{d\in \C} F(d,d)$ as
+given by a function taking an object $d \in \C$ and returning
+$F(d, d)$, subject to the end equalizer constraint)
+
+\subsubsection{Exists}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \x A : \rtype}
+\]
+What we have from the premise and what we need to construct are identical to the forall case, but we take the coend instead of the end.
+
+We have
+\[A_{\delta d d'} : \Gamma_{\delta}  \to \rtype\]
+\[A_{\phi f f'} : (g : \Gamma_{\phi})  \to A_{\delta d d'}(\Gamma_{\ltri \phi} g) \to
+A_{\epsilon e e'}(\Gamma_{\rtri\phi} g)\]
+and we set
+\begin{defnbox}
+  $((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)$
+\end{defnbox}
+For the morphism part, we must construct
+\[((\alpha : \C) \to A)_{\phi} : (g : \Gamma_{\phi})  \to
+\left(\int^{d \in \C} A_{\delta dd}(\Gamma_{\ltri \phi} g)\right)
+\to \left( \int^{d \in \C} A_{\epsilon dd}(\Gamma_{\rtri \phi} g) \right)\]
+so we set
+\begin{defnbox}
+  $((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2)) $
+\end{defnbox}
+(thinking of an inhabitant $K$ of a coend $\int^{d\in \C} F(d,d)$ as
+given by a pair consisting of an object $K_1 \in \C$ and an inhabitant
+$K_2 \in F(K_1, K_1)$, quotiented by the coend equivalence relation)
+
+\subsubsection{Forall Intro}
+Let's use $\I$ for a category,
+with typical morphisms $m : i \to j$, to keep variables from colliding.
+From
+\[
+\erule
+{
+\Delta, \alpha : \I ; \Gamma \prov M : A
+}
+{\Delta ; \Gamma \prov \Lambda \alpha . M : (\alpha : \I) \to A }
+\]
+we have, for any $d \in \ssem\Delta$ and $i\in \I$,
+\[M_{di} : (g : \Gamma_{dd}) \to A_{ddii}(g) \]
+
+ we need to construct
+\[(\Lambda \alpha : \I . A)_d : ((\alpha : \I) \to A)_{dd} \]
+i.e.
+\[(\Lambda \alpha : \I . A)_d : \lambda g : \Gamma_{dd} . \int_{i\in \I} A_{ddii}(g) \]
+so we set
+\begin{defnbox}
+  $(\Lambda \alpha : \I . A)_d(g) = \lambda i . M_{di}(g) $
+\end{defnbox}
+Let's try to validate the end condition. The premise tells us that for any
+ $f : d \to e \in \ssem \Delta$  and $m : i \to j \in \I$, we have
+\[ (g : \Gamma_{ff}) \to A_{fdmi}(\Gamma_{\rtri \fdom}g, M_{di}(\Gamma_{\fdom}g )) \equiv \]
+\[ A_{efjm}(\Gamma_{\rtri \fcod} g, M_{ej}( \Gamma_{\fcod} g))\]
+We want to check that for any  $f : d \to e \in \ssem \Delta$, we have
+\[ (g : \Gamma_{ff}) \to ((\alpha : \ii) \to A)_{fd}(\Gamma_{\rtri \fdom}g, (\Lambda \alpha . M)_{d}(\Gamma_{\fdom}g )) \equiv \]
+\[ ((\alpha : \ii) \to A)_{ef}(\Gamma_{\rtri \fcod} g, (\Lambda \alpha . M)_{e}( \Gamma_{\fcod} g))\]
+so let's expand the latter. Expanding the definition of transport at $A$, we get
+\[ (g : \Gamma_{ff}) \to \lambda i . A_{fdii} (\Gamma_{\rtri \fdom}g, (\Lambda \alpha . M)_{d}(\Gamma_{\fdom}g )(i))  \equiv \]
+\[ \lambda i . A_{efii}(\Gamma_{\rtri \fcod} g, (\Lambda \alpha . M)_{e}( \Gamma_{\fcod} g)(i))\]
+and then expanding the meaning of $\Lambda$, we get
+\[ (g : \Gamma_{ff}) \to \lambda i . A_{fdii} (\Gamma_{\rtri \fdom}g, M_{di}(\Gamma_{\fdom}g ))  \equiv \]
+\[ \lambda i . A_{efii}(\Gamma_{\rtri \fcod} g, M_{ei}( \Gamma_{\fcod} g))\]
+Great, this follows from the premise by instantiating at $m = \rid_i$.
+
+\subsubsection{Forall Elim}
+\[
+\erule
+{
+\Delta ; \Gamma \prov M : (\alpha : \I) \to A
+\qquad
+\Delta \prov t : \I
+}
+{
+\Delta ; \Gamma \prov M[t] : [t/\alpha]A
+}
+\]
+We have $M_d : (g : \Gamma_{dd}) \to \int_{i \in \I} A_{ddii}(g)$
+and we need to construct
+ \[(M[t])_d = (g : \Gamma_{dd}) \to ([t/\alpha] A)_{dd}(g)\]
+and I think I'm going to assume that works out to be
+ \[(M[t])_d = (g : \Gamma_{dd}) \to A_{ddt(dd)t(dd)}(g)\]
+and $\sem t : \sem \Delta \to \I$, so we set
+\begin{defnbox}
+  $(M[t])_d(g) = M_d(g)(t(dd))$
+\end{defnbox}
+
+\subsubsection{$\hom$ intro}
+
+\[
+\erule
+{
+\Delta \prov t : \C
+}
+{\Delta; \Gamma \prov \rid_t : \C[\bar t, t]}
+\]
+We have $\sem t : \sem \Delta \to \C$, we need to construct
+\[(\rid_t)_d : \C[\bar t_{dd}, t_{dd}]\]
+Well surely
+\begin{thmbox}
+  $\bar t_\delta = t_{\bar\delta}$
+\end{thmbox}
+so we can get away with
+\begin{defnbox}
+  $(\rid_t)_d = \rid_{t_{dd}}$
+\end{defnbox}
+\subsubsection{$\hom$ elim $+$}
+\[
+\erule
+{
+\Delta; \gamma : \I; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \I^\op, \beta : \I ; \Gamma, h - \I[\bar\alpha,\bar\beta] \prov \coe^{\alpha \beta h}(\gamma.M) : A}
+\]
+
+Let $d\in \ssem\Delta, a \in \I, b \in \I$ be given. From the fact that $\bar \alpha, \bar \beta \not \in A$
+we want to conclude that $A$, as a functor, only depends contravariantly on $\I$ through $\alpha$,
+ and only covariantly on $\I$ through $\beta$. So we can write its object part as $A_{ddab}$. To be more precise,
+it factors through some other semantic functor, which we can write as $A_{ddab}$.
+And $\Gamma$ doesn't depend on $\alpha, \beta$ at all. If we allowed stuff after the $h$ in the context,
+it'd have to be subject to the same constraint as $A$ is, I suppose. We want to construct
+\[(\coe^{\alpha \beta h}(\gamma.M))_{dab} : (g : \Gamma_{dd})(h : \I(a, b)) \to  A_{ddab}(g, h)\]
+and what we have from the premise is, for any $d \in \ssem \Delta$ and $i \in \I$, that
+\[M_{di} : (g : \Gamma_{dd}) \to  A_{ddii}(g, \rid_i)\]
+But aha, this is exactly where end-transport comes in! {\em Because} we have the morphism $h$,
+we can take either of $A_{ddaa}(g, \rid_a)$ or $A_{ddbb}(g, \rid_b)$ and transport to
+$A_{ddab}(g, h)$ and get the same thing.
+
+Let's see if I can formulate this in real syntax:
+\begin{defnbox}
+$(\coe^{\alpha \beta h}(\gamma.M))_{dab}(g, h) =  A_{ddah}(M_{da}(g)) = A_{ddhb}(M_{db}(g))$
+\end{defnbox}
+
+Something's going slightly wrong with the transport variance, but I think I can fix it.
+
+And it's worth paying careful attention to the fact that because we
+substituted the {\em same} variable $\gamma$ for $\alpha$ and $\beta$
+in $M$ that we get this end-condition glue. And I think the actual
+transport structure of the hom-type itself is making
+$\rid$-composed-with-$h$ the thing that goes in the right slot.
+\subsubsection{$\hom$ elim $-$}
+\[
+\erule
+{
+\Delta; \gamma : \I; \Gamma \prov M : [\bar \gamma/\alpha][\gamma/\beta][\rid_\gamma/h]A \qquad \bar\alpha, \bar \beta \not\in A
+}
+{\Delta, \alpha : \I^\op, \beta : \I ; \Gamma, h + \I[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
+\]
+
+
+\end{document}
