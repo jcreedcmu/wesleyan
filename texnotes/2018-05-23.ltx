@@ -1037,4 +1037,19 @@ thence
 \[\Delta^\op; \Gamma^\op \prov  \dag \bar P  : \rtype\]
 which licenses asking if I can do
 \[\Delta; \Gamma, x - \dag \bar P  \prov ? : P\]
+
+\section{Thinking Hard about what dualization means}
+
+No, I'm probably wrong to think that semantics are invariant under
+$\dag$. It's the operation I'm calling ${}^\op$ in
+\texttt{syntax-first} and it does a swap. And the question of what I
+can do with $x - A$ already comes up even in the simply-typed case.
+Let me make sure I understand that, first.
+
+There the meaning of $\Gamma$ is a functor $\sem \Delta \to \rset$, as is
+the meaning of a type $A$. If $\Gamma^\op$ means just swap signs and $\bar \Gamma$ means
+swap variables, then I think
+
+\[ (\Gamma^\op)_\delta = \Gamma_{\bar \delta}\]
+\[ (\bar\Gamma)_\delta = \Gamma_{ \delta}\]
 \end{document}

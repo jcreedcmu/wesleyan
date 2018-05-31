@@ -19,4 +19,8 @@ of things
 = careful-dualization.ltx
 
 trying to be more careful about dualization, realizing I needed to
-maybe have x^op in terms?
+maybe have x^op in terms? This never got really finished.
+
+= simply-typed.ltx
+
+Retreating to the simply-typed version to figure out dualization operations.
