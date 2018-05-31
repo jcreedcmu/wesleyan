@@ -1,0 +1,522 @@
+\documentclass{article}
+\usepackage[tmargin=0.05in, bmargin=0.05in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\fdom{\mathbf{d}f}
+\def\fcod{\mathbf{e}f}
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{{\mathsf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\S{\mathbf{S}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Slight Sense of Panic}
+Ok, I'm trying to go back and remind myself of which pieces of the foundation are secure
+or not. The simply-typed case seems fine, and needs no distinction between $\Gamma$ and
+$\Gamma^\op$. I just need to observe that if $\delta \in \Delta$, then also $\bar \delta$
+is indeed an object in $\Delta$, and I can say that
+\[ (A \to B)_\delta = A_{\bar \delta}\to B_{\delta} \]
+and so have a meaningful way to talk about transport, i.e.
+\[(A\to B)_\phi(f) = \lambda x . B_\phi(f ( A_{\bar \phi}(x)))\]
+If I want to talk about dependency, I can do so in a way that preserves $\Delta$.
+It seems like there must be some operation $\dag$ on contexts that means
+context formation can go like
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\dag \Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+to match what happens when all the $\Gamma$s drop away in the simply-typed case.
+The choice --- at this early point in the development --- of whether $A$ or $\bar A$
+appears up top is simply a matter of convention, isn't it? A well-formed context
+written using the other rule would have the same data in a different form.
+
+Ok, so if I stare at the $\Pi$ formation rule
+\[
+\erule
+{\Delta ; \dag \Gamma\prov A : \rtype \qquad \Delta ; \Gamma, x - A \prov B : \rtype}
+{\Delta ; \Gamma \prov (x : A) \to B : \rtype}
+\]
+it's again without any loss that I just pass $A$ up to the right without any modification.
+I know in my gut I'm going to want a $-$ assumption, but it's the semantics that will justify
+it. The first premise is forced by the second.
+
+Ok, let's barge into the semantics, then. We hope for
+\begin{declbox}
+  $\Gamma_\phi : \rtype$.\\
+  $\Gamma_\tau : \Gamma_{\psi} \to \Gamma_{\phi} $\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma_{\ltri\phi} g) \to A_{\epsilon}(\Gamma_{\rtri\phi} g)$
+\end{declbox}
+
+and we think $((x : A) \to B)_\delta$ is going to have the rough shape
+that it did for the simply-typed case. An nontrivial conjecture that might
+be worth questioning, but which nicely forces
+some other things into place is that {\em we don't have to do any transport}
+in the definition of the object part. Given that conjecture,
+we basically have to write
+\begin{defnbox}
+  $((x : A) \to B)_\delta(g) = (x : A_{\bar \delta}(g)) \to B_{\delta}(g, x)$
+\end{defnbox}
+and for this we need
+\begin{thmbox}
+$(\dag \Gamma)_{\bar \delta} = \Gamma_\delta$\\
+$(\Gamma, x - A)_{ \delta} = (g : \Gamma_\delta) \x (A_{\bar\delta} (g))$
+\end{thmbox}
+And for the morphism part we'd say
+\[((x : A) \to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar \delta}(\Gamma_{\ltri \phi} g)) \to B_{\delta}(\Gamma_{\ltri \phi} g, x))
+\]\[\to ((x : A_{\bar \epsilon}(\Gamma_{\rtri \phi} g)) \to B_{\epsilon}(\Gamma_{\rtri \phi} g, x))\]
+and here we're in much the same situation as before.
+
+We know we have
+\[A_{\bar \phi} : (g : (\dag\Gamma)_{ \bar\phi}) \to A_{\bar \epsilon}((\dag \Gamma)_{\ltri\bar\phi} g) \to A_{\bar \delta}((\dag\Gamma)_{\rtri\bar\phi} g) \]
+which if we assume
+(the reason that I don't want to choose
+$(\dag \Gamma)_{\bar\phi} = \Gamma_{\bar \phi}$ is that I need able to transport
+from $(\dag \Gamma)_{\bar\phi}$ to $\Gamma_\delta$ and $\Gamma_\epsilon$, not
+to  $\Gamma_{\bar \delta}$ and $\Gamma_{\bar \epsilon}$)
+\begin{thmbox}
+$(\dag \Gamma)_{\bar\phi} = \Gamma_\phi$\\
+$(\dag \Gamma)_{\bar\tau} = \Gamma_\tau$
+\end{thmbox}
+means
+\[A_{\bar \phi} : (g : \Gamma_{\phi}) \to A_{\bar \epsilon}( \Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+and then we also have
+\[B_\phi : (g : (\Gamma, x - A)_\phi) \to B_\delta((\Gamma, x - A)_{\ltri \phi} g)
+\to B_\epsilon((\Gamma, x - A)_{\rtri \phi} g)\]
+which we need to make a guess about how $\phi$ works on negative contexts. So we
+guess
+\begin{defnbox}
+  $ (\Gamma, x - A)_{ \phi} = (g : \Gamma_\phi) \x (A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)) $
+\end{defnbox}
+Note the guess of $\epsilon$ (that is, $A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)$)
+not $\delta$ (that is, $A_{\bar\delta} (\Gamma_{\ltri \phi} g)$) here! Even though it
+otherwise seems like we might have a choice when picking something
+that reduces to the special case $(\Gamma, x - A)_\delta = (g :
+\Gamma_{\rid_\delta}) \x A_{\bar \delta}(g)$ that we already had motivated.
+(this being since both the domain and codomain of $\rid_\delta$ are
+$\delta$) This is very important, I think! Remember from
+\texttt{2018-05-23.ltx}, when I said
+\begin{quote}
+ A critical thing seems to be that when computing
+the meaning of $B_\phi$, I get that the second argument $(\_ : A_{\bar \epsilon}(\cdots))$
+of it is at something $\epsilon$-like, so that I can plug in the naked variable $x$ that
+I have, rather than some transport expression. When I substitute a transport expression,
+then I get some constraint that has to be satisfied for the result to be well-typed.
+\end{quote}
+Now we know that $B$-transport expands to
+\[B_\phi : (g : \Gamma_\phi) (a : A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)) \to B_\delta((\Gamma, x - A)_{\ltri \phi} (g, a))
+\to B_\epsilon((\Gamma, x - A)_{\rtri \phi} (g, a))\]
+and we have to remember how to actually do context transport at minus assumptions.
+In a situation like
+\begin{tikzcd}
+  \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
+\delta \ar[r,"\phi"'] & \epsilon
+\end{tikzcd}
+we need to make
+\[ (\Gamma, x - A)_\tau :
+(g : \Gamma_\psi) (a : A_{\bar\epsilon'} (\Gamma_{\rtri \psi} g))
+\to
+(k : \Gamma_\phi) \x (A_{\bar\epsilon} (\Gamma_{\rtri \phi} k))\]
+so we set
+\begin{defnbox}
+  $(\Gamma, x - A)_\tau(g, a) = (\Gamma_\tau g, A_{\bar \omega}(\Gamma_{\rtri\tau}g ,a))$
+\end{defnbox}
+Let's type-check this;
+\[A_{\bar \omega} : (g : \Gamma_{\omega}) \to A_{\bar \epsilon'}( \Gamma_{\rtri\omega} g) \to A_{\bar \epsilon}(\Gamma_{\ltri\omega} g) \]
+Means that all we need are $\rtri \omega \o \rtri \tau = \rtri \psi$
+to make the $A_{\bar \epsilon'}$ match, and
+$\ltri \omega \o \rtri \tau = \rtri \phi \o \tau$
+to make the $A_\epsilon$ match. But these both hold.
+
+Now we know that $B$-transport expands to
+\[B_\phi : (g : \Gamma_\phi) (a : A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)) \to
+ B_\delta(\Gamma_{\ltri \phi} g, A_{\bar \phi}(g ,a) )
+\to B_\epsilon(\Gamma_{\rtri \phi} g, a)\]
+
+Now we know the morphism part must be
+\[((x : A) \to B)_\phi : (g : \Gamma_\phi) \to ((x : A) \to B)_{\delta}(\Gamma_{\ltri\phi} g) \to ((x : A) \to B)_{\epsilon}(\Gamma_{\rtri\phi} g)\]
+i.e.
+\[((x : A) \to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar \delta}(\Gamma_{\ltri\phi} g)) \to B_{\delta}(\Gamma_{\ltri\phi} g, x)) \]
+\[\to (x : A_{\bar \epsilon}(\Gamma_{\rtri\phi} g)) \to B_{\epsilon}(\Gamma_{\rtri\phi} g, x)\]
+and we define it
+\begin{defnbox}
+  $((x : A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (A_{\bar \phi}(g, x)))$
+\end{defnbox}
+Armed with
+\[A_{\bar \phi} : (g : \Gamma_{\phi}) \to A_{\bar \epsilon}( \Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi) (a : A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)) \to
+ B_\delta(\Gamma_{\ltri \phi} g, A_{\bar \phi}(g ,a) )
+\to B_\epsilon(\Gamma_{\rtri \phi} g, a)\]
+we check
+\[g : \Gamma_\phi, x : A_{\bar \epsilon}(\Gamma_{\rtri \phi} g) \prov A_{\bar \phi}(g, x) : A_{\bar\delta}(\Gamma_{\ltri \phi} g) \]
+\[\cdots, f : (x : A_{\bar \delta}(\Gamma_{\ltri\phi} g)) \to B_{\delta}(\Gamma_{\ltri\phi} g, x)
+ \prov f(A_{\bar \phi}(g, x)) : B_{\delta}(\Gamma_{\ltri\phi} g, A_{\bar \phi}(g, x)) \]
+And everything's fine.
+
+\section{Popping Up}
+Summarizing definitions and theorems, we have
+\begin{thmbox}
+$(\dag \Gamma)_{\bar\phi} = \Gamma_\phi$\\
+$(\dag \Gamma)_{\bar\tau} = \Gamma_\tau$
+\end{thmbox}
+\begin{defnbox}
+  $ (\Gamma, x - A)_{ \phi} = (g : \Gamma_\phi) \x (A_{\bar\epsilon} (\Gamma_{\rtri \phi} g)) $\\
+  $(\Gamma, x - A)_\tau(g, a) = (\Gamma_\tau g, A_{\bar \omega}(\Gamma_{\rtri\tau}g ,a))$\\
+  $((x : A) \to B)_\delta(g) = (x : A_{\bar \delta}(g)) \to B_{\delta}(g, x)$\\
+  $((x : A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (A_{\bar \phi}(g, x)))$
+\end{defnbox}
+I think going through the same above business with $\Sigma$s would motivate the correct
+definitions for plus assumptions, which I'm just going to be sloppy and think that they
+are
+\begin{defnbox}
+  $ (\Gamma, x + A)_{ \phi} = (g : \Gamma_\phi) \x A_{\delta} (\Gamma_{\ltri \phi} g) $\\
+  $ (\Gamma, x - A)_{ \phi} = (g : \Gamma_\phi) \x A_{\bar\epsilon} (\Gamma_{\rtri \phi} g) $\\
+  $(\Gamma, x + A)_\tau(g, a) = (\Gamma_\tau g, A_{\iota}(\Gamma_{\ltri\tau}g ,a))$\\
+  $(\Gamma, x - A)_\tau(g, a) = (\Gamma_\tau g, A_{\bar \omega}(\Gamma_{\rtri\tau}g ,a))$\\
+\\
+  $((x : A) \to B)_\delta(g) = (x : A_{\bar \delta}(g)) \to B_{\delta}(g, x)$\\
+  $((x : A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$\\
+  $((x : A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (A_{\bar \phi}(g, x)))$\\
+  $((x : A)\x B)_\phi(g, (a, b)) = (A_\phi(g, a), B_\phi((g, a), b))$
+\end{defnbox}
+Now at this point I'm finally ready to conjecture that in this setting,
+ $\dag \Gamma$ is {\em just} the
+sign-flipping operation, with no variable substitutions from ${}^\op$ping $\Delta$.
+
+Let's try to prove the the above theorems, then.
+
+The object part works like
+\[(\dag (\Gamma, x + A))_{ \bar \phi} = (\dag \Gamma, x - A)_{\bar \phi}\]
+\[= (\dag \Gamma, x - A)_{\bar \phi}\]
+\[ = (g : (\dag \Gamma)_{\bar\phi}) \x A_{\delta} ((\dag \Gamma)_{\rtri \bar\phi} g)\]
+\[ = (g :  \Gamma_\phi) \x A_{\delta} (\Gamma_{\ltri \phi} g)\]
+\[= (\Gamma, x + A)_{  \phi} \]
+And the morphism part works like
+\[(\dag (\Gamma, x + A))_{ \bar \tau}(g, a) = (\dag \Gamma, x - A)_{\bar \tau}(g, a)\]
+\[ = ((\dag \Gamma)_{\bar\tau} g, A_{\iota}((\dag \Gamma)_{\rtri{\bar\tau}}g ,a)) \]
+\[ = ( \Gamma_{\tau} g, A_{\iota}(\Gamma_{\ltri\tau}g ,a)) \]
+\[ = (\Gamma, x + A)_\tau(g,a) \]
+Ok, so everything's fine there.
+
+Let's fix in our minds the notion that $\Gamma^\op$ flips sign and $\bar \Gamma$ flips variables. Define another notion of context, $\rctx'$, where I simply
+{\em write} the minus-type assumptions as $\bar A$ instead of $A$.
+That is, I intend the theorem
+\begin{thmbox}
+  $\Delta \prov \Gamma \rctx \qquad\iff \qquad \Delta\prov \tilde \Gamma  \rctx'$
+\end{thmbox}
+where $\tilde \Gamma$ selectively changes $x - A$ to $x - \bar A$ but leaves $x + A$
+alone.
+
+I know I have the rule
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+So do I then have the rule
+\[
+\erule
+{\Delta \prov \Gamma \rctx' \qquad \Delta;{\bar \Gamma}^\op \prov \bar A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx'}
+\]
+?
+Expanding the `definition' of $\rctx'$, this is the claim
+\[
+\erule
+{\Delta \prov \tilde \Gamma \rctx \qquad \Delta;{\bar \Gamma}^\op \prov \bar A : \rtype}
+{\Delta \prov \tilde \Gamma, x - \bar A \rctx}
+\]
+which doesn't seem obviously provable, which is very weird. Oh, but maybe
+I just need some other induction hypothesis, or something.
+Let's be clear about the different types of things involved.
+I have contexts $\Gamma$ with
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+and a judgment $\Delta ; \Gamma \prov A : \rtype$. Then I have things $\Omega$
+with
+\[
+\erule
+{\Delta \prov \Omega \rctx' \qquad \Delta;{\bar \Omega}^\op \prov \bar A : \rtype}
+{\Delta \prov \Omega, x - A \rctx'}
+\]
+And I guess there is a corresponding judgment $\Delta ; \Omega \prov A : \rtype$.
+The putative relationship between them is
+\[ \Delta ; \Omega \prov A : \rtype \iff \Delta ;\tilde\Omega \prov A : \rtype\]
+\[ \Delta ; \Gamma \prov A : \rtype \iff \Delta ;\tilde\Gamma \prov A : \rtype\]
+So I want to prove
+\[ \Delta \prov \Gamma \rctx \qquad\iff \qquad \Delta\prov \tilde \Gamma  \rctx'\]
+inductively, so let's take the case
+\[ \Delta \prov (\Gamma, x - A) \rctx \qquad\iff \qquad \Delta\prov (\tilde \Gamma, x - \bar A)  \rctx'\]
+and unpacking we get
+\[
+\erule
+{ \Delta \prov \Gamma \rctx\qquad \Delta ; \Gamma^\op \prov A : \rtype}
+{ \Delta \prov (\Gamma, x - A) \rctx}
+\ \iff\ %
+\erule
+{ \Delta \prov \tilde\Gamma \rctx'\qquad \Delta ; \overline{\tilde\Gamma}^\op \prov \bar A : \rtype}
+{   \Delta\prov (\tilde \Gamma, x - \bar A)  \rctx'}
+\]
+This isn't working, either? Weird. Ok, let's just start with
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+and assert the theorem and rewrite. I get
+\[
+\erule
+{\Delta \prov \tilde\Gamma \rctx' \qquad \Delta;\tilde\Gamma^\op \prov A : \rtype}
+{\Delta \prov \tilde\Gamma, x - \bar A \rctx'}
+\]
+which means
+\[
+\erule
+{\Delta \prov \Omega \rctx' \qquad \Delta;\Omega^\op \prov \bar A : \rtype}
+{\Delta \prov \Omega, x - A \rctx'}
+\]
+where ${}^\op$ is {\em only} sign-flipping. Wow, I am super confused.
+
+Let me at least examine the thing I have. It's essential that
+$\dagger$ --- which I'm taking to be ${}^\op$ --- is an operation that
+preserves context validity in the same $\Delta$.
+
+Given the rules
+\[
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\qquad
+\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}
+\]
+I should be able to prove
+\begin{thmbox}
+  if $\Delta \prov \Gamma\rctx$, then $\Delta \prov \Gamma^\op\rctx$
+\end{thmbox}
+\noindent for ${}^\op$ just flipping signs.
+
+If \[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma, x + A \rctx}
+\]
+we can show
+\[\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta;\Gamma \prov A : \rtype}
+{\Delta \prov \Gamma^\op, x - A \rctx}\]
+and if
+\[\erule
+{\Delta \prov \Gamma \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma, x - A \rctx}\]
+then we can show
+\[
+\erule
+{\Delta \prov \Gamma^\op \rctx \qquad \Delta;\Gamma^\op \prov A : \rtype}
+{\Delta \prov \Gamma^\op, x + A \rctx}
+\]
+\section{Revisiting the Variable Rule}
+The real crux of everything I think is when
+\[ \alpha : \C  \prov A : \rtype \]
+ can I make some term
+\[ \alpha : \C ; x - A  \prov x^* : A \]
+Recall that a term $\Delta ; \Gamma \prov M : A$ needs to have
+$M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$ for every object $d\in \ssem \Delta$, subject to
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+
+So the object part is forced. $(x^*)_d(a) = a$.
+In this case, the type $A$ does not depend on anything, so we're just concerned with checking
+\[ (g : \Gamma_{ff}) \to A_{fd}( M_d(\Gamma_{\fdom}g )) \equiv A_{ef}( M_e( \Gamma_{\fcod} g))\]
+
+In this case $\Gamma = x - A$, so $\Gamma_{ff} = A_{de}$, and $\Gamma_{\fdom} = A_{df}$
+and $\Gamma_{\fcod} = A_{fe}$, so we have to check
+\[ (g : \Gamma_{de}) \to A_{fd}( M_d(A_{df}g )) \equiv A_{ef}( M_e( A_{fe} g))\]
+so, yeah, everything's kosher here so far. I still fear higher dependencies.
+\end{document}

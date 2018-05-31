@@ -4857,9 +4857,25 @@ A: ???
 
 === 2018.05.26
 
-Q: Where did I put all the tedious calculations that led me to the right definition of end condition?
+Q: Where did I put all the tedious calculations that led me to the
+right definition of end condition?
 A:
 wes//agda/anon/2018-05-22-rewrites.agda
 wes//agda/anon/2018-05-22.agda
 wes//agda/anon/2018-05-22b.agda
 wes//agda/anon/2018-05-22c.agda
+
+The earlier tedious calcuations that convinced me that ± Γ contexts made sense at all are
+wes//agda/anon/2018-05-16.agda
+
+I don't really know what I can learn from
+wes//agda/anon/2018-05-18.agda
+it seems like an awful mutual recursive mess.
+
+=== 2018.05.31
+
+Q: What lesson do I take from looking at what happens with the
+simply-typed version?
+A: Even though I can treat every rule as maintaining Δ without
+dualizing it, I still refer to swapped δ in the definition of the
+function type's semantics.
