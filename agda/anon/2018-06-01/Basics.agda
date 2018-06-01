@@ -114,9 +114,10 @@ postulate
     → oD--- ε a b c
 
 
-tB+ tB- tC++ tC-+ tC+- tC--
+tA tB+ tB- tC++ tC-+ tC+- tC--
   tD+++ tD++- tD+-+ tD+--
   tD-++ tD-+- tD--+ tD--- : Set
+tA = (c : Obj1) → oA (c , c)
 tB+ = (c : Obj1) (a : oA (c , c)) → oB+ (c , c) a
 tB- = (c : Obj1) (a : oA (c , c)) → oB- (c , c) a
 tC++ = (c : Obj1) → (a : oA (c , c)) (b : oB+ (c , c) a) → oC++ (c , c) a b

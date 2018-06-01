@@ -4,7 +4,7 @@ open import HoTT
 open import 2018-06-01.Basics
 open import 2018-06-01.Rewrites
 
-module 2018-06-01.Terms (d e : Obj1) (f : Mor1 d e) where
+module 2018-06-01.Terms {d e : Obj1} (f : Mor1 d e) where
 
 dd de ed ee : Obj
 dd = (d , d)
@@ -29,6 +29,13 @@ ff = (f , f)
 
 -- for all of these, I can imagine postulating L == R, but I don't
 -- actually need to use it anywhere, so don't actually do it.
+
+module eA (t : tA) where
+  X : Set
+  X = oA ed
+  L R : X
+  L = mA fd (t d)
+  R = mA ef (t e)
 
 module eB+ (a : oA de) (t : tB+) where
   X : Set
