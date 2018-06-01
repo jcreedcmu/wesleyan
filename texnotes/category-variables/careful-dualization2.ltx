@@ -1438,7 +1438,33 @@ Now I need some conjectures about $A^*$ semantics. I think
   $A^*_\phi : (g : \Gamma_\phi) \to A^*_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A^*_{\cc \phi}(\Gamma_{\rtri\phi} g)$\\
   $A^*_\phi : (g : \Gamma_\phi) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri\phi} g) \to A_{\overline{\cc \phi}}(\Gamma_{\rtri\phi} g) \qquad ?$\\
   $A_{\bar\phi} : (g : (\Gamma^\op)_{\bar\phi}) \to A_{\dd {\bar\phi}}((\Gamma^\op)_{\ltri{\bar\phi}} g) \to A_{\cc {\bar\phi}}((\Gamma^\op)_{\rtri{\bar\phi}} g)$\\
-  $A_{\bar\phi} : (g : \Gamma_{\phi}) \to A_{\overline{\cc \phi}} (\Gamma_{\rtri{\phi}} g) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri{\phi}} g)$\\
+  $A_{\bar\phi} : (g : \Gamma_{\phi}) \to A_{\overline{\cc \phi}} (\Gamma_{\rtri{\phi}} g) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri{\phi}} g)$
 \end{thmbox}
-
+Arg, this is breaking down. Can I suppose that $A^*$ and $A$ are related only
+for sufficiently symmetric inputs, or something?
+I want specifically that
+\[ A^*_{fd}(\Gamma_{\rtri \fdom}g, A_{df}(\Gamma_{ \rtri \fdom}g , a)) \equiv \]
+\[ A_{fd}(\Gamma_{\ltri \fdom}g, A_{df}(\Gamma_{ \rtri \fdom}g , a))  \]
+and there is something special and symmetric about $\fdom$; we have $\fdom = \overline{\fdom}$. Let me try to  generalize this
+to, let a $\tau$ be given such that $\bar \tau = \tau$. It looks like
+\[\begin{tikzcd}
+     ab \ar[r, "ff"]\ar[d, "k \ell"'] & ba\ar[from=d, "\ell k"']\\
+     cd \ar[r, "hh"']& dc
+   \end{tikzcd}\]
+such that
+\[\begin{tikzcd}
+     a \ar[r, "f"]\ar[d, "k"'] & b\ar[from=d, "\ell"']\\
+     c \ar[r, "h"']& d
+   \end{tikzcd}\]
+nonredundantly explains what's going on. Perhaps we have
+\[(g : \Gamma_{ff}) \to A^*_{\ell k}(\Gamma_{\rtri \tau} g, x) \equiv A_{\ell k}(\Gamma_{\ltri \tau} g, x)\]
+What type does $x$ need to be? According to
+\begin{thmbox}
+  $A^*_\phi : (g : \Gamma_\phi) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri\phi} g) \to A_{\overline{\cc \phi}}(\Gamma_{\rtri\phi} g) $\\
+  $A_{\bar\phi} : (g : \Gamma_{\phi}) \to A_{\overline{\cc \phi}} (\Gamma_{\rtri{\phi}} g) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri{\phi}} g)$
+\end{thmbox}
+it needs to be both
+$A_{cd}(\Gamma_{\ltri\ell k} \Gamma_{\rtri \tau} g)$ and
+$A_{ab}(\Gamma_{\rtri\ell k} \Gamma_{\ltri \tau} g)$.
+This is a mess.
 \end{document}
