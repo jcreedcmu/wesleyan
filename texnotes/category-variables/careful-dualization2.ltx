@@ -439,7 +439,7 @@ x -  A \in \Gamma
 \Delta ; \Gamma \prov M : (x + A) \x B
 }
 {
-\Delta ; \Gamma \prov \pi_1 M : \bar A
+\Delta ; \Gamma \prov \pi_1 M :  A
 }
 \qquad
 \erule
@@ -765,10 +765,10 @@ arranged like so:
 
 We're going treat contexts as if they were defined inductively by
 \[\begin{tabular}{rccl}
-  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma^\dagger \celse \Gamma, x + A$\\
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma^\op \celse \Gamma, x + A$\\
 \end{tabular}
 \]
-because we can think of $\Gamma, x - A$ as $(\Gamma^\dagger, x + A)^\op$.
+because we can think of $\Gamma, x - A$ as $(\Gamma^\op, x + A)^\op$.
 
 We declare:
 \begin{declbox}
@@ -780,11 +780,11 @@ We declare:
 and define:
 \begin{defnbox}
  $(\cdot)_\phi = \bone$\\
- $(\Gamma^\dagger)_\phi = \Gamma_{\bar\phi}$\\
+ $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$\\
  $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
   \\
  $(\cdot)_\tau = {!}$\\
- $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$\\
+ $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$\\
  $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
 \end{defnbox}
 Here's a blow-by-blow of why the definition of $(\Gamma, x + A)_\tau(g, a)$ is well-typed.
@@ -832,28 +832,28 @@ and
 \subsubsection{Semantics of Minus Hypotheses}
 We can compute them directly from the definitions. It's handy to have them in this form for
 later calculations:
-\[(\Gamma, x - A)_\phi = (\Gamma^\dagger, x + \bar A)^\op_\phi\]
-\[ = (\Gamma^\dagger, x + \bar A)_{\bar \phi} \]
-\[ = (g : \Gamma^\dagger_{\bar \phi}) \x \bar A_{\dd \bar \phi}( \Gamma^\dagger_{\ltri\bar\phi} g ) \]
-\[ = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g ) \]
+\[(\Gamma, x - A)_\phi = (\Gamma^\op, x + A)^\op_\phi\]
+\[ = (\Gamma^\op, x + A)_{\bar \phi} \]
+\[ = (g : \Gamma^\op_{\bar \phi}) \x A_{\dd \bar \phi}( \Gamma^\op_{\ltri\bar\phi} g ) \]
+\[ = (g : \Gamma_\phi) \x A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g ) \]
 and
-\[ (\Gamma, x -  A)_\tau (g, a) = (\Gamma^\dagger, x + \bar A)^\op_\tau \]
-\[ = (\Gamma^\dagger, x + \bar A)_{\bar \tau} \]
-\[ = (\Gamma^\dagger_{\bar \tau} g, \bar A_{\ll \bar \tau}(\Gamma^\dagger_{\ltri \bar \tau}g , a) ) \]
-\[ = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
+\[ (\Gamma, x -  A)_\tau (g, a) = (\Gamma^\op, x + A)^\op_\tau \]
+\[ = (\Gamma^\op, x + A)_{\bar \tau} \]
+\[ = (\Gamma^\op_{\bar \tau} g, A_{\ll \bar \tau}(\Gamma^\op_{\ltri \bar \tau}g , a) ) \]
+\[ = (\Gamma_\tau g, A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) ) \]
 So we could have also defined
 \begin{defnbox}
  $(\cdot)_\phi = \bone$\\
  $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
- $(\Gamma, x - A)_\phi = (g : \Gamma_\phi) \x \bar A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g )$\\
+ $(\Gamma, x - A)_\phi = (g : \Gamma_\phi) \x A_{\overline{\cc  \phi}}( \Gamma_{\rtri\phi} g )$\\
   \\
  $(\cdot)_\tau = {!}$\\
  $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $\\
- $(\Gamma, x - A)_\tau (g, a) = (\Gamma_\tau g, \bar A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) )$
+ $(\Gamma, x - A)_\tau (g, a) = (\Gamma_\tau g, A_{\overline{\rr \tau}}(\Gamma_{ \rtri \tau}g , a) )$
 \end{defnbox}
 \noindent and {\em proved} inductively that
- $(\Gamma^\dagger)_\phi = \Gamma_{\bar\phi}$ and
- $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$ as theorems, but it seems much easier to just do the calculation above.
+ $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$ and
+ $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$ as theorems, but it seems much easier to just do the calculation above.
 
 
 \subsubsection{Functoriality}
@@ -880,17 +880,18 @@ of these definitions. This is how we show functoriality, and what's required of 
 %% \end{proof}
 Assuming
 \[\begin{tikzcd}
-  \gamma \ar[r, "\gamma"] & \delta \ar[r, "\phi"] & \epsilon
+  \gamma \ar[r, "\eta"] & \delta \ar[r, "\phi"] & \epsilon
 \end{tikzcd}\]
 we claim the following are true
 \begin{thmbox}
  $\Gamma_\rid g = g$\\
  $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$\\
   $A_{\rid_\delta}(g, a) = a$\\
-  $A_{\phi\eta}(g, a) = A_\phi(\Gamma_{\phi \gol \eta}g, A_\eta(\Gamma_{\phi \sqsupset \eta}g, a))$
+  $A_{\phi\o \eta}(g, a) = A_\phi(\Gamma_{\phi \gol \eta}g, A_\eta(\Gamma_{\phi \sqsupset \eta}g, a))$
 \end{thmbox}
-Too see that this last equation is well-typed, we observe that as long as
-we know ${\ltri \eta}  \o (\phi \gor \eta) = \ltri (\phi \eta)$
+To see that this last equation is well-typed, we observe that as long as
+we know
+\[{\ltri \eta}  \o (\phi \gor \eta) = \ltri (\phi \eta)\eqno(1)\]
 we have
 \[
 a : A_{\gamma}(\Gamma_{\ltri \phi \eta} g)\prov A_\eta(\Gamma_{\phi \gor \eta} g, a) :
@@ -898,11 +899,14 @@ A_\delta(\Gamma_{\rtri \eta} \Gamma_{\phi \gor \eta} g)
 \]
 and then the second argument of $A_\eta$ wants to be $A_\delta(\Gamma_{\ltri\phi} \Gamma_{\phi \gol \eta} g)$
 so we need the equation
-\[ \ltri\phi \o (\phi \gol \eta) = \rtri \eta \o (\phi \gor \eta)\]
+\[ \ltri\phi \o (\phi \gol \eta) = \rtri \eta \o (\phi \gor \eta) \eqno(2)\]
 and finally the output we get from $A_\phi$ is $A_\epsilon(\Gamma_{\rtri\phi}\Gamma_{\phi \gol \eta}g )$
 but it needs to be $A_\epsilon(\Gamma_{\rtri\phi\eta}g )$, so we need to check
-\[ \rtri\phi \o (\phi \gol \eta) = \rtri(\phi\eta) \]
+\[ \rtri\phi \o (\phi \gol \eta) = \rtri(\phi\eta) \eqno(3)\]
 but all three of these properties are true by diagram-chasing.
+
+We can prove that context semantics are functorial, assuming that
+type semantics are `functorial' in the above sense.
 \begin{lemma}\ %
   \begin{enumerate}
   \item $\Gamma_\rid g = g$ and
@@ -914,16 +918,16 @@ but all three of these properties are true by diagram-chasing.
 By induction on $\Gamma$
 \begin{enumerate}
  %% $(\cdot)_\tau = {!}$\\
- %% $(\Gamma^\dagger)_\tau = \Gamma_{\bar\tau}$\\
+ %% $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$\\
  %% $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
 
 \item We need to check that
 $(\Gamma, x + A)_\rid (g, a) = (\Gamma_\rid g, A_{\rid}(\Gamma_{\rid}g , a) ) $ and that
-$(\Gamma^\dagger)_\rid(g) = \Gamma_{\rid}(g)$. It suffices to require that $A_\rid(g, a) = a$.
+$(\Gamma^\op)_\rid(g) = \Gamma_{\rid}(g)$. It suffices to require that $A_\rid(g, a) = a$.
 \item
 It's easy to check that
-\[(\Gamma^\dagger)_{\tau\sigma}(g) = \Gamma_{\overline{\tau\sigma}}(g) = \Gamma_{\bar\tau\bar\sigma}(g)
-= \Gamma_{\bar\tau}\Gamma_{\bar\sigma}(g) = (\Gamma^\dagger)_{\tau}(\Gamma^\dagger)_{\sigma}(g)\]
+\[(\Gamma^\op)_{\tau\sigma}(g) = \Gamma_{\overline{\tau\sigma}}(g) = \Gamma_{\bar\tau\bar\sigma}(g)
+= \Gamma_{\bar\tau}\Gamma_{\bar\sigma}(g) = (\Gamma^\op)_{\tau}(\Gamma^\op)_{\sigma}(g)\]
 by induction hypothesis.
 Then we need to check that
 \[(\Gamma, x + A)_{\tau  \sigma} (g, a) = (\Gamma, x + A)_{\tau }(\Gamma, x + A)_{  \sigma} (g, a)\]
@@ -977,8 +981,8 @@ Let $f : d \to e$ be a morphism in $\ssem \Delta$. We declare:
 \end{defnbox}
 % end condition
 \begin{thmbox}
-For any $g : \Gamma_{ff}$, we have
-\[ A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+For any $f : d \to e \in \ssem \Delta$, we have
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
 \end{thmbox}
 
 
@@ -1040,13 +1044,13 @@ So chase the following diagrams to see
 
 \begin{defnbox}
   $((x + A) \x B)_\delta (g) = (x : A_\delta(g)) \x B_\delta(g, x)$\\
-  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x)$\\
+  $((x - A) \to B)_\delta (g) = (x : A_{\bar \delta}(g)) \to B_\delta(g, x)$\\
   $((\alpha : \C) \x A)_{\delta}(g) = \int^{d \in \C} A_{\delta dd}(g)$\\
   $((\alpha : \C) \to A)_{\delta}(g) = \int_{d \in \C} A_{\delta dd}(g)$\\
   $(\C[t_1, t_2])_\delta = \C[(t_1)_\delta, (t_2)_\delta]$\\
   \\
   $((x + A)\x B)_\phi(g, (a, b)) = (A_\phi(g, a), B_\phi((g, a), b))$\\
-  $((x - A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (\bar A_{\bar \phi}(g, x)))$\\
+  $((x - A)\to B)_\phi(g, f) = \lambda x . B_\phi((g, x), f (A_{\bar \phi}(g, x)))$\\
 %  $((\alpha : \C) \x A)_{\phi}(g, K) = \bunpack(K, d.a.\bpack(d, A_{\phi d d}(g, a)  )) $\\
   $((\alpha : \C) \x A)_{\phi}(g, K) = (K_1, A_{\phi K_1 K_1}(g, K_2))$\\
   $((\alpha : \C) \to A)_{\phi}(g, E) = \lambda d . A_{\phi d d}(g, E(d))$\\
@@ -1059,7 +1063,9 @@ So chase the following diagrams to see
   $(\lambda x . M)_d(g) = \lambda x . M_d(g, x)$\\
   $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$\\
   $(M[t])_d(g) = M_d(g)(t(dd))$\\
-  $(\rid_t)_d = \rid_{t_{dd}}$
+  $(\rid_t)_d(g) = \rid_{t_{dd}}$\\
+  $(x)_d(g) = \pi_x g$\\
+  $(x^*)_d(g) = \pi_x g$
 \end{defnbox}
 
 \subsection{Miscellaneous Notes Reasoning Through Semantics}
@@ -1108,7 +1114,7 @@ Observe that the premises of the formation rule
 \[
 \erule
 {
-\Delta; \Gamma^\dagger \prov \bar A : \rtype \qquad
+\Delta; \Gamma^\op \prov A : \rtype \qquad
 \Delta; \Gamma, x - A  \prov B : \rtype
 }
 {\Delta ; \Gamma \prov (x - A) \to B : \rtype}
@@ -1116,23 +1122,23 @@ Observe that the premises of the formation rule
  give us all of the following derived functions
 to work with, for $\phi : \delta \to \epsilon \in \sem \Delta$:
 
-\[\bar A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
-\[B_\delta : (g : \Gamma_\delta) \to \bar A_{\bar \delta}(g) \to \rtype \]
-\[\bar A_{\bar \phi} : (g : \Gamma_{ \phi}) \to \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to \bar A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
-\[B_\phi : (g : \Gamma_\phi)(x : \bar A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, \bar A_{\bar \phi}(g, x))
+\[A_{\bar \delta} : \Gamma_{ \delta} \to \rtype \]
+\[B_\delta : (g : \Gamma_\delta) \to A_{\bar \delta}(g) \to \rtype \]
+\[A_{\bar \phi} : (g : \Gamma_{ \phi}) \to A_{\bar \epsilon}(\Gamma_{\rtri\phi} g) \to A_{\bar \delta}(\Gamma_{\ltri\phi} g) \]
+\[B_\phi : (g : \Gamma_\phi)(x : A_{\bar \epsilon}(\Gamma_{\rtri\phi}g)) \to B_\delta(\Gamma_{\ltri\phi}g, A_{\bar \phi}(g, x))
 \to B_\epsilon(\Gamma_{\rtri\phi}g, x)\]
 
 We define the object part of this (of type $((x - A) \to B)_\delta : \Gamma_\delta \to \rtype$) by
 \begin{defnbox}
-  $((x - A) \to B)_\delta (g) = (x : \bar A_{\bar \delta}(g)) \to B_\delta(g, x) $
+  $((x - A) \to B)_\delta (g) = (x : A_{\bar \delta}(g)) \to B_\delta(g, x) $
 \end{defnbox}
 and the morphism part needs to be
-\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : \bar A_{\bar\delta}(\Gamma_{\ltri\phi} g))
+\[((x-A)\to B)_\phi : (g : \Gamma_\phi) \to ((x : A_{\bar\delta}(\Gamma_{\ltri\phi} g))
 \to B_\delta(\Gamma_{\ltri\phi} g, x))\]
-\[  \to (x : \bar A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
+\[  \to (x : A_{\bar\epsilon}(\Gamma_{\rtri\phi} g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x) \]
 and we define it
 \begin{defnbox}
-  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (\bar A_{\bar \phi}(g, x)))$
+  $((x-A)\to B)_\phi(g, f, x) = B_\phi(g, x, f (A_{\bar \phi}(g, x)))$
 \end{defnbox}
 
 \subsubsection{Lambdas}
@@ -1145,19 +1151,19 @@ and we define it
 
 We want to construct the object part
 \[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x - A) \to B)_{dd}(g)\]
-\[ = (g : \Gamma_{dd}) (x : \bar A_{dd}(g)) \to B_{dd}(g, x)\]
+\[ = (g : \Gamma_{dd}) (x : A_{dd}(g)) \to B_{dd}(g, x)\]
 We get to assume the object part
 \[ M_d : (g : (\Gamma, x - A)_{dd}) \to B_{dd}(g)\]
-\[ =  (g : \Gamma_{dd}) (x : \bar A_{dd}( g) ) \to B_{dd}(g, x)\]
+\[ =  (g : \Gamma_{dd}) (x : A_{dd}( g) ) \to B_{dd}(g, x)\]
 So we define
 \begin{defnbox}
   $(\lambda x .M)_d(g)( x) = M_d(g, x)$
 \end{defnbox}
 
 As for the end-condition, if we turn the crank on either the top or the bottom of the rule, we get
-\[(g : \Gamma_{ff})(a : \bar A_{de}(\Gamma_{\rtri ff} g)) \to \]
-\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, \bar A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
-\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, \bar A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
+\[(g : \Gamma_{ff})(a : A_{de}(\Gamma_{\rtri ff} g)) \to \]
+\[B_{fd}((\Gamma_{\rtri \fdom} g, a), M_d(\Gamma_{\fdom}g, A_{df}(\Gamma_{\rtri \fdom} g, a)))\]
+\[\equiv B_{ef}((\Gamma_{\rtri \fcod} g, a), M_e(\Gamma_{\fcod}g, A_{fe}(\Gamma_{\rtri \fcod} g, a)))\]
 so the requirement needed for the conclusion is satisfied trivially by yielding to
 the requirement satisfied by the premise.
 \subsubsection{$\hom$ Types}
@@ -1381,5 +1387,58 @@ $\rid$-composed-with-$h$ the thing that goes in the right slot.
 {\Delta, \alpha : \I^\op, \beta : \I ; \Gamma, h + \I[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
 \]
 
+\subsubsection{Variables}
+\[
+\erule
+{
+}
+{\Delta ; \Gamma, x + A \prov x : A }
+\qquad
+\erule
+{
+}
+{\Delta ; \Gamma, x - A \prov x^* : A^* }
+\]
+I need to come up with
+\[x_d : (g : \Gamma_{dd})(a : A_{dd}(g)) \to A_{dd}( g)\]
+\[(x^*)_d : (g : \Gamma_{dd}) (a : A_{dd}(  g )) \to A_{dd}(g)\]
+but this is easy:
+\[ x_d(g, a) = a \qquad (x^*)_d(g, a) = a \]
+we now want to check
+\[ (g : (\Gamma, x + A)_{ff}) \to A_{fd}((\Gamma, x + A)_{\rtri \fdom}g, x_d((\Gamma, x + A)_{\fdom}g )) \equiv A_{ef}((\Gamma, x + A)_{\rtri \fcod} g, x_e( (\Gamma, x + A)_{\fcod} g))\]
+so
+\[ (g : \Gamma_{ff})(a : A_{de}( \Gamma_{\ltri ff} g )) \to \]
+\[ A_{fd}((\Gamma, x + A)_{\rtri \fdom}(g, a), x_d((\Gamma, x + A)_{\fdom}(g, a) )) \equiv\]
+\[ A_{ef}((\Gamma, x + A)_{\rtri \fcod} (g, a), x_e( (\Gamma, x + A)_{\fcod} (g, a)))\]
+in other words
+\[ (g : \Gamma_{ff})(a : A_{de}( \Gamma_{\ltri ff} g )) \to \]
+\[ A_{fd}(\Gamma_{\rtri\fdom} g, A_{df}(\Gamma_{\ltri \fdom}g , a)) \equiv\]
+\[ A_{ef} (\Gamma_{\rtri\fcod} g, A_{fe}(\Gamma_{\ltri \fcod}g , a))\]
+which by functoriality is just checking
+\[ (g : \Gamma_{ff})(a : A_{de}( \Gamma_{\ltri ff} g )) \to  A_{ff}(a) \equiv  A_{ff} (a)\]
+We also want to check
+\[ (g : (\Gamma, x - A)_{ff}) \to A^*_{fd}((\Gamma, x - A)_{\rtri \fdom}g, x^*_d((\Gamma, x - A)_{\fdom}g )) \equiv A^*_{ef}((\Gamma, x - A)_{\rtri \fcod} g, x^*_e( (\Gamma, x - A)_{\fcod} g))\]
+which reduces to (remembering $A_\delta : \Gamma_{\bar \delta} \to \rset$)
+\[ (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\rtri ff}g))) \to \]
+\[ A^*_{fd}(\Gamma_{\rtri \fdom}g, x^*_d((\Gamma, x - A)_{\fdom}(g, a) )) \equiv \]
+\[ A^*_{ef}(\Gamma_{\rtri \fcod} g, x^*_e( (\Gamma, x - A)_{\fcod} (g, a)))\]
+which then
+\[ (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\rtri ff}g))) \to \]
+\[ A^*_{fd}(\Gamma_{\rtri \fdom}g, A_{\overline{\rr \fdom}}(\Gamma_{ \rtri \fdom}g , a)) \equiv \]
+\[ A^*_{ef}(\Gamma_{\rtri \fcod} g,  A_{\overline{\rr \fcod}}(\Gamma_{ \rtri \fcod}g , a))\]
+which means
+\[ (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\rtri ff}g))) \to \]
+\[ A^*_{fd}(\Gamma_{\rtri \fdom}g, A_{df}(\Gamma_{ \rtri \fdom}g , a)) \equiv \]
+\[ A^*_{ef}(\Gamma_{\rtri \fcod} g,  A_{fe}(\Gamma_{ \rtri \fcod}g , a))\]
+Now I need some conjectures about $A^*$ semantics. I think
+\begin{thmbox}
+  $A_{\bar \delta} : \Gamma_\delta \to \rtype$\\
+  $A^*_{ \delta} : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (g : \Gamma_\phi) \to A_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A_{\cc \phi}(\Gamma_{\rtri\phi} g)$\\
+  $A^*_\phi : (g : \Gamma_\phi) \to A^*_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A^*_{\cc \phi}(\Gamma_{\rtri\phi} g)$\\
+  $A^*_\phi : (g : \Gamma_\phi) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri\phi} g) \to A_{\overline{\cc \phi}}(\Gamma_{\rtri\phi} g) \qquad ?$\\
+  $A_{\bar\phi} : (g : (\Gamma^\op)_{\bar\phi}) \to A_{\dd {\bar\phi}}((\Gamma^\op)_{\ltri{\bar\phi}} g) \to A_{\cc {\bar\phi}}((\Gamma^\op)_{\rtri{\bar\phi}} g)$\\
+  $A_{\bar\phi} : (g : \Gamma_{\phi}) \to A_{\overline{\cc \phi}} (\Gamma_{\rtri{\phi}} g) \to A_{\overline{\dd \phi}}(\Gamma_{\ltri{\phi}} g)$\\
+\end{thmbox}
 
 \end{document}
