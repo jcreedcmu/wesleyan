@@ -819,7 +819,7 @@ $S$ being whatever orientation causes yoneda-unification.
 \[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
 \[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
 \[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
-\[=  \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to eTf \to  c R f \to \# \zeta \]
+\[=  \forall \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to eTf \to  c R f \to \# \zeta \]
 \[= \forall f e \zeta  .   A \wat f \to
 \ups B \wat (e, \zeta) \to c \le f \to f R e \to \# \zeta \]
 \[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
@@ -865,4 +865,88 @@ Set $[fea] = fSe \x eTa$, where $fSe$ yoneda-unifies.
 \[= \forall a \zeta   e  . A \wat e \to  \ups B \wat (e, \zeta)  \to eTa \to  c R a \to \# \zeta \eqno(y, fSe) \]
 
 No, this leaves $A$ and $B$ at the same world, which is bad.
+
+\subsection{Maybe I need a mixed-variance relation?}
+
+
+So I start with the special case I have a functor $\lol : \P \x \N \to \N$ and give
+\[ P \lol N = \int^{\alpha : \PP, \phi : \NN} P(\alpha) \x N(\alpha) \x \NN( \alpha \lol \phi, \dash) \]
+as the semantics of $P \lol N  : \NN \to \rset$ given
+$P : \PP \to \rset$ and
+$N : \NN \to \rset$.
+I can take that generalize to a relation
+\[R : \PP^\op \x \NN^\op \x \NN  \to \rset \]
+and say
+\[ P \lol N =  \int^{\alpha : \PP, \phi : \NN} P(\alpha) \x N(\alpha) \x R(\alpha,  \phi, \dash) \]
+but also I see no reason why I can't say even for
+\[R : (\PP \x \PP^\op) \x (\NN \x \NN^\op) \x \NN  \to \rset \]
+that
+\[ P \lol N =  \int^{\alpha : \PP, \phi : \NN} P(\alpha) \x N(\alpha) \x R(\alpha, \alpha, \phi, \phi, \dash) \]
+
+So let's go back to the original plan of making $cRa$ yoneda-collapse.
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[= \forall  \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fec] \to \# \zeta \eqno(y, cRa)\]
+\[= \forall f e \zeta  .   A \wat f \to
+\ups B \wat (e, \zeta) \to c \le f \to f R e \to \# \zeta \eqno ([fec])\]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f R e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f \tri (e, \zeta) \]
+\[= \forall f . c \le f \to  A \wat f \to \dns \ups B \wat f \]
+
+So we know that we have to set $[fec] = c \le f \x fRe$.
+I think {\em either} orientation of $R$ will make $[fec]$ come out to the same
+thing, and all that really determines it is $\ltri$ and maybe yoneda considerations.
+
+For isn't it true that
+\[\int^{\alpha, \beta \in \C, \bar\alpha, \bar\beta \in \C^\op} \C[\bar\alpha, \beta] \x F(\alpha, \beta, \bar \alpha, \bar\beta) =
+\int^{\alpha, \beta \in \C, \bar\alpha, \bar\beta \in \C^\op} \C[\bar\beta, \alpha] \x F(\alpha, \beta, \bar \alpha, \bar\beta)\]
+or something? Given something of the former, I have some objects $a, b\in \C$ and
+$\C[a, b] \x F(a, b, a, b)$... no, Idunno.
+
+\subsection{Recalling (co)end/(co)friend}
+
+Loregian's summary of the yoneda lemma says that for any $K : \rset^{\C^\op}$
+and $H : \rset^\C$ we have
+\[ K \equiv \int^c \C[\dash, c] \x Kc \equiv \int_c \C[c, \dash] \to Kc \]
+\[ H \equiv \int^c \C[c, \dash] \x Hc \equiv \int_c \C[\dash, c] \to Hc \]
+in logical language
+\[ Kd \equiv \exists c. d \le c \x Kc \equiv \forall c. c \le d \to Kc \]
+\[ Hd \equiv \exists c . c \le d \x Hc \equiv \forall c. d\le c \to Hc \]
+So a salient special case of these --- I think it's going to be the essential
+one I need to think about --- is
+\[b \le c  \equiv \exists a . b \le a \x a \le c \]
+
+which is interesting in its own right, because it shows off how the
+coend is different from a bare existential. The bare existential
+quantifier would conceptually have potentially {\em lots} of witnesses
+in the interval between $b$ and $c$, at the very least $b$ and $c$ themselves ---
+but the coend equates all of those witnesses. It's a kind of proof-irrelevance `up to'
+the morphisms involved.
+
+
+So if I define
+\[c \tri (a, \zeta) = c\le \alpha \to \# \zeta\]
+\[[fea] = a \le f \x f \le e \]
+I can reason
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \le a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c \le a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c \le a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c \le a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to a \le f \to f \le e \to  c \le a \to \# \zeta \eqno([fea]) \]
+\[= \forall \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to (\exists a .   c \le a \x a \le f ) \to f \le e    \to \# \zeta  \]
+\[= \forall \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to   c \le  f \to f \le e    \to \# \zeta  \eqno(y)\]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f \le e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f \tri (e, \zeta) \]
+\[= \forall f . c \le f \to  A \wat f \to \dns \ups B \wat f \]
+
 \end{document}
