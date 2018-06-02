@@ -81,7 +81,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\pp{\textsf{\textbf p}}
 \def\nn{{\mathsf n}}
 \def\PP{\textsf{\textbf P}}
-\def\NN{{\mathsf N}}
+\def\NN{\textsf{\textbf N}}
 \def\zz{{\mathsf z}}
 \def\sem#1{[\![#1]\!]}
 \def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
@@ -128,6 +128,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\ltri{{\lhd}}
 \def\rtri{{\rhd}}
+\def\tri{\rhd}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{dctx}}
@@ -569,4 +570,299 @@ so that
 {\Gamma, x + A \prov \theta_\Gamma[x^*/x] : \Gamma^\op, x - A}
 \]
 
+\section{Trying Small Examples}
+
+Ok, so I could do
+\[\alpha : \C ; x - A \prov x^* : A\]
+What's one harder than that? Something like
+\[\alpha : \C ; x + A, y - B \prov y : B^*\]
+maybe? For this I want
+\[\alpha : \C ; x - A \prov B : \rtype\]
+so hopefully somehow
+\[\alpha : \C ; x + A \prov B^* : \rtype\]
+Oh, this seems really sketchy.
+Anyway, the stuff I have available looks like
+for $\phi : \delta \to \epsilon \in \sem \Delta$,
+\[A_{\bar \delta} :  \rtype \]
+\[B_\delta : A_{\bar \delta} \to \rtype \]
+\[A_{\bar \phi} :  A_{\bar \epsilon} \to A_{\bar \delta}  \]
+\[B_\phi : (a : A_{\bar \epsilon} ) \to B_\delta( A_{\bar \phi}(a))
+\to B_\epsilon( a)\]
+So what could $B^*$ possibly be? We know
+\[B^*_\delta : A_\delta \to \rtype\]
+So like...
+\[B^*_\delta(a) = B_{\bar\delta}(a)\]
+? Now we have to define
+\[B^*_\phi : (a : A_{\delta} ) \to B_\delta( a) \to B_\epsilon(A_\phi(a)) \]
+So what can we possibly set this to? We have
+\[B_{\bar\phi} : (a : A_{\delta} ) \to B_{\bar\epsilon}( A_{ \phi}(a))
+\to B_{\bar\delta}( a)\]
+And this is the mess that I'm in.
+
+\subsection{I do need this, don't I?}
+
+If I try to prove
+\[  \prov P \imp P \]
+this focalizes to
+\[  \prov \dns(P \imp \ups P) \wat 1 \]
+then
+\[  \prov \forall \phi . (P \imp \ups P) \wat \phi \to 1 \rtri \phi \]
+\[   (P \imp \ups P) \wat \phi \prov 1 \rtri \phi \]
+\[   P \wat \alpha , \ups P \wat \psi  \prov 1 \rtri (\alpha \lol \psi) \]
+\[   P \wat \alpha,  \ups P \wat \psi  \prov \alpha \rtri \psi \]
+\[   P \wat \alpha,  (\forall \beta .  P \wat \beta \to \beta \rtri \psi)  \prov \alpha \rtri \psi \]
+So, yeah, $P$ certainly occurs with both polarities. I have to deal with this
+\subsection{Can I escape it by fixing the lambda rule}
+So let the formation rule stay
+\[
+\erule
+{\Delta ; \Gamma^\op \prov A : \rtype \qquad \Delta ; \Gamma, x - A \prov B : \rtype }
+{\Delta ; \Gamma \prov (x : A) \to B : \rtype}
+\]
+Can I, like, define a twisted version of the term judgment so I could say like
+\[
+\erule
+{\Delta ; \Gamma^\op, x + A \prov M - B }
+{\Delta ; \Gamma \prov \lambda x . M :  (x : A) \to B }
+\]
+where $B$ is still a type in $\Gamma$, but $M$ is a term in $\Gamma^\op, x + A$
+so that it can really use $x$?
+
+This suggests that I have the same object part requirement --- recall that I had
+no apparent problem defining the object part even for types involving minus
+assumptions --- but somehow a dual requirement for the end.
+
+Oh no, but then what does the minus variable rule look like? It can't be
+\[
+\erule
+{}
+{\Delta ; \Gamma, x +  A \prov x - A}
+\]
+because then the type invariants don't work out.
+But it can't be
+\[
+\erule
+{}
+{\Delta ; \Gamma, x -  A \prov x - A}
+\]
+because then I can't use it with the lambda rule.
+
+
+
+\[
+\erule
+{\Delta ; \Gamma^\op, x + A \prov M - A }
+{\Delta ; \Gamma \prov \lambda x . M :  (x : A) \to A }
+\]
+
+The real problem is that I can't even always form $A \to A$ for types
+$A$ depending on variables.
+
+\section{Attacking This From Orbit}
+
+Ok, let's step way back. The reason I think that anything like this at
+all should work comes from squinting at the cartesian closed structure
+on presheaf categories
+\[(A \imp B)(C) = \C[yC \x A, B]\]
+and feeling that that $yC \x \dash$ looks a lot like a shift operator.
+Let's recall the way in which the shift is connected to that kind of kripke
+quantification.
+
+If I have an unpolarized implication like $A\imp B$, I can polarize it
+in a way where every proposition is translated to a positive,
+and one clause of that translation is
+
+\[(A \imp B)^+ = \dns (A^+ \imp \ups B^+)\]
+
+In the resource-passing semantics, this positive proposition takes
+as an argument a positive resource, so I get something like
+
+\[\lambda \gamma .\quad \forall \phi .  (A^+ \lol \ups B^+) \wat \phi \to \gamma \tri \phi\]
+\[= \lambda \gamma .\quad \forall \phi .  (\exists \alpha \psi . A^+ \wat \alpha \x \ups B^+ \wat \psi \x R_\lol(\alpha, \psi, \phi)) \to \gamma \tri \phi\]
+\[= \lambda \gamma .\quad \forall \phi  \alpha \psi . A^+ \wat \alpha \to \ups B^+ \wat \psi \to R_\lol(\alpha, \psi, \phi) \to \gamma \tri \phi\]
+
+Now comes a stage where I have a lot of wiggle room, and I can pick the categories
+in which $\phi, \psi$ and $\alpha, \gamma$ live in, and I can pick $R_\lol$ and $\tri$
+to be whatever I want. Let's work from the other direction, then and see what I need.
+I know I want to end up at
+
+\[ \lambda \gamma .\quad \forall  \alpha . \alpha \le \gamma  \to A^+ \wat \alpha \to  B^+ \wat \alpha \]
+
+The $\gamma$ plays the role of $C$, the yoneda embedding is the $\le$, and the $\alpha$
+is the object argument of the natural transformation. Now I remember from doing
+this calcluation previously that I'm actually going to end up with
+\[ \lambda \gamma .\quad \forall  \alpha . \alpha \le \gamma  \to A^+ \wat \alpha \to
+\dns \ups  B^+ \wat \alpha \]
+which is fine. That expands to
+\[ \lambda \gamma .\quad \forall  \alpha \psi . \alpha \le \gamma  \to A^+ \wat \alpha \to
+ \ups  B^+ \wat \psi \to  \alpha \tri \psi \]
+So it looks like we just have to ensure that
+\[\alpha \le \gamma \to \alpha \tri \psi  \equiv \forall \phi . R_{\lol}(\alpha \psi \phi) \to \gamma \tri \phi\]
+
+And I also sort of remember from doing this calculation previously
+that I set $\phi = (\bar\phi, \phi_0)$ and $\psi = (\bar\psi, \psi_0)$
+where $\bar\phi$ is of the same syntactic sort as $\alpha, \beta, \gamma$, etc.,
+and $\phi_0$ is its own thing, with some abstract
+predicate $\#(\phi_0)$, and I defined
+\[ \alpha \tri (\bar\phi, \phi_0) = \alpha \sim \bar\phi \to \#(\phi_0) \]
+for $\sim$ being either $\le$ or $\ge$. Doing that changes my goal to
+\[\alpha \le \gamma \to \alpha \sim \bar\psi \to \#(\psi_0) \equiv \forall \phi . R_{\lol}(\alpha \psi \phi) \to \gamma \sim \bar\phi \to \#(\phi_0)\]
+So definitely $R_\lol(\alpha(\bar\psi\psi_0)(\bar\phi\phi_0))$ should at least
+be of the form $\psi_0 = \phi_0 \x R'(\alpha\bar\psi\bar\phi)$ so that I get
+\[\alpha \le \gamma \to \alpha \sim \bar\psi \to \#(\psi_0) \equiv \forall \bar\phi . R'(\alpha \bar\psi \bar\phi) \to \gamma \sim \bar\phi \to \#(\psi_0)\]
+and if I choose the right orientation of $\sim$, then I should be able to yoneda-reduce
+the right-hand-side and get merely
+\[\alpha \le \gamma \to \alpha \sim \bar\psi \to \#(\psi_0) \equiv R'(\alpha \bar\psi \gamma)  \to \#(\psi_0)\]
+So that forces my hand to set
+\[R'(\alpha \bar\psi\gamma) =  \alpha \le \gamma \x \alpha \sim \bar\psi\]
+
+So let's set about carefully determining which way $\psi$ is oriented. The idea
+is that $\alpha, \beta, \gamma$ etc. come from some category $\C$, and $\alpha \le \beta$ is
+secretly $\C[\alpha, \beta]$. I've oriented the $\le$ that I did stick in to coincide
+with the yoneda embedding $\C \to \hat\C$. That is, $A^+$ and $B^+$ are {\em contravariant}
+functoris in their argument, and so too is $\dash \le \gamma$. So this suggests that
+$\sim$ is $\le$, so that $R'$ can consistently be a contravariant functor in $\alpha$,
+and covariant in the other two arguments.
+
+\subsection{The Story}
+Let's try this from the top, then. We start with two syntactic sorts
+\[\begin{tabular}{r@{ }c@{ }c@{ }l}
+  Pos. Resources&$r^+$&$::=$&$\alpha \celse \cdots$\\
+  Neg. Resources&$r^-$&$::=$&$\phi \celse \cdots$\\
+\end{tabular}\]
+and we want to compile them away into
+\[\begin{tabular}{r@{ }c@{ }c@{ }l}
+  Kripke worlds&$c$&$::=$&$ \cdots$\\
+  Nonce worlds&$\zeta$&$::=$&$ \cdots$\\
+\end{tabular}\]
+
+We postulate a relation $c \le c'$ which is the hom of $\C$. We postulate
+some arbitrary unary relation $\#(\zeta)$. We say that every $r^+$ is actually
+a $c$, and we say every $r^-$ is actually a pair $(c, \zeta)$.
+The relation $r^+ \tri r^-$ is defined by
+\[
+\erule
+{c \le c' \to \#(\zeta)}
+{c \tri (c', \zeta)}
+\]
+If I have categories $\PP$ and $\NN$, so that positive and negative
+props are interpreted as $\PP \to \rset$ and $\NN \to \rset$,
+ they would be like $\C$ and $\C^\op \x Z$ for the mere set $Z$ the $\zeta$s live in.
+And $\rtri : \PP \x \NN \to \rset$.
+ And now
+we define the profunctor-like $R : \PP^? \x \NN^? \x \NN^? \to \rset$ by
+\[
+\erule
+{(c \le c') \x (c \le c'')}
+{R(c, (c', \zeta), (c'', \zeta))}
+\]
+So given $c : \C$, we compute
+\[\dns (A^+ \lol \ups B^+) \wat c = \forall (c', \zeta) .  (A^+ \lol \ups B^+) \wat (c', \zeta) \to c \tri (c', \zeta) \]
+\[ = \forall (c', \zeta) .  (A^+ \lol \ups B^+) \wat (c', \zeta) \to c \le c' \to \#( \zeta) \]
+\[ = \forall (c', \zeta) .  (\exists c_2 c_3 \zeta'. (A^+ \wat c_2) \x (\ups B^+ \wat (c_3, \zeta')) \x R(c_2 (c_3 \zeta') (c' \zeta))) \to c \le c' \to \#( \zeta) \]
+\[ = \forall c' \zeta c_2 c_3 \zeta'. (A^+ \wat c_2) \to (\ups B^+ \wat (c_3, \zeta')) \to R(c_2 (c_3 \zeta') (c' \zeta)) \to c \le c' \to \#( \zeta) \]
+\[ = \forall c' \zeta c_2 c_3 . (A^+ \wat c_2) \to (\ups B^+ \wat (c_3, \zeta)) \to R(c_2 (c_3 \zeta) (c' \zeta)) \to c \le c' \to \#( \zeta) \]
+\[ = \forall c' \zeta c_2 c_3 . (A^+ \wat c_2) \to (\ups B^+ \wat (c_3, \zeta)) \to c_2 \le c_3 \to c_2 \le c' \to c \le c' \to \#( \zeta) \]
+\[ = \forall c' \zeta c_2 c_3 . (A^+ \wat c_2) \to (\ups B^+ \wat (c_3, \zeta)) \to c_2 \le c_3 \to c_2 \le c' \to c \le c' \to \#( \zeta) \]
+???
+\[ = \forall c' . c \le c' \to (A^+ \wat c') \to \forall (c*, \zeta) . \ups B^+ \wat (c*, \zeta) \to c' \le c* \to \# (\zeta) \]
+\[ = \forall c' . c \le c' \to (A^+ \wat c') \to \forall (c*, \zeta) . \ups B^+ \wat (c*, \zeta) \to c' \tri (c*, \zeta) \]
+\[ = \forall c' . c \le c' \to (A^+ \wat c') \to \dns \ups B^+ \wat c' \]
+
+\subsection{Trying Again}
+Roman letters are objects of $\C$. The hom of $\C$ is $\le$. Frames are pairs $(c, \zeta)$.
+$a \tri (b, \zeta)$ is defined as $a R b \to \#\zeta$ for some $R$. The relation $[a(b\zeta)(c\zeta')]$ is defined god only knows how, except that I know it requires $\zeta = \zeta'$.
+$A$ and $B$ are positive propositions.
+
+I start with the knowledge that I want the calculation to run like
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[ ??? \]
+\[= \forall d b \zeta  .   A \wat d \to
+\ups B \wat (b, \zeta) \to c \le d \to d R b \to \# \zeta \]
+\[= \forall d . c \le d \to  A \wat d \to \forall b \zeta .
+\ups B \wat (b, \zeta) \to  d R b \to \# \zeta \]
+\[= \forall d . c \le d \to  A \wat d \to \forall b \zeta .
+\ups B \wat (b, \zeta) \to  d \tri (b, \zeta) \]
+\[= \forall d . c \le d \to  A \wat d \to \dns \ups B \wat d \]
+
+One attempt is to think that I can yoneda away the $cRa$ and make it look like
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[= \forall  \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fec] \to \# \zeta \eqno(y)\]
+\[ ??? \]
+\[= \forall f e \zeta  .   A \wat f \to
+\ups B \wat (e, \zeta) \to c \le f \to f R e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f R e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f \tri (e, \zeta) \]
+\[= \forall f . c \le f \to  A \wat f \to \dns \ups B \wat f \]
+This seems to leave me only with incoherent choices for how to orient $R$.
+Is it possible that I should instead yoneda away something else? Could it be that
+the $a$ yoneda-unifies with something else and the $cRa$ becomes the thing in the Kripke
+expression? Let's try that. I have two options, for it to unify with $f$ or with $e$.
+\subsubsection{Trying $a$ unifying with $f$}
+We set $[fea] = aSf \x eTf$ for some relations $S$ and $T$. With
+$S$ being whatever orientation causes yoneda-unification.
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[=  \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to eTf \to  c R f \to \# \zeta \]
+\[= \forall f e \zeta  .   A \wat f \to
+\ups B \wat (e, \zeta) \to c \le f \to f R e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f R e \to \# \zeta \]
+\[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
+\ups B \wat (e, \zeta) \to  f \tri (e, \zeta) \]
+\[= \forall f . c \le f \to  A \wat f \to \dns \ups B \wat f \]
+Ok, in this case $R$ must be $\le$ and $T$ must be $\ge$. The relation
+$fea$ becomes $a \le f \x f \le e$ which is variance-incoherent also.
+\subsubsection{Trying $a$ unifying with $e$}
+We set $[fea] = aSe \x eTf$ for some relations $S$ and $T$. With
+$S$ being whatever orientation causes yoneda-unification.
+
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to aSe \to eTf  \to  c R a \to \# \zeta \]
+\[= \forall  \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta)  \to eTf  \to  c R e \to \# \zeta \eqno(y, aSe) \]
+\[ ??? \]
+\[= \forall d b \zeta  .   A \wat d \to
+\ups B \wat (b, \zeta) \to c \le d \to d R b \to \# \zeta \]
+\[= \forall d . c \le d \to  A \wat d \to \forall b \zeta .
+\ups B \wat (b, \zeta) \to  d R b \to \# \zeta \]
+\[= \forall d . c \le d \to  A \wat d \to \forall b \zeta .
+\ups B \wat (b, \zeta) \to  d \tri (b, \zeta) \]
+\[= \forall d . c \le d \to  A \wat d \to \dns \ups B \wat d \]
+This seems to not work because I have the wrong variables
+to unify with the latter half of the argument.
+\subsubsection{Trying $e$ unifying with $f$}
+Somehow, I don't think this will work, but might as well try.
+Set $[fea] = fSe \x eTa$, where $fSe$ yoneda-unifies.
+
+\[\dns (A \lol \ups B) \wat c  \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c \tri (a, \zeta) \]
+\[= \forall a \zeta . (A \lol \ups B) \wat (a, \zeta) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta . (\exists f e \zeta' . A \wat f \x  \ups B \wat (e, \zeta') \x [f(e\zeta')(a, \zeta)]) \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e \zeta' . A \wat f \to  \ups B \wat (e, \zeta') \to [f(e\zeta')(a, \zeta)] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to [fea] \to  c R a \to \# \zeta \]
+\[= \forall a \zeta  f e  . A \wat f \to  \ups B \wat (e, \zeta) \to fSe \to eTa \to  c R a \to \# \zeta \]
+\[= \forall a \zeta   e  . A \wat e \to  \ups B \wat (e, \zeta)  \to eTa \to  c R a \to \# \zeta \eqno(y, fSe) \]
+
+No, this leaves $A$ and $B$ at the same world, which is bad.
 \end{document}
