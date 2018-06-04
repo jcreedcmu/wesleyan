@@ -15,6 +15,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\prequiv{\dashv\vdash}
 \def\fdom{\mathbf{d}f}
 \def\fcod{\mathbf{e}f}
 \def\thn{\mathrel|}
@@ -948,5 +949,314 @@ I can reason
 \[= \forall f . c \le f \to  A \wat f \to \forall e \zeta .
 \ups B \wat (e, \zeta) \to  f \tri (e, \zeta) \]
 \[= \forall f . c \le f \to  A \wat f \to \dns \ups B \wat f \]
+
+\subsection{Products}
+How about trying to define $\x$ as a certain kind of $\tensor$?
+I'd conjecture either $R_\tensor[abc] = (c \le a) \x (c \le b)$
+or $R_\tensor[abc] = (a \le c) \x (b \le c)$, whichever works out with the right variance...
+There aren't necessarily shifts involved, so that makes things easier, I think.
+Or do I want shifts to give enough quantifiers to do yoneda-ish things to in the first place?
+
+Well, recall the ninja yoneda lemma says that for a covariant functor $A : \PP \to \rset$,
+I should expect
+\[Hc \equiv \exists a . a \le c \x H a \]
+so
+\[(A \tensor  B) \wat c  \]
+\[= \exists a b . A(a) \x B(b) \x (a \le c) \x (b \le c) \]
+\[= \exists  b . A(c) \x B(b)  \x (b \le c) \]
+\[= A(c) \x B(c)  \]
+so there's the pointwise product I expect. And if the underlying
+category $\PP$ has coproducts, this could be just $R_\tensor[abc] =
+((a + b) \le c)$. And maybe this makes sense because I'm working kind
+of contravariantly to how I might otherwise more normally be doing
+things. But interestingly this definition works even if $\PP$ has no
+particular structure; I'm sort of (co)freely adding the products. Or
+importing them from the metatheory or something.
+
+\subsection{Focusing and inequalities}
+
+How does a proof of the ninja yoneda lemmas actually look?
+
+The easy direction involves reflexivity:
+\[
+\begin{prooftree}
+\[
+\justifies
+  \alpha : \C ; H(\alpha) \prov \alpha \le \alpha \x H(\alpha)
+\]
+\justifies
+  \alpha : \C ; H(\alpha) \prov \exists \beta . \beta \le \alpha \x H(\beta)
+\end{prooftree}
+\]
+The other direction necessarily involves some use of a left rule for $\le$:
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\gamma : \C ; H(\gamma) \prov H(\gamma)
+\]
+\using \le L
+\justifies
+\alpha : \C, \beta : \C ; \beta \le \alpha, H(\beta) \prov H(\alpha)
+\]
+\justifies
+  \alpha : \C ; \exists \beta . \beta \le \alpha \x H(\beta) \prov H(\alpha)
+\end{prooftree}
+\]
+Alternatively I could think of $\le$ as a positive atom, and every covariant
+atomic proposition as baking in an appropriate quantifier?
+
+Like $H^+(\alpha)$ really means $\exists \beta . \beta \le \alpha \x h^+(\alpha)$
+for some underlying $h^+(\alpha)$ that isn't particularly covariant.
+And $H^-(\alpha)$ really means $\forall \beta . \alpha \le \beta \to h^-(\beta)$.
+In this case $\le$ inverts on the left into some judgmental $\sqsubseteq$, and
+synchronously requires it on the right. To check that the ninja yoneda
+lemma holds, we basically just need to check that `two bits of slack' is the
+same as `one bit of slack', i.e. the equivalence of for instance
+\[\exists \beta . \beta \le \alpha \x \exists \gamma . \gamma \le \beta \x H(\gamma)
+\prequiv
+\exists \beta . \beta \le \alpha \x H(\beta)\]
+but we do have
+\[\exists \beta . \beta \le \alpha \x \exists \gamma . \gamma \le \beta \x H(\gamma) \]
+\[\prequiv \exists \gamma . (\exists \beta . \gamma \le \beta \x \beta \le \alpha) \x H(\gamma)\]
+\[\prequiv \exists \gamma .  \gamma \le \alpha \x H(\gamma)\]
+\[\prequiv_\alpha \exists \beta .  \beta \le \alpha \x H(\gamma)\]
+and the ouroborous ninja-yoneda lemma
+\[\gamma \le \alpha \prequiv \exists \beta . \gamma \le \beta \x \beta \le \alpha\]
+can I think be proved directly without resorting to augmenting the atom $\le$
+itself with any quantification. Let's try:
+
+\[
+\begin{prooftree}
+\[
+\justifies
+\gamma \le \alpha \prov   \gamma \le \gamma \x \gamma \le \alpha
+\]
+\justifies
+\gamma \le \alpha \prov \exists \beta . \gamma \le \beta \x \beta \le \alpha
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+\[
+\justifies
+ \gamma \sqsubseteq \beta, \beta \sqsubseteq \alpha \prov [\gamma \le \alpha]
+\]
+\justifies
+ \exists \beta . \gamma \le \beta \x \beta \le \alpha \prov \gamma \le \alpha
+\end{prooftree}
+\]
+Sure, super easy, no problem.
+
+\section{A high-level story I don't understand yet}
+
+I say: the syntactic diagnostic sign of
+what it is to be a (focusing-)positive contravariant proposition
+\[ \alpha : \C \prov P(\bar\alpha) : \rtype \]
+is that
+\[ P(\alpha) \prequiv \exists \beta . \alpha \le \beta \x P(\beta) \]
+and to be a negative covariant proposition
+\[ \alpha : \C \prov N(\alpha) : \rtype \]
+is
+\[ N(\alpha) \prequiv \forall \beta . \alpha \le \beta \to N(\beta) \]
+and I could fill out a table
+\[\begin{tabular}{ccl}
+  {\bf focusing}&{\bf variance}\\
+$-$&$-$&$X(\alpha) \prequiv \forall \beta . \beta \le \alpha \to X(\beta)$\\
+$+$&$-$&$X(\alpha) \prequiv \exists \beta . \alpha \le \beta \x X(\beta)$\\
+$-$&$+$&$X(\alpha) \prequiv \forall \beta . \alpha \le \beta \to X(\beta)$\\
+$+$&$+$&$X(\alpha) \prequiv \exists \beta . \beta \le \alpha \x X(\beta)$\\
+\end{tabular}\]
+for all the possibilities.
+
+I know that given a positive contravariant $P$ and a negative covariant $N$, I can make
+\[ P(\bar \alpha) \to N(\alpha) \]
+which is negative covariant. But also, given positive {\bf co}variant $Q$ and
+negative covariant $N$,
+I can make
+\[ \forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta) \]
+which is still covariant in $\alpha$. It's the end $\forall$ that's letting
+me use $\beta$ in a covariant functor on the left of a $\to$.
+Now I want to show that this expression is equal to something else convenient.
+Like... can I confine the quantifier to $Q$, somehow? Can I show
+\[(\exists \beta . \alpha \le \beta \x  Q( \beta)) \to N(\alpha)
+\prequiv
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+\]
+Forward direction:
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+\forall \beta . \alpha \le \beta \to N(\beta), \alpha \le \beta \prov N(\beta)
+\]
+\justifies
+N(\alpha), \alpha \le \beta \prov N(\beta)
+\]
+\[
+\justifies
+\alpha \le \beta, Q(\beta) \prov \exists \beta . \alpha \le \beta \x Q(\beta)
+\]
+\justifies
+(\exists \beta . \alpha \le \beta \x  Q( \beta)) \to N(\alpha),
+\alpha \le \beta, Q(\beta)  \prov  N(\beta)
+\]
+\justifies
+(\exists \beta . \alpha \le \beta \x  Q( \beta)) \to N(\alpha)
+\prov
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+\end{prooftree}
+\]
+works fine. Backwards direction:
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\textcolor{red}{XXX}
+\justifies
+\alpha \le \beta , \forall \gamma . \beta \le \gamma \to N(\gamma)
+ \prov N(\alpha)
+\]
+\justifies
+\alpha \le \beta , N(\beta)
+ \prov N(\alpha)
+\]
+\justifies
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+,
+\alpha \le \beta ,  Q( \beta) \prov N(\alpha)
+\]
+\justifies
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+\prov
+(\exists \beta . \alpha \le \beta \x  Q( \beta)) \to N(\alpha)
+\end{prooftree}
+\]
+Dang, this seems like the wrong direction. Or can I try using reflexivity and
+expanding $Q$ instead:
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\alpha \le \alpha
+\]
+\[
+\textcolor{red}{XXX}
+\justifies
+\alpha \le \beta , Q(\beta)
+ \prov Q(\alpha)
+\]
+\justifies
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+,
+\alpha \le \beta ,  Q( \beta) \prov N(\alpha)
+\]
+\justifies
+\forall \beta . \alpha \le \beta \to Q( \beta) \to N(\beta)
+\prov
+(\exists \beta . \alpha \le \beta \x  Q( \beta)) \to N(\alpha)
+\end{prooftree}
+\]
+No, this is the wrong direction, too.
+
+\subsection{But this is what I wrote down on paper}
+On paper I did the calculation of the equivalence of the sort of ill-varianced
+\[P(\alpha) \to N(\alpha) \prequiv \forall \beta . \alpha \le \beta \to P(\beta) \to N(\beta)\]
+On the basis of
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+ N(\alpha) , \alpha \le \beta \prov N(\beta)
+\]
+\[
+\justifies
+ \alpha \le \beta , P(\beta) \prov P(\alpha)
+\]
+\justifies
+P(\alpha) \to N(\alpha) , \alpha \le \beta , P(\beta) \prov N(\beta)
+\]
+\justifies
+P(\alpha) \to N(\alpha) \prov \forall \beta . \alpha \le \beta \to P(\beta) \to N(\beta)
+\end{prooftree}
+\]
+and
+\[
+\begin{prooftree}
+\[
+\justifies
+ \alpha \le \alpha
+\]
+\[
+\justifies
+  P(\alpha) \to N(\alpha) \prov P(\alpha) \to N(\alpha)
+\]
+\justifies
+\forall \beta . \alpha \le \beta \to P(\beta) \to N(\beta) \prov P(\alpha) \to N(\alpha)
+\end{prooftree}
+\]
+Or is this really ill-varianced? I'm not sure. In a sequents-are-ends world, there's nothing
+wrong with $P(\alpha) \to N(\alpha)$ for {\em some} flipping of the $\alpha$s, regardless
+of what kind of functor $P$ is. The variance of $P$ is established nonetheless
+by the assumption that $P(\alpha) \prequiv \exists \alpha \le \beta \x P(\beta)$.
+And what we're establishing with this little proof is that if $N$ is negative covariant,
+and $P$ is positive contravariant, then $P \to N$ is negative covariant.
+
+\subsection{The difference between positive and negative propositions?}
+
+Ninja yoneda seems to be saying that every covariant proposition is negative and
+positive. Do I have, with enough shifts, that if
+\[N(a) \prequiv \forall b . a \le b \to N(b)\]
+then also
+\[N(c) \prequiv \exists d . d \le c \x N(d)\]
+? Oh, yeah, most likely, this is just an issue of focusing. I remember now.
+
+\[
+\begin{prooftree}
+\[
+\justifies
+c \le c
+\]
+\[
+\justifies
+N(c) \prov N(c)
+\]
+\justifies
+N(c) \prov \exists d . d \le c \x N(d)
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+ d \le c \prov d \le c
+\]
+\[
+\justifies
+  N(c) \prov N(c)
+\]
+\justifies
+ d \le c , \forall b . d \le b \to N(b) \prov N(c)
+\]
+\justifies
+ d \le c , N(d) \prov N(c)
+\]
+\justifies
+ \exists d . d \le c \x N(d) \prov N(c)
+\end{prooftree}
+\]
+Right, this is all fine. So the real diagnostic is about variance, and separately
+I know I have confidence that I can express it in a focally positive or negative
+way if that became useful for completeness proofs.
 
 \end{document}

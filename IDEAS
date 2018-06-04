@@ -4879,3 +4879,69 @@ simply-typed version?
 A: Even though I can treat every rule as maintaining Δ without
 dualizing it, I still refer to swapped δ in the definition of the
 function type's semantics.
+
+=== 2018.06.03
+
+Q: In [N17], what is the intuition for the sorts of Glue types he defines
+that are valid in all presheaf models?
+A:
+
+Oh, it's not really so bad. I can
+read off its intro rule as a definition, so I guess it's negative?
+Not sure about that.
+
+Γ ⊢ P : prop
+Γ, P ⊢ T : type
+Γ, P ⊢ f : T → A
+Γ ⊢ A : type
+
+Glue { A ← (P ? T, f) } ≡ (a : A) (t : T) × f t ≡ a
+
+To be in the Glue, you have to give an element a : A that's defined
+everywhere, but then also you get to specify some elements of the
+fibers over P, the support of f.
+
+Q: How about Weld?
+A:
+
+Ok, Weld looks dual. We have a function f with support P again,
+but instead of picking out elements of the f-fiber over P, we go the other
+direction, and specify how to evaluate P into the partial type T.
+Now I think the left rule is invertible, maybe? Or at least
+has the same property that the right rule had for Glue.
+So a the elim rule for Weld is like
+
+Γ, y : Weld { A → (p : P ? T , f)} ⊢ C : type
+Γ, p : P, y : T ⊢ d : C
+Γ, x : A ⊢ c : [weld(p : P ? f) x / y]C
+Γ, p : P, x : A ⊢ [f(x)/y]d = c : [f(x)/y]C
+Γ ⊢ b : Weld {A → (p : P ? T, f)}
+-------------------------------------------------
+Γ ⊢ ind_Weld(y.C(p : P ? y . d), x.c, b) : [b/y]C
+
+where the intro rule is like
+
+Γ ⊢ a : A
+--------------------------------------------------
+Γ ⊢ weld (p : P ? f) a : Weld {A → (p : P ? T, f)}
+
+Let's look at the special case of rec_Weld where C doesn't depend on
+the weld variable.
+
+Γ ⊢ C : type
+Γ, p : P, y : T ⊢ d : C
+Γ, a : A ⊢ c : C
+Γ, p : P, a : A ⊢ [f(a)/y]d = c : C
+Γ ⊢ b : Weld {A → (p : P ? T, f)}
+-------------------------------------------------
+Γ ⊢ rec_Weld(y.C(p : P ? y . d), a.c, b) : C
+
+We have a global map to C, called c. We have a local map to C, called
+d, which only works on the partial set T. And if we pass along
+f from a global element that *happens* to be in the support P, and
+then do d, that's the same thing as having done c in the first place.
+
+So, right, this feels like a coequalizer. The elements of Weld
+are either global elements or local elements, and I identify along
+the function. The elements of Glue are an equalizer; I have to specify
+global elements *and* local, and they must be equal along f.

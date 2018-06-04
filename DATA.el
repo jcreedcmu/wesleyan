@@ -30,4 +30,7 @@
  ("GCTT"
   "http://www.jonmsterling.com/pdfs/guarded-ctt.pdf"
   "Guarded Computational Type Theory")
+ ("N17"
+  "https://arxiv.org/pdf/1706.04383.pdf"
+  "A Model of Parametric Dependent Type Theory in Bridge/Path Cubical Sets")
  )
