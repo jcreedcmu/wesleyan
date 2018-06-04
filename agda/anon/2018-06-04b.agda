@@ -7,6 +7,11 @@ postulate
   Δ : Set
   _≤_ : Δ → Δ → Set
   refl : (δ : Δ) → δ ≤ δ
+  comp : {a b c : Δ} → a ≤ b → b ≤ c → a ≤ c
+
+  compl : {a b : Δ} (f : a ≤ b) → comp (refl a) f ↦ f
+  compr : {a b : Δ} (f : a ≤ b) → comp f (refl b) ↦ f
+  {-# REWRITE compl compr #-}
 
 module Foo (A : Δ → Set) (B : (δ : Δ) → A δ → Set) where
 
@@ -55,15 +60,21 @@ module Foo (A : Δ → Set) (B : (δ : Δ) → A δ → Set) where
   ABm : (δ : Δ) → AB δ → ABl δ
   ABm δ f = abl δ (refl δ) f
 
-  -- Lemmas
+  -- Transport at ΠAB
   ABmi : (δ : Δ) → ABl δ → AB δ
   ABmi δ (abl ε p f) a = Bt a p (f (At a p))
+
+  {- given this transport, it seems possible to conjecture
+     a principle of coend equivalence like so -}
+  postulate
+    ABq : (δ me ne : Δ) (p1 : me ≤ ne) (p2 : ne ≤ δ)
+      (mf : (x : A me) → B me x) →
+      (abl ne p2 (ABmi ne (abl me p1 mf))) == (abl me (comp p1 p2) mf)
 
   -- GOAL:
   ABmie : (δ : Δ) → is-equiv (ABm δ)
   ABmie δ = is-eq (ABm δ) (ABmi δ) zig zag where
     zig : (b : ABl δ) → ABm δ (ABmi δ b) == b
-    -- need: δ , refl δ , (λ a → Bt a p (f (At a p))) == ε , p , f
-    zig (abl ε p f) = {!ABm δ (ABmi δ (abl ε p f)) == abl ε p f!}
+    zig (abl ε p f) = ABq δ ε δ p (refl δ) f
     zag : (a : AB δ) → ABmi δ (ABm δ a) == a
     zag f = idp

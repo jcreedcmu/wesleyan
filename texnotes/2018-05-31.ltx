@@ -1363,4 +1363,16 @@ for a $g : d \to c$, we could return $c \leftarrow d \to d$.
 No, we probably need to demand the underlying category has pullbacks
 to make this work. I'd rather not if I could get away with it.
 It really should be an arbitrary zigzag in $\C$, shouldn't it?
+\subsection{How do I think about general types}
+So when I say something like
+\[ A(\alpha) \equiv \forall \beta . \beta \le \alpha \to A(\beta) \]
+\[ A(\alpha) \equiv \exists \beta . \beta \le \alpha \x A(\beta) \]
+the assumption is that $A$'s argument is actually doubled, and I'm talking about
+half of it at a time. So that assumption could be internalized by saying that
+every type $A(\dash)$ has a different version $\circ A(\dash, \dash)$
+such that
+\[A(\alpha) = \circ A(\alpha, \alpha) \]
+\[ \circ A(\alpha_1, \alpha_2) \equiv \forall \beta . \beta \le \alpha \to A(\alpha_1, \beta) \]
+\[ \circ A(\alpha_1, \alpha_2) \equiv \exists \beta . \beta \le \alpha \x A(\beta, \alpha_2) \]
+
 \end{document}
