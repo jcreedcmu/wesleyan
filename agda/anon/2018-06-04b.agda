@@ -44,19 +44,26 @@ module Foo (A : Δ → Set) (B : (δ : Δ) → A δ → Set) where
   AB : (δ : Δ) → Set
   AB δ = (a : A δ) → B δ a
 
+  record ABl (δ : Δ) : Set where
+    constructor abl
+    field
+      ε : Δ
+      p : ε ≤ δ
+      f : AB ε
+
   -- Reflexivity morphism for Pi type:
-  ABm : (δ : Δ) → AB δ → Σ Δ (λ ε → (ε ≤ δ) × AB ε)
-  ABm δ f = δ , (refl δ , f)
+  ABm : (δ : Δ) → AB δ → ABl δ
+  ABm δ f = abl δ (refl δ) f
 
   -- Lemmas
-  ABmi : (δ : Δ) → Σ Δ (λ ε → (ε ≤ δ) × AB ε) → AB δ
-  ABmi δ (ε , (p , f)) a = Bt a p (f (At a p))
+  ABmi : (δ : Δ) → ABl δ → AB δ
+  ABmi δ (abl ε p f) a = Bt a p (f (At a p))
 
   -- GOAL:
   ABmie : (δ : Δ) → is-equiv (ABm δ)
   ABmie δ = is-eq (ABm δ) (ABmi δ) zig zag where
-    zig : (b : Σ Δ (λ ε → (ε ≤ δ) × AB ε)) → ABm δ (ABmi δ b) == b
+    zig : (b : ABl δ) → ABm δ (ABmi δ b) == b
     -- need: δ , refl δ , (λ a → Bt a p (f (At a p))) == ε , p , f
-    zig (ε , p , f) = {!ABm δ (ABmi δ (ε , p , f)) == ε , p , f!}
+    zig (abl ε p f) = {!ABm δ (ABmi δ (abl ε p f)) == abl ε p f!}
     zag : (a : AB δ) → ABmi δ (ABm δ a) == a
     zag f = idp

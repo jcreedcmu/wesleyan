@@ -1283,13 +1283,6 @@ Look, $A$'s contravariance looks like either of
 Maybe... I decisively need to use the `$\bar\beta$' of the end to do
 reverse transport? No, that seems kind of weird.
 
-Can I take the existential form of $B$'s covariance? Assume $A$ contravariant like
-\[ \alpha : \C ; \prov  A(\alpha) \equiv \forall \beta .\beta \le \alpha \to A(\beta) \]
-\[ \alpha : \C ; x : A(\alpha) \prov  B(\alpha, x) \equiv \exists \beta .(p : \beta \le \alpha) \x B(\beta, A_p(x)) \]
-Weird, that seems like that works on the face of it.
-Let's try showing now that
-\[ \alpha : \C ;  \prov  (x : A(\alpha)) \to B(\alpha, x) \equiv \exists \beta .(p : \beta \le \alpha) \x (x : A(\beta)) \to B(\beta, x) \]
-
 The forward direction is easy. The backward direction has a $\beta$ to work with,
 and a $p : \beta \le \alpha$ we could plug into transport. Also
 a function $f : (x : A(\beta)) \to B(\beta, x)$. We have
@@ -1300,6 +1293,15 @@ And, now that we have a $p : \beta \le \alpha$ and a $B(\beta, A_p(x))$, we
 can do $B$-transport to get a $B(\alpha, x)$ as required.
 So now I need to check round-trips, and I probably want agda to do that. But this is
 promising!
+
+Right, a sudden thought I had was that the appropriate requirement is not just
+that, e.g. an equivalence $A(\alpha) \equiv \exists \beta . \alpha \le \beta \x A(\beta)$
+exists, but that {\em the map}
+\[A(\alpha) \to \exists \beta . \alpha \le \beta \x A(\beta)\]
+that chooses $\beta = \alpha$ and pops in the reflexivity is an equivalence.
+Or dually, {\em the map}
+\[ (\forall \beta . \alpha \le \beta \to A(\beta)) \to A(\alpha) \]
+that chooses $\beta = \alpha$ and pops in reflexivity is an equivalence.
 
 Right, a sudden thought I had was that the appropriate requirement is not just
 that, e.g. an equivalence $A(\alpha) \equiv \exists \beta . \alpha \le \beta \x A(\beta)$
@@ -1333,4 +1335,32 @@ at the equation
 \[\langle \alpha, \rid_\alpha, \iota \langle \beta, p, b\rangle\rangle = \langle \beta, p, b\rangle\]
 and conclude that $\alpha = \beta$, an unwarrantedly strong conclusion given
 the assumption that merely $\beta \le \alpha$! So I have to be more careful about that.
+So what can I conclude from
+\[t \equiv u : \int^{c\in\C} P_{cc}\]
+? I know $t$ and $u$ both {\em can} be represented as
+$\langle c, p \rangle$ for $p : P_{cc}$, but not uniquely.
+The coequalizing condition is that for any $f : c \to d$
+\[
+\erule
+{P_{fc}(p_c)  =  P_{df}(p_d)  : P_{dc}}
+{\langle c, p_c\rangle = \langle d , p_d \rangle}
+\]
+Perhaps... is this rule invertible, then? Can I canonically get out of
+any path a morphism that witnesses the equality?
+It seems like knowing ${\langle c, p_c\rangle = \langle d , p_d \rangle}$
+shouldn't be enough to give a morphism $c \to d$, because then it'd be enough
+to give a morphism $d \to c$ also. Is it enough to give a span $c \leftarrow \bullet \to d$?
+Then if it actually is the case that ${\langle c, p_c\rangle = \langle d , p_d \rangle}$
+was constructed out of $f : c \to d$, we'd return $c \leftarrow c \to d$, and if
+ symmetrically  we had done
+\[
+\erule
+{P_{cg}(p_c)  =  P_{gd}(p_d)  : P_{cd}}
+{\langle c, p_c\rangle = \langle d , p_d \rangle}
+\]
+for a $g : d \to c$, we could return $c \leftarrow d \to d$.
+
+No, we probably need to demand the underlying category has pullbacks
+to make this work. I'd rather not if I could get away with it.
+It really should be an arbitrary zigzag in $\C$, shouldn't it?
 \end{document}
