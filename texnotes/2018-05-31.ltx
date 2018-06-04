@@ -15,6 +15,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\ot{\leftarrow}
 \def\prequiv{\dashv\vdash}
 \def\fdom{\mathbf{d}f}
 \def\fcod{\mathbf{e}f}
@@ -1374,5 +1375,80 @@ such that
 \[A(\alpha) = \circ A(\alpha, \alpha) \]
 \[ \circ A(\alpha_1, \alpha_2) \equiv \forall \beta . \beta \le \alpha \to A(\alpha_1, \beta) \]
 \[ \circ A(\alpha_1, \alpha_2) \equiv \exists \beta . \beta \le \alpha \x A(\beta, \alpha_2) \]
+Nah, I don't know what to do with this.
+\subsection{Back To Thinking About Zig-Zags}
 
+If I have a zig-zag
+\[\begin{tikzcd}
+0  \ar[from=r, "f_1"'] & 1 \ar[r, "f_2"] & \cdots \ar[r, "f_n"] & n
+\end{tikzcd}\]
+and for a functor $[\dash] : \C \x \C^\op \to \rset$ I have
+a vector $(t_0, t_1, \ldots, t_n)$ such that pushing them down
+in the diagram
+\[\begin{tikzcd}
+{[00]}  \ar[dr]
+&[-2em]&[-2em] {[11]} \ar[dl]\ar[dr]
+&[-2em]&[-2em] {[22]} \ar[dl]\ar[rr, phantom, "\cdots"]
+&[-2em]&[-2em] {[n-1,n-1]} \ar[dr]
+&[-2em]&[-2em] {[nn]} \ar[dl]
+\\
+& {[01]}
+&& {[21]}
+&& \cdots
+&& {[n,n-1]}
+\end{tikzcd}\]
+leads to everything always being equal, then I have
+that $\pair 0 {t_0} = \pair n {t_n} : \int^\C [\dash]$.
+
+So I want to be able to talk about a bridge type $\{\alpha, \beta\}$,
+and there's some type that exists given a functor $F(\alpha)$ and a bridge,
+which corresponds to there being inhabitants across the bivariate zigzag diagram.
+The equality type
+\[t = u : \exists \alpha . F(\alpha)\]
+should be equivalent to something that feels like
+\[\exists \alpha \beta . (b : \{ \alpha , \beta\}) \x F @ b\]
+and which has two projections to $\exists \alpha . F(\alpha)$
+which are equal to $t$ and $u$.
+
+\subsection{A dual thought}
+
+I do seem to have the option of flipping {\em everything} around, in the sense
+of saying that  covariant types are characterized
+positively by
+\[ A(\alpha) \equiv \exists \beta . \beta \le \alpha \x A(\beta) \]
+and contravariant types are characterized negatively by
+\[ B(\alpha) \equiv \forall \beta . \beta \le \alpha \to B(\beta) \]
+ I could then formulate the {\em contravariance} of $\Pi$ types by saying
+\[ \alpha : \C ; x : A(\alpha) \prov B(\alpha, x) \equiv \forall \beta . \beta \le \alpha \to B(\beta, A_p(x))\]
+Because I can do forward transport for $A$ by defining... wait, something's wrong.
+
+What are the four possibilities that have any chance of working?
+I feel like $B$ is definitely supposed to be {\em co}variant, and $A$ is
+supposed to be {\em contra}variant, for $\Pi A B$ to be {\em co}variant.
+So $A$ should be either of
+\[ A(\alpha) \equiv \forall \beta . \beta \le \alpha \to A(\beta) \]
+\[ A(\beta) \equiv \exists \alpha . \beta \le \alpha \x A(\alpha) \]
+and $B$ should be either of
+\[ \beta : \C ; x : A(\beta) \prov B(\beta, x) \equiv \forall \alpha . (p : \beta \le \alpha) \to B(\alpha, A_p(x))\]
+\[ \alpha : \C ; x : A(\alpha) \prov B(\alpha, x) \equiv \exists \beta . (p : \beta \le \alpha) \x B(\beta, A_p(x))\]
+But curiously, only the existential for $B$ seems to work. I can only transport
+$A(\alpha)$ and the knowledge that $\beta \le \alpha$ to $A(\beta)$.
+
+But what if I do make $B$ contravariant and $A$ covariant, can I prove $\Pi A B$
+contravariant somehow? With
+
+\[ A(\beta) \equiv \exists \alpha . \alpha \le \beta \x A(\alpha) \]
+\[ \beta : \C ; x : A(\beta) \prov B(\beta, x) \equiv \forall \alpha . (p : \alpha \le \beta) \to B(\alpha, A_p(x))\]
+? No! Here I need to transport $A$ from bigger to smaller, and I can transport
+only from smaller to bigger. It really seems like $\Pi$ wants the existential.
+
+Is it just as true that $\Sigma$ needs the universal quantifier?
+If $A$ transports forward, and $B$ transports forward, then
+I'd want to say that $B$'s transport is
+\[ \alpha : \C ; x : A(\alpha) \prov B(\alpha, x) \equiv \forall \beta . (p : \alpha \le \beta) \to B(\beta, A_p(x))\]
+which does work, and
+\[ \alpha : \C ; x : A(\alpha) \prov B(\alpha, x) \equiv \exists \beta . (p : \beta \le \alpha) \to B(\beta, A_p(x))\]
+which decisively does not.
+
+How weird that I get a polarity inversion this way!
 \end{document}
