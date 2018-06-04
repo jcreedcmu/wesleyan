@@ -1309,4 +1309,28 @@ that chooses $\beta = \alpha$ and pops in the reflexivity is an equivalence.
 Or dually, {\em the map}
 \[ (\forall \beta . \alpha \le \beta \to A(\beta)) \to A(\alpha) \]
 that chooses $\beta = \alpha$ and pops in reflexivity is an equivalence.
+
+\subsection{What Did I learn From Agda}
+
+A weird/interesting thing about saying that
+
+\[\alpha : \C ; x : A(\alpha) \prov B(\alpha, x) \equiv \exists \beta .
+(p : \beta \le \alpha) \x B(\beta, A_p(x))\]
+
+comes from observing that the round-trip starting at
+\[ \exists \beta . (p : \beta \le \alpha) \x B(\beta, A_p(x))\]
+is the identity. It's possible to get very confused if I forget (as I did!)
+that that existential is {\em not} an ordinary $\Sigma$-type, and is instead
+a coend. For if I indulge in that confusion, I start with a package
+$\langle \beta, p, b\rangle$, I carry it back to
+$\iota \langle \beta, p, b\rangle : B(\alpha, x)$ via the assumed
+inverse-to-the-canonical-reflexivity-map that exists as a witness
+to $B$'s covariance, and then I pop that into the canonical-reflexivity-map
+to get $\langle \alpha, \rid_\alpha, \iota \langle \beta, p, b\rangle\rangle$.
+
+If I think of these as ordinary existential bundles, then I'd take a look
+at the equation
+\[\langle \alpha, \rid_\alpha, \iota \langle \beta, p, b\rangle\rangle = \langle \beta, p, b\rangle\]
+and conclude that $\alpha = \beta$, an unwarrantedly strong conclusion given
+the assumption that merely $\beta \le \alpha$! So I have to be more careful about that.
 \end{document}
