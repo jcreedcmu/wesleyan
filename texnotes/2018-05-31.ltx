@@ -1258,5 +1258,55 @@ N(c) \prov \exists d . d \le c \x N(d)
 Right, this is all fine. So the real diagnostic is about variance, and separately
 I know I have confidence that I can express it in a focally positive or negative
 way if that became useful for completeness proofs.
+\subsection{Why this is important}
+This is a syntactic diagnostic for variance that didn't require me do any particular
+magical thing with $\le$ or groveling through type expressions counting the number
+of flips. Perhaps I can prove a dependent version.
+We say: a type $X$ depending on a category-typed variable $\alpha$ is covariant
+when
+\[X(\alpha) \equiv \forall \beta . \alpha \le \beta \to X(\beta)\]
+and it's contravariant when
+\[X(\alpha) \equiv \exists \beta . \alpha \le \beta \x X(\beta)\]
+Can I show something formal to go with the informal ``$(x : A) \to B$
+is covariant when $A$ is contravariant and $B$ is covariant''?
+I want to say something like
+\[ \alpha : \C ; x : A(\alpha) \prov  B(\alpha, x) \equiv \forall \beta .\alpha \le \beta \to B(\beta, x) \]
+but that's ill-typed, right? I have to transport $x$ somehow to get it to fit into
+$B(\beta, x)$. Maybe I should head to agda. But just sketching it out, I'd have
+the assumption
+\[ \alpha : \C ; x : A(\alpha) \prov  B(\alpha, x) \equiv \forall \beta .
+(p : \alpha \le \beta) \to B(\beta, A_p(x)) \]
+...wait, that requires that $A$ transports covariantly. That seems very wrong.
+Look, $A$'s contravariance looks like either of
+\[\alpha : \C \prov A(\alpha) \equiv \exists \beta . \alpha \le \beta \x A(\beta)\]
+\[\alpha : \C \prov A(\alpha) \equiv \forall \beta . \beta \le \alpha \to A(\beta)\]
+Maybe... I decisively need to use the `$\bar\beta$' of the end to do
+reverse transport? No, that seems kind of weird.
 
+Can I take the existential form of $B$'s covariance? Assume $A$ contravariant like
+\[ \alpha : \C ; \prov  A(\alpha) \equiv \forall \beta .\beta \le \alpha \to A(\beta) \]
+\[ \alpha : \C ; x : A(\alpha) \prov  B(\alpha, x) \equiv \exists \beta .(p : \beta \le \alpha) \x B(\beta, A_p(x)) \]
+Weird, that seems like that works on the face of it.
+Let's try showing now that
+\[ \alpha : \C ;  \prov  (x : A(\alpha)) \to B(\alpha, x) \equiv \exists \beta .(p : \beta \le \alpha) \x (x : A(\beta)) \to B(\beta, x) \]
+
+The forward direction is easy. The backward direction has a $\beta$ to work with,
+and a $p : \beta \le \alpha$ we could plug into transport. Also
+a function $f : (x : A(\beta)) \to B(\beta, x)$. We have
+a $x : A(\alpha)$ and we want to make $B(\alpha, x)$.
+We can reverse-transport along $p$ to get $A_p(x) : A(\beta)$. Applying
+$f$ we get $f (A_p(x)) : B(\beta, A_p(x))$.
+And, now that we have a $p : \beta \le \alpha$ and a $B(\beta, A_p(x))$, we
+can do $B$-transport to get a $B(\alpha, x)$ as required.
+So now I need to check round-trips, and I probably want agda to do that. But this is
+promising!
+
+Right, a sudden thought I had was that the appropriate requirement is not just
+that, e.g. an equivalence $A(\alpha) \equiv \exists \beta . \alpha \le \beta \x A(\beta)$
+exists, but that {\em the map}
+\[A(\alpha) \to \exists \beta . \alpha \le \beta \x A(\beta)\]
+that chooses $\beta = \alpha$ and pops in the reflexivity is an equivalence.
+Or dually, {\em the map}
+\[ (\forall \beta . \alpha \le \beta \to A(\beta)) \to A(\alpha) \]
+that chooses $\beta = \alpha$ and pops in reflexivity is an equivalence.
 \end{document}
