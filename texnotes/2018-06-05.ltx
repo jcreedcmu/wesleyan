@@ -625,4 +625,54 @@ but also
 \[a_2 \le b_1 \to a_2 \le z_1 \to  a_2 \le z_1\]
 And things are totally falling apart and I'm not sure I understand $\sp$ at all anymore.
 Or $\hom$ types, even.
+
+\subsection{Why I should be skeptical of $\sp$}
+
+If I substituted $\alpha \bullet \beta$ in for a category variable in
+a term, wouldn't I have a morphism-independent way of realizing $M_{de}$ at
+any $d, e$? That seems bad.
+
+\subsection{What Happens If I don't Fix Endpoints on $\sim$}
+
+Let's return to thinking about
+\[
+\erule
+{z : \{t, u\} \qquad M :  F \wat z}
+{\pi_1 M : F(t)}
+\qquad
+\erule
+{z : \{t, u\} \qquad M : F \wat z}
+{\pi_2 M : F(u)}
+\]
+Keep in mind that $\wat$ is actually binding an $\alpha$ in $F$.
+
+The relation-composition property for this type constructor is
+\[
+\erule
+{z_1 : \{t, u\} \quad z_2 : \{u, v\}}
+{F \wat z_1;z_2 \equiv ((x_1 : F \wat z_1) (x_2 : F\wat z_2) \x \pi_2 x_1 \equiv \pi_1 x_2)}
+\]
+The identity property is
+\[
+\erule
+{}
+{F \wat \rid_t \equiv F(t)}
+\]
+And symmetry is the fact that there does exist an equivalence
+\[
+\erule
+{}
+{ F \wat z \equiv F \wat \bar z}
+\]
+\subsection{Is the Zig-zag type really a type?}
+Maybe actually it's four different types for all the different arity possibilities.
+Can I pass between them freely?
+Suppose I have $\{t^+, t^-\},\{t^-, t^+\},\{t^+, t^+\},\{t^-, t^-\}$.
+Then I could think about types like
+\[ \{\bar\alpha^+ , \beta^-\} \to \{\bar\alpha^-, \bar\beta^-\} \]
+which is a meaningful type to ask about. Does the identity function
+on zigzags have the appropriate functoriality for all 16 assignments of polarities?
+Let's call the polarities $a, b, c, d$.
+\[ \alpha, \beta : \C \prov Z_{ab}\{\alpha^{\bar a} , \beta^{\bar b}\} \to Z_{cd}\{\alpha^c, \beta^d\} \]
+
 \end{document}
