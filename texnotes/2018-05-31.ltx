@@ -1451,4 +1451,44 @@ which does work, and
 which decisively does not.
 
 How weird that I get a polarity inversion this way!
+
+\subsection{Filling the next gap}
+
+Ok, so I have some agda in \texttt{2018-06-04b.agda} that proves something with
+a lot of postulating, and I want to try to de-postulate \texttt{ABq} to some extent.
+
+What I know about something that's ostensibly of type
+$(\epsilon : \Delta) \to \epsilon \le \delta \to A(\epsilon)$ is not
+merely that a have a function of that type, but that it satisfies the end-condition.
+If I have a map $\phi : e \to e'$, and I instantiate it at $ee$ and $e'e'$, the functions
+$ee \le \delta \to A(ee)$ and $e'e' \le \delta \to A(e'e')$ that it gives
+me are, when transported down to $e'e \le \delta \to A(e'e)$ are the same.
+
+This feels at least consistent with --- if not clearly implying or implied by
+--- \texttt{At-$\eta$} --- which says if I feed any
+$q: (\epsilon : \Delta) \to \epsilon \le \delta \to A(\epsilon)$
+$\delta$ and $\rid_\delta$, then I get... any $a : A(\delta)$? Hold
+on a minute, that seems too strong.
+
+Let's examine where this comes from more carefully. The putatitve
+equivalence involving $\delta : \Delta \prov A : \rtype$ that says
+that $A$ is contravariant is
+\[ A(\delta) \equiv \forall \epsilon . \epsilon \le \delta \to A(\epsilon) \]
+and specifically that the map
+\[\mu :  (\forall \epsilon . \epsilon \le \delta \to A(\epsilon)) \to A(\delta)   \]
+\[\mu(t) = t[\delta](\rid_\delta) \]
+has an inverse
+\[\nu  : A(\delta) \to   \forall \epsilon . \epsilon \le \delta \to A(\epsilon) \]
+The $\beta$-reduction says that a round-trip starting at $A(\delta)$ reduces to the
+identity:
+\[ (a : A(\delta)) \to \mu (\nu a) \equiv a\]
+\[ (a : A(\delta)) \to \nu (a) [\delta](\rid_\delta) \equiv a\]
+
+The $\eta$-reduction says that a round-trip starting at
+$\forall \epsilon . \epsilon \le \delta \to A(\epsilon)$ reduces to the
+identity:
+\[(t : \forall \epsilon . \epsilon \le \delta \to A(\epsilon)) \to \nu(\mu t) \equiv t\]
+\[(t : \forall \epsilon . \epsilon \le \delta \to A(\epsilon)) \to \nu( t[\delta](\rid_\delta)) \equiv t\]
+Oh, looks like I simply wrote down totally the wrong thing in the agda then.
+Fixed in \texttt{2018-06-05.agda}
 \end{document}
