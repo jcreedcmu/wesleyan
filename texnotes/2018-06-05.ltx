@@ -15,6 +15,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\sp{\bullet}
 \def\ot{\leftarrow}
 \def\prequiv{\dashv\vdash}
 \def\fdom{\mathbf{d}f}
@@ -433,7 +434,7 @@ If I speak carelessly and don't get the variances right, it'd be
 \[
 \erule
 {\Delta \prov t : \C \qquad \Delta \prov u : \C}
-{\Delta \prov t \bullet u : \C}
+{\Delta \prov t \sp u : \C}
 \]
 The `average' of $t$ and $u$.
 It's kind of a slice-and-splice operation that takes half of $t$ and
@@ -450,45 +451,45 @@ need a morphism to make sense:
 \[
 \erule
 {f : \C[t, u]}
-{\binl_f : F(t) \to F(u \bullet t)}
+{\binl_f : F(t) \to F(u \sp t)}
 \qquad
 \erule
 {f : \C[t, u]}
-{\binr_f : F(u) \to F(u \bullet t)}
+{\binr_f : F(u) \to F(u \sp t)}
 \]
 So everything else above I said makes sense, just replacing $F \wat f$
-with $F(u\bullet t)$. I index by the `middle' of the morphism, not the morphism itself.
+with $F(u\sp t)$. I index by the `middle' of the morphism, not the morphism itself.
 
 Are these injections definable as transport? Seems like they should be.
 Other things I expect of it include
-$t \bullet t = t$
-and  $(a \bullet b) \bullet c = a \bullet (b \bullet c) = a \bullet c$.
+$t \sp t = t$
+and  $(a \sp b) \sp c = a \sp (b \sp c) = a \sp c$.
 
-I think $\bullet$ is covariant in its first argument, and contravariant in its
+I think $\sp$ is covariant in its first argument, and contravariant in its
 second, so if
 \[F(\alpha) \equiv \forall \beta . \alpha \le \beta \to F(\beta)\]
 then I expect
-\[F(\alpha \bullet \gamma) \equiv \forall \beta . \alpha \le \beta \to F(\beta \bullet \gamma)\]
+\[F(\alpha \sp \gamma) \equiv \forall \beta . \alpha \le \beta \to F(\beta \sp \gamma)\]
 This latter statement would entail
-\[F(\alpha) \equiv \forall \beta . \alpha \le \beta \to F(\beta \bullet \alpha)\]
+\[F(\alpha) \equiv \forall \beta . \alpha \le \beta \to F(\beta \sp \alpha)\]
 
 So what kind of condition would I need to show that
-\[ \forall \beta . \alpha \le \beta \to F(\beta) \equiv \forall \beta . \alpha \le \beta \to F(\beta \bullet \alpha)\]
+\[ \forall \beta . \alpha \le \beta \to F(\beta) \equiv \forall \beta . \alpha \le \beta \to F(\beta \sp \alpha)\]
 unconditionally?
 
 If I start with the goal
-\[ \forall \beta . \alpha \le \beta \to F(\beta) \prov \forall \beta . \alpha \le \beta \to F(\beta \bullet \alpha)\]
+\[ \forall \beta . \alpha \le \beta \to F(\beta) \prov \forall \beta . \alpha \le \beta \to F(\beta \sp \alpha)\]
 that leads to
-\[ \forall \beta . \alpha \le \beta \to F(\beta), \alpha \le \beta \prov F(\beta \bullet \alpha)\]
-so maybe I can choose $\beta = \beta \bullet \alpha$ on the left to get
-\[  \alpha \le \beta \prov \alpha \le \beta \bullet \alpha \]
+\[ \forall \beta . \alpha \le \beta \to F(\beta), \alpha \le \beta \prov F(\beta \sp \alpha)\]
+so maybe I can choose $\beta = \beta \sp \alpha$ on the left to get
+\[  \alpha \le \beta \prov \alpha \le \beta \sp \alpha \]
 which actually seems maybe provable if I squint and see it as
-\[  \alpha \le \beta \prov \alpha \bullet \alpha \le \beta \bullet \alpha \]
+\[  \alpha \le \beta \prov \alpha \sp \alpha \le \beta \sp \alpha \]
 
 If I start with the goal
-\[\forall \beta . \alpha \le \beta \to F(\beta \bullet \alpha) \prov \forall \beta . \alpha \le \beta \to F(\beta) \]
+\[\forall \beta . \alpha \le \beta \to F(\beta \sp \alpha) \prov \forall \beta . \alpha \le \beta \to F(\beta) \]
 that leads to
-\[\forall \beta . \alpha \le \beta \to F(\beta \bullet \alpha) , \alpha \le \beta \prov F(\beta) \]
+\[\forall \beta . \alpha \le \beta \to F(\beta \sp \alpha) , \alpha \le \beta \prov F(\beta) \]
 and I can just choose $\beta = \alpha$ on the left to get the goal
 \[ F(\alpha) , \alpha \le \beta \prov F(\beta) \]
 which can be finished thanks to the assumption that $F$ is monotone.
@@ -497,7 +498,7 @@ So I think it's appropriate to ask that we can go
 \[
 \erule
 {\alpha \le \beta \qquad \alpha' \le \beta'}
-{\alpha \bullet \beta' \le \alpha' \bullet \beta}
+{\alpha \sp \beta' \le \alpha' \sp \beta}
 \]
 
 \subsection{What injection equalities mean}
@@ -565,4 +566,63 @@ and then just plop down the identity zigzag and identity path for $m \sim m$.
 
 I ought to be conscious of the fact that I'm doing a large elimination
 from the coend type and that's slightly terrifying!
+
+\subsection{Another Equivalent Way of Talking about Variance}
+
+A type constructor $F(\alpha)$ is covariant
+iff $F(\alpha \sp \beta) \equiv F(\alpha)$ for any $\beta$.
+It's contravariant
+iff $F(\alpha \sp \beta) \equiv F(\beta)$ for any $\alpha$.
+
+This means we should have $\alpha \le \beta \equiv \alpha \le \beta \sp \gamma$
+and $\gamma \bullet \alpha \le \beta$. Does that hold up?
+
+If we have $\alpha \le \beta$, then certainly we have $\alpha \sp \gamma \le \beta \sp \gamma$. Do we have $\alpha \le \alpha \sp \gamma$? It seems like we need
+a morphism $\gamma \to \alpha$ to justify it via $\alpha \sp \alpha \le \alpha \sp \gamma$.
+
+Let's try to think more generally about what's needed to bridge these.
+Suppose $F(\alpha \bullet \beta) \equiv F(\alpha)$ for all $\beta$.
+We'd then like to show that
+$F(\alpha) \equiv \forall \beta . \alpha \le \beta \to F(\beta)$.
+Specifically the hard direction is
+\[F(\alpha), f : \alpha \le \beta \prov F(\beta)\]
+This doesn't seem to be of any help at all. Or wait --- maybe I need to remember that
+I can do
+\[ \binl_f : F(\alpha) \to F(\beta \bullet \alpha) \]
+and that's what gets me to something that's as good as $F(\beta)$.
+
+Huh, so another way of thinking about
+ the type $\alpha \le \beta$/$\C[\alpha, \beta]$ is that it's sort of
+like a cospan
+\[ F(\alpha) + F(\beta)  \to F(\beta \sp \alpha)\]
+
+How does composition work, then? If I have
+\[ F(\alpha) + F(\beta)  \to F(\beta \sp \alpha)\]
+\[ F(\beta) + F(\gamma)  \to F(\gamma \sp \beta)\]
+I'd need to know how to get
+\[ F(\beta \sp \alpha) \to F(\gamma \sp \alpha) \]
+\[ F(\gamma \sp \beta) \to F(\gamma \sp \alpha) \]
+Would it be enough to ask directly for
+\[ F(\alpha) + F(\gamma \sp \beta)  \to F(\gamma  \sp \alpha)\]
+\[ F(\beta \sp \alpha) + F(\gamma)  \to F(\gamma  \sp \alpha)\]
+then?
+More perspicuously:
+\[ \alpha \le \beta =  F(\alpha) + F(\beta' \sp \beta)  \to F(\beta'  \sp \alpha)\]
+\[ \beta \le \gamma = F(\beta \sp \beta') + F(\gamma)  \to F(\gamma  \sp \beta')\]
+So perhaps generally:
+\[ \delta \le \epsilon = F(\delta \sp \delta') + F(\epsilon' \sp \epsilon)  \to F(\epsilon' \sp \delta')\]
+No, that doesn't look right, not even
+\[ \delta \le \epsilon = F(\delta \sp w) + F(w \sp \epsilon)  \to F(w)\]
+\subsubsection{Equivalence?}
+So the injections seem to let us show that
+\[\alpha \le \beta \to \zeta \le \alpha \to \zeta \le \beta \sp \alpha\]
+but also
+\[\alpha \le \beta \to \alpha \le \zeta \to  \beta \sp \alpha \le \zeta\]
+What's up with that? If $\alpha = a_1a_2$ and $\beta = b_1b_2$ and $\zeta = z_1z_2$
+this is telling us that
+\[a_2 \le b_1 \to z_2 \le a_1 \to z_2 \le b_1\]
+but also
+\[a_2 \le b_1 \to a_2 \le z_1 \to  a_2 \le z_1\]
+And things are totally falling apart and I'm not sure I understand $\sp$ at all anymore.
+Or $\hom$ types, even.
 \end{document}
