@@ -547,4 +547,22 @@ zigzag, but I know it should be
 {(M \sim^F_{\mathsf{zig} f} N) \equiv (\binl_f M \equiv \binr_f N)}
 \]
 though I suppose I could derive the identity principle from that.
+
+Anyway, popping way back up, I think now the thing I expect for equality at
+coend-type is
+\[(M \equiv N) \equiv  \blet \pair \alpha m = M \bin
+ \blet \pair \beta n = N \bin
+\  (z : \{\alpha, \beta\}) \x m \sim^F_{z} n \]
+and then I think with some suitable $\eta$-principle I can go from $\ridp : M \equiv M$
+on the left to
+\[ \blet \pair \alpha m = M \bin
+ \blet \pair \beta n = M \bin
+\  (z : \{\alpha, \beta\}) \x m \sim^F_{z} n \]
+to
+\[ \blet \pair \alpha m = M \bin
+\  (z : \{\alpha, \alpha\}) \x m \sim^F_{z} m \]
+and then just plop down the identity zigzag and identity path for $m \sim m$.
+
+I ought to be conscious of the fact that I'm doing a large elimination
+from the coend type and that's slightly terrifying!
 \end{document}
