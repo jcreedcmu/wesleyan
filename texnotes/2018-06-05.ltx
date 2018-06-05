@@ -508,4 +508,43 @@ So more abstractly I could just say that there's a type whose inhabitants
 are proofs that a hom $f : \C[t, u]$
 relates an $M : F(t)$ and a $N : F(u)$. And this works regardless of whether
 the functor $F$ is co/contravariant!
+
+This kind of reasoning is appropriate for zigzags also.
+If we have zigzags $z_1 : \{t, u\}$ and $z_2 : \{u, v\}$, then
+we can relate $M : F(t)$ and $P : F(v)$ `over' $z_1;z_2$
+precisely when we can find a $N : F(u)$
+and we can relate $M \sim N$ over $z_1$ and $N \sim P$ over $z_2$.
+
+Ok, let's write the type constructor
+\[
+\erule
+{z : \{t, u\} \qquad \alpha : \C \prov F : \rtype \qquad M : F(t) \qquad N : F(u)}
+{M \sim^F_z N : \rtype}
+\]
+then the principle I expect to hold is
+\[
+\erule
+{z_1 : \{t, u\} \quad z_2 : \{u, v\}\qquad M : F(t)\quad N : F(u)\quad P: F(v)}
+{(M \sim^F_{z_1;z_2} P) \equiv (N : F(u)) \x (M \sim_{z_1}^F N) \x (N \sim_{z_2}^F P)}
+\]
+and for identities
+\[
+\erule
+{ M, N : F(t)}
+{(M \sim^F_{\rid_t} N) \equiv (M \equiv N)}
+\]
+and converses
+\[
+\erule
+{ z: \{t, u\} \qquad M : F(t) \qquad N : F(u)}
+{(M \sim^F_{z} N) \equiv (N \sim^F_{\bar z} M)}
+\]
+And so far I don't know how yet I'd concretely use the data in a one-morphism
+zigzag, but I know it should be
+\[
+\erule
+{ f: [t, u] \qquad M : F(t) \qquad N : F(u)}
+{(M \sim^F_{\mathsf{zig} f} N) \equiv (\binl_f M \equiv \binr_f N)}
+\]
+though I suppose I could derive the identity principle from that.
 \end{document}
