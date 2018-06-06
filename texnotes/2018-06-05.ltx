@@ -675,4 +675,19 @@ on zigzags have the appropriate functoriality for all 16 assignments of polariti
 Let's call the polarities $a, b, c, d$.
 \[ \alpha, \beta : \C \prov Z_{ab}\{\alpha^{\bar a} , \beta^{\bar b}\} \to Z_{cd}\{\alpha^c, \beta^d\} \]
 
+\subsection{Feeling pretty stuck}
+
+But here's the shape of an argument I'd like to work.
+
+We aim to prove that if $z : \{\alpha, \beta\}$, and
+ $q : \forall \gamma \in z . F(\gamma)$, then
+ $\pair \alpha {q[\alpha]} \equiv \pair \beta {q[\beta]}$.
+Somehow magically we hope that circumstances are appropriate
+for applying $\{\}$-induction, so we get to
+substitute a $\delta$ for both $\alpha$ and $\beta$ in what
+follows, and $\rid_\delta$ for $z$. We now need to show
+that if we have $q : \forall \gamma \in \rid_\delta . F(\gamma)$
+--- i.e. $q : F(\delta)$ ---
+then $\pair \delta {q[\delta]} \equiv \pair \delta {q[\delta]}$,
+and we accomplish that with $\ridp$.
 \end{document}
