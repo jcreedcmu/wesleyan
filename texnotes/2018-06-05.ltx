@@ -690,4 +690,26 @@ that if we have $q : \forall \gamma \in \rid_\delta . F(\gamma)$
 --- i.e. $q : F(\delta)$ ---
 then $\pair \delta {q[\delta]} \equiv \pair \delta {q[\delta]}$,
 and we accomplish that with $\ridp$.
+
+Note that what I'm {\em not} doing is saying that $z$ is, like, a
+(relational) path $\ii\to \C$,
+and that $q$ is $\forall i : \ii . F(z(i))$. I don't know if this saves
+me from anything, but at least on the face of it it saves me from thinking
+of data in $\C$ as something that I'm able to {\em make}.
+
+The restriction on where $\alpha$ and $\beta$ can appear and still let me
+do induction on $\{\alpha, \beta\}$ is {\em stronger} than the restriction
+for $[\alpha, \beta]$. It's almost like requiring zero-ary occurrences, but I'm
+not totally confident that's a good analogy. I should look at what Nuyts does.
+But at least I feel good about allowing appearances as the end-existential witness
+constructing things of type $\exists \alpha . F(\alpha)$, and then I suppose
+analogously also the `witness' in $\forall$-elimination for either a general
+$\forall$ or the specific $\forall \gamma \in \rid_\delta$ that might be funny
+and not an instance of the general $\forall$ after all. Because of the
+coequalizer-quotienting, that existential witness should be fairly `wiggly'
+in a useful way.
+
+Where I {\em shouldn't} expect to necessarily use a $\{\}$-inductive variable
+is directly as an argument in a category-varying type. Which includes homs
+$[\alpha, \beta]$, actually.
 \end{document}
