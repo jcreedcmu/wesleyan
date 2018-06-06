@@ -675,6 +675,68 @@ on zigzags have the appropriate functoriality for all 16 assignments of polariti
 Let's call the polarities $a, b, c, d$.
 \[ \alpha, \beta : \C \prov Z_{ab}\{\alpha^{\bar a} , \beta^{\bar b}\} \to Z_{cd}\{\alpha^c, \beta^d\} \]
 
+Oh... I think I see now how this doesn't work.
+For a concrete example, picture the diagram
+\[\begin{tikzcd}
+\{\alpha_1, \beta_1\} \to \{\alpha_1, \beta_1\} \ar[dr] && \{\alpha_2, \beta_2\} \to \{\alpha_2, \beta_2\} \ar[dl]\\
+& \{\alpha_1, \beta_2\} \to \{\alpha_1, \beta_1\}
+\end{tikzcd}\]
+This is meant to depict an end-condition check when we have $f : \alpha_1 \to \alpha_2$
+and $g : \beta_1 \to \beta_2$.
+If we construct a function $\{\alpha_1, \beta_2\} \to \{\alpha_1, \beta_1\}$
+by appealing to the identity $\rid_{\{\alpha_1, \beta_1\} }$, given some $h : \{\alpha_1, \beta_2\}$ we make
+\[
+\begin{tikzcd}
+  \alpha_1 \ar[r, <->, squiggly, "h"] & \beta_2  \ar[from=r, "g"'] & \beta_1
+\end{tikzcd}
+\]
+in order to feed it to the identity, then we do feed it, then we don't have
+to adapt it any further and we're done.
+
+But on the other side, we construct
+\[
+\begin{tikzcd}
+\alpha_2 \ar[from=r, "f"'] &  \alpha_1 \ar[r, <->, squiggly, "h"] & \beta_2
+\end{tikzcd}
+\]
+in order to feed it to $\rid_{\{\alpha_2, \beta_2\} }$, and then slap on
+extra morphisms
+\[
+\begin{tikzcd}
+\alpha_1 \ar[r, "f"] & \alpha_2 \ar[from=r, "f"'] &  \alpha_1 \ar[r, <->, squiggly, "h"] & \beta_2  \ar[from=r, "g"'] & \beta_1
+\end{tikzcd}
+\]
+to adapt it to $\{\alpha_1, \beta_1\}$. Now this doesn't look like the same thing
+at all, is it?
+
+
+Except it depends on exactly what I mean by the type $\{\alpha, \beta\}$. If it's
+really zigzags considered as lists of morphisms without any further quotienting,
+then these definitely aren't equal. But if I think of it as isomorphisms in $\C$
+after we localize it at every morphism --- i.e. consider $f$ composed
+with its reverse to be the identity --- then maybe it is?
+
+But given what we're using this for, it seems odd to quotient that way.
+There might be more choices in the $\forall \gamma \in z . F(\gamma)$
+when part of $z$ looks like
+\[
+\begin{tikzcd}
+\alpha \ar[r, "f"] & \beta \ar[from=r, "f"'] & \alpha
+\end{tikzcd}
+\]
+than when it's just a single $\alpha$. Because then we'd be trying to fill in
+
+\[
+\begin{tikzcd}
+aa \ar[rr, "f", dotted] \ar[dr, "fa"'] & & bb \ar[dl, "bf"]\ar[dr, "bf"'] \ar[from=rr, "f"', dotted] && aa\ar[dl, "fa"]\\
+& ba && ba
+\end{tikzcd}
+\]
+
+I don't know, does the end-flexibility in the $\forall$ in
+ $\forall \gamma \in z . F(\gamma)$ somehow smooth over this difference? It
+feels unlikely at the moment.
+
 \subsection{Feeling pretty stuck}
 
 But here's the shape of an argument I'd like to work.
@@ -712,4 +774,161 @@ in a useful way.
 Where I {\em shouldn't} expect to necessarily use a $\{\}$-inductive variable
 is directly as an argument in a category-varying type. Which includes homs
 $[\alpha, \beta]$, actually.
+
+\subsection{Misc}
+
+Why does characterizing monotonicity as things like
+\[ P(\alpha) \equiv \forall \beta . \alpha \le \beta \to P(\beta) \]
+feel good? It's because it feels like modalities a la HoTT or the cohesion
+papers, only with a parameter. It's a modality on the kind $\C \to \rtype$.
+It is idempotent, even. And surely nothing screams
+ $\square$ like `for all future worlds'.
+
+Okay, so can I characterize the zero-ary use of a variable by saying
+\[ P(\alpha) \equiv \forall \beta . \{\alpha,  \beta\} \to P(\beta) \]
+then? Or equivalently
+\[ P(\alpha) \equiv \exists \beta . \{\alpha,  \beta\} \x P(\beta) \]
+That seems plausible. And of course $\{\alpha, \beta\}$ should use
+both of its arguments in this fashion, so that
+\[\{\alpha, \gamma\} \equiv \exists \beta . \{\alpha, \beta\} \x \{\beta, \gamma\}\]
+But what is even going on when I drop a quantified variable into $\{\alpha, \beta\}$?
+Is there some more general construction than a (co)end going on?
+
+\section{Something about $\dag$-categories}
+
+Ok, there certainly is this  weak kind of variable I have in mind,
+that can {\em only} be used in certain
+kinds of occurrence-locations, including but not limited to the arguments of
+$\{\alpha, \beta\}$. I think what I want
+to say about it is that
+ \[ \zeta \sim  \C \prov F(\zeta) : \rtype \]
+corresponds to a functor out of the free $\dagger$-category on $\C$,
+or something rather like it. I'm a little unsure whether the free
+construction I want makes all invertible morphisms unitary (i.e. when $f$
+is invertible, then $f^\dag = f^{-1}$) or whether it makes only the identity
+morphisms unitary.
+
+So then given
+ \[ \zeta \sim  \C \prov F(\zeta) : \rtype \]
+i.e. a functor $F : \dag(\C) \to \rtype$,
+can we also regard it as a type
+\[ \alpha : \C \prov F(\alpha) \]
+i.e. a functor $F : \C \x \C^\op \to \rtype$?
+This requires a functor $\C \x \C^\op \to \dag(\C)$. There doesn't
+seem to be one canonical one, but surely there are two reasonable symmetric
+and equally canonical choices. Surely we can embed $\C \to \dag(\C)$, and
+also $\C^\op \to \dag(\C)$. So I guess these correspond
+to substitutions $[\alpha / \zeta]$ and $[\bar \alpha / \zeta]$.
+If I distinguish these classes of variables, maybe the $\{\}$ induction rule looks like
+
+\[
+\erule
+{\Delta, \eta \sim \C; \Gamma \prov M : A(\eta, \eta,\rid_\eta)}
+{\Delta, \zeta, \xi \sim \C; \Gamma, x : \{\zeta, \xi\} \prov \mathbf{ind}( M) : A(\zeta, \xi, x)}
+\]
+
+\subsection{Do I need to dualize again?}
+
+Assuming  $\zeta \sim \C \prov F(\zeta) : \rtype$
+and $\zeta \sim \C \prov G(\zeta) : \rtype$
+I want to make sense of $\zeta \sim \C \prov F(\zeta) \to G(\zeta)$,
+which I think should be a type.
+
+For any object $C\in \C$, we get from $F(C)$ or $G(C)$ a genuine $\rtype$.
+We can actually, really, transport along either forward or backward
+arrows to some other $F(D)$ or $G(D)$ --- i.e.
+along an arbitrary zigzag $z : C \sim D$.
+
+We could say that $(F \to G)(C)$ is $F(C) \to G(C)$, and then we're
+left with the obligation to show how we can transport $F(C) \to G(C)$
+to $F(D) \to G(D)$. We could try saying that, given a zigzag $z : C \sim D$,
+we take our $F(D)$, transport it along $\bar z$ to $F(C)$, plug it into the
+function we were given, then transport along $z$ to $F(D)$. But I'm not sure
+this is actually functorial unless we impose some equalities or something.
+
+Let's do this carefully.
+
+\begin{lemma}
+Suppose $\C$ is a $\dagger$-category.
+If $A :  \C \to \rset$ and $B : \C \to \rset$, then
+there is a functor $A \to B :  \C \to \rset$ whose object
+part is $(A \to B)_C = A_C \to B_C$.
+\end{lemma}
+
+\begin{proof}
+We need to say (a) what the morphism part is, (b) see that it
+preserves composition, and (c) see that it preserves identities. We
+aren't claiming that $A \to B$ is a $\dagger$-functor, for there isn't
+any $\dag$-structure on $\rset$ that would make that claim meaningful.
+
+The morphism part is defined by, given an $z : C \to D \in \C$,
+saying
+\[(A \to B)_z(f : A_C \to B_C) = \lambda x : A_D . B_z(f(A_{z^\dag}(x)))\]
+
+Suppose we have $z : C \to D$ and $w : D \to E$. Then we find
+\[(A \to B)_{w\o z}(f) = \lambda x . B_{w \o z}(f(A_{(w \o z)^\dag}(x)))\]
+\[= \lambda x . B_w (B_z (f(A_{z^\dag}(A_{w^\dag}(x)))))\]
+\[= \lambda x . (A \to B)_w ( (A \to B)_z (x))\]
+\[=  (A \to B)_w  \o  (A \to B)_z \]
+
+And it preserves identities because
+\[(A \to B)_{\rid_C}(f) = \lambda x . B_{\rid_C}(f(A_{\rid_C^\dag}(x)))\]
+\[= f\]
+What we're relying on is that $(w \o z)^\dag = z^\dag \o w^\dag$
+and $\rid_C^\dag = \rid_C$, and that $A$ and $B$ separately are functors.
+\cqed
+\end{proof}
+
+\subsection{Ok, but is {\em this} `identity' type inhabited?}
+
+Can we make a term
+
+\[\zeta, \xi \sim \C \prov M : \{\zeta, \xi\} \to \{ \zeta, \xi\}\]
+with the above definition of $\to$? And what I mean by
+term I guess is `global section'?
+
+The object part of this has obviously
+got to be the identity function $M_{CD} : \{ C , D \} \to \{ C, D\}$.
+I want to see that identity-function-ness is preserved by transport.
+If I pick a morphism $q : C \to C' \in \C$, I get a function
+$ \{ C' , D \} \to \{ C', D\}$. What it does is, takes your $C' \to D$ zigzag,
+plops on $q$ on the front, pushes it through the identity, and plops
+on $q^\dag$ on the front. Ooops, that's bad. No longer the identity.
+
+How does the oriented hom work? Maybe that'll help me get my head straight.
+Syntactically we write
+\[\alpha, \beta : \C \prov M : [\alpha, \bar\beta] \to [ \bar\alpha, \beta]\]
+
+This type is a functor on four arguments
+$(\alpha\bar\alpha\beta\bar\beta) : \C \x \C^\op \x \C \x \C^\op$. It
+gives the set of ordinary, set-theortic functions from
+the homset $[\alpha, \bar\beta]$ to the homset $[\bar \alpha, \beta]$.
+The term that is the identity function takes only the two arguments $a$ and
+$b$ and yileds the identity function $[a, b] \to [a, b]$. It has the end property
+that given functions $f : a_1 \to a_2$ and $g : b_1 \to b_2$,
+I get commutativity out of
+\[\begin{tikzcd}
+{[a_1, b_1] \to [a_1, b_1]} \ar[dr] && {[a_2, b_2] \to [a_2, b_2]} \ar[dl]\\
+& {[a_2, b_1] \to [a_1, b_2]}
+\end{tikzcd}\]
+Which is to say, given an $h : a_2 \to b_1$ I can either compose to
+$h f : a_1 \to b_1$, apply identity, then compose to $g h f : a_1 \to b_2$,
+or else compose $gh : a_2 \to b_2$, apply identity, compose to $ghf : a_1\to b_2$,
+and associativity says they're equal.
+
+\subsection{What Happens if I Double-Dual?}
+
+Let's imagine that in the majority of situations that I want to think
+about a $\dagger$ed variable, I actually use $\zeta : \dag\C$ to represent
+$\zeta \sim \C$. Which is to say, something with semantics $\dag \C \x \dag \C^\op$.
+The meaning of $\{\dash\}$ is now perfectly clear; it's just a special case of $[\dash]$
+with the category set to $\dag \C$.
+
+The real thing to assess is whether I can do a $\{\dash\}$-induction rule
+\[
+\erule
+{\Delta, \eta : \dag \C; \Gamma \prov M : A(\eta, \eta,\rid_\eta)}
+{\Delta, \zeta, \xi : \dag \C; \Gamma, x : \{\zeta, \xi\} \prov \mathbf{ind}( M) : A(\zeta, \xi, x)}
+\]
+regardless of the arity with which $\zeta, \xi$ appear in $A$!
 \end{document}
