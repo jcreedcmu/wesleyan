@@ -931,4 +931,23 @@ The real thing to assess is whether I can do a $\{\dash\}$-induction rule
 {\Delta, \zeta, \xi : \dag \C; \Gamma, x : \{\zeta, \xi\} \prov \mathbf{ind}( M) : A(\zeta, \xi, x)}
 \]
 regardless of the arity with which $\zeta, \xi$ appear in $A$!
+
+\subsection{Internalizing $\dagger$-swap?}
+
+Can I make a term
+\[\zeta, \xi : \dag \C \prov [\zeta, \bar \xi] \to [\bar \xi, \zeta]\]
+?
+The object part is, for every $a, b\in \dag\C$, just actually take the morphism
+$f \in [a,b]$ to $f^\dag \in [b,a]$. The end condition is,
+given $f : a_1 \to a_2$ and $g : b_1 \to b_2$, stare at
+\[\begin{tikzcd}
+{[a_1, b_1] \to [b_1, a_1]} \ar[dr] && {[a_2, b_2] \to [b_2, a_2]} \ar[dl]\\
+& {[a_2, b_1] \to [b_1, a_2]}
+\end{tikzcd}\]
+And start with a $h : a_2 \to b_1$, and on the left we make $hf : a_1 \to b_1$
+and swap to $f^\dag h^\dag : b_1 \to a_1$ and get to $f f^\dag h^\dag$,
+but on the right we make $h^\dag g^\dag g$. So that's no good.
+
+Maybe I do want to think about the free groupoid on a category rather
+than the free $\dag$-category?
 \end{document}
