@@ -1040,4 +1040,88 @@ and the morphism part is
 (b^* : B_{\bar \epsilon}(a^*, A_\phi(a))) \to\]
 \[ C_\delta(a, A_{\bar \phi}(a), b, B_{\bar\phi}(\cdots ?)) \]
 Time to switch to agda.
+
+\subsection{After Agda Excursion}
+Now I'm staring at \texttt{2018-06-07.agda}.
+It still seems appropriate to say something like,
+ when $\Gamma \prov A : \rtype$,
+\begin{declbox}
+  $\Gamma_\delta : \rtype$\\
+  $\Gamma_\phi : \rtype$\\
+  $\Gamma^!_\delta : \Gamma_\delta \to \Gamma_{\bar \delta}$\\
+  $\Gamma^\ltri_\phi : \Gamma_\phi \to \Gamma_\delta$\\
+  $\Gamma^\rtri_\phi : \Gamma_\phi \to \Gamma_\epsilon$\\
+\(
+A_\delta : (g : \Gamma_\delta) \to A_\delta
+\)\\
+\(
+A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri}_{\phi} g)
+\to A_\epsilon(\Gamma^{\rtri}_{\phi} g)
+\)
+\end{declbox}
+and I try to extract some definitions like
+\begin{defnbox}
+  $(\Gamma, x : A)_\delta = (g : \Gamma_\delta) \x A_\delta(g) \x A_{\bar \delta}(\Gamma^!_\delta g)$\\
+  \(
+  (\Gamma, x : A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri}_\phi g)
+  \x A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_{\phi} g  )
+  \)
+  \\
+  $(\Gamma, x : A)^!_\delta(g, a, a') = (\Gamma^!_\delta g, a', a)$\\
+  $(\Gamma, x : A)^\ltri_\phi(g, a, a') = (\Gamma^\ltri_\phi g, a, \textcolor{red}{?_1})$\\
+  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\bar\phi} g, \textcolor{red}{?_2}, a')$
+\end{defnbox}
+I leave two holes. They are typed
+\[a' : A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_\phi g) \prov
+\textcolor{red}{?_1} : A_{\bar\delta}(\Gamma^!_\delta \Gamma_\phi^\ltri g)\]
+\[a: A_{\delta}( \Gamma^\ltri_\phi g) \prov
+\textcolor{red}{?_2} : A_{\epsilon}( \Gamma_\phi^\rtri g)\]
+Ok, great, we can set
+\[\textcolor{red}{?_1} = A_{\bar\phi}(\Gamma_{\phi}^! g, a') \qquad \textcolor{red}{?_2} = A_\phi(g, a)\]
+as long as there is such thing as $\Gamma_\phi^!$ with
+\begin{thmbox}
+  $ \Gamma^!_\epsilon \Gamma^\rtri_\phi g = \Gamma^\ltri_{\bar\phi} \Gamma^!_\phi g $\\
+  $ \Gamma^!_\delta \Gamma^\ltri_\phi g = \Gamma^\rtri_{\bar\phi} \Gamma^!_\phi g $
+\end{thmbox}
+So let's try
+
+\begin{declbox}
+  $\Gamma_\delta : \rtype$\\
+  $\Gamma_\phi : \rtype$\\
+  $\Gamma^!_\delta : \Gamma_\delta \to \Gamma_{\bar \delta}$\\
+  $\Gamma^!_\phi : \Gamma_\phi \to \Gamma_{\bar \phi}$\\
+  $\Gamma^\ltri_\phi : \Gamma_\phi \to \Gamma_\delta$\\
+  $\Gamma^\rtri_\phi : \Gamma_\phi \to \Gamma_\epsilon$\\
+\(
+A_\delta : (g : \Gamma_\delta) \to A_\delta
+\)\\
+\(
+A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri}_{\phi} g)
+\to A_\epsilon(\Gamma^{\rtri}_{\phi} g)
+\)
+\end{declbox}
+\begin{defnbox}
+  $(\Gamma, x : A)_\delta = (g : \Gamma_\delta) \x A_\delta(g) \x A_{\bar \delta}(\Gamma^!_\delta g)$\\
+  \(
+  (\Gamma, x : A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri}_\phi g)
+  \x A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_{\phi} g  )
+  \)
+  \\
+  $(\Gamma, x : A)^!_\delta(g, a, a') = (\Gamma^!_\delta g, a', a)$\\
+  $(\Gamma, x : A)^!_\phi(g, a, a') = (\Gamma^!_\phi g, a, a')$\\
+  $(\Gamma, x : A)^\ltri_\phi(g, a, a') = (\Gamma^\ltri_\phi g, a, A_{\bar\phi}(\Gamma_{\phi}^! g, a'))$\\
+  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\bar\phi} g, A_\phi(g, a), a')$
+\end{defnbox}
+Checking that the definition of $(\Gamma, x : A)^!_\phi(g, a, a')$ is well-typed,
+we check that
+\[A_\delta(\Gamma^{\ltri}_\phi g) =
+A_{\delta}(\Gamma^!_{\bar\delta} \Gamma^\rtri_{\bar\phi} \Gamma_\phi^! g  )\]
+and
+\[A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_{\phi} g  ) =
+A_{\bar\epsilon}(\Gamma^{\ltri}_{\bar \phi} \Gamma^!_\phi g)
+\]
+which needs merely the easy-to-see idempotence
+\begin{thmbox}
+  $\Gamma^!_{\bar\delta} \Gamma^!_\delta g = g$
+\end{thmbox}
 \end{document}
