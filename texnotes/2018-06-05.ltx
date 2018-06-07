@@ -132,6 +132,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ltri{{\lhd}}
 \def\rtri{{\rhd}}
 \def\tri{\rhd}
+\def\ll{\mathsf{L}}
+\def\rr{\mathsf{R}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
 \def\o{\circ}
 \def\rctx{\,\mathsf{ctx}}
 \def\rdctx{\,\mathsf{dctx}}
@@ -950,4 +954,90 @@ but on the right we make $h^\dag g^\dag g$. So that's no good.
 
 Maybe I do want to think about the free groupoid on a category rather
 than the free $\dag$-category?
+
+\section{Doubling Term Variables}
+
+This idea popped into my head in the shower: what if
+we need to `double up' term variables in the same way that
+category variables are really $\C \x \C^\op$? On the face of
+it, this might mean that it would be possible to even {\em express}
+an identity type for functions that depend on a term variable,
+like
+if
+\[ \Delta; \Gamma, x + A \prov  B : \rtype \]
+then we might be able to say
+\[ \Delta; \Gamma, x + A, x^* - A \prov  B(x^*) \to B(x)  : \rtype\]
+On the face of it I'm extremely unsure how likely this is to run into
+same the problem I was having previously with $x^*$-like variables
+leading me into all types' transport needing to be invertible.
+It does seem slightly promising in providing a possible way to decouple
+term from category variance.
+
+It's {\em extremely} attractive for the possibility that it would
+allow me, in the syntax, to eliminate annotations in $\Gamma$, since
+every variable would occur with both variances. I wonder if there
+might be some restrictions in $\Pi$ and $\Sigma$ formation, however,
+saying that I can only use some term variables negatively or positively,
+respectively, in type formation.
+
+What is the structure of the semantics, now? I think what-a-context-is
+stays pretty much the same, just the clauses might be different?
+Recall the old definitions were
+\begin{declbox}
+  $\Gamma_\phi : \rtype$.\\
+  $\Gamma_\tau : \Gamma_{\dd \tau} \to \Gamma_{\cc \tau} $\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
+  $A_\phi : (g : \Gamma_\phi) \to A_{\dd \phi}(\Gamma_{\ltri\phi} g) \to A_{\cc \phi}(\Gamma_{\rtri\phi} g)$
+\end{declbox}
+\begin{defnbox}
+ $(\cdot)_\phi = \bone$\\
+ $(\Gamma^\op)_\phi = \Gamma_{\bar\phi}$\\
+ $(\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )$\\
+  \\
+ $(\cdot)_\tau = {!}$\\
+ $(\Gamma^\op)_\tau = \Gamma_{\bar\tau}$\\
+ $(\Gamma, x + A)_\tau (g, a) = (\Gamma_\tau g, A_{\ll \tau}(\Gamma_{\ltri \tau}g , a) ) $
+\end{defnbox}
+
+So I'd expect at least something like
+\begin{defnbox}
+\(
+(\Gamma, x : A)_\phi = (g : \Gamma_\phi) \x A_{\dd \phi}( \Gamma_{\ltri\phi} g )
+\x A_{?}( \Gamma_{?} g )
+\)
+\end{defnbox}
+\noindent with two copies of $A$ to show up, but I'm not sure what goes in the `$?$'.
+
+How about a small example. Suppose $\Delta; \cdot \prov A : \rtype$
+and $\Delta; x : A \prov B : \rtype$. So this is something like
+$\Delta; x + A, x^* - A^* \prov B : \rtype$. In this particular case,
+I actually know $A \equiv A^*$ since $A$ has no $\Gamma$-dependencies,
+but I'm going to keep writing $A^*$ intensionally where I think it
+belongs.
+
+The object part of $A$ is just $A_\delta : \rtype$.
+The morphism part of $A$ is, given $\phi : \delta \to \epsilon$,
+\[ A_\phi : A_\delta \to A_\epsilon \]
+The morphism part of $A^*$ is
+\[ A_{\bar\phi} : A_{\bar\epsilon} \to A_{\bar\delta} \]
+In the current case, this is not any new data; $A^*_{\bar\phi}$ is just $A_{\bar\phi}$.
+
+The object part of $B$ is
+\[ B_\delta : A_\delta \to A^*_{\bar\delta} \to \rtype \]
+The morphism part of $B$ is
+\[ B_\phi : (a : A_\delta)(a^* : A^*_{\bar\epsilon}) \to
+B_\delta(a, A^*_{\bar\phi}(a^*)) \to B_\epsilon(A_\phi(a), a^*)
+\]
+
+Ok, good so far. What if we have a further $C$ with the intent of
+saying
+$x : A, y : B \prov C : \rtype$? I'm going to give up writing $A^*$ now I think
+because it's confusing more than it's helping. The object part of $C$ is
+\[ C_\delta : (a : A_\delta)(a^* : A_{\bar\delta}) (b : B_\delta(a, a^*))
+(b^* : B_{\bar \delta}(a^*, a)) \to \rtype\]
+and the morphism part is
+\[ C_\phi : (a : A_\delta)(a^* : A_{\bar\epsilon}) (b : B_\delta(a, A_{\bar\phi}(a^*)))
+(b^* : B_{\bar \epsilon}(a^*, A_\phi(a))) \to\]
+\[ C_\delta(a, A_{\bar \phi}(a), b, B_{\bar\phi}(\cdots ?)) \]
+Time to switch to agda.
 \end{document}
