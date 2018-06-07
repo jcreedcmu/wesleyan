@@ -1069,7 +1069,7 @@ and I try to extract some definitions like
   \\
   $(\Gamma, x : A)^!_\delta(g, a, a') = (\Gamma^!_\delta g, a', a)$\\
   $(\Gamma, x : A)^\ltri_\phi(g, a, a') = (\Gamma^\ltri_\phi g, a, \textcolor{red}{?_1})$\\
-  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\bar\phi} g, \textcolor{red}{?_2}, a')$
+  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\phi} g, \textcolor{red}{?_2}, a')$
 \end{defnbox}
 I leave two holes. They are typed
 \[a' : A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_\phi g) \prov
@@ -1110,7 +1110,7 @@ A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri}_{\phi} g)
   $(\Gamma, x : A)^!_\delta(g, a, a') = (\Gamma^!_\delta g, a', a)$\\
   $(\Gamma, x : A)^!_\phi(g, a, a') = (\Gamma^!_\phi g, a, a')$\\
   $(\Gamma, x : A)^\ltri_\phi(g, a, a') = (\Gamma^\ltri_\phi g, a, A_{\bar\phi}(\Gamma_{\phi}^! g, a'))$\\
-  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\bar\phi} g, A_\phi(g, a), a')$
+  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\phi} g, A_\phi(g, a), a')$
 \end{defnbox}
 Checking that the definition of $(\Gamma, x : A)^!_\phi(g, a, a')$ is well-typed,
 we check that
@@ -1124,4 +1124,30 @@ which needs merely the easy-to-see idempotence
 \begin{thmbox}
   $\Gamma^!_{\bar\delta} \Gamma^!_\delta g = g$
 \end{thmbox}
+
+Once again I see the object-interpretation of contexts is just a special case of
+the static-morphism-relationy part, and $\ltri$ is definable as $\Gamma^\ltri_\phi = \Gamma^!_{\bar\epsilon} \Gamma^\ltri_{\bar\phi} \Gamma^!_\phi$, so the essential definitions
+that determine the rest are
+
+\begin{declbox}
+  $\Gamma_\phi : \rtype$\\
+  $\Gamma^!_\phi : \Gamma_\phi \to \Gamma_{\bar \phi}$\\
+  $\Gamma^\rtri_\phi : \Gamma_\phi \to \Gamma_\epsilon$\\
+\(
+A_\delta : (g : \Gamma_\delta) \to A_\delta
+\)\\
+\(
+A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri}_{\phi} g)
+\to A_\epsilon(\Gamma^{\rtri}_{\phi} g)
+\)
+\end{declbox}
+\begin{defnbox}
+  \(
+  (\Gamma, x : A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri}_\phi g)
+  \x A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma^\rtri_{\phi} g  )
+  \)
+  \\
+  $(\Gamma, x : A)^!_\phi(g, a, a') = (\Gamma^!_\phi g, a, a')$\\
+  $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\phi} g, A_\phi(g, a), a')$
+\end{defnbox}
 \end{document}
