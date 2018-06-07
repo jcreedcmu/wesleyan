@@ -1150,4 +1150,88 @@ A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri}_{\phi} g)
   $(\Gamma, x : A)^!_\phi(g, a, a') = (\Gamma^!_\phi g, a, a')$\\
   $(\Gamma, x : A)^\rtri_\phi(g, a, a') = (\Gamma^\rtri_{\phi} g, A_\phi(g, a), a')$
 \end{defnbox}
+
+\vfil\eject
+\subsection{Twisted Arrow Category}
+
+Recall that we needed to generalize to the twisted arrow category to handle
+defining terms. Let's try to do that again.
+In a situation like
+\(\tau = \begin{tikzcd}
+  \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
+\delta \ar[r,"\phi"'] & \epsilon
+\end{tikzcd}\)
+we say
+\begin{declbox}
+  $\Gamma_\phi : \rtype$\\
+  $\Gamma^!_\phi : \Gamma_\phi \to \Gamma_{\bar \phi}$\\
+  $\Gamma_\tau : \Gamma_\psi \to \Gamma_\phi$\\
+\(
+A_\delta : (g : \Gamma_\delta) \to A_\delta
+\)\\
+\(
+A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
+\to A_\epsilon(\Gamma_{\rtri\phi} g)
+\)
+\end{declbox}
+\begin{defnbox}
+  \(
+  (\Gamma, x : A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma_{\ltri\phi} g)
+  \x A_{\bar\epsilon}(\Gamma^!_\epsilon \Gamma_{\rtri\phi} g  )
+  \)
+  \\
+  $(\Gamma, x : A)^!_\phi(g, a, a') = (\Gamma^!_\phi g, a, a')$\\
+  \((\Gamma, x : A)_{\tau}(g, a, a') = (\Gamma_{\tau} g, A_\iota(\Gamma_{\ltri\tau}g, a),
+A_{\bar\omega} (\Gamma_{\omega}^! \Gamma_{\rtri \tau} g, a'))\)
+\end{defnbox}
+Check that this last line is well-typed.
+We have from the context
+\[g' : \Gamma_\psi, a : A_{\delta'}(\Gamma_{\ltri\psi} g'),
+a' : A_{\bar\epsilon'}(\Gamma^!_{\epsilon'} \Gamma_{\rtri\psi} g')  \]
+We need the second and third elements of the output tuple to be
+\[G_1 = A_\delta(\Gamma_{\ltri\phi} \Gamma_\tau g')\]
+\[G_2 = A_{\bar\epsilon}(\Gamma^!_\epsilon\Gamma_{\rtri\phi} \Gamma_\tau g')\]
+respectively.
+
+The transport $A_\iota(\Gamma_{\ltri \tau} g')$ requires
+$A_{\delta'}(\Gamma_{\ltri \iota} \Gamma_{\ltri\tau} g')$ and emits
+$A_\delta(\Gamma_{\rtri \iota} \Gamma_{\ltri\tau} g')$.
+
+The transport $A_{\bar\omega}(\Gamma^!_\omega \Gamma_{\rtri \tau} g')$ requires
+$A_{\bar\epsilon'}(\Gamma_{\ltri \bar\omega} \Gamma^!_\omega \Gamma_{\rtri \tau} g')$ and emits
+$A_{\bar\epsilon}(\Gamma_{\rtri \bar\omega} \Gamma^!_\omega \Gamma_{\rtri \tau} g')$.
+
+Let's first posit how $\Gamma^!$ interchanges with things. We conjecture
+
+So the four conditions we need to satisfy come from
+matching up the inputs $a, a'$
+at $A_{\delta'}$ and $A_{\bar\epsilon'}$, and the outputs at $A_\delta$ and $A_{\bar\epsilon}$.
+They are:
+\[ \Gamma_{\ltri \iota} \Gamma_{\ltri\tau} g' = \Gamma_{\ltri\psi} g'
+\eqno(\delta')
+\]
+\[ \Gamma_{\ltri \bar\omega} \Gamma^!_\omega \Gamma_{\rtri \tau} g' = \Gamma^!_{\epsilon'} \Gamma_{\rtri\psi} g'
+\eqno(\bar\epsilon')
+\]
+\[\Gamma_{\ltri\phi} \Gamma_\tau g' = \Gamma_{\rtri \iota} \Gamma_{\ltri\tau} g'
+\eqno(\delta)\]
+\[\Gamma^!_\epsilon\Gamma_{\rtri\phi} \Gamma_\tau g'
+= \Gamma_{\rtri \bar\omega} \Gamma^!_\omega \Gamma_{\rtri \tau} g'
+\eqno(\bar\epsilon)\]
+
+Then, conjecturing that
+\begin{thmbox}
+$  \Gamma^!_\phi \Gamma_\tau = \Gamma_{\bar \tau} \Gamma^!_{\psi} : \Gamma_\psi \to \Gamma_{\bar\phi}$\\
+$\Gamma_{\sigma \o \tau} = \Gamma_\sigma \Gamma_\tau$
+\end{thmbox}
+it suffices to check
+
+\[ {\ltri \iota}  \o {\ltri\tau}  = {\ltri\psi} \eqno(\delta') \]
+\[ {\rtri \omega}  \o {\rtri \tau}  =  {\rtri\psi} \eqno(\epsilon') \]
+\[{\ltri\phi} \o \tau  = {\rtri \iota} \o {\ltri\tau} \eqno(\delta)\]
+\[{\rtri\phi} \o \tau = {\ltri \omega} \o {\rtri \tau} \eqno(\epsilon)\]
+
+And, very tidily, every one of these is giving two names for the
+canonical map in the twisted arrow category from $\psi$ to some
+identity map at some object among $\delta', \epsilon', \delta, \epsilon$.
 \end{document}
