@@ -15,6 +15,9 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
 \def\sp{\bullet}
 \def\ot{\leftarrow}
 \def\prequiv{\dashv\vdash}
@@ -1166,9 +1169,7 @@ we say
   $\Gamma_\phi : \rtype$\\
   $\Gamma^!_\phi : \Gamma_\phi \to \Gamma_{\bar \phi}$\\
   $\Gamma_\tau : \Gamma_\psi \to \Gamma_\phi$\\
-\(
-A_\delta : (g : \Gamma_\delta) \to A_\delta
-\)\\
+  $A_\delta : \Gamma_\delta \to \rtype$\\
 \(
 A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
 \to A_\epsilon(\Gamma_{\rtri\phi} g)
@@ -1234,4 +1235,200 @@ it suffices to check
 And, very tidily, every one of these is giving two names for the
 canonical map in the twisted arrow category from $\psi$ to some
 identity map at some object among $\delta', \epsilon', \delta, \epsilon$.
+
+\subsection{Towards Function Types}
+Ok, let's confirm that I can write function types with a suitable variable
+restriction. The formation rule would be
+\[
+\erule
+{\Delta;\Gamma\prov A : \rtype\qquad \Delta;\Gamma, x : A \prov B : \rtype \qquad x \not\in_+ B}
+{\Delta;\Gamma \prov (x : A) \to B : \rtype}
+\]
+For some variable occurrence relation $x \not\in_+ B$ that I'd need to define,
+which comes with the following sort of guarantee.
+
+Nomrally the semantics of $B$ would be
+\[ B_\delta : (\Gamma, x : A)_\delta \to \rtype \]
+\[ B_\phi : (g : (\Gamma, x : A)_\phi) \to B_\delta((\Gamma, x : A)_{\ltri \phi} g)
+\to B_\epsilon((\Gamma, x : A)_{\rtri \phi} g) \]
+which expand to
+\[ B_\delta :  (g : \Gamma_\delta) \to  A_\delta( g) \to A_{\bar \delta}(\bar g) \to \rtype \]
+\[ B_\phi : (g : \Gamma_\phi) (a : A_\delta(\Gamma_{\ltri\phi} g))
+  (a' : A_{\bar\epsilon}( \Gamma_{\ltri\bar\phi} \bar g  ))
+\]
+\[ \to B_\delta(\Gamma_{\ltri \phi} g,  a, A_{\bar\phi} (\bar g, a')) \]
+\[ \to B_\epsilon(\Gamma_{\rtri\phi} g, A_\phi(g, a),  a') \]
+(abbreviating $\Gamma^!$ as overline)
+The thing we want $x \not\in_+ B$ to guarantee is that these actually factor through
+a semantics with fewer arguments, i.e.
+\[ B_\delta :  (g : \Gamma_\delta) \to A_{\bar \delta}(\bar g) \to \rtype \]
+\[ B_\phi : (g : \Gamma_\phi)
+  (a' : A_{\bar\epsilon}( \Gamma_{\ltri\bar\phi} \bar g  ))
+ \to B_\delta(\Gamma_{\ltri \phi} g,  A_{\bar\phi} (\bar g, a'))
+ \to B_\epsilon(\Gamma_{\rtri\phi} g,  a') \]
+And symmetrically, $x \not\in_- B$, which we'd need for $\Sigma$, I think, would guarantee
+\[ B_\delta :  (g : \Gamma_\delta) \to  A_\delta( g) \to \rtype \]
+\[ B_\phi : (g : \Gamma_\phi) (a : A_\delta(\Gamma_{\ltri\phi} g))
+ \to B_\delta(\Gamma_{\ltri \phi} g,  a)
+ \to B_\epsilon(\Gamma_{\rtri\phi} g, A_\phi(g, a)) \]
+
+Now I think this is pretty close to the $x - A$ and $x + A$
+assumptions that I had before, but the difference is that all of $g :
+\Gamma_\phi$ is still around, and I think that'll save me when it
+comes to identity types and such. Or maybe the right thing to say,
+foreshadowingly, is that the lambda rule {\em won't} have a variable
+restriction on the term side, and we'll just say
+\[
+\erule
+{\Delta; \Gamma, x : A \prov M : B}
+{\Delta; \Gamma \prov \lambda x . M : (x : A) \to B}
+\]
+\subsection{Function Types, Actually}
+But I'm getting ahead of myself.
+
+The tools I have to construct the $\Pi$ type are
+\[A_\delta :  \Gamma_\delta \to \rtype\]
+\[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
+\to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+\[ B_\delta :  (g : \Gamma_\delta) \to A_{\bar \delta}(\bar g) \to \rtype \]
+\[ B_\phi : (g : \Gamma_\phi)
+  (a' : A_{\bar\epsilon}( \Gamma_{\ltri\bar\phi} \bar g  ))
+ \to B_\delta(\Gamma_{\ltri \phi} g,  A_{\bar\phi} (\bar g, a'))
+ \to B_\epsilon(\Gamma_{\rtri\phi} g,  a') \]
+and I need to make
+\[((x : A) \to B)_\delta :  \Gamma_\delta \to \rtype\]
+So I set
+\begin{defnbox}
+  $ ((x : A) \to B)_\delta(g) = (x : A_{\bar\delta}(\bar g)) \to B_\delta(g, x) $
+\end{defnbox}
+Then I need to make
+\[((x : A) \to B)_\phi : (g : \Gamma_\phi) \]
+\[ \to ((x : A_{\bar\delta}(\Gamma_{\rtri\bar\phi} \bar g)) \to B_\delta(\Gamma_{\ltri\phi} g, x))  \]
+\[ \to ((x : A_{\bar\epsilon}(\Gamma_{\ltri\bar\phi} \bar g)) \to B_\epsilon(\Gamma_{\rtri\phi} g, x))\]
+So I set
+\begin{defnbox}
+  $ ((x : A) \to B)_\phi(g, h) = \lambda a' . B_{\phi}((g, a'), h(A_{\bar\phi}(\bar g, a'))) $
+\end{defnbox}
+And proceed to try to typecheck this.
+\[ A_{\bar\phi}(\bar g, a') : A_{\bar \delta}(\Gamma_{\rtri \bar\phi}\bar g) \]
+\[ h(A_{\bar\phi}(\bar g, a')) : B_\delta(\Gamma_{\ltri \phi} g, A_{\bar\phi}(\bar g, a')) \]
+\[B_{\phi}((g, a'), h(A_{\bar\phi}(\bar g, a'))) : B_{\epsilon}(\Gamma_{\rtri \phi} g, a') \]
+Easy as pie, no equation-checking in twisted arrows needed, even.
+\subsection{Nondependent Functions}
+Ok, so now can I convince myself that
+\[
+\erule
+{\Gamma \prov A : \rtype\qquad \Gamma \prov B : \rtype}
+{\Gamma \prov A\to B : \rtype}
+\]
+? I think so; because the variable of type $A$ doesn't appear in $B$ at all.
+Nondependent types are recovered with no variable restriction, hooray.
+In particular, $B \to B$ is a type whereever $B$ is.
+\subsection{Variable Rule}
+To make a term in general, for $\Delta ; \Gamma \prov M : A$
+I need for every object $d \in \ssem \Delta$ to make
+\[ M_d : (g : \Gamma_{dd}) \to A_{dd} \]
+such that
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d(\Gamma_{\fdom} g))
+ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e(\Gamma_{\fcod} g))\]
+So to make
+\[
+\erule
+{}
+{\Gamma, x : A \prov x : A}
+\]
+We need
+\[ x_d : (g : \Gamma_{dd}) (a : A_{dd}( g)) (a' : A_{dd}(\bar g)) \to A_{dd}(g) \]
+So of course we set
+\[ x_d(g, a, a') = a \]
+And observe that $x \not\in_- x$. We can check
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}((\Gamma, x : A)_{\rtri \fdom} (g, a, a'), M_d((\Gamma, x : A)_{\fdom} (g, a, a')))
+\]
+\[ \equiv A_{ef}((\Gamma, x : A)_{\rtri\fcod} (g, a, a'),M_e((\Gamma, x : A)_{\fcod} (g, a, a')))\]
+i.e.
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d((\Gamma, x : A)_{\fdom} (g, a, a')))
+\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e((\Gamma, x : A)_{\fcod} (g, a, a')))\]
+because the $A$ on the right doesn't depend on $x$, then using the definition
+\begin{defnbox}
+  \((\Gamma, x : A)_{\tau}(g, a, a') = (\Gamma_{\tau} g, A_\iota(\Gamma_{\ltri\tau}g, a),
+A_{\bar\omega} (\Gamma_{\omega}^! \Gamma_{\rtri \tau} g, a'))\)
+\end{defnbox}
+this is
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d(\Gamma_{\tau} g, A_{df}(\Gamma_{\ltri\fdom }g, a),
+A_{df} ( \Gamma_{\ltri \fdom} \bar g, a')))
+\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e(\Gamma_{\tau} g, A_{fe}(\Gamma_{\ltri \fcod}g, a),
+A_{fe} ( \Gamma_{\ltri \fcod} \bar g, a')))\]
+and plugging in the definition of $M = x$ we get
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g,  A_{df}(\Gamma_{\ltri\fdom }g, a))\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g, A_{fe}(\Gamma_{\ltri \fcod}g, a)) \]
+and by functoriality, which should look like before,
+\begin{thmbox}
+ $\Gamma_\rid g = g$\\
+ $\Gamma_{\tau \o \sigma}g = \Gamma_\tau\Gamma_\sigma g$\\
+  $A_{\rid_\delta}(g, a) = a$\\
+  $A_{\phi\eta}(g, a) = A_\phi(\Gamma_{\phi \gol \eta}g, A_\eta(\Gamma_{\phi \sqsupset \eta}g, a))$
+\end{thmbox}
+this is established, because by reflexivity
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+ \to A_{ff}( g,  a) \equiv A_{ff}( g,  a) \]
+
+
+(Remember that these look like so:
+
+\(\fdom = \begin{tikzcd}
+  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
+dd \ar[r,equal] & dd
+\end{tikzcd}\)
+\(\fcod = \begin{tikzcd}
+  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, "ef"']\\
+ee \ar[r,equal] & ee
+\end{tikzcd}\)
+\(\rtri\fdom = \begin{tikzcd}
+  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+dd \ar[r,"fd"'] & ed
+\end{tikzcd}\)
+\(\rtri\fcod = \begin{tikzcd}
+  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+ee \ar[r,"ef"'] & ed
+\end{tikzcd}\)
+)
+\subsection{Lambda Rule}
+\[
+\erule
+{\Delta; \Gamma, x : A \prov M : B}
+{\Delta; \Gamma \prov \lambda x . M : (x : A) \to B}
+\]
+We have
+\[(M_d : (g : \Gamma_{dd}) (a : A_{dd}(g)) (a' : A_{dd}(\bar g)) \to B_{dd}(g, a') \]
+We need to make
+\[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x : A) \to B)_{dd}(g)\]
+i.e.
+\[(\lambda x . M)_d : (g : \Gamma_{dd})  (a' : A_{dd}(\bar g)) \to B_{dd}(g, a')\]
+Huh, this doesn't quite work, yet. I cannot always prove that $A \to A$.
+
+\subsection{Backing up}
+Given that the semantics of the variable rule look like they have some
+extra data that I'm not using, I definitely wonder if it's possible
+to recover the sort of $\Gamma, x : A \prov x^* : A^*$ business I was
+trying and failing to do before. Which would mean that my identity
+theory would be more like the fact that $A$ always proves $A^*$, not $A$.
 \end{document}
