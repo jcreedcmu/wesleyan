@@ -23,6 +23,9 @@
 \def\prequiv{\dashv\vdash}
 \def\fdom{\mathbf{d}f}
 \def\fcod{\mathbf{e}f}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
 \def\thn{\mathrel|}
 \def\coe{\mathsf{coe}}
 \def\bpush{\mathbf{push}}
@@ -1587,24 +1590,154 @@ $A^1$ as canonical, and inlining $A^2$:
 \end{defnbox}
 
 
-%% \vskip 2em \hrule\vskip 2em
-%% \(\fdom = \begin{tikzcd}
-%%   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
-%% dd \ar[r,equal] & dd
-%% \end{tikzcd}\)
-%% \(\fcod = \begin{tikzcd}
-%%   de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, "ef"']\\
-%% ee \ar[r,equal] & ee
-%% \end{tikzcd}\)
-%% \(\rtri\fdom = \begin{tikzcd}
-%%   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
-%% dd \ar[r,"fd"'] & ed
-%% \end{tikzcd}\)
-%% \(\rtri\fcod = \begin{tikzcd}
-%%   de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
-%% ee \ar[r,"ef"'] & ed
-%% \end{tikzcd}\)
-%% \[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
-%% \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+Does the end-condition become any nicer in this format?
+Was
+\begin{thmbox}
+\(
+  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_{\fdom}  g))
+  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_{\fcod}   g))
+\)
+\end{thmbox}
+We want to get from $dd$ to $ed$. That's the morphism
+\[\begin{tikzcd}
+dd \ar[r,"fd"] \ar[d, "fd"'] & ed \ar[from=d, equal]\\
+  ed  \ar[r, equal] & ed
+\end{tikzcd}\]
+\begin{thmbox}
+\(
+  (g : \Gamma_{ff})  \to A_{\rtri fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_{\fdom}  g))
+  \equiv A_{\rtri ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_{\fcod}   g))
+\)
+\end{thmbox}
+Which is hard to tell that it even typechecks until I realize
+that
+\[A^1_{\phi' \o \phi}(g) = A_{\delta}(\Gamma_{\ltri (\phi' \o \phi)} g)\]
+\[
+\begin{tikzcd}
+ \cdot \ar[r, "\phi"] \ar[d, equal] & \cdot  \ar[r, "\phi'"] & \cdot \ar[from=d, "\phi'"'] \\
+ \cdot \ar[d, equal] \ar[rr, "\phi"] &  & \cdot\ar[from=d, "\phi"']\\
+ \cdot  \ar[rr, equal] &  & \cdot\\
+\end{tikzcd}
+\]
+\[  = A_{\delta}(\Gamma_{\ltri \phi \o  (\phi' \gor \phi))} g)\]
+\[  = A_{\delta}(\Gamma_{\ltri \phi} \Gamma_{\phi' \gor \phi} g)\]
+\[  = A^1_{\phi}(\Gamma_{\phi' \gor \phi} g)\]
+
+So $M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)$
+but that's the same as $A_{ed}(\Gamma_{\rtri fd}\Gamma_{\rtri \fdom} g)$.
+or is it?
+\subsection{This is still a mess}
+
+Can I lift term semantics to morphism-and-twisted-morphism?
+If I have $M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$, what else do
+I automatically have?
+
+Also, if I have an $f$, what $\tau$-like morphisms do I automatically have?
+I think the $\ltri$s and $\rtri$s of $ff, \fdom, \fcod$ cover everything.
+
+Hmm, if I do have $f : d \to e$, I can squeeze out something I might call
+\[M_f : (g : \Gamma_{de}) \to A_{ed}(\Gamma_{ff} g)\]
+ right? Take your $g : \Gamma_{de}$, transport it to $\Gamma_{df} g : \Gamma_{dd}$, then
+take your $M_d(\Gamma_{df} g) : A_{dd}(\Gamma_{df} g)$ and $A$-transport it to
+\[ A_{fd}(\textcolor{red}{?}, M_d(\Gamma_{df} g)) : A_{dd}(\Gamma_{df} g)\]
+Oh, no, I need more powerful stuff to transport terms.
+
+Ok, let's give myself $(g : \Gamma_{ff})$ to start with.
+I could try to make either of
+\[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
+\[M'_f : (g : \Gamma_{ff}) \to A_{de}(\Gamma_{\ltri ff} g) \]
+by saying
+\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_{\fdom} g))\]
+\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_{\fcod} g))\]
+Oh, I see, these are in fact equal. But I can see that the {\em type}
+of $M'_f$ is $(g : \Gamma_{ff}) \to A^1_{ff}(g)$.
+
+So maybe I could try to formulate the end-condition in terms
+of a $\tau : ff \to hh$ or something. Or maybe given a $t : f \to h$ like
+\[
+\begin{tikzcd}
+  d \ar[d] \ar[r, "f"] & e \ar[from=d]\\
+ b \ar[r,"h"'] & c
+\end{tikzcd}
+\]
+we'd define $tt$ as
+\[
+\begin{tikzcd}
+  de \ar[d] \ar[r, "ff"] & ed \ar[from=d]\\
+ bc \ar[r,"hh"'] & cb
+\end{tikzcd}
+\]
+or maybe I need to think about
+\[
+\begin{tikzcd}
+  de \ar[d] \ar[r, "ff"] & ed \ar[from=d]\\
+ be \ar[r,"hf"'] & cd
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  bc \ar[d] \ar[r, "hh"] & cb \ar[from=d]\\
+ be \ar[r,"hf"'] & cd
+\end{tikzcd}
+\]
+Hm, no, those don't typecheck.
+
+Maybe the generalization is from $f : d \to e$ to a $\tau$-like shape that has
+arrows in place of $d$ and $e$ on the sides: we first ask for $t$ to look like
+\[
+\begin{tikzcd}
+  d_1 \ar[d, "h"'] \ar[r, "f_1"] & e_1 \ar[from=d, "k"']\\
+ d_2 \ar[r,"f_2"'] & e_2
+\end{tikzcd}
+\]
+And we try to come up with some condition relating $M_h$ and $M_k$.
+We know
+\[M_h : (g : \Gamma_{hh}) \to A_{hh}(g)\]
+\[M_k : (g : \Gamma_{kk}) \to A_{kk}(g)\]
+We can also stare at the $\tau$-morphism
+\[
+\begin{tikzcd}
+  d_1d_2 \ar[d, "hh"'] \ar[r, "f_1 f_2", red] & e_1e_2 \ar[from=d, "kk"']\\
+ d_2d_1 \ar[r,"f_2 f_1"', red] & e_2e_1
+\end{tikzcd}
+\]
+Mmm, nope, that doesn't work.
+
+\subsection{Wait, I made a mistake way earlier on}
+
+When I said
+\begin{quote}
+I could try to make either of
+\[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
+\[M'_f : (g : \Gamma_{ff}) \to A_{de}(\Gamma_{\ltri ff} g) \]
+by saying
+\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_{\fdom} g))\]
+\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_{\fcod} g))\]
+\end{quote}
+actually both of those have type
+\[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
+and therefore neither admits the abbreviation as $(g : \Gamma_{ff}) \to A^1_{ff}(g)$.
+\vskip 2em \hrule\vskip 2em
+\[
+\fdom = \begin{tikzcd}
+  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
+dd \ar[r,equal] & dd
+\end{tikzcd}
+\qquad
+\fcod = \begin{tikzcd}
+  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, "ef"']\\
+ee \ar[r,equal] & ee
+\end{tikzcd}\]
+\[\rtri\fdom = \begin{tikzcd}
+  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+dd \ar[r,"fd"'] & ed
+\end{tikzcd}
+\qquad
+\rtri\fcod = \begin{tikzcd}
+  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+ee \ar[r,"ef"'] & ed
+\end{tikzcd}
+\]
+\[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
+\to A_\epsilon(\Gamma_{\rtri\phi} g)\]
 
 \end{document}
