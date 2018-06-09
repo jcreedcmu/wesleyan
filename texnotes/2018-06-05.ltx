@@ -1714,8 +1714,52 @@ by saying
 \[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_{\fcod} g))\]
 \end{quote}
 actually both of those have type
-\[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
+\[ (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
 and therefore neither admits the abbreviation as $(g : \Gamma_{ff}) \to A^1_{ff}(g)$.
+
+\subsection{Reanalyzing what I have}
+
+Recall that I moved from
+\[ A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri \phi} g) \to
+A_\epsilon(\Gamma_{\rtri \phi} g) \]
+to
+\[ A^1_\tau : (g : \Gamma_\psi) \to A^1_\psi(g) \to
+A^1_\phi(\Gamma_{\tau} g) \]
+where I'm able to recover the former by taking $\tau$ to be
+\[
+\rtri \phi =
+\begin{tikzcd}
+  \delta \ar[d, "\phi"'] \ar[r, "\phi"] & \epsilon \ar[from=d, equal]\\
+\epsilon \ar[r,equal] & \epsilon
+\end{tikzcd}
+\]
+So by analogy I should want to move from the type
+\[ M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
+to the type
+\[ M^1_t : (g : \Gamma_{ss}) \to A^1_{ff}(\Gamma_{tt} g) \]
+with generally
+\[
+t =
+\begin{tikzcd}
+  d' \ar[d, "i"'] \ar[r, "s"] & e' \ar[from=d, "o"']\\
+d \ar[r,"f"'] & e
+\end{tikzcd}
+\qquad
+tt =
+\begin{tikzcd}
+  d'e' \ar[d, "io"'] \ar[r, "ss"] & e'd' \ar[from=d, "oi"']\\
+de \ar[r,"ff"'] & ed
+\end{tikzcd}
+\]
+But I can't seem to set $t$ to anything to get back $M_f$.
+\[
+t = \rtri f =
+\begin{tikzcd}
+  d \ar[d, "f"'] \ar[r, "f"] & e \ar[from=d, equal]\\
+e \ar[r,equal] & e
+\end{tikzcd}
+\]
+Doesn't seem to work?
 \vskip 2em \hrule\vskip 2em
 \[
 \fdom = \begin{tikzcd}
