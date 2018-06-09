@@ -1760,6 +1760,30 @@ e \ar[r,equal] & e
 \end{tikzcd}
 \]
 Doesn't seem to work?
+
+\subsection{Trying Again From Scratch}
+
+Let's just stare at the definitions
+\begin{declbox}
+  $A^1_\phi :\Gamma_\phi \to \rtype$\\
+  $A^1_\tau : (g : \Gamma_\psi) \to A^1_\psi(g) \to A^1_\phi(\Gamma_\tau g)$
+\end{declbox}
+\begin{defnbox}
+  $A^1_\phi(g) = A_\delta(\Gamma_{\ltri \phi} g)$\\
+  $A^1_\tau(g, a) = A_{\iota}(\Gamma_{\ltri \tau} g, a)$
+\end{defnbox}
+My first guess for $M^1_f$ is $(g : \Gamma_{ff}) \to A^1_{ff}(g)$, which
+is $(g : \Gamma_{ff}) \to A_{de}(\Gamma_{\ltri ff} g)$, which does
+not appear attainable from $M_d$ or $M_e$. The thing I really want it to be
+is
+is something like
+\[M^1_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff}g)\]
+So I guess I could make up an abbreviation
+$A^\phi : \Gamma_\phi \to \rtype$ and have it mean
+$A^\phi(g) = A_\epsilon(\Gamma_{\rtri \phi} g)$, and
+this would let me write
+\[M^1_f : (g : \Gamma_{ff}) \to A^{ff}(g)\]
+
 \vskip 2em \hrule\vskip 2em
 \[
 \fdom = \begin{tikzcd}
@@ -1783,5 +1807,6 @@ ee \ar[r,"ef"'] & ed
 \]
 \[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
 \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+
 
 \end{document}
