@@ -2054,7 +2054,14 @@ went through that exercise successfully. And this signals that we do use
 $x$ negatively in creating the term $x^*$.
 
 Right, ok, the reason this has a chance of working is that it {\em internalizes} the
-anti-term judgment as an operation on types, so we can have a heterogeneous $A \to A^*$.\vskip 2em \hrule\vskip 2em
+anti-term judgment as an operation on types, so we can have a heterogeneous $A \to A^*$.
+
+A bit of wiggle room I notice I have is that I may only need to require
+\begin{thmbox}
+  $(g : \Gamma_{ff}) \to A_{ff}(g) = A^*_{ff}(\bar g)$
+\end{thmbox}
+Not sure, though, need to run through the end-calculation.
+\vskip 2em \hrule\vskip 2em
 {\bf Cheat Sheet: }
 \(\tau = \begin{tikzcd}
   \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\

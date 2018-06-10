@@ -28,3 +28,7 @@ Retreating to the simply-typed version to figure out dualization operations.
 = careful-dualization2.ltx
 
 After some thought, I think I have a more coherent way of organization dualization.
+
+= doubling-up.ltx
+
+Trying to include both 'polarities' of term variables.
