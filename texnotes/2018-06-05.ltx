@@ -1890,12 +1890,23 @@ and the end-condition becomes just
 \[ M^{\ltri f} = M^{\rtri f} \]
 Nice!
 
+This still requires defining somehow
+\begin{declbox}
+  $M_f : (g : \Gamma_{ff}) \to A^>_{ff}(g)$
+\end{declbox}
+and while I can do this in two asymmetric ways, i.e.
+\[M_f(g) = A^\fdom_>(g , M_d(\Gamma^\fdom g))\]
+\[M_f(g) = A^\fcod_>(g , M_e(\Gamma^\fcod g))\]
+I wish there was something better.
+
+
+
+
 \vskip 2em \hrule\vskip 2em
 \(\tau = \begin{tikzcd}
   \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
 \delta \ar[r,"\phi"'] & \epsilon
 \end{tikzcd}\)
-
 \[
 \fdom = \begin{tikzcd}
   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
