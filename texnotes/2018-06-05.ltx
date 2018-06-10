@@ -2061,33 +2061,48 @@ A bit of wiggle room I notice I have is that I may only need to require
   $(g : \Gamma_{ff}) \to A_{ff}(g) = A^*_{ff}(\bar g)$
 \end{thmbox}
 Not sure, though, need to run through the end-calculation.
-\vskip 2em \hrule\vskip 2em
-{\bf Cheat Sheet: }
-\(\tau = \begin{tikzcd}
-  \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
-\delta \ar[r,"\phi"'] & \epsilon
-\end{tikzcd}\)
+%% \vskip 2em \hrule\vskip 2em
+%% {\bf Cheat Sheet: }
+%% \(\tau = \begin{tikzcd}
+%%   \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
+%% \delta \ar[r,"\phi"'] & \epsilon
+%% \end{tikzcd}\)
+%% \[
+%% \fdom = \begin{tikzcd}
+%%   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
+%% dd \ar[r,equal] & dd
+%% \end{tikzcd}
+%% \qquad
+%% \fcod = \begin{tikzcd}
+%%   de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, "ef"']\\
+%% ee \ar[r,equal] & ee
+%% \end{tikzcd}\]
+%% \[\rtri\fdom = \begin{tikzcd}
+%%   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+%% dd \ar[r,"fd"'] & ed
+%% \end{tikzcd}
+%% \qquad
+%% \rtri\fcod = \begin{tikzcd}
+%%   de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
+%% ee \ar[r,"ef"'] & ed
+%% \end{tikzcd}
+%% \]
+%% \[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
+%% \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
+
+\subsection{Comments on Separate LaTeX development}
+
+I think I see what's going on with the proliferation of macros
+in \texttt{doubling-up.pdf}. Each type is like a dependent functor
+from $\T\sem \Delta$ to $\T$ of the metatheory's notion of $\rtype$.
+
+Like, for each $g : \Gamma_\psi$, I'm pretty sure we have the commutativity
 \[
-\fdom = \begin{tikzcd}
-  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
-dd \ar[r,equal] & dd
-\end{tikzcd}
-\qquad
-\fcod = \begin{tikzcd}
-  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, "ef"']\\
-ee \ar[r,equal] & ee
-\end{tikzcd}\]
-\[\rtri\fdom = \begin{tikzcd}
-  de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
-dd \ar[r,"fd"'] & ed
-\end{tikzcd}
-\qquad
-\rtri\fcod = \begin{tikzcd}
-  de \ar[d, "fe"'] \ar[r, "ff"] & ed\ar[from=d, equal]\\
-ee \ar[r,"ef"'] & ed
+\begin{tikzcd}
+  A^<_\psi( g) \ar[r, "{A^\psi(g)}"] \ar[d, "A^\tau_<(g)"']
+&  A^>_\psi( g) \ar[from=d, "A^\tau_>(g)"']\\
+  A^<_\phi(\Gamma^\tau g) \ar[r, "{A^\phi(\Gamma^\tau g)}"']
+&  A^>_\phi(\Gamma^\tau g)
 \end{tikzcd}
 \]
-\[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
-\to A_\epsilon(\Gamma_{\rtri\phi} g)\]
-
 \end{document}
