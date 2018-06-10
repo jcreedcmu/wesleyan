@@ -21,8 +21,8 @@
 \def\sp{\bullet}
 \def\ot{\leftarrow}
 \def\prequiv{\dashv\vdash}
-\def\fdom{\mathbf{d}f}
-\def\fcod{\mathbf{e}f}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
 \def\fidom{\mathbf{\bar d}f}
 \def\ficod{\mathbf{\bar e}f}
 
@@ -1332,8 +1332,8 @@ To make a term in general, for $\Delta ; \Gamma \prov M : A$
 I need for every object $d \in \ssem \Delta$ to make
 \[ M_d : (g : \Gamma_{dd}) \to A_{dd} \]
 such that
-\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d(\Gamma_{\fdom} g))
- \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e(\Gamma_{\fcod} g))\]
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d(\Gamma_\fdom g))
+ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e(\Gamma_\fcod g))\]
 So to make
 \[
 \erule
@@ -1349,17 +1349,17 @@ And observe that $x \not\in_- x$. We can check
    (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
   (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
 \[
- \to A_{fd}((\Gamma, x : A)_{\rtri \fdom} (g, a, a'), M_d((\Gamma, x : A)_{\fdom} (g, a, a')))
+ \to A_{fd}((\Gamma, x : A)_{\rtri \fdom} (g, a, a'), M_d((\Gamma, x : A)_\fdom (g, a, a')))
 \]
-\[ \equiv A_{ef}((\Gamma, x : A)_{\rtri\fcod} (g, a, a'),M_e((\Gamma, x : A)_{\fcod} (g, a, a')))\]
+\[ \equiv A_{ef}((\Gamma, x : A)_{\rtri\fcod} (g, a, a'),M_e((\Gamma, x : A)_\fcod (g, a, a')))\]
 i.e.
 \[
    (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
   (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
 \[
- \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d((\Gamma, x : A)_{\fdom} (g, a, a')))
+ \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d((\Gamma, x : A)_\fdom (g, a, a')))
 \]
-\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e((\Gamma, x : A)_{\fcod} (g, a, a')))\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e((\Gamma, x : A)_\fcod (g, a, a')))\]
 because the $A$ on the right doesn't depend on $x$, then using the definition
 \begin{defnbox}
   \((\Gamma, x : A)_{\tau}(g, a, a') = (\Gamma_{\tau} g, A_\iota(\Gamma_{\ltri\tau}g, a),
@@ -1447,26 +1447,26 @@ is validated by saying
 What's the dual end condition?
 Is it perhaps just
 \[
-(g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom} \bar g, M_d(\Gamma_{\fdom} \bar g))
- \equiv A_{ef}(\Gamma_{\rtri\fcod} \bar g,M_e(\Gamma_{\fcod} \bar g))\]
+(g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom} \bar g, M_d(\Gamma_\fdom \bar g))
+ \equiv A_{ef}(\Gamma_{\rtri\fcod} \bar g,M_e(\Gamma_\fcod \bar g))\]
 ? Because in this symmetric case, $g$ and $\bar g$ both have type $\Gamma_{ff}$.
 Oh, but this is compatible with specifically
 $ M_d : (g : \Gamma_{dd}) \to A_{dd}(\bar g) $
 because we'd look at the second argument to $A_{fd}$ and check that
-$M_d(\Gamma_{\fdom} \bar g) : A_{dd}(\Gamma_{\ltri fd} \Gamma_{\ltri \fdom} \bar g)$.
+$M_d(\Gamma_\fdom \bar g) : A_{dd}(\Gamma_{\ltri fd} \Gamma_{\ltri \fdom} \bar g)$.
 Oh, but wait, this is wrong: Actually
 
-\[ M_d(\Gamma_{\fdom} \bar g) : A_{dd}(\overline {\Gamma_{\fdom} \bar g}) =
-A_{dd}( {\Gamma_{\fdom}  g})\]
+\[ M_d(\Gamma_\fdom \bar g) : A_{dd}(\overline {\Gamma_\fdom \bar g}) =
+A_{dd}( {\Gamma_\fdom  g})\]
 So maybe what I want is
 \begin{thmbox}
 \(
-  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_{\fdom} \bar g))
-  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_{\fcod}  \bar g))
+  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_\fdom \bar g))
+  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_\fcod  \bar g))
 \)
 \end{thmbox}
 For then the condition is that
-\[ M_d(\Gamma_{\fdom} \bar g) : A_{dd}(\Gamma_{\ltri fd}\Gamma_{\rtri \fdom} \bar g) \]
+\[ M_d(\Gamma_\fdom \bar g) : A_{dd}(\Gamma_{\ltri fd}\Gamma_{\rtri \fdom} \bar g) \]
 and indeed $\fdom = \ltri fd \o \rtri \fdom$.
 
 So, ok, that's a definition of an anti-term. Two questions:
@@ -1594,8 +1594,8 @@ Does the end-condition become any nicer in this format?
 Was
 \begin{thmbox}
 \(
-  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_{\fdom}  g))
-  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_{\fcod}   g))
+  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_\fdom  g))
+  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_\fcod   g))
 \)
 \end{thmbox}
 We want to get from $dd$ to $ed$. That's the morphism
@@ -1605,8 +1605,8 @@ dd \ar[r,"fd"] \ar[d, "fd"'] & ed \ar[from=d, equal]\\
 \end{tikzcd}\]
 \begin{thmbox}
 \(
-  (g : \Gamma_{ff})  \to A_{\rtri fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_{\fdom}  g))
-  \equiv A_{\rtri ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_{\fcod}   g))
+  (g : \Gamma_{ff})  \to A_{\rtri fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_\fdom  g))
+  \equiv A_{\rtri ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_\fcod   g))
 \)
 \end{thmbox}
 Which is hard to tell that it even typechecks until I realize
@@ -1623,7 +1623,7 @@ that
 \[  = A_{\delta}(\Gamma_{\ltri \phi} \Gamma_{\phi' \gor \phi} g)\]
 \[  = A^1_{\phi}(\Gamma_{\phi' \gor \phi} g)\]
 
-So $M_d(\Gamma_{\fdom} g) : A_{dd}(\Gamma_{\fdom} g)$
+So $M_d(\Gamma_\fdom g) : A_{dd}(\Gamma_\fdom g)$
 but that's the same as $A_{ed}(\Gamma_{\rtri fd}\Gamma_{\rtri \fdom} g)$.
 or is it?
 \subsection{This is still a mess}
@@ -1647,8 +1647,8 @@ I could try to make either of
 \[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
 \[M'_f : (g : \Gamma_{ff}) \to A_{de}(\Gamma_{\ltri ff} g) \]
 by saying
-\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_{\fdom} g))\]
-\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_{\fcod} g))\]
+\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_\fdom g))\]
+\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_\fcod g))\]
 Oh, I see, these are in fact equal. But I can see that the {\em type}
 of $M'_f$ is $(g : \Gamma_{ff}) \to A^1_{ff}(g)$.
 
@@ -1710,8 +1710,8 @@ I could try to make either of
 \[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
 \[M'_f : (g : \Gamma_{ff}) \to A_{de}(\Gamma_{\ltri ff} g) \]
 by saying
-\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_{\fdom} g))\]
-\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_{\fcod} g))\]
+\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_\fdom g))\]
+\[M'_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_\fcod g))\]
 \end{quote}
 actually both of those have type
 \[ (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g) \]
@@ -1784,7 +1784,117 @@ $A^\phi(g) = A_\epsilon(\Gamma_{\rtri \phi} g)$, and
 this would let me write
 \[M^1_f : (g : \Gamma_{ff}) \to A^{ff}(g)\]
 
+\section{Reorganizing Explicitly Around Static vs. Dynamic}
+
+This is all just slightly fussy hair-splitting over notation, but I still
+want to get it right if it helps me do calculations more reliably.
+
+Let's write subscripts like $A_\delta$ for `static' types, and superscripts $A^\phi$
+for `dynamic' transport, so that I can resolve the ambiguity between $A_\phi$ and $A^\phi$.
+Also I think I want to talk about both the domain and codomain versions of $A_\phi$,
+so maybe they're $A_\phi^>$ and $A_\phi^<$.
+
+\begin{declbox}
+  $A_\phi^>, A_\phi^< : \Gamma_\phi \to \rtype$\\
+  $A_<^\tau : (g : \Gamma_\psi) \to A_\psi^<(g) \to A_\phi^<(\Gamma_\tau(g))$\\
+%  $A_>^\tau : (g : \Gamma_\psi) \to A_\psi^>(g) \to A_\phi^>(\Gamma_\tau(g))$\\
+\end{declbox}
+\begin{defnbox}
+  $A_\phi^<(g) = A_\delta(\Gamma_{\ltri \phi} g)$\\
+  $A_\phi^>(g) = A_\epsilon(\Gamma_{\rtri \phi} g)$\\
+  $A^\tau_<(g, a) = A_\iota(\Gamma_{\ltri \tau} g, a)$\\
+ % $A_\tau^>(g, a) = A_{\bar\omega}(\Gamma_{\rtri \tau} g, a)$\\
+\end{defnbox}
+
+A thing that I can feasibly generalize $M_d : (g : \Gamma_{dd}) \to A_{dd}$ to is
+\[M_f : (g : \Gamma_{ff}) \to A^>_{ff}(g)\]
+i.e.
+\[M_f : (g : \Gamma_{ff}) \to A_{ed}(\Gamma_{\rtri ff} g)\]
+because I can set either of
+\[M_f(g) = A_{fd}(\Gamma_{\rtri\fdom}g , M_d(\Gamma_\fdom g))\]
+\[M_f(g) = A_{ef}(\Gamma_{\rtri\fcod}g , M_e(\Gamma_\fcod g))\]
+So to compress these it seems like I want to make a definition something like
+\[ A^\tau_>(g, a) = A_\omega( \Gamma_{\rtri \tau} , a) \]
+but what type does that have? Is it
+\[ A_>^\tau : (g : \Gamma_\psi) \to A_\phi^>(\Gamma_\tau g) \to A_\psi^>(g) \]
+Let's try typechecking this definition.
+We know $\omega : \epsilon \to \epsilon'$ so
+\[A_\omega : (g : \Gamma_\omega) \to A_\epsilon(\Gamma_{\ltri \omega} g)
+\to A_{\epsilon'}(\Gamma_{\rtri \omega} g)\]
+\[A_\omega(\Gamma_{\rtri \tau} g) :  A_\epsilon(\Gamma_{\ltri \omega} \Gamma_{\rtri \tau} g)
+\to A_{\epsilon'}(\Gamma_{\rtri \omega} \Gamma_{\rtri \tau} g)\]
+To allow using $a$ as an argument requires
+\[\Gamma_{\ltri \omega} \Gamma_{\rtri \tau} g \equiv \Gamma_{\rtri \phi} \Gamma_{\tau} g\]
+But this holds. For the output type to be correct requires
+\[\Gamma_{\rtri \omega} \Gamma_{\rtri \tau} g = \Gamma_{\rtri \psi} g\]
+but this also holds.
+
+\subsection{What We Have}
+
+\begin{declbox}
+  $A_\phi^>, A_\phi^< : \Gamma_\phi \to \rtype$\\
+  $A_<^\tau : (g : \Gamma_\psi) \to A_\psi^<(g) \to A_\phi^<(\Gamma^\tau g)$\\
+  $A_>^\tau : (g : \Gamma_\psi) \to  A_\phi^>(\Gamma^\tau g) \to A_\psi^>(g) $
+%\\  $M_f : (g : \Gamma_{ff}) \to A^>_{ff}(g)$
+\end{declbox}
+\begin{defnbox}
+  $A_\phi^<(g) = A_\delta(\Gamma^{\ltri \phi} g)$\\
+  $A_\phi^>(g) = A_\epsilon(\Gamma^{\rtri \phi} g)$\\
+  $A^\tau_<(g, a) = A^\iota(\Gamma^{\ltri \tau} g, a)$\\
+  $A^\tau_>(g, a) = A^\omega(\Gamma^{\rtri \tau} g, a)$
+\end{defnbox}
+
+Now we observe that we can compress
+\[M_f(g) = A_{fd}(\Gamma^{\rtri\fdom}g , M_d(\Gamma^\fdom g))\]
+\[M_f(g) = A_{ef}(\Gamma^{\rtri\fcod}g , M_e(\Gamma^\fcod g))\]
+as
+\[M_f(g) = A^\fdom_>(g , M_d(\Gamma^\fdom g))\]
+\[M_f(g) = A^\fcod_>(g , M_e(\Gamma^\fcod g))\]
+and for this we need $M_d(\Gamma^\fdom g) : A_{dd}^>(\Gamma^\fdom g)$,
+which we have, great.
+
+Ok, suppose we have a situation like
+\[
+t =
+\begin{tikzcd}
+  d' \ar[d, "i"'] \ar[r, "s"] & e' \ar[from=d, "o"']\\
+d \ar[r,"f"'] & e
+\end{tikzcd}
+\qquad
+tt =
+\begin{tikzcd}
+  d'e' \ar[d, "io"'] \ar[r, "ss"] & e'd' \ar[from=d, "oi"']\\
+de \ar[r,"ff"'] & ed
+\end{tikzcd}
+\]
+Then I could talk about starting with a $g : \Gamma_{ss}$.
+I transport it to $\Gamma^{tt} g : \Gamma_{ff}$.
+Then I hand that off to $M_f : (g : \Gamma_{ff}) \to A^>_{ff}( g)$.
+So I have $M_f(\Gamma^{tt} g) : A^>_{ff}(\Gamma^{tt} g)$.
+Now I hope that I can $A$-transport it. I observe
+\[ A^{tt}_> : (g : \Gamma_{ss}) \to A^>_{ff}(\Gamma^{tt} g) \to A^>_{ss}(g) \]
+Yeah, perfect! I get out $A^{tt}_>(g, M_f(\Gamma^{tt} g)) : A^>_{ss}(g)$.
+
+I observe now that actually $\fdom = (\ltri f)(\ltri f)$ and
+$\fcod = (\rtri f)(\rtri f)$.
+
+I think now I can define
+\begin{declbox}
+$M^t : (g : \Gamma_{ss}) \to A^>_{ss}(g)$
+\end{declbox}
+\begin{defnbox}
+$M^t(g) = A^{tt}_>(g, M_f(\Gamma^{tt} g))$
+\end{defnbox}
+
+and the end-condition becomes
+
+\[(g : \Gamma_{ss}) \to  M^{\ltri f}(g) = M^{\rtri f}(g) \]
 \vskip 2em \hrule\vskip 2em
+\(\tau = \begin{tikzcd}
+  \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
+\delta \ar[r,"\phi"'] & \epsilon
+\end{tikzcd}\)
+
 \[
 \fdom = \begin{tikzcd}
   de \ar[d, "df"'] \ar[r, "ff"] & ed\ar[from=d, "fd"']\\
@@ -1807,6 +1917,5 @@ ee \ar[r,"ef"'] & ed
 \]
 \[A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma_{\ltri\phi} g)
 \to A_\epsilon(\Gamma_{\rtri\phi} g)\]
-
 
 \end{document}
