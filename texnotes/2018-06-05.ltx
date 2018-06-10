@@ -1901,8 +1901,161 @@ I wish there was something better.
 
 
 
+\subsection{Returning to Anti-Terms}
+Anyway, so I know a term is something like
+$M_f : (g : \Gamma_{ff}) \to A^>_{ff}(g)$ satisfying $M^{\ltri f} = M^{\rtri f}$,
+so I think an anti-term is a
+$M_f : (g : \Gamma_{ff}) \to A^>_{ff}(\bar g)$ satisfying... the same equation, I think?
+If $M$ is an anti-term, then let's think about what type
+$M^t(g) = A^{tt}_>(g, M_f(\Gamma^{tt} g))$ has. $M_f(\Gamma^{tt} g)$ has type
+$A^>_{ff}(\Gamma^{tt} \bar g)$. Oh, but
+since
+\[ A_>^\tau : (g : \Gamma_\psi) \to  A_\phi^>(\Gamma^\tau g) \to A_\psi^>(g) \]
+we have
+\[A_>^{tt} : (g : \Gamma_{ss}) \to  A_{ff}^>(\Gamma^{tt} g) \to A_{ss}^>(g)\]
+So maybe in the anti-term case we need to define
+\[M^t(g) = A^{tt}_>(\bar g, M_f(\Gamma^{tt} g))\]
+So then the typing is
+\[M^t : (g : \Gamma_{ss}) \to A^>_{ss}(\bar g)\]
+and we can nonetheless require $M^{\ltri f} = M^{\rtri f}$.
 
-\vskip 2em \hrule\vskip 2em
+\subsection{Checking the anti-variable rule}
+
+\[
+\erule
+{}
+{\Delta;\Gamma, x^* : A \prov x - A}
+\]
+
+The object part is
+\[x^*_d :  (g : \Gamma_{dd})(a : A_{dd}(g))(a' : A_{dd}(\bar g)) \to A_{dd}(\bar g)\]
+is
+$x^*_d(g, a, a')  = a'$.
+We want to check
+\begin{thmbox}
+\(
+  (g : \Gamma_{ff})  \to A_{fd}(\Gamma_{\rtri \fdom}  g, M_d(\Gamma_\fdom \bar g))
+  \equiv A_{ef}(\Gamma_{\rtri\fcod}  g,M_e(\Gamma_\fcod  \bar g))
+\)
+\end{thmbox}
+which becomes
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}((\Gamma, x : A)_{\rtri \fdom} (g, a, a'), M_d((\Gamma, x : A)_\fdom (\bar g, a', a)))
+\]
+\[ \equiv A_{ef}((\Gamma, x : A)_{\rtri\fcod} (g, a, a'),M_e((\Gamma, x : A)_\fcod (\bar g, a', a)))\]
+i.e.
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}( \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d((\Gamma, x : A)_\fdom (\bar g, a', a)))
+\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e((\Gamma, x : A)_\fcod (\bar g, a', a)))\]
+because the $A$ on the right doesn't depend on $x$, then using the definition
+\begin{defnbox}
+  \((\Gamma, x : A)_{\tau}(g, a, a') = (\Gamma_{\tau} g, A_\iota(\Gamma_{\ltri\tau}g, a),
+A_{\bar\omega} (\Gamma_{\omega}^! \Gamma_{\rtri \tau} g, a'))\)
+\end{defnbox}
+this is
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g, M_d(\Gamma_{\tau} g, A_{df}(\Gamma_{\ltri\fdom }\bar g, a'),
+A_{df} ( \Gamma_{\ltri \fdom}  g, a)))
+\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g,M_e(\Gamma_{\tau} g, A_{fe}(\Gamma_{\ltri \fcod}\bar g, a'),
+A_{fe} ( \Gamma_{\ltri \fcod}  g, a)))\]
+and plugging in the definition of $M = x^*$ we get
+\[
+   (g : \Gamma_{ff}) (a : A_{de}(\Gamma_{\ltri ff} g))
+  (a' : A_{de}(\ \Gamma_{\ltri ff} \bar g  )) \]
+\[
+ \to A_{fd}(\Gamma_{\rtri \fdom} g,  A_{df}(\Gamma_{\ltri\fdom }g, a))\]
+\[ \equiv A_{ef}(\Gamma_{\rtri\fcod} g, A_{fe}(\Gamma_{\ltri \fcod}g, a)) \]
+and now all of the dualizations have cancelled out
+and we finish by functoriality just like before.
+
+\subsection{Is there any anti-lambda thing that works?}
+
+At this point I know for any $\Gamma \prov B : \rtype$ that both
+of
+\[\Delta;\Gamma, x : B \prov x : B\]
+\[\Delta;\Gamma, x : B \prov x^* : B\]
+hold, and I know $x\not\in_- x$ and $x\not\in_+ x^*$.
+Can I prove any of
+\[\Delta;\Gamma \prov \lambda x . x : B \to B\]
+\[\Delta;\Gamma \prov \lambda x . x^* : B \to B\]
+\[\Delta;\Gamma \prov \lambda x . x - B \to B\]
+\[\Delta;\Gamma \prov \lambda x . x^* - B \to B\]
+?
+I think first of all that the use of $x^*$ is proably essential, since
+recall that staring at
+\[
+\erule
+{\Delta; \Gamma, x : B \prov M : B}
+{\Delta; \Gamma \prov \lambda x . M : (x : B) \to B}
+\]
+means we have
+\[M_d : (g : \Gamma_{dd}) (a : B_{dd}(g)) (a' : B_{dd}(\bar g)) \to B_{dd}(g) \]
+and we need to make
+\[(\lambda x . M)_d : (g : \Gamma_{dd}) \to ((x : B) \to B)_{dd}(g)\]
+i.e.
+\[(\lambda x . M)_d : (g : \Gamma_{dd})  (a' : B_{dd}(\bar g)) \to B_{dd}(g)\]
+so we really need to add a condition
+\[
+\erule
+{\Delta; \Gamma, x : A \prov M : B \qquad x \not \in_+ M}
+{\Delta; \Gamma \prov \lambda x . M : (x : A) \to B}
+\]
+
+But now what happens if I ask for an anti-lambda?
+I want to make
+\[(\lambda x . M)_d : (g : \Gamma_{dd})  (a : B_{dd}( g)) \to B_{dd}(\bar g)\]
+so I want an anti-term
+\[
+\erule
+{\Delta; \Gamma, x : A \prov M - B \qquad x \not \in_- M}
+{\Delta; \Gamma \prov \lambda x . M - (x : A) \to B}
+\]
+and this is just as problematic, because now I can't use $x$ positively in the anti-term
+$M$.
+
+\subsection{Back To Thinking About the $*$-swap}
+
+The other avenue that might be open now is that maybe
+I have enough semantics stuff to back the $*$ operation that I was failing to justify
+back in \texttt{2018-05-31.ltx} ``trying small examples'' for example.
+
+I want to have a syntactic rule like
+\[
+\erule
+{}
+{\Delta\prov \Gamma, x : A \prov x^* : A^* }
+\]
+
+Where $x^*$ is a real actual {\em term}, not an anti-term, and $A^*$ is a modified
+version of the type $A$. And we should have that $x$ occurs negatively in $x^*$.
+Think about the fact that to be a type in a context $\Gamma$ is to be
+for all $\phi$, a map $\Gamma_\phi \to \rtype$. I expect the property
+\begin{thmbox}
+  $(g : \Gamma_{\phi}) \to A_\phi(g) = A^*_{\bar \phi}(\bar g)$
+\end{thmbox}
+and then I expect the provable identity functions to be
+$ A \to A^*$.
+
+Can we validate this rule? At the object level, we need to build
+\[x^*_d : (g : (\Gamma, x : A)_{dd}) \to A^*_{dd}(g) = A^*_{dd}(\bar g)\]
+So this does look like the same job as building an anti-term, and we already
+went through that exercise successfully. And this signals that we do use
+$x$ negatively in creating the term $x^*$.
+
+Right, ok, the reason this has a chance of working is that it {\em internalizes} the
+anti-term judgment as an operation on types, so we can have a heterogeneous $A \to A^*$.\vskip 2em \hrule\vskip 2em
+{\bf Cheat Sheet: }
 \(\tau = \begin{tikzcd}
   \delta' \ar[d, "\iota"'] \ar[r, "\psi"] & \epsilon'\ar[from=d, "\omega"']\\
 \delta \ar[r,"\phi"'] & \epsilon
