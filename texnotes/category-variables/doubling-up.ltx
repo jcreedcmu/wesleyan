@@ -76,8 +76,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
 
-\def\ll{\mathsf{L}}
-\def\rr{\mathsf{R}}
+\def\ll{{<}}
+\def\rr{{>}}
 \def\cc{\mathsf{c}}
 \def\dd{\mathsf{d}}
 \def\ii{{\mathbb I}}
@@ -511,10 +511,10 @@ squares showing how $\psi$ factors through $\phi$:
   \delta \ar[r, "\phi"']& \epsilon
 \end{tikzcd}\]
 We can of course write a $\tau$ as just the pair $(\tau_1, \tau_2)$ that determines it.
-To extract the parts of a morphism $\tau$, we define $\ll \tau = \tau_1$ (`left') and $\rr \tau = \tau_2$
-(`right')
+To extract the parts of a morphism $\tau$, we define $\ll \tau = \tau_1$
+ and $\rr \tau = \tau_2$
 and $\cc \tau = \phi$ (`codomain') and $\dd \tau = \psi$ (`domain').
-We also write $\cc \phi$ and $\dd \phi$ for the (co)domain of a morphism $\phi \in \sem \Delta$.
+We also write $\ll \phi$ and $\rr \phi$ for the (co)domain of a morphism $\phi \in \sem \Delta$.
 
 Here's a summary of the symbols we'll use for typical members of the above categories:
 \[\begin{tabular}{rccl}
@@ -670,10 +670,10 @@ The second is some convenience `macros' for the semantics of types.
   $A_>^\tau :  (g : \Gamma_\psi) \to A^>_\phi(\Gamma^\tau g) \to A^>_\psi(g) $
 \end{declbox}
 \begin{defnbox}
-  $A_\phi^<(g) = A_\delta(\Gamma^{\ltri \phi} g)$\\
-  $A_\phi^>(g) = A_\epsilon(\Gamma^{\rtri \phi} g)$\\
-  $A^\tau_<(g, a) = A^\iota(\Gamma^{\ltri \tau} g, a)$\\
-  $A^\tau_>(g, a) = A^\omega(\Gamma^{\rtri \tau} g, a)$
+  $A_\phi^<(g) = A_{\ll \phi}(\Gamma^{\ltri \phi} g)$\\
+  $A_\phi^>(g) = A_{\rr \phi}(\Gamma^{\rtri \phi} g)$\\
+  $A^\tau_<(g, a) = A^{\ll \tau}(\Gamma^{\ltri \tau} g, a)$\\
+  $A^\tau_>(g, a) = A^{\rr \tau}(\Gamma^{\rtri \tau} g, a)$
 \end{defnbox}
 
 Finally, the semantics of contexts are given by
