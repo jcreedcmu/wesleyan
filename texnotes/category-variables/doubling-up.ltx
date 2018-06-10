@@ -209,6 +209,7 @@ Let there be some syntax
 &&&$\celse \C[t, t] \celse \cdots$\\
   Terms&$M$&$::=$&$x \celse x^* \celse  \lambda x . M \celse M\ M \celse \pair M M \celse \pi_1 M \celse \pi_2 M$\\
 &&&$\celse \Lambda \alpha . M \celse M[t] \celse \bpack(M, M) \celse \bunpack(M, \alpha.x.M)$\\
+Substitutions&$\theta$&$::=$&$\cdot \celse \theta[M/x]$\\
 \\
   Signatures&$\Sigma$&$::=$&$\cdot \celse \Sigma, a : K \celse \Sigma, c : A $\\
   Kinds&$K$&$::=$&$\rtype \celse (x : A) \to K \celse (\alpha : \C) \to K$\\
@@ -234,7 +235,8 @@ These are the typing judgments; the usual suspects, except we have a $\Delta$ ou
 \begin{declbox}
   $\Delta \prov  \Gamma \rctx $\\
   $\Delta ; \Gamma \prov A : \rtype$\\
-  $\Delta ; \Gamma \prov M : A$
+  $\Delta ; \Gamma \prov M : A$\\
+  $\Delta ; \Gamma' \prov \theta : \Gamma$
 \end{declbox}
 There are also some judgments about variable occurrences that I need to define:
 \begin{declbox}
@@ -246,6 +248,23 @@ We read $x \in^+ A$ (resp. $\in^-$) as `$x$
 actually require any occurrences of $x$.
 It might have been more clear to use the notation
  $\not\in^-$, $\not\in^+$ instead of $\in^+$, $\in^-$.
+
+\subsection{Operations}
+We define an `inverting' substitution $\theta_\Gamma$. Its intended type
+signature is
+\begin{declbox}
+ $\Gamma \prov  \theta_\Gamma : \Gamma$
+\end{declbox}
+but we won't be able to prove this until after we give the typing rules,
+which use this definition.
+
+The definition of $\theta_\Gamma$ is:
+\begin{defnbox}
+$  \theta_\cdot = \cdot$\\
+$\theta_{\Gamma, x : A} = \theta_\Gamma [x^* / x]$
+\end{defnbox}
+When  $\Delta ; \Gamma\prov A : \rtype$, we write $\theta_\Gamma A$ as simply $A^*$.
+This is used in one of the two variable rules below.
 
 \subsection{Rules}
 \subsubsection{Context Formation}
@@ -447,6 +466,17 @@ and another $\coe_{\alpha \beta h}$ that expresses that
 {\Delta, \alpha : \C^\op, \beta : \C ; \Gamma, h + \C[\alpha,\beta] \prov \coe_{\alpha \beta h}(\gamma.M) : A}
 \]
 
+\subsubsection{Substitutions}
+\[
+\erule
+{}
+{\Delta;\Gamma \prov \cdot : \cdot}
+\qquad
+\erule
+{\Delta;\Gamma \prov \theta : \Gamma'\qquad \Delta ; \Gamma \prov M : \theta A}
+{\Delta;\Gamma \prov \theta[M/x] : \Gamma', x : A}
+\]
+
 \subsubsection{Category Terms}
 \[
 \erule
@@ -473,15 +503,31 @@ We consider strictly equal, i.e. treat as reductions,
 \subsection{Results}
 
 
+
 \begin{theorem}[Substitution]\ %
   \begin{itemize}
   \item If $\Delta ; \Gamma \prov M : A$ and $\Delta ; \Gamma, x : A \prov J$, then
 $\Delta ; \Gamma \prov [M/x]J$.
+  \item If $\Delta ; \Gamma' \prov \theta : \Gamma$ and $\Delta ; \Gamma \prov J$, then
+$\Delta ; \Gamma' \prov \theta J$.
   \item If $\Delta \prov t : \C$ and $\Delta, \alpha : \C \prov J$, then
 $\Delta \prov [t/\alpha]J$.
   \end{itemize}
 \end{theorem}
 
+
+We can now check
+\begin{thmbox}
+ $\Gamma \prov  \theta_\Gamma : \Gamma$
+\end{thmbox}
+by observing
+\[
+\erule
+{
+\[ i.h. \justifies \Delta;\Gamma \prov \theta_\Gamma : \Gamma\]
+\[ \justifies \Delta;\Gamma, x : A \prov x^* : \theta_\Gamma A \]}
+{\Delta;\Gamma, x : A \prov \theta_\Gamma[x^*/x] : \Gamma, x : A}
+\]
 
 \section{Semantics}
 \subsection{Types}
