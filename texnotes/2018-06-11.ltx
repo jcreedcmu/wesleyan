@@ -556,4 +556,51 @@ least they're equal at their common transport to $\Gamma^A_s$, i.e.
 \begin{thmbox}
 $\Gamma^{\ltri t}_A(M_{d'd}(i)) = \Gamma^{\rtri t}_A(M_{ee'}(o))$
 \end{thmbox}
+\section{Starting Over With Simple Examples}
+
+I still fail to understand what it really means to have an indexed
+type in this setting. Suppose we have $\Delta \prov A : \rtype$,
+which means $A_{\delta} : \rtype$ and $A_\phi : A_\delta \to A_\epsilon$.
+Suppose $\Delta \prov M : A$, which means $M_d : A_{dd}$ and
+$A_{fd} M_d = A_{ef} M_e : A_{ed}$.
+
+Now what could it mean to have $\Delta; x : A \prov B : \rtype$?
+Surely at least it means for every $M : A$ as above, that we get a type.
+The other way we can see $M$ is as $M_\delta : [\delta] \to A_{\bar\delta}$
+so that $M_{de}(f) : A_{ed}$. So maybe  one of
+\[B^-_\delta : ([\delta] \to A_{\bar \delta}) \to \rtype\]
+\[B^+_\delta : ([\bar\delta] \to A_{ \delta}) \to \rtype\]
+In either case, if I have the interpretation of $B$, and I have the interpretation of
+$M$, I can make a type.
+
+Can we define transport for $B_{\delta}$? Depending on whether I think of it as a $+$
+or $-$ assumption, I'd want
+\[B^-_{\phi} : (a : [\delta] \to A_{\bar \delta}) \to B_\delta(A_{\bar\phi}(a)) \to B_\epsilon(a)\]
+\[B^+_{\phi} : (a : [\bar\delta] \to A_{ \delta}) \to B_\delta(a) \to B_\epsilon(A_\phi(a))\]
+So we somehow have to define
+\[A_\phi : ([\bar\delta] \to A_\delta)  \to ([\bar\epsilon] \to A_\epsilon) \]
+But this is backwards!
+
+So once again, apparently the only notion of term that I can coherently index
+over looks more like $[\delta] \to A_\delta$, which {\em isn't} what pops naturally
+out of (co)ends, which scares me a bit.
+
+Let's proceed anyway. The static semantics for $x + A \prov B : \rtype$ is
+\[B_\phi : (a : [\delta] \to A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
+
+Bah. What kind of twisted-arrow transport can I expect at the type $[\delta] \to A_\delta$?
+Back at $[\bar \delta] \to A_{\delta}$ I could take $t : s \to f$ and
+go from $\Gamma_f^A$ to $\Gamma_s^A$. Let's conjecture that if I instead define
+\[\Gamma^A_f = (g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g) \]
+that I can go from $\Gamma^A_s \to \Gamma^A_f$ in
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+i.e. can I make
+\[ ((z : \Gamma_{ss}) \to A_{d'e'}(\Gamma^{\ltri ss} z)) \to
+((g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g)) \]
+No, this is a nonstarter! I can't get from $\Gamma_{ff}$ to $\Gamma_{ss}$.
 \end{document}
