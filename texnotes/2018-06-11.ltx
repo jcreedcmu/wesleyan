@@ -627,4 +627,213 @@ to $[t/\alpha]A$. Unless... $t$ supplies a morphism somehow?
 
 Suppose I have a $\int_{c\in \C} A_{\delta c c} (g)$. I want to get
 a $A_{\delta t t}(g)$. Ugh, maybe this isn't a problem?
+
+\subsection{Trying to Connect Ends and Global Sections}
+Let me clear my mind, and start with
+\begin{declbox}
+  $ \Gamma_{\phi} :   \rtype $\\
+  $ A_{\delta} :  \Gamma_\delta \to \rtype $\\
+  $ M_{\delta} : (g : \Gamma_\delta) \to A_{\delta}(g) $\\
+  $ \Gamma^{\tau} :   \Gamma_\psi \to \Gamma_\phi $\\
+  $ A^{\phi} :  (g : \Gamma_\phi) \to A_{\delta}(\Gamma^{\ltri\phi}g) $
+$\to A_{\epsilon}(\Gamma^{\rtri\phi}g)$
+\end{declbox}
+\begin{thmbox}
+$ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)$
+\end{thmbox}
+\subsubsection{Formation}
+
+I want to address the $\forall$ formation rule first.
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
+\]
+Object part is
+\begin{defnbox}
+  $((\alpha : \C) \to A)_\delta(g) = \int_{c \in \C} A_{\delta cc}(g) $
+\end{defnbox}
+and morphism part is
+\[ ((\alpha : \C) \to A)^\phi : (g : \Gamma_\phi)
+\to \int_{c \in \C} A_{\delta cc}(\Gamma^{\ltri\phi} g)
+\to \int_{c \in \C} A_{\epsilon cc}(\Gamma^{\rtri\phi} g) \]
+\begin{defnbox}
+  $ ((\alpha : \C) \to A)^\phi(g, E) = \lambda c . A^{\phi cc}(g, E(c))$
+\end{defnbox}
+\subsubsection{Intro}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov M : A
+}
+{\Delta ; \Gamma \prov \Lambda \alpha . M :  (\alpha : \C) \to A }
+\]
+And I can observe
+\[ (\Lambda \alpha . M)_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
+\[ M_{\delta c c'} : (g : \Gamma_\delta) \to  A_{\delta cc'}(g)\]
+So that, not needing to take advantage of the full asymmetric structure of $M$,
+I can nonetheless say, contractingly,
+\begin{defnbox}
+  $ (\Lambda \alpha . M)_{\delta}(g) = \lambda c . M_{\delta c c}(g)$
+\end{defnbox}
+And the property of being a global section is strictly stronger than being an end;
+the end condition is satisfied a fortiori.
+
+\subsubsection{Elim}
+Okay, everything is riding on the elim rule, then.
+The thing that gives me hope is I feel a lot of wiggle room in the semantics
+for $\Delta \prov t : \C$.
+\[\erule
+{
+\Delta; \Gamma \prov M : (\alpha : \C) \to A \qquad \Delta \prov t : \C
+}
+{\Delta ; \Gamma \prov M[t] :  [t/\alpha] A}
+\]
+What we have is
+\[ M_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
+and what we need is
+\[ (M[t])_\delta : (g : \Gamma_\delta) \to ([t/\alpha] A)_{\delta }(g)\]
+I'm going to imagine that the semantics of $t$ is somehow a pair
+of functors and a natural transformation between them. I posit that
+it gives me an object
+$t^<_\delta$, an object $t^>_\delta$, and a morphism $t_\delta : t^<_\delta \to t^>_\delta$.
+
+I'm going to assume that
+\begin{thmbox}
+$([t/\alpha]A)_\delta(g) = A_{\delta t^>_\delta t^<_\delta}(g)$
+\end{thmbox}
+And now, by construction, it's easy as pie to achieve
+\[(g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g) \to A_{\delta t^>_\delta t^<_\delta}(g)\]
+for that's exactly what the end is set up to enable. We can either take the end
+$E :\int_{c\in\C} A_{\delta c c}(g)$ and instantiate it at $t^<_\delta$ to get
+$A_{\delta t^<_\delta t^<_\delta}(g)$ and forward-transport to the goal,
+or instantiate to get $A_{\delta t^>_\delta t^>_\delta}(g)$ and reverse-transport to
+the goal. The end-condition tells us these are the same.
+
+So I can notate this as
+\begin{defnbox}
+  $ (M[t])_\delta(g) = M_\delta(g)[t_\delta] $
+\end{defnbox}
+Checking the functoriality of this definition should give us some additional
+constraints on $t^<_\delta, t^>_\delta, t_\delta$. Perhaps $t$ is a functor into
+$\T \rtype$ or something.
+
+Ok, let's go. Functoriality is generally
+\[ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+So what we know is
+\[ (g:\Gamma_\phi) \to ((a : \C) \to A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+
+and what we want is
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, (M[t])_\delta(\Gamma^{\ltri \phi} g)) = (M[t])_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+And... ah, I still need a theorem about transport and category-term substitution.
+Let's try to guess something appropriate.
+
+We know we're going to have to make
+\[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
+\to ([t/\alpha] A)_\delta(\Gamma^{\ltri \phi} g)
+\to ([t/\alpha] A)_\epsilon(\Gamma^{\rtri \phi} g) \]
+which is
+\[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
+\to A_{\delta t^>_\delta t^<_\delta}(\Gamma^{\ltri \phi} g)
+\to A_{\epsilon t^>_\epsilon t^<_\epsilon}(\Gamma^{\rtri \phi} g) \]
+So this makes me assume that there's got to be a diagram like
+\[
+\begin{tikzcd}
+t^<_\epsilon \ar[r, "t_\epsilon"]\ar[d, "t_\phi^<"']& t^>_\epsilon\ar[from=d, "t_\phi^>"']\\
+t^<_\delta \ar[r, "t_\delta"']& t^>_\delta
+\end{tikzcd}
+\]
+Where $t_\phi = (t_\phi^<, t_\phi^>)$ is the twisted morphism $t_\epsilon \to t_\delta$.
+Now we can assert
+\begin{thmbox}
+  $([t/\alpha] A)^\phi(g, a) = A^{\phi t_\phi^> t_\phi^<}(g, a) $
+\end{thmbox}
+
+Going way back, we recall that what we {\bf have} is
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+and what we {\bf want} is
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+\[ (g:\Gamma_\phi) \to A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+This is actually looking really good! We just have to establish the property
+that `applying an end to a morphism' has. It would suffice to finish the proof
+of functoriality to show
+\[
+(\lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
+=
+A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+by, respectively, the hypothesized and required equality of these to
+$M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]$.
+
+Ok, let's back up and try to assert this property generally.
+I'm pretty sure I can abstract out the $A^{\phi}$ and reduce this to something like
+\[
+(\lambda c . A^{ cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+but $A^{cc}$ is the identity so
+\[
+(\lambda c . M_\delta(\Gamma^{\ltri \phi} g)[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+
+then get abstract out the $M_\delta(\Gamma^{\ltri \phi})$
+and just think about
+\[
+(\lambda c .  M[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M[t_\delta])
+\]
+and then the contexts are relatively unimportant so
+\[
+(\lambda c . M[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} ( M[t_\delta])
+\]
+and then suppose we have a general
+ square of morphisms like
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+so we can rename to
+\[
+(\lambda c .  M[\rid_c])[s] = A^{ o i} (M[f])
+\]
+but we've just $\eta$-expanded $M$, so this is really
+\[
+M[s] = A^{ o i} (M[f])
+\]
+
+Ok, this is maybe small enough to look at and reinfer what the types are.
+We have some kind of functor $A : \C \x \C^\op \to \rtype$.
+We have an inhabitant of the end of $A$, $M_d : A_{dd}$. What we mean
+by $M[f]$ for $f : d \to e$ is either of $A^{fd} M_d = A^{ef} M_e : A_{ed}$.
+If we hit that wth $A^{oi}$ we get $A^{of,i} M_d = A^{o,fi} M_e : A_{e'd'}$.
+
+Ok, on the other side, we have
+$A^{ofi,} M_{d'} = A^{,ofi} M_{e'} : A_{e'd'}$. This means I just need to show
+equivalently
+either of
+\[A^{ofi,} M_{d'} = A^{of,i} M_d : A_{e'd'} \]
+\[A^{,ofi} M_{e'} = A^{o,fi} M_e : A_{e'd'} \]
+but these follow from hitting the known equations
+\[A^{i,} M_{d'} = A^{,i} M_d : A_{dd'} \]
+\[A^{,o} M_{e'} = A^{o,} M_e : A_{e'e} \]
+with $A^{of,}$ or $A^{,fi}$, respectively.
+
+So I think that's enough to see that functoriality holds!
+
 \end{document}
