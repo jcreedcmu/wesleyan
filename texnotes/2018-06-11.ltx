@@ -603,4 +603,28 @@ i.e. can I make
 \[ ((z : \Gamma_{ss}) \to A_{d'e'}(\Gamma^{\ltri ss} z)) \to
 ((g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g)) \]
 No, this is a nonstarter! I can't get from $\Gamma_{ff}$ to $\Gamma_{ss}$.
+
+\subsection{A Low-Probability Option}
+
+What happens if I simply demand that $M_\delta$ exists as a global section, so that
+every transport $A_\phi(M_\delta) = M_\epsilon$? This seems too strong, but maybe
+worth thinking about it to see where the bubble goes. In this case,
+simply
+\[B_\phi : (a : A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
+as before, the only difference being that $M_\delta : A_\delta$ gives us something to
+semantically substitute when we need to. Now the main thing I'd worry about
+is how categorical quantifiers look.
+
+A type in context is still $A_\delta : \Gamma_\delta \to \rtype$
+and
+\[A^\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}g)
+ \to A_\epsilon(\Gamma^{\rtri \phi}g)\]
+and a term in general is $M_\delta : (g : \Gamma_\delta) \to A_\delta$.
+So what's $\forall \alpha . A$ look like? Statically
+\[ (( \alpha : \C) \to  A)_\delta(g) = \int_{c \in \C} A_{\delta c c}(g)\]
+and then I expect problems to arise when I try to go from $\forall \alpha . A$
+to $[t/\alpha]A$. Unless... $t$ supplies a morphism somehow?
+
+Suppose I have a $\int_{c\in \C} A_{\delta c c} (g)$. I want to get
+a $A_{\delta t t}(g)$. Ugh, maybe this isn't a problem?
 \end{document}
