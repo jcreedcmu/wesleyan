@@ -138,8 +138,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ltri{{\lhd}}
 \def\rtri{{\rhd}}
 \def\tri{\rhd}
-\def\ll{\mathsf{L}}
-\def\rr{\mathsf{R}}
+\def\ll{{<}}
+\def\rr{{>}}
 \def\cc{\mathsf{c}}
 \def\dd{\mathsf{d}}
 \def\o{\circ}
@@ -439,5 +439,121 @@ $A_{e'e}$, then $e'f$-transporting to $A_{e'd}$
 \end{enumerate}
 and demanding that those are equal. But I don't know how to fill in the $?$s if I abandon
 the twisted-arrow diagram.
+\subsection{Realizing a Bureaucractic Mistake}
+Of, should the typing terms actually be
+\[M^*_{\delta} :  [\delta] \to (g : \Gamma_{\delta})  \to A_{\bar \delta}(\bar g)\]
+after all? Because given a morphism $f : d \to e$ we go from $\Gamma_{de}$
+to $\Gamma_{dd}$ and $\Gamma_{ee}$, thence to $A_{dd}$ and $A_{ee}$, thence
+to $A_{ed}$.
 
+Let's just say as churn-insurance that
+\[A^+_{\delta} : \Gamma_\delta \to \rtype \qquad A^-_{\delta} : \Gamma_\delta \to \rtype\]
+\[A^+_{\delta}(g) = [\delta] \to A_\delta(g)
+\qquad
+A^-_{\delta}(g) = [\bar\delta] \to A_\delta(g)\]
+for $[dd']$ meaning $d \to d'$. Then I'm saying
+\[M^*_\delta: (g : \Gamma_\delta) \to A^-_{\bar \delta}(g)\]
+\[M_{de}(g, f) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+Oh, whoops, that's not right at all. In the dependent setting, I need
+to start with $\Gamma_{ff}$, not
+$\Gamma_{de}$. Hmm. So maybe I need the dependent type
+\[ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(?)\]
+But what goes in the $?$, huh?
+
+Wait, what common type are the two comparands
+in
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+?
+We have
+$A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}(g)) $
+$ \to A_\epsilon(\Gamma^{\rtri \phi}(g))$ so... oh, right, $\rtri ff$
+is a twisted arrow $ff \to ed$. So at least
+
+\begin{declbox}
+  $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
+\end{declbox}
+\begin{defnbox}
+  $M^+_{de}(f, g) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))$
+\end{defnbox}
+is a sensible thing to say. This is a much more reasonable expression
+of what {\em I can already do} with term semantics than my previous
+attempts, but it has the disadvantage that I can't easily pull out
+the $(g) \to A(g)$ part as a separate type.
+
+Nonetheless, let me investigate whether I can define
+ a semantic substitution coherence theorem
+if I use $A^+_\delta$ in the definition of contexts. That was the one that
+was oriented the right way around, wasn't it? Remember that if I have
+$\phi : \delta \to\epsilon$ which is $f : d \to e$ and $f' : e' \to d'$,
+then I can revere transport $h : [\epsilon] = e \to e'$ to $h^\phi : [\delta]$, right.
+
+This is the direction for which I'm able to define transport
+\[A_+^\phi : (g : \Gamma_\phi) \to A^+_\delta(\Gamma^{\ltri \phi}(g))
+ \to A^+_\epsilon(\Gamma^{\rtri \phi}(g))\]
+\[A_+^\phi(g, a, h) = A_\phi(g, a(h^\phi))\]
+and then contexts go like
+\[ (\Gamma, x + A)^+_\phi  = (g : \Gamma_\phi) \x A^+_{<\phi}(\Gamma^{\ltri \phi} g) \]
+\[ (\Gamma, x + A)_+^\tau(g, a)  = (\Gamma^\tau g ,  A_+^{<\tau}(\Gamma^{\ltri \tau} g, a)) \]
+I guess those more or less work transparently since $A^\phi_+$ satisfies the same
+interface as $A^\phi$. Probably need to prove functoriality for it though.
+
+I'm still having a hard time reconciling the context $A_\delta$ with
+the term $A_{\bar\delta}$. Let's put that off and see if I can
+generalize the end-condition at least, though.
+Let $o, f, i$ in
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+be given, and set $s = ofi$, and $\delta = d'd$ and $\epsilon = ee'$.
+I think I want to reconcile  $M_\delta(i)$ and $M_\epsilon(o)$.
+Ehhh but if I have
+\begin{declbox}
+  $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
+\end{declbox}
+Then I probably would want to ask for $\Gamma_{ss}$ to start with, and I don't know
+how to get $\Gamma_{ii}$ from that.
+
+Perhaps can I make the definition
+\begin{defnbox}
+  $\Gamma^A_f =  (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g)$
+\end{defnbox}
+and show that if I have a twisted arrow $t : s \to f$, then I can go
+\begin{declbox}
+  $ \Gamma^t_A :  \Gamma^A_f \to \Gamma^A_s $
+\end{declbox}
+i.e.
+  \[ \Gamma^t_A :  ( (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g))
+  \to
+  ( (z : \Gamma_{ss}) \to A_{e'd'}(\Gamma^{\rtri ss} z)) \]
+?
+Oh, it actually looks like I can.
+\begin{defnbox}
+  $ \Gamma^t_A(q, z) =  A^{oi}(\Gamma^{\rtri tt} z , q(\Gamma^{tt} z)) $
+\end{defnbox}
+We plug in $\Gamma^{tt} z$ for $g$.
+Now $q(\Gamma^{tt} z)$ has type $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$.
+There's a `$\phi$-coercion of $t$' call it $\dot t$, which
+is just $(\ll t, \rr t)$, forgetting about its domain and codomain.
+In this case $\dot t = oi$.
+We want to take this $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$
+data and $A^{oi}$ transport it.
+Recall
+\[ A^{oi} : (g : \Gamma_{oi}) \to A_{ed}(\Gamma^{\ltri oi} g)
+\to A_{e'd'}(\Gamma^{\rtri oi} g) \]
+And this is fine because $\ltri oi \o \rtri tt = \rtri ff \o tt$,
+and $\rtri ss = \rtri oi \o \rtri tt$.
+
+Ok, and I see that this is actually very closely related
+to the $A^{tt}_>$ that I defined before, great.
+
+Anyway I {\em think} that the end-condition now looks like saying
+that
+if you have $M_{d'd}(i) : \Gamma^A_i$ and $M_{ee'}(o) : \Gamma^A_o$, then at
+least they're equal at their common transport to $\Gamma^A_s$, i.e.
+\begin{thmbox}
+$\Gamma^{\ltri t}_A(M_{d'd}(i)) = \Gamma^{\rtri t}_A(M_{ee'}(o))$
+\end{thmbox}
 \end{document}
