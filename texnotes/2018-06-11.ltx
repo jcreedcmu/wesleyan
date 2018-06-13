@@ -130,8 +130,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
 \def\G{\mathbf{G}}
-\def\S{\mathbf{S}}
-\def\D{\mathbf{D}}
+\def\D{\mathbb{D}}
 \def\E{\mathbf{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
@@ -995,4 +994,37 @@ M_d(B^\beta_{kd}(f, a, z)) =  A^{kd} a \]
 \[A_{ke}M_e(B^\beta_{ek}(f, a, z)) = A^{kk} a \qquad
 A_{dk}M_d(B^\beta_{kd}(f, a, z)) =  A^{kk} a \]
 Huh, seems like it works.
+
+\vfil\eject
+\subsection{Summing Up}
+\def\mod{\S}
+Assuming I haven't screwed up somewhere, the theorem looks like
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv  \mod A \]
+\end{thmbox}
+
+Where $F : \mod A$ is kind of like a functor; its object
+part is
+\[ F_f : \{f : c \to d\} (a : A_{dc}) \to \U \]
+and its morphism part is
+\[ F_{io} : \{o : b \to c\}\{i : d \to e\} (a : A_{dc}) \to F_f(a) \to F_{ifo}(A^{io}a)\]
+
+Oh, I never checked that the $B$ I defined actually preserved
+composition and identities. Checking that would surely impose the
+appropriate similar constraints on the morphism part of $F$ here.
+
+Actually, wait, can I define what $\mod A$ is using categories of elements or something?
+There is a forgetful-like functor $\Phi : \T \C \to \D \C$, isn't there?
+
+Let's see... if $\C$ is a category and $F : \C \to \rset$, the category of elements
+$\int_\C$ of $F$ has as objects pairs $(c, x)$ with $x \in F(c)$. So $F_f$ is like the object
+part of a functor
+\[ \left(\int^{\T \C} A \o \Phi\right) \to \rset\]
+Right, ok, so perhaps
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv  \left(\int^{\T \C} A \o \Phi\right) \to \rset \]
+\end{thmbox}
+
 \end{document}
