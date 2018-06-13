@@ -977,8 +977,22 @@ from $\beta$ an inhabitant of an end.
 \[M^\beta_d :  (f : d \to d)(a : A_{dd})(z : \beta(f, a)) \to A_{dd}\]
 Ah, but this will just be the projection.
 \[M_d(\beta, f, a, b) = a\]
-Let's check that $M^\beta$ is an end. I start with $h : B_{ed}^\beta \to A_{d e}$.
+Let's check that $M^\beta$ is an end. Let $k : e \to d$
+be given. I start with $M_d$ and $M_e$.
 I can transport it to either of
-\[A_{fe} \o h \o B_{ef}^\beta : B_{ee}^\beta \to A_{ee}\]
-\[A_{df} \o h \o B_{fd}^\beta: B_{dd}^\beta \to A_{dd}\]
+\[A_{ke} \o M_e \o B_{ek}^\beta : B_{ed}^\beta \to A_{de}\]
+\[A_{dk} \o M_d \o B_{kd}^\beta: B_{ed}^\beta \to A_{de}\]
+and these should turn out to be equal.
+
+Let $b : B^\beta_{ed} = (f : d \to e)(a : A_{ed}) \x \beta(f, a)$ be given.
+Then
+\[B^\beta_{ek}(f, a, z) = \langle  f k,  A^{ek} a, \beta^{ek} z \rangle\qquad
+B^\beta_{kd}(f, a, z) = \langle k f ,  A^{kd} a, \beta^{kd} z \rangle\]
+%
+\[M_e(B^\beta_{ek}(f, a, z)) = A^{ek} a \qquad
+M_d(B^\beta_{kd}(f, a, z)) =  A^{kd} a \]
+%
+\[A_{ke}M_e(B^\beta_{ek}(f, a, z)) = A^{kk} a \qquad
+A_{dk}M_d(B^\beta_{kd}(f, a, z)) =  A^{kk} a \]
+Huh, seems like it works.
 \end{document}
