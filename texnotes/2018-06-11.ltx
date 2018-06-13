@@ -836,4 +836,149 @@ with $A^{of,}$ or $A^{,fi}$, respectively.
 
 So I think that's enough to see that functoriality holds!
 
+\subsection{But wait what's the problem with this}
+
+It doesn't seem practical to ask for a sequent
+\[\Delta \prov t : \C\]
+to give morphisms in the twisted arrow category. Recall that there is not
+necessarily a functor even
+\[ \C \to \T \C\]
+because if we take objects to identities, we would have to take morphisms
+to {\em isomorphisms}.
+
+\section{What Next?}
+
+The essential problem seems to be that terms are defined symmetrically
+and types are defined asymmetrically. Or to put it another way,
+terms are defined on $\ssem \Delta$ and types are defined on $\sem \Delta$.
+However, we know that a term-with-a-morphism is enough to give fully
+asymmetric data.
+
+Is there some way of stating what {\em is} true about substitution on types
+in terms of this?
+Like, if I have $\Delta; \Gamma \prov M : A$,
+I have $M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$. If I have
+$\Delta; \Gamma, x : A \prov B : \rtype$, then in general I have
+\[(g : \Gamma_\delta)  (a : A_\delta(g)) (a' : A_{\bar \delta}(\bar g)) \to B_\delta(g, a, a')\]
+which, actually, come to think of it,
+ is an even more onerous thing that requires morphisms in both $[\bar\delta]$ {\em and}
+$[\delta]$ if $B$ used both $a$ and $a'$.
+
+One idea I don't like the notion of trying to pursue is asking what
+happens if $A_\delta$ only depends on, like, half of $\delta$.
+
+\subsection{What About the Usual Way of Modelling Dependent Types}
+
+Consider the simply-typed case, whose semantics I think I understand.
+What's the situation look like when I have two types
+$\Delta \prov A, B : \rtype$ and a map $\Delta; x : B \prov  A$.
+The witnesses for that judgment are inhabitants of the end
+\[\int_{d \in \ssem \Delta} B_{dd} \to A_{dd} \]
+That is, for every $d \in \ssem \Delta$ we have to have
+\[M_d : B_{dd} \to A_{dd}\]
+and for every $f : d \to e$, we have
+\[ (b : B_{de}) \to A^{fd}(M_d(B^{df} b)) = A^{ef}(M_e(B^{fe} b)) : A_{ed}\]
+Trying to Grothendieck this around in my head, this means every
+element of $A_{dd}$ {\em has} a preimage set $B_{dd}$, but also general
+$B_{de}$s sort of exist and float around and determine the end property.
+Weird!
+
+Let's spell out the usual theorem and see if we can generalize it appropriately.
+\begin{thmbox}
+Let a set $A$ be given. The {\em choice} of a set $B$ and a function $B \to A$ is the same thing as
+  a function from $A$ into set. That is,
+\[ (B : \U) \x (B \to A) \equiv (A \to \U) \]
+\end{thmbox}
+The left-to-right part of the proof is
+\[\lambda \pair B \pi. \lambda a . (b : B) \x (\pi b = a)\]
+The right-to-left part of the proof is
+\[\lambda \beta . \langle (a : A) \x \beta(a), \pi_1 \rangle\]
+
+Okay, so the corresponding theorem is going to have the shape:
+Let a functor $A : \C \x \C^\op \to \rtype$ be given.
+The choice of $B$ a functor $\C \x \C^\op \to \rtype$
+and a term $M \in \int_{\delta} B_{\bar\delta} \to A_\delta$ is
+the same thing as {\em something else goes here}
+
+\subsection{A Guess}
+
+I'm going to try to go with the same intuition that an end is mostly about
+being canonically a function from {\em morphisms} to elements.
+I conjecture that the {\em something else goes here} is:
+\begin{quote}
+  A choice of a set for each morphism $f : d \to e \in \C$ and each element
+  $a \in A_{ed}$, subject to {\em some coherence conditions}
+\end{quote}
+
+\def\db#1{\widetilde{#1}}
+Let me write $\db \C$ for $\C \x \C^\op \to \rtype$. The conjecture looks like
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv (\beta : (f : d \to e) (a : A_{ed}) \to \U) \x P(\beta)\]
+\end{thmbox}
+
+Ok, good, let's write down the first component of the forward
+direction. We'll then try to do the backward direction, and hopefully that
+will help us figure out what $P$ should be, then we can return to trying to prove
+it holds for this particular $\beta$.
+
+Building $\beta$ means taking the inverse image under $M$, using $f$ to make
+this inverse image meaningful.
+  \[\beta : (B : \db\C) \x (M : B \to A) \to  (f : d \to e) (a : A_{ed}) \to \U\]
+\[\beta(B, M, f, a) = \{ b : B_{de} \st A^{ef}(M_e(B^{fe}(b))) = a \} \]
+We could of course have symmetrically used $A^{fd}(M_d(B^{df}(b)))$.
+
+In the reverse direction, the intuition is that we're building the
+total space of the fibered object. Maybe we can just existentially
+quantify over $f$, the same way as we do over $a$. Therefore we define
+\[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
+\[B(\beta, d, e) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
+And I may have gotten the order of the arguments $d$ and $e$ backwards.
+Let's try to see how $B$ is functorial, and maybe that will sort that out.
+
+Suppose we have a $\phi : de \to d'e'$, which is to say, $i : d \to d'$ and $o : e' \to e$.
+ We should be able to traverse
+\[
+((f : d\to e)(a : A_{ed}) \x \beta(f, a))
+\to
+((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
+\]
+Yeah, that looks like I got things backwards. Let's try
+
+\[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
+\[B(\beta, e, d) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
+so we have a morphism $\phi : ed \to e'd'$, which means $i : e \to e'$ and $o : d' \to d$.
+Now we can attempt
+\[
+B(\beta, i, o) : ((f : d\to e)(a : A_{ed}) \x \beta(f, a))
+\to
+((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
+\]
+\[
+B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \textcolor{red}{?} \rangle
+\]
+Ok, this gap means we need some kind of transport from
+$\beta(f, a)$ to $\beta(ifo, A^{io} a)$. Toss this in the bag of stuff that is $P(\beta)$.
+We have at the `object level' that
+$\beta$ is a thing taking a morphism $f : d\to e$ and a $a : A_{ed}$ to a type,
+but we also need at the `morphism level' that a twisted morphism $t$
+from a {\em smaller} $f$ to a {\em bigger} $ifo$ lets us do
+\[\beta^{t} : \beta_f(a) \to \beta_s(A^{io} a)\]
+Ok, but great, if I had such transport, $B$ would be well-typed. I'd write
+\[
+B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \beta^{io} z \rangle
+\]
+
+There's
+still another part of the reverse direction, though. I need to build
+from $\beta$ an inhabitant of an end.
+
+\[M^\beta_d : B(\beta, d, d) \to A_{dd}\]
+\[M^\beta_d :  (f : d \to d)(a : A_{dd})(z : \beta(f, a)) \to A_{dd}\]
+Ah, but this will just be the projection.
+\[M_d(\beta, f, a, b) = a\]
+Let's check that $M^\beta$ is an end. I start with $h : B_{ed}^\beta \to A_{d e}$.
+I can transport it to either of
+\[A_{fe} \o h \o B_{ef}^\beta : B_{ee}^\beta \to A_{ee}\]
+\[A_{df} \o h \o B_{fd}^\beta: B_{dd}^\beta \to A_{dd}\]
 \end{document}
