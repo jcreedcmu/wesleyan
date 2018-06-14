@@ -1040,4 +1040,158 @@ and then the element $M_d : A_{dd}$, and that gives me a type.
 
 No... Now I'm not sure that's right. Shouldn't I be getting out a $\db \C$ or something?
 Not just a set? Suppose I have $cd \in \D \C$... No, I'm just lost.
+\subsection{The More Challenging Alternative}
+It's even more higher-order, but I could try starting with
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv (\forall de.(d \to e) \to A_{ed}) \to \db \C\]
+\end{thmbox}
+which is really sort of just saying
+  \[(B : \db\C) \x (M : B \to A) \equiv (\int_{c\in \C}  A_{cc}) \to \db \C\]
+which, if I {\em could} prove that, I'd definitely be in a good spot.
+That makes me worried it's too strong. But it seems to be just
+about exactly the statement that is the diagnostic of whether what I want to be
+true, is true.
+
+Let's try anyway.
+\[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
+Now $M$ itself is the end $\int_{c} B_{cc} \to A_{cc}$ isn't it? Actually, it's
+not totally clear. I could choose for it to be that, and I could choose
+it to be, like, a natural transformation of functors in $\db \C$. But the
+end intepretation seems more appropriate for this setting. The $\mathsf{fwd}$
+direction is supposed be about taking the $a$ and generating the
+set that is its inverse image under $M$. So something like
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st M(b) = a \}\]
+is what I'm aiming for. This has a morphism gap, for I can only pull out
+$M$'s functional nature by providing a morphism. So I could quantify; maybe
+one of
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c' \to c . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c' \to c . M_f(b) = a_f \}\]
+might work. But I'm not sure I have the $c$s and $c'$s around correctly.
+
+If indeed $f : c' \to c$, then $a_f : A_{cc'}$, and $M_f : B_{c'c} \to A_{cc'}$.
+ So really I want to guess something closer to
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \forall f : c' \to c . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \exists f : c' \to c . M_f(b) = a_f \}\]
+But I still might have the order of $c, c'$ wrong in the arguments to $\mathsf{fwd}$ itself.
+I need it to be functorial. Suppose I have $i : c \to d$ and $o : d' \to c'$. I have to
+be able to get
+from $\mathsf{fwd}_{cc'}$ to $\mathsf{fwd}_{dd'}$. Since $\mathsf{fwd}$ is made up of $B$s
+that have a certain property, I think I want to flip things around so that it's
+more like
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}\]
+Ok, let's now investigate both of these to see if either or both can be made
+functorial.
+\subsubsection{Existential}
+We have $\{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}$
+and $i : c \to d$ and $o : d' \to c'$ and we want to make
+\[\{ b \in B_{dd'} \st \exists h : d \to d' . M_h(b) = a_h \}\]
+The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
+if we know that $M_f(b) = a_f$ for {\em some} $f : c \to c'$, can we conclude
+that $M_h(B^{io} b) = a_h$ for some $h : d \to d'$? Unfortunately,
+there seems to be no way to build
+$d \to d'$ out of the zigzag $d' \to c' \leftarrow c \to d$.
+
+\subsubsection{Universal}
+Ok, so I think the universal quantifier has to be the correct way to do things.
+
+We have $\{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}$
+and $i : c \to d$ and $o : d' \to c'$ and we want to make
+\[\{ b \in B_{dd'} \st \forall h : d \to d' . M_h(b) = a_h \}\]
+The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
+if we know that $M_f(b) = a_f$ for {\em any} $f : c \to c'$, can we conclude
+that $M_h(B^{io} b) = a_h$ for any $h : d \to d'$? Well, $ohi : c \to c'$, so we know
+that $M_{ohi}(b) = a_{ohi}$.
+
+We're trying to establish now
+\[\begin{prooftree}
+  M_{ohi}(b) = a_{ohi}
+\justifies
+M_h(B^{io} b) = a_h
+\end{prooftree}\]
+which seems very difficult; it seems oriented backwards.
+
+\subsection{Just Looking at the Diagonal?}
+
+I'm not immediately constrained at the moment to use all of $B$.
+It might be that I only need to capture elements on $B$'s diagonal,
+and that that somehow suffices.
+
+I could try defining something like
+\[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cc} \st \forall f : c \to d . A^{fc} M_c(b) = A^{fc} a_c \} \]
+No, this doesn't seem sufficiently different.
+\subsection{Interpreting $M$ as a natural transformation?}
+If $M : B \to A$ is a natural transformation $M_{cd} : B_{cd} \to A_{cd}$, then maybe
+we could do
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \forall f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \exists f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
+but that feels very wrong to use $f$ only on one side of the equation.
+
+\subsection{Pushing the Bubble Elsewhere?}
+
+Let's suppose that $M : B \to A$ is an end over $\C^\op$
+in the sense that such that for every $f : c \to d$, we get a function
+$B_{dc} \to A_{cd}$. Bah, no, does that even make sense with respect
+to what $B$ and $A$ are as types?
+
+\section{Deeply Confused}
+
+Let's take a step back and think about what I'm trying to do. Even
+saying in a very literal-minded way that the semantics of $\Delta ; x : A \prov B : \rtype$
+should be
+\[ \left ( \int_{d \in \ssem \Delta}  A_{dd} \right ) \to \db \C \]
+seems slightly wrong, because I would think that the meaning of $B_{cc'}$
+{\em at} particular values of $c$ and $c'$ would have to do with the value
+of the index at $c$ or $c'$, not having to do with, globally, the ability to make
+a $A_{dd}$ for {\em every} $d$.
+
+I can try interposing a conjunction or disjunction or something, which
+is sort of like the increasingly common move I've been making of
+interposing a quantifier for an impedance mismatch I don't otherwise
+know how to treat. That is, saying that the meaning of $\Delta ; x : A \prov B : \rtype$
+is something close to something in the family
+\[ (c : \C)(c' : \C^\op) \to A_{cc} \to A_{c'c'} \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to A_{cc'} \to A_{c'c} \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to (A_{cc'} + A_{c'c}) \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to (A_{cc} + A_{c'c'}) \to \rtype \]
+
+\subsection{Compressing}
+Would it help at all for faster calculating
+just to be able to state the conditions on the `morphism form' of
+the end condition?
+
+Suppose I have a functor $F : \C^\op \x\C \to \rset$. The end $\int F$ is
+defined as the set of maps $c \mapsto F_{cc}$ such that for any $f : c \to d$ the common
+transport to $F_{cd}$ is equal. I want to say that the end is the set of natural
+transformations
+$\hom_\C \to F$ such that {\em something something}.
+
+Say we have an element $e$ in the end. The way we construct $\tau (e) : \hom_\C \to F$
+Given $c$ and $d$, we take $f : c \to d$ to $F_{cf} e_c = F_{fd} e_d : F_{cd}$.
+Given some morphisms $\iota : b \to c$ and $\omega : d \to e$, We observe naturality
+\[
+\begin{tikzcd}
+  {f \in [c,d]} \ar[r]\ar[d]& F^{,f} e_c \in F_{cd}\ar[d]\\
+  {\omega f\iota \in [b,e]} \ar[r]& F^{\iota\omega} F^{,f} e_c \in  F_{be}
+\end{tikzcd}
+\]
+Because $F^{\iota,\omega f} e_c = F^{,\omega f \iota} e_b$ because
+$F^{\iota,} e_c = F^{, \iota} e_b$.
+
+Okay, given a natural transformation
+$\eta : \hom_\C \to F$, and given an object $c \in \C$, we create $F_{cc}$
+by just doing $\eta_c(\rid_c)$. Check that the end condition is satisfied.
+If we take $\eta_c(\rid_c)$ and transport it, we get $F_{cf}\eta_{cc}(\rid_c) : F_{cd}$.
+If we take $\eta_d(\rid_d)$ and transport it, we get $F_{fd}\eta_{dd}(\rid_d) : F_{cd}$.
+By naturality of $\eta$, we have
+\[
+\begin{tikzcd}
+ & {[c,c]} \ar[r, "\eta_{cc}"]\ar[d, "f \o "']&  F_{cc}\ar[d, "F^{cf}"]\\
+1\ar[ur, bend left, "\rid_c"]\ar[r, "f"]\ar[dr, bend right, "\rid_d"']&  {[c,d]} \ar[r, "\eta_{cd}"']&  F_{cd}\\
+ & {[d,d]} \ar[r, "\eta_{dd}"']\ar[u, " \o f"]&  F_{dd}\ar[u, "F^{fd}"']
+\end{tikzcd}
+\]
+So yeah I guess naturality sufficies. I thought it was more than that.
 \end{document}
