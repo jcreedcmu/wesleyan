@@ -130,7 +130,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\C{\mathbf{C}}
 \def\G{\mathbf{G}}
-\def\D{\mathbb{D}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
 \def\E{\mathbf{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
@@ -1015,7 +1016,7 @@ composition and identities. Checking that would surely impose the
 appropriate similar constraints on the morphism part of $F$ here.
 
 Actually, wait, can I define what $\mod A$ is using categories of elements or something?
-There is a forgetful-like functor $\Phi : \T \C \to \D \C$, isn't there?
+There is a forgetful-like functor $\Phi : \T \C \to \DD \C$, isn't there?
 
 Let's see... if $\C$ is a category and $F : \C \to \rset$, the category of elements
 $\int_\C$ of $F$ has as objects pairs $(c, x)$ with $x \in F(c)$. So $F_f$ is like the object
@@ -1039,7 +1040,7 @@ I can {\em choose} the object $\rid_{d}$ of $\T \C$,
 and then the element $M_d : A_{dd}$, and that gives me a type.
 
 No... Now I'm not sure that's right. Shouldn't I be getting out a $\db \C$ or something?
-Not just a set? Suppose I have $cd \in \D \C$... No, I'm just lost.
+Not just a set? Suppose I have $cd \in \DD \C$... No, I'm just lost.
 \subsection{The More Challenging Alternative}
 It's even more higher-order, but I could try starting with
 \begin{thmbox}
@@ -1203,4 +1204,91 @@ $\hom_{\Delta} \to A : \Delta^\op \x \Delta \to \rset$. Clearly $\hom_\Delta$ is
 that makes it appropriate as a representation of the empty context?
 
 What's the interpretation of the context comma even for nondependent types?
+
+\subsection{An Adjunction}
+
+The category $\rcat$ is as usual, but say $\rcat_2$ is the category
+whose objects are categories, and whose morphisms $\C \to \D$ are
+actually functors $\C^\op \x \C \to \D$. Oh, is this just a co-kleisli
+category? We can lift $\C^\op \x \C \to \D$ to $\C^\op \x \C \to \D \x \D^\op$
+by op-and-swap, right. The comonadic $\epsilon$ is the obvious
+$\C^\op \x \C \to \C$, and the $\delta$ we can get by
+staring at
+\[\C^\op \x \C \to (\C^\op \x \C)^\op \x (\C^\op \x \C)\]
+and realizing if we have both sides of the coin, we have everything.
+
+With slightly more generality, suppose $\C$ is a category with
+binary products, and an involutive endofunctor
+$* : \C \to \C$ that preserves the products. Then the functor
+$c \mapsto c \x c^*$ is a comonad. Maybe I don't even need that $c^* = c$,
+just a map $c\to c^{**}$. Oh, and $*$ could merely laxly preserve products.
+Suppose I have a natural $\sigma_{ab} : a^* \x b^* \to (a \x b)^* $,
+and $\iota_c : c \to c^{**}$. Then I can define the comonadic
+$\epsilon$ like
+\[\epsilon_c : c^* \x c \to (c^* \x c)^* \x (c^* \x c) = \pair {\alpha_c} {\rid_{c^* \x c}}\]
+where
+\[
+\begin{tikzcd}
+  c^* \x c \ar[d, "c^* \x \iota_c"']\ar[r, "\alpha"] & (c^* \x c)^*\\
+c^* \x c^{**} \ar[r, "\sim"'] & c^{**} \x c^* \ar[u, "\sigma_{cc}"']
+\end{tikzcd}
+\]
+and then we want to check the comonad laws. Let's do associativity first.
+If we stare at
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \x \epsilon_c"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\epsilon_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^* \x (c^* \x c)^* \x (c^* \x c)
+\end{tikzcd}
+\]
+we can think about either the first or second projection of the output. The second is
+
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, " \epsilon_c \o \pi_2"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, equal]
+ &   (c^* \x c)^* \x (c^* \x c)
+\end{tikzcd}
+\]
+which is satisfied. The first is
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \o \pi_1"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^*
+\end{tikzcd}
+\]
+or
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\alpha_c"]
+& (c^* \x c)^*  \ar[d, "\epsilon_c^* "]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^*
+\end{tikzcd}
+\]
+Let's name $\tilde\sigma$ for $\sigma \o {\sim}$. We now have
+
+\[
+\begin{tikzcd}
+Dc
+\ar[d, "\epsilon_c"']\ar[r, "c^* \x \iota_c"]
+& \tilde D c^* \ar[r]
+& (Dc)^*  \ar[d, "\epsilon_c^* "]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "{(c^* \x c)^* \x \iota_{c^* \x c}}"']
+ &  (c^* \x c)^* \x (c^* \x c)^{**} \ar[r, "\sigma_{c^* \x c,c^* \x c}"]
+ &  DDc
+\end{tikzcd}
+\]
+writing $Dc$ for $c^* \x c$.
+Ah, bah, this is a mess. Some requirements on $\iota$ and $\sigma$
+surely work, though. I can come back to this.
 \end{document}
