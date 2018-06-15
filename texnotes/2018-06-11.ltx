@@ -207,1090 +207,1090 @@ boxrule=0pt,boxsep=0pt,breakable}
    arrow style=tikz,
    diagrams={>=stealth}}
 
-%% \section{A Total Glaring Obvious Terrible Problem}
+\section{A Total Glaring Obvious Terrible Problem}
 
-%% Substitution doesn't make sense semantically!
+Substitution doesn't make sense semantically!
 
-%% If I have $\Delta  \prov M : A$ then I have, for any $d$,
-%% \[ M_d :  A_{dd} \]
-%% But if I have $\Delta , x : A \prov B : \rtype$, then I'm supposed
-%% to have, for any $\delta$,
-%% \[ B_{\delta} : A_{\delta} \to \rtype \]
-%% But how do I interpret the expression $([M/x]B)_\delta$? I don't know
-%% how to take the general object $\delta \in \ssem\Delta$
-%% and make something of $M$ with it.
+If I have $\Delta  \prov M : A$ then I have, for any $d$,
+\[ M_d :  A_{dd} \]
+But if I have $\Delta , x : A \prov B : \rtype$, then I'm supposed
+to have, for any $\delta$,
+\[ B_{\delta} : A_{\delta} \to \rtype \]
+But how do I interpret the expression $([M/x]B)_\delta$? I don't know
+how to take the general object $\delta \in \ssem\Delta$
+and make something of $M$ with it.
 
-%% The shape of the first solution that occurs to me is to change the interpretation
-%% of contexts $\Gamma$ to replace $(\cdots, x : A)_\delta = \cdots, A_{\delta}$
-%% with something more like $(\cdots, x : A)_\delta = \cdots, [\delta] \to A_{\delta}$
-%% where we define $[ed]$ is the set of morphisms $d \to e \in \ssem \Delta$.
-%% This is because the end-condition on terms means that there actually is a canonical
-%% way of defining
-%% $M_\delta : [\delta] \to A_\delta$
-%% for a $\Delta \prov M : A$.
+The shape of the first solution that occurs to me is to change the interpretation
+of contexts $\Gamma$ to replace $(\cdots, x : A)_\delta = \cdots, A_{\delta}$
+with something more like $(\cdots, x : A)_\delta = \cdots, [\delta] \to A_{\delta}$
+where we define $[ed]$ is the set of morphisms $d \to e \in \ssem \Delta$.
+This is because the end-condition on terms means that there actually is a canonical
+way of defining
+$M_\delta : [\delta] \to A_\delta$
+for a $\Delta \prov M : A$.
 
-%% Ok, that sounds nice, but what else do I have to set up to make that work?
-%% I suspect the end-property still translates to some other coherence
-%% properties that $M_\delta$ needs to have with respect to transport.
-%% Like: suppose we have
+Ok, that sounds nice, but what else do I have to set up to make that work?
+I suspect the end-property still translates to some other coherence
+properties that $M_\delta$ needs to have with respect to transport.
+Like: suppose we have
+\[
+\begin{tikzcd}
+c \ar[r, "h"] & d \ar[r, "f"] & e
+\end{tikzcd}
+\]
+and we stare at
+\[
+\begin{tikzcd}
+  A_{cc} \ar[dr]
+  &[-2em]&[-2em] A_{dd} \ar[dl]\ar[dr]
+  &[-2em]&[-2em] A_{ee} \ar[dl]\\
+  & A_{dc}\ar[dr]
+  && A_{ed} \ar[dl]\\
+&& A_{ec}
+\end{tikzcd}
+\]
+Oh, this starts to resemble a bit of twisted-arrow-category stuff
+again, fantastic.
+%% So $M_{dc} : [dc] \to A_{dc}$. For example, $M_{dc}(h) : A_{dc}$.
+%% Also $M_{ed} : [ed] \to A_{ed}$, and $M_{ed}(f) : A_{ed}$.
+For what is transport on $A^+ : [\delta] \to A_\delta$?
+We had $A_\phi : A_\delta \to A_\epsilon$, so
+\begin{declbox}
+  $A_\phi^+ :  ([\delta] \to A_\delta) \to ([\epsilon] \to A_\epsilon)$
+\end{declbox}
+%Ok, what is $[\phi]$, for a $\phi : d'e' \to de$? It's a square
+Or if we name the parts of  $\phi$ as $i o : d'e' \to de$ and stare at
+\[
+% t =
+\begin{tikzcd}
+d' \ar[from=r, "f"']\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[from=r]& e \\
+\end{tikzcd}
+\]
+then we can define {\em backwards} transport?
+\begin{declbox}
+  $A_{io}^+ : (a : [de] \to A_{de}) \to ([d'e'] \to A_{d'e'})$
+\end{declbox}
+\begin{defnbox}
+  $A_{io}^+( a, f) = A_{io}( a(i \o f \o o))$
+\end{defnbox}
+No, this doesn't work. None of the arrows are lining up correctly. What's wrong?
+
+
+Let's go over it again. If I have a morphism $f : d \to e\in \ssem \Delta$,
+ and a term $M$, I can canonically get a value in $A_{ed}$.
+I either take $M_{dd}$ and transport $fd$, or $M_{ee}$ and transport $ef$.
+So I want to talk about $M_f : [\delta] \to A_\delta$ where $[\delta]$ is defined
+as the contravariant hom: $[ed]$ is $d \to e$.
+
+What data is needed to go from $[\delta] \to A_\delta$ to $[\epsilon] \to A_\epsilon$?
+Surely something should work. Suppose $\delta = dd'$ and $\epsilon = ee'$.
+If we have a $[\epsilon] = e' \to e$ and we want to be able to make
+a $[\delta] = d' \to d$, we need
+\[
+% t =
+\begin{tikzcd}
+d' \ar[r]\ar[d, "i"']& d\ar[from=d, "o"']\\
+e' \ar[r, "f"']& e \\
+\end{tikzcd}
+\]
+which is really uncomfortable and weird. I seem to need a morphism
+$\phi : \delta \to \epsilon$ to tell me how to actually do the
+transport $A_\delta \to A_\epsilon$, but another map $\epsilon \to
+\delta$ to tell me how to adapt $[\epsilon]$ into $[\delta]$.
+This seems totally wrong.
+
+\subsection{What Happens if I Ignore This}
+Let's try to define what contexts might mean, anyway.
+
+I'm going to go back to thinking about $\Gamma, x + A$ because it's less total
+typing.
+Before I had
+%\[ A^\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma^{\ltri \phi} g) \to A_{\epsilon}(\Gamma^{\rtri \phi} g) \]
+\[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri \phi} g) \]
+%\[ (g : \Gamma_\psi) \x A_{\delta'}(\Gamma^{\ltri \psi} g) \to (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri \phi} g) \]
+\[ (\Gamma, x + A)^\tau(g, a) = (\Gamma^\tau g, A^\iota(\Gamma^{\ltri \tau}, a)) \]
+Now I think it's going to be more like
+\[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x ([\delta] \to A_\delta(\Gamma^{\ltri \phi} g)) \]
+and then we'll need
+\[ (\Gamma, x + A)^\tau : (g' : \Gamma_\psi) (a : [\delta'] \to A_{\delta'}(\Gamma^{\ltri \psi} g'))\to (g : \Gamma_\phi) \x [\delta] \to A_\delta(\Gamma^{\ltri \phi} g) \]
+with $\tau$ being
+\[
+\begin{tikzcd}
+\delta' \ar[r, "\psi"]\ar[d, "\iota"']& \epsilon'\ar[from=d, "\omega"']\\
+\delta \ar[r, "\phi"']& \epsilon
+\end{tikzcd}
+\]
+As it is, I seem stuck. I don't think I can get from $[\delta]$ to $[\delta']$ with $\iota$
+Suppose $\delta = dd_0$ and $\delta' = d'd_0'$.
+Then I'm talking about getting from $d_0 \to d$ to $d_0' \to d'$, and for that
+I need $d_0' \to d_0$ and $d \to d'$, which is the opposite of what $\iota$ is.
+
+Hmm. Can I get any mileage out of considering when $\tau$ is symmetric, arising from
+\[
+t =\qquad
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+as
+\[
+tt =\qquad
+\begin{tikzcd}
+d'e' \ar[r, "ss"]\ar[d, "io"']& e'd'\ar[from=d, "oi"']\\
+de \ar[r, "ff"']& ed
+\end{tikzcd}
+\]
+In that case I'm trying to make
+\[ (\Gamma, x + A)^{tt} : (g' : \Gamma_{ss}) (a : [d'e'] \to A_{d'e'}(\Gamma^{\ltri ss} g'))\to (g : \Gamma_{ff}) \x [de] \to A_{de}(\Gamma^{\ltri ff} g) \]
+Oh, no, I'm still stuck with the same problem.
+
+\subsection{Doing the Opposite of what Doesn't Work}
+I feel like there's no way this could work, but {\em existentially} quantifying
+over morphisms seemed to let me make some progress on equality types, so let me try
+it here, even though it seems like exactly the wrong thing for terms? Unless I get
+some kind of adjoint-ish collapse?
+
+Let's define
+\begin{declbox}
+  $ A^+_\delta : \Gamma_\delta \to \rtype$
+\end{declbox}
+\begin{defnbox}
+  $ A^+_\delta(g) = [\delta] \x A_\delta(g) $
+\end{defnbox}
+
+Then I try to define
+\[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x ([\delta] \x A_\delta(\Gamma^{\ltri \phi} g)) \]
+doing transport will require
+\[ (\Gamma, x + A)^\tau : (g' : \Gamma_\psi) (k : [\delta'])(a :  A_{\delta'}(\Gamma^{\ltri \psi} g'))\to (g : \Gamma_\phi) \x [\delta] \x A_\delta(\Gamma^{\ltri \phi} g) \]
+Which seems attainable, but I just can't wrap my head around what it means.
+\subsection{Opposite In a Different Way}
+
+Can I make any sense out of defining $[dd']$ `covariantly' instead, as
+representing $d \to d'$? Can I hope for a term semantics that takes $M$ and this sort
+of $\delta$ and yields $[\delta] \to (g : \Gamma_{\delta}) \to A_{\delta}(g)$?
+It's not definable {\em from} the current semantics, but nothing immediately
+stops me from attempting this as a stronger semantic requirement.
+
+This might repair a lot. For one thing, transport at types should now work the right way
+around. The major bad thing is I have no idea what the general
+end condition should look like now. Let's look at transport for clues.
+\begin{declbox}
+ $ A^+_\delta : \Gamma_\delta \to \rtype$\\
+ $ A_+^\phi : (g : \Gamma_\delta) \to A^+_\delta(\Gamma^{\ltri \phi} g) \to A^+_\epsilon(\Gamma^{\rtri \phi} g)$
+\end{declbox}
+\begin{defnbox}
+ $ A_\delta^+(g) = [\delta] \to A_\delta(g)$
+\end{defnbox}
+We say $\delta = d d'$ and $\epsilon = e e'$ and we need to make
+\[ A_+^\phi : (g : \Gamma_\delta) \to ([\delta] \to A_\delta(\Gamma^{\ltri \phi} g))
+\to [\epsilon] \to A_\epsilon(\Gamma^{\rtri \phi} g)\]
+
+Let me get my head straight that if I have a $h : [\epsilon]$ and
+$\phi : \delta \to \epsilon$
+then I can {\em reverse} transport $h^\phi : [\delta]$.
+For if $h : e \to e'$ and $\phi$ is a pair consisting of $d \to e$
+and $e' \to d'$, then I can compose to get $d \to d'$. Ok, great. Then I can define
+\begin{defnbox}
+  $A_+^\phi(g, a, h) = A^\phi(g, a(h^\phi))$
+\end{defnbox}
+Ok, what could the end-condition be, then? Terms
+are
+\begin{declbox}
+  $M_\delta :  (g : \Gamma_\delta) \to [\delta] \to A_\delta(g)$
+\end{declbox}
+Now what I had before corresponded to
+taking a $g : \Gamma_{de}$
+\begin{enumerate}
+\item giving this $\Gamma^{\rtri \fdom } g$ and the  identity arrow at $d$, and getting out
+$A_{dd}$, then transporting  to $A_{ed}$
+\item giving this $\Gamma^{\rtri \fcod} g$ and the  identity arrow at $e$, and getting out
+$A_{ee}$, then transporting to $A_{ed}$
+\end{enumerate}
+and demanding that those are equal.
+
+%% A relevant twisted-arrow diagram that obtains among the stuff I have looks like
 %% \[
 %% \begin{tikzcd}
-%% c \ar[r, "h"] & d \ar[r, "f"] & e
-%% \end{tikzcd}
-%% \]
-%% and we stare at
-%% \[
-%% \begin{tikzcd}
-%%   A_{cc} \ar[dr]
-%%   &[-2em]&[-2em] A_{dd} \ar[dl]\ar[dr]
-%%   &[-2em]&[-2em] A_{ee} \ar[dl]\\
-%%   & A_{dc}\ar[dr]
-%%   && A_{ed} \ar[dl]\\
-%% && A_{ec}
-%% \end{tikzcd}
-%% \]
-%% Oh, this starts to resemble a bit of twisted-arrow-category stuff
-%% again, fantastic.
-%% %% So $M_{dc} : [dc] \to A_{dc}$. For example, $M_{dc}(h) : A_{dc}$.
-%% %% Also $M_{ed} : [ed] \to A_{ed}$, and $M_{ed}(f) : A_{ed}$.
-%% For what is transport on $A^+ : [\delta] \to A_\delta$?
-%% We had $A_\phi : A_\delta \to A_\epsilon$, so
-%% \begin{declbox}
-%%   $A_\phi^+ :  ([\delta] \to A_\delta) \to ([\epsilon] \to A_\epsilon)$
-%% \end{declbox}
-%% %Ok, what is $[\phi]$, for a $\phi : d'e' \to de$? It's a square
-%% Or if we name the parts of  $\phi$ as $i o : d'e' \to de$ and stare at
-%% \[
-%% % t =
-%% \begin{tikzcd}
-%% d' \ar[from=r, "f"']\ar[d, "i"']& e'\ar[from=d, "o"']\\
-%% d \ar[from=r]& e \\
-%% \end{tikzcd}
-%% \]
-%% then we can define {\em backwards} transport?
-%% \begin{declbox}
-%%   $A_{io}^+ : (a : [de] \to A_{de}) \to ([d'e'] \to A_{d'e'})$
-%% \end{declbox}
-%% \begin{defnbox}
-%%   $A_{io}^+( a, f) = A_{io}( a(i \o f \o o))$
-%% \end{defnbox}
-%% No, this doesn't work. None of the arrows are lining up correctly. What's wrong?
-
-
-%% Let's go over it again. If I have a morphism $f : d \to e\in \ssem \Delta$,
-%%  and a term $M$, I can canonically get a value in $A_{ed}$.
-%% I either take $M_{dd}$ and transport $fd$, or $M_{ee}$ and transport $ef$.
-%% So I want to talk about $M_f : [\delta] \to A_\delta$ where $[\delta]$ is defined
-%% as the contravariant hom: $[ed]$ is $d \to e$.
-
-%% What data is needed to go from $[\delta] \to A_\delta$ to $[\epsilon] \to A_\epsilon$?
-%% Surely something should work. Suppose $\delta = dd'$ and $\epsilon = ee'$.
-%% If we have a $[\epsilon] = e' \to e$ and we want to be able to make
-%% a $[\delta] = d' \to d$, we need
-%% \[
-%% % t =
-%% \begin{tikzcd}
-%% d' \ar[r]\ar[d, "i"']& d\ar[from=d, "o"']\\
-%% e' \ar[r, "f"']& e \\
-%% \end{tikzcd}
-%% \]
-%% which is really uncomfortable and weird. I seem to need a morphism
-%% $\phi : \delta \to \epsilon$ to tell me how to actually do the
-%% transport $A_\delta \to A_\epsilon$, but another map $\epsilon \to
-%% \delta$ to tell me how to adapt $[\epsilon]$ into $[\delta]$.
-%% This seems totally wrong.
-
-%% \subsection{What Happens if I Ignore This}
-%% Let's try to define what contexts might mean, anyway.
-
-%% I'm going to go back to thinking about $\Gamma, x + A$ because it's less total
-%% typing.
-%% Before I had
-%% %\[ A^\phi : (g : \Gamma_\phi) \to A_{\delta}(\Gamma^{\ltri \phi} g) \to A_{\epsilon}(\Gamma^{\rtri \phi} g) \]
-%% \[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri \phi} g) \]
-%% %\[ (g : \Gamma_\psi) \x A_{\delta'}(\Gamma^{\ltri \psi} g) \to (g : \Gamma_\phi) \x A_\delta(\Gamma^{\ltri \phi} g) \]
-%% \[ (\Gamma, x + A)^\tau(g, a) = (\Gamma^\tau g, A^\iota(\Gamma^{\ltri \tau}, a)) \]
-%% Now I think it's going to be more like
-%% \[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x ([\delta] \to A_\delta(\Gamma^{\ltri \phi} g)) \]
-%% and then we'll need
-%% \[ (\Gamma, x + A)^\tau : (g' : \Gamma_\psi) (a : [\delta'] \to A_{\delta'}(\Gamma^{\ltri \psi} g'))\to (g : \Gamma_\phi) \x [\delta] \to A_\delta(\Gamma^{\ltri \phi} g) \]
-%% with $\tau$ being
-%% \[
-%% \begin{tikzcd}
-%% \delta' \ar[r, "\psi"]\ar[d, "\iota"']& \epsilon'\ar[from=d, "\omega"']\\
-%% \delta \ar[r, "\phi"']& \epsilon
-%% \end{tikzcd}
-%% \]
-%% As it is, I seem stuck. I don't think I can get from $[\delta]$ to $[\delta']$ with $\iota$
-%% Suppose $\delta = dd_0$ and $\delta' = d'd_0'$.
-%% Then I'm talking about getting from $d_0 \to d$ to $d_0' \to d'$, and for that
-%% I need $d_0' \to d_0$ and $d \to d'$, which is the opposite of what $\iota$ is.
-
-%% Hmm. Can I get any mileage out of considering when $\tau$ is symmetric, arising from
-%% \[
-%% t =\qquad
-%% \begin{tikzcd}
-%% d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+%% d \ar[r, "f"]\ar[d, equal]& e\ar[from=d, equal]\\
 %% d \ar[r, "f"']& e
 %% \end{tikzcd}
 %% \]
-%% as
-%% \[
-%% tt =\qquad
+So I might try to generalize to
+\[
+\begin{tikzcd}
+d' \ar[r, "f'"]\ar[d, "\ell"']& e'\ar[d, "r"]\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+%% \qquad
 %% \begin{tikzcd}
 %% d'e' \ar[r, "ss"]\ar[d, "io"']& e'd'\ar[from=d, "oi"']\\
 %% de \ar[r, "ff"']& ed
 %% \end{tikzcd}
-%% \]
-%% In that case I'm trying to make
-%% \[ (\Gamma, x + A)^{tt} : (g' : \Gamma_{ss}) (a : [d'e'] \to A_{d'e'}(\Gamma^{\ltri ss} g'))\to (g : \Gamma_{ff}) \x [de] \to A_{de}(\Gamma^{\ltri ff} g) \]
-%% Oh, no, I'm still stuck with the same problem.
-
-%% \subsection{Doing the Opposite of what Doesn't Work}
-%% I feel like there's no way this could work, but {\em existentially} quantifying
-%% over morphisms seemed to let me make some progress on equality types, so let me try
-%% it here, even though it seems like exactly the wrong thing for terms? Unless I get
-%% some kind of adjoint-ish collapse?
-
-%% Let's define
-%% \begin{declbox}
-%%   $ A^+_\delta : \Gamma_\delta \to \rtype$
-%% \end{declbox}
-%% \begin{defnbox}
-%%   $ A^+_\delta(g) = [\delta] \x A_\delta(g) $
-%% \end{defnbox}
-
-%% Then I try to define
-%% \[ (\Gamma, x + A)_\phi = (g : \Gamma_\phi) \x ([\delta] \x A_\delta(\Gamma^{\ltri \phi} g)) \]
-%% doing transport will require
-%% \[ (\Gamma, x + A)^\tau : (g' : \Gamma_\psi) (k : [\delta'])(a :  A_{\delta'}(\Gamma^{\ltri \psi} g'))\to (g : \Gamma_\phi) \x [\delta] \x A_\delta(\Gamma^{\ltri \phi} g) \]
-%% Which seems attainable, but I just can't wrap my head around what it means.
-%% \subsection{Opposite In a Different Way}
-
-%% Can I make any sense out of defining $[dd']$ `covariantly' instead, as
-%% representing $d \to d'$? Can I hope for a term semantics that takes $M$ and this sort
-%% of $\delta$ and yields $[\delta] \to (g : \Gamma_{\delta}) \to A_{\delta}(g)$?
-%% It's not definable {\em from} the current semantics, but nothing immediately
-%% stops me from attempting this as a stronger semantic requirement.
-
-%% This might repair a lot. For one thing, transport at types should now work the right way
-%% around. The major bad thing is I have no idea what the general
-%% end condition should look like now. Let's look at transport for clues.
-%% \begin{declbox}
-%%  $ A^+_\delta : \Gamma_\delta \to \rtype$\\
-%%  $ A_+^\phi : (g : \Gamma_\delta) \to A^+_\delta(\Gamma^{\ltri \phi} g) \to A^+_\epsilon(\Gamma^{\rtri \phi} g)$
-%% \end{declbox}
-%% \begin{defnbox}
-%%  $ A_\delta^+(g) = [\delta] \to A_\delta(g)$
-%% \end{defnbox}
-%% We say $\delta = d d'$ and $\epsilon = e e'$ and we need to make
-%% \[ A_+^\phi : (g : \Gamma_\delta) \to ([\delta] \to A_\delta(\Gamma^{\ltri \phi} g))
-%% \to [\epsilon] \to A_\epsilon(\Gamma^{\rtri \phi} g)\]
-
-%% Let me get my head straight that if I have a $h : [\epsilon]$ and
-%% $\phi : \delta \to \epsilon$
-%% then I can {\em reverse} transport $h^\phi : [\delta]$.
-%% For if $h : e \to e'$ and $\phi$ is a pair consisting of $d \to e$
-%% and $e' \to d'$, then I can compose to get $d \to d'$. Ok, great. Then I can define
-%% \begin{defnbox}
-%%   $A_+^\phi(g, a, h) = A^\phi(g, a(h^\phi))$
-%% \end{defnbox}
-%% Ok, what could the end-condition be, then? Terms
-%% are
-%% \begin{declbox}
-%%   $M_\delta :  (g : \Gamma_\delta) \to [\delta] \to A_\delta(g)$
-%% \end{declbox}
-%% Now what I had before corresponded to
-%% taking a $g : \Gamma_{de}$
-%% \begin{enumerate}
-%% \item giving this $\Gamma^{\rtri \fdom } g$ and the  identity arrow at $d$, and getting out
-%% $A_{dd}$, then transporting  to $A_{ed}$
-%% \item giving this $\Gamma^{\rtri \fcod} g$ and the  identity arrow at $e$, and getting out
-%% $A_{ee}$, then transporting to $A_{ed}$
-%% \end{enumerate}
-%% and demanding that those are equal.
-
-%% %% A relevant twisted-arrow diagram that obtains among the stuff I have looks like
-%% %% \[
-%% %% \begin{tikzcd}
-%% %% d \ar[r, "f"]\ar[d, equal]& e\ar[from=d, equal]\\
-%% %% d \ar[r, "f"']& e
-%% %% \end{tikzcd}
-%% %% \]
-%% So I might try to generalize to
-%% \[
-%% \begin{tikzcd}
-%% d' \ar[r, "f'"]\ar[d, "\ell"']& e'\ar[d, "r"]\\
-%% d \ar[r, "f"']& e
-%% \end{tikzcd}
-%% %% \qquad
-%% %% \begin{tikzcd}
-%% %% d'e' \ar[r, "ss"]\ar[d, "io"']& e'd'\ar[from=d, "oi"']\\
-%% %% de \ar[r, "ff"']& ed
-%% %% \end{tikzcd}
-%% %%
-%%  \]
-%% and try taking a $g : \Gamma_{de}$
-%% \begin{enumerate}
-%% \item giving this $\Gamma^{?} g$ and $\ell$, and getting out
-%% $A_{d'd}$, then $f'd$-transporting  to $A_{e'd}$
-%% \item giving this $\Gamma^{?} g$ and $r$, and getting out
-%% $A_{e'e}$, then $e'f$-transporting to $A_{e'd}$
-%% \end{enumerate}
-%% and demanding that those are equal. But I don't know how to fill in the $?$s if I abandon
-%% the twisted-arrow diagram.
-%% \subsection{Realizing a Bureaucractic Mistake}
-%% Of, should the typing terms actually be
-%% \[M^*_{\delta} :  [\delta] \to (g : \Gamma_{\delta})  \to A_{\bar \delta}(\bar g)\]
-%% after all? Because given a morphism $f : d \to e$ we go from $\Gamma_{de}$
-%% to $\Gamma_{dd}$ and $\Gamma_{ee}$, thence to $A_{dd}$ and $A_{ee}$, thence
-%% to $A_{ed}$.
-
-%% Let's just say as churn-insurance that
-%% \[A^+_{\delta} : \Gamma_\delta \to \rtype \qquad A^-_{\delta} : \Gamma_\delta \to \rtype\]
-%% \[A^+_{\delta}(g) = [\delta] \to A_\delta(g)
-%% \qquad
-%% A^-_{\delta}(g) = [\bar\delta] \to A_\delta(g)\]
-%% for $[dd']$ meaning $d \to d'$. Then I'm saying
-%% \[M^*_\delta: (g : \Gamma_\delta) \to A^-_{\bar \delta}(g)\]
-%% \[M_{de}(g, f) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
-%% Oh, whoops, that's not right at all. In the dependent setting, I need
-%% to start with $\Gamma_{ff}$, not
-%% $\Gamma_{de}$. Hmm. So maybe I need the dependent type
-%% \[ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(?)\]
-%% But what goes in the $?$, huh?
-
-%% Wait, what common type are the two comparands
-%% in
-%% \[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
-%% ?
-%% We have
-%% $A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}(g)) $
-%% $ \to A_\epsilon(\Gamma^{\rtri \phi}(g))$ so... oh, right, $\rtri ff$
-%% is a twisted arrow $ff \to ed$. So at least
-
-%% \begin{declbox}
-%%   $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
-%% \end{declbox}
-%% \begin{defnbox}
-%%   $M^+_{de}(f, g) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))$
-%% \end{defnbox}
-%% is a sensible thing to say. This is a much more reasonable expression
-%% of what {\em I can already do} with term semantics than my previous
-%% attempts, but it has the disadvantage that I can't easily pull out
-%% the $(g) \to A(g)$ part as a separate type.
-
-%% Nonetheless, let me investigate whether I can define
-%%  a semantic substitution coherence theorem
-%% if I use $A^+_\delta$ in the definition of contexts. That was the one that
-%% was oriented the right way around, wasn't it? Remember that if I have
-%% $\phi : \delta \to\epsilon$ which is $f : d \to e$ and $f' : e' \to d'$,
-%% then I can revere transport $h : [\epsilon] = e \to e'$ to $h^\phi : [\delta]$, right.
-
-%% This is the direction for which I'm able to define transport
-%% \[A_+^\phi : (g : \Gamma_\phi) \to A^+_\delta(\Gamma^{\ltri \phi}(g))
-%%  \to A^+_\epsilon(\Gamma^{\rtri \phi}(g))\]
-%% \[A_+^\phi(g, a, h) = A_\phi(g, a(h^\phi))\]
-%% and then contexts go like
-%% \[ (\Gamma, x + A)^+_\phi  = (g : \Gamma_\phi) \x A^+_{<\phi}(\Gamma^{\ltri \phi} g) \]
-%% \[ (\Gamma, x + A)_+^\tau(g, a)  = (\Gamma^\tau g ,  A_+^{<\tau}(\Gamma^{\ltri \tau} g, a)) \]
-%% I guess those more or less work transparently since $A^\phi_+$ satisfies the same
-%% interface as $A^\phi$. Probably need to prove functoriality for it though.
-
-%% I'm still having a hard time reconciling the context $A_\delta$ with
-%% the term $A_{\bar\delta}$. Let's put that off and see if I can
-%% generalize the end-condition at least, though.
-%% Let $o, f, i$ in
-%% \[
-%% \begin{tikzcd}
-%% d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
-%% d \ar[r, "f"']& e
-%% \end{tikzcd}
-%% \]
-%% be given, and set $s = ofi$, and $\delta = d'd$ and $\epsilon = ee'$.
-%% I think I want to reconcile  $M_\delta(i)$ and $M_\epsilon(o)$.
-%% Ehhh but if I have
-%% \begin{declbox}
-%%   $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
-%% \end{declbox}
-%% Then I probably would want to ask for $\Gamma_{ss}$ to start with, and I don't know
-%% how to get $\Gamma_{ii}$ from that.
-
-%% Perhaps can I make the definition
-%% \begin{defnbox}
-%%   $\Gamma^A_f =  (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g)$
-%% \end{defnbox}
-%% and show that if I have a twisted arrow $t : s \to f$, then I can go
-%% \begin{declbox}
-%%   $ \Gamma^t_A :  \Gamma^A_f \to \Gamma^A_s $
-%% \end{declbox}
-%% i.e.
-%%   \[ \Gamma^t_A :  ( (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g))
-%%   \to
-%%   ( (z : \Gamma_{ss}) \to A_{e'd'}(\Gamma^{\rtri ss} z)) \]
-%% ?
-%% Oh, it actually looks like I can.
-%% \begin{defnbox}
-%%   $ \Gamma^t_A(q, z) =  A^{oi}(\Gamma^{\rtri tt} z , q(\Gamma^{tt} z)) $
-%% \end{defnbox}
-%% We plug in $\Gamma^{tt} z$ for $g$.
-%% Now $q(\Gamma^{tt} z)$ has type $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$.
-%% There's a `$\phi$-coercion of $t$' call it $\dot t$, which
-%% is just $(\ll t, \rr t)$, forgetting about its domain and codomain.
-%% In this case $\dot t = oi$.
-%% We want to take this $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$
-%% data and $A^{oi}$ transport it.
-%% Recall
-%% \[ A^{oi} : (g : \Gamma_{oi}) \to A_{ed}(\Gamma^{\ltri oi} g)
-%% \to A_{e'd'}(\Gamma^{\rtri oi} g) \]
-%% And this is fine because $\ltri oi \o \rtri tt = \rtri ff \o tt$,
-%% and $\rtri ss = \rtri oi \o \rtri tt$.
-
-%% Ok, and I see that this is actually very closely related
-%% to the $A^{tt}_>$ that I defined before, great.
-
-%% Anyway I {\em think} that the end-condition now looks like saying
-%% that
-%% if you have $M_{d'd}(i) : \Gamma^A_i$ and $M_{ee'}(o) : \Gamma^A_o$, then at
-%% least they're equal at their common transport to $\Gamma^A_s$, i.e.
-%% \begin{thmbox}
-%% $\Gamma^{\ltri t}_A(M_{d'd}(i)) = \Gamma^{\rtri t}_A(M_{ee'}(o))$
-%% \end{thmbox}
-%% \section{Starting Over With Simple Examples}
-
-%% I still fail to understand what it really means to have an indexed
-%% type in this setting. Suppose we have $\Delta \prov A : \rtype$,
-%% which means $A_{\delta} : \rtype$ and $A_\phi : A_\delta \to A_\epsilon$.
-%% Suppose $\Delta \prov M : A$, which means $M_d : A_{dd}$ and
-%% $A_{fd} M_d = A_{ef} M_e : A_{ed}$.
-
-%% Now what could it mean to have $\Delta; x : A \prov B : \rtype$?
-%% Surely at least it means for every $M : A$ as above, that we get a type.
-%% The other way we can see $M$ is as $M_\delta : [\delta] \to A_{\bar\delta}$
-%% so that $M_{de}(f) : A_{ed}$. So maybe  one of
-%% \[B^-_\delta : ([\delta] \to A_{\bar \delta}) \to \rtype\]
-%% \[B^+_\delta : ([\bar\delta] \to A_{ \delta}) \to \rtype\]
-%% In either case, if I have the interpretation of $B$, and I have the interpretation of
-%% $M$, I can make a type.
-
-%% Can we define transport for $B_{\delta}$? Depending on whether I think of it as a $+$
-%% or $-$ assumption, I'd want
-%% \[B^-_{\phi} : (a : [\delta] \to A_{\bar \delta}) \to B_\delta(A_{\bar\phi}(a)) \to B_\epsilon(a)\]
-%% \[B^+_{\phi} : (a : [\bar\delta] \to A_{ \delta}) \to B_\delta(a) \to B_\epsilon(A_\phi(a))\]
-%% So we somehow have to define
-%% \[A_\phi : ([\bar\delta] \to A_\delta)  \to ([\bar\epsilon] \to A_\epsilon) \]
-%% But this is backwards!
-
-%% So once again, apparently the only notion of term that I can coherently index
-%% over looks more like $[\delta] \to A_\delta$, which {\em isn't} what pops naturally
-%% out of (co)ends, which scares me a bit.
-
-%% Let's proceed anyway. The static semantics for $x + A \prov B : \rtype$ is
-%% \[B_\phi : (a : [\delta] \to A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
-
-%% Bah. What kind of twisted-arrow transport can I expect at the type $[\delta] \to A_\delta$?
-%% Back at $[\bar \delta] \to A_{\delta}$ I could take $t : s \to f$ and
-%% go from $\Gamma_f^A$ to $\Gamma_s^A$. Let's conjecture that if I instead define
-%% \[\Gamma^A_f = (g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g) \]
-%% that I can go from $\Gamma^A_s \to \Gamma^A_f$ in
-%% \[
-%% \begin{tikzcd}
-%% d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
-%% d \ar[r, "f"']& e
-%% \end{tikzcd}
-%% \]
-%% i.e. can I make
-%% \[ ((z : \Gamma_{ss}) \to A_{d'e'}(\Gamma^{\ltri ss} z)) \to
-%% ((g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g)) \]
-%% No, this is a nonstarter! I can't get from $\Gamma_{ff}$ to $\Gamma_{ss}$.
-
-%% \subsection{A Low-Probability Option}
-
-%% What happens if I simply demand that $M_\delta$ exists as a global section, so that
-%% every transport $A_\phi(M_\delta) = M_\epsilon$? This seems too strong, but maybe
-%% worth thinking about it to see where the bubble goes. In this case,
-%% simply
-%% \[B_\phi : (a : A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
-%% as before, the only difference being that $M_\delta : A_\delta$ gives us something to
-%% semantically substitute when we need to. Now the main thing I'd worry about
-%% is how categorical quantifiers look.
-
-%% A type in context is still $A_\delta : \Gamma_\delta \to \rtype$
-%% and
-%% \[A^\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}g)
-%%  \to A_\epsilon(\Gamma^{\rtri \phi}g)\]
-%% and a term in general is $M_\delta : (g : \Gamma_\delta) \to A_\delta$.
-%% So what's $\forall \alpha . A$ look like? Statically
-%% \[ (( \alpha : \C) \to  A)_\delta(g) = \int_{c \in \C} A_{\delta c c}(g)\]
-%% and then I expect problems to arise when I try to go from $\forall \alpha . A$
-%% to $[t/\alpha]A$. Unless... $t$ supplies a morphism somehow?
-
-%% Suppose I have a $\int_{c\in \C} A_{\delta c c} (g)$. I want to get
-%% a $A_{\delta t t}(g)$. Ugh, maybe this isn't a problem?
-
-%% \subsection{Trying to Connect Ends and Global Sections}
-%% Let me clear my mind, and start with
-%% \begin{declbox}
-%%   $ \Gamma_{\phi} :   \rtype $\\
-%%   $ A_{\delta} :  \Gamma_\delta \to \rtype $\\
-%%   $ M_{\delta} : (g : \Gamma_\delta) \to A_{\delta}(g) $\\
-%%   $ \Gamma^{\tau} :   \Gamma_\psi \to \Gamma_\phi $\\
-%%   $ A^{\phi} :  (g : \Gamma_\phi) \to A_{\delta}(\Gamma^{\ltri\phi}g) $
-%% $\to A_{\epsilon}(\Gamma^{\rtri\phi}g)$
-%% \end{declbox}
-%% \begin{thmbox}
-%% $ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)$
-%% \end{thmbox}
-%% \subsubsection{Formation}
-
-%% I want to address the $\forall$ formation rule first.
-%% \[
-%% \erule
-%% {
-%% \Delta, \alpha : \C; \Gamma \prov A : \rtype
-%% }
-%% {\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
-%% \]
-%% Object part is
-%% \begin{defnbox}
-%%   $((\alpha : \C) \to A)_\delta(g) = \int_{c \in \C} A_{\delta cc}(g) $
-%% \end{defnbox}
-%% and morphism part is
-%% \[ ((\alpha : \C) \to A)^\phi : (g : \Gamma_\phi)
-%% \to \int_{c \in \C} A_{\delta cc}(\Gamma^{\ltri\phi} g)
-%% \to \int_{c \in \C} A_{\epsilon cc}(\Gamma^{\rtri\phi} g) \]
-%% \begin{defnbox}
-%%   $ ((\alpha : \C) \to A)^\phi(g, E) = \lambda c . A^{\phi cc}(g, E(c))$
-%% \end{defnbox}
-%% \subsubsection{Intro}
-%% \[
-%% \erule
-%% {
-%% \Delta, \alpha : \C; \Gamma \prov M : A
-%% }
-%% {\Delta ; \Gamma \prov \Lambda \alpha . M :  (\alpha : \C) \to A }
-%% \]
-%% And I can observe
-%% \[ (\Lambda \alpha . M)_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
-%% \[ M_{\delta c c'} : (g : \Gamma_\delta) \to  A_{\delta cc'}(g)\]
-%% So that, not needing to take advantage of the full asymmetric structure of $M$,
-%% I can nonetheless say, contractingly,
-%% \begin{defnbox}
-%%   $ (\Lambda \alpha . M)_{\delta}(g) = \lambda c . M_{\delta c c}(g)$
-%% \end{defnbox}
-%% And the property of being a global section is strictly stronger than being an end;
-%% the end condition is satisfied a fortiori.
-
-%% \subsubsection{Elim}
-%% Okay, everything is riding on the elim rule, then.
-%% The thing that gives me hope is I feel a lot of wiggle room in the semantics
-%% for $\Delta \prov t : \C$.
-%% \[\erule
-%% {
-%% \Delta; \Gamma \prov M : (\alpha : \C) \to A \qquad \Delta \prov t : \C
-%% }
-%% {\Delta ; \Gamma \prov M[t] :  [t/\alpha] A}
-%% \]
-%% What we have is
-%% \[ M_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
-%% and what we need is
-%% \[ (M[t])_\delta : (g : \Gamma_\delta) \to ([t/\alpha] A)_{\delta }(g)\]
-%% I'm going to imagine that the semantics of $t$ is somehow a pair
-%% of functors and a natural transformation between them. I posit that
-%% it gives me an object
-%% $t^<_\delta$, an object $t^>_\delta$, and a morphism $t_\delta : t^<_\delta \to t^>_\delta$.
-
-%% I'm going to assume that
-%% \begin{thmbox}
-%% $([t/\alpha]A)_\delta(g) = A_{\delta t^>_\delta t^<_\delta}(g)$
-%% \end{thmbox}
-%% And now, by construction, it's easy as pie to achieve
-%% \[(g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g) \to A_{\delta t^>_\delta t^<_\delta}(g)\]
-%% for that's exactly what the end is set up to enable. We can either take the end
-%% $E :\int_{c\in\C} A_{\delta c c}(g)$ and instantiate it at $t^<_\delta$ to get
-%% $A_{\delta t^<_\delta t^<_\delta}(g)$ and forward-transport to the goal,
-%% or instantiate to get $A_{\delta t^>_\delta t^>_\delta}(g)$ and reverse-transport to
-%% the goal. The end-condition tells us these are the same.
-
-%% So I can notate this as
-%% \begin{defnbox}
-%%   $ (M[t])_\delta(g) = M_\delta(g)[t_\delta] $
-%% \end{defnbox}
-%% Checking the functoriality of this definition should give us some additional
-%% constraints on $t^<_\delta, t^>_\delta, t_\delta$. Perhaps $t$ is a functor into
-%% $\T \rtype$ or something.
-
-%% Ok, let's go. Functoriality is generally
-%% \[ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
-%% So what we know is
-%% \[ (g:\Gamma_\phi) \to ((a : \C) \to A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
-%% \[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
-
-%% and what we want is
-%% \[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, (M[t])_\delta(\Gamma^{\ltri \phi} g)) = (M[t])_\epsilon(\Gamma^{\rtri \phi} g)\]
-%% \[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% = M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
-%% And... ah, I still need a theorem about transport and category-term substitution.
-%% Let's try to guess something appropriate.
-
-%% We know we're going to have to make
-%% \[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
-%% \to ([t/\alpha] A)_\delta(\Gamma^{\ltri \phi} g)
-%% \to ([t/\alpha] A)_\epsilon(\Gamma^{\rtri \phi} g) \]
-%% which is
-%% \[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
-%% \to A_{\delta t^>_\delta t^<_\delta}(\Gamma^{\ltri \phi} g)
-%% \to A_{\epsilon t^>_\epsilon t^<_\epsilon}(\Gamma^{\rtri \phi} g) \]
-%% So this makes me assume that there's got to be a diagram like
-%% \[
-%% \begin{tikzcd}
-%% t^<_\epsilon \ar[r, "t_\epsilon"]\ar[d, "t_\phi^<"']& t^>_\epsilon\ar[from=d, "t_\phi^>"']\\
-%% t^<_\delta \ar[r, "t_\delta"']& t^>_\delta
-%% \end{tikzcd}
-%% \]
-%% Where $t_\phi = (t_\phi^<, t_\phi^>)$ is the twisted morphism $t_\epsilon \to t_\delta$.
-%% Now we can assert
-%% \begin{thmbox}
-%%   $([t/\alpha] A)^\phi(g, a) = A^{\phi t_\phi^> t_\phi^<}(g, a) $
-%% \end{thmbox}
-
-%% Going way back, we recall that what we {\bf have} is
-%% \[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
-%% \[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
-%% and what we {\bf want} is
-%% \[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% = M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
-%% \[ (g:\Gamma_\phi) \to A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% = M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
-%% This is actually looking really good! We just have to establish the property
-%% that `applying an end to a morphism' has. It would suffice to finish the proof
-%% of functoriality to show
-%% \[
-%% (\lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
-%% =
-%% A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% \]
-%% by, respectively, the hypothesized and required equality of these to
-%% $M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]$.
-
-%% Ok, let's back up and try to assert this property generally.
-%% I'm pretty sure I can abstract out the $A^{\phi}$ and reduce this to something like
-%% \[
-%% (\lambda c . A^{ cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
-%% =
-%% A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% \]
-%% but $A^{cc}$ is the identity so
-%% \[
-%% (\lambda c . M_\delta(\Gamma^{\ltri \phi} g)[\rid_c])[t_\epsilon]
-%% =
-%% A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
-%% \]
-
-%% then get abstract out the $M_\delta(\Gamma^{\ltri \phi})$
-%% and just think about
-%% \[
-%% (\lambda c .  M[\rid_c])[t_\epsilon]
-%% =
-%% A^{ t^>_\phi t^<_\phi} (g, M[t_\delta])
-%% \]
-%% and then the contexts are relatively unimportant so
-%% \[
-%% (\lambda c . M[\rid_c])[t_\epsilon]
-%% =
-%% A^{ t^>_\phi t^<_\phi} ( M[t_\delta])
-%% \]
-%% and then suppose we have a general
-%%  square of morphisms like
-%% \[
-%% \begin{tikzcd}
-%% d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
-%% d \ar[r, "f"']& e
-%% \end{tikzcd}
-%% \]
-%% so we can rename to
-%% \[
-%% (\lambda c .  M[\rid_c])[s] = A^{ o i} (M[f])
-%% \]
-%% but we've just $\eta$-expanded $M$, so this is really
-%% \[
-%% M[s] = A^{ o i} (M[f])
-%% \]
-
-%% Ok, this is maybe small enough to look at and reinfer what the types are.
-%% We have some kind of functor $A : \C \x \C^\op \to \rtype$.
-%% We have an inhabitant of the end of $A$, $M_d : A_{dd}$. What we mean
-%% by $M[f]$ for $f : d \to e$ is either of $A^{fd} M_d = A^{ef} M_e : A_{ed}$.
-%% If we hit that wth $A^{oi}$ we get $A^{of,i} M_d = A^{o,fi} M_e : A_{e'd'}$.
-
-%% Ok, on the other side, we have
-%% $A^{ofi,} M_{d'} = A^{,ofi} M_{e'} : A_{e'd'}$. This means I just need to show
-%% equivalently
-%% either of
-%% \[A^{ofi,} M_{d'} = A^{of,i} M_d : A_{e'd'} \]
-%% \[A^{,ofi} M_{e'} = A^{o,fi} M_e : A_{e'd'} \]
-%% but these follow from hitting the known equations
-%% \[A^{i,} M_{d'} = A^{,i} M_d : A_{dd'} \]
-%% \[A^{,o} M_{e'} = A^{o,} M_e : A_{e'e} \]
-%% with $A^{of,}$ or $A^{,fi}$, respectively.
-
-%% So I think that's enough to see that functoriality holds!
-
-%% \subsection{But wait what's the problem with this}
-
-%% It doesn't seem practical to ask for a sequent
-%% \[\Delta \prov t : \C\]
-%% to give morphisms in the twisted arrow category. Recall that there is not
-%% necessarily a functor even
-%% \[ \C \to \T \C\]
-%% because if we take objects to identities, we would have to take morphisms
-%% to {\em isomorphisms}.
-
-%% \section{What Next?}
-
-%% The essential problem seems to be that terms are defined symmetrically
-%% and types are defined asymmetrically. Or to put it another way,
-%% terms are defined on $\ssem \Delta$ and types are defined on $\sem \Delta$.
-%% However, we know that a term-with-a-morphism is enough to give fully
-%% asymmetric data.
-
-%% Is there some way of stating what {\em is} true about substitution on types
-%% in terms of this?
-%% Like, if I have $\Delta; \Gamma \prov M : A$,
-%% I have $M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$. If I have
-%% $\Delta; \Gamma, x : A \prov B : \rtype$, then in general I have
-%% \[(g : \Gamma_\delta)  (a : A_\delta(g)) (a' : A_{\bar \delta}(\bar g)) \to B_\delta(g, a, a')\]
-%% which, actually, come to think of it,
-%%  is an even more onerous thing that requires morphisms in both $[\bar\delta]$ {\em and}
-%% $[\delta]$ if $B$ used both $a$ and $a'$.
-
-%% One idea I don't like the notion of trying to pursue is asking what
-%% happens if $A_\delta$ only depends on, like, half of $\delta$.
-
-%% \subsection{What About the Usual Way of Modelling Dependent Types}
-
-%% Consider the simply-typed case, whose semantics I think I understand.
-%% What's the situation look like when I have two types
-%% $\Delta \prov A, B : \rtype$ and a map $\Delta; x : B \prov  A$.
-%% The witnesses for that judgment are inhabitants of the end
-%% \[\int_{d \in \ssem \Delta} B_{dd} \to A_{dd} \]
-%% That is, for every $d \in \ssem \Delta$ we have to have
-%% \[M_d : B_{dd} \to A_{dd}\]
-%% and for every $f : d \to e$, we have
-%% \[ (b : B_{de}) \to A^{fd}(M_d(B^{df} b)) = A^{ef}(M_e(B^{fe} b)) : A_{ed}\]
-%% Trying to Grothendieck this around in my head, this means every
-%% element of $A_{dd}$ {\em has} a preimage set $B_{dd}$, but also general
-%% $B_{de}$s sort of exist and float around and determine the end property.
-%% Weird!
-
-%% Let's spell out the usual theorem and see if we can generalize it appropriately.
-%% \begin{thmbox}
-%% Let a set $A$ be given. The {\em choice} of a set $B$ and a function $B \to A$ is the same thing as
-%%   a function from $A$ into set. That is,
-%% \[ (B : \U) \x (B \to A) \equiv (A \to \U) \]
-%% \end{thmbox}
-%% The left-to-right part of the proof is
-%% \[\lambda \pair B \pi. \lambda a . (b : B) \x (\pi b = a)\]
-%% The right-to-left part of the proof is
-%% \[\lambda \beta . \langle (a : A) \x \beta(a), \pi_1 \rangle\]
-
-%% Okay, so the corresponding theorem is going to have the shape:
-%% Let a functor $A : \C \x \C^\op \to \rtype$ be given.
-%% The choice of $B$ a functor $\C \x \C^\op \to \rtype$
-%% and a term $M \in \int_{\delta} B_{\bar\delta} \to A_\delta$ is
-%% the same thing as {\em something else goes here}
-
-%% \subsection{A Guess}
-
-%% I'm going to try to go with the same intuition that an end is mostly about
-%% being canonically a function from {\em morphisms} to elements.
-%% I conjecture that the {\em something else goes here} is:
-%% \begin{quote}
-%%   A choice of a set for each morphism $f : d \to e \in \C$ and each element
-%%   $a \in A_{ed}$, subject to {\em some coherence conditions}
-%% \end{quote}
-
-%% \def\db#1{\widetilde{#1}}
-%% Let me write $\db \C$ for $\C \x \C^\op \to \rtype$. The conjecture looks like
-%% \begin{thmbox}
-%% For all $A : \db \C$,
-%%   \[(B : \db\C) \x (M : B \to A) \equiv (\beta : (f : d \to e) (a : A_{ed}) \to \U) \x P(\beta)\]
-%% \end{thmbox}
-
-%% Ok, good, let's write down the first component of the forward
-%% direction. We'll then try to do the backward direction, and hopefully that
-%% will help us figure out what $P$ should be, then we can return to trying to prove
-%% it holds for this particular $\beta$.
-
-%% Building $\beta$ means taking the inverse image under $M$, using $f$ to make
-%% this inverse image meaningful.
-%%   \[\beta : (B : \db\C) \x (M : B \to A) \to  (f : d \to e) (a : A_{ed}) \to \U\]
-%% \[\beta(B, M, f, a) = \{ b : B_{de} \st A^{ef}(M_e(B^{fe}(b))) = a \} \]
-%% We could of course have symmetrically used $A^{fd}(M_d(B^{df}(b)))$.
-
-%% In the reverse direction, the intuition is that we're building the
-%% total space of the fibered object. Maybe we can just existentially
-%% quantify over $f$, the same way as we do over $a$. Therefore we define
-%% \[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
-%% \[B(\beta, d, e) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
-%% And I may have gotten the order of the arguments $d$ and $e$ backwards.
-%% Let's try to see how $B$ is functorial, and maybe that will sort that out.
-
-%% Suppose we have a $\phi : de \to d'e'$, which is to say, $i : d \to d'$ and $o : e' \to e$.
-%%  We should be able to traverse
-%% \[
-%% ((f : d\to e)(a : A_{ed}) \x \beta(f, a))
-%% \to
-%% ((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
-%% \]
-%% Yeah, that looks like I got things backwards. Let's try
-
-%% \[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
-%% \[B(\beta, e, d) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
-%% so we have a morphism $\phi : ed \to e'd'$, which means $i : e \to e'$ and $o : d' \to d$.
-%% Now we can attempt
-%% \[
-%% B(\beta, i, o) : ((f : d\to e)(a : A_{ed}) \x \beta(f, a))
-%% \to
-%% ((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
-%% \]
-%% \[
-%% B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \textcolor{red}{?} \rangle
-%% \]
-%% Ok, this gap means we need some kind of transport from
-%% $\beta(f, a)$ to $\beta(ifo, A^{io} a)$. Toss this in the bag of stuff that is $P(\beta)$.
-%% We have at the `object level' that
-%% $\beta$ is a thing taking a morphism $f : d\to e$ and a $a : A_{ed}$ to a type,
-%% but we also need at the `morphism level' that a twisted morphism $t$
-%% from a {\em smaller} $f$ to a {\em bigger} $ifo$ lets us do
-%% \[\beta^{t} : \beta_f(a) \to \beta_s(A^{io} a)\]
-%% Ok, but great, if I had such transport, $B$ would be well-typed. I'd write
-%% \[
-%% B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \beta^{io} z \rangle
-%% \]
-
-%% There's
-%% still another part of the reverse direction, though. I need to build
-%% from $\beta$ an inhabitant of an end.
-
-%% \[M^\beta_d : B(\beta, d, d) \to A_{dd}\]
-%% \[M^\beta_d :  (f : d \to d)(a : A_{dd})(z : \beta(f, a)) \to A_{dd}\]
-%% Ah, but this will just be the projection.
-%% \[M_d(\beta, f, a, b) = a\]
-%% Let's check that $M^\beta$ is an end. Let $k : e \to d$
-%% be given. I start with $M_d$ and $M_e$.
-%% I can transport it to either of
-%% \[A_{ke} \o M_e \o B_{ek}^\beta : B_{ed}^\beta \to A_{de}\]
-%% \[A_{dk} \o M_d \o B_{kd}^\beta: B_{ed}^\beta \to A_{de}\]
-%% and these should turn out to be equal.
-
-%% Let $b : B^\beta_{ed} = (f : d \to e)(a : A_{ed}) \x \beta(f, a)$ be given.
-%% Then
-%% \[B^\beta_{ek}(f, a, z) = \langle  f k,  A^{ek} a, \beta^{ek} z \rangle\qquad
-%% B^\beta_{kd}(f, a, z) = \langle k f ,  A^{kd} a, \beta^{kd} z \rangle\]
-%% %
-%% \[M_e(B^\beta_{ek}(f, a, z)) = A^{ek} a \qquad
-%% M_d(B^\beta_{kd}(f, a, z)) =  A^{kd} a \]
-%% %
-%% \[A_{ke}M_e(B^\beta_{ek}(f, a, z)) = A^{kk} a \qquad
-%% A_{dk}M_d(B^\beta_{kd}(f, a, z)) =  A^{kk} a \]
-%% Huh, seems like it works.
-
-
-%% \subsection{Summing Up}
-%% \def\mod{\S}
-%% Assuming I haven't screwed up somewhere, the theorem looks like
-%% \begin{thmbox}
-%% For all $A : \db \C$,
-%%   \[(B : \db\C) \x (M : B \to A) \equiv  \mod A \]
-%% \end{thmbox}
-
-%% Where $F : \mod A$ is kind of like a functor; its object
-%% part is
-%% \[ F_f : \{f : c \to d\} (a : A_{dc}) \to \U \]
-%% and its morphism part is
-%% \[ F_{io} : \{o : b \to c\}\{i : d \to e\} (a : A_{dc}) \to F_f(a) \to F_{ifo}(A^{io}a)\]
-
-%% Oh, I never checked that the $B$ I defined actually preserved
-%% composition and identities. Checking that would surely impose the
-%% appropriate similar constraints on the morphism part of $F$ here.
-
-%% Actually, wait, can I define what $\mod A$ is using categories of elements or something?
-%% There is a forgetful-like functor $\Phi : \T \C \to \DD \C$, isn't there?
-
-%% Let's see... if $\C$ is a category and $F : \C \to \rset$, the category of elements
-%% $\int_\C$ of $F$ has as objects pairs $(c, x)$ with $x \in F(c)$. So $F_f$ is like the object
-%% part of a functor
-%% \[ \left(\int^{\T \C} A \o \Phi\right) \to \rset\]
-%% Right, ok, so perhaps
-%% \begin{thmbox}
-%% For all $A : \db \C$,
-%%   \[(B : \db\C) \x (M : B \to A) \equiv  \left(\int^{\T \C} A \o \Phi\right) \to \rset \]
-%% \end{thmbox}
-
-%% \subsection{The Million-Dollar Question}
-%% Now can I persuade myself, even informally, that a term of type $A$
-%% and one of these thingies should actually yield a type? I don't quite
-%% see how, unless I introduce another quantifier or something.
-
-%% Oh, wait, no, of course! I can choose the identity morphism.
-%% Given a type $\Gamma, x : A \prov B$ interpreted as
-%% $\left(\int^{\T \C} A \o \Phi\right) \to \rset$, and an $M_d : A_{dd}$,
-%% I can {\em choose} the object $\rid_{d}$ of $\T \C$,
-%% and then the element $M_d : A_{dd}$, and that gives me a type.
-
-%% No... Now I'm not sure that's right. Shouldn't I be getting out a $\db \C$ or something?
-%% Not just a set? Suppose I have $cd \in \DD \C$... No, I'm just lost.
-%% \subsection{The More Challenging Alternative}
-%% It's even more higher-order, but I could try starting with
-%% \begin{thmbox}
-%% For all $A : \db \C$,
-%%   \[(B : \db\C) \x (M : B \to A) \equiv (\forall de.(d \to e) \to A_{ed}) \to \db \C\]
-%% \end{thmbox}
-%% which is really sort of just saying
-%%   \[(B : \db\C) \x (M : B \to A) \equiv (\int_{c\in \C}  A_{cc}) \to \db \C\]
-%% which, if I {\em could} prove that, I'd definitely be in a good spot.
-%% That makes me worried it's too strong. But it seems to be just
-%% about exactly the statement that is the diagnostic of whether what I want to be
-%% true, is true.
-
-%% Let's try anyway.
-%% \[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
-%% Now $M$ itself is the end $\int_{c} B_{cc} \to A_{cc}$ isn't it? Actually, it's
-%% not totally clear. I could choose for it to be that, and I could choose
-%% it to be, like, a natural transformation of functors in $\db \C$. But the
-%% end intepretation seems more appropriate for this setting. The $\mathsf{fwd}$
-%% direction is supposed be about taking the $a$ and generating the
-%% set that is its inverse image under $M$. So something like
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st M(b) = a \}\]
-%% is what I'm aiming for. This has a morphism gap, for I can only pull out
-%% $M$'s functional nature by providing a morphism. So I could quantify; maybe
-%% one of
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c' \to c . M_f(b) = a_f \}\]
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c' \to c . M_f(b) = a_f \}\]
-%% might work. But I'm not sure I have the $c$s and $c'$s around correctly.
-
-%% If indeed $f : c' \to c$, then $a_f : A_{cc'}$, and $M_f : B_{c'c} \to A_{cc'}$.
-%%  So really I want to guess something closer to
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \forall f : c' \to c . M_f(b) = a_f \}\]
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \exists f : c' \to c . M_f(b) = a_f \}\]
-%% But I still might have the order of $c, c'$ wrong in the arguments to $\mathsf{fwd}$ itself.
-%% I need it to be functorial. Suppose I have $i : c \to d$ and $o : d' \to c'$. I have to
-%% be able to get
-%% from $\mathsf{fwd}_{cc'}$ to $\mathsf{fwd}_{dd'}$. Since $\mathsf{fwd}$ is made up of $B$s
-%% that have a certain property, I think I want to flip things around so that it's
-%% more like
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}\]
-%% \[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}\]
-%% Ok, let's now investigate both of these to see if either or both can be made
-%% functorial.
-%% \subsubsection{Existential}
-%% We have $\{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}$
-%% and $i : c \to d$ and $o : d' \to c'$ and we want to make
-%% \[\{ b \in B_{dd'} \st \exists h : d \to d' . M_h(b) = a_h \}\]
-%% The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
-%% if we know that $M_f(b) = a_f$ for {\em some} $f : c \to c'$, can we conclude
-%% that $M_h(B^{io} b) = a_h$ for some $h : d \to d'$? Unfortunately,
-%% there seems to be no way to build
-%% $d \to d'$ out of the zigzag $d' \to c' \leftarrow c \to d$.
-
-%% \subsubsection{Universal}
-%% Ok, so I think the universal quantifier has to be the correct way to do things.
-
-%% We have $\{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}$
-%% and $i : c \to d$ and $o : d' \to c'$ and we want to make
-%% \[\{ b \in B_{dd'} \st \forall h : d \to d' . M_h(b) = a_h \}\]
-%% The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
-%% if we know that $M_f(b) = a_f$ for {\em any} $f : c \to c'$, can we conclude
-%% that $M_h(B^{io} b) = a_h$ for any $h : d \to d'$? Well, $ohi : c \to c'$, so we know
-%% that $M_{ohi}(b) = a_{ohi}$.
-
-%% We're trying to establish now
-%% \[\begin{prooftree}
-%%   M_{ohi}(b) = a_{ohi}
-%% \justifies
-%% M_h(B^{io} b) = a_h
-%% \end{prooftree}\]
-%% which seems very difficult; it seems oriented backwards.
-
-%% \subsection{Just Looking at the Diagonal?}
-
-%% I'm not immediately constrained at the moment to use all of $B$.
-%% It might be that I only need to capture elements on $B$'s diagonal,
-%% and that that somehow suffices.
-
-%% I could try defining something like
-%% \[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
-%% \[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cc} \st \forall f : c \to d . A^{fc} M_c(b) = A^{fc} a_c \} \]
-%% No, this doesn't seem sufficiently different.
-%% \subsection{Interpreting $M$ as a natural transformation?}
-%% If $M : B \to A$ is a natural transformation $M_{cd} : B_{cd} \to A_{cd}$, then maybe
-%% we could do
-%% \[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \forall f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
-%% \[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \exists f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
-%% but that feels very wrong to use $f$ only on one side of the equation.
-
-%% \subsection{Pushing the Bubble Elsewhere?}
-
-%% Let's suppose that $M : B \to A$ is an end over $\C^\op$
-%% in the sense that such that for every $f : c \to d$, we get a function
-%% $B_{dc} \to A_{cd}$. Bah, no, does that even make sense with respect
-%% to what $B$ and $A$ are as types?
-
-%% \section{Deeply Confused}
-
-%% Let's take a step back and think about what I'm trying to do. Even
-%% saying in a very literal-minded way that the semantics of $\Delta ; x : A \prov B : \rtype$
-%% should be
-%% \[ \left ( \int_{d \in \ssem \Delta}  A_{dd} \right ) \to \db \C \]
-%% seems slightly wrong, because I would think that the meaning of $B_{cc'}$
-%% {\em at} particular values of $c$ and $c'$ would have to do with the value
-%% of the index at $c$ or $c'$, not having to do with, globally, the ability to make
-%% a $A_{dd}$ for {\em every} $d$.
-
-%% I can try interposing a conjunction or disjunction or something, which
-%% is sort of like the increasingly common move I've been making of
-%% interposing a quantifier for an impedance mismatch I don't otherwise
-%% know how to treat. That is, saying that the meaning of $\Delta ; x : A \prov B : \rtype$
-%% is something close to something in the family
-%% \[ (c : \C)(c' : \C^\op) \to A_{cc} \to A_{c'c'} \to \rtype \]
-%% \[ (c : \C)(c' : \C^\op) \to A_{cc'} \to A_{c'c} \to \rtype \]
-%% \[ (c : \C)(c' : \C^\op) \to (A_{cc'} + A_{c'c}) \to \rtype \]
-%% \[ (c : \C)(c' : \C^\op) \to (A_{cc} + A_{c'c'}) \to \rtype \]
-
-%% \subsection{Compressing}
-%% Would it help at all for faster calculating
-%% just to be able to state the conditions on the `morphism form' of
-%% the end condition?
-
-%% Suppose I have a functor $F : \C^\op \x\C \to \rset$. The end $\int F$ is
-%% defined as the set of maps $c \mapsto F_{cc}$ such that for any $f : c \to d$ the common
-%% transport to $F_{cd}$ is equal. I want to say that the end is the set of natural
-%% transformations
-%% $\hom_\C \to F$ such that {\em something something}.
-
-%% Say we have an element $e$ in the end. The way we construct $\tau (e) : \hom_\C \to F$
-%% Given $c$ and $d$, we take $f : c \to d$ to $F_{cf} e_c = F_{fd} e_d : F_{cd}$.
-%% Given some morphisms $\iota : b \to c$ and $\omega : d \to e$, We observe naturality
-%% \[
-%% \begin{tikzcd}
-%%   {f \in [c,d]} \ar[r]\ar[d]& F^{,f} e_c \in F_{cd}\ar[d]\\
-%%   {\omega f\iota \in [b,e]} \ar[r]& F^{\iota\omega} F^{,f} e_c \in  F_{be}
-%% \end{tikzcd}
-%% \]
-%% Because $F^{\iota,\omega f} e_c = F^{,\omega f \iota} e_b$ because
-%% $F^{\iota,} e_c = F^{, \iota} e_b$.
-
-%% Okay, given a natural transformation
-%% $\eta : \hom_\C \to F$, and given an object $c \in \C$, we create $F_{cc}$
-%% by just doing $\eta_c(\rid_c)$. Check that the end condition is satisfied.
-%% If we take $\eta_c(\rid_c)$ and transport it, we get $F_{cf}\eta_{cc}(\rid_c) : F_{cd}$.
-%% If we take $\eta_d(\rid_d)$ and transport it, we get $F_{fd}\eta_{dd}(\rid_d) : F_{cd}$.
-%% By naturality of $\eta$, we have
-%% \[
-%% \begin{tikzcd}
-%%  & {[c,c]} \ar[r, "\eta_{cc}"]\ar[d, "f \o "']&  F_{cc}\ar[d, "F^{cf}"]\\
-%% 1\ar[ur, bend left, "\rid_c"]\ar[r, "f"]\ar[dr, bend right, "\rid_d"']&  {[c,d]} \ar[r, "\eta_{cd}"']&  F_{cd}\\
-%%  & {[d,d]} \ar[r, "\eta_{dd}"']\ar[u, " \o f"]&  F_{dd}\ar[u, "F^{fd}"']
-%% \end{tikzcd}
-%% \]
-%% So yeah I guess naturality sufficies. I thought it was more than that.
-
-%% But this makes me see this as: ordinarily, a term at a (closed) type
-%% $A$ that lives in a category $\C$ is like a morphism $1 \to A : \C$.
-%% Here, a term at a (closed) type $A$ is a morphism
-%% $\hom_{\Delta} \to A : \Delta^\op \x \Delta \to \rset$. Clearly $\hom_\Delta$ isn't
-%% {\em  terminal}, but is it somehow special enough in another way,
-%% that makes it appropriate as a representation of the empty context?
-
-%% What's the interpretation of the context comma even for nondependent types?
-
-%% \subsection{An Adjunction}
-
-%% The category $\rcat$ is as usual, but say $\rcat_2$ is the category
-%% whose objects are categories, and whose morphisms $\C \to \D$ are
-%% actually functors $\C^\op \x \C \to \D$. Oh, is this just a co-kleisli
-%% category? We can lift $\C^\op \x \C \to \D$ to $\C^\op \x \C \to \D \x \D^\op$
-%% by op-and-swap, right. The comonadic $\epsilon$ is the obvious
-%% $\C^\op \x \C \to \C$, and the $\delta$ we can get by
-%% staring at
-%% \[\C^\op \x \C \to (\C^\op \x \C)^\op \x (\C^\op \x \C)\]
-%% and realizing if we have both sides of the coin, we have everything.
-
-%% With slightly more generality, suppose $\C$ is a category with
-%% binary products, and an involutive endofunctor
-%% $* : \C \to \C$ that preserves the products. Then the functor
-%% $c \mapsto c \x c^*$ is a comonad. Maybe I don't even need that $c^* = c$,
-%% just a map $c\to c^{**}$. Oh, and $*$ could merely laxly preserve products.
-%% Suppose I have a natural $\sigma_{ab} : a^* \x b^* \to (a \x b)^* $,
-%% and $\iota_c : c \to c^{**}$. Then I can define the comonadic
-%% $\epsilon$ like
-%% \[\epsilon_c : c^* \x c \to (c^* \x c)^* \x (c^* \x c) = \pair {\alpha_c} {\rid_{c^* \x c}}\]
-%% where
-%% \[
-%% \begin{tikzcd}
-%%   c^* \x c \ar[d, "c^* \x \iota_c"']\ar[r, "\alpha"] & (c^* \x c)^*\\
-%% c^* \x c^{**} \ar[r, "\sim"'] & c^{**} \x c^* \ar[u, "\sigma_{cc}"']
-%% \end{tikzcd}
-%% \]
-%% and then we want to check the comonad laws. Let's do associativity first.
-%% If we stare at
-%% \[
-%% \begin{tikzcd}
-%%  c^{*} \x c
-%% \ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
-%% & (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \x \epsilon_c"]\\
-%% (c^* \x c)^* \x (c^* \x c) \ar[r, "\epsilon_{c^* \x c}"']
-%%  &  ((c^* \x c)^* \x (c^* \x c))^* \x (c^* \x c)^* \x (c^* \x c)
-%% \end{tikzcd}
-%% \]
-%% we can think about either the first or second projection of the output. The second is
-
-%% \[
-%% \begin{tikzcd}
-%%  c^{*} \x c
-%% \ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
-%% & (c^* \x c)^* \x (c^* \x c) \ar[d, " \epsilon_c \o \pi_2"]\\
-%% (c^* \x c)^* \x (c^* \x c) \ar[r, equal]
-%%  &   (c^* \x c)^* \x (c^* \x c)
-%% \end{tikzcd}
-%% \]
-%% which is satisfied. The first is
-%% \[
-%% \begin{tikzcd}
-%%  c^{*} \x c
-%% \ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
-%% & (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \o \pi_1"]\\
-%% (c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
-%%  &  ((c^* \x c)^* \x (c^* \x c))^*
-%% \end{tikzcd}
-%% \]
-%% or
-%% \[
-%% \begin{tikzcd}
-%%  c^{*} \x c
-%% \ar[d, "\epsilon_c"']\ar[r, "\alpha_c"]
-%% & (c^* \x c)^*  \ar[d, "\epsilon_c^* "]\\
-%% (c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
-%%  &  ((c^* \x c)^* \x (c^* \x c))^*
-%% \end{tikzcd}
-%% \]
-%% Let's name $\tilde\sigma$ for $\sigma \o {\sim}$. We now have
-
-%% \[
-%% \begin{tikzcd}
-%% Dc
-%% \ar[d, "\epsilon_c"']\ar[r, "c^* \x \iota_c"]
-%% & \tilde D c^* \ar[r]
-%% & (Dc)^*  \ar[d, "\epsilon_c^* "]\\
-%% (c^* \x c)^* \x (c^* \x c) \ar[r, "{(c^* \x c)^* \x \iota_{c^* \x c}}"']
-%%  &  (c^* \x c)^* \x (c^* \x c)^{**} \ar[r, "\sigma_{c^* \x c,c^* \x c}"]
-%%  &  DDc
-%% \end{tikzcd}
-%% \]
-%% writing $Dc$ for $c^* \x c$.
-%% Ah, bah, this is a mess. Some requirements on $\iota$ and $\sigma$
-%% surely work, though. I can come back to this.
+%%
+ \]
+and try taking a $g : \Gamma_{de}$
+\begin{enumerate}
+\item giving this $\Gamma^{?} g$ and $\ell$, and getting out
+$A_{d'd}$, then $f'd$-transporting  to $A_{e'd}$
+\item giving this $\Gamma^{?} g$ and $r$, and getting out
+$A_{e'e}$, then $e'f$-transporting to $A_{e'd}$
+\end{enumerate}
+and demanding that those are equal. But I don't know how to fill in the $?$s if I abandon
+the twisted-arrow diagram.
+\subsection{Realizing a Bureaucractic Mistake}
+Of, should the typing terms actually be
+\[M^*_{\delta} :  [\delta] \to (g : \Gamma_{\delta})  \to A_{\bar \delta}(\bar g)\]
+after all? Because given a morphism $f : d \to e$ we go from $\Gamma_{de}$
+to $\Gamma_{dd}$ and $\Gamma_{ee}$, thence to $A_{dd}$ and $A_{ee}$, thence
+to $A_{ed}$.
+
+Let's just say as churn-insurance that
+\[A^+_{\delta} : \Gamma_\delta \to \rtype \qquad A^-_{\delta} : \Gamma_\delta \to \rtype\]
+\[A^+_{\delta}(g) = [\delta] \to A_\delta(g)
+\qquad
+A^-_{\delta}(g) = [\bar\delta] \to A_\delta(g)\]
+for $[dd']$ meaning $d \to d'$. Then I'm saying
+\[M^*_\delta: (g : \Gamma_\delta) \to A^-_{\bar \delta}(g)\]
+\[M_{de}(g, f) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+Oh, whoops, that's not right at all. In the dependent setting, I need
+to start with $\Gamma_{ff}$, not
+$\Gamma_{de}$. Hmm. So maybe I need the dependent type
+\[ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(?)\]
+But what goes in the $?$, huh?
+
+Wait, what common type are the two comparands
+in
+\[ (g : \Gamma_{ff}) \to A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) \equiv A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))\]
+?
+We have
+$A_\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}(g)) $
+$ \to A_\epsilon(\Gamma^{\rtri \phi}(g))$ so... oh, right, $\rtri ff$
+is a twisted arrow $ff \to ed$. So at least
+
+\begin{declbox}
+  $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
+\end{declbox}
+\begin{defnbox}
+  $M^+_{de}(f, g) =   A_{fd}(\Gamma_{\rtri \fdom}g, M_d(\Gamma_{\fdom}g )) = A_{ef}(\Gamma_{\rtri \fcod} g, M_e( \Gamma_{\fcod} g))$
+\end{defnbox}
+is a sensible thing to say. This is a much more reasonable expression
+of what {\em I can already do} with term semantics than my previous
+attempts, but it has the disadvantage that I can't easily pull out
+the $(g) \to A(g)$ part as a separate type.
+
+Nonetheless, let me investigate whether I can define
+ a semantic substitution coherence theorem
+if I use $A^+_\delta$ in the definition of contexts. That was the one that
+was oriented the right way around, wasn't it? Remember that if I have
+$\phi : \delta \to\epsilon$ which is $f : d \to e$ and $f' : e' \to d'$,
+then I can revere transport $h : [\epsilon] = e \to e'$ to $h^\phi : [\delta]$, right.
+
+This is the direction for which I'm able to define transport
+\[A_+^\phi : (g : \Gamma_\phi) \to A^+_\delta(\Gamma^{\ltri \phi}(g))
+ \to A^+_\epsilon(\Gamma^{\rtri \phi}(g))\]
+\[A_+^\phi(g, a, h) = A_\phi(g, a(h^\phi))\]
+and then contexts go like
+\[ (\Gamma, x + A)^+_\phi  = (g : \Gamma_\phi) \x A^+_{<\phi}(\Gamma^{\ltri \phi} g) \]
+\[ (\Gamma, x + A)_+^\tau(g, a)  = (\Gamma^\tau g ,  A_+^{<\tau}(\Gamma^{\ltri \tau} g, a)) \]
+I guess those more or less work transparently since $A^\phi_+$ satisfies the same
+interface as $A^\phi$. Probably need to prove functoriality for it though.
+
+I'm still having a hard time reconciling the context $A_\delta$ with
+the term $A_{\bar\delta}$. Let's put that off and see if I can
+generalize the end-condition at least, though.
+Let $o, f, i$ in
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+be given, and set $s = ofi$, and $\delta = d'd$ and $\epsilon = ee'$.
+I think I want to reconcile  $M_\delta(i)$ and $M_\epsilon(o)$.
+Ehhh but if I have
+\begin{declbox}
+  $ M^+_\delta : (f : [\delta]) (g : \Gamma_{ff}) \to A_{\bar \delta}(\Gamma_{\rtri ff} g)$
+\end{declbox}
+Then I probably would want to ask for $\Gamma_{ss}$ to start with, and I don't know
+how to get $\Gamma_{ii}$ from that.
+
+Perhaps can I make the definition
+\begin{defnbox}
+  $\Gamma^A_f =  (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g)$
+\end{defnbox}
+and show that if I have a twisted arrow $t : s \to f$, then I can go
+\begin{declbox}
+  $ \Gamma^t_A :  \Gamma^A_f \to \Gamma^A_s $
+\end{declbox}
+i.e.
+  \[ \Gamma^t_A :  ( (g : \Gamma_{ff}) \to A_{ed}(\Gamma^{\rtri ff} g))
+  \to
+  ( (z : \Gamma_{ss}) \to A_{e'd'}(\Gamma^{\rtri ss} z)) \]
+?
+Oh, it actually looks like I can.
+\begin{defnbox}
+  $ \Gamma^t_A(q, z) =  A^{oi}(\Gamma^{\rtri tt} z , q(\Gamma^{tt} z)) $
+\end{defnbox}
+We plug in $\Gamma^{tt} z$ for $g$.
+Now $q(\Gamma^{tt} z)$ has type $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$.
+There's a `$\phi$-coercion of $t$' call it $\dot t$, which
+is just $(\ll t, \rr t)$, forgetting about its domain and codomain.
+In this case $\dot t = oi$.
+We want to take this $A_{ed}(\Gamma^{\rtri ff} \Gamma^{tt} z)$
+data and $A^{oi}$ transport it.
+Recall
+\[ A^{oi} : (g : \Gamma_{oi}) \to A_{ed}(\Gamma^{\ltri oi} g)
+\to A_{e'd'}(\Gamma^{\rtri oi} g) \]
+And this is fine because $\ltri oi \o \rtri tt = \rtri ff \o tt$,
+and $\rtri ss = \rtri oi \o \rtri tt$.
+
+Ok, and I see that this is actually very closely related
+to the $A^{tt}_>$ that I defined before, great.
+
+Anyway I {\em think} that the end-condition now looks like saying
+that
+if you have $M_{d'd}(i) : \Gamma^A_i$ and $M_{ee'}(o) : \Gamma^A_o$, then at
+least they're equal at their common transport to $\Gamma^A_s$, i.e.
+\begin{thmbox}
+$\Gamma^{\ltri t}_A(M_{d'd}(i)) = \Gamma^{\rtri t}_A(M_{ee'}(o))$
+\end{thmbox}
+\section{Starting Over With Simple Examples}
+
+I still fail to understand what it really means to have an indexed
+type in this setting. Suppose we have $\Delta \prov A : \rtype$,
+which means $A_{\delta} : \rtype$ and $A_\phi : A_\delta \to A_\epsilon$.
+Suppose $\Delta \prov M : A$, which means $M_d : A_{dd}$ and
+$A_{fd} M_d = A_{ef} M_e : A_{ed}$.
+
+Now what could it mean to have $\Delta; x : A \prov B : \rtype$?
+Surely at least it means for every $M : A$ as above, that we get a type.
+The other way we can see $M$ is as $M_\delta : [\delta] \to A_{\bar\delta}$
+so that $M_{de}(f) : A_{ed}$. So maybe  one of
+\[B^-_\delta : ([\delta] \to A_{\bar \delta}) \to \rtype\]
+\[B^+_\delta : ([\bar\delta] \to A_{ \delta}) \to \rtype\]
+In either case, if I have the interpretation of $B$, and I have the interpretation of
+$M$, I can make a type.
+
+Can we define transport for $B_{\delta}$? Depending on whether I think of it as a $+$
+or $-$ assumption, I'd want
+\[B^-_{\phi} : (a : [\delta] \to A_{\bar \delta}) \to B_\delta(A_{\bar\phi}(a)) \to B_\epsilon(a)\]
+\[B^+_{\phi} : (a : [\bar\delta] \to A_{ \delta}) \to B_\delta(a) \to B_\epsilon(A_\phi(a))\]
+So we somehow have to define
+\[A_\phi : ([\bar\delta] \to A_\delta)  \to ([\bar\epsilon] \to A_\epsilon) \]
+But this is backwards!
+
+So once again, apparently the only notion of term that I can coherently index
+over looks more like $[\delta] \to A_\delta$, which {\em isn't} what pops naturally
+out of (co)ends, which scares me a bit.
+
+Let's proceed anyway. The static semantics for $x + A \prov B : \rtype$ is
+\[B_\phi : (a : [\delta] \to A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
+
+Bah. What kind of twisted-arrow transport can I expect at the type $[\delta] \to A_\delta$?
+Back at $[\bar \delta] \to A_{\delta}$ I could take $t : s \to f$ and
+go from $\Gamma_f^A$ to $\Gamma_s^A$. Let's conjecture that if I instead define
+\[\Gamma^A_f = (g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g) \]
+that I can go from $\Gamma^A_s \to \Gamma^A_f$ in
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+i.e. can I make
+\[ ((z : \Gamma_{ss}) \to A_{d'e'}(\Gamma^{\ltri ss} z)) \to
+((g : \Gamma_{ff}) \to A_{de}(\Gamma^{\ltri ff} g)) \]
+No, this is a nonstarter! I can't get from $\Gamma_{ff}$ to $\Gamma_{ss}$.
+
+\subsection{A Low-Probability Option}
+
+What happens if I simply demand that $M_\delta$ exists as a global section, so that
+every transport $A_\phi(M_\delta) = M_\epsilon$? This seems too strong, but maybe
+worth thinking about it to see where the bubble goes. In this case,
+simply
+\[B_\phi : (a : A_\delta) \to B_{\delta}(a) \to B_{\epsilon}(A^\phi a) \]
+as before, the only difference being that $M_\delta : A_\delta$ gives us something to
+semantically substitute when we need to. Now the main thing I'd worry about
+is how categorical quantifiers look.
+
+A type in context is still $A_\delta : \Gamma_\delta \to \rtype$
+and
+\[A^\phi : (g : \Gamma_\phi) \to A_\delta(\Gamma^{\ltri \phi}g)
+ \to A_\epsilon(\Gamma^{\rtri \phi}g)\]
+and a term in general is $M_\delta : (g : \Gamma_\delta) \to A_\delta$.
+So what's $\forall \alpha . A$ look like? Statically
+\[ (( \alpha : \C) \to  A)_\delta(g) = \int_{c \in \C} A_{\delta c c}(g)\]
+and then I expect problems to arise when I try to go from $\forall \alpha . A$
+to $[t/\alpha]A$. Unless... $t$ supplies a morphism somehow?
+
+Suppose I have a $\int_{c\in \C} A_{\delta c c} (g)$. I want to get
+a $A_{\delta t t}(g)$. Ugh, maybe this isn't a problem?
+
+\subsection{Trying to Connect Ends and Global Sections}
+Let me clear my mind, and start with
+\begin{declbox}
+  $ \Gamma_{\phi} :   \rtype $\\
+  $ A_{\delta} :  \Gamma_\delta \to \rtype $\\
+  $ M_{\delta} : (g : \Gamma_\delta) \to A_{\delta}(g) $\\
+  $ \Gamma^{\tau} :   \Gamma_\psi \to \Gamma_\phi $\\
+  $ A^{\phi} :  (g : \Gamma_\phi) \to A_{\delta}(\Gamma^{\ltri\phi}g) $
+$\to A_{\epsilon}(\Gamma^{\rtri\phi}g)$
+\end{declbox}
+\begin{thmbox}
+$ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)$
+\end{thmbox}
+\subsubsection{Formation}
+
+I want to address the $\forall$ formation rule first.
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov A : \rtype
+}
+{\Delta ; \Gamma \prov (\alpha : \C) \to A : \rtype}
+\]
+Object part is
+\begin{defnbox}
+  $((\alpha : \C) \to A)_\delta(g) = \int_{c \in \C} A_{\delta cc}(g) $
+\end{defnbox}
+and morphism part is
+\[ ((\alpha : \C) \to A)^\phi : (g : \Gamma_\phi)
+\to \int_{c \in \C} A_{\delta cc}(\Gamma^{\ltri\phi} g)
+\to \int_{c \in \C} A_{\epsilon cc}(\Gamma^{\rtri\phi} g) \]
+\begin{defnbox}
+  $ ((\alpha : \C) \to A)^\phi(g, E) = \lambda c . A^{\phi cc}(g, E(c))$
+\end{defnbox}
+\subsubsection{Intro}
+\[
+\erule
+{
+\Delta, \alpha : \C; \Gamma \prov M : A
+}
+{\Delta ; \Gamma \prov \Lambda \alpha . M :  (\alpha : \C) \to A }
+\]
+And I can observe
+\[ (\Lambda \alpha . M)_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
+\[ M_{\delta c c'} : (g : \Gamma_\delta) \to  A_{\delta cc'}(g)\]
+So that, not needing to take advantage of the full asymmetric structure of $M$,
+I can nonetheless say, contractingly,
+\begin{defnbox}
+  $ (\Lambda \alpha . M)_{\delta}(g) = \lambda c . M_{\delta c c}(g)$
+\end{defnbox}
+And the property of being a global section is strictly stronger than being an end;
+the end condition is satisfied a fortiori.
+
+\subsubsection{Elim}
+Okay, everything is riding on the elim rule, then.
+The thing that gives me hope is I feel a lot of wiggle room in the semantics
+for $\Delta \prov t : \C$.
+\[\erule
+{
+\Delta; \Gamma \prov M : (\alpha : \C) \to A \qquad \Delta \prov t : \C
+}
+{\Delta ; \Gamma \prov M[t] :  [t/\alpha] A}
+\]
+What we have is
+\[ M_\delta : (g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g)\]
+and what we need is
+\[ (M[t])_\delta : (g : \Gamma_\delta) \to ([t/\alpha] A)_{\delta }(g)\]
+I'm going to imagine that the semantics of $t$ is somehow a pair
+of functors and a natural transformation between them. I posit that
+it gives me an object
+$t^<_\delta$, an object $t^>_\delta$, and a morphism $t_\delta : t^<_\delta \to t^>_\delta$.
+
+I'm going to assume that
+\begin{thmbox}
+$([t/\alpha]A)_\delta(g) = A_{\delta t^>_\delta t^<_\delta}(g)$
+\end{thmbox}
+And now, by construction, it's easy as pie to achieve
+\[(g : \Gamma_\delta) \to \int_{c \in \C} A_{\delta cc}(g) \to A_{\delta t^>_\delta t^<_\delta}(g)\]
+for that's exactly what the end is set up to enable. We can either take the end
+$E :\int_{c\in\C} A_{\delta c c}(g)$ and instantiate it at $t^<_\delta$ to get
+$A_{\delta t^<_\delta t^<_\delta}(g)$ and forward-transport to the goal,
+or instantiate to get $A_{\delta t^>_\delta t^>_\delta}(g)$ and reverse-transport to
+the goal. The end-condition tells us these are the same.
+
+So I can notate this as
+\begin{defnbox}
+  $ (M[t])_\delta(g) = M_\delta(g)[t_\delta] $
+\end{defnbox}
+Checking the functoriality of this definition should give us some additional
+constraints on $t^<_\delta, t^>_\delta, t_\delta$. Perhaps $t$ is a functor into
+$\T \rtype$ or something.
+
+Ok, let's go. Functoriality is generally
+\[ (g:\Gamma_\phi) \to A^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+So what we know is
+\[ (g:\Gamma_\phi) \to ((a : \C) \to A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+
+and what we want is
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, (M[t])_\delta(\Gamma^{\ltri \phi} g)) = (M[t])_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+And... ah, I still need a theorem about transport and category-term substitution.
+Let's try to guess something appropriate.
+
+We know we're going to have to make
+\[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
+\to ([t/\alpha] A)_\delta(\Gamma^{\ltri \phi} g)
+\to ([t/\alpha] A)_\epsilon(\Gamma^{\rtri \phi} g) \]
+which is
+\[([t/\alpha] A)^\phi : (g : \Gamma_\phi)
+\to A_{\delta t^>_\delta t^<_\delta}(\Gamma^{\ltri \phi} g)
+\to A_{\epsilon t^>_\epsilon t^<_\epsilon}(\Gamma^{\rtri \phi} g) \]
+So this makes me assume that there's got to be a diagram like
+\[
+\begin{tikzcd}
+t^<_\epsilon \ar[r, "t_\epsilon"]\ar[d, "t_\phi^<"']& t^>_\epsilon\ar[from=d, "t_\phi^>"']\\
+t^<_\delta \ar[r, "t_\delta"']& t^>_\delta
+\end{tikzcd}
+\]
+Where $t_\phi = (t_\phi^<, t_\phi^>)$ is the twisted morphism $t_\epsilon \to t_\delta$.
+Now we can assert
+\begin{thmbox}
+  $([t/\alpha] A)^\phi(g, a) = A^{\phi t_\phi^> t_\phi^<}(g, a) $
+\end{thmbox}
+
+Going way back, we recall that what we {\bf have} is
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)(c)) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+\[ (g:\Gamma_\phi) \to \lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]) = M_\epsilon(\Gamma^{\rtri \phi} g)\]
+and what we {\bf want} is
+\[ (g:\Gamma_\phi) \to ([t/\alpha]A)^\phi(g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+\[ (g:\Gamma_\phi) \to A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+= M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]\]
+This is actually looking really good! We just have to establish the property
+that `applying an end to a morphism' has. It would suffice to finish the proof
+of functoriality to show
+\[
+(\lambda c . A^{\phi cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
+=
+A^{\phi t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+by, respectively, the hypothesized and required equality of these to
+$M_\epsilon(\Gamma^{\rtri \phi} g)[t_\epsilon]$.
+
+Ok, let's back up and try to assert this property generally.
+I'm pretty sure I can abstract out the $A^{\phi}$ and reduce this to something like
+\[
+(\lambda c . A^{ cc}(g, M_\delta(\Gamma^{\ltri \phi} g)[\rid_c]))[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+but $A^{cc}$ is the identity so
+\[
+(\lambda c . M_\delta(\Gamma^{\ltri \phi} g)[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M_\delta(\Gamma^{\ltri \phi} g)[t_\delta])
+\]
+
+then get abstract out the $M_\delta(\Gamma^{\ltri \phi})$
+and just think about
+\[
+(\lambda c .  M[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} (g, M[t_\delta])
+\]
+and then the contexts are relatively unimportant so
+\[
+(\lambda c . M[\rid_c])[t_\epsilon]
+=
+A^{ t^>_\phi t^<_\phi} ( M[t_\delta])
+\]
+and then suppose we have a general
+ square of morphisms like
+\[
+\begin{tikzcd}
+d' \ar[r, "s"]\ar[d, "i"']& e'\ar[from=d, "o"']\\
+d \ar[r, "f"']& e
+\end{tikzcd}
+\]
+so we can rename to
+\[
+(\lambda c .  M[\rid_c])[s] = A^{ o i} (M[f])
+\]
+but we've just $\eta$-expanded $M$, so this is really
+\[
+M[s] = A^{ o i} (M[f])
+\]
+
+Ok, this is maybe small enough to look at and reinfer what the types are.
+We have some kind of functor $A : \C \x \C^\op \to \rtype$.
+We have an inhabitant of the end of $A$, $M_d : A_{dd}$. What we mean
+by $M[f]$ for $f : d \to e$ is either of $A^{fd} M_d = A^{ef} M_e : A_{ed}$.
+If we hit that wth $A^{oi}$ we get $A^{of,i} M_d = A^{o,fi} M_e : A_{e'd'}$.
+
+Ok, on the other side, we have
+$A^{ofi,} M_{d'} = A^{,ofi} M_{e'} : A_{e'd'}$. This means I just need to show
+equivalently
+either of
+\[A^{ofi,} M_{d'} = A^{of,i} M_d : A_{e'd'} \]
+\[A^{,ofi} M_{e'} = A^{o,fi} M_e : A_{e'd'} \]
+but these follow from hitting the known equations
+\[A^{i,} M_{d'} = A^{,i} M_d : A_{dd'} \]
+\[A^{,o} M_{e'} = A^{o,} M_e : A_{e'e} \]
+with $A^{of,}$ or $A^{,fi}$, respectively.
+
+So I think that's enough to see that functoriality holds!
+
+\subsection{But wait what's the problem with this}
+
+It doesn't seem practical to ask for a sequent
+\[\Delta \prov t : \C\]
+to give morphisms in the twisted arrow category. Recall that there is not
+necessarily a functor even
+\[ \C \to \T \C\]
+because if we take objects to identities, we would have to take morphisms
+to {\em isomorphisms}.
+
+\section{What Next?}
+
+The essential problem seems to be that terms are defined symmetrically
+and types are defined asymmetrically. Or to put it another way,
+terms are defined on $\ssem \Delta$ and types are defined on $\sem \Delta$.
+However, we know that a term-with-a-morphism is enough to give fully
+asymmetric data.
+
+Is there some way of stating what {\em is} true about substitution on types
+in terms of this?
+Like, if I have $\Delta; \Gamma \prov M : A$,
+I have $M_d : (g : \Gamma_{dd}) \to A_{dd}(g)$. If I have
+$\Delta; \Gamma, x : A \prov B : \rtype$, then in general I have
+\[(g : \Gamma_\delta)  (a : A_\delta(g)) (a' : A_{\bar \delta}(\bar g)) \to B_\delta(g, a, a')\]
+which, actually, come to think of it,
+ is an even more onerous thing that requires morphisms in both $[\bar\delta]$ {\em and}
+$[\delta]$ if $B$ used both $a$ and $a'$.
+
+One idea I don't like the notion of trying to pursue is asking what
+happens if $A_\delta$ only depends on, like, half of $\delta$.
+
+\subsection{What About the Usual Way of Modelling Dependent Types}
+
+Consider the simply-typed case, whose semantics I think I understand.
+What's the situation look like when I have two types
+$\Delta \prov A, B : \rtype$ and a map $\Delta; x : B \prov  A$.
+The witnesses for that judgment are inhabitants of the end
+\[\int_{d \in \ssem \Delta} B_{dd} \to A_{dd} \]
+That is, for every $d \in \ssem \Delta$ we have to have
+\[M_d : B_{dd} \to A_{dd}\]
+and for every $f : d \to e$, we have
+\[ (b : B_{de}) \to A^{fd}(M_d(B^{df} b)) = A^{ef}(M_e(B^{fe} b)) : A_{ed}\]
+Trying to Grothendieck this around in my head, this means every
+element of $A_{dd}$ {\em has} a preimage set $B_{dd}$, but also general
+$B_{de}$s sort of exist and float around and determine the end property.
+Weird!
+
+Let's spell out the usual theorem and see if we can generalize it appropriately.
+\begin{thmbox}
+Let a set $A$ be given. The {\em choice} of a set $B$ and a function $B \to A$ is the same thing as
+  a function from $A$ into set. That is,
+\[ (B : \U) \x (B \to A) \equiv (A \to \U) \]
+\end{thmbox}
+The left-to-right part of the proof is
+\[\lambda \pair B \pi. \lambda a . (b : B) \x (\pi b = a)\]
+The right-to-left part of the proof is
+\[\lambda \beta . \langle (a : A) \x \beta(a), \pi_1 \rangle\]
+
+Okay, so the corresponding theorem is going to have the shape:
+Let a functor $A : \C \x \C^\op \to \rtype$ be given.
+The choice of $B$ a functor $\C \x \C^\op \to \rtype$
+and a term $M \in \int_{\delta} B_{\bar\delta} \to A_\delta$ is
+the same thing as {\em something else goes here}
+
+\subsection{A Guess}
+
+I'm going to try to go with the same intuition that an end is mostly about
+being canonically a function from {\em morphisms} to elements.
+I conjecture that the {\em something else goes here} is:
+\begin{quote}
+  A choice of a set for each morphism $f : d \to e \in \C$ and each element
+  $a \in A_{ed}$, subject to {\em some coherence conditions}
+\end{quote}
+
+\def\db#1{\widetilde{#1}}
+Let me write $\db \C$ for $\C \x \C^\op \to \rtype$. The conjecture looks like
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv (\beta : (f : d \to e) (a : A_{ed}) \to \U) \x P(\beta)\]
+\end{thmbox}
+
+Ok, good, let's write down the first component of the forward
+direction. We'll then try to do the backward direction, and hopefully that
+will help us figure out what $P$ should be, then we can return to trying to prove
+it holds for this particular $\beta$.
+
+Building $\beta$ means taking the inverse image under $M$, using $f$ to make
+this inverse image meaningful.
+  \[\beta : (B : \db\C) \x (M : B \to A) \to  (f : d \to e) (a : A_{ed}) \to \U\]
+\[\beta(B, M, f, a) = \{ b : B_{de} \st A^{ef}(M_e(B^{fe}(b))) = a \} \]
+We could of course have symmetrically used $A^{fd}(M_d(B^{df}(b)))$.
+
+In the reverse direction, the intuition is that we're building the
+total space of the fibered object. Maybe we can just existentially
+quantify over $f$, the same way as we do over $a$. Therefore we define
+\[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
+\[B(\beta, d, e) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
+And I may have gotten the order of the arguments $d$ and $e$ backwards.
+Let's try to see how $B$ is functorial, and maybe that will sort that out.
+
+Suppose we have a $\phi : de \to d'e'$, which is to say, $i : d \to d'$ and $o : e' \to e$.
+ We should be able to traverse
+\[
+((f : d\to e)(a : A_{ed}) \x \beta(f, a))
+\to
+((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
+\]
+Yeah, that looks like I got things backwards. Let's try
+
+\[B : (\beta : (f : d \to e) (a : A_{ed}) \to \U) \to \db \C\]
+\[B(\beta, e, d) = (f : d\to e)(a : A_{ed}) \x \beta(f, a) \]
+so we have a morphism $\phi : ed \to e'd'$, which means $i : e \to e'$ and $o : d' \to d$.
+Now we can attempt
+\[
+B(\beta, i, o) : ((f : d\to e)(a : A_{ed}) \x \beta(f, a))
+\to
+((f' : d'\to e')(a' : A_{e'd'}) \x \beta(f', a'))
+\]
+\[
+B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \textcolor{red}{?} \rangle
+\]
+Ok, this gap means we need some kind of transport from
+$\beta(f, a)$ to $\beta(ifo, A^{io} a)$. Toss this in the bag of stuff that is $P(\beta)$.
+We have at the `object level' that
+$\beta$ is a thing taking a morphism $f : d\to e$ and a $a : A_{ed}$ to a type,
+but we also need at the `morphism level' that a twisted morphism $t$
+from a {\em smaller} $f$ to a {\em bigger} $ifo$ lets us do
+\[\beta^{t} : \beta_f(a) \to \beta_s(A^{io} a)\]
+Ok, but great, if I had such transport, $B$ would be well-typed. I'd write
+\[
+B(\beta, i, o)(f, a, z) = \langle i\o f\o o,  A^{io} a, \beta^{io} z \rangle
+\]
+
+There's
+still another part of the reverse direction, though. I need to build
+from $\beta$ an inhabitant of an end.
+
+\[M^\beta_d : B(\beta, d, d) \to A_{dd}\]
+\[M^\beta_d :  (f : d \to d)(a : A_{dd})(z : \beta(f, a)) \to A_{dd}\]
+Ah, but this will just be the projection.
+\[M_d(\beta, f, a, b) = a\]
+Let's check that $M^\beta$ is an end. Let $k : e \to d$
+be given. I start with $M_d$ and $M_e$.
+I can transport it to either of
+\[A_{ke} \o M_e \o B_{ek}^\beta : B_{ed}^\beta \to A_{de}\]
+\[A_{dk} \o M_d \o B_{kd}^\beta: B_{ed}^\beta \to A_{de}\]
+and these should turn out to be equal.
+
+Let $b : B^\beta_{ed} = (f : d \to e)(a : A_{ed}) \x \beta(f, a)$ be given.
+Then
+\[B^\beta_{ek}(f, a, z) = \langle  f k,  A^{ek} a, \beta^{ek} z \rangle\qquad
+B^\beta_{kd}(f, a, z) = \langle k f ,  A^{kd} a, \beta^{kd} z \rangle\]
+%
+\[M_e(B^\beta_{ek}(f, a, z)) = A^{ek} a \qquad
+M_d(B^\beta_{kd}(f, a, z)) =  A^{kd} a \]
+%
+\[A_{ke}M_e(B^\beta_{ek}(f, a, z)) = A^{kk} a \qquad
+A_{dk}M_d(B^\beta_{kd}(f, a, z)) =  A^{kk} a \]
+Huh, seems like it works.
+
+
+\subsection{Summing Up}
+\def\mod{\S}
+Assuming I haven't screwed up somewhere, the theorem looks like
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv  \mod A \]
+\end{thmbox}
+
+Where $F : \mod A$ is kind of like a functor; its object
+part is
+\[ F_f : \{f : c \to d\} (a : A_{dc}) \to \U \]
+and its morphism part is
+\[ F_{io} : \{o : b \to c\}\{i : d \to e\} (a : A_{dc}) \to F_f(a) \to F_{ifo}(A^{io}a)\]
+
+Oh, I never checked that the $B$ I defined actually preserved
+composition and identities. Checking that would surely impose the
+appropriate similar constraints on the morphism part of $F$ here.
+
+Actually, wait, can I define what $\mod A$ is using categories of elements or something?
+There is a forgetful-like functor $\Phi : \T \C \to \DD \C$, isn't there?
+
+Let's see... if $\C$ is a category and $F : \C \to \rset$, the category of elements
+$\int_\C$ of $F$ has as objects pairs $(c, x)$ with $x \in F(c)$. So $F_f$ is like the object
+part of a functor
+\[ \left(\int^{\T \C} A \o \Phi\right) \to \rset\]
+Right, ok, so perhaps
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv  \left(\int^{\T \C} A \o \Phi\right) \to \rset \]
+\end{thmbox}
+
+\subsection{The Million-Dollar Question}
+Now can I persuade myself, even informally, that a term of type $A$
+and one of these thingies should actually yield a type? I don't quite
+see how, unless I introduce another quantifier or something.
+
+Oh, wait, no, of course! I can choose the identity morphism.
+Given a type $\Gamma, x : A \prov B$ interpreted as
+$\left(\int^{\T \C} A \o \Phi\right) \to \rset$, and an $M_d : A_{dd}$,
+I can {\em choose} the object $\rid_{d}$ of $\T \C$,
+and then the element $M_d : A_{dd}$, and that gives me a type.
+
+No... Now I'm not sure that's right. Shouldn't I be getting out a $\db \C$ or something?
+Not just a set? Suppose I have $cd \in \DD \C$... No, I'm just lost.
+\subsection{The More Challenging Alternative}
+It's even more higher-order, but I could try starting with
+\begin{thmbox}
+For all $A : \db \C$,
+  \[(B : \db\C) \x (M : B \to A) \equiv (\forall de.(d \to e) \to A_{ed}) \to \db \C\]
+\end{thmbox}
+which is really sort of just saying
+  \[(B : \db\C) \x (M : B \to A) \equiv (\int_{c\in \C}  A_{cc}) \to \db \C\]
+which, if I {\em could} prove that, I'd definitely be in a good spot.
+That makes me worried it's too strong. But it seems to be just
+about exactly the statement that is the diagnostic of whether what I want to be
+true, is true.
+
+Let's try anyway.
+\[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
+Now $M$ itself is the end $\int_{c} B_{cc} \to A_{cc}$ isn't it? Actually, it's
+not totally clear. I could choose for it to be that, and I could choose
+it to be, like, a natural transformation of functors in $\db \C$. But the
+end intepretation seems more appropriate for this setting. The $\mathsf{fwd}$
+direction is supposed be about taking the $a$ and generating the
+set that is its inverse image under $M$. So something like
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st M(b) = a \}\]
+is what I'm aiming for. This has a morphism gap, for I can only pull out
+$M$'s functional nature by providing a morphism. So I could quantify; maybe
+one of
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c' \to c . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c' \to c . M_f(b) = a_f \}\]
+might work. But I'm not sure I have the $c$s and $c'$s around correctly.
+
+If indeed $f : c' \to c$, then $a_f : A_{cc'}$, and $M_f : B_{c'c} \to A_{cc'}$.
+ So really I want to guess something closer to
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \forall f : c' \to c . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{c'c} \st \exists f : c' \to c . M_f(b) = a_f \}\]
+But I still might have the order of $c, c'$ wrong in the arguments to $\mathsf{fwd}$ itself.
+I need it to be functorial. Suppose I have $i : c \to d$ and $o : d' \to c'$. I have to
+be able to get
+from $\mathsf{fwd}_{cc'}$ to $\mathsf{fwd}_{dd'}$. Since $\mathsf{fwd}$ is made up of $B$s
+that have a certain property, I think I want to flip things around so that it's
+more like
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}\]
+\[ \mathsf{fwd}_{cc'}(B, M, a) = \{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}\]
+Ok, let's now investigate both of these to see if either or both can be made
+functorial.
+\subsubsection{Existential}
+We have $\{ b \in B_{cc'} \st \exists f : c \to c' . M_f(b) = a_f \}$
+and $i : c \to d$ and $o : d' \to c'$ and we want to make
+\[\{ b \in B_{dd'} \st \exists h : d \to d' . M_h(b) = a_h \}\]
+The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
+if we know that $M_f(b) = a_f$ for {\em some} $f : c \to c'$, can we conclude
+that $M_h(B^{io} b) = a_h$ for some $h : d \to d'$? Unfortunately,
+there seems to be no way to build
+$d \to d'$ out of the zigzag $d' \to c' \leftarrow c \to d$.
+
+\subsubsection{Universal}
+Ok, so I think the universal quantifier has to be the correct way to do things.
+
+We have $\{ b \in B_{cc'} \st \forall f : c \to c' . M_f(b) = a_f \}$
+and $i : c \to d$ and $o : d' \to c'$ and we want to make
+\[\{ b \in B_{dd'} \st \forall h : d \to d' . M_h(b) = a_h \}\]
+The thing we do to the $b$ itself seems forced; it's $B^{io} b$. So
+if we know that $M_f(b) = a_f$ for {\em any} $f : c \to c'$, can we conclude
+that $M_h(B^{io} b) = a_h$ for any $h : d \to d'$? Well, $ohi : c \to c'$, so we know
+that $M_{ohi}(b) = a_{ohi}$.
+
+We're trying to establish now
+\[\begin{prooftree}
+  M_{ohi}(b) = a_{ohi}
+\justifies
+M_h(B^{io} b) = a_h
+\end{prooftree}\]
+which seems very difficult; it seems oriented backwards.
+
+\subsection{Just Looking at the Diagonal?}
+
+I'm not immediately constrained at the moment to use all of $B$.
+It might be that I only need to capture elements on $B$'s diagonal,
+and that that somehow suffices.
+
+I could try defining something like
+\[ \mathsf{fwd} : (B : \db \C)(M : B \to A)(a : \int_{c\in\C} A_{cc}) (c : \C)(c' : \C^\op) \to \rset\]
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cc} \st \forall f : c \to d . A^{fc} M_c(b) = A^{fc} a_c \} \]
+No, this doesn't seem sufficiently different.
+\subsection{Interpreting $M$ as a natural transformation?}
+If $M : B \to A$ is a natural transformation $M_{cd} : B_{cd} \to A_{cd}$, then maybe
+we could do
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \forall f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
+\[ \mathsf{fwd}_{cd}(B, M, a) = \{ b \in B_{cd} \st \exists f : d \to c .  M_{cd}(b) = A^{cf} a_c \} \]
+but that feels very wrong to use $f$ only on one side of the equation.
+
+\subsection{Pushing the Bubble Elsewhere?}
+
+Let's suppose that $M : B \to A$ is an end over $\C^\op$
+in the sense that such that for every $f : c \to d$, we get a function
+$B_{dc} \to A_{cd}$. Bah, no, does that even make sense with respect
+to what $B$ and $A$ are as types?
+
+\section{Deeply Confused}
+
+Let's take a step back and think about what I'm trying to do. Even
+saying in a very literal-minded way that the semantics of $\Delta ; x : A \prov B : \rtype$
+should be
+\[ \left ( \int_{d \in \ssem \Delta}  A_{dd} \right ) \to \db \C \]
+seems slightly wrong, because I would think that the meaning of $B_{cc'}$
+{\em at} particular values of $c$ and $c'$ would have to do with the value
+of the index at $c$ or $c'$, not having to do with, globally, the ability to make
+a $A_{dd}$ for {\em every} $d$.
+
+I can try interposing a conjunction or disjunction or something, which
+is sort of like the increasingly common move I've been making of
+interposing a quantifier for an impedance mismatch I don't otherwise
+know how to treat. That is, saying that the meaning of $\Delta ; x : A \prov B : \rtype$
+is something close to something in the family
+\[ (c : \C)(c' : \C^\op) \to A_{cc} \to A_{c'c'} \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to A_{cc'} \to A_{c'c} \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to (A_{cc'} + A_{c'c}) \to \rtype \]
+\[ (c : \C)(c' : \C^\op) \to (A_{cc} + A_{c'c'}) \to \rtype \]
+
+\subsection{Compressing}
+Would it help at all for faster calculating
+just to be able to state the conditions on the `morphism form' of
+the end condition?
+
+Suppose I have a functor $F : \C^\op \x\C \to \rset$. The end $\int F$ is
+defined as the set of maps $c \mapsto F_{cc}$ such that for any $f : c \to d$ the common
+transport to $F_{cd}$ is equal. I want to say that the end is the set of natural
+transformations
+$\hom_\C \to F$ such that {\em something something}.
+
+Say we have an element $e$ in the end. The way we construct $\tau (e) : \hom_\C \to F$
+Given $c$ and $d$, we take $f : c \to d$ to $F_{cf} e_c = F_{fd} e_d : F_{cd}$.
+Given some morphisms $\iota : b \to c$ and $\omega : d \to e$, We observe naturality
+\[
+\begin{tikzcd}
+  {f \in [c,d]} \ar[r]\ar[d]& F^{,f} e_c \in F_{cd}\ar[d]\\
+  {\omega f\iota \in [b,e]} \ar[r]& F^{\iota\omega} F^{,f} e_c \in  F_{be}
+\end{tikzcd}
+\]
+Because $F^{\iota,\omega f} e_c = F^{,\omega f \iota} e_b$ because
+$F^{\iota,} e_c = F^{, \iota} e_b$.
+
+Okay, given a natural transformation
+$\eta : \hom_\C \to F$, and given an object $c \in \C$, we create $F_{cc}$
+by just doing $\eta_c(\rid_c)$. Check that the end condition is satisfied.
+If we take $\eta_c(\rid_c)$ and transport it, we get $F_{cf}\eta_{cc}(\rid_c) : F_{cd}$.
+If we take $\eta_d(\rid_d)$ and transport it, we get $F_{fd}\eta_{dd}(\rid_d) : F_{cd}$.
+By naturality of $\eta$, we have
+\[
+\begin{tikzcd}
+ & {[c,c]} \ar[r, "\eta_{cc}"]\ar[d, "f \o "']&  F_{cc}\ar[d, "F^{cf}"]\\
+1\ar[ur, bend left, "\rid_c"]\ar[r, "f"]\ar[dr, bend right, "\rid_d"']&  {[c,d]} \ar[r, "\eta_{cd}"']&  F_{cd}\\
+ & {[d,d]} \ar[r, "\eta_{dd}"']\ar[u, " \o f"]&  F_{dd}\ar[u, "F^{fd}"']
+\end{tikzcd}
+\]
+So yeah I guess naturality sufficies. I thought it was more than that.
+
+But this makes me see this as: ordinarily, a term at a (closed) type
+$A$ that lives in a category $\C$ is like a morphism $1 \to A : \C$.
+Here, a term at a (closed) type $A$ is a morphism
+$\hom_{\Delta} \to A : \Delta^\op \x \Delta \to \rset$. Clearly $\hom_\Delta$ isn't
+{\em  terminal}, but is it somehow special enough in another way,
+that makes it appropriate as a representation of the empty context?
+
+What's the interpretation of the context comma even for nondependent types?
+
+\subsection{An Adjunction}
+
+The category $\rcat$ is as usual, but say $\rcat_2$ is the category
+whose objects are categories, and whose morphisms $\C \to \D$ are
+actually functors $\C^\op \x \C \to \D$. Oh, is this just a co-kleisli
+category? We can lift $\C^\op \x \C \to \D$ to $\C^\op \x \C \to \D \x \D^\op$
+by op-and-swap, right. The comonadic $\epsilon$ is the obvious
+$\C^\op \x \C \to \C$, and the $\delta$ we can get by
+staring at
+\[\C^\op \x \C \to (\C^\op \x \C)^\op \x (\C^\op \x \C)\]
+and realizing if we have both sides of the coin, we have everything.
+
+With slightly more generality, suppose $\C$ is a category with
+binary products, and an involutive endofunctor
+$* : \C \to \C$ that preserves the products. Then the functor
+$c \mapsto c \x c^*$ is a comonad. Maybe I don't even need that $c^* = c$,
+just a map $c\to c^{**}$. Oh, and $*$ could merely laxly preserve products.
+Suppose I have a natural $\sigma_{ab} : a^* \x b^* \to (a \x b)^* $,
+and $\iota_c : c \to c^{**}$. Then I can define the comonadic
+$\epsilon$ like
+\[\epsilon_c : c^* \x c \to (c^* \x c)^* \x (c^* \x c) = \pair {\alpha_c} {\rid_{c^* \x c}}\]
+where
+\[
+\begin{tikzcd}
+  c^* \x c \ar[d, "c^* \x \iota_c"']\ar[r, "\alpha"] & (c^* \x c)^*\\
+c^* \x c^{**} \ar[r, "\sim"'] & c^{**} \x c^* \ar[u, "\sigma_{cc}"']
+\end{tikzcd}
+\]
+and then we want to check the comonad laws. Let's do associativity first.
+If we stare at
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \x \epsilon_c"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\epsilon_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^* \x (c^* \x c)^* \x (c^* \x c)
+\end{tikzcd}
+\]
+we can think about either the first or second projection of the output. The second is
+
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, " \epsilon_c \o \pi_2"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, equal]
+ &   (c^* \x c)^* \x (c^* \x c)
+\end{tikzcd}
+\]
+which is satisfied. The first is
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\epsilon_c"]
+& (c^* \x c)^* \x (c^* \x c) \ar[d, "\epsilon_c^* \o \pi_1"]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^*
+\end{tikzcd}
+\]
+or
+\[
+\begin{tikzcd}
+ c^{*} \x c
+\ar[d, "\epsilon_c"']\ar[r, "\alpha_c"]
+& (c^* \x c)^*  \ar[d, "\epsilon_c^* "]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "\alpha_{c^* \x c}"']
+ &  ((c^* \x c)^* \x (c^* \x c))^*
+\end{tikzcd}
+\]
+Let's name $\tilde\sigma$ for $\sigma \o {\sim}$. We now have
+
+\[
+\begin{tikzcd}
+Dc
+\ar[d, "\epsilon_c"']\ar[r, "c^* \x \iota_c"]
+& \tilde D c^* \ar[r]
+& (Dc)^*  \ar[d, "\epsilon_c^* "]\\
+(c^* \x c)^* \x (c^* \x c) \ar[r, "{(c^* \x c)^* \x \iota_{c^* \x c}}"']
+ &  (c^* \x c)^* \x (c^* \x c)^{**} \ar[r, "\sigma_{c^* \x c,c^* \x c}"]
+ &  DDc
+\end{tikzcd}
+\]
+writing $Dc$ for $c^* \x c$.
+Ah, bah, this is a mess. Some requirements on $\iota$ and $\sigma$
+surely work, though. I can come back to this.
 
 \subsection{Slightly More Generality Still}
 
@@ -1441,7 +1441,122 @@ A_m\prd_{np} A_{np}
 &A_m \prd_{np} A_n A_p
 \end{tikzcd}\]
 The top square is $\prd_n$ applied to naturality of $\sigma$.
-The bottom square is also naturality of $\sigma$.
+The bottom square is also naturality of $\sigma$, I think.
 
-Anyway, I'm getting tired of doing these details, something surely works out.
+For the other compatibility square, we stare at
+\[
+\begin{tikzcd}
+\prd_{p} A_{mn} X_p
+  \ar[rr, "\sigma"]\ar[d, "\mu"']
+  &
+&  A_{mn} \prd_p X_p
+  \ar[d, "\mu"]
+  \\
+\prd_{p} A_{m}A_{n}X_p
+  \ar[r, "\sigma"']
+  &A_{m}\prd_{p} A_{n}X_p
+  \ar[r, "\sigma"']
+&  A_{m}A_{n} \prd_p X_p
+\end{tikzcd}
+\]
+And maybe this we actually need to postulate! Ok great! So I think the four diagrams
+I need to require are
+\[\begin{tikzcd}
+  A_{mnp}  \ar[r, "\mu"] \ar[d, "\mu"']
+& A_{mn} A_p\ar[d, "\mu"]\\
+  A_{m} A_{np}  \ar[r, "\mu"'] & A_{m} A_n A_p\\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\prd_{p} A_{mn} X_p
+  \ar[rr, "\sigma"]\ar[d, "\mu"']
+  &
+&  A_{mn} \prd_p X_p
+  \ar[d, "\mu"]
+  \\
+\prd_{p} A_{m}A_{n}X_p
+  \ar[r, "\sigma"']
+  &A_{m}\prd_{p} A_{n}X_p
+  \ar[r, "\sigma"']
+&  A_{m}A_{n} \prd_p X_p
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+  A_{m}  \ar[r, "\mu"] \ar[d, "\mu"']\ar[dr, equal]
+& A_{m} A_\rid\ar[d, "\eta"]\\
+  A_{\rid} A_{m}  \ar[r, "\eta"'] & A_{m}\\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \prd_p A_\rid X_p  \ar[r, "\sigma"]\ar[dr, "\eta"']
+& A_{\rid} \prd_p X_p \ar[d, "\eta"]\\
+& \prd_p  X_p\\
+\end{tikzcd}
+\]
+\subsection{Summary}
+
+
+Suppose we have a category $\C$ with finite products and a monoid $M$.
+We write $\C^M$ for the category of $|M|$-tuples of objects of $\C$, typically
+named $X$ with components $X_m$.
+Suppose $M$ laxly acts on $\C$ in the sense that for any $m,n\in M$,
+we have a functor $A_m : \C \to \C$,
+and natural transformations
+\[\sigma^m_X : \prod_n A_m X_n \to  A_m \prod_n X_n : \C^M \to \C\]
+\[\mu^{mn}_C : A_{mn} C \to A_m A_n C  : \C \to \C \qquad
+\eta_C :  A_{\rid} C \to  C : \C \to \C\]
+
+\[\begin{tikzcd}
+  A_{mnp}  \ar[r, "\mu"] \ar[d, "\mu"']
+& A_{mn} A_p\ar[d, "\mu"]\\
+  A_{m} A_{np}  \ar[r, "\mu"'] & A_{m} A_n A_p\\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\prd_{p} A_{mn} X_p
+  \ar[rr, "\sigma"]\ar[d, "\mu"']
+  &
+&  A_{mn} \prd_p X_p
+  \ar[d, "\mu"]
+  \\
+\prd_{p} A_{m}A_{n}X_p
+  \ar[r, "\sigma"']
+  &A_{m}\prd_{p} A_{n}X_p
+  \ar[r, "\sigma"']
+&  A_{m}A_{n} \prd_p X_p
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+  A_{m}  \ar[r, "\mu"] \ar[d, "\mu"']\ar[dr, equal]
+& A_{m} A_\rid\ar[d, "\eta"]\\
+  A_{\rid} A_{m}  \ar[r, "\eta"'] & A_{m}\\
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \prd_p A_\rid X_p  \ar[r, "\sigma"]\ar[dr, "\eta"']
+& A_{\rid} \prd_p X_p \ar[d, "\eta"]\\
+& \prd_p  X_p\\
+\end{tikzcd}
+\]
+We can then define a comonad $\square : \C \to \C$ by setting
+\[ \square C = \prod_m A_m C \]
+and defining comultiplication and counit by the diagrams
+\[ \delta_C : \prod_{p} A_{p} C \to  \prod_m A_m  \prod_n A_n C
+\qquad
+\begin{tikzcd}
+\prod_{p} A_{p} C \ar[r, "\delta_C"]\ar[d]
+  & \prod_m A_m  \prod_n A_n C\\
+\prod_{{mn}} A_{{mn}} C \ar[r, "\mu"']
+  & \prod_{mn} A_m   A_n C \ar[u, "\sigma"']\\
+\end{tikzcd}\]
+\[ \epsilon_C : \prod_{m} A_{m} C \to   C \qquad
+\begin{tikzcd}
+\prod_{m} A_{m} C \ar[r, "\epsilon_c"]\ar[d, "\pi"']
+  & C\\
+A_\rid C \ar[ur, "\eta"', bend right]
+  & \\
+\end{tikzcd}\]
+
 \end{document}
