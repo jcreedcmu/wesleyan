@@ -1291,4 +1291,115 @@ Dc
 writing $Dc$ for $c^* \x c$.
 Ah, bah, this is a mess. Some requirements on $\iota$ and $\sigma$
 surely work, though. I can come back to this.
+
+\subsection{Slightly More Generality Still}
+
+Suppose we have a category $\C$ with finite products.
+Suppose further that we
+have a monoid $M$. We write $\C^M$ for the category of $|M|$-tuples of objects of $\C$.
+
+Suppose $M$ `laxly acts' on $\C$ in the sense that $A_m : \C \to \C$
+is a functor, and we have for any $m\in M$ we have natural transformations
+\[\sigma^m_X : \prod_n A_m X_n \to  A_m \prod_n X_n : \C^M \to \C\]
+and for any $m, n$ we have a natural transformation
+\[\mu^{mn}_C : A_{mn} C \to A_m A_n C  : \C \to \C\]
+and a natural transformation
+\[\eta_C :  A_{\rid} C \to  C : \C \to \C\]
+
+\def\jj{\underline}
+
+We'll write morphisms that arise merely from the product structure of
+$\C$ as dotted arrows. We write underlined sequences of letters for
+independent symbols that have compound names, for ease of lining up
+which variables `go with' which other sets of variables. That is,
+$\jj{mn}$ is simply another letter in our alphabet of variable names,
+distinct from both $m$ and $n$. It does not actually refer to the monoid
+multiplication of $m$ and $n$, but suggests that the variable
+$\jj{mn}$ will align with the result of monoid multiplication of $m$
+and $n$ elsewhere. It's exactly
+as if in agda we named some variables \texttt{m}, and \texttt{n}, and \texttt{mn}.
+
+We can then define a comonad $\square : \C \to \C$ by setting
+\[ \square C = \prod_m A_m C \]
+and defining comultiplication
+\[ \delta_C : \prod_{\jj{mn}} A_{\jj{mn}} C \to  \prod_m A_m  \prod_n A_n C \]
+by the diagram
+\[\begin{tikzcd}
+\prod_{\jj{mn}} A_{\jj{mn}} C \ar[r, "\delta_c"]\ar[d, dotted]
+  & \prod_m A_m  \prod_n A_n C\\
+\prod_{{mn}} A_{{mn}} C \ar[r, "\Pi_{mn} \mu^{mn}_C"']
+  & \prod_{mn} A_m   A_n C \ar[u, "\Pi_m  \sigma^{m}_{n\mapsto A_{n} C}"']\\
+\end{tikzcd}\]
+and counit
+\[ \epsilon_C : \prod_{m} A_{m} C \to   C \]
+\[\begin{tikzcd}
+\prod_{m} A_{m} C \ar[r, "\epsilon_c"]\ar[d, dotted, "\pi_e"']
+  & C\\
+A_\rid C \ar[ur, "\eta_C"', bend right]
+  & \\
+\end{tikzcd}\]
+Now we want to check coassociativity
+\def\prd{\prod\limits}
+\[
+\begin{tikzcd}
+  \prd_{\jj{mnp}} A_{\jj{mnp}} C
+  \ar[r, dotted]\ar[d, dotted]
+  \ar[rrr, bend left, "\epsilon_C"]
+  \ar[ddd, bend right, shift right=15, "\epsilon_C"']
+  & \prd_{\jj{mn}p} A_{\jj{mn}p} C
+  \ar[r, "\mu"]\ar[d, dotted]
+  & \prd_{\jj{mn}p} A_{\jj{mn}}A_p C
+  \ar[r, "\sigma"]\ar[d, dotted]
+  & \prd_{\jj{mn}} A_{\jj{mn}}\prd_p A_p C
+  \ar[d, dotted]
+  \ar[ddd, bend left, shift left=20, "\epsilon_{\square C}"]
+  \\
+  \prd_{m\jj{np}} A_{m\jj{np}} C
+  \ar[r, dotted]\ar[d, "\mu"']
+  & \prd_{mnp} A_{mnp} C
+  \ar[r, "\mu" description]\ar[d, "\mu" description]
+  \ar[dr, "\mathsf{A}_\mu", phantom]
+  & \prd_{mnp} A_{mn} A_{p} C
+  \ar[r, "\sigma" description]\ar[d, "\mu" description]
+  \ar[dr, "\mathsf{C}", phantom]
+  & \prd_{mn} A_{mn} \prd_p A_{p} C
+  \ar[d, "\mu"]
+  \\
+  \prd_{m\jj{np}} A_{m}A_{\jj{np}} C
+  \ar[r, dotted]\ar[d, "\sigma"']
+  & \prd_{mnp} A_{m}A_{np} C
+  \ar[r, "\mu" description]\ar[d, "\sigma" description]
+  \ar[dr, "\mathsf{C}", phantom]
+  & \prd_{mnp} A_{m}A_{n}A_{p} C
+  \ar[r, "\sigma" description]\ar[d, "\sigma" description]
+  \ar[dr, "\mathsf{A}_\sigma", phantom]
+  & \prd_{mn} A_{m}A_{n} \prd_p A_{p} C
+  \ar[d, "\sigma"]
+  \\
+  \prd_{m} A_{m} \prd_{\jj{np}} A_{\jj{np}} C
+  \ar[r, dotted]  \ar[rrr, bend right, "\square\epsilon_C"']
+  & \prd_{m} A_{m} \prd_{np} A_{np} C
+  \ar[r, "\mu"']
+  & \prd_{m} A_{m} \prd_{np} A_{n}A_{p}C
+  \ar[r, "\sigma"']
+  & \prd_{m} A_{m} \prd_{n} A_{n}\prd_p A_{p}C
+\end{tikzcd}
+\]
+We find that, apart from the naturality of $\mu$ and $\sigma$, we need
+`associativity' squares $\mathsf{A}_\mu$ and $\mathsf{A}_{\sigma}$,
+and a compatibility $\mathsf{C}$ between $\sigma$ and $\mu$. We postulate
+ for every $m,n,p\in M$ that
+\[\begin{tikzcd}
+  A_{mnp} C \ar[r, "\mu^{mn,p}_{C}"] \ar[d, "\mu^{m,np}_C"']\ar[dr, phantom, "\mathsf{A}_\mu"]
+& A_{mn} A_pC\ar[d, "\mu^{mn}_{A_p C}"]\\
+  A_{m} A_{np} C \ar[r, "A_m \mu^{np}_{C}"'] & A_{m} A_n A_pC\\
+\end{tikzcd}\]
+\[\begin{tikzcd}
+  \prd_{mnp} A_m A_n A_p C
+\ar[r, "\mu^{mn,p}_{C}"] \ar[d, "\mu^{m,np}_C"']\ar[dr, phantom, "\mathsf{A}_\sigma"]
+& \prd_{mn} A_m A_n \prd_p^A C \ar[d, "\mu^{mn}_{A_p C}"]\\
+  \prd_{m}^A \prd_{np} A_n A_p C \ar[r, "A_m \mu^{np}_{C}"']
+&\prd_{m}^A \prd_{n}^A \prd_p^A C \\
+\end{tikzcd}\]
+
 \end{document}
