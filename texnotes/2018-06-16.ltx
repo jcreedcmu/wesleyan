@@ -269,4 +269,47 @@ We want something to play the role of the homfunctor $H : \C \to \C^\op \to \rse
 so that we can say a morphism $F \to G : \TP$ is a natural tranformation
 $\rset^\C[H , F \imp G]$.
 
+\subsection{Wait a minute What about composition}
+
+Forget about the generality above for now, go back to the concrete case where I am
+talking about $\C^\op \x \C$, not some general case where I have a category-
+with-involution. It looks like I can't define normal things like application
+or composition across several closed terms, even though I can make closed
+terms with fairly rich behavior when application or composition is internalized!
+So maybe this is a place where I can see how I need to generalize what a term is,
+to get a better-situated induction hypothesis.
+
+Let me expand on what I just said with examples: There is always a closed
+term $(A \to B) \to (B \to C) \to A \to C$, as I described farther above.
+Even more simply, there is always a closed term at $A \to (A \to B) \to B$.
+For I say
+\[t_0 : A_{00} \to (A_{00} \to B_{00}) \to B_{00}\]
+\[t_1 : A_{11} \to (A_{11} \to B_{11}) \to B_{11}\]
+are the application functions at each individual type, and observe that transport
+along $f : 0 \to 1$
+to
+\[A_{01} \to (A_{10} \to B_{01}) \to B_{10}\]
+which gives me either
+(repeatedly using
+$ (A \to B)_{\phi}(h) = \lambda x . B_{\phi} ( h(A_{\bar\phi} x))$)
+\[ (A \to (A \to B) \to B)_{f0}(t_0) = \lambda a . ((A \to B) \to B)_{f0} ( t_0(A_{0f} a)) \]
+\[= \lambda a . ((A \to B) \to B)_{f0} ( t_0(A_{0f} a)) \]
+\[= \lambda a g . B_{f0} ( t_0(A_{0f} a, (A \to B)_{0f} g)) \]
+\[= \lambda a g . B_{f0} ( t_0(A_{0f} a, \lambda x . B_{0f} ( g(A_{f0} x))))\]
+\[= \lambda a g . B_{f0} (  B_{0f} ( g(A_{f0} A_{0f} a))))\]
+\[= \lambda a g . B_{ff} ( g(A_{ff} a))\]
+or symmetrically
+\[ (A \to (A \to B) \to B)_{1f}(t_1) = \lambda a g . B_{ff} ( g(A_{ff} a))\]
+
+However, suppose I have a closed term $M : A$ and $N : A \to B$.
+This means I have all of
+\[M_0 : A_{00} \qquad N_0 : A_{00} \to B_{00}\]
+\[M_1 : A_{11} \qquad N_1 : A_{11} \to B_{11}\]
+\[A_{f0} M_0 = A_{1f} M_1 \qquad
+\forall x : A_{01} . B_{f0} ( N_0(A_{0f} x)) = B_{1f} ( N_0(A_{f1} x))\]
+So I can make the raw data of a term $L = N M : B$ via
+\[L_0 : B_{00} = N_0\ M_0 \qquad L_1 : B_{11} = N_1\ M_1\]
+But I don't seem to be able to prove
+\[B_{f0} (N_0(M_0)) = B_{1f} (N_1(M_1))\]
+Because, on one side of the symmetric coin, $M_0$ is not of the form $A_{f0}$ of something.
 \end{document}
