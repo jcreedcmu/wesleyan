@@ -312,4 +312,43 @@ So I can make the raw data of a term $L = N M : B$ via
 But I don't seem to be able to prove
 \[B_{f0} (N_0(M_0)) = B_{1f} (N_1(M_1))\]
 Because, on one side of the symmetric coin, $M_0$ is not of the form $A_{f0}$ of something.
+
+Here's a na\"ive conjecture I hope I can refute: that we can get away with thinking
+of terms as global sections, which is to say, a term of $A$ is just
+picking out an element of $A_{01}$. For is there even an element of
+\[(A_{01} \to B_{10}) \to (B_{01} \to C_{10}) \to A_{10} \to C_{01}\]
+? It doesn't seem like it! I wouldn't know how to get from $B_{10}$ to $B_{01}$!
+So that's a good signal that something interestingly
+nontrivial is going on here, but I still don't
+know what.
+
+\subsubsection{A Guess}
+
+What if I try to deliberately move away from the closedness of terms, by
+saying: a term of type $A$ is a choice, for every type $\Gamma$, of
+a closed term of the function type $\Gamma \to A$. Then can I prove
+something like cut/substitution? I'd have $\Gamma \to A$ and
+$\Gamma \to A \to B$ for every $\Gamma$. I want to prove $\Gamma \to B$
+for every $\Gamma$. Is there a clever {\em choice} of $\Gamma$ for
+the premises derived from the universal $\Gamma$ in my conclusion?
+Hmm, don't see how. Any use of existentially quantifying over the $\Gamma$s?
+Nah, that makes a term at every type.
+
+\subsubsection{End Formulation}
+
+The thing I failed to check is simply that if I have
+
+\[M \in \int_{c \in \C} A_{cc} \to B_{cc} \qquad
+N \in \int_{c \in \C} A_{cc}\]
+
+it isn't obvious how to get
+
+\[M\ N \in \int_{c \in \C} B_{cc}\]
+
+Because the object part is easy; $(M\ N)_c = M_c\ N_c$.
+But I need to check that $B_{fc} (M\ N)_c = B_{df} (M\ N)_d$,
+that is, $B_{fc} (M_c\ N_c) = B_{df} (M_d\ N_d)$.
+What I know is that $A_{fc} N_c = A_{df} N_d$
+and $(A \to B)_{fc} M_c = (A \to B)_{df} M_d$, the latter which means
+\[B_{fc} (M_c(A_{cf} x)) = B_{df} (M_d(A_{fd} x))\]
 \end{document}
