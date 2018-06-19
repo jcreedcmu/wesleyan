@@ -351,4 +351,102 @@ that is, $B_{fc} (M_c\ N_c) = B_{df} (M_d\ N_d)$.
 What I know is that $A_{fc} N_c = A_{df} N_d$
 and $(A \to B)_{fc} M_c = (A \to B)_{df} M_d$, the latter which means
 \[B_{fc} (M_c(A_{cf} x)) = B_{df} (M_d(A_{fd} x))\]
+
+\subsection{Composition With Half-Mute Functors}
+
+Let's reassure myself that things don't unravel all the way back to
+last November. If we have {\em covariant} functors $A, B, C$, and ends
+\[M \in \int_c A(c) \to B(c) \]
+\[N \in \int_c B(c) \to C(c) \]
+Then surely there is a composite, yeah? Because $M$ actually is a natural
+transformation $A \to B$ and $N$ a natural transformation $B \to C$.
+If $\C$ were just a single arrow $f : c \to d$, then the general
+diagram of $A \to B$
+\[
+\begin{tikzcd}
+A_{dc} \to B_{cd} \arrow[r, "cf"] \arrow[d, "fd"'] & A_{cc} \to B_{cc} \arrow[d, "fc"] \\
+A_{dd}\to B_{dd} \arrow[r, "df"'] & A_{cd} \to B_{dc}
+\end{tikzcd}
+\]
+would degenerate to
+\[
+\begin{tikzcd}
+A_{d} \to B_{c} \arrow[r, "cf"] \arrow[d, "fd"'] & A_{c} \to B_{c} \arrow[d, "fc"] \\
+A_{d}\to B_{d} \arrow[r, "df"'] & A_{c} \to B_{d}
+\end{tikzcd}
+\]
+
+Then how do we form the composite? To get from $A_d \to C_d$ we go $A_d \to B_d \to C_d$,
+and same with $c$. What's the condition we need to check? That
+$A_c \to A_d \to B_d \to C_d$ is the same as $A_c \to B_c \to C_c \to C_d$.
+But we get this one type at a time. It's just chasing the diagram
+\[
+\begin{tikzcd}
+A_{c}  \arrow[r] \arrow[d] & B_{c}  \arrow[d] \ar[r] & C_{c}  \arrow[d] \\
+A_{d} \arrow[r] & B_{d} \ar[r] & C_{d}
+\end{tikzcd}
+\]
+
+Why can't we do
+\[
+\begin{tikzcd}
+A_{cd}  \arrow[r] \arrow[d] & B_{cd}  \arrow[d] \ar[r] & C_{cd}  \arrow[d] \\
+A_{dc} \arrow[r] & B_{dc} \ar[r] & C_{dc}
+\end{tikzcd}
+\]
+Because we don't actually have functions $A_{cd} \to B_{cd} \to C_{cd}$.
+
+\subsection{Slightly Less Nontrivial Example?}
+
+It's still weirding me out that dinatural transformations can't be composed, and
+yet I don't know of any proposition that can't be realized with a proof term for
+its corresponding type.
+
+Like, suppose $A, B, C, D, E, F, Y, Z$ are $\C \x \C^\op \to \rset$. It's meaningful
+for me to write
+\[ A \to (((A \to B + C) \to (B \to D \x E) \to (C \to F) \to (E + F \to Z) \to Z) \to Y) \to Y\]
+where $+$ and $\x$ mean pointwise sum and product, and
+$(A \to B)_\delta = A_{\bar\delta} \to B_{\delta}$ with evident transport.
+Is there an element of the end of this functor? I think so. For I can surely realize
+\[ A_d \to (((A_d \to B_d + C_d) \to (B_d \to D_d \x E_d) \to (C_d \to F_d) \to (E_d + F_d \to Z_d) \to Z_d) \to Y_d) \to Y_d\]
+for every symmetric $d$, as
+\[ \lambda ak . k (\lambda \alpha\beta\gamma\zeta. \bcase \alpha\ a \bof\]
+\[b \to \zeta (\binl (\bsnd \beta\ b) ) \celse c \to  \zeta (\binr (\gamma\ c)))\]
+and we'd want to check that transport works out the same either way, which results in
+\[ A_{\bar\delta} \to (((A_{\delta} \to B_{\bar\delta} + C_{\bar\delta}) \to (B_{\delta} \to D_{\bar\delta} \x E_{\bar\delta}) \to (C_{\delta} \to F_{\bar\delta}) \to (E_{\delta} + F_{\delta} \to Z_{\bar\delta}) \to Z_{\delta}) \to Y_{\bar\delta}) \to Y_{\delta}\]
+
+which does the same thing with some coercions slipped in. We take in a
+$A_{\bar\delta}$, convert it to $A_\delta$, feed it to the function
+spitting out the $B_{\bar\delta}+C_{\bar\delta}$, convert its
+components, etc. etc.
+
+What's going on here? How is this compositional? It sure looks like
+some kind of term/anti-term business going on. I can `prove' $Y \to Y$
+because the two ways of going $Y_{\bar\delta} \to Y_\delta$ are the
+same, because that functoriality is part of what it means for $Y$ to be a type.
+
+Strawman proposal: variables act like knowledge that global sections of a functor exist,
+but what we're proving is merely ends. The substitution theorem says that if we have a natural
+transformation
+$M_{\delta} : \Gamma_{\delta} \to  A_\delta$ and a term
+\[N : \int \Gamma_{\bar\delta} \to A_{\bar \delta} \to B_\delta\] then
+we have a term
+\[[M/x]N : \int \Gamma_{\bar\delta} \to B_\delta\]
+How does this work? We have to come up with
+\[([M/x]N)_d :  \Gamma_{dd} \to B_{dd}\]
+so we set
+\[([M/x]N)_d(g) = N_d(g, M_{dd}(g))\]
+Great, what about the end condition? Let a morphism $f : d \to e$ be given.
+We want to confirm that
+\[(\Gamma \to B)_{fd} ([M/x]N)_d = (\Gamma \to B)_{ef}([M/x]N)_e \]
+\[(\Gamma \to B)_{fd} \lambda g . N_d(g, M_{dd}(g)) = (\Gamma \to B)_{ef} \lambda g . N_e(g, M_{ee}(g)) \]
+\[(g : \Gamma_{de}) \to  B_{fd}  N_d(\Gamma_{df} g, M_{dd}(\Gamma_{df} g)) =  B_{ef}  N_e(\Gamma_{fe} g, M_{ee}(\Gamma_{fe} g)) : B_{ed}\]
+Now: we assumed that $M$ works globally, so $M_{de}$ exists, and moreover
+naturality means
+\[(g : \Gamma_{de})\to  A_{df} M_{de}(g) = M_{dd}(\Gamma_{df} g) : A_{dd}\]
+\[(g : \Gamma_{de})\to  A_{fe} M_{de}(g) = M_{ee}(\Gamma_{fe} g) : A_{ee}\]
+so our obligation is now to check
+\[(g : \Gamma_{de}) \to  B_{fd}  N_d(\Gamma_{df} g, A_{df} M_{de}(g)) =  B_{ef}  N_e(\Gamma_{fe} g, A_{fe} M_{de}(g)) : B_{ed}\]
+but this is just the end condition for the type $N$ and we're done.
+
 \end{document}
