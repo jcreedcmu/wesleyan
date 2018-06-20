@@ -449,4 +449,73 @@ so our obligation is now to check
 \[(g : \Gamma_{de}) \to  B_{fd}  N_d(\Gamma_{df} g, A_{df} M_{de}(g)) =  B_{ef}  N_e(\Gamma_{fe} g, A_{fe} M_{de}(g)) : B_{ed}\]
 but this is just the end condition for the type $N$ and we're done.
 
+\subsection{Thought}
+
+What's a concrete example of why I can't require global sections generally?
+How about the identity type? Is there always an
+element $A_{\bar \delta} \to A_\delta$ for any $A : \C \x \C^\op \to \rset$ and
+$\delta : \C \x \C^\op$? I don't believe so. I might consider
+specifically the homtype
+\[
+\begin{tikzcd}
+0 \arrow[r] \arrow[d] & 1 \arrow[d] \\
+1 \arrow[r] & 1
+\end{tikzcd}
+\]
+in which there definitely isn't a map $0 \to 1$, even though there is a
+term that takes $1 \to 1$ three different ways.
+
+\subsection{If I can't handle cut...}
+
+If my goal is simply to show that if ordinary sequent calculus proves a proposition,
+then it's semantically realizable, I shouldn't need to separately worry about cut,
+it should just fall out. But I do need to be concerned over particular inference
+rules. So I expect ${\imp} L$ to cause the most cut-like obstacles.
+\[
+\erule
+{\Gamma, B \prov C  \qquad \Gamma \prov A}
+{\Gamma, A \imp B \prov C}
+\]
+Let's take even the special case where $\Gamma$ is empty.
+Suppose I have $h : B_{dd} \to C_{dd}$, and $a : A_{dd}$,
+and I want to make $(A_{dd} \to B_{dd}) \to C_{dd}$. I can certainly form
+$\lambda k . h\ (k\ a)$, and then consider transport:
+I should require that the two derived ways of doing
+$(A_{ed} \to B_{de}) \to C_{ed}$ are the same, given an $f : d \to e$.
+They are
+\[\lambda k . C_{fd}(h\ (B_{df}(k\ A_{fd} a)))\]
+\[\lambda k . C_{ef}(h\ (B_{fe}(k\ A_{ef} a)))\]
+Ok, so right off the bat I notice that I {\em want} to be able to identify
+$B_{df}(k\ A_{fd} a)$ with $B_{fe}(k\ A_{ef} a)$ but the obstacle is the fact that
+I don't know the relationship between $A_{fd} a$ and $A_{ef} a$. Or, rather, I sort
+of {\em do}; I know that they've diverged from the peak of the diamond down to the sides,
+and I know that {\em if} I made them converge again with... wait, no, I have this wrong.
+
+Both of these have type $(A_{ed} \to B_{de}) \to C_{ed}$:
+\[a : A_{dd}, h : B_{dd} \to C_{dd} \prov \lambda k . C_{fd}(h\ (B_{df}(k\ A_{fd} a)))  \]
+\[a' : A_{ee}, h' : B_{ee} \to C_{ee} \prov \lambda k . C_{ef}(h'\ (B_{fe}(k\ A_{ef} a')))\]
+
+That means that $A_{fd} a$ and $A_{ef} a'$ {\em are} equal. Let me call them both $\alpha$.
+So I'm comparing
+\[\alpha : A_{ed}, h : B_{dd} \to C_{dd} \prov \lambda k . C_{fd}(h\ (B_{df}(k\ \alpha)))  \]
+\[\alpha : A_{ed}, h' : B_{ee} \to C_{ee} \prov \lambda k . C_{ef}(h'\ (B_{fe}(k\ \alpha)))\]
+
+Now I see it's actually $B$ that's doing the divergent transport,
+feeding things to $h$ and $h'$ respectively. But wait, the equality I need
+now follows directly from the end-property of $h$, doesn't it?
+
+\subsection{Does It Work For General Contexts?}
+
+Suppose I have terms
+$\Gamma \prov M : A$
+$\Gamma, x : B \prov N : C$
+meaning
+\[ M \in \int \Gamma_{\bar\delta} \to A_{\delta}
+\qquad N \in \int \Gamma_{\bar\delta} \to B_{\bar\delta} \to C_{\delta}
+\]
+Then I want to construct a term
+\[
+P \in \int (A_{\delta} \to B_{\bar\delta}) \to C_{\delta}
+\]
+by setting $P_d = \lambda k : A_{dd} \to B_{dd} . \ldots$ maybe it's agda time.
 \end{document}
