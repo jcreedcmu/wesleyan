@@ -4945,3 +4945,24 @@ So, right, this feels like a coequalizer. The elements of Weld
 are either global elements or local elements, and I identify along
 the function. The elements of Glue are an equalizer; I have to specify
 global elements *and* local, and they must be equal along f.
+
+=== 2018.06.21
+
+Q: Where exactly did I have the semantic data to substantiate the claim about focusing
+shifts realizing the yoneda-quantifier in the exponential?
+A: 2018-05-31.ltx, section 5.3 "Maybe I need a mixed-variance relation?"
+
+Q: Does the failure of composition of end-elements cause any problems for the interpretation
+of a focused simply-typed proof theory where multiplicative connectives are realized by
+arbitrary-variance profunctory things?
+A: ???
+
+Q: Hm, what would be the right connective or whatever to investigate?
+A: The underlying 'logic' that I'm imagining interpreting allows
+positive propositions to be covariant functors P → Set, negative props
+to be covariant functors N → Set, but then I'm also allowing atomic propositions
+like
+▷ : P × N → Set
+and critically mixed-variance relations like
+⊸ : (P × P^op × N × N^op) × N → Set
+Hm, this is still unanswered. ???

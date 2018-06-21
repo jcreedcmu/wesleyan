@@ -518,4 +518,105 @@ Then I want to construct a term
 P \in \int (A_{\delta} \to B_{\bar\delta}) \to C_{\delta}
 \]
 by setting $P_d = \lambda k : A_{dd} \to B_{dd} . \ldots$ maybe it's agda time.
+
+Yeah, this checks out in agda. So what's the deal? I can pretty much derive cut from
+this and ${\imp}R$, which has to succeed because it's just a mute currying operation.
+So do I fail at the step of going from
+\[ \int (A_\delta \to A_{\bar \delta}) \to C_\delta \]
+to
+\[ \int  C_\delta \]
+maybe?
+
+Let me focus again on the alleged general failure of getting from
+$ M : \int A_{\bar\delta} \to B_{\delta}$ and $N : \int A_{\delta}$
+to $P : \int  B_\delta $. We write down that $P_d = M_d(N_d)$.
+We want to check that $B_{fd} P_d = B_{ef} P_e$. This means checking
+$B_{fd} M_d(N_d) = B_{ef} M_e(N_e)$. We know that
+\[A_{fd} N_d = A_{ef} N_e\]
+\[(x : A_{de}) \to B_{fd} M_d(A_{df} x) = B_{ef} M_e(A_{fe} x)\]
+
+\subsection{An Interesting Counterexample}
+
+Ok, here's a concrete way in which the semantics is {\em incomplete} with respect to the usual
+sequent calculus. It's basically a `yes' to the above question of
+\begin{quote}
+  Is the essential failure of trying to show cut elimination reducible
+  to the specific failure of a cut $\prov A \to A$ against $A \to A
+  \prov C$ to get $\prov C$?
+\end{quote}
+
+Let $A$ be the homtype
+\[
+\begin{tikzcd}
+0 \arrow[r] \arrow[d] & 1 \arrow[d] \\
+1 \arrow[r] & 1
+\end{tikzcd}
+\]
+and let $C$ be the `inconsistent type 2'
+\[
+\begin{tikzcd}
+0 \arrow[r] \arrow[d] & \{b\} \arrow[d] \\
+\{a\} \arrow[r] & \{a, b\}
+\end{tikzcd}
+\]
+Note
+that $C$ has no closed terms.
+
+However, $(A \to A) \to C$ does have a closed term:
+\[
+\begin{tikzcd}
+  & \lambda \_ . b \arrow[d, mapsto] \\
+\lambda \_  . a \arrow[r, mapsto] & !
+\end{tikzcd}
+\]
+The two representatives at each
+$((A \to A) \to C)_{dd}$ ignore their argument (the unique function $\{*\} \to \{*\}$) and
+produce unique element of $C_{dd}$. Unlike terms of $C$, they {\em do} consistently reconcile
+to the same element of $(A_{ed} \to A_{de}) \to C_{ed}$, however, because there
+{\em are} no elements of $(A_{ed} \to A_{de})$.
+
+How do I diagnose what the problem is here? Ideally I'd like to say
+that, in some way, this exotic term of type $(A \to A) \to C$ is `not
+respecting the equality at $A \to A$'.
+
+\subsection{Back to the time when I was thinking about Zig-zags}
+
+So I am stuck pretty hard, aren't I? I'm trying to reconcile the fact that
+syntactically it seems like I ought to have
+\[ \forall \alpha . A(\alpha) , \forall \alpha . A(\bar\alpha) \to B(\alpha) \prov \forall \alpha . B(\alpha) \]
+But generally there doesn't seem to be a function
+
+\[ \left( \int_\delta A_\delta\right) \to \left( \int_\delta A_{\bar\delta} \to B_\delta \right) \to \left( \int_\delta B_\delta\right) \]
+the counterexample being when $B$ is the `inconsistent pair' functor $\C \x \C^\op \to \rset$
+for $\C$ the one-arrow category, and $A$ is the `homtype'. In this case
+$\left( \int_\delta A_\delta\right)$ is singleton, and
+$\left( \int_\delta A_{\bar\delta} \to B_\delta \right)$ is singleton, but
+$\left( \int_\delta B_\delta\right)$ is empty.
+
+I would try to construct the element of $\int_\delta B_\delta$ from
+\[ M \in \int_\delta A_\delta \qquad N \in \int_\delta A_{\bar\delta} \to B_\delta \]
+
+by letting $d$ be given, and constructing $N_d\ M_d : B_{dd}$, and
+experiencing the now-familiar failure of verifying the end condition
+for this from the end-conditions for $M$ and $N$.
+
+Is $\int_d$ more like $\Diamond \forall$ than a naked $\forall$?
+Does
+\[ \left( \int_\delta A_\delta\right) \to \left( \int_\delta  B_\delta \right) \to \left( \int_\delta A_\delta \x B_\delta\right) \]
+also fail? Here we'd take
+\[ M \in \int_\delta A_\delta \qquad N \in \int_\delta  B_\delta \]
+and construct $\pair {M_{d}} {N_d} : A_{dd} \x B_{dd}$. We'd want to check that
+\[(A \x B)_{fd} \pair {M_{d}} {N_d} = (A \x B)_{ef} \pair {M_{e}} {N_e}\]
+\[ \pair{A_{fd}M_{d}}{B_{fd}N_{d}} = \pair{A_{ef}M_{e}}{B_{ef}N_{e}}\]
+but this {\em does} follow from the end-properties for $M, N$.
+So the real failure must be contained in merely
+\[ \left( \int_\delta A_\delta \x  (A_{\bar\delta} \to  B_\delta) \right) \to \left( \int_\delta B_\delta\right) \]
+Ok, so again, suppose $A_{de} = \emptyset$ and otherwise $A_\delta = \{*\}$.
+Suppose $B_{ed} = \{d, e\}$ and $B_{dd} = \{d\}$ and $B_{ee} = \{e\}$ and $B_{de} = \emptyset$.
+We observe that $\int_\delta B_\delta = \emptyset$. We have
+\[ A_{de} \x (A_{ed} \to B_{de}) = \emptyset \]
+\[ A_{dd} \x (A_{dd} \to B_{dd}) = \{ d \} \]
+\[ A_{ee} \x (A_{ee} \to B_{ee}) = \{ e \} \]
+\[ A_{ed} \x (A_{de} \to B_{ed}) = \{ * \} \x (\emptyset \to \{d, e\}) = \{ ! \} \]
+And there {\em are} terms of this.
 \end{document}
