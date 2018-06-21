@@ -632,4 +632,47 @@ ${\forall} R$ on $(\forall x . A(x) \x (A(x) \to B(x))) \to \forall x.B(x)$?
 I only get a change when I actually {\em instantiate} the variable of the inner end.
 \[\int_\delta ( A_{\bar\delta} \x  (A_{\delta} \to  B_{\bar\delta}) ) \to  B_\delta \]
 is suddenly provable. That's weird, I thought I went through the reasoning for $\forall {L}$.
+
+Let's look at it again.
+We have
+\[
+\erule
+{\Delta; \Gamma \prov M : \forall_\C \alpha . A \qquad \Delta \prov t : \C}
+{\Delta; \Gamma \prov M[t] : [t/\alpha] A }
+\]
+
+which tells us that we have $M_d : (g : \Gamma_{dd}) \to \int_{c} A_{ddcc}$
+and $ t_{\delta} : \C$. We need to make
+\[(M[t])_d : (g : \Gamma_{dd}) \to  A_{ddt_{dd}t_{dd}}\]
+So we do the mere swizzling
+\[ (M[t])_d(g) = M_d(g)[t_{dd}] \]
+and now we want to check that the end-property holds.
+We let some morphism $f : d \to e \in \ssem \Delta$ be given.
+We want to check that
+\[ (g : \Gamma_{ff}) \to ([t/\alpha]A)_{fd}(\Gamma_{\rtri\fdom}  g, (M[t])_d(\Gamma_{\fdom} g))
+\equiv ([t/\alpha]A)_{ef}(\Gamma_{\rtri\fcod}  g, (M[t])_e(\Gamma_{\fcod} g)) \]
+wait but what exactly is $([t/\alpha]A)_{\phi}$? I already tacitly assumed
+$([t/\alpha]A)_\delta = A_{\delta t_\delta t_{\bar \delta}}$.
+So since
+\[([t/\alpha]A)_\phi : (g : \Gamma_\phi) \to A_{\delta t_\delta t_{\bar \delta}}(\Gamma_{\ltri \phi} g) \to A_{\epsilon t_\epsilon t_{\bar \epsilon}}(\Gamma_{\rtri \phi} g)\]
+and I'm going to assume that $t_\phi : t_\delta \to t_\epsilon$ is a thing. This means I can
+make the guess that
+\[([t/\alpha]A)_\phi(g, a) = A_{\phi t_\phi t_{\bar \phi}}(g, a)\]
+because also $t_{\bar\phi} : t_{\bar\epsilon} \to t_{\bar\delta}$ and $\Gamma$ doesn't depend
+on the variable $\alpha$ at all, so we get simplifications like, e.g.
+$\Gamma_{\phi t_\phi t_{\bar\phi}} = \Gamma_{\phi}$
+and
+$\Gamma_{\ltri(\phi t_\phi t_{\bar\phi})} = \Gamma_{\ltri \phi}$.
+
+Okay, plugging in this conjecture, and the definition of the swizzling, I get as a goal
+\[ (g : \Gamma_{ff}) \to A_{fd t_{fd} t_{df}}(\Gamma_{\rtri\fdom}  g, M_d(\Gamma_{\fdom} g)[t_{dd}])
+\equiv A_{ef t_{ef}t_{fe}}(\Gamma_{\rtri\fcod}  g, M_e(\Gamma_{\fcod} g)[t_{ee}]) \]
+Ok, now let's look at the end condition for $M$ itself.
+\[ (g : \Gamma_{ff}) \to (\forall \alpha . A)_{fd}(\Gamma_{\rtri\fdom}  g, M_d(\Gamma_{\fdom} g))
+\equiv (\forall \alpha . A)_{ef}(\Gamma_{\rtri\fcod}  g, M_e(\Gamma_{\fcod} g)) \]
+
+I look up the semantics I worked out before and see that I got
+\[(\forall^\C\alpha . A)_\phi(g, E) = \lambda d . A_{\phi d d}(g, E(d)) \]
+and I sort of see that this is enough to see equality along the diagonal, but not in the
+full generality that I need for my goal. Bummer.
 \end{document}
