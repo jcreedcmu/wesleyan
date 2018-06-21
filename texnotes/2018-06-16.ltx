@@ -623,4 +623,13 @@ And there {\em are} terms of this.
 Take clear note: the interpretation {\em with quantifiers} is therefore {\em not sound}
 even though it seemed like the interpretation with one quantifier at the outside
 and a bunch of propositional stuff inside was sound.
+
+How far is it from sound, though? Can I make a term of type
+\[\int_\delta \left( \int_\delta A_\delta \x  (A_{\bar\delta} \to  B_\delta) \right) \to  B_\delta \]
+which corresponds to the sequent-goal I get after doing ${\imp}R$ and
+${\forall} R$ on $(\forall x . A(x) \x (A(x) \to B(x))) \to \forall x.B(x)$?
+
+I only get a change when I actually {\em instantiate} the variable of the inner end.
+\[\int_\delta ( A_{\bar\delta} \x  (A_{\delta} \to  B_{\bar\delta}) ) \to  B_\delta \]
+is suddenly provable. That's weird, I thought I went through the reasoning for $\forall {L}$.
 \end{document}
