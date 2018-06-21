@@ -675,4 +675,50 @@ I look up the semantics I worked out before and see that I got
 \[(\forall^\C\alpha . A)_\phi(g, E) = \lambda d . A_{\phi d d}(g, E(d)) \]
 and I sort of see that this is enough to see equality along the diagonal, but not in the
 full generality that I need for my goal. Bummer.
+
+\subsection{When Do I Expect This To Work?}
+
+The next thing I should try to do is at least figure out where the
+boundary between working and not-working is. I think I can bisect from
+the focusing semantics.
+
+I do expect to be able to transit
+\[\int_\delta ( A_{\bar\delta} \x  (A_{\delta} \to  B_{\bar\delta}) ) \to  \int_\delta B_\delta \]
+{\em when I'm in the special case} of $A$ being purely co- or contravariant. I wonder
+if this observation gets me closer to seeing how a type could come equipped with some
+structure that makes it `as good as' these special cases. But I'm getting ahead
+of myself. Let's make sure this is true, first. Let's suppose $A$ is a covariant
+functor, and $B$ is $\C \x \C^\op \to \rset$. Then I'm trying to achieve
+\[ \int_c A(c) \x (A(\bar c) \to B(c, \bar c)) \to \int_c B(c, \bar c) \]
+So I suppose I have
+\[ M : \int_c A(c) \x (A(\bar c) \to B(c, \bar c)) \]
+and I'm trying to make $ \int_c B(c, \bar c)$. So let $d$ be given. I build
+\[P_d = \blet (x, g) = M_d \bin g(x) : B_{dd}\]
+(where $x : A_d, g : A_d \to B_{dd}$)
+as required. What's the assumed end-condition of $M$? Given an $f : d \to e$, it;s
+\[
+( \blet (x, g) = M_d \bin \pair {A_f x} {B_{fd} \o g})
+\equiv
+(\blet (x, g) = M_e \bin \pair { x} {B_{ef} \o g \o A_f}): A_{e} \x (A_d \to B_{ed})
+\]
+What do we need to show? That
+\[ B_{fd} P_d \equiv B_{ef} P_e \]
+\[ B_{fd} (\blet (x, g) = M_d \bin g(x)) \equiv B_{ef} (\blet (x, g) = M_e \bin g(x)) \]
+Let's expand out those $\blet$s in what we know, writing $\bfst$ and $\bsnd$ as superscripts.
+We know
+\[
+\pair  {A_f M_d^1} {B_{fd} \o M_d^2}
+\equiv
+ \pair { M_e^1} {B_{ef} \o M_e^2 \o A_f}): A_{e} \x (A_d \to B_{ed})
+\]
+so that's really two equations
+\[
+  {A_f M_d^1} \equiv { M_e^1} : A_e\]
+\[
+{B_{fd} \o M_d^2}
+\equiv  {B_{ef} \o M_e^2 \o A_f}: A_d \to B_{ed}
+\]
+and we're trying to show
+\[ B_{fd} ( M_d^2(M_d^1) ) \equiv B_{ef} ( M_e^2(M_e^1) )\]
+Aha, and this follows directly.
 \end{document}
