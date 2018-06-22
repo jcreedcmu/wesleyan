@@ -695,7 +695,7 @@ So I suppose I have
 and I'm trying to make $ \int_c B(c, \bar c)$. So let $d$ be given. I build
 \[P_d = \blet (x, g) = M_d \bin g(x) : B_{dd}\]
 (where $x : A_d, g : A_d \to B_{dd}$)
-as required. What's the assumed end-condition of $M$? Given an $f : d \to e$, it;s
+as required. What's the assumed end-condition of $M$? Given an $f : d \to e$, it's
 \[
 ( \blet (x, g) = M_d \bin \pair {A_f x} {B_{fd} \o g})
 \equiv
@@ -730,4 +730,295 @@ as well.
 So somehow the general case of {\em bi}variant types are second-class citizens.
 Assuming my guess is right, monovariant (whether co- or contra-) types behave better.
 How does this get represented in a logic?
+
+\section{Going over the quantifiers carefully}
+
+Ok, I'm in a simply-typed setting. What is the semantics
+of $\forall \alpha . A$ and  $\exists \alpha . A$?
+Going to assume that I always mean quantification over $\C$ below.
+I'm reasonably confident in the following semantic
+definitions and lemmas for types:
+
+\begin{defnbox}
+  $(\exists \alpha .  A)_{\delta} = \int^c A_{\delta cc}$\\
+  $(\forall \alpha . A)_{\delta} = \int_c A_{\delta cc}$\\
+  $(\exists \alpha .  A)_{\phi}( K) = \blet \pair c x = K \bin \pair c  {A_{\phi cc}( x)}$\\
+  $(\forall \alpha . A)_{\phi}( E) = \Lambda c . A_{\phi cc}( E[c])$
+\end{defnbox}
+\begin{thmbox}
+  $([t/\alpha] A)_\delta = A_{\delta t_\delta t_{\bar \delta}} =: A_{\delta t^\delta}$\\
+  $([t/\alpha] A)_\phi = A_{\phi t_\phi t_{\bar \phi}} =: A_{\phi t^\phi}$
+\end{thmbox}
+And then for terms:
+\begin{defnbox}
+  $(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)$\\
+$\cdots$
+\end{defnbox}
+\subsection{Syntax}
+Given a morphism $f : d \to e$ in $\C$ I'm going to say
+\begin{defnbox}
+$f_< = de$\\
+$f_0 = dd$\\
+$f_1 = ee$\\
+$f_> = ed$\\
+$f_0^< : f_< \to f_0 = df$\\
+$f_1^< : f_< \to f_1 = fe$\\
+$f_0^> : f_0 \to f_> = fd$\\
+$f_1^> : f_1 \to f_> = ef$
+\end{defnbox}
+So that the end condition on $\Delta ; \Gamma \prov M : A$ is
+\begin{thmbox}
+ \(
+ (g : \Gamma_{f_<}) \to A_{f_0^>} (M_d (\Gamma_{f_0^<} g))
+\equiv A_{f_1^>} (M_e (\Gamma_{f_1^<} g))
+\)
+\end{thmbox}
+or equivalently
+\begin{thmbox}
+ \(
+ A_{f_0^>} M_d \Gamma_{f_0^<} \equiv A_{f_1^>} M_e \Gamma_{f_1^<}
+\)
+\end{thmbox}
+or maybe more perspicuously in the other order
+\begin{thmbox}
+ \(
+ \Gamma_{f_0^<}; M_d;A_{f_0^>}  \equiv \Gamma_{f_1^<}; M_e;A_{f_1^>}
+\)
+\end{thmbox}
+
+\subsection{Reasoning}
+
+I want to get throw the existential and forall elim and intro rules, and see what
+breaks, and what shape of band-aid can fix it.
+
+\subsubsection{Forall intro}
+\[
+\erule
+{\Delta, \alpha : \C;\Gamma\prov M : A}
+{\Delta;\Gamma \prov \Lambda\alpha . M : \forall \alpha . C}
+\]
+
+We have $M_{dc} : \Gamma_{ddcc} \to A_{ddcc}$ and
+For $f : d \to d'$ and $h : c \to c'$,
+\[  (g : \Gamma_{f_<h_<}) \to A_{f_0^>h_0^>} (M_{dc} (\Gamma_{f_0^<h_0^<} g))
+\equiv A_{f_1^>h_1^>} (M_{d'c'} (\Gamma_{f_1^<h_1^<} g))
+\]
+and we want to check that the definition
+\[(\Lambda \alpha. A)_d(g) = \lambda c . M_{dc}(g)\]
+satisfies
+\[(\Lambda \alpha. A)_d : \Gamma_{dd} \to (\forall \alpha . A)_{dd} = \Gamma_{dd} \to \int_c A_{ddcc}\]
+and
+\[ (g : \Gamma_{f_<}) \to A_{f_0^>} ((\Lambda \alpha. A)_d (\Gamma_{f_0^<} g))
+\equiv A_{f_1^>} ((\Lambda \alpha. A)_{d'} (\Gamma_{f_1^<} g))\]
+Now for this definition to be in the small, inner end $\int_c A_{ddcc}$, we using the
+end property of $M_{dc}$ at the identity on $d$ and
+$h : c \to c'$. For it to satisfy the big, outer end, we use the end property of
+$M_{dc}$ at $f : d \to d'$ and the identity.
+
+\subsubsection{Forall elim}
+\[
+\erule
+{\Delta;\Gamma\prov M : \forall \alpha . A \qquad \Delta\prov t : \C}
+{\Delta;\Gamma \prov  M[t] : [t/\alpha]A}
+\]
+We have that
+\[M_d : \Gamma_{dd} \to (\forall \alpha . A)_{dd} = \Gamma_{dd} \to \int_c A_{ddcc}\]
+and
+\[  (g : \Gamma_{f_<}) \to (\forall \alpha . A)_{f_0^>} (M_{d} (\Gamma_{f_0^<} g))
+\equiv (\forall \alpha . A)_{f_1^>} (M_{d'} (\Gamma_{f_1^<} g))
+\]
+which means
+\[  (g : \Gamma_{f_<}) \to \Lambda c . A_{f_0^>cc} (M_{d} (\Gamma_{f_0^<} g)[c])
+\equiv \Lambda c . A_{f_1^>cc} (M_{d'} (\Gamma_{f_1^<} g)[c])
+\eqno(*)
+\]
+
+and given the definition
+\[(M[t])_d(g) = M_d(g)[t_{dd}]\]
+we want to check that
+\[(M[t])_d : \Gamma_{dd} \to A_{ddt_{dd}t_{dd}}\]
+(easy) and, critically
+\[    (g : \Gamma_{f_<}) \to ([t/\alpha] A)_{f_0^>} ((M[t])_{d} (\Gamma_{f_0^<} g))
+  \equiv ([t/\alpha] A)_{f_1^>} ((M[t])_{d'} (\Gamma_{f_1^<} g))
+\]
+which is to say
+\begin{thmbox}
+  \(
+(g : \Gamma_{f_<}) \to A_{f_0^> t_{f_0^>}t_{\bar f_0^>}} M_{d}(\Gamma_{f_0^<} g)[t_{dd}]
+\equiv  A_{f_1^> t_{f_1^>}t_{\bar f_1^>}} M_{d'}(\Gamma_{f_1^<} g)[t_{d'd'}]
+  \)
+\end{thmbox}
+
+We also know because of the end property of $\int_c A_{ddcc}$ itself, that
+for any object $d\in \C$ and any morphism $h : u \to v \in \C$,
+\[A_{dd h^>_0} M_d(g)[u] = A_{dd h^>_1} M_d(g)[v]\]
+
+Ok, so I don't expect to be able to complete this reasoning, but how far can I get?
+We can functorially break up the transport as
+  \[
+(g : \Gamma_{f_<}) \to A_{\rid t_{f_0^>}t_{\bar f_0^>}} A_{f_0^> \rid \rid}  M_{d}(\Gamma_{f_0^<} g)[t_{dd}]
+\equiv  A_{f_1^> t_{f_1^>}t_{\bar f_1^>}} M_{d'}(\Gamma_{f_1^<} g)[t_{d'd'}]
+  \]
+reducing our obligation via $(*)$ to
+  \[
+(g : \Gamma_{f_<}) \to A_{\rid t_{f_0^>}t_{\bar f_0^>}} A_{f_1^> \rid \rid}  M_{d'}(\Gamma_{f_1^<} g)[t_{dd}]
+\equiv  A_{f_1^> t_{f_1^>}t_{\bar f_1^>}} M_{d'}(\Gamma_{f_1^<} g)[t_{d'd'}]
+  \]
+
+\subsection{Difficulties}
+Hm, this new notation isn't actually helping me see what's going on very well.
+Does it make much sense with old?
+
+Goal is
+\begin{thmbox}
+  \(
+(g : \Gamma_{de}) \to A_{fd t_{fd}t_{df}} M_{d}(\Gamma_{df} g)[t_{dd}]
+\equiv  A_{ef t_{ef}t_{fe}} M_{e}(\Gamma_{fe} g)[t_{ee}]
+  \)
+\end{thmbox}
+and what's known is
+\[  (g : \Gamma_{de}) \to \Lambda c . A_{fdcc} (M_{d} (\Gamma_{df} g)[c])
+\equiv \Lambda c . A_{efcc} (M_{e} (\Gamma_{fe} g)[c])
+\eqno(*)
+\]
+\[A_{dd hu} M_d(g)[u] = A_{dd vh} M_d(g)[v] \eqno(**)\]
+I can transform the goal first to
+\[
+(g : \Gamma_{de}) \to  A_{e d t_{fd}t_{df}} A_{fd t_{dd}t_{dd}} M_{d}(\Gamma_{df} g)[t_{dd}]
+\equiv  A_{ef t_{ef}t_{fe}} M_{e}(\Gamma_{fe} g)[t_{ee}]
+\]
+and then via $(*)$ to
+\[
+(g : \Gamma_{de}) \to  A_{e d t_{fd}t_{df}} A_{ef t_{dd}t_{dd}} M_{e}(\Gamma_{fe} g)[t_{dd}]
+\equiv  A_{ef t_{ef}t_{fe}} M_{e}(\Gamma_{fe} g)[t_{ee}]
+\]
+then perhaps swizzle this around to
+\[
+(g : \Gamma_{de}) \to   A_{ef t_{ed}t_{de}}A_{e e t_{fd}t_{df}} M_{e}(\Gamma_{fe} g)[t_{dd}]
+\equiv  A_{ef t_{ef}t_{fe}} M_{e}(\Gamma_{fe} g)[t_{ee}]
+\]
+for which it would suffice to show
+\[
+(g : \Gamma_{de}) \to   A_{e e t_{fd}t_{df}} M_{e}(\Gamma_{fe} g)[t_{dd}]
+\equiv  A_{ee t_{ef}t_{fe}} M_{e}(\Gamma_{fe} g)[t_{ee}]
+\eqno(\dag)
+\]
+But crucially this is a little more general than $(**)$, isn't it?
+
+Ok, let's draw some pictures:
+\[
+\begin{tikzcd}
+  t_{de} \ar[r, "t_{fe}"]\ar[d, "t_{df}"']& t_{ee}\ar[d, "t_{ef}"]\\
+  t_{dd} \ar[r, "t_{fd}"']& t_{ed}\\
+\end{tikzcd}
+\]
+On the left side of $(\dag)$, we go  $A_{\cdots t_{dd}t_{dd}} \to A_{\cdots t_{ed}t_{de}}$.
+On the right side of $(\dag)$, we go  $A_{\cdots t_{ee}t_{ee}} \to A_{\cdots t_{ed}t_{de}}$.
+But what does $(*)$ gives us?
+\[
+\begin{tikzcd}
+  uv \ar[r, "{hv}"]\ar[d, "{uh}"']& vv\ar[d, "{vh}"]\\
+  uu \ar[r, "{hu}"']& vu\\
+\end{tikzcd}
+\]
+
+\subsection{Return to Known Counterexample}
+
+Let's think about
+$ (\forall x . A_x \x (A_x \to B_x)) \to \forall x . B_x$
+again. The syntactic proof would be
+
+
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+ A_x \x (A_x \to B_x) \prov B_x
+\]
+\justifies
+\forall x . A_x \x (A_x \to B_x) \prov B_x
+\using {\forall L}
+\]
+\justifies
+\forall x . A_x \x (A_x \to B_x) \prov \forall x . B_x
+\end{prooftree}
+\]
+And I believe there always is an element of the end
+\[\int_\delta A_{\bar \delta} \x (A_\delta \to B_{\bar\delta}) \to B_\delta \]
+but not always of
+\[\int_\delta \left( \int_\epsilon A_{ \epsilon} \x (A_{\bar\epsilon} \to B_{\epsilon}) \right)
+\to B_\delta \]
+For the special case of $A = \hom$ and $B = 1 \to 2 \leftarrow 1$.
+
+So let's look at the very, very special case of $\forall L$ which is
+
+\[
+\erule
+{\alpha : \C; x : A(\alpha) \prov M : B(\alpha)}
+{\alpha : \C; y : \forall \beta . A(\beta) \prov [y[\alpha]/x]M : B(\alpha)}
+\]
+
+and the very, very special case of $\forall E$ which corresponds to it,
+
+\[
+\erule
+{ }
+{\alpha : \C; y : \forall \beta . A(\beta) \prov y[\alpha] : A(\alpha) }
+\]
+
+Does this rule by itself fail semantically? I hope so. It would require
+me to construct a $P$ such that
+$P_d : (\forall \beta . A(\beta))_{dd} \to A_{dd}$, i.e.
+\[ P_d : \left(\int_c  A_{cc}\right) \to A_{dd} \]
+such that
+\[ (g : {\textstyle\int_c A_{cc}}) \to A_{fd} P_d(g) \equiv A_{ef} P_e(g) \]
+and clearly I'd want to say
+\[ P_d(E) = E[d]\]
+and check that
+\[ (g : {\textstyle\int_c A_{cc}}) \to A_{fd} g[d] \equiv A_{ef} g[e] \]
+oh, but dang, this {\em is} the end-property of $g$. This apparently
+doesn't give me the failure I want, and the problem is lurking
+somewhere in the substitution theorem or something?
+
+Ok, let's try the left rule instead of the elim rule. We have
+$M_d : A_{dd} \to B_{dd}$ with
+\[B_{fd} \o M_d \o A_{df} = B_{ef} \o M_e \o A_{fe} \]
+We want $P$ with
+\[ P_d : ({\textstyle \int_c  A_{cc}}) \to B_{dd} \]
+\[B_{fd} \o P_d  = B_{ef} \o P_d  \]
+so we set
+\[P_d(x) = M_d(x[d])\]
+so we need to check
+\[B_{fd}(M_d(x[d])) \equiv B_{ef}(M_e(x[e]))\]
+and {\em this} is the familiar stuck state where we don't actually know
+that $x[d]$ and $x[e]$ are the $A$-transport of anything from $A_{de}$.
+
+\subsection{Special Case of Special Case where it works}
+
+So let $A$ be $C \x (C \to B)$ where $C$ is covariant.
+
+\[
+\erule
+{\alpha : \C; x : (C \x (C \to B))(\alpha) \prov M : B(\alpha)}
+{\alpha : \C; y : \forall \beta . (C \x (C \to B))(\beta) \prov [y[\alpha]/x]M : B(\alpha)}
+\]
+
+The known end condition says that for all
+\[B_{fd} \o M_d \o (C \x (C \to B))_{df} = B_{ef} \o M_e \o (C \x (C \to B))_{fe} \]
+\[(x : C_{d}) (h : C_{e} \to B_{de})
+\to
+B_{fd} ( M_d ( (C \x (C \to B))_{df} (x, h)))= B_{ef} ( M_e ( (C \x (C \to B))_{fe} (x, h)))\]
+\[(x : C_{d}) (h : C_{e} \to B_{de})
+\to
+B_{fd} ( M_d (x, B_{df} \o h \o C_f))= B_{ef} ( M_e  (C_fx, B_{fe} \o h))\]
+
+and we want to construct
+\[P_d : \left(\int_c C_{c} \x (C_{c} \to B_{cc})\right) \to B_{dd} \]
+\[B_{fd} \o P_d  = B_{ef} \o P_d  \]
+so we set
+\[P_d(x) = M_d(x[d])\]
+and we need to check
+\[B_{fd}(M_d(x[d])) \equiv B_{ef}(M_e(x[e]))\]
+and we seem to still be stuck? What's going on?
 \end{document}
