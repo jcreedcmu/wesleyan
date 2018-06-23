@@ -677,6 +677,7 @@ and I sort of see that this is enough to see equality along the diagonal, but no
 full generality that I need for my goal. Bummer.
 
 \subsection{When Do I Expect This To Work?}
+\label{expect.work}
 
 The next thing I should try to do is at least figure out where the
 boundary between working and not-working is. I think I can bisect from
@@ -1004,7 +1005,7 @@ So let $A$ be $C \x (C \to B)$ where $C$ is covariant.
 {\alpha : \C; y : \forall \beta . (C \x (C \to B))(\beta) \prov [y[\alpha]/x]M : B(\alpha)}
 \]
 
-The known end condition says that for all
+The known end condition for $M$ says that for all
 \[B_{fd} \o M_d \o (C \x (C \to B))_{df} = B_{ef} \o M_e \o (C \x (C \to B))_{fe} \]
 \[(x : C_{d}) (h : C_{e} \to B_{de})
 \to
@@ -1017,8 +1018,69 @@ and we want to construct
 \[P_d : \left(\int_c C_{c} \x (C_{c} \to B_{cc})\right) \to B_{dd} \]
 \[B_{fd} \o P_d  = B_{ef} \o P_d  \]
 so we set
-\[P_d(x) = M_d(x[d])\]
+\[P_d(z) = M_d(z[d])\]
 and we need to check
-\[B_{fd}(M_d(x[d])) \equiv B_{ef}(M_e(x[e]))\]
-and we seem to still be stuck? What's going on? %
+\[(z : {\textstyle \int}_c C_c \x (C_c \to B_{cc})) \to  B_{fd}(M_d(z[d])) \equiv B_{ef}(M_e(z[e]))\]
+and we seem to still be stuck? What's going on?
+
+\vfil\eject
+\subsection{Why Did What I Have Before Work?}
+
+Before, back up in \S\ref{expect.work}, I had a {\em specific} $M$ in
+mind for a proof of $x : C \x (C \to B) \prov B$. It was
+
+\[ \blet (y, g) = x \bin g(y) : B_{dd}\]
+
+Or wait, is that the deal? I also notice now that I forgot I have an end-condition for
+$z : {\textstyle \int}_c C_c \x (C_c \to B_{cc})$ itself, as an element of an end. It's
+\[\blet (y, g) = z[d] \bin (C_f y, C_{fd} \o g) \equiv \blet (y, g) = z[e] \bin (y,  C_{ef} \o g \o C_f)\]
+
+which rewriting with projections is
+\[C_f z_d^1 =  z_e^1\]
+\[ C_{fd} \o z_d^2 \equiv C_{ef} \o z_e^2 \o C_f\]
+
+Hm, this by itself doesn't get me unstuck. The {\em specific} $M$ is $M_d(q) = q^2(q^1)$,
+which makes me check
+\[(z : {\textstyle \int}_c C_c \x (C_c \to B_{cc})) \to  B_{fd}(z_d^2(z_d^1)) \equiv B_{ef}(z_e^2(z_e^1))\]
+and now I can see that
+\[B_{ef}(z_e^2(z_e^1)) = B_{ef}(z_e^2(C_f z_d^1))\]
+\[ = B_{ef}(z_e^2(C_f z_d^1))\]
+
+\subsection{What's Special About This Case}
+Bah, what the heck is going on. Let's just reconcile notation.
+{\em If} I have a term of type \[\int_c C_c \x (C_c \to B_{cc})\], then
+I should be able to construct a term of type $\int_c B_{cc}$.
+We let $M : \int_c C_c \x (C_c \to B_{cc})$ be given,
+set $P_d = M_d^2(M_d^1) : B_{cc}$, and check that the end condition
+\[ B_{fd} (M_d^2(M_d^1)) = B_{ef} (M_e^2(M_e^1)) \]
+follows from
+\[ \pair{ C_f M^1_d} { B_{fd} \o M_d^2 } = \pair {M^1_e} { B_{ef} \o M_e^2 \o C_f} \]
+
+But if I have a term of type
+\[( C_d \x (C_d \to B_{dd}) ) \to B_{dd} \]
+I'd like to {\em think} that I can $\forall L$ to
+\[\left( \int_c  C_c \x (C_c \to B_{cc}) \right) \to B_{dd} \]
+but I seem to get stuck.
+
+No, this line of thought isn't helping.
+
+\subsection{What Else To Do?}
+
+With some foreshadowing intent I want to call what I'd ordinarily
+think of as a normal proposition instead a {\em pre}proposition in
+this context; it's all propositions, which may not be well-behaved
+with respect to this semantics. But I can {\em give} an interpretation
+as a type to any such preprop, with implication being functions and quantifiers
+being (co)ends, and so on. They simply don't follow the usual rules.
+
+Except my language of preprops is a little richer than regular props,
+because I mean to syntactically bake into atomic propositions the variance
+with which they depend on categorical variables.
+
+Ok, so what rules {\em do} they satisfy? Let me collect some data. What data do I have
+already? I believe I know that
+\[\models (\forall x . C^+_x \x (C^+_x \to B_{x})) \to \forall x . B_{x}\]
+\[\models (\forall x . C^-_x \x (C^-_x \to B_{x})) \to \forall x . B_{x}\]
+and that generally
+\[\not\models (\forall x . C_x \x (C_x \to B_{x})) \to \forall x . B_{x}\]
 \end{document}
