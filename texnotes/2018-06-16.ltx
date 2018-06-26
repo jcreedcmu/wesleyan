@@ -1083,4 +1083,232 @@ already? I believe I know that
 \[\models (\forall x . C^-_x \x (C^-_x \to B_{x})) \to \forall x . B_{x}\]
 and that generally
 \[\not\models (\forall x . C_x \x (C_x \to B_{x})) \to \forall x . B_{x}\]
+
+\subsection{Carefully Checking A Case I Believe Should Work}
+Suppose we have functors
+\[R : (\PP \x \PP^\op) \x (\PP \x \PP^\op) \x \PP \to \rset\]
+\[P_1, P_2 : \PP \to \rset \]
+I want to see whether I can validate the focusing $\tensor {R}$ rule
+\[
+\erule
+{\Delta_1 \prov [P_1] \qquad\Delta_2  \prov [P_2] }
+{\Delta_1, \Delta_2\prov [P_1 \tensor P_2]}
+\]
+Which I take to mean, if there are natural transformations
+\[ \zeta_1 : \sem{\Delta_1} \to \sem {P_1}\qquad
+ \zeta_2 : \sem {\Delta_2} \to \sem {P_2}\]
+then there is a natural transformation
+\[ \zeta : \sem{\Delta_1} \htensor \sem {\Delta_2} \to \sem{P_1} \htensor \sem {P_2}\]
+where
+\[ (F_1 \htensor F_2)(\alpha) =
+\int^{\beta_1 \beta_2} F_1(\beta_1) \x F_2(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\]
+Ok, to be a natural transformation means for every object $\alpha \in \PP$ we need an arrow
+\[(\Delta_1, \Delta_2)_\alpha \to (P_1 \tensor P_2)_\alpha\] i.e.
+\[
+\int^{\beta_1 \beta_2} \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\]
+\[
+\to \int^{\beta_1 \beta_2} \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\]
+and for every morphism $m : \alpha \to \alpha'$ we need
+\[
+\begin{tikzcd}
+  (\Delta_1, \Delta_2)_\alpha \ar[r]\ar[d, "{(\Delta_1, \Delta_2)_m}"']
+& (P_1 \tensor P_2)_\alpha\ar[d, "{(P_1 \tensor P_2)_m}"]\\
+  (\Delta_1, \Delta_2)_{\alpha'} \ar[r]& (P_1 \tensor P_2)_{\alpha'}
+\end{tikzcd}
+\]
+Ok, recall how we get in and out of coends. We make something of a coend by
+making it at the diagonal. We use something of coend type by getting it at the
+diagonal and being required to use it in such a way that it respects transport.
+
+So we're handed a
+\[ \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha) \]
+and we make
+\[ \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\]
+by just plugging in the natural transformations $\Delta_1 \to P_1$ and $\Delta_2 \to P_2$
+that we assumed we had.
+
+Let's verify the coend property is respected. If we have morphisms $m_1 : \beta_1 \to \beta'_1$
+and $m_2 : \beta_2 \to \beta'_2$, we want to confirm that this diagram commutes:
+\[
+\begin{tikzcd}
+&[-10em]\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta'_1, \beta_2, \beta'_2, \alpha)\ar[dr]\ar[dl]\\
+  \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[d]&&[-10em]
+\sem{\Delta_1}(\beta'_1) \x \sem{\Delta_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[d]\\
+  \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[dr]&&
+\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[dl]\\
+&\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta_1, \beta'_2, \beta_2, \alpha)
+\end{tikzcd}
+\]
+which is just the product-wise overlaying of naturality of how we go $\Delta_1 \to P_1$
+and $\Delta_2 \to P_2$, and the interchange of functoriality in the arguments of $R$.
+
+Do we have naturality? If I take the diagonal elements of the coend as authoritative, then I see
+(for $m : \alpha \to \alpha'$)
+\[
+\begin{tikzcd}
+\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\ar[r]\ar[d, "\cdots m"']
+&
+\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\ar[d, "\cdots m"]
+\\
+\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha')
+\ar[r]
+&
+\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha')
+\end{tikzcd}
+\]
+Yeah, since the composite arrow $\Delta_1, \Delta_2 \to P_1 \tensor P_2$ is just
+the identity on the $R$-component, naturality is easy here.
+
+\subsection{Just Making Sure I Have The Right Intuitions about Ends}
+
+For $F, G : \C\x\C^\op \to \rset$, a morphism $\int_c F(c, c) \to \int_c G(c, c)$ is given by
+a map $F(c, c) \to G(c, c)$ for each $c$ such that
+\[
+\begin{tikzcd}
+&F(c, d)\ar[dr]\ar[dl]\\
+F(c, c)
+\ar[d]&&
+F(d, d)\ar[d]\\
+ G(c, c)\ar[dr]&&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+Right? For $\int_c F(c, c)$ is the equalizer
+\[
+\begin{tikzcd}
+  \int_c F(c, c) \ar[r, >->]& \prod_{c} F(c, c) \ar[r, shift left]\ar[r, shift right] & \prod_{c, d} F(c, d)
+\end{tikzcd}
+\]
+So we construct a map into $\int_c G(c, c)$ by
+\[
+\begin{tikzcd}
+  \int_c F(c, c) \ar[r, >->]& \prod_{c} F(c, c) \ar[r, shift left]\ar[r, shift right] \ar[d]& \prod_{c, d} F(c, d)\\
+  \int_c G(c, c) \ar[r, >->]& \prod_{c} G(c, c) \ar[r, shift left]\ar[r, shift right] & \prod_{c, d} G(c, d)
+\end{tikzcd}
+\]
+Right, no, I am thinking about this a little sloppily. The hexagon above is literally
+what it means to belong to an end $\int_c F(c, c) \to G(c, c)$.
+What would suffice to commute to get $\int_c F(c, c) \to \int_c G(c, c)$ is actually
+\[
+\begin{tikzcd}
+&\int_c F(c, c)\ar[dr, "\pi"]\ar[dl, "\pi"']\\
+F(c, c)
+\ar[d]&&
+F(d, d)\ar[d]\\
+ G(c, c)\ar[dr]&&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+If I had a natural transformation $F \to G$, then I would have
+\[
+\begin{tikzcd}
+&\int_c F(c, c)\ar[dr, "\pi"]\ar[dl, "\pi"']\\
+F(c, c)\ar[dr]
+\ar[d]&&
+F(d, d)\ar[d]\ar[dl]\\
+ G(c, c)\ar[dr]&F(d, c)\ar[d]&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+Anyway, it makes me think I need to actually check the commutativity of
+\[
+\begin{tikzcd}
+&[-10em]\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta'_1, \beta_2, \beta'_2, \alpha)\ar[dr]\ar[dl]\\
+  \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[d]&&[-10em]
+\sem{\Delta_1}(\beta'_1) \x \sem{\Delta_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[d]\\
+  \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[dr]&&
+\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[dl]\\
+&\int^{\beta_1\beta_2}\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\end{tikzcd}
+\]
+ah... but this almost feels plausible, since the processes $\Delta_1 \to P_1$ and
+$\Delta_2 \to P_2$ {\em were} natural transformations, and the relation $R$
+is sort of `at rest'.
+
+Let me try to get some better notation. $P$ and $Q$ are the positive props. Write
+covariant arguments subscript and contravariant arguments superscript.
+
+I have $P, Q, \Delta, \Gamma: \PP \to \rset$. I have natural tranformations $\zeta : \Delta \to P$
+and $\xi : \Gamma \to Q$. I have objects $\alpha, \beta,\gamma,\beta',\gamma'\in\PP$.
+ I have morphisms $m : \beta \to \beta', n : \gamma \to \gamma' \in \PP$.
+{\em If} we can satisfy the diagram
+\[
+\begin{tikzcd}
+&[-5em]
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dr, "{\Delta_m \x \Gamma_n\x R_{m n1}^{1}}"]
+\ar[dl, "{{\Delta_1} \x {\Gamma_1}\x R_{111}^{m n}}"']
+\\
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[d, "\zeta_\beta \x \xi_\beta \x 1"']
+&&[-5em]
+{\Delta}_{\beta'} \x {\Gamma}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[d, "\zeta_{\beta'} \x \xi_{\beta'} \x 1"]
+\\
+{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[dr, "\iota_{\beta\gamma}"']
+&&
+{P}_{\beta'} \x {Q}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[dl, "\iota_{\beta'\gamma'}"]
+\\
+&
+\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\end{tikzcd}
+\]
+then we get a morphism
+\[\int^{\beta\gamma}\Delta_\beta \x \Gamma_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}
+\to \int^{\beta\gamma}P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\]
+as we wish. But naturality of $\zeta, \xi$ means the upper right cell of
+\[
+\begin{tikzcd}
+&
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dr]
+\ar[dl]
+\ar[d]
+\\
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[d]
+&
+P_\beta \x Q_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dl]\ar[dr]
+&
+{\Delta}_{\beta'} \x {\Gamma}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[d]
+\\
+{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[dr]
+&&
+{P}_{\beta'} \x {Q}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[dl]
+\\
+&
+\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\end{tikzcd}
+\]
+commutes. The upper left cell is basically trivial. The bottom cell is the coend
+property of $\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}$.
 \end{document}
