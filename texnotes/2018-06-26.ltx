@@ -827,4 +827,38 @@ Why can I not already reason
 \[ = G^f(M_e(w_e))\]
 Okay, maybe this works after all, and I can imagine justifying monovariance
 requirements `at the leaves' of focusing trees!
+
+\subsection{Making Sure The Dual Thing Works}
+
+I'm a little nervous as I thought I'd gotten decisively stuck here before.
+Let's try again.
+
+Recall we're trying to validate
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G^\alpha \x H_\alpha}
+{\int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha \x H_\alpha}
+\]
+So we have
+\[ M : {\int_\alpha F^\alpha_\alpha \to G^\alpha \x H_\alpha} \]
+and we build
+\[ P : {\int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha \x H_\alpha}\]
+as
+\[ P_d = \lambda x . \pair d {M_d(x)} \]
+and we need to check
+\[ P_d \o F^f = P_e \o F_f \]
+i.e.
+\[ (x : F^e_d) \to   \pair d {M_d(F^f(x))} = \pair e {M_e(F_f(x))} : \int_\alpha  G^\alpha \x H_\alpha\]
+i.e.
+\[ (x : F^e_d) \to   \pair d {M^1_d(F^f(x)), M^2_d(F^f(x))} = \pair e {M^1_e(F_f(x)), M^2_e(F_f(x))} : \int_\alpha  G^\alpha \x H_\alpha\]
+
+and what we know is the coend equality, for any $f : d \to e$,
+\[ (y : G^e \x H_d)\to   \pair d {G^f(y^1), y^2} = \pair e {y^1, H_f(y^2)} : \int^\alpha  G^\alpha \x H_\alpha\]
+and the end property of $M$,
+\[  M^1_d \o F^f = G^f \o M^1_e \o F_f \qquad  H_f \o M^2_d \o F^f =  M^2_e \o F_f \]
+But wait; stare at our obligation, and apply the end-property of $M$. It becomes
+\[    \pair d {G^fM^1_eF_fx, M^2_dF^fx} = \pair e {M^1_eF_fx, H_fM^2_dF^fx}\]
+and this {\em is} exactly the coend equality for $y = \pair {M^1_e F_f x} {M^2_d F^f x}$.
+
+Great, this holds, it was just clouded by the noise of notation.
 \end{document}
