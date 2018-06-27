@@ -1,0 +1,830 @@
+\documentclass{article}
+\usepackage[tmargin=0.05in, bmargin=0.05in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+
+\section{Carefully Checking A Case I Believe Should Work}
+Suppose we have functors
+\[R : (\PP \x \PP^\op) \x (\PP \x \PP^\op) \x \PP \to \rset\]
+\[P_1, P_2 : \PP \to \rset \]
+I want to see whether I can validate the focusing $\tensor {R}$ rule
+\[
+\erule
+{\Delta_1 \prov [P_1] \qquad\Delta_2  \prov [P_2] }
+{\Delta_1, \Delta_2\prov [P_1 \tensor P_2]}
+\]
+Which I take to mean, if there are natural transformations
+\[ \zeta_1 : \sem{\Delta_1} \to \sem {P_1}\qquad
+ \zeta_2 : \sem {\Delta_2} \to \sem {P_2}\]
+then there is a natural transformation
+\[ \zeta : \sem{\Delta_1} \htensor \sem {\Delta_2} \to \sem{P_1} \htensor \sem {P_2}\]
+where
+\[ (F_1 \htensor F_2)(\alpha) =
+\int^{\beta_1 \beta_2} F_1(\beta_1) \x F_2(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\]
+Ok, to be a natural transformation means for every object $\alpha \in \PP$ we need an arrow
+\[(\Delta_1, \Delta_2)_\alpha \to (P_1 \tensor P_2)_\alpha\] i.e.
+\[
+\int^{\beta_1 \beta_2} \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\]
+\[
+\to \int^{\beta_1 \beta_2} \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\]
+and for every morphism $m : \alpha \to \alpha'$ we need
+\[
+\begin{tikzcd}
+  (\Delta_1, \Delta_2)_\alpha \ar[r]\ar[d, "{(\Delta_1, \Delta_2)_m}"']
+& (P_1 \tensor P_2)_\alpha\ar[d, "{(P_1 \tensor P_2)_m}"]\\
+  (\Delta_1, \Delta_2)_{\alpha'} \ar[r]& (P_1 \tensor P_2)_{\alpha'}
+\end{tikzcd}
+\]
+Ok, recall how we get in and out of coends. We make something of a coend by
+making it at the diagonal. We use something of coend type by getting it at the
+diagonal and being required to use it in such a way that it respects transport.
+
+So we're handed a
+\[ \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha) \]
+and we make
+\[ \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2) \x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\]
+by just plugging in the natural transformations $\Delta_1 \to P_1$ and $\Delta_2 \to P_2$
+that we assumed we had.
+
+Let's verify the coend property is respected. If we have morphisms $m_1 : \beta_1 \to \beta'_1$
+and $m_2 : \beta_2 \to \beta'_2$, we want to confirm that this diagram commutes:
+\[
+\begin{tikzcd}
+&[-10em]\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta'_1, \beta_2, \beta'_2, \alpha)\ar[dr]\ar[dl]\\
+  \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[d]&&[-10em]
+\sem{\Delta_1}(\beta'_1) \x \sem{\Delta_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[d]\\
+  \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[dr]&&
+\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[dl]\\
+&\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta_1, \beta'_2, \beta_2, \alpha)
+\end{tikzcd}
+\]
+which is just the product-wise overlaying of naturality of how we go $\Delta_1 \to P_1$
+and $\Delta_2 \to P_2$, and the interchange of functoriality in the arguments of $R$.
+
+Do we have naturality? If I take the diagonal elements of the coend as authoritative, then I see
+(for $m : \alpha \to \alpha'$)
+\[
+\begin{tikzcd}
+\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\ar[r]\ar[d, "\cdots m"']
+&
+\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\ar[d, "\cdots m"]
+\\
+\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha')
+\ar[r]
+&
+\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha')
+\end{tikzcd}
+\]
+Yeah, since the composite arrow $\Delta_1, \Delta_2 \to P_1 \tensor P_2$ is just
+the identity on the $R$-component, naturality is easy here.
+
+\subsection{Just Making Sure I Have The Right Intuitions about Ends}
+
+For $F, G : \C\x\C^\op \to \rset$, a morphism $\int_c F(c, c) \to \int_c G(c, c)$ is given by
+a map $F(c, c) \to G(c, c)$ for each $c$ such that
+\[
+\begin{tikzcd}
+&F(c, d)\ar[dr]\ar[dl]\\
+F(c, c)
+\ar[d]&&
+F(d, d)\ar[d]\\
+ G(c, c)\ar[dr]&&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+Right? For $\int_c F(c, c)$ is the equalizer
+\[
+\begin{tikzcd}
+  \int_c F(c, c) \ar[r, >->]& \prod_{c} F(c, c) \ar[r, shift left]\ar[r, shift right] & \prod_{c, d} F(c, d)
+\end{tikzcd}
+\]
+So we construct a map into $\int_c G(c, c)$ by
+\[
+\begin{tikzcd}
+  \int_c F(c, c) \ar[r, >->]& \prod_{c} F(c, c) \ar[r, shift left]\ar[r, shift right] \ar[d]& \prod_{c, d} F(c, d)\\
+  \int_c G(c, c) \ar[r, >->]& \prod_{c} G(c, c) \ar[r, shift left]\ar[r, shift right] & \prod_{c, d} G(c, d)
+\end{tikzcd}
+\]
+Right, no, I am thinking about this a little sloppily. The hexagon above is literally
+what it means to belong to an end $\int_c F(c, c) \to G(c, c)$.
+What would suffice to commute to get $\int_c F(c, c) \to \int_c G(c, c)$ is actually
+\[
+\begin{tikzcd}
+&\int_c F(c, c)\ar[dr, "\pi"]\ar[dl, "\pi"']\\
+F(c, c)
+\ar[d]&&
+F(d, d)\ar[d]\\
+ G(c, c)\ar[dr]&&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+If I had a natural transformation $F \to G$, then I would have
+\[
+\begin{tikzcd}
+&\int_c F(c, c)\ar[dr, "\pi"]\ar[dl, "\pi"']\\
+F(c, c)\ar[dr]
+\ar[d]&&
+F(d, d)\ar[d]\ar[dl]\\
+ G(c, c)\ar[dr]&F(d, c)\ar[d]&
+G(d, d)\ar[dl]\\
+&G(d, c)
+\end{tikzcd}
+\]
+Anyway, it makes me think I need to actually check the commutativity of
+\[
+\begin{tikzcd}
+&[-10em]\sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta'_1, \beta_2, \beta'_2, \alpha)\ar[dr]\ar[dl]\\
+  \sem{\Delta_1}(\beta_1) \x \sem{\Delta_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[d]&&[-10em]
+\sem{\Delta_1}(\beta'_1) \x \sem{\Delta_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[d]\\
+  \sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)\ar[dr]&&
+\sem{P_1}(\beta'_1) \x \sem{P_2}(\beta'_2)
+\x R(\beta'_1, \beta'_1, \beta'_2, \beta'_2, \alpha)\ar[dl]\\
+&\int^{\beta_1\beta_2}\sem{P_1}(\beta_1) \x \sem{P_2}(\beta_2)
+\x R(\beta_1, \beta_1, \beta_2, \beta_2, \alpha)
+\end{tikzcd}
+\]
+ah... but this almost feels plausible, since the processes $\Delta_1 \to P_1$ and
+$\Delta_2 \to P_2$ {\em were} natural transformations, and the relation $R$
+is sort of `at rest'.
+
+Let me try to get some better notation. $P$ and $Q$ are the positive props. Write
+covariant arguments subscript and contravariant arguments superscript.
+
+I have $P, Q, \Delta, \Gamma: \PP \to \rset$. I have natural tranformations $\zeta : \Delta \to P$
+and $\xi : \Gamma \to Q$. I have objects $\alpha, \beta,\gamma,\beta',\gamma'\in\PP$.
+ I have morphisms $m : \beta \to \beta', n : \gamma \to \gamma' \in \PP$.
+{\em If} we can satisfy the diagram
+\[
+\begin{tikzcd}
+&[-5em]
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dr, "{\Delta_m \x \Gamma_n\x R_{m n1}^{1}}"]
+\ar[dl, "{{\Delta_1} \x {\Gamma_1}\x R_{111}^{m n}}"']
+\\
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[d, "\zeta_\beta \x \xi_\beta \x 1"']
+&&[-5em]
+{\Delta}_{\beta'} \x {\Gamma}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[d, "\zeta_{\beta'} \x \xi_{\beta'} \x 1"]
+\\
+{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[dr, "\iota_{\beta\gamma}"']
+&&
+{P}_{\beta'} \x {Q}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[dl, "\iota_{\beta'\gamma'}"]
+\\
+&
+\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\end{tikzcd}
+\]
+then we get a morphism
+\[\int^{\beta\gamma}\Delta_\beta \x \Gamma_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}
+\to \int^{\beta\gamma}P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\]
+as we wish. But naturality of $\zeta, \xi$ means the upper right cell of
+\[
+\begin{tikzcd}
+&
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dr]
+\ar[dl]
+\ar[d]
+\\
+\Delta_\beta \x \Gamma_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[d]
+&
+P_\beta \x Q_\gamma\x R_{\beta \gamma\alpha}^{\beta' \gamma'}
+\ar[dl]\ar[dr]
+&
+{\Delta}_{\beta'} \x {\Gamma}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[d]
+\\
+{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\ar[dr]
+&&
+{P}_{\beta'} \x {Q}_{\gamma'}\x R_{\beta' \gamma'\alpha}^{\beta' \gamma'}
+\ar[dl]
+\\
+&
+\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}
+\end{tikzcd}
+\]
+commutes. The upper left cell is basically trivial. The bottom cell is the coend
+property of $\int^{\beta\gamma}{P}_\beta \x {Q}_\gamma\x R_{\beta \gamma\alpha}^{\beta \gamma}$.
+
+\subsection{Syntax/Semantics}
+
+Ok, what derivation in the `syntactic semantics' underlies the use of
+the $\tensor$-right rule here? We translate
+\[
+\erule
+{\Delta \prov [P] \qquad\Gamma  \prov [Q] }
+{\Delta, \Gamma\prov [P \tensor Q]}
+\]
+to
+\[
+\erule
+{\Delta  \prov P \wat \alpha_{\Delta} \qquad\Gamma   \prov Q \wat \alpha_{\Gamma} }
+{\Delta, \Gamma\prov (P \tensor Q) \wat (\alpha_{\Delta} \tensor \alpha_{\Gamma})}
+\]
+which I can isomorphically reinterpret as
+\[
+\erule
+{\beta, \Delta_\beta  \prov P_\beta \qquad
+ \gamma, \Gamma_\gamma   \prov Q_\gamma }
+{\alpha, \beta, \gamma, R^{\beta\gamma}_{\beta\gamma\alpha}, \Delta, \Gamma
+\prov (P \tensor Q)_\alpha}
+\]
+or, expanding out the meaning of $\tensor$ as a logical formula,
+\[
+\erule
+{\beta, \Delta_\beta  \prov P_\beta \qquad
+ \gamma, \Gamma_\gamma   \prov Q_\gamma }
+{\alpha, \beta, \gamma, R^{\beta\gamma}_{\beta\gamma\alpha}, \Delta, \Gamma
+\prov \exists \beta \gamma . P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}}
+\]
+So the essential thing I'm doing is, in fact, $\exists R$:
+\[
+\erule
+{
+\[
+\[\justifies \beta, \Delta_\beta  \prov P_\beta \]
+\[\justifies \gamma, \Gamma_\gamma   \prov Q_\gamma\]
+\[\justifies R^{\beta\gamma}_{\beta\gamma\alpha}  \prov R^{\beta\gamma}_{\beta\gamma\alpha}\]
+\justifies
+\alpha, \beta, \gamma, R^{\beta\gamma}_{\beta\gamma\alpha}, \Delta_\beta, \Gamma_\gamma
+\prov  P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}
+\]}
+{\alpha, \beta, \gamma, R^{\beta\gamma}_{\beta\gamma\alpha}, \Delta_\beta, \Gamma_\gamma
+\prov \exists \beta \gamma . P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}}
+\]
+So my gut feeling is that there's a stronger-than-normal sense in which
+$\Delta_\beta \prov P_\beta$ --- namely, something arising from the fact that it
+holds in an environment where the free variable
+$\beta$ is only used monovariantly --- and the same is true of $\Gamma_\gamma \prov Q_\gamma$.
+And also perhaps somehow the {\em identity} entailment
+$R^{\beta\gamma}_{\beta\gamma\alpha} \prov R^{\beta\gamma}_{\beta\gamma\alpha}$
+is in this stronger-than-normal subset as well.
+
+I conjecture this stronger-than-normal entailment is what $\exists R$ and $\forall L$ need
+to require in their body. Perhaps there are two strengthenings of the hypothetical judgment,
+one appropriate for $\exists$, and one for $\forall$. The $\exists$ strengthening I suppose
+is preserved by product. Not sure about $\forall$ yet.
+
+What's something that I do know? That, supposing there are natural transformations
+\[\Delta \to P \qquad \Gamma \to Q\]
+then there {\em is} an inhabitant of the end
+\[\int_{\alpha\beta\gamma} ( \Delta_\beta \x \Gamma_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}) \to P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\]
+{\em and also} of the end-coend
+\[\int_{\alpha\beta\gamma} ( \Delta_\beta \x \Gamma_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}) \to \int^{\alpha\beta\gamma} P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\]
+which by mere coend-fu is the same as the map of coends
+\[\left(\int^{\alpha\beta\gamma}  \Delta_\beta \x \Gamma_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\right) \to \int^{\alpha\beta\gamma} P_\beta \x Q_\gamma \x R^{\beta\gamma}_{\beta\gamma\alpha}\]
+
+Let's confirm that my observation that $\forall L$ doesn't hold extends to $\exists R$.
+What I mean by $\exists R$ is the general claim that
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G^\alpha_\alpha}
+{\int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha_\alpha}
+\]
+If we have some $M :\int_\alpha F^\alpha_\alpha \to G^\alpha_\alpha$,
+we do have $M_d : F^d_d \to G^d_d$ for every particular $d \in \C$.
+So it seems like we can build $P : \int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha_\alpha$
+by setting
+\[P_d = \lambda x . \pair d {M_d(x)} \]
+but we have to check that $P$ actually lives in the end. (There's nothing
+to check for getting into the coend; the injections always work)
+So we want to check that we have convergence for any morphism $f : d \to e$ like
+\[
+\begin{tikzcd}
+  F^d_d \to \int^\alpha G^\alpha_\alpha \ar[dr]
+&&  F^e_e \to \int^\alpha G^\alpha_\alpha \ar[dl]\\
+&
+  F^e_d \to \int^\alpha G^\alpha_\alpha
+\end{tikzcd}
+\]
+That is, we must check
+\[ P_d \o F^f \equiv P_e \o F_f \]
+i.e.
+\[ (x : F^e_d) \to   \pair d {M_d(F^f(x))} = \pair e {M_e(F_f(x))} : \int^\alpha  G^\alpha_\alpha\]
+but what we have is that the coend on $G$ iself licenses
+\[ (y : G^e_d) \to   \pair d {G^f(y)} = \pair e {G_f(y)} : \int^\alpha  G^\alpha_\alpha\]
+and the end-property of $M$ licenses
+\[
+\begin{tikzcd}
+  F^d_d \to  G^d_d \ar[dr]
+&&  F^e_e \to  G^e_e \ar[dl]\\
+&
+  F^e_d \to  G^d_e
+\end{tikzcd}
+\]
+i.e.
+\[ (x : F^e_d) \to   (G_f \o M_d \o F^f)(x) = (G^f \o M_e \o F_f)(x) :  G^d_e\]
+But we don't know that $M_d(F^f(x))$ or $M_e(F_f(x))$ actually arise from $G$-transport, so
+we're stuck, as I'd expected/hoped.
+
+\subsection{Ways This Can Go Ok}
+
+One thing that should suffice is when $F$ and $G$ are {\em both} covariant.
+Then I must check
+\[ (x : F_d) \to   \pair d {M_d(x)} = \pair e {M_e(F_f(x))} : \int^\alpha  G_\alpha\]
+knowing
+\[ (y : G_d) \to   \pair d {y} = \pair e {G_f(y)} : \int^\alpha  G_\alpha\]
+\[ (x : F_d) \to   G_f \o M_d  =  M_e \o F_f :  G_e\]
+This means the coend equation has one side where we don't need to require transport;
+we already have that
+\[\pair d {M_d(x)} = \pair e {G_f(M_d(x))}\]
+and then the end-property of $M$ says
+\[\pair e {G_f(M_d(x))} = \pair e {M_e(F_f(x))}\]
+which finishes the proof.
+
+\subsubsection{$G$ covariant}
+Does this work if only $G$ is purely covariant, even if $F$ isn't?
+Then we must check
+\[ (x : F^e_d) \to   \pair d {M_d(F^f(x))} = \pair e {M_e(F_f(x))} : \int_\alpha  G_\alpha\]
+knowing
+\[ (y : G_d) \to   \pair d {y} = \pair e {G_f(y)} : \int^\alpha  G_\alpha\]
+\[ (x : F^e_d) \to   G_f \o M_d \o F^f =  M_e \o F_f :  G_e\]
+In this case, we calculate
+\[\pair d {M_d(F^f(x))} = \pair e {G_f(M_d(F^f(x)))} = \pair e {M_e(F_f(x))}\]
+As required.
+
+\subsubsection{$G$ contravariant}
+Does this work if only $G$ is purely contravariant?
+Then we must check
+\[ (x : F^e_d) \to   \pair d {M_d(F^f(x))} = \pair e {M_e(F_f(x))} : \int_\alpha  G^\alpha\]
+knowing
+\[ (y : G^e) \to   \pair d {G^f(y)} = \pair e {y} : \int^\alpha  G^\alpha\]
+\[ (x : F^e_d) \to    M_d \o F^f = G^f \o M_e \o F_f :  G^d\]
+Here we calculate `backwards',
+\[\pair e {M_e(F_f(x))} = \pair d {G^f(M_e(F_f(x)))} = \pair d {M_d(F^f(x))}\]
+Ok, this is great! Existential introduction works as long as $G$ is monovariant!
+But this isn't enough. I need to be able to mix in other variances of the variable.
+
+\subsubsection{$G$ product of two variances}
+What happens if we have $G^\alpha$ and $H_\alpha$, and we're trying to validate
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G^\alpha \x H_\alpha}
+{\int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha \x H_\alpha}
+\]
+Then we have  $M_d : F^d_d \to G^d$ and $N_d : F^d_d \to H_d$ and we need to check
+\vskip 1in
+\[ (x : F^e_d) \to   \pair d {M_d(F^f(x)), N_d(F^f(x))} = \pair e {M_e(F_f(x)), N_e(F_f(x))} : \int_\alpha  G^\alpha \x H_\alpha\]
+knowing
+\[ (y : G^e) (z : H_d)\to   \pair d {G^f(y), z} = \pair e {y, H_f(z)} : \int^\alpha  G^\alpha \x H_\alpha\]
+\[ (x : F^e_d) \to    M_d \o F^f = G^f \o M_e \o F_f :  G^d\]
+\[ (x : F^e_d) \to   H_f \o N_d \o F^f =  N_e \o F_f :  H_e\]
+
+Huh, here I might be stuck. I can't get started with the  coend equality on either
+side, because it requires either that one of the components of the tuple is
+ already $G$- or $H$-transport.
+
+But can I establish for certain proofs that they {\em do} have a representative
+upstream along one of these transports? Maybe that's what's special about the identity proof
+of the multiplicative connective relation.
+
+\subsection{Looking at simpler proofs involving bivariant functors}
+
+Ok, but surely I {\em can} do
+\[ \int_\alpha \left( R^\alpha_\alpha \to \int^\alpha R^\alpha_\alpha \right)\]
+because that's the same thing (by coend-fu) as
+\[ \left(\int^\alpha R^\alpha_\alpha\right) \to \int^\alpha R^\alpha_\alpha\]
+What's special about this proof? For every $d \in \C$ we take
+a $R^d_d$ to the injection in $\int^\alpha R^\alpha_\alpha$.
+The required end property is that
+\[
+\begin{tikzcd}
+  R^d_d \to  \int^\alpha R^\alpha_\alpha \ar[dr]
+&&  R^e_e \to  \int^\alpha R^\alpha_\alpha \ar[dl]\\
+&
+  R^e_d \to  \int^\alpha R^\alpha_\alpha
+\end{tikzcd}
+\]
+\[ (x : R^e_d) \to   ( M_d \o R^f)(x) = ( M_e \o R_f)(x) :  \int^\alpha R^\alpha_\alpha\]
+that is,
+\[ (x : R^e_d) \to    \pair d {R^fx} = \pair e {R_f x} :  \int^\alpha R^\alpha_\alpha\]
+But this is, of course, exactly the coend property.
+
+\subsection{What's the more general $\forall L$ case that I can make work?}
+Let's try working with just ends, not coends.
+Based on expecting that synchronous shift rules to work, I expect
+to be able to validate {\em something} like
+\[
+\erule
+{\int_\alpha (F_\alpha \to G^\alpha_\alpha) \to H^\alpha_\alpha }
+{\int_\alpha \left( \int_\beta F_\beta \to G^\beta_\beta \right) \to  H^\alpha_\alpha}
+\]
+but this is already more general than
+\[
+\erule
+{\int_\alpha G^\alpha_\alpha \to H^\alpha_\alpha }
+{\int_\alpha \left( \int_\beta  G^\beta_\beta \right) \to  H^\alpha_\alpha}
+\]
+which I know doesn't work; this is the counterexample where $G$ is $0111$
+and $H$ is $0112$. The critical thing is that the $G$-to-$H$ proof is
+trivial/special/simple somehow.
+
+A case I can make work is
+\[
+\erule
+{\int_\alpha F_\alpha \to G^\alpha_\alpha }
+{\int_\alpha \left( \int_\beta F_\beta \right) \to  G^\alpha_\alpha}
+\]
+for there I  have $M : \int_\alpha F_\alpha \to G^\alpha_\alpha $
+and I make $P : {\int_\alpha \left( \int_\beta F_\beta \right) \to  G^\alpha_\alpha}$
+by
+\[ P_d = \lambda w . M_d(w_d)\]
+and what I know is
+\[  G_f \o M_d = G^f \o M_e \o F_f  \]
+\[  F_f w_d = w_e  \]
+and what I need to check is
+\[  G_f \o P_d = G^f \o P_e   \]
+i.e.
+\[  G_f(M_d(w_d)) = G^f(M_e(w_e))   \]
+which is done by reasoning
+\[G^f(M_e(w_e)) = G^f(M_e(F_f(w_d))) = G_f(M_d(w_d)) \]
+
+\subsection{Specialness}
+So the `specialness' in a putative fixed inference rule
+\[
+\erule
+{\Gamma, [t/\beta](F \to G) \prov H }
+{\Gamma,   \forall \beta. F \to G \prov  H}
+\]
+Seems like it probably wants to go into the {\em conclusion} $H$, for
+otherwise the `special assumption' $F \to G$ needs to break down into more
+kinds of special things; the specialness of $F$ being monovariant,
+and of $G$ being usable-only-at-the-identity. Well... no, I guess I have
+to implement those sorts of specialness also even if $H$ is special. Not sure
+I have enough asymmetry to guide me here.
+
+And if I'm to use that reasoning, then in the `fixed' $\exists R$ rule
+\[
+\erule
+{\Gamma, [t/\beta](F \x G)  }
+{\Gamma\prov   \exists \beta. F \x G }
+\]
+it seems like the only thing I can make special is the `complex
+thing', in case the conclusion.
+
+This actually is leading me towards thinking that it is the `complex' side that
+deserves special judgmental treatment, because it seems to line up so well with
+being in focus position.
+
+\subsection{A Syntactic Conjecture}
+
+I want things to shape up like this, where we have some usual rules
+like
+\[
+\erule
+{\Gamma \prov [[t/\beta] P]}
+{\Gamma \prov [\exists \beta . P]}
+\qquad
+\erule
+{\Gamma[[t/\beta] N] \prov Q}
+{\Gamma[\forall \beta . N] \prov Q}
+\]
+\[
+\erule
+{\Gamma \prov [P]\qquad \Gamma \prov [P]}
+{\Gamma \prov [P \x P]}
+\qquad
+\erule
+{\Gamma \prov [P] \qquad \Gamma[N] \prov Q}
+{\Gamma[P \to N] \prov Q}
+\]
+ there are some restrictions about
+how you can get {\em out} of focus. We do get the identity rules
+\[
+\erule
+{}
+{\Gamma[a_-] \prov a^-}
+\qquad
+\erule
+{}
+{\Gamma, a^+ \prov [a_+]}
+\]
+but otherwise blurring requires monovariance
+\[
+\erule
+{\Gamma, P \prov Q \qquad P\ \mathsf{mono}}
+{\Gamma[\ups P] \prov Q}
+\qquad
+\erule
+{\Gamma \prov N \qquad N\ \mathsf{mono}}
+{\Gamma \prov [\dns N]}
+\]
+Actually maybe what happens is the quantifier synchronous rules
+build up an explicit substitution, so we know what variables we
+have around, and the $\mathsf{mono}$ restrictions require that the blurred
+proposition is mono in {\em each} of those variables, but maybe not
+the same for each variable? Or maybe we already have to choose the
+variance at the moment we unbind the quantifier, so it spans across products?
+Yeah, no, I think something more like the latter, since I know already that
+I can't generally do
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G^\alpha \x H_\alpha}
+{\int_\alpha F^\alpha_\alpha \to \int^\alpha G^\alpha \x H_\alpha}
+\]
+right?
+
+Hm, I'm not really sure. So far I haven't found a concrete counterexample
+for $\exists R$. What's the analogous thing for $\forall L$?
+I'm guessing it's
+\[
+\erule
+{\int_\alpha (F_\alpha \x H^\alpha) \to G^\alpha_\alpha }
+{\int_\alpha \left( \int_\beta F_\beta \x H^\beta \right) \to  G^\alpha_\alpha}
+\]
+which I can right away successfully refute, since
+\[\begin{tikzcd}
+  K_{d}^{e} = 0 \ar[r]\ar[d] & K_{e}^{e} = 1\ar[d]\\
+  K_{d}^{d} = 1 \ar[r] & K_{e}^{d} = 1
+\end{tikzcd}\]
+can in fact be factored as
+\[
+\left(\begin{tikzcd}
+  F_{d} = 0 \ar[r]\ar[d] & F_{e} = 1\ar[d]\\
+  F_{d} = 0 \ar[r] & F_{e} = 1
+\end{tikzcd}\right)
+\x
+\left(\begin{tikzcd}
+  H^{e} = 0 \ar[r]\ar[d] & H^{e} = 0\ar[d]\\
+  H^{d} = 1 \ar[r] & H^{d} = 1
+\end{tikzcd}\right)\]
+whoops, no that's or, not and. And even if I did disjoint-sum, that'd give me $0112$, not $0111$.
+
+Ok, I don't have a counterexample yet, but let's go through the
+reasoning and see if it suggests something. I have
+\[M : {\int_\alpha (F_\alpha \x H^\alpha) \to G^\alpha_\alpha }\]
+and I want to make
+\[P : {\int_\alpha \left( \int_\beta F_\beta \x H^\beta \right) \to  G^\alpha_\alpha}\]
+by
+\[P_d = \lambda w . M_d (w_d) \]
+What I know is that
+\[  G_f \o M_d \o (\rid \x H^f) = G^f \o M_e \o (F_f \x \rid) \]
+\[  (F_f \x \rid) w_d = (\rid \x H^f) w_e  \]
+and what I need to check is
+\[  G_f \o P_d = G^f \o P_e   \]
+i.e.
+\[  G_f(M_d(w_d)) = G^f(M_e(w_e))   \]
+And I'm stuck.
+
+What's something that could be special about $M$ that would get me unstuck?
+Something about the way that it uses its second argument? I
+want either of
+$M_d(\pi_1 w_d , \pi_2 w_d)$ or $M_e(\pi_1 w_e , \pi_2 w_e)$
+to be able to be rewritten somehow...
+
+Suppose we had a $q : H^e$ such that $\pi_2 w_d = H^fq : H^d$
+and $w_e = (F_f \pi_1 w_d ,  q)$.
+Then we could reason that
+
+\[G_f(M_d(w_d)) = G_f(M_d(\pi_1 w_d , \pi_2 w_d))\]
+\[ = G_f(M_d(\pi_1 w_d , H^f q))\]
+\[ = G^f(M_e(F_f \pi_1 w_d ,  q))\]
+\[ = G^f(M_e(w_e))\]
+
+But wait, we do have that $w_e : H^e$. Does it make sense to assume that
+$\pi_2 w_d = H^f \pi_2 w_e$? Wait, step back,
+\[  (F_f \x \rid) w_d = (\rid \x H^f) w_e  \]
+does actually split as
+\[  F_f \pi_1 w_d = \pi_1 w_e  \]
+\[   \pi_2 w_d = H^f \pi_2 w_e  \]
+Doesn't it?
+Why can I not already reason
+\[G_f(M_d(w_d)) = G_f(M_d(\pi_1 w_d , \pi_2 w_d))\]
+\[ = G_f(M_d(\pi_1 w_d , H^f \pi_2 w_e))\]
+\[ = G^f(M_e(F_f \pi_1 w_d ,  \pi_2 w_e))\]
+\[ = G^f(M_e(\pi_1 w_e, \pi_2 w_e))\]
+\[ = G^f(M_e(w_e))\]
+Okay, maybe this works after all, and I can imagine justifying monovariance
+requirements `at the leaves' of focusing trees!
+\end{document}
