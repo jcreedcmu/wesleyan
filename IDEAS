@@ -4966,3 +4966,32 @@ like
 and critically mixed-variance relations like
 ⊸ : (P × P^op × N × N^op) × N → Set
 Hm, this is still unanswered. ???
+
+=== 2018.06.27
+
+Q: How did I get arbitrary fonts out of a 'font suitcase' in XeTeX?
+A:
+$ brew install fondu
+$ fondu /Library/Fonts/Microsoft/Garamond/..namedfork/rsrc
+This outputs some ttf files in the current dir.
+Copy the ttf file to the same directory as the .tex file.
+Then you can do like
+   \usepackage{fontspec}
+   ...
+   {\fontspec{Garamond.ttf} Hello }
+or
+   \usepackage{fontspec}
+   \setmainfont[
+    BoldFont={GaramondBold.ttf},
+    ItalicFont={GaramondItalic.ttf}
+    ]{Garamond.ttf}
+in the .tex file.
+
+Q: Do I need to do this?
+A: Not necessarily.
+Not all fonts are in suitcases; you can use the family name without the
+.ttf extension for these.
+
+Q: How list what fonts available?
+A:
+$ fc-list : family
