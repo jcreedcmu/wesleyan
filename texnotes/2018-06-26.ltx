@@ -861,4 +861,42 @@ But wait; stare at our obligation, and apply the end-property of $M$. It becomes
 and this {\em is} exactly the coend equality for $y = \pair {M^1_e F_f x} {M^2_d F^f x}$.
 
 Great, this holds, it was just clouded by the noise of notation.
+
+\subsection{Trying to Generalize a Little}
+
+Let's say a functor $F : \C^\op \x \C \to \rset$ is `universalizable' or just `u-able',
+if we can go
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G^\alpha_\alpha }
+{\int_\alpha \left(\int_\beta F^\beta_\beta\right) \to  G^\alpha_\alpha }
+\]
+for any $G$. I conjecture that u-ability is preserved by products. Let $F$ and
+$H$ be given, suppose both u-able,
+say
+\[\nabla_G F : \left(\int_\alpha F^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to \int_\alpha \left(\int_\beta F^\beta_\beta\right) \to  G^\alpha_\alpha\]
+\[\nabla_G H : \left(\int_\alpha H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to \int_\alpha \left(\int_\beta H^\beta_\beta\right) \to  G^\alpha_\alpha\]
+I want to construct
+\[\nabla_G (F \x H) : \left(\int_\alpha F^\alpha_\alpha \x H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to \int_\alpha \left(\int_\beta F^\beta_\beta \x H^\beta_\beta\right) \to  G^\alpha_\alpha\]
+So I observe
+\[\nabla_{H \to G} F : \left(\int_\alpha F^\alpha_\alpha \to H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to \int_\alpha \left(\int_\beta F^\beta_\beta\right) \to  H^\alpha_\alpha \to G^\alpha_\alpha\]
+I can probably pull out the constant
+\[\left(\int_\alpha F^\alpha_\alpha \to H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to  \left(\int_\beta F^\beta_\beta\right) \to  \int_\alpha H^\alpha_\alpha \to G^\alpha_\alpha\]
+I can compose with $\nabla_G H$ to get
+\[\left(\int_\alpha F^\alpha_\alpha \to H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to  \left(\int_\beta F^\beta_\beta\right) \to
+\int_\alpha \left(\int_\beta H^\beta_\beta\right) \to  G^\alpha_\alpha\]
+pull out the constant again to get
+\[\left(\int_\alpha F^\alpha_\alpha \to H^\alpha_\alpha \to G^\alpha_\alpha \right)
+\to  \left(\int_\beta F^\beta_\beta\right) \to
+ \left(\int_\beta H^\beta_\beta\right) \to \int_\alpha G^\alpha_\alpha\]
+So all I need now is just that
+\[  \left(\int_\beta F^\beta_\beta \x H^\beta_\beta\right) \to \left(\int_\beta F^\beta_\beta\right) \x
+ \left(\int_\beta H^\beta_\beta\right)  \]
+which I'm pretty sure is true.
 \end{document}
