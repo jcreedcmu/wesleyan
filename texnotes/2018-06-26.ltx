@@ -1229,4 +1229,45 @@ This whole business is just chasing the diagram
 \end{tikzcd}
 \]
 
+\subsection{So what is this data?}
+Claim one: To have $M_d$ and $M^f$ for some type $\forall(F \to G)$ is stronger than having
+an end in $\forall(F \to G)$. For I would just need to check that
+\[G_f \o M_d \o F^f = G^f \o M_e \o F_f\]
+but this is the same as
+\[M^f \o F_f \o F^f = M^f \o F^f \o F_f\]
+and that follows from functoriality of $F$. This is chasing the diagram
+\[
+\begin{tikzcd}
+&  F^d_d \ar[r, "M_d"] \ar[d, "F_f"'] & G^d_d \ar[d, "G_f"]\\
+F^e_d \ar[ur, bend left, "F^f"]\ar[dr, bend right, "F_f"']&  F^d_e \ar[r, "M^f"']  & G^d_e\\
+&  F^e_e \ar[r, "M_e"'] \ar[u, "F^f"] & G^e_e \ar[u, "G^f"']
+\end{tikzcd}
+\]
+
+Claim two: this is not as strong as having a natural transformation
+$F \to G : \C\x\C^\op \to \rset$. What would naturality mean for that?
+For any $f : d \to e$ and $f' : e' \to d'$, we'd need
+\[
+\begin{tikzcd}
+  F^{d'}_{d}
+ \ar[r, "F^{f'}_f"]
+\ar[d, "M^{d'}_{d}"']
+& F^{e'}_e
+\ar[d, "M^{e'}_{d}"]
+\\
+  G^{d'}_{d} \ar[r, "G^{f'}_f"'] & G^{e'}_e
+\end{tikzcd}
+\]
+This just seems like a very different requirement. The requirement I just made up with $M^f$
+would not require any `components of the natural transformation between two objects' if
+there are no arrows between them, but the actual natural transformation would.
+
+Is it the case that {\em if} I have a natural transformation, then I have one of
+these super-ends? I suppose so, since I can define $M_d$ as $M^{d}_d$, and $M^f$
+as $M^{\dom f}_{\cod f}$.
+
+Ok, so all signs are pointing to this being an intermediate
+requirement between end and natural transformation so far.
+Of course, when $F$ is contravariant and $G$ is covariant, that distinction collapses,
+but this definition is meaningful even when $F$ and $G$ are bivariant.
 \end{document}
