@@ -899,4 +899,274 @@ So all I need now is just that
 \[  \left(\int_\beta F^\beta_\beta \x H^\beta_\beta\right) \to \left(\int_\beta F^\beta_\beta\right) \x
  \left(\int_\beta H^\beta_\beta\right)  \]
 which I'm pretty sure is true.
+
+\subsection{Wait What}
+But this is just showing that conjunction is {\em negative}, isn't it?
+I should expect an {\em implication} in this position. But for that I need
+to invent what I mean by existentializable/e-able. It's that I can do
+either of the following two equivalent things:
+\[\Delta_G F : \left(\int_\alpha G^\alpha_\alpha \to F^\alpha_\alpha\right) \to
+\int_\alpha G^\alpha_\alpha \to \int^\alpha F^\alpha_\alpha \]
+
+\[\Delta_G F : \left(\int_\alpha G^\alpha_\alpha \to F^\alpha_\alpha\right) \to
+\left(\int^\alpha G^\alpha_\alpha\right) \to \int^\alpha F^\alpha_\alpha \]
+
+Ok. Suppose $F$ is existentializable (i.e. positive) and $H$ is universalizable (i.e. negative).
+We want to show that $F \to H$ is universalizable. I want the coends/ends to look more
+visually distinct,
+so I'm going to write them as $\exists/\forall$.We have
+\[\Delta_G F : \forall (G \to F) \to \exists G \to \exists F \]
+\[\nabla_G H : \forall(H \to G) \to \forall H \to \forall  G\]
+and we want
+\[\nabla_G(F \to H) : \forall((F \to H) \to G) \to\forall(F \to H) \to \forall G \]
+Ok, it seems likely that the outer call is going to be to $\nabla_G H$.
+We we have is $\forall((F \to H) \to G)$ and $\forall(F \to H)$
+and what we need is $\forall(H \to G)$ and $\forall H$. This seems stuck.
+
+What is universalizability/existentializability supposed to be telling me? That I'm allowed
+to use $\forall L/\exists R$. So why is it ok to use the $\forall L$ rule at $P \to N$?
+
+\[
+\erule
+{\Gamma, P[t] \to N[t] \prov Q}
+{\Gamma, \forall x . P \to N \prov Q}
+\]
+I can't see anything.
+
+\subsection{Products Preserve E-ability?}
+Let's try to look at whether
+existentializability as stated preserves products, and if so what that proof
+looks like. It might be more closely analagous since I'm doing a multiplicative
+connective instead of an additive.
+
+We have
+\[\Delta_G F : \forall (G \to F) \to \exists G \to \exists F \]
+\[\Delta_G H : \forall (G \to H) \to \exists G \to \exists H \]
+and we want
+\[\Delta_G (F \x H) : \forall (G \to F \x H) \to \exists G \to \exists (F \x H) \]
+This seems more straightforwardly about being able to do pair-introduction on coends,
+and projecting components out of ends.
+\subsection{What's hard about the implication case?}
+Do I need to reason about the {\em implies left} rule, in the sense of
+\[\forall F \to \forall (H \to G) \to \forall (( F \to H) \to G)\]
+? No, because what I {\em have} is $\forall (( F \to H) \to G)$.
+
+Can I ask for a stronger notion of universalizability, like
+\[\nabla_{FG} H : \forall((F \to H) \to G) \to \forall (F \to H) \to \forall  G\]
+? And then together with
+\[\Delta_G F : \forall (G \to F) \to \exists G \to \exists F \]
+we would want to prove
+\[\nabla_{JG} H : \forall((J \to F \to H) \to G) \to \forall (J \to F \to H) \to \forall  G\]
+Eh, this is probably too strong, it would let us prove this just by invoking
+$\nabla_{(J \x F)G} H$ without even using $\Delta_G F$.
+
+I suspect I need to prove some other little lemma about $\to$, though,
+parallel to the little lemmas about $\x$ required for the other facts.
+
+\subsection{Resummary}
+
+So far I believe in
+
+\[
+\erule
+{\forall (F^+ \x H^- \to G)}
+{ \forall (F^+ \x H^-) \to \forall G}
+\]
+\[
+\erule
+{\forall (G \to F^+ \x H^-)}
+{\exists G \to \exists (F^+ \x H^-)}
+\]
+
+Can I prove anything like
+\[
+\erule
+{\forall ((F^+ \to H^-) \to G)}
+{ \forall (F^+ \to H^-) \to \forall G}
+\]
+Or maybe with some other assignment of polarities to $F$ and $H$?
+
+Say we have $M : \int_c ((F_c \to H^c) \to G^c_c)$ and I want to construct
+$P : (\int_c F_c \to H^c) \to \int_c G^c_c$. I do this with
+$P(w)_d = M_d(w_d)$. I want to check that the output $P$ is actually in the end,
+so for any $f : d \to e$
+\[G_f (P(w)_d) = G^f (P(w)_e) : G^d_e \]
+i.e.
+\[(w : \int_c F_c \to H^c) \to G_f (M_d(w_d)) = G^f (M_e(w_e)) : G^d_e \]
+What I know is that $M$ and $w$ belong to their respective ends
+\[G_f \o M_d \o (F \to H)^f = G^f \o M_e \o (F \to H)_f \]
+\[ H_f \o w_d \o F^f  = H^f \o w_e \o F_f \]
+and recall that $(F \to H)^f = \lambda z . H^f \o z \o F_f$
+and $(F \to H)_f = \lambda z . H_f \o z \o F^f$ which in this case is just the identity,
+so what we really know is
+\[G_f \o M_d \o (F \to H)^f = G^f \o M_e  \]
+\[  w_d   = H^f \o w_e \o F_f \]
+So we reason
+\[G_fM_dw_d = G_fM_d(H^f \o w_e \o F_f) = G^fM_ew_e\]
+precisely as required.
+
+This seems like it would work if I revesed $+$ and $-$ in $F$ and $H$.
+Does it work with both $+$? Actually, let me just write out what I have for the most
+general case (which oughtn't work) so I can at least copy and paste and reduce that.
+So I'm studying
+\[
+\erule
+{\forall ((F \to H) \to G)}
+{ \forall (F \to H) \to \forall G}
+\]
+which comes out to still defining $P(w)_d = M_d(w_d)$ as before. I want
+to check that the output $P$ is in the end, so the thing to verify is
+\[(w : \int_c F^c_c \to H^c_c) \to G_f (M_d(w_d)) = G^f (M_e(w_e)) : G^d_e \]
+What I know is
+\[G_f \o M_d \o (F \to H)^f = G^f \o M_e \o (F \to H)_f \]
+\[ (F \to H)_f (w_d)  = (F \to H)^f(w_e) \]
+
+\subsubsection{What I proved already}
+
+If $F^+$ and $H^-$, then $(F \to H)_f$ is the identity. I reason
+\[G_fM_dw_d = G_fM_d(F \to H)^f w_e  = G^fM_ew_e\]
+If $F^-$ and $H^+$, then $(F \to H)^f$ is the identity. I reason
+\[G^fM_ew_e = G^fM_e(F \to H)_f w_d  = G_fM_dw_d\]
+But really what's going on in both these cases is just that $F \to H$ itself
+as a functor is already monovariant. That's not terrifically interesting.
+What's much more interesting is if $F$ and $H$ are of the same variance.
+
+
+A more convenient way of writing what I know in that case is
+\[(z : F^d_e \to H^e_d) \to  G_f M_d  (H^f \o z \o F_f) = G^f  M_e  (H_f \o z\o F^f)\]
+\[ H_f \o w_d\o F^f  =  H^f \o w_e \o F_f\]
+
+\subsubsection{Both Positive}
+What I know is
+\[(z : F_e \to H_d) \to  G_f M_d  ( z \o F_f) = G^f  M_e  (H_f \o z)\]
+\[ H_f \o w_d  =   w_e \o F_f\]
+I don't seem to be able to do much with this, but the more I think about this, the more
+expected it is. The situation that arises in the focusing semantics is not that
+$H$ is an arbitrary bivariant functor, but one that matches up with $G$ very closely.
+I need to figure out what conditions makes the `identity term' acceptable to make
+progress on this front.
+
+Let's just eta-expand some more things, though, to make sure I'm not missing something.
+What I know is
+\[(z : F_e \to H_d) \to  G_f M_d  ( \lambda (x : F_d) . z (F_f(x))) = G^f  M_e  (\lambda (x : F_e) . H_f ( z(x)))\]
+\[(x : F_d) \to  H_f ( w_d(x))  =   w_e ( F_f(x))\]
+and what I'm trying to prove is
+\[ G_f M_d (\lambda (x : F_d) . w_d (x)) = G^f M_e (\lambda (y : F_e) . w_e (y))\]
+This doesn't seem to reveal anything.
+Critically what I seem to be unable to do is take $w_d$ or $w_e$ and turn either one of
+them into the type $z$ needs to have.
+
+However, a special property $M$ could have which would give me some
+traction is that if, for any $f$, there was some $M_f : (F_d \to H_e) \to G^d_d $
+ such that $M_d w_d = M_f (H_f \o w_d)$ then I could reason that
+\[ G_f M_d w_d = G_f M_f (H_f \o w_d) \]
+\[= G_f M_f (w_e \o F_f) \]
+But there I'm stuck again. I need to get to $G_f M_d$ somehow.
+Starting from the other end, if I make a dual assumption about the existence
+of a $M^f : (F_d \to H_e) \to G_e^e$, that
+$M_ew_e = M^f(w_e \o F_f)$, then
+I'd have
+\[ G^f M_e w_e = G^f M^f (w_e \o F_f)\]
+And so a sufficient assumption --- supplanting, I suppose, the end condition previously assumed
+for $M$ --- is that
+\[G_f M_f = G^f M^f\]
+
+Ok, a thing that's interesting is that the end condition {\em follows from} this condition. If
+we have a $z : F_e \to H_d$, then
+\[G_f M_d (z \o F_f)  = G_f M_f (H_f \o z \o F_f) = G^f M^f (H_f \o z \o F_f) = G^f M_e (H_f \o z)\]
+
+\subsection{Let's Try Generalizing This a Bit}
+
+Suppose we have an $M  : \forall((F \to H) \to G)$ but also we have for any $f$,
+\[M_f : (F_d^e \to H_e^d) \to G^d_d \]
+\[M^f : (F_d^e \to H_e^d) \to G^e_e \]
+such that for any $q : F^d_d \to H^d_d$, we have
+\[ M_f(H_f \o q \o F^f) = M_d q \]
+and for any $q : F^e_e \to H^e_e$, we have
+\[ M^f(H^f \o q \o F_f) = M_e q \]
+and
+\[G_f \o M_f = G^f \o M^f\]
+Given all this junk, we aim to show that we can build
+\[ \forall (F \to H) \to \forall G\]
+We do this by setting $P (w)_d = M_d(w_d)$ as usual. We want to check that
+the output is in the end, so we check
+\[G_f P(w)_d = G^f P(w)_e\]
+i.e.
+\[G_f M_d w_d = G^f M_e w_e\]
+but we also know that $w : \int_c F^c_c \to H^c_c$, so
+\[ H_f \o w_d \o F^f = H^f \o w_e \o F_f : F^e_d \to H^d_e \]
+which means we can reason
+\[G_f M_d w_d = G_f M_f (H_f \o w_d \o F^f)\]
+\[ = G^f M^f (H_f \o w_d \o F^f)\]
+\[ = G^f M^f (H^f \o w_e \o F_f)\]
+\[ = G^f M_e w_e\]
+
+\subsection{ Can I do this for suitable `identity' proofs?}
+Let's suppose $G = H$. Suppose specifically that $M : \forall (F \to H) \to H$
+is of the form
+\[M_d (q) = q (N_d) \]
+for some $N_d : F_d^d$. Can I make
+\[M_f : (F_d^e \to H_e^d) \to H^d_d \]
+? No, I don't think so. Transport goes in the wrong direction. I could make
+either of
+\[M_f : (F_d^e \to H_e^d) \to H^d_e
+\qquad M_f : (F_d^e \to H_d^d) \to H^d_d \]
+Couldn't I? Wait, no, I still can't figure out how to get $F^e_d$. Transport's in the
+wrong direction there, too.
+
+But hold on a minute, expecting $F$ to be bivariant is not reasonable; That's the
+position at which I expect things to be monovariant. I think maybe $H$ ought
+to be possibly bivariant, though?
+
+Ok, let's suppose $F$ is covariant. Then $N_d : F_d$. I might try making some of
+\[M_f : (F_d \to H_e^d) \to H^d_e
+\qquad M_f : (F_d \to H_d^d) \to H^d_d \]
+\[M^f : (F_d \to H_e^d) \to H^d_e
+\qquad M^f : (F_d \to H_e^e) \to H^e_e \]
+
+This will require me to change conditions on what $M_f$ and $M^f$ must satisfy, though.
+\subsection{Another Iteration of Guessing}
+
+Suppose we have an $M  : \forall((F \to H) \to G)$ but also we have for any $f$,
+\[M^f : (F^e_d \to H^d_e) \to G^d_e \]
+such that for any $q : F^d_d \to H^d_d$, we have
+\[ M^f(H_f \o q \o F^f) = G_f M_d q \]
+and for any $q : F^e_e \to H^e_e$, we have
+\[ M^f(H^f \o q \o F_f) = G^f M_e q \]
+Given all this junk, we aim to show that we can build
+\[ \forall (F \to H) \to \forall G\]
+We do this by setting $P (w)_d = M_d(w_d)$ as usual. We want to check that
+the output is in the end, so we check
+\[G_f P(w)_d = G^f P(w)_e\]
+i.e.
+\[G_f M_d w_d = G^f M_e w_e\]
+but we also know that $w : \int_c F^c_c \to H^c_c$, so
+\[ H_f \o w_d \o F^f = H^f \o w_e \o F_f : F^e_d \to H^d_e \]
+which means we can reason
+\[G_f M_d w_d =  M^f (H_f \o w_d \o F^f)\]
+\[ =  M^f (H_f \o w_d \o F^f)\]
+\[ =  M^f (H^f \o w_e \o F_f)\]
+\[ = G^f M_e w_e\]
+
+\subsection{Another Iteration of `identity'}
+Let's suppose $G = H$, and $F$ is covariant, and $M : \forall (F \to H) \to H$
+is given by
+\[M_d (q) = q (N_d) \]
+for some global section $N_d : F_d$ with $F_f N_d = N_e$.
+We are able to define
+\[M^f : (F_d \to H^d_e) \to H^d_e \qquad M^f(q) = q(N_d)\]
+We must check
+\[
+ M^f(H_f \o q ) = H_f M_d q
+\qquad
+ M^f(H^f \o q \o F_f) = H^f M_e q
+\]
+i.e.
+\[
+ H_f  q  N_d = H_f  q N_d
+\qquad
+ H^f  q  F_f N_d = H^f  q N_e
+\]
+and these follow from the assumptions.
+
 \end{document}
