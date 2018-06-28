@@ -1149,6 +1149,7 @@ which means we can reason
 \[ = G^f M_e w_e\]
 
 \subsection{Another Iteration of `identity'}
+\subsubsection{$F$ Covariant}
 Let's suppose $G = H$, and $F$ is covariant, and $M : \forall (F \to H) \to H$
 is given by
 \[M_d (q) = q (N_d) \]
@@ -1166,6 +1167,26 @@ i.e.
  H_f  q  N_d = H_f  q N_d
 \qquad
  H^f  q  F_f N_d = H^f  q N_e
+\]
+and these follow from the assumptions.
+\subsubsection{$F$ Contravariant}
+Let's suppose $G = H$, and $F$ is contravariant, and $M : \forall (F \to H) \to H$
+is given by
+\[M_d (q) = q (N_d) \]
+for some global section $N_e : F_e$ with $F^f N_e = N_d$.
+We are able to define
+\[M^f : (F^e \to H^d_e) \to H^d_e \qquad M^f(q) = q(N_e)\]
+We must check
+\[
+ M^f(H_f \o q \o F^f) = H_f M_d q
+\qquad
+ M^f(H^f \o q ) = H^f M_e q
+\]
+i.e.
+\[
+ H_f  q  F^f N_e = H_f  q N_d
+\qquad
+ H^f  q N_e = H^f  qN_e
 \]
 and these follow from the assumptions.
 
