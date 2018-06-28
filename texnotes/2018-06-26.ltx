@@ -1190,4 +1190,43 @@ i.e.
 \]
 and these follow from the assumptions.
 
+\subsection{A Generalization of the last Guess}
+
+Suppose we have an $M : \forall (F \to G)$ and also for any $f$ we have
+\[M^f : F^d_e \to G^d_e\]
+such that for any $x : F^d_d$, we have
+\[ M^f F_f  x  = G_f M_d x \]
+and for any $y : F^e_e $, we have
+\[ M^fF^f y  = G^f M_e y \]
+In diagrams, this looks like
+\[
+\begin{tikzcd}
+  F^d_d \ar[r, "M_d"] \ar[d, "F_f"'] & G^d_d \ar[d, "G_f"]\\
+  F^d_e \ar[r, "M^f"']  & G^d_e\\
+  F^e_e \ar[r, "M_e"'] \ar[u, "F^f"] & G^e_e \ar[u, "G^f"']
+\end{tikzcd}
+\]
+Given all this junk, we aim to show that we can build
+\[ P : \forall F \to \forall G\]
+We do this by setting $P (x)_d = M_d(x_d)$. We want to check that
+the output is in the end, so we check
+\[G_f P(x)_d = G^f P(x)_e\]
+i.e.
+\[G_f M_d x_d = G^f M_e x_e\]
+but we also know that $x : \int_c F^c_c$, so
+\[ F_f  x_d = F^f  x_e  : F^d_e \]
+which means we can reason
+\[G_f M_d x_d =  M^f F_f  x_d \]
+\[ =  M^f F_f  x_d\]
+\[ =  M^f F^f  x_e\]
+\[ = G^f M_e x_e\]
+This whole business is just chasing the diagram
+\[
+\begin{tikzcd}
+&  F^d_d \ar[r, "M_d"] \ar[d, "F_f"'] & G^d_d \ar[d, "G_f"]\\
+\int_c F^c_c \ar[ur, bend left, "x_d"]\ar[dr, bend right, "x_e"']&  F^d_e \ar[r, "M^f"']  & G^d_e\\
+&  F^e_e \ar[r, "M_e"'] \ar[u, "F^f"] & G^e_e \ar[u, "G^f"']
+\end{tikzcd}
+\]
+
 \end{document}
