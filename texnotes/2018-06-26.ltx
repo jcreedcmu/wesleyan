@@ -1288,7 +1288,8 @@ So I set $P_d(x) = \pair d {M_d(x)}$. I need to check that
 \[P_d \o F^f = P_e \o F_f : F^e_d \to \int^c G^c_c \]
 i.e.
 \[(x : F^e_d) \to \pair d {M_dF^f x}  = \pair e {M_e F_f x} :  \int^c G^c_c \]
-Hmmm, maybe I need a dual notion of super-end here, like
+Hmmm, maybe I need a dual --- existential rather than universal
+--- notion of super-end here, like
 \[
 \begin{tikzcd}
   F^d_d \ar[r, "M_d"] \ar[from=d, "F^f"] & G^d_d \ar[from=d, "G^f"']\\
@@ -1301,4 +1302,36 @@ So that I can reason
 \[ = \pair e {G_f M^f x}\]
 \[= \pair e {M_eF_f x}\]
 And for sure the identity function $F^e_d \to F^e_d$ works!
+
+\subsection{Relating Super-ends to Monovariance}
+
+Ok, so the right blur rule would normally look like
+\[
+\erule
+{\Gamma \prov N}
+{\Gamma \prov [\dns N]}
+\]
+and so I want to interpret it something like
+\[
+\erule
+{\int_c F^c_c \to G_c}
+{ \oint_c F^c_c \to G_c}
+\]
+where $\oint$ indicates a (existential? since I'm talking about right-focus?) super-end.
+
+The premise gives me $M_d : F^d_d \to G_d$ such that
+\[ G_f \o M_d \o F^f = G^f \o M_e \o F_f \]
+in particular since $G$ is covariant this means
+\[ G_f \o M_d \o F^f =  M_e \o F_f \]
+The super-end requires me to make $M^f : F^e_d \to G_d$
+so I define $M^f = M_d \o F^f$. But now the premise is enough
+to see that
+\[
+\begin{tikzcd}
+  F^d_d \ar[r, "M_d"] \ar[from=d, "F^f"] & G_d \ar[from=d, equals]\\
+  F^e_d \ar[r, "M^f"']  & G_d\\
+  F^e_e \ar[r, "M_e"'] \ar[from=u, "F_f"'] & G_e \ar[from=u, "G_f"]\\
+\end{tikzcd}
+\]
+Nice! And I expect everything goes symmetrically when $G$ is purely contravariant.
 \end{document}
