@@ -1270,4 +1270,15 @@ Ok, so all signs are pointing to this being an intermediate
 requirement between end and natural transformation so far.
 Of course, when $F$ is contravariant and $G$ is covariant, that distinction collapses,
 but this definition is meaningful even when $F$ and $G$ are bivariant.
+
+\subsection{Do Super-ends Compose?}
+I think they do.
+\[
+\begin{tikzcd}
+  F^d_d \ar[r, "M_d"] \ar[d, "F_f"'] & G^d_d \ar[r, "N_d"]\ar[d, "G_f"]& H^d_d \ar[d, "H_f"]\\
+  F^d_e \ar[r, "M^f"']  & G^d_e\ar[r, "N^f"']& H^d_e\\
+  F^e_e \ar[r, "M_e"'] \ar[u, "F^f"] & G^e_e \ar[r, "N_e"']\ar[u, "G^f"']& H^e_e \ar[u, "H^f"']
+\end{tikzcd}
+\]
+
 \end{document}
