@@ -1281,4 +1281,24 @@ I think they do.
 \end{tikzcd}
 \]
 
+\subsection{Do Super-Ends satisfy $\exists R$ Also?}
+Suppose I have $M : \forall(F \to G)$ and $M^f : F^d_e \to G^d_e$ as usual.
+I want to make $P : \forall( F \to \exists G)$.
+So I set $P_d(x) = \pair d {M_d(x)}$. I need to check that
+\[P_d \o F^f = P_e \o F_f : F^e_d \to \int^c G^c_c \]
+i.e.
+\[(x : F^e_d) \to \pair d {M_dF^f x}  = \pair e {M_e F_f x} :  \int^c G^c_c \]
+Hmmm, maybe I need a dual notion of super-end here, like
+\[
+\begin{tikzcd}
+  F^d_d \ar[r, "M_d"] \ar[from=d, "F^f"] & G^d_d \ar[from=d, "G^f"']\\
+  F^e_d \ar[r, "M^f"']  & G^e_d\\
+  F^e_e \ar[r, "M_e"'] \ar[from=u, "F_f"'] & G^e_e \ar[from=u, "G_f"]\\
+\end{tikzcd}
+\]
+So that I can reason
+\[\pair d {M_dF^f x} = \pair d {G^f M^f x}\]
+\[ = \pair e {G_f M^f x}\]
+\[= \pair e {M_eF_f x}\]
+And for sure the identity function $F^e_d \to F^e_d$ works!
 \end{document}
