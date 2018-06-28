@@ -1315,9 +1315,10 @@ and so I want to interpret it something like
 \[
 \erule
 {\int_c F^c_c \to G_c}
-{ \oint_c F^c_c \to G_c}
+{ \int^+_c F^c_c \to G_c}
 \]
-where $\oint$ indicates a (existential? since I'm talking about right-focus?) super-end.
+where $\int^+$ indicates a (existential/positive --- since I'm talking about right-focus)
+ super-end.
 
 The premise gives me $M_d : F^d_d \to G_d$ such that
 \[ G_f \o M_d \o F^f = G^f \o M_e \o F_f \]
@@ -1334,4 +1335,22 @@ to see that
 \end{tikzcd}
 \]
 Nice! And I expect everything goes symmetrically when $G$ is purely contravariant.
+The $G_f$ disappears from the premise's property, and we define $M^f = M_e \o F_f$ instead.
+
+And for universal superends, we have admissible rules  like
+\[
+\erule
+{\int_c F_c \to G^c_c}
+{\int^-_c F_c \to G^c_c}
+\]
+and a diagram like
+\[
+\begin{tikzcd}
+  F_d \ar[r, "M_d"] \ar[d, "F_f"'] & G^d_d \ar[d, "G_f"]\\
+  F_e \ar[r, "M^f"']  & G^d_e\\
+  F_e \ar[r, "M_e"'] \ar[u, equals] & G^e_e \ar[u, "G^f"']
+\end{tikzcd}
+\]
+And we define $M^f = G^f \o M_e$.
+
 \end{document}
