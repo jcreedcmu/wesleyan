@@ -465,18 +465,19 @@ such that
 A positive end is written
 \[\int_\beta  G^\beta_\beta \to [F^{\alpha\beta}_{\alpha\beta}]^\theta_\alpha \]
 and what it means is for every $f : d \to e \in \A$, there's a map
-\[M_f : G^d_e \to F^{d\theta^e_d}_{e\theta^d_e} \]
+\[M_f : G^e_d \to F^{e\theta^d_e}_{d\theta^e_d} \]
 such that
 \[
 \begin{tikzcd}
   G^d_d \ar[d, "M_d"']\ar[from=r]
-& G^d_e\ar[d, "M_f"]
+& G^e_d\ar[d, "M_f"]
  & \ar[from=l] G^e_e\ar[d, "M_e"]
 \\
   F^{d \theta^d_d}_{d\theta^d_d} \ar[from=r]
-& F^{d \theta^e_d}_{e\theta^d_e}
+& F^{e \theta^d_e}_{d\theta^e_d}
 & \ar[from=l] F^{e \theta^e_e}_{e\theta^e_e}
 \end{tikzcd}
 \]
-I do believe it is just a negative end, but in $\rset^\op$.
+I do believe it is just a negative end, but when we consider instead $\A^\op$, $\B^\op$,
+and $\rset^\op$.
 \end{document}
