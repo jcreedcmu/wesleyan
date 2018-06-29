@@ -127,8 +127,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\x{\times}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
-\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
-\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
 \def\C{\mathbf{C}}
 \def\G{\mathbf{G}}
 \def\D{\mathbf{D}}
@@ -368,5 +368,115 @@ Such that for any $f$,
   F^e_e \ar[r, "{M_{\rid_e}}"'] \ar[u, "F^f"] & G^e_e \ar[u, "G^f"']
 \end{tikzcd}
 \]
-Oof giant notational headache I'm not even going to finish making that diagram correct.
+Oof giant notational headache I'm not even going to finish making that diagram correct
+until I pause and think a bit.
+
+\def\inn#1{\underline{#1}}
+\def\doub{\Delta^2}
+What is $\theta$, semantically? A functor from $\Xi$ to $\Delta$. Let's make some notation
+that's a little more uniform. A negative end looks like
+\[\int_{d\in \Delta}  [F^{d\inn d}_{d\inn d}]_{\inn d \in \inn \Delta}^\theta \to G^{d}_{d} \]
+for $\Delta$ and $\inn \Delta$ categories, and $\theta : \inn \Delta \to \Delta$. An inhabitant
+of it is, for any morphism $f : d \to e \in \Delta$, and $\inn f : \inn d \to \inn e \in \inn \Delta$,
+\[M_{f\inn f} : F^{d\theta_{\inn d}}_{e\theta_{\inn e}} \to G^{d}_{e} \]
+Maybe an easier way of talking about this is to define $\doub  = \Delta \x \inn\Delta$, and
+let $\pi : \doub \to \Delta$ be the first projection, and say that the meaning
+of
+\[\int_{d\in \doub}  [F^{d}_{d}]^\theta \to G^{\pi d}_{\pi d} \]
+is an inhabitant, for every $f : d \to e \in \doub$,
+...
+wait, some type discipline is breaking down. Shoot.
+What is the type of $F$ supposed to be? Maybe I need to do some
+smaller examples before I generalize.
+
+\subsubsection{Forall Left With Two Variables}
+Let's say I want to model
+\[
+\erule
+{\alpha : \A; [[t/\beta] F] \prov G \qquad \alpha : \A \prov t : \B}
+{\alpha : \A;  [\forall (\beta:\B) . F]\prov G}
+\]
+Then I want
+\[ F : {}^{\A^\op}_{\x \A} \x {}^{\B^\op}_{\x \B} \to \rset\]
+\[ G :  {}^{\B^\op}_{\x \B} \to \rset\]
+\[ t :  {}^{\A^\op}_{\x \A} \to \B\]
+The proof $\alpha : \A; [[t/\beta] F] \prov G$ is modelled as,
+for every morphism $f : d \to e \in \A$, a map
+\[ M_f : F^{dt^e_d}_{et^d_e} \to G^d_e \]
+such that
+\[
+\begin{tikzcd}
+  F^{d t^d_d}_{dt^d_d} \ar[r, "F^{t^f}_{ft_f}"]\ar[d, "M_d"']
+& F^{d t^e_d}_{et^d_e} \ar[d, "M_f"]
+& \ar[l]\ar[d, "M_e"] F^{e t^e_e}_{et^e_e}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+The proof goal
+$\alpha : \A;  [\forall (\beta:\B) . F]\prov G$ is modelled as,
+for every $f : d \to e \in \A$, a map
+\[ P_f : \left(\int_{\beta\in \B} F^{d\beta}_{e\beta}\right) \to G^d_e \]
+such that
+\[
+\begin{tikzcd}
+  \int_\beta F^{d \beta}_{d \beta} \ar[r]\ar[d, "P_d"']
+& \int_\beta F^{d \beta}_{e\beta} \ar[d, "P_f"]
+& \ar[l]\ar[d, "P_e"] \int_\beta F^{e \beta}_{e\beta}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+So we attempt to set
+\[ P_f (w) = M_f ( F_{ t^f_f } w_{t^e_d} )\]
+and remembering that $w$'s end property means
+\[F_{ t^f_f } w_{t^e_d} = F^{ t^f_f } w_{t^d_e}\]
+we try to verify, for any $x \in \int_\beta F^{d\beta}_{d\beta}$, that
+$P_f(\int_\beta F_f) x = G_f P_d x$, which means
+\[M_f ( F_{ t^f_f } ((\int_\beta F_f) x)_{t^e_d}   = G_f M_d (  x_{t^d_d} )\]
+so we reason
+\[M_f ( F_{ t^f_f } ((\int_\beta F_f) x)_{t^e_d} = M_f ( F_{ t^f_f } ( F_f x_{t^e_d})) \]
+(noting that $x_{t^e_d} : F^{dt^e_d}_{dt^e_d}$, so $F_{t^f_f} F_f x_{t^e_d} : F^{dt^e_d}_{et^d_e}$)
+\[ = M_f  F_f  F_{t_f} F_{ t^f}  x_{t^e_d} \]
+(by the end-property of $x$ we have)
+\[ = M_f  F_f  F_{t_f} F^{ t^f}  x_{t^d_d} \]
+(and by the negative-end-property of $M$ we have)
+\[ = G_f M_d    x_{t^d_d} \]
+Yeah, that seems fine!
+
+\subsection{Another Pass at Nailing Down General Polarized Ends}
+
+Ok, if I have two categories $\A$ and $\B$, and functors
+\[ F : {}^{\A^\op}_{\x \A} \x {}^{\B^\op}_{\x \B} \to \rset\]
+\[ G :  {}^{\B^\op}_{\x \B} \to \rset\]
+\[ \theta :  {}^{\A^\op}_{\x \A} \to \B\]
+then a negative end is written
+\[\int_\beta [ F^{\alpha\beta}_{\alpha\beta}]^\theta_\alpha \to G^\beta_\beta \]
+and what it means is for every $f : d \to e \in \A$, there's a map
+\[M_f : F^{d\theta^e_d}_{e\theta^d_e} \to G^d_e\]
+such that
+\[
+\begin{tikzcd}
+  F^{d \theta^d_d}_{d\theta^d_d} \ar[r]\ar[d, "M_d"']
+& F^{d \theta^e_d}_{e\theta^d_e} \ar[d, "M_f"]
+& \ar[l]\ar[d, "M_e"] F^{e \theta^e_e}_{e\theta^e_e}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+
+A positive end is written
+\[\int_\beta  G^\beta_\beta \to [F^{\alpha\beta}_{\alpha\beta}]^\theta_\alpha \]
+and what it means is for every $f : d \to e \in \A$, there's a map
+\[M_f : G^d_e \to F^{d\theta^e_d}_{e\theta^d_e} \]
+such that
+\[
+\begin{tikzcd}
+  G^d_d \ar[d, "M_d"']\ar[from=r]
+& G^d_e\ar[d, "M_f"]
+ & \ar[from=l] G^e_e\ar[d, "M_e"]
+\\
+  F^{d \theta^d_d}_{d\theta^d_d} \ar[from=r]
+& F^{d \theta^e_d}_{e\theta^d_e}
+& \ar[from=l] F^{e \theta^e_e}_{e\theta^e_e}
+\end{tikzcd}
+\]
+I do believe it is just a negative end, but in $\rset^\op$.
 \end{document}
