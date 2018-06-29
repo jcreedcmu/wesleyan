@@ -398,7 +398,7 @@ Let's say I want to model
 \]
 Then I want
 \[ F : {}^{\A^\op}_{\x \A} \x {}^{\B^\op}_{\x \B} \to \rset\]
-\[ G :  {}^{\B^\op}_{\x \B} \to \rset\]
+\[ G :  {}^{\A^\op}_{\x \A} \to \rset\]
 \[ t :  {}^{\A^\op}_{\x \A} \to \B\]
 The proof $\alpha : \A; [[t/\beta] F] \prov G$ is modelled as,
 for every morphism $f : d \to e \in \A$, a map
@@ -446,10 +446,10 @@ Yeah, that seems fine!
 
 Ok, if I have two categories $\A$ and $\B$, and functors
 \[ F : {}^{\A^\op}_{\x \A} \x {}^{\B^\op}_{\x \B} \to \rset\]
-\[ G :  {}^{\B^\op}_{\x \B} \to \rset\]
+\[ G :  {}^{\A^\op}_{\x \A} \to \rset\]
 \[ \theta :  {}^{\A^\op}_{\x \A} \to \B\]
 then a negative end is written
-\[\int_\beta [ F^{\alpha\beta}_{\alpha\beta}]^\theta_\alpha \to G^\beta_\beta \]
+\[\int_\alpha [ F^{\alpha\beta}_{\alpha\beta}]^\theta_\beta \to G^\alpha_\alpha \]
 and what it means is for every $f : d \to e \in \A$, there's a map
 \[M_f : F^{d\theta^e_d}_{e\theta^d_e} \to G^d_e\]
 such that
@@ -463,7 +463,7 @@ such that
 \]
 
 A positive end is written
-\[\int_\beta  G^\beta_\beta \to [F^{\alpha\beta}_{\alpha\beta}]^\theta_\alpha \]
+\[\int_\alpha  G^\alpha_\alpha \to [F^{\alpha\beta}_{\alpha\beta}]^\theta_\beta \]
 and what it means is for every $f : d \to e \in \A$, there's a map
 \[M_f : G^e_d \to F^{e\theta^d_e}_{d\theta^e_d} \]
 such that
@@ -480,4 +480,108 @@ such that
 \]
 I do believe it is just a negative end, but when we consider instead $\A^\op$, $\B^\op$,
 and $\rset^\op$.
+\subsection{Some Ideas For Better notation}
+I could write $\theta F : {}^{\A^\op}_{\x \A} \to \rset$ defined by
+\[(\theta F)^d_e = F^{d\theta^e_d}_{e\theta^d_e}\]
+in which case a negative end would just be a map
+\[M_f : (\theta F)^{d}_{e} \to G^d_e\]
+such that
+\[
+\begin{tikzcd}
+  (\theta F)^{d}_{d} \ar[r]\ar[d, "M_d"']
+& (\theta F)^{d }_{e} \ar[d, "M_f"]
+& \ar[l]\ar[d, "M_e"] (\theta F)^{e }_{e}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+Ok, that's a great factorization, then, I can take as my fundamental definitions of positive and
+negative end things that don't involve $\theta$s at all.
+
+If I have
+two functors $F,  G :  {}^{\A^\op}_{\x \A} \to \C$ then a negative end is written
+\[\int_\alpha  [F^{\alpha}_{\alpha}] \to G^\alpha_\alpha \]
+and consists of, for any $f : d \to e \in \A$, a family of $\C$-morphisms
+\[
+M_f : F^d_e \to G^d_e
+\]
+such that
+\[
+\begin{tikzcd}
+  F^{d}_{d} \ar[r]\ar[d, "M_d"']
+& F^{d }_{e} \ar[d, "M_f"]
+& \ar[l]\ar[d, "M_e"] F^{e }_{e}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+and a positive end is written
+\[\int_\alpha  G^{\alpha}_{\alpha} \to [F^\alpha_\alpha] \]
+and consists of
+\[
+M_f : G^e_d \to F^e_d
+\]
+such that
+\[
+\begin{tikzcd}
+  G^{d}_{d} \ar[from=r]\ar[d, "M_d"']
+& G^{e}_{d} \ar[d, "M_f"]
+& \ar[from=l]\ar[d, "M_e"] G^{e }_{e}\\
+  F^d_d \ar[from=r] & F^e_d & \ar[from=l] F^e_e
+\end{tikzcd}
+\]
+And I then conclude the duality
+\[M_f \in \int_{\alpha \in \A} G^\alpha_\alpha \to [F^\alpha_\alpha] : \C
+\quad\longleftrightarrow\quad
+M_f \in \int_{\alpha \in \A^\op} [F^\alpha_\alpha] \to G^\alpha_\alpha : \C^\op \]
+
+\subsection{Can I Get The Twisted Arrow Category Involved}
+
+Ok, there's the category $\A$, and then there's $\T\A$, whose objects are morphisms
+of $\A$ and whose morphisms are ways of picking out subcomposites.
+
+One generalization of being a positive end --- which I'm hoping will turn out to be
+ actually no more general --- is to be a natural transformation
+\[M : G \o U \to F \o U : \T \A \to \C\]
+where $U : \T \A \to {}^{\A^\op}_{\x \A}$. Naturality means that for any
+
+\[
+t : s \to f \quad = \quad
+\begin{tikzcd}
+  d'\ar[r, "s"]\ar[d, "i"'] &e' \ar[from=d, "o"']\\
+  d\ar[r, "f"'] &e
+\end{tikzcd} \quad \in \quad \T \A
+\]
+we should have commutativity of
+\[
+\begin{tikzcd}
+  GUs \ar[r, "GUt"]\ar[d, "M_s"'] & GUf \ar[d, "M_f"]\\
+  FUs\ar[r, "FUt"'] &FUf
+\end{tikzcd}
+\]
+which would mean
+\[
+\begin{tikzcd}
+  G^{e'}_{d'} \ar[r, "G^o_i"]\ar[d, "M_s"'] & G^e_d \ar[d, "M_f"]\\
+  F^{e'}_{d'}\ar[r, "F^o_i"'] &F^e_d
+\end{tikzcd}
+\]
+and taking $t = \ltri f$
+\[
+\ltri f : f \to d \quad = \quad
+\begin{tikzcd}
+  d\ar[r, "f"]\ar[d, equal] &e \ar[from=d, "f"']\\
+  d\ar[r, equal] &d
+\end{tikzcd} \quad \in \quad \T \A
+\]
+I get the familiar
+\[
+\begin{tikzcd}
+  G^{e}_{d} \ar[r, "G^f"]\ar[d, "M_f"'] & G^d_d \ar[d, "M_d"]\\
+  F^{e}_{d}\ar[r, "F^f"'] &F^d_d
+\end{tikzcd}
+\]
+
+{\bf Question}: If I have a positive end in the usual sense, do I get a natural
+transformation $GU \to FU$? It's not actually clear to me that I do, now.
+I'd want to check naturality, and the equations I do get from a positive
+end only seem to work if I get back to the diagonal.
 \end{document}
