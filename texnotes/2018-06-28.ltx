@@ -596,5 +596,151 @@ is exactly a natural transformation $GU \to FU : \ii \A \to \C$.
 I still don't know whether the $\ii$-based or $\T$-based definition is actually the `right' one,
 more broadly. I bet a lot of my proofs so far don't depend on the exact selection of arrows.
 
+\subsection{What are negative ends, then?}
 
+Oh, I could say that $\ii^+ \A$ is where there are morphisms from arrow-objects to their
+domain and codomain, and $\ii^- \A$ is where there are morphisms from the domain-and-codomain
+to the arrow-object.
+
+Let $U^- : \ii^- \A \to {}^{\A^\op}_{\x \A}$ and
+$U^+ : \ii^+ \A \to {}^{\A^\op}_{\x \A}$ be the only sensible functors of their type.
+
+They behave like
+\[ U^+\left( \begin{tikzcd}
+  d\ar[r, "f"]\ar[d, equal] &e \ar[from=d, "f"']\\
+  d\ar[r, equal] &d
+\end{tikzcd}
+ \quad \in \quad \ii^+ \A[f, \rid_d]\right) =
+\begin{tikzcd}
+  \textcolor{red}d\ar[d, equal] &\textcolor{red} e \ar[from=d, "f"']\\
+\textcolor{blue}  d &\textcolor{blue}d
+\end{tikzcd}\quad : \textcolor{red}{\quad{}^e_d} \to \textcolor{blue}{{}^d_d}
+\]
+\[ U^+\left( \begin{tikzcd}
+  d\ar[r, "f"]\ar[d, "f"'] &e \ar[from=d, equal]\\
+  e\ar[r, equal] &e
+\end{tikzcd}
+ \quad \in \quad \ii^+ \A[f, \rid_e]\right) =
+\begin{tikzcd}
+  \textcolor{red}d\ar[d, "f"'] &\textcolor{red} e \ar[from=d, equal]\\
+\textcolor{blue}  d &\textcolor{blue}d
+\end{tikzcd}\quad : \textcolor{red}{\quad{}^e_d} \to \textcolor{blue}{{}^d_d}
+\]
+
+\[ U^-\left( \begin{tikzcd}
+  d\ar[r, "f"]\ar[d, equal] &e \ar[from=d, "f"']\\
+  d\ar[r, equal] &d
+\end{tikzcd}
+ \quad \in \quad \ii^- \A[ \rid_d, f]\right) =
+\begin{tikzcd}
+  \textcolor{red}d\ar[d, equal] &\textcolor{red} e \ar[from=d, "f"']\\
+\textcolor{blue}  d &\textcolor{blue}d
+\end{tikzcd}\quad : \textcolor{blue}{\quad{}^d_d} \to \textcolor{red}{{}^d_e}
+\]
+
+\[ U^-\left(\begin{tikzcd}
+  d\ar[r, "f"]\ar[d, "f"'] &e \ar[from=d, equal]\\
+  e\ar[r, equal] &e
+\end{tikzcd}
+ \quad \in \quad \ii^- \A[ \rid_e, f]\right) =
+\begin{tikzcd}
+  \textcolor{red}d\ar[d, "f"'] &\textcolor{red} e \ar[from=d, equal]\\
+\textcolor{blue}  d &\textcolor{blue}d
+\end{tikzcd}\quad : \textcolor{blue}{\quad{}^d_d} \to \textcolor{red}{{}^d_e}
+\]
+
+Then a negative end $\int [F] \to G$
+is a natural transformation $FU^- \to GU^- : \ii^- \A \to \C$,
+and a positive end $\int F \to [G]$
+is a natural transformation $FU^+ \to GU^+ : \ii^+ \A \to \C$.
+
+It is the case that $(\ii^+)^\op = \ii^-$ and $(U^+)^\op = {\sim} \o U^-$
+where $\sim$ is the swap of the two components of a product.
+\subsection{Trying Out Proofs with that Definition}
+
+\[
+\erule
+{\Gamma \prov [P] \qquad \Gamma [N] \prov Q}
+{\Gamma [P \lol N] \prov Q}
+\]
+So we want to achieve
+\[\erule{
+M : \Gamma U^+ \to P U^+
+\qquad
+K : (N U^-) \to (\Gamma \to Q)(U^-)
+}
+{
+L :  (P \to N)(U^-) \to (\Gamma \to Q)(U^-)
+}\]
+i.e. we want to let an object of $t : \ii^- \C$ be given and make an arrow
+\[(P \to N)(U^- t) \to (\Gamma \to Q)(U^- t)\]
+
+Hmm... let's abstract a little. Instead of $\C \x \C^\op$, let's just suppose we have
+a $\D$ with an overbar involution $\D^\op \to \D$. Then for functors $F, G : \D \to \rset$,
+we define $F \to G : \D \to \rset$ by
+\[ (F \to G)(D) = F\bar D \to GD\]
+\[ (F \to G)(f : C \to D) = (F \bar C \to G C) \to (F \bar D \to G D)\]
+\[ (F \to G)(f : C \to D) = \lambda m  . G f \o m \o F \bar f \]
+Now if we have some other category, call it $\ii$, and functors $V: \ii \to \D$,
+and you define $U : \ii^\op \to \D$ by $U(i) = \overline{V^\op(i)}$,
+ and you have functors $\Gamma, P, N, Q : \D \to \rset$, then we're trying
+to validate the rule
+\[\erule{
+M : \Gamma \o U \dto P\o U
+\qquad
+K : (N \o V) \dto (\Gamma \to Q) \o V
+}
+{
+L :  (P \to N) \o V \dto (\Gamma \to Q) \o V
+}\]
+i.e.
+\[\erule{
+M : \lambda i . \Gamma \overline{V^\op(i)} \dto P \overline{V^\op(i)}
+\qquad
+K : \lambda i . NV(i) \dto (\Gamma \overline {V(i)} \to QV(i) )
+}
+{
+L :  \lambda i .  (P{\overline {V(i)}} \to NV(i) )\dto
+(\Gamma{\overline {V(i)}} \to QV(i) )
+}\]
+We define the object part
+\[L_i (w, g) = K_i(w(M_i g), g)  \]
+Naturality for $M$ and $K$ says that for any morphism $f : i \to j \in \ii$
+we have
+\[
+\begin{tikzcd}
+  \Gamma \overline{V^\op (j)} \ar[r, "\Gamma \overline{V^\op f}"]\ar[d, "M_j"']
+&   \Gamma \overline{V^\op (i)}
+\ar[d, "M_i"]
+\\
+  P \overline{V^\op (j)} \ar[r, "P \overline{V^\op f}"']
+&   P \overline{V^\op (i)}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  N {V (i)} \ar[r, "N {V f}"]\ar[d, "K_i"']
+&[3em]   N {V (j)}
+\ar[d, "K_j"]
+\\
+  (\Gamma \to Q) {V (i)} \ar[r, "(\Gamma \to Q) {V f}"']
+&   (\Gamma \to Q) {V (j)}
+\end{tikzcd}
+\]
+and we want to check
+\[
+\begin{tikzcd}
+  (P \to N) {V (i)} \ar[r, "(P \to N) {V f}"]\ar[d, "L_i"']
+&[3em]   (P \to N) {V (j)}
+\ar[d, "L_j"]
+\\
+  (\Gamma \to Q) {V (i)} \ar[r, "(\Gamma \to Q) {V f}"']
+&   (\Gamma \to Q) {V (j)}
+\end{tikzcd}
+\]
+So we calculate, for any $z \in (P{\overline {V(i)}} \to NV(i) )$
+\[ L_j ((P\to N)V f) z = L_j (P \overline {V f} \to N V f) z \]
+\[ = L_j (P \overline {V f} \to N V f) z \]
+\[ = L_j (  \lambda q . N V f z \o q \o P \overline {V f} \bar z )\]
+\[= \lambda g .  K_j( N V f z \o M_j g \o P \overline {V f} \bar z, g)  \]
+ach this is too much of a mess for me to see what's going on.
 \end{document}
