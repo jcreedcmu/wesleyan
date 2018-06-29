@@ -261,4 +261,112 @@ should be an inhabitant of the positive end
 I think the `for each morphism $f : d\to e \in \Delta$' quantification is really
 only over the subset of $\Delta$ that has been so far subject to synchronous quantifier rules.
 
+\subsection{Trying To Validate Various Inference Rules}
+\subsubsection{Implies Left}
+\[
+\erule
+{\Gamma \prov [P] \qquad \Gamma [N] \prov Q}
+{\Gamma [P \lol N] \prov Q}
+\]
+So we want to achieve
+\[\erule{
+M : \int_c \Gamma^c_c \to [P^c_c]
+\qquad
+K : \int_c  [N^c_c] \to (\Gamma \to Q)^c_c
+}
+{
+L : \int_c  [(P \to N)^c_c] \to (\Gamma \to Q)^c_c
+}\]
+i.e.
+\[\erule
+{
+M_f : \Gamma^e_d \to P^e_d
+\qquad
+K_f :   N^d_e \to \Gamma^e_d \to Q^d_e}
+{
+L_f : (P^e_d \to N^d_e) \to (\Gamma^e_d \to Q^d_e)
+} \]
+We least define $L_f (q) = \lambda g . K_f(q(M_f(g)), g)$. The diagrams we know for $M$ and $K$ are
+\[
+\begin{tikzcd}
+  \Gamma^d_d \ar[r, "{M_{d}}"] \ar[from=d, "\Gamma^f"] & P^d_d \ar[from=d, "P^f"']\\
+  \Gamma^e_d \ar[r, "{M_{f}}"']  & P^e_d\\
+  \Gamma^e_e \ar[r, "{M_{e}}"'] \ar[from=u, "\Gamma_f"'] & P^e_e \ar[from=u, "P_f"]
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  N^d_d \ar[r, "{K_{d}}"] \ar[d, "N_f"'] & {(\Gamma\to Q)}^d_d \ar[d, "{(\Gamma\to Q)}_f"]\\
+  N^d_e \ar[r, "{K_{f}}"']  & {(\Gamma\to Q)}^d_e\\
+  N^e_e \ar[r, "{K_{e}}"'] \ar[u, "N^f"] & {(\Gamma\to Q)}^e_e \ar[u, "{(\Gamma\to Q)}^f"']
+\end{tikzcd}
+\]
+and we want to check
+\[
+\begin{tikzcd}
+  (P \to N)^d_d \ar[r, "{L_{d}}"] \ar[d, "(P \to N)_f"'] & {(\Gamma\to Q)}^d_d \ar[d, "{(\Gamma\to Q)}_f"]\\
+  (P \to N)^d_e \ar[r, "{L_{f}}"']  & {(\Gamma\to Q)}^d_e\\
+  (P \to N)^e_e \ar[r, "{L_{e}}"'] \ar[u, "(P \to N)^f"] & {(\Gamma\to Q)}^e_e \ar[u, "{(\Gamma\to Q)}^f"']
+\end{tikzcd}
+\]
+Maybe this is easier to do algebraically than diagrammatically. The top half of the
+$N$-diagram is saying that for any $n \in N^d_d, g \in \Gamma^e_d$, we have
+\[K_f(N_f n, g) = Q_f K_d(n, \Gamma^f g)\]
+
+Then checking
+the top half of the bottom diagram, we let $z \in P^d_d \to N^d_d$ be given,
+and reason
+\[ L_f (P \to N)_f z = L_f (N_f \o z \o P^f) \]
+\[ = \lambda g . K_f(((N_f \o z \o P^f))(M_f(g)), g) \]
+\[ = \lambda g . K_f(N_f  z  P^fM_fg, g) \]
+\[ = \lambda g . Q_f K_d(  z  P^fM_fg, \Gamma^f g) \]
+\[ = \lambda g . Q_f K_d(  z  M_d \Gamma^f g, \Gamma^f g) \]
+\[ = Q_f \o (L_d ( z)) \o \Gamma^f\]
+\[ = (\Gamma \to Q)_f (L_d ( z)) \]
+and checking the bottom parts of the diagrams is symmetric.
+
+\subsubsection{Forall Left}
+\[
+\erule
+{ \Gamma [[t/\alpha]N] \prov Q \qquad \Delta \prov t : \C}
+{\Gamma [\forall \alpha . N] \prov Q}
+\]
+So we want to achieve something like
+\[\erule{
+M :  \int_c [N^{cb}_{cb}]^{\theta[t^c_c/b]} \to (\Gamma \to Q)^c_c
+}
+{
+L : \int_c  \left[\int_b N^{cb}_{cb}\right]^\theta \to (\Gamma \to Q)^c_c
+}\]
+in which I am making up some notation, imagining that the focus positions
+are parametrized by substitutions.
+
+What is this supposed to do semantically? We should
+first of all have
+$t : {}^{\Delta^\op}_{\x \Delta} \to \C$. The domain of $\theta$ --- the variables
+it's substituting for --- should be some subset of the variables being quantified
+over when we say $\int_{c\in\Delta}$.
+
+Actually, let me rewrite this a bit:
+\[\erule{
+M :  \int_{d\in\Delta} [N^{dxc}_{dxc}]^{\theta[t^{dx}_{dx}/c]}_{x,c\in \Xi \x \C} \to (\Gamma \to Q)^{d}_{d}
+}
+{
+L : \int_{d\in \Delta}  \left[\int_{c\in \C} N^{dxc}_{dxc}\right]_{x \in \Xi}^\theta \to (\Gamma \to Q)^{d}_{d}
+}\]
+
+I'm trying to conceive of a negative-focused-end-thing as
+\[\int_{d\in \Delta}  [F^{dx}_{dx}]_{x \in \Xi}^\theta \to G^{d}_{d} \]
+where $\theta$ is a substitution $\Delta \prov \theta : \Xi$.
+An inhabitant of it is, for every $f : d \to e$ and $\xi : x \to y$,
+
+\[M_{f\xi} : F^{d\theta(x)}_{e\theta(y)} \to G^{d}_{e} \]
+Such that for any $f$,
+\[
+\begin{tikzcd}
+  F^{d\theta(x)}_{d\theta(x)} \ar[r, "{M_{\rid_d}}"] \ar[d, "F_{f\theta(\xi)}"'] & G^d_d \ar[d, "G_f"]\\
+  F^{d\theta(x)}_{e\theta(y)} \ar[r, "{M_{f \xi}}"']  & G^d_e\\
+  F^e_e \ar[r, "{M_{\rid_e}}"'] \ar[u, "F^f"] & G^e_e \ar[u, "G^f"']
+\end{tikzcd}
+\]
+Oof giant notational headache I'm not even going to finish making that diagram correct.
 \end{document}
