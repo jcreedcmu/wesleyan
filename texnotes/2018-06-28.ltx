@@ -1125,4 +1125,24 @@ Q^{d }_{d } \ar[r, "Q"'] & Q^d_e&Q^{e }_{e }\ar[l, "Q"]
 and this doesn't require us to come up with off-diagonal elements of $N$.
 The idea for how to reconstruct an end given one of these is we can
 appeal to $M_d^{\rid\rid} $ and get back the end diagram from the one we see.
+
+Actually,  I think I want to
+generalize this requirement to saying that whenever I have a commutative square
+\[
+\begin{tikzcd}
+  d\ar[d] \ar[r] & c\ar[d]\\
+  b \ar[r] & e\\
+\end{tikzcd}
+\]
+then I get
+\[
+\begin{tikzcd}
+N^{e t^d_e}_{d t^d_e}\ar[d, "N"']
+& \int_\alpha N^{e\alpha}_{d\alpha} \ar[r]\ar[l]
+&  N^{e t^e_d}_{d t^e_d} \ar[d, "N"]\\
+N^{b t^e_d}_{b t^d_e} \ar[d, "{M_b^{//}}"'] &&N^{c t^e_d}_{c t^d_e}\ar[d, "{M_c^{//}}"]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e&Q^{c }_{c }\ar[l, "Q"]
+\end{tikzcd}
+\]
+There, that actually uses interpolatability more substantially!
 \end{document}
