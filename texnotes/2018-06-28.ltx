@@ -390,6 +390,7 @@ What is the type of $F$ supposed to be? Maybe I need to do some
 smaller examples before I generalize.
 
 \subsubsection{Forall Left With Two Variables}
+\label{two.variables}
 Let's say I want to model
 \[
 \erule
@@ -743,4 +744,92 @@ So we calculate, for any $z \in (P{\overline {V(i)}} \to NV(i) )$
 \[ = L_j (  \lambda q . N V f z \o q \o P \overline {V f} \bar z )\]
 \[= \lambda g .  K_j( N V f z \o M_j g \o P \overline {V f} \bar z, g)  \]
 ach this is too much of a mess for me to see what's going on.
+
+\subsection{Returning To Multiple Variables}
+
+Somehow I keep thinking that the situation I had before in \S\ref{two.variables}
+with
+\[
+\erule
+{\alpha : \A; [[t/\beta] F] \prov G \qquad \alpha : \A \prov t : \B}
+{\alpha : \A;  [\forall (\beta:\B) . F]\prov G}
+\]
+\[ F : {}^{\A^\op}_{\x \A} \x {}^{\B^\op}_{\x \B} \to \rset\]
+\[ G :  {}^{\A^\op}_{\x \A} \to \rset\]
+\[ t :  {}^{\A^\op}_{\x \A} \to \B\]
+I should only actually be demanding that I have negative super-end-like properties with
+respect to $\B$ --- or at least, with respect to the stuff that goes through $t$ ---
+ not with respect to the rest of the variables in $\A$. Like, I should assume
+instead something weaker than
+claiming that the proof $\alpha : \A; [[t/\beta] F] \prov G$ has
+for every morphism $f : d \to e \in \A$, a map
+\[ M_f : F^{dt^e_d}_{et^d_e} \to G^d_e \]
+such that
+\[
+\begin{tikzcd}
+  F^{d t^d_d}_{dt^d_d} \ar[r, "F^{t^f}_{ft_f}"]\ar[d, "M_d"']
+& F^{d t^e_d}_{et^d_e} \ar[d, "M_f"]
+& \ar[l]\ar[d, "M_e"] F^{e t^e_e}_{et^e_e}\\
+  G^d_d \ar[r] & G^d_e & \ar[l] G^e_e
+\end{tikzcd}
+\]
+The sort  of a proposition that I think should be provable is something
+where I needn't act like I'm focused on or instantiating the variable of type $\A$.
+If I have a mere end $\forall \alpha .  F^\alpha_{\alpha t} \to G^\alpha_\alpha$ then I should be able
+to infer
+$\forall \alpha . (\forall \beta. F^\alpha_{\alpha \beta}) \to G^\alpha_\alpha$
+even though $\alpha$ is used bivariantly in $F$.
+
+The proof tree should look something like
+\[
+\erule
+{\[
+\[
+\[
+\justifies
+ F^\alpha_{\alpha t} \prov G^\alpha_\alpha
+\]
+\using blur \justifies
+\beta.[ F^\alpha_{\alpha\beta}]^t \prov G^\alpha_\alpha
+\]
+\justifies
+[\forall \beta . F^\alpha_{\alpha\beta}] \prov G^\alpha_\alpha
+\]}
+{\forall \beta . F^\alpha_{\alpha\beta} \prov G^\alpha_\alpha}
+\]
+
+So it's like there's a local context attached to the focus position, I guess?
+The left focus judgment is
+\[\Delta; \Gamma  [N]_\Omega^\theta \prov Q \]
+where $\Omega$ is actually the same kind of context as $\Delta$, which contains
+variables that are bound in $N$, and $\theta$
+is a term-for-category-variable substitution, with $\Delta \prov \theta : \Omega$.
+The invariant on $N$ being that
+\[\Delta, \Omega \prov N : \rtype \]
+The left rules for focus, blur, and $\forall$ would be
+\[
+\erule
+{\Delta; \Gamma  [N]^\cdot_\cdot \prov Q }
+{\Delta; \Gamma, N \prov Q }
+\qquad
+\erule
+{\Delta; \Gamma, \theta P \prov Q \qquad   \Delta, \Omega^\pm \prov P}
+{\Delta; \Gamma  [\ups P]^\theta_\Omega \prov Q }
+\qquad
+\erule
+{\Delta; \Gamma [N]^{\theta[t/\alpha]}_\Omega \prov Q }
+{\Delta; \Gamma  [\forall \alpha . N]^\theta_\Omega \prov Q }
+\]
+And now I have to understand what $\Delta; \Gamma  [N]_\Omega^\theta \prov Q $
+actually means. It seems clear enough that I can pretend that $\Delta, \Omega$
+are just simple categories, at least; when they're composite, it must be a product.
+The semantics of $\theta$ is just a multiple-argument version of
+whatever the semantics of a category term $t$ is,
+coming from a product category (or a doubled product category) down to the category
+$\Omega$.
+
+My first guess is I see $\Delta;[N]^\theta_\Omega \prov Q$ as meaning, for every
+object $d \in \Delta$ and every morphism $f : p \to q \in \Omega$,
+I have $M_{df} : N^{d\theta^d_d}_{d\theta^d_d} \to Q^d_d$? No, this doesn't even use $f$.
+
 \end{document}
