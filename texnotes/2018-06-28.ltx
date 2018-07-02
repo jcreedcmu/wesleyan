@@ -1097,5 +1097,32 @@ N^{d t^e_d}_{d t^d_e} \ar[d, "{M<f}"'] &&N^{e t^e_d}_{e t^d_e}\ar[d, "{M>f}"]\\
 Q^{d }_{d } \ar[r, "Q"'] & Q^d_e&Q^{e }_{e }\ar[l, "Q"]
 \end{tikzcd}
 \]
+I think I'm claiming that the meaning of
+\[\Delta;   [ N]^{[t/\alpha]}_\alpha \prov Q \]
+is the existence, for every $f$, of an $M< f$ and an $M > f$ that satisfy this diagram.
+The extension to arbitrary $\Gamma$ (which just sits inside $Q$, really) and
+ $\theta$ (which is just another way of writing a whole category term that goes in
+for a product of variables) should not present any surprises.
 
+One smell-check is seeing that this is an end for $\Omega = 1$. I want to conclude
+that $M<f$ is just what the end does as the domain of $f$, and $M>f$ is what it does at
+the codomain. Are they constrained to be the same for a pair of arrows that meet
+at an object? Hm, they don't seem to be.
+
+Maybe given an arbitrary {\em interpolation} of $d, e$, meaning
+a choice of object $x$ and morphisms $f : d \to x$ and $g : x \to e$ we get
+\[ M^{fg}_x : N^{x t^e_d}_{x t^e_d} \to Q^x_x\]
+and then the central diagram is that for every $f : d\to e$ we have
+\[
+\begin{tikzcd}
+N^{e t^d_e}_{d t^d_e}\ar[d, "N"']
+& \int_\alpha N^{e\alpha}_{d\alpha} \ar[r]\ar[l]
+&  N^{e t^e_d}_{d t^e_d} \ar[d, "N"]\\
+N^{d t^e_d}_{d t^d_e} \ar[d, "{M_d^{\rid_d f}}"'] &&N^{e t^e_d}_{e t^d_e}\ar[d, "{M_e^{f \rid_e}}"]\\
+Q^{d }_{d } \ar[r, "Q"'] & Q^d_e&Q^{e }_{e }\ar[l, "Q"]
+\end{tikzcd}
+\]
+and this doesn't require us to come up with off-diagonal elements of $N$.
+The idea for how to reconstruct an end given one of these is we can
+appeal to $M_d^{\rid\rid} $ and get back the end diagram from the one we see.
 \end{document}
