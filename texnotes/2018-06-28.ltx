@@ -745,7 +745,7 @@ So we calculate, for any $z \in (P{\overline {V(i)}} \to NV(i) )$
 \[= \lambda g .  K_j( N V f z \o M_j g \o P \overline {V f} \bar z, g)  \]
 ach this is too much of a mess for me to see what's going on.
 
-\subsection{Returning To Multiple Variables}
+\section{Returning To Multiple Variables}
 
 Somehow I keep thinking that the situation I had before in \S\ref{two.variables}
 with
@@ -830,6 +830,143 @@ $\Omega$.
 
 My first guess is I see $\Delta;[N]^\theta_\Omega \prov Q$ as meaning, for every
 object $d \in \Delta$ and every morphism $f : p \to q \in \Omega$,
-I have $M_{df} : N^{d\theta^d_d}_{d\theta^d_d} \to Q^d_d$? No, this doesn't even use $f$.
+I have $M_{df} : N^{d\theta^d_d}_{d\theta^d_d} \to Q^d_d$? This doesn't seem to fully use $f$.
+Do I get like two distinct
+$M^f : N^{d\theta^e_d}_{d\theta^d_e} \to Q^d_d$ and
+$M_f : N^{e\theta^e_d}_{e\theta^d_e} \to Q^e_e$?
+Before I go any farther with the awful nested subscripts, I need to remember that I can
+define
+\[(\theta F)^d_e = F^{d\theta^e_d}_{e\theta^d_e}\]
+but, no, I want to decouple things away from that definition possibly. Maybe if I define
+\[\theta^d_e F^{d'}_{e'} = F^{d'\theta^e_d}_{e'\theta^d_e}\]
+Then my very tentative guess is that for a left-focused end I ask for
+\[ M^f : \theta^d_e N^d_d  \to Q^d_d\]
+\[ M_f : \theta^d_e N^e_e  \to Q^e_e\]
+and then some diagrams I could consider asking for are
+\[
+\begin{tikzcd}
+  \theta^d_d N^d_d \ar[r]\ar[d, "M^d"']&  \theta^d_e N^d_d
+\ar[d, "M^f"]\ar[from=r, "/"{anchor=center}]&  \theta^e_e N^e_e \\
+  Q^d_d \ar[r, equal]&   Q^d_d \ar[from=r, "/"{anchor=center}]& Q^e_e
+\end{tikzcd}
+\]
+Oof that's ugly. What again is the way of phrasing ordinary ends in terms of morphisms?
+Or is that even what I want? Shouldn't I be able to just talk about wrapping the
+ordinary end around the focused end? Like
+\[
+\erule
+{\int_{d \in \Delta} \int_{\beta \in \B} [A] \to (\Gamma \to Q)}
+{\int_{d \in \Delta} \left[\int_{\beta \in \B} A\right] \to (\Gamma \to Q)}
+\]
+Is it actually about the variance of the variables that get used to build the term $t$?
+Is it legit to do
+\[
+\erule
+{ \int_\alpha F^{\alpha}_{\alpha\alpha} \to G^\alpha_\alpha}
+{\int_{\alpha} \left(\int_{\beta} F^\alpha_{\alpha\beta}\right) \to G^\alpha_\alpha}
+\]
+In the special case where $F$ doesn't use its first two arguments, this reduces to
+\[
+\erule
+{ \int_\alpha F_\alpha \to G^\alpha_\alpha}
+{\int_{\alpha} \left(\int_{\beta} F_{\beta}\right) \to G^\alpha_\alpha}
+\]
+which I know is ok because $F$ is covariant. But I'm not yet sure about the more general version.
 
+\subsection{A Variation on $\forall$L}
+Let's try to validate
+\[
+\erule
+{ \int_\alpha F^{\alpha}_{\alpha\alpha} \to G^\alpha_\alpha}
+{\int_{\alpha} \left(\int_{\beta} F^\alpha_{\alpha\beta}\right) \to G^\alpha_\alpha}
+\]
+manually, then, I guess? Suppose I have
+$M_d : F^d_{dd} \to G^d_d$
+with
+\[G_{f} \o M_d \o F^f = G^f \o M_e \o F_{ff} : F^e_{dd} \to G^d_e \eqno(*)\]
+I try to make $P_d : \left(\int_\beta F^d_{d\beta}\right) \to G^d_d$ with
+\[G_{f} \o P_d \o \left(\int_\beta F^f_{\cdot\beta}\right)
+= G^f \o P_e \o \left(\int_\beta F_{f\beta}\right)
+: \left(\int_\beta F^e_{d\beta}\right) \to G^d_e \]
+So I define
+\[ P_d = \lambda w . M_d(w_d) \]
+and knowing $(*)$ I try to check
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  P_d \left(\int_\beta F^f_{\cdot\beta}\right) (z)
+= G^f  P_e  \left(\int_\beta F_{f\beta}\right) (z)
+:   G^d_e \]
+i.e.
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d \left(\left(\int_\beta F^f_{\cdot\beta}\right) (z)\right)_d
+= G^f  M_e  \left(\left(\int_\beta F_{f\beta}\right) (z)\right)_e
+:   G^d_e \]
+
+Now let's think about $z$. Its end property is
+\[F^e_{df} z_d = z_e\]
+
+How does transport inside ends look? Surely
+\[\left(\int_\beta F^f_{\cdot\beta}\right) (z) = \Lambda d . F^f_{\cdot d} z_d \]
+and the like, so we're really checking
+
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d  F^f_{\cdot d} (z_d)
+= G^f  M_e   F_{f e} (z_e)
+:   G^d_e \]
+Now using $z$'s end property we have
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d  F^f_{\cdot d} (z_d)
+= G^f  M_e   F_{f e} (F_{\cdot f} z_d)
+:   G^d_e \]
+and now this follows directly from $M$'s end-property.
+
+\subsection{Redo with a term}
+I expect this will be boring and similar to the above case,
+ but let's do it anyway. Suppose we have a
+functor $t : {}^{\A^\op}_{\x \A} \to \B$. Let's try to validate
+\[
+\erule
+{ \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \to G^\alpha_\alpha}
+{\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta}\right) \to G^\alpha_\alpha}
+\]
+So we have
+$M_d : F^d_{dt^d_d} \to G^d_d$
+with
+\[G_{f} \o M_d \o F^f_{\bullet t^f_\bullet} = G^f \o M_e \o F^\bullet_{ft^\bullet_f} : F^e_{dt^e_d} \to G^d_e \eqno(*)\]
+I try to make $P_d : \left(\int_\beta F^d_{d\beta}\right) \to G^d_d$ with
+\[G_{f} \o P_d \o \left(\int F^f_{\bullet\bullet}\right)
+= G^f \o P_e \o \left(\int F^\bullet_{f\bullet}\right)
+: \left(\int_\beta F^e_{d\beta}\right) \to G^d_e \]
+So I define
+\[ P_d = \lambda w . M_d(w_{t^d_d}) \]
+and knowing $(*)$ I try to check
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  P_d \left(\int F^f_{\bullet\bullet}\right) (z)
+= G^f  P_e  \left(\int F^\bullet_{f\bullet}\right) (z)
+:   G^d_e \]
+i.e.
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d  F^f_{\bullet\bullet} z_{t^d_d}
+= G^f  M_e   F^\bullet_{f\bullet} z_{t^e_e}
+:   G^d_e \]
+Now $z$'s end property is still
+\[F^\bullet_{\bullet \phi} z_\delta  = z_\epsilon\]
+for any morphism $\phi : \delta  \to \epsilon \in \B$. We can't find any morphisms
+directly between $t^d_d$ and $t^e_e$, but we {\em can} find a pair of morphisms
+that start from a common object in $\B$ and end up at them respectively.
+Does that help us? We consider
+\[t^f_\bullet : t^e_d \to t^d_d \qquad t_f^\bullet : t^e_d \to t^e_e\]
+and plugging that into $z$'s end property gives us
+\[F^{\bullet}_{ \bullet t^f_\bullet} z_{ t^e_d}  = z_{t^d_d}\qquad
+F^{\bullet}_{ \bullet t_f^\bullet} z_{ t^e_d}  = z_{t^e_e}\]
+So our proof obligation is now
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d  F^f_{\bullet\bullet} F^{\bullet}_{ \bullet t^f_\bullet} z_{ t^e_d}
+= G^f  M_e   F^\bullet_{f\bullet} F^{\bullet}_{ \bullet t_f^\bullet} z_{ t^e_d}
+:   G^d_e \]
+in other words
+\[\left(z : \int_\beta F^e_{d\beta}\right) \to
+G_{f}  M_d  F^f_{\bullet t^f_\bullet}  z_{ t^e_d}
+= G^f  M_e   F^\bullet_{ft_f^\bullet}  z_{ t^e_d}
+:   G^d_e \]
+which is immediately satisfied by $(*)$! That was actually a closer call than I thought.
 \end{document}
