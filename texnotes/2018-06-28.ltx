@@ -1145,4 +1145,22 @@ Q^{b }_{b } \ar[r, "Q"'] & Q^d_e&Q^{c }_{c }\ar[l, "Q"]
 \end{tikzcd}
 \]
 There, that actually uses interpolatability more substantially!
+
+\subsection{Using the end property that's already in sight?}
+I do notice that I can draw a commuting top-half of this diagram
+\[
+\begin{tikzcd}
+N^{e t^d_e}_{d t^d_e}\ar[d, "N"']
+& \int_\alpha N^{e\alpha}_{d\alpha} \ar[r]\ar[l]
+&  N^{e t^e_d}_{d t^e_d} \ar[d, "N"]\\
+N^{b t^e_d}_{b t^d_e} \ar[d, "{M_b^{//}}"']\ar[r]
+&N^{dt^e_d}_{et^d_e}
+&N^{c t^e_d}_{c t^d_e}\ar[d, "{M_c^{//}}"]\ar[l]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e&Q^{c }_{c }\ar[l, "Q"]
+\end{tikzcd}
+\]
+but I don't know if that buys me anything? I precisely {\em don't}
+ want to draw an arrow from the
+center $N^{dt^e_d}_{et^d_e}$ down to $Q^d_e$. Maybe this kind of
+reasoning shows up when $N$ is univariant and we're doing a blur?
 \end{document}
