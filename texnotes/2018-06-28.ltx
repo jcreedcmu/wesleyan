@@ -15,6 +15,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+\def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
 \def\gol{\sqsubset}
 \def\gor{\sqsupset}
 
@@ -50,14 +52,14 @@
 
 \definecolor{lred}{rgb}{0.95,0.8,0.8}
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
-\definecolor{orange}{rgb}{0.95,0.90,0.80}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
 \definecolor{bluegray}{rgb}{0.6,0.6,0.85}
 \definecolor{lgray}{gray}{0.9}
 \newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
-\newtcolorbox{defnbox}{colframe=orange,colback=orange,grow to right by=-10mm,grow to left by=-10mm,
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
@@ -969,4 +971,131 @@ G_{f}  M_d  F^f_{\bullet t^f_\bullet}  z_{ t^e_d}
 = G^f  M_e   F^\bullet_{ft_f^\bullet}  z_{ t^e_d}
 :   G^d_e \]
 which is immediately satisfied by $(*)$! That was actually a closer call than I thought.
+
+\subsection{So Where Does This Leave Me}
+This corroborates the idea tha the rules
+\[
+\erule
+{\Delta; \Gamma  [N]^\cdot_\cdot \prov Q }
+{\Delta; \Gamma, N \prov Q }
+\qquad
+\erule
+{\Delta; \Gamma, \theta P \prov Q \qquad   \Delta, \Omega^\pm \prov P}
+{\Delta; \Gamma  [\ups P]^\theta_\Omega \prov Q }
+\qquad
+\erule
+{\Delta; \Gamma [N]^{\theta[t/\alpha]}_{\Omega, \alpha} \prov Q }
+{\Delta; \Gamma  [\forall \alpha . N]^\theta_\Omega \prov Q }
+\]
+are probably sound, though I still don't know how to prove it.
+But the central idea is that I can instantiate quantifiers
+with  whatever terms I want, derived bivariantly
+from $\Delta$ however I want, as long I blur at a proposition that monovariantly
+uses all the variables that have been instantiated this focusing phase.
+\subsection{What About Those Other Propositions That Seemed Provable}
+I seem to recall conjecturing that for any propositional tautology, e.g. $A \to (A \to B) \to B$,
+that I should expect the corresponding end, like
+\[\forall \alpha . A^\alpha_\alpha \to (A^\alpha_\alpha \to B^\alpha_\alpha) \to B^\alpha_\alpha\]
+to hold. Do I get that? Yeah, I suppose so; I do a focus, and then a blur, however many
+times I like, because I never invoke synchronous quantifier rules internally. Ok, nice.
+
+\subsection{Back to Guessing Induction Hypotheses}
+I still need to interpret
+\[\Delta; \Gamma  [ N]^\theta_\Omega \prov Q \]
+as some kind of end-like thing. What was the issue
+ that really exercised that superend business? It really is $\forall L$, isn't it?
+And recall that I started with end-data and worked my way up. So the raw
+end-data we have in $\forall L$ is  something like
+\[\int_{d\in\Delta} \Gamma^d_d \x (\theta[t/\alpha]N)^d_d \to Q^d_d \]
+and we want to get to something like
+\[\int_{d\in \Delta}  \Gamma^d_d  \x ( \forall \alpha . \theta N)^d_d \to Q^d_d\]
+So let's ignore the residual substitution and the context and suppose we have
+\[M \in \int_{d\in\Delta}  N^{dt^d_d}_{dt^d_d} \to Q^d_d \eqno(\dagger)\]
+and see what goes wrong trying to make
+\[L \in \int_{d\in \Delta}   \left( \int_{ \alpha \in\A}   N^{d \alpha}_{d \alpha}\right) \to Q^d_d \eqno(*)\]
+Actually, I'm going to observe that in this special case, I think
+what we want to achieve is {\em exactly} $(*)$, not some focused generalization
+of it. Maybe. Because to whatever extent $(*)$ is focused, it's
+focused with respect to {\em no category variables}, whereas $(\dagger)$ is with
+respect to $\alpha$.
+
+Now $M$ tells us that we can make $N^{dt^d_d}_{dt^d_d} \to Q^d_d$ for any $d$,
+and
+\[ Q_f \o M_d \o N^{ft^{\cdot}_f}_{{\cdot}t^f_{\cdot}} =  Q^f \o M_e \o N^{\cdot t^f_\cdot}_{ft^\cdot_f} :  N^{et^d_e}_{dt^e_d} \to Q^d_e \chave\]
+Now $L$ wants us to make something for every $d$, but we should achieve
+\[ Q_f \o L_d \o \int N^{f\cdot}_{{\cdot}{\cdot}} =
+  Q^f \o L_e \o \int N^{\cdot \cdot}_{f\cdot} :
+ \int_\alpha N^{e \alpha}_{d \alpha} \to Q^d_e \cwant\]
+We would try to set
+\[L_d = \lambda x . M_d(x_{t^d_d}) \]
+and try to check
+\[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
+=
+  Q^f  M_e   N^{\cdot \cdot}_{f\cdot} z_{t^e_e} :
+   Q^d_e \cwant\]
+And at this point the end property of $z$ only guarantees
+\[ N^{\cdot \cdot}_{\cdot \phi} z_\delta =  N^{\cdot \phi}_{\cdot \cdot} z_\epsilon \chave\]
+and this is where bivariance gets us stuck.
+
+We'd like to squeeze a little more juice out of $M_d$ because it's supposed
+to be $[t^d_d/\alpha]$-focused on $N$. If only $M_d$ actually had a $N^{\cdot\cdot}_{\cdot\phi}$
+of some sort baked into it! Could we ask that for every $f$, in fact
+\[
+\begin{tikzcd}
+  N^{dt^d_d}_{dt^d_d} \ar[r, "M_d"] & Q^d_d
+\end{tikzcd}
+\]
+factors as
+\[
+\begin{tikzcd}
+  N^{dt^d_d}_{dt^d_d} \ar[r, "{N^{\cdot\cdot}_{\cdot t^\cdot_f}}"] & N^{dt^d_d}_{dt^d_e}\ar[r, "M_f"] & Q^d_d
+\end{tikzcd}
+\]
+
+And in this case we can at least make a little progress:
+\[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to\]
+\[  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
+=  Q_f  M_f N^{\cdot\cdot}_{\cdot t^\cdot_f}   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}\]
+\[=  Q_f  M_f    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot\cdot}_{\cdot t^\cdot_f} z_{t^d_d}\]
+\[=  Q_f  M_f    N^{f\cdot}_{{\cdot}{\cdot}} N_{\cdot\cdot}^{\cdot t^\cdot_f} z_{t^d_e}\]
+This looks slightly promising; it looks like being closer to applying the end-property of $M$.
+But we can't quite get it. What happens if I throw in another little bit of factorization,
+and say that $M_d$ factors as
+\[
+\begin{tikzcd}
+  N^{dt^d_d}_{dt^d_d} \ar[r, "{N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}}"] & N^{dt^e_d}_{dt^d_e}\ar[r, "M<f"] & Q^d_d
+\end{tikzcd}
+\]
+and also $M_e$ factors as
+\[
+\begin{tikzcd}
+  N^{et^e_e}_{et^e_e} \ar[r, "{N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}}"] & N^{et^e_d}_{et^d_e}\ar[r, "M>f"] & Q^e_e
+\end{tikzcd}
+\]
+Then from one side I have
+\[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to\]
+\[  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
+=  Q_f  (M<f) N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}\]
+\[=  Q_f  (M<f)    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N^{\cdot\cdot}_{\cdot t^\cdot_f} z_{t^d_d}\]
+\[=  Q_f  (M<f)    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N_{\cdot\cdot}^{\cdot t^\cdot_f} z_{t^d_e}\]
+\[=  Q_f  (M<f)     N^{f t^f_f}_{\cdot\cdot}  z_{t^d_e}\]
+and from the other side I have
+\[  Q^f  M_e   N^{\cdot \cdot}_{f\cdot} z_{t^e_e}
+=  Q^f  (M> f) N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} z_{t^e_e} \]
+\[=  Q^f  (M> f) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot t^\cdot_f}_{\cdot \cdot} z_{t^e_e} \]
+\[=  Q^f  (M> f) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot \cdot}_{\cdot t^\cdot_f} z_{t^e_d} \]
+\[=  Q^f  (M> f)   N^{\cdot \cdot}_{ft^f_f}  z_{t^e_d} \]
+
+So I suppose it suffices to ask for the commutativity of the diagram
+
+\[
+\begin{tikzcd}
+N^{e t^d_e}_{d t^d_e}\ar[d, "N"']
+& \int_\alpha N^{e\alpha}_{d\alpha} \ar[r]\ar[l]
+&  N^{e t^e_d}_{d t^e_d} \ar[d, "N"]\\
+N^{d t^e_d}_{d t^d_e} \ar[d, "{M<f}"'] &&N^{e t^e_d}_{e t^d_e}\ar[d, "{M>f}"]\\
+Q^{d }_{d } \ar[r, "Q"'] & Q^d_e&Q^{e }_{e }\ar[l, "Q"]
+\end{tikzcd}
+\]
+
 \end{document}
