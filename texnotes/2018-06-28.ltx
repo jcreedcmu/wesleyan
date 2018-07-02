@@ -1163,4 +1163,63 @@ but I don't know if that buys me anything? I precisely {\em don't}
  want to draw an arrow from the
 center $N^{dt^e_d}_{et^d_e}$ down to $Q^d_e$. Maybe this kind of
 reasoning shows up when $N$ is univariant and we're doing a blur?
+
+\subsection{Composites}
+Actually, if I'm willing to explicitly incorporate the data
+of an end
+\vskip 1in
+\[ M \in \int_\alpha [t/\alpha] N \to Q \]
+ there's a simpler way of stating this without involving {\em two} interpolants,
+isn't there? Because canonically there is a
+\[ M_f \in  N^{dt^e_d}_{et^d_e} \to Q^d_e \]
+do I only need to require
+\[
+\begin{tikzcd}
+&N^{e t^d_e}_{d t^d_e}\ar[dl, "N"']\ar[dr, "N"] \\
+N^{b t^e_d}_{b t^d_e} \ar[d, "{M_b^{//}}"'] &&N^{d t^e_d}_{e t^d_e}\ar[dl, "{M_f}"]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e
+\end{tikzcd}
+\]
+or even merely
+\[
+\begin{tikzcd}
+N^{b t^e_d}_{b t^d_e} \ar[r, "N"]\ar[d, "{M_b^{hk}}"'] &N^{d t^e_d}_{e t^d_e}\ar[d, "{M_{f}}"]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e
+\end{tikzcd}
+\]
+for any
+\[
+\begin{tikzcd}
+  d\ar[r, "h"] & b\ar[r, "k"] & e
+\end{tikzcd}
+\]
+where the composite is $f = kh$.
+\textcolor{red}{Nope, back the heck up.}
+\subsection{Erasing that mistake}
+I made a mistake above. It's actually
+\[ M_f \in  N^{et^d_e}_{dt^e_d} \to Q^d_e \]
+that I get. And no matter what I instantiate the end $\int_\alpha N^{e\alpha}_{d\alpha}$
+at, to get any of
+\[ N^{et^d_d}_{dt^d_d}\qquad N^{et^d_e}_{dt^d_e} \qquad N^{et^e_d}_{dt^e_d} \qquad N^{et^e_e}_{dt^e_e}\]
+none of these can be transformed into the domain of $M_f$. But wait, some of them
+can go into $M_d$ or $M_e$, can't they? The first and the last on this list can go into
+$M_d$ and $M_e$, respectively. So maybe I could ask for
+\[
+\begin{tikzcd}
+N^{e t^d_e}_{d t^d_e}\ar[d, "N"']
+& \int_\alpha N^{e\alpha}_{d\alpha} \ar[r]\ar[l]
+&  N^{e t^d_d}_{d t^d_d} \ar[d, "N"]\\
+N^{b t^e_d}_{b t^d_e} \ar[d, "{M_b^{//}}"'] &&N^{d t^d_d}_{d t^d_d}\ar[d, "{M_d}"]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e&Q^{d }_{d }\ar[l, "Q"]
+\end{tikzcd}
+\]
+which further looks like it might suffice to ask for
+\[
+\begin{tikzcd}
+N^{b t^e_d}_{b t^d_e} \ar[d, "{M_b^{//}}"'] &N^{e t^d_d}_{d t^d_d}\ar[r, "N"]\ar[l, "N"'] &N^{d t^d_d}_{d t^d_d}\ar[d, "{M_d}"]\\
+Q^{b }_{b } \ar[r, "Q"'] & Q^d_e&Q^{d }_{d }\ar[l, "Q"]
+\end{tikzcd}
+\]
+
+
 \end{document}
