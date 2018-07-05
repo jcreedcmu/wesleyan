@@ -628,4 +628,43 @@ Don't know what I can make with that though.
 
 Dang, I thought I was close, and now I'm confused again. Probably should
 establish that it works with more special-case tools first.
+
+\section{Going Way Back}
+I would have thought that an inhabitant of a left-focused end
+\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+gives functions
+\[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
+\[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
+but I can't build either of these out of
+\[ M : N \sw {d t\sw d} \to Q \sw d\]
+even under the assumption that $N$ is univariant, can I? Could it be that I want to ask for
+\[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
+\[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
+What {\em can} I build out of this end $M$ when $N$ is univariant? Ok, when $N$ is covariant,
+the most I can build is
+\[  N^{e }_{d t^e_d} \to Q^d_e \]
+and the maximally specialized things I {\em can} build that are better than that are
+\[  N^{d }_{d t^d_d} \to Q^d_d \]
+\[  N^{e }_{e t^e_e} \to Q^e_e \]
+$\ldots$ don't know what to think about this.
+\section{Another Example}
+Drawing out a diagram for
+\[
+\erule
+{ \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
+{\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
+\]
+which looks like
+\[\begin{tikzcd}
+\int_\beta F^d_{d\beta} \times H^{d\beta}_d \arrow[rdd, dotted] \arrow[ddd, "P_d"'] &  & \int_\beta F^e_{d\beta} \times H^{e\beta}_d \arrow[ll] \arrow[rr] \arrow[ld, dotted] \arrow[rd, dotted] \arrow[dd, "{\langle \pi_1\pi_{t^e_d},\pi_2\pi_{t^d_e}\rangle}" description, red] &  & \int_\beta F^e_{e\beta} \times H^{e\beta}_e \arrow[ldd, dotted] \arrow[ddd, "P_e"] \\
+ & F^e_{d{t^d_d}} \times H^{e{t^d_d}}_d \arrow[d] &  & F^e_{d{t^e_e}} \times H^{e{t^e_e}}_d \arrow[d] &  \\
+ & F^d_{dt^d_d} \times H^{dt^d_d}_d \arrow[ld, "M_d" description] & F^e_{dt^e_d} \times H^{et^d_e}_d \arrow[l] \arrow[r] & F^e_{et^e_e} \times H^{et^e_e}_e \arrow[rd, "M_e" description] &  \\
+G^d_d \arrow[rr] &  & G^d_e &  & G^e_e \arrow[ll]
+\end{tikzcd}\]
+makes me think there's something useful about, in the context of having a `focusable' type
+in the $N$-position of
+\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+of having a map
+\[ \left(\int_\beta N^{\alpha\beta}_{\alpha\beta}\right) \to N^{\alpha t^d_e}_{\alpha t^e_d} \]
+which role is played by the red arrow in the diagram.
 \end{document}
