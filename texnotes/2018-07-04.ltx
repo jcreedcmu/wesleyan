@@ -510,4 +510,122 @@ N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]
 Q^b_c\ar[r] &Q^d_e
 \end{tikzcd}
 \]
+I think I may also want
+\[
+\begin{tikzcd}
+N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{c t^c_b}_{b t^b_c} \ar[dl, "M_{\rid_s}", bend left]\ar[l]\\
+Q^b_c
+\end{tikzcd}
+\]
+to get that focused ends are ends.
+
+\section{Trying To Check These Definitions}
+
+To repeat myself more clearly, the left-focused end
+\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+is the set consisting of the functions
+\[ M_\tau : N^{c t^e_d}_{b t^d_e} \to Q^b_c \]
+for (perhaps some restricted set of) twisted morphisms
+\[
+\tau : f \to s \qquad=\qquad
+\begin{tikzcd}
+  d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
+b \ar[r, "s"']&c
+\end{tikzcd}
+\]
+such that, for any such $t$,
+\[
+\begin{tikzcd}
+N^{c t^c_b}_{b t^b_c} \ar[r] \ar[d, "M_{\rid_s}"']
+& N^{c t^e_d}_{b t^d_e}\ar[d, "M_\tau" description]
+& N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]
+\\[1em]
+Q^b_c \ar[r, equal]& Q^b_c\ar[r] &Q^d_e
+\end{tikzcd}
+\]
+\begin{lemma}[Focused Ends imply Ends]
+\[
+\erule
+{\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+{\int_\alpha N\sw{\alpha t\sw\alpha} \to Q\sw \alpha}
+\]
+\end{lemma}
+
+\begin{proof}
+For any $d$, we need to construct $L_d : N\sw{d t\sw d} \to Q\sw d$.
+We set $L_d = M_{\rid_{\rid_d}}$. Then for any $f : d\to e$, chase
+the following diagram to see that we've made
+an end:
+\[
+\begin{tikzcd}
+N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] &  & N^{et^d_e}_{dt^e_d} \arrow[ll] \arrow[rr] \arrow[d] &  & N^{et^e_e}_{et^e_e} \arrow[dd, "M_{\rid_{\rid_e}}"] \arrow[ld] \\
+& N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[d, "M_{\rid_f}"] \arrow[l] \arrow[r] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
+Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
+\end{tikzcd}
+\]
+\cqed
+\end{proof}
+
+Actually I'm not sure I really need this lemma directly in exactly
+this way, as the focus rule wouldn't force you to factorize the
+proposition you already have in terms of some made-up substitution.
+Still feels good as a sanity-check, though. Maybe this reasoning will
+come in handy later.
+
+\begin{lemma}[Focused Ends support Forall Left]
+\[
+\erule
+{\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+{\int_\alpha \left(\int_\beta N\sw{\alpha \beta}\right) \to Q\sw \alpha}
+\]
+\end{lemma}
+
+\begin{proof}
+We have a focused end $M_\tau$. We're trying to make
+\[ L_d : \left( \int_\beta N\sw{d \beta} \right) \to Q\sw d \cwant \]
+so we set
+\[L_d(z) = M_{\rid_{\rid_d}} (z_{t^d_d})\]
+and we need to check that
+\[
+\left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
+Q_f  L_d  \left( \int N^f \right) (z)
+= Q^f  L_e  \left( \int N_f \right) (z) \]
+which means
+\[
+\left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
+Q_f  M_{\rid_{\rid_d}}   N^f  (z_{t\sw d})
+= Q^f  M_{\rid_{\rid_e}}   N_f  (z_{t\sw e}) \]
+which we can prove by chasing
+\[\begin{tikzcd}
+N^{et^d_d}_{dt^d_d} \arrow[d] \arrow[rd] &  & \int_\beta N^{e\beta}_{d\beta} \arrow[ll, orange] \arrow[d, orange] \arrow[rr, orange] &  & N^{et^e_e}_{dt^e_e} \arrow[ld] \arrow[d] \\
+N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] & N^{et^d_d}_{dt^d_e} \arrow[d] & N^{et^d_e}_{dt^d_e} \arrow[l] \arrow[d] \arrow[r] & N^{et^e_e}_{dt^d_e} \arrow[d] & N^{et^e_e}_{et^e_e} \arrow[ld] \arrow[dd, "M_{\rid_{\rid_e}}"] \\
+& N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[l] \arrow[r] \arrow[d, "M_{\rid_f}"] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
+Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
+\end{tikzcd}\]
+\cqed
+\end{proof}
+
+\begin{lemma}[Focused Ends support Covariant Blur]
+\[
+\erule
+{\int_\alpha N^\alpha_{\alpha t\sw \alpha} \to Q\sw \alpha}
+{\int_\alpha [N^\alpha_{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+\]
+\end{lemma}
+
+\begin{proof}
+We have $M_d : N^d_{dt^d_d} \to Q\sw d$ and we know that
+\[ Q_f \o M_d \o N^f_{\cdot t^f}  = Q^f \o M_e \o N_{f t_f}\chave\]
+and we want to come up with
+\[ L_\tau : N^{c }_{b t^d_e} \to Q^b_c \cwant\]
+and... oooh, we can't, quite. We could, however make
+\[ L_\tau : N^{c }_{b t^e_d} \to Q^b_c \]
+by setting
+\[ L_\tau(x) = M_b(N^s_{\cdot t^{os}_i} x)\]
+Don't know what I can make with that though.
+\cqed
+\end{proof}
+
+Dang, I thought I was close, and now I'm confused again. Probably should
+establish that it works with more special-case tools first.
 \end{document}
