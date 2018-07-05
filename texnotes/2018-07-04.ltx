@@ -1,0 +1,513 @@
+\documentclass{article}
+\usepackage[tmargin=0.05in, bmargin=0.05in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+\def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\def\doubs#1{{}^{{#1}^\op}_{\x {#1}}}
+\def\doub#1{{#1}^\op \x {#1}}
+\section{Ends and Extranaturality}
+
+Recall that an extranatural transformation $\alpha : C \to G$
+where $C \in \C$ and $G : \doubs \D \to \C$ is supposed to be the same
+as natural transformation $\beta : C \to G \o \pi^+ : \tw (\D) \to \C$
+where $\C$ is the constant functor out of the twisted arrow category, and
+$\pi^+ : \tw(\D) \to \doub\D$ is the evident forgetful functor.
+
+Why is this? Extranaturality requires that for every $f : d \to e$, we have
+\[
+\begin{tikzcd}
+  C \ar[r, "\alpha_e"]\ar[d, "\alpha_d"'] & G^e_e \ar[d, "G^f"]\\
+  G^d_d \ar[r, "G_f"'] & G^d_e
+\end{tikzcd}
+\]
+Either of the two equal sides of this diagram are what we assign to
+$\beta_f$. We check naturality of $\beta$ by letting a twisted arrow $t : f \to s$
+\[
+\begin{tikzcd}
+  d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
+  d \ar[r, "f"'] & e
+\end{tikzcd}
+\]
+be given, and checking
+\[
+\begin{tikzcd}
+  C \ar[r, "\beta_{f}"]\ar[d, equal] & G^{d}_{e}\ar[d, "G^i_o"]
+\\
+  C \ar[r, "\beta_{s}"']  & G^{d'}_{e'}
+\end{tikzcd}
+\]
+which expands to
+\[
+\begin{tikzcd}
+  C \ar[r, "\alpha_{d}"]\ar[dd, equal]
+& G^{d}_{d} \ar[d, "G^i"']\ar[r, "G_f"] & G^{d}_{e}\ar[d, "G^i"]
+\\
+& G^{d'}_{d}\ar[r, "G_{f}" description] & G^{d'}_e\ar[d, "G_o"]
+\\
+  C \ar[r, "\alpha_{d'}"'] & G^{d'}_{d'}\ar[u, "G_i"] \ar[r, "G_s"'] & G^{d'}_{e'}
+\end{tikzcd}
+\]
+where the left rectangle is extranaturality, and the other two cells are just
+functoriality of $G$.
+
+Conversely, if we have a natural transformation $\beta$,
+we extract the extranatural transformation $\alpha$
+by querying the natural transformation at identity morphisms for objects:
+$\alpha_d = \beta_{\rid_D}$. For naturality
+of $\alpha$ tells us that we can take the twisted arrows
+\[
+\begin{tikzcd}
+  d \ar[r, "f"]\ar[d, equal] & e \ar[from=d, "f"']\\
+  d \ar[r, equal] & d
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  d \ar[r, "f"]\ar[d, "f"'] & e \ar[from=d, equal]\\
+  e \ar[r, equal] & e
+\end{tikzcd}
+\]
+and obtain the extranaturality diagram by composing two naturality squares:
+\[
+\begin{tikzcd}
+  C \ar[r, "\alpha_{d}"]\ar[d, equal]
+& G^{d}_{d}  \ar[d, "G_f"]
+\\
+  C \ar[r, "\beta_{f}"] & G^{d}_{e}
+\\
+  C \ar[r, "\alpha_{e}"']\ar[u, equal]
+& G^{e}_{e}  \ar[u, "G^f"']
+\end{tikzcd}
+\]
+
+\subsection{Dually}
+
+An extranatural transformation $\alpha : G \to C$ should then be the same thing as a natural
+transformation $\beta : G \o \pi^- \to C$, where
+\[ \pi^- : \tw(\D)^\op \to \doub\D \]
+Extranaturality requires that for every $f : d \to e$, we have
+\[
+\begin{tikzcd}
+  G^e_d \ar[r, "G_f"]\ar[d, "G^f"'] & G^e_e \ar[d, "\alpha_e"]\\
+  G^d_d \ar[r, "\alpha_d"'] & C \\
+\end{tikzcd}
+\]
+and we check naturality of $\beta$ by
+letting a twisted arrow $t : s \to f$
+\[
+\begin{tikzcd}
+  d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
+  d \ar[r, "f"'] & e
+\end{tikzcd}
+\]
+be given, and checking
+\[
+\begin{tikzcd}
+  G^{e'}_{d'} \ar[r, "\beta_{s}"]\ar[d, "G^o_i"'] & C\ar[d, equal]
+\\
+ G^{e}_{d} \ar[r, "\beta_{f}"']  &  C
+\end{tikzcd}
+\]
+which expands to
+\[
+\begin{tikzcd}
+G^{e'}_{d'} \ar[r, "G^s"] \ar[d, "G^o"']
+& G^{d'}_{d'} \ar[r, "\alpha_{d'}"]\ar[from=d, "G^i"']
+& C \ar[dd, equal]
+\\
+G^e_{d'} \ar[r, "G^f" description]\ar[d, "G_i"'] & G^{d}_{d'}
+\\
+G^{e}_{d} \ar[r, "G^f"']
+& G^{d}_{d} \ar[r, "\alpha_{d}"']\ar[from=u, "G_i"]
+& C
+\end{tikzcd}
+\]
+and we similarly get extranaturality out of naturality by composing
+\[
+\begin{tikzcd}
+ G^{d}_{d}  \ar[from=d, "G^f"]  \ar[r, "\alpha_{d}"]
+& C\ar[d, equal]
+\\
+  G^{e}_{d} \ar[r, "\beta_{f}"] & C
+\\
+  G^{e}_{e}  \ar[from=u, "G_f"'] \ar[r, "\alpha_{e}"']
+& C\ar[u, equal]
+\end{tikzcd}
+\]
+\subsection{Both At Once}
+What's a natural transformation version of an extranatural transformation
+\[ \alpha : F \to G\]
+for both  $F, G : \doubs \D \to \C$?
+I think it's a natural transformation
+\[ \beta : (\lambda ^f_\_ . F^d_e) \to (\lambda^\__f . G^d_e) : \doubs{\tw (\D)}\to \C\]
+
+\section{General Forall Left Attempt Again}
+
+Let's look again at
+\[
+\erule
+{[N]^{[t/\alpha]}_\alpha \prov Q}
+{\forall \alpha . N \prov Q}
+\]
+Semantically this is claiming
+\[
+\erule
+{\int_\alpha [N^{\alpha\beta}_{\alpha\beta}]^{[t\sw \alpha/\beta]}_\beta \to Q^\alpha_\alpha}
+{\int_\alpha \left(\int_\beta  N^{\alpha\beta}_{\alpha\beta}\right) \to  Q^\alpha_\alpha}
+\]
+where we have to come up with the meaning for the left-focused end. We expect to have
+at least the ordinary end
+\[ M \in \int_\alpha N \sw{\alpha t\sw\alpha} \to Q^\alpha_\alpha \chave\]
+with some kind of extra data, and we want to get
+\[ L \in \int_\alpha \left(\int_\beta N \sw{\alpha \beta}\right) \to Q^\alpha_\alpha \cwant\]
+and the implementation on the diagonal is
+\[ L_d(x) = M_d(x_{t\sw d})\]
+So then the end properties we have are
+\[ Q_f \o M_d \o N^{ft_f}_{\cdot t^f} = Q^f \o M_e \o N^{\cdot t^f}_{f t_f}  : N^{e t^d_e}_{d t^e_d}  \to Q^d_e\chave\]
+and the one we want is
+\[ Q_f \o L_d \o  \left(\int_\beta N^{f \beta}_{\cdot \beta}\right)
+=  Q^f \o L_e \o  \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right) \cwant\]
+which by extensionality is
+\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+Q_f  L_d   \left(\int_\beta N^{f \beta}_{\cdot \beta}\right) (z)
+=  Q^f  L_e   \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right)(z) \cwant\]
+which expands upon plugging in the definition of $L$ to
+\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+ Q_f  M_d    N^{f} z_{t\sw d}
+=  Q^f  M_e    N_{f }z_{t\sw e} \cwant\]
+Now the end property of $z$ is
+\[ N^{e}_{d \phi} z_\delta = N^{e\phi }_{d } z_\epsilon   \chave\]
+
+\subsection{The Extra Piece of Data}
+I was before attempting to ask for something like the following, but I'm going
+to try to simplify as much as I can along the way. If I have a pair
+of arrows
+\[
+\begin{tikzcd}
+  d \ar[r, "j"]& x \ar[r, "k"] & e
+\end{tikzcd}
+\]
+then I'm going to ask $M$ to provide
+\[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
+and perhaps a reasonable thing to ask is that
+\[M_x^{jk} \o N^{\cdot t^k_j}_{\cdot t^j_k} = M_x\]
+Now if this is the case I can rewrite my goal to
+\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+ Q_f  M^{\cdot f}_d N^{\cdot t^f}_{\cdot t_f}    N^{f} z_{t\sw d}
+=  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
+and using the end-property of $z$ four times I get
+\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+ Q_f  M^{\cdot f}_d N^{\cdot t_f}_{\cdot t^f}    N^{f} z_{t\sw e}
+=  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
+Hm... I think I'm stuck here. I can't possibly get $N^{et^d_e}_{dt^e_d}$ by
+any projection from $z$, can I? So I need the condition on the extra data
+to mention that end explicitly. Guess I simplified too much.
+\subsection{Another Attempt At Extra Data}
+I'm still going to say that if I have a pair
+of arrows
+\[
+\begin{tikzcd}
+  d \ar[r, "j"]& x \ar[r, "k"] & e
+\end{tikzcd}
+\]
+then I'm going to ask $M$ to provide
+\[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
+but the diagram I ask for is a bit different. I'll demand
+\[\begin{tikzcd}
+  \int_\beta N^{e\beta}_{d\beta} \ar[d, "\pi_{t^d_e}"'] \ar[r, "\pi_{t\sw x}"]
+& N^{et^x_x}_{dt^x_x}
+\ar[r, "N^{k}_{j}"]
+& N^{xt^x_x}_{xt^x_x}
+\ar[dr, bend left, "M_x"]
+\\
+N^{e t^d_e}_{d t^d_e}
+\ar[r, "N^{\cdot t\sw f}"']
+& N^{e t^e_d}_{d t^d_e}
+\ar[r, "N^{k}_j"']
+& N^{x t^e_d}_{x t^d_e}
+\ar[r, "M^{jk}_x"']
+& Q \sw x
+\end{tikzcd}\]
+
+Now if $M$ really is an end, then I should have... arg.
+%% \subsection{Going Back to What I did Before}
+%% Trying to guess in the middle of so much noise is still hard. Let me go incrementally
+%% from what I know works. I'm not going to even pay attention to the end property
+%% of $M$ itself; I'm just going to try to capture what's necessary for it as a super-end.
+%% Perhaps I'll going to go all the way back to $M_{<f}$ and $M_{>f}$ nonsense, even.
+
+%% The critical thing is still that $M_d$ factors through $N^{dt^e_d}_{dt^e_d}$
+%% and $M_e$ factors through $N^{et^e_d}_{et^e_d}$. Let's say
+%% \[
+%% \begin{tikzcd}
+%%   N^{dt^d_d}_{dt^d_d} \ar[r, "{N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}}"] & N^{dt^e_d}_{dt^d_e}\ar[r, "M_{<f}"] & Q^d_d
+%% \end{tikzcd}
+%% \]
+%% and also $M_e$ factors as
+%% \[
+%% \begin{tikzcd}
+%%   N^{et^e_e}_{et^e_e} \ar[r, "{N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}}"] & N^{et^e_d}_{et^d_e}\ar[r, "M_{>f}"] & Q^e_e
+%% \end{tikzcd}
+%% \]
+%% \[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to\]
+%% \[  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
+%% =  Q_f  (M_{<f}) N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}\]
+%% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N^{\cdot\cdot}_{\cdot t^\cdot_f} z_{t^d_d}\]
+%% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N_{\cdot\cdot}^{\cdot t^\cdot_f} z_{t^d_e}\]
+%% \[=  Q_f  (M_{<f})     N^{f t^f_f}_{\cdot\cdot}  z_{t^d_e}\]
+%% and from the other side I have
+%% \[  Q^f  M_e   N^{\cdot \cdot}_{f\cdot} z_{t^e_e}
+%% =  Q^f  (M_{>f}) N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} z_{t^e_e} \]
+%% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot t^\cdot_f}_{\cdot \cdot} z_{t^e_e} \]
+%% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot \cdot}_{\cdot t^\cdot_f} z_{t^e_d} \]
+%% \[=  Q^f  (M_{>f})   N^{\cdot \cdot}_{ft^f_f}  z_{t^e_d} \]
+
+\subsection{Let's try this}
+
+Say for all `appropriate' twisted arrows
+\[
+t : f \to s \qquad=\qquad
+\begin{tikzcd}
+  d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
+b \ar[r, "s"']&c
+\end{tikzcd}
+\]
+We're supposed to have $M_t : N^{c t^e_d}_{b t^d_e} \to Q^b_c$. And if
+we have two different $t : f \to s$ and $t' : f \to s'$ out of the same $f$, then
+we want the following diagram to commute:
+\[
+\begin{tikzcd}
+N^{et^c_b}_{dt^b_c}\ar[d]
+&\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[r]
+& N^{et^{c'}_{b'}}_{dt^{b'}_{c'}}\ar[d]\\
+N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] && N^{c' t^e_d}_{b' t^d_e} \ar[d, "M_{t'}"]\\
+Q^b_c\ar[r] &Q^d_e & Q^{b'}_{c'}\ar[l]
+\end{tikzcd}
+\]
+So this actually now makes $\rid_f$ seem like an acceptable twisted arrow, since it
+only gets us a function $N^{et^e_d}_{dt^d_e} \to Q^d_e$, which is more end-like. And
+then we could just demand the diagram
+\[
+\begin{tikzcd}
+N^{et^c_b}_{dt^b_c}\ar[d]
+&\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[d]\\
+N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\\
+Q^b_c\ar[r] &Q^d_e
+\end{tikzcd}
+\]
+indeed can I require only the bottom half of this??
+\[
+\begin{tikzcd}
+N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]\\
+Q^b_c\ar[r] &Q^d_e
+\end{tikzcd}
+\]
+\end{document}

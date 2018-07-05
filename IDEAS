@@ -4995,3 +4995,38 @@ Not all fonts are in suitcases; you can use the family name without the
 Q: How list what fonts available?
 A:
 $ fc-list : family
+
+=== 2018.07.04
+
+Q: What's the deal with the twisted arrow category?
+A:
+I think if I haven't flipped a bit somewhere, the thing I observe that
+seems relevant is that
+
+Let C ∈ ℂ and F : 𝔻^op × 𝔻 → ℂ be given. Let Tw(𝔻) mean precisely the definition
+found on nLab. Let
+π^+ : Tw(𝔻)    → 𝔻^op × 𝔻
+π^- : Tw(𝔻)^op → 𝔻^op × 𝔻
+be the evident forgetful/boundary functors.
+
+- an extranatural transformation C → F should be the same as a natural
+transformation out of a constant-C functor
+    (λ_.C) → F ∘ π^+ : Tw(𝔻) → ℂ
+of the twisted arrow category.
+
+- an extranatural transformation C → F should be the same as a natural
+transformation into a constant-C functor
+    F ∘ π^- → (λ_.C) : Tw(𝔻)^op → ℂ
+of the *dual* of the twisted arrow category.
+
+Q: So is there a nice natural-transformation explanation of extranatural
+transformations that are extranatural in their domain and codomain at
+once? Like, from
+F1 : 𝔻^op × 𝔻 → ℂ
+to
+F2 : 𝔼^op × 𝔼 → ℂ
+?
+A: It doesn't seem obvious to me that there is.
+
+Q: Or can I just take the product?
+A: ???
