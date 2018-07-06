@@ -214,465 +214,755 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \def\doubs#1{{}^{{#1}^\op}_{\x {#1}}}
 \def\doub#1{{#1}^\op \x {#1}}
-\section{Ends and Extranaturality}
+%% \section{Ends and Extranaturality}
 
-Recall that an extranatural transformation $\alpha : C \to G$
-where $C \in \C$ and $G : \doubs \D \to \C$ is supposed to be the same
-as natural transformation $\beta : C \to G \o \pi^+ : \tw (\D) \to \C$
-where $\C$ is the constant functor out of the twisted arrow category, and
-$\pi^+ : \tw(\D) \to \doub\D$ is the evident forgetful functor.
+%% Recall that an extranatural transformation $\alpha : C \to G$
+%% where $C \in \C$ and $G : \doubs \D \to \C$ is supposed to be the same
+%% as natural transformation $\beta : C \to G \o \pi^+ : \tw (\D) \to \C$
+%% where $\C$ is the constant functor out of the twisted arrow category, and
+%% $\pi^+ : \tw(\D) \to \doub\D$ is the evident forgetful functor.
 
-Why is this? Extranaturality requires that for every $f : d \to e$, we have
-\[
-\begin{tikzcd}
-  C \ar[r, "\alpha_e"]\ar[d, "\alpha_d"'] & G^e_e \ar[d, "G^f"]\\
-  G^d_d \ar[r, "G_f"'] & G^d_e
-\end{tikzcd}
-\]
-Either of the two equal sides of this diagram are what we assign to
-$\beta_f$. We check naturality of $\beta$ by letting a twisted arrow $t : f \to s$
-\[
-\begin{tikzcd}
-  d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
-  d \ar[r, "f"'] & e
-\end{tikzcd}
-\]
-be given, and checking
-\[
-\begin{tikzcd}
-  C \ar[r, "\beta_{f}"]\ar[d, equal] & G^{d}_{e}\ar[d, "G^i_o"]
-\\
-  C \ar[r, "\beta_{s}"']  & G^{d'}_{e'}
-\end{tikzcd}
-\]
-which expands to
-\[
-\begin{tikzcd}
-  C \ar[r, "\alpha_{d}"]\ar[dd, equal]
-& G^{d}_{d} \ar[d, "G^i"']\ar[r, "G_f"] & G^{d}_{e}\ar[d, "G^i"]
-\\
-& G^{d'}_{d}\ar[r, "G_{f}" description] & G^{d'}_e\ar[d, "G_o"]
-\\
-  C \ar[r, "\alpha_{d'}"'] & G^{d'}_{d'}\ar[u, "G_i"] \ar[r, "G_s"'] & G^{d'}_{e'}
-\end{tikzcd}
-\]
-where the left rectangle is extranaturality, and the other two cells are just
-functoriality of $G$.
-
-Conversely, if we have a natural transformation $\beta$,
-we extract the extranatural transformation $\alpha$
-by querying the natural transformation at identity morphisms for objects:
-$\alpha_d = \beta_{\rid_D}$. For naturality
-of $\alpha$ tells us that we can take the twisted arrows
-\[
-\begin{tikzcd}
-  d \ar[r, "f"]\ar[d, equal] & e \ar[from=d, "f"']\\
-  d \ar[r, equal] & d
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-  d \ar[r, "f"]\ar[d, "f"'] & e \ar[from=d, equal]\\
-  e \ar[r, equal] & e
-\end{tikzcd}
-\]
-and obtain the extranaturality diagram by composing two naturality squares:
-\[
-\begin{tikzcd}
-  C \ar[r, "\alpha_{d}"]\ar[d, equal]
-& G^{d}_{d}  \ar[d, "G_f"]
-\\
-  C \ar[r, "\beta_{f}"] & G^{d}_{e}
-\\
-  C \ar[r, "\alpha_{e}"']\ar[u, equal]
-& G^{e}_{e}  \ar[u, "G^f"']
-\end{tikzcd}
-\]
-
-\subsection{Dually}
-
-An extranatural transformation $\alpha : G \to C$ should then be the same thing as a natural
-transformation $\beta : G \o \pi^- \to C$, where
-\[ \pi^- : \tw(\D)^\op \to \doub\D \]
-Extranaturality requires that for every $f : d \to e$, we have
-\[
-\begin{tikzcd}
-  G^e_d \ar[r, "G_f"]\ar[d, "G^f"'] & G^e_e \ar[d, "\alpha_e"]\\
-  G^d_d \ar[r, "\alpha_d"'] & C \\
-\end{tikzcd}
-\]
-and we check naturality of $\beta$ by
-letting a twisted arrow $t : s \to f$
-\[
-\begin{tikzcd}
-  d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
-  d \ar[r, "f"'] & e
-\end{tikzcd}
-\]
-be given, and checking
-\[
-\begin{tikzcd}
-  G^{e'}_{d'} \ar[r, "\beta_{s}"]\ar[d, "G^o_i"'] & C\ar[d, equal]
-\\
- G^{e}_{d} \ar[r, "\beta_{f}"']  &  C
-\end{tikzcd}
-\]
-which expands to
-\[
-\begin{tikzcd}
-G^{e'}_{d'} \ar[r, "G^s"] \ar[d, "G^o"']
-& G^{d'}_{d'} \ar[r, "\alpha_{d'}"]\ar[from=d, "G^i"']
-& C \ar[dd, equal]
-\\
-G^e_{d'} \ar[r, "G^f" description]\ar[d, "G_i"'] & G^{d}_{d'}
-\\
-G^{e}_{d} \ar[r, "G^f"']
-& G^{d}_{d} \ar[r, "\alpha_{d}"']\ar[from=u, "G_i"]
-& C
-\end{tikzcd}
-\]
-and we similarly get extranaturality out of naturality by composing
-\[
-\begin{tikzcd}
- G^{d}_{d}  \ar[from=d, "G^f"]  \ar[r, "\alpha_{d}"]
-& C\ar[d, equal]
-\\
-  G^{e}_{d} \ar[r, "\beta_{f}"] & C
-\\
-  G^{e}_{e}  \ar[from=u, "G_f"'] \ar[r, "\alpha_{e}"']
-& C\ar[u, equal]
-\end{tikzcd}
-\]
-\subsection{Both At Once}
-What's a natural transformation version of an extranatural transformation
-\[ \alpha : F \to G\]
-for both  $F, G : \doubs \D \to \C$?
-I think it's a natural transformation
-\[ \beta : (\lambda ^f_\_ . F^d_e) \to (\lambda^\__f . G^d_e) : \doubs{\tw (\D)}\to \C\]
-
-\section{General Forall Left Attempt Again}
-
-Let's look again at
-\[
-\erule
-{[N]^{[t/\alpha]}_\alpha \prov Q}
-{\forall \alpha . N \prov Q}
-\]
-Semantically this is claiming
-\[
-\erule
-{\int_\alpha [N^{\alpha\beta}_{\alpha\beta}]^{[t\sw \alpha/\beta]}_\beta \to Q^\alpha_\alpha}
-{\int_\alpha \left(\int_\beta  N^{\alpha\beta}_{\alpha\beta}\right) \to  Q^\alpha_\alpha}
-\]
-where we have to come up with the meaning for the left-focused end. We expect to have
-at least the ordinary end
-\[ M \in \int_\alpha N \sw{\alpha t\sw\alpha} \to Q^\alpha_\alpha \chave\]
-with some kind of extra data, and we want to get
-\[ L \in \int_\alpha \left(\int_\beta N \sw{\alpha \beta}\right) \to Q^\alpha_\alpha \cwant\]
-and the implementation on the diagonal is
-\[ L_d(x) = M_d(x_{t\sw d})\]
-So then the end properties we have are
-\[ Q_f \o M_d \o N^{ft_f}_{\cdot t^f} = Q^f \o M_e \o N^{\cdot t^f}_{f t_f}  : N^{e t^d_e}_{d t^e_d}  \to Q^d_e\chave\]
-and the one we want is
-\[ Q_f \o L_d \o  \left(\int_\beta N^{f \beta}_{\cdot \beta}\right)
-=  Q^f \o L_e \o  \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right) \cwant\]
-which by extensionality is
-\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
-Q_f  L_d   \left(\int_\beta N^{f \beta}_{\cdot \beta}\right) (z)
-=  Q^f  L_e   \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right)(z) \cwant\]
-which expands upon plugging in the definition of $L$ to
-\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
- Q_f  M_d    N^{f} z_{t\sw d}
-=  Q^f  M_e    N_{f }z_{t\sw e} \cwant\]
-Now the end property of $z$ is
-\[ N^{e}_{d \phi} z_\delta = N^{e\phi }_{d } z_\epsilon   \chave\]
-
-\subsection{The Extra Piece of Data}
-I was before attempting to ask for something like the following, but I'm going
-to try to simplify as much as I can along the way. If I have a pair
-of arrows
-\[
-\begin{tikzcd}
-  d \ar[r, "j"]& x \ar[r, "k"] & e
-\end{tikzcd}
-\]
-then I'm going to ask $M$ to provide
-\[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
-and perhaps a reasonable thing to ask is that
-\[M_x^{jk} \o N^{\cdot t^k_j}_{\cdot t^j_k} = M_x\]
-Now if this is the case I can rewrite my goal to
-\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
- Q_f  M^{\cdot f}_d N^{\cdot t^f}_{\cdot t_f}    N^{f} z_{t\sw d}
-=  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
-and using the end-property of $z$ four times I get
-\[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
- Q_f  M^{\cdot f}_d N^{\cdot t_f}_{\cdot t^f}    N^{f} z_{t\sw e}
-=  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
-Hm... I think I'm stuck here. I can't possibly get $N^{et^d_e}_{dt^e_d}$ by
-any projection from $z$, can I? So I need the condition on the extra data
-to mention that end explicitly. Guess I simplified too much.
-\subsection{Another Attempt At Extra Data}
-I'm still going to say that if I have a pair
-of arrows
-\[
-\begin{tikzcd}
-  d \ar[r, "j"]& x \ar[r, "k"] & e
-\end{tikzcd}
-\]
-then I'm going to ask $M$ to provide
-\[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
-but the diagram I ask for is a bit different. I'll demand
-\[\begin{tikzcd}
-  \int_\beta N^{e\beta}_{d\beta} \ar[d, "\pi_{t^d_e}"'] \ar[r, "\pi_{t\sw x}"]
-& N^{et^x_x}_{dt^x_x}
-\ar[r, "N^{k}_{j}"]
-& N^{xt^x_x}_{xt^x_x}
-\ar[dr, bend left, "M_x"]
-\\
-N^{e t^d_e}_{d t^d_e}
-\ar[r, "N^{\cdot t\sw f}"']
-& N^{e t^e_d}_{d t^d_e}
-\ar[r, "N^{k}_j"']
-& N^{x t^e_d}_{x t^d_e}
-\ar[r, "M^{jk}_x"']
-& Q \sw x
-\end{tikzcd}\]
-
-Now if $M$ really is an end, then I should have... arg.
-%% \subsection{Going Back to What I did Before}
-%% Trying to guess in the middle of so much noise is still hard. Let me go incrementally
-%% from what I know works. I'm not going to even pay attention to the end property
-%% of $M$ itself; I'm just going to try to capture what's necessary for it as a super-end.
-%% Perhaps I'll going to go all the way back to $M_{<f}$ and $M_{>f}$ nonsense, even.
-
-%% The critical thing is still that $M_d$ factors through $N^{dt^e_d}_{dt^e_d}$
-%% and $M_e$ factors through $N^{et^e_d}_{et^e_d}$. Let's say
+%% Why is this? Extranaturality requires that for every $f : d \to e$, we have
 %% \[
 %% \begin{tikzcd}
-%%   N^{dt^d_d}_{dt^d_d} \ar[r, "{N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}}"] & N^{dt^e_d}_{dt^d_e}\ar[r, "M_{<f}"] & Q^d_d
+%%   C \ar[r, "\alpha_e"]\ar[d, "\alpha_d"'] & G^e_e \ar[d, "G^f"]\\
+%%   G^d_d \ar[r, "G_f"'] & G^d_e
 %% \end{tikzcd}
 %% \]
-%% and also $M_e$ factors as
+%% Either of the two equal sides of this diagram are what we assign to
+%% $\beta_f$. We check naturality of $\beta$ by letting a twisted arrow $t : f \to s$
 %% \[
 %% \begin{tikzcd}
-%%   N^{et^e_e}_{et^e_e} \ar[r, "{N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}}"] & N^{et^e_d}_{et^d_e}\ar[r, "M_{>f}"] & Q^e_e
+%%   d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
+%%   d \ar[r, "f"'] & e
 %% \end{tikzcd}
 %% \]
-%% \[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to\]
-%% \[  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
-%% =  Q_f  (M_{<f}) N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}\]
-%% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N^{\cdot\cdot}_{\cdot t^\cdot_f} z_{t^d_d}\]
-%% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N_{\cdot\cdot}^{\cdot t^\cdot_f} z_{t^d_e}\]
-%% \[=  Q_f  (M_{<f})     N^{f t^f_f}_{\cdot\cdot}  z_{t^d_e}\]
-%% and from the other side I have
-%% \[  Q^f  M_e   N^{\cdot \cdot}_{f\cdot} z_{t^e_e}
-%% =  Q^f  (M_{>f}) N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} z_{t^e_e} \]
-%% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot t^\cdot_f}_{\cdot \cdot} z_{t^e_e} \]
-%% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot \cdot}_{\cdot t^\cdot_f} z_{t^e_d} \]
-%% \[=  Q^f  (M_{>f})   N^{\cdot \cdot}_{ft^f_f}  z_{t^e_d} \]
+%% be given, and checking
+%% \[
+%% \begin{tikzcd}
+%%   C \ar[r, "\beta_{f}"]\ar[d, equal] & G^{d}_{e}\ar[d, "G^i_o"]
+%% \\
+%%   C \ar[r, "\beta_{s}"']  & G^{d'}_{e'}
+%% \end{tikzcd}
+%% \]
+%% which expands to
+%% \[
+%% \begin{tikzcd}
+%%   C \ar[r, "\alpha_{d}"]\ar[dd, equal]
+%% & G^{d}_{d} \ar[d, "G^i"']\ar[r, "G_f"] & G^{d}_{e}\ar[d, "G^i"]
+%% \\
+%% & G^{d'}_{d}\ar[r, "G_{f}" description] & G^{d'}_e\ar[d, "G_o"]
+%% \\
+%%   C \ar[r, "\alpha_{d'}"'] & G^{d'}_{d'}\ar[u, "G_i"] \ar[r, "G_s"'] & G^{d'}_{e'}
+%% \end{tikzcd}
+%% \]
+%% where the left rectangle is extranaturality, and the other two cells are just
+%% functoriality of $G$.
 
-\subsection{Let's try this}
+%% Conversely, if we have a natural transformation $\beta$,
+%% we extract the extranatural transformation $\alpha$
+%% by querying the natural transformation at identity morphisms for objects:
+%% $\alpha_d = \beta_{\rid_D}$. For naturality
+%% of $\alpha$ tells us that we can take the twisted arrows
+%% \[
+%% \begin{tikzcd}
+%%   d \ar[r, "f"]\ar[d, equal] & e \ar[from=d, "f"']\\
+%%   d \ar[r, equal] & d
+%% \end{tikzcd}
+%% \qquad
+%% \begin{tikzcd}
+%%   d \ar[r, "f"]\ar[d, "f"'] & e \ar[from=d, equal]\\
+%%   e \ar[r, equal] & e
+%% \end{tikzcd}
+%% \]
+%% and obtain the extranaturality diagram by composing two naturality squares:
+%% \[
+%% \begin{tikzcd}
+%%   C \ar[r, "\alpha_{d}"]\ar[d, equal]
+%% & G^{d}_{d}  \ar[d, "G_f"]
+%% \\
+%%   C \ar[r, "\beta_{f}"] & G^{d}_{e}
+%% \\
+%%   C \ar[r, "\alpha_{e}"']\ar[u, equal]
+%% & G^{e}_{e}  \ar[u, "G^f"']
+%% \end{tikzcd}
+%% \]
 
-Say for all `appropriate' twisted arrows
-\[
-t : f \to s \qquad=\qquad
-\begin{tikzcd}
-  d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
-b \ar[r, "s"']&c
-\end{tikzcd}
-\]
-We're supposed to have $M_t : N^{c t^e_d}_{b t^d_e} \to Q^b_c$. And if
-we have two different $t : f \to s$ and $t' : f \to s'$ out of the same $f$, then
-we want the following diagram to commute:
-\[
-\begin{tikzcd}
-N^{et^c_b}_{dt^b_c}\ar[d]
-&\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[r]
-& N^{et^{c'}_{b'}}_{dt^{b'}_{c'}}\ar[d]\\
-N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] && N^{c' t^e_d}_{b' t^d_e} \ar[d, "M_{t'}"]\\
-Q^b_c\ar[r] &Q^d_e & Q^{b'}_{c'}\ar[l]
-\end{tikzcd}
-\]
-So this actually now makes $\rid_f$ seem like an acceptable twisted arrow, since it
-only gets us a function $N^{et^e_d}_{dt^d_e} \to Q^d_e$, which is more end-like. And
-then we could just demand the diagram
-\[
-\begin{tikzcd}
-N^{et^c_b}_{dt^b_c}\ar[d]
-&\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[d]\\
-N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\\
-Q^b_c\ar[r] &Q^d_e
-\end{tikzcd}
-\]
-indeed can I require only the bottom half of this??
-\[
-\begin{tikzcd}
-N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]\\
-Q^b_c\ar[r] &Q^d_e
-\end{tikzcd}
-\]
-I think I may also want
-\[
-\begin{tikzcd}
-N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{c t^c_b}_{b t^b_c} \ar[dl, "M_{\rid_s}", bend left]\ar[l]\\
-Q^b_c
-\end{tikzcd}
-\]
-to get that focused ends are ends.
+%% \subsection{Dually}
 
-\section{Trying To Check These Definitions}
+%% An extranatural transformation $\alpha : G \to C$ should then be the same thing as a natural
+%% transformation $\beta : G \o \pi^- \to C$, where
+%% \[ \pi^- : \tw(\D)^\op \to \doub\D \]
+%% Extranaturality requires that for every $f : d \to e$, we have
+%% \[
+%% \begin{tikzcd}
+%%   G^e_d \ar[r, "G_f"]\ar[d, "G^f"'] & G^e_e \ar[d, "\alpha_e"]\\
+%%   G^d_d \ar[r, "\alpha_d"'] & C \\
+%% \end{tikzcd}
+%% \]
+%% and we check naturality of $\beta$ by
+%% letting a twisted arrow $t : s \to f$
+%% \[
+%% \begin{tikzcd}
+%%   d' \ar[r, "s"]\ar[d, "i"'] & e' \ar[from=d, "o"']\\
+%%   d \ar[r, "f"'] & e
+%% \end{tikzcd}
+%% \]
+%% be given, and checking
+%% \[
+%% \begin{tikzcd}
+%%   G^{e'}_{d'} \ar[r, "\beta_{s}"]\ar[d, "G^o_i"'] & C\ar[d, equal]
+%% \\
+%%  G^{e}_{d} \ar[r, "\beta_{f}"']  &  C
+%% \end{tikzcd}
+%% \]
+%% which expands to
+%% \[
+%% \begin{tikzcd}
+%% G^{e'}_{d'} \ar[r, "G^s"] \ar[d, "G^o"']
+%% & G^{d'}_{d'} \ar[r, "\alpha_{d'}"]\ar[from=d, "G^i"']
+%% & C \ar[dd, equal]
+%% \\
+%% G^e_{d'} \ar[r, "G^f" description]\ar[d, "G_i"'] & G^{d}_{d'}
+%% \\
+%% G^{e}_{d} \ar[r, "G^f"']
+%% & G^{d}_{d} \ar[r, "\alpha_{d}"']\ar[from=u, "G_i"]
+%% & C
+%% \end{tikzcd}
+%% \]
+%% and we similarly get extranaturality out of naturality by composing
+%% \[
+%% \begin{tikzcd}
+%%  G^{d}_{d}  \ar[from=d, "G^f"]  \ar[r, "\alpha_{d}"]
+%% & C\ar[d, equal]
+%% \\
+%%   G^{e}_{d} \ar[r, "\beta_{f}"] & C
+%% \\
+%%   G^{e}_{e}  \ar[from=u, "G_f"'] \ar[r, "\alpha_{e}"']
+%% & C\ar[u, equal]
+%% \end{tikzcd}
+%% \]
+%% \subsection{Both At Once}
+%% What's a natural transformation version of an extranatural transformation
+%% \[ \alpha : F \to G\]
+%% for both  $F, G : \doubs \D \to \C$?
+%% I think it's a natural transformation
+%% \[ \beta : (\lambda ^f_\_ . F^d_e) \to (\lambda^\__f . G^d_e) : \doubs{\tw (\D)}\to \C\]
 
-To repeat myself more clearly, the left-focused end
-\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
-is the set consisting of the functions
-\[ M_\tau : N^{c t^e_d}_{b t^d_e} \to Q^b_c \]
-for (perhaps some restricted set of) twisted morphisms
-\[
-\tau : f \to s \qquad=\qquad
-\begin{tikzcd}
-  d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
-b \ar[r, "s"']&c
-\end{tikzcd}
-\]
-such that, for any such $t$,
-\[
-\begin{tikzcd}
-N^{c t^c_b}_{b t^b_c} \ar[r] \ar[d, "M_{\rid_s}"']
-& N^{c t^e_d}_{b t^d_e}\ar[d, "M_\tau" description]
-& N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]
-\\[1em]
-Q^b_c \ar[r, equal]& Q^b_c\ar[r] &Q^d_e
-\end{tikzcd}
-\]
-\begin{lemma}[Focused Ends imply Ends]
-\[
-\erule
-{\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
-{\int_\alpha N\sw{\alpha t\sw\alpha} \to Q\sw \alpha}
-\]
-\end{lemma}
+%% \section{General Forall Left Attempt Again}
 
-\begin{proof}
-For any $d$, we need to construct $L_d : N\sw{d t\sw d} \to Q\sw d$.
-We set $L_d = M_{\rid_{\rid_d}}$. Then for any $f : d\to e$, chase
-the following diagram to see that we've made
-an end:
-\[
-\begin{tikzcd}
-N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] &  & N^{et^d_e}_{dt^e_d} \arrow[ll] \arrow[rr] \arrow[d] &  & N^{et^e_e}_{et^e_e} \arrow[dd, "M_{\rid_{\rid_e}}"] \arrow[ld] \\
-& N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[d, "M_{\rid_f}"] \arrow[l] \arrow[r] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
-Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
-\end{tikzcd}
-\]
-\cqed
-\end{proof}
+%% Let's look again at
+%% \[
+%% \erule
+%% {[N]^{[t/\alpha]}_\alpha \prov Q}
+%% {\forall \alpha . N \prov Q}
+%% \]
+%% Semantically this is claiming
+%% \[
+%% \erule
+%% {\int_\alpha [N^{\alpha\beta}_{\alpha\beta}]^{[t\sw \alpha/\beta]}_\beta \to Q^\alpha_\alpha}
+%% {\int_\alpha \left(\int_\beta  N^{\alpha\beta}_{\alpha\beta}\right) \to  Q^\alpha_\alpha}
+%% \]
+%% where we have to come up with the meaning for the left-focused end. We expect to have
+%% at least the ordinary end
+%% \[ M \in \int_\alpha N \sw{\alpha t\sw\alpha} \to Q^\alpha_\alpha \chave\]
+%% with some kind of extra data, and we want to get
+%% \[ L \in \int_\alpha \left(\int_\beta N \sw{\alpha \beta}\right) \to Q^\alpha_\alpha \cwant\]
+%% and the implementation on the diagonal is
+%% \[ L_d(x) = M_d(x_{t\sw d})\]
+%% So then the end properties we have are
+%% \[ Q_f \o M_d \o N^{ft_f}_{\cdot t^f} = Q^f \o M_e \o N^{\cdot t^f}_{f t_f}  : N^{e t^d_e}_{d t^e_d}  \to Q^d_e\chave\]
+%% and the one we want is
+%% \[ Q_f \o L_d \o  \left(\int_\beta N^{f \beta}_{\cdot \beta}\right)
+%% =  Q^f \o L_e \o  \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right) \cwant\]
+%% which by extensionality is
+%% \[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+%% Q_f  L_d   \left(\int_\beta N^{f \beta}_{\cdot \beta}\right) (z)
+%% =  Q^f  L_e   \left(\int_{\beta } N^{\cdot \beta }_{f\beta }\right)(z) \cwant\]
+%% which expands upon plugging in the definition of $L$ to
+%% \[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+%%  Q_f  M_d    N^{f} z_{t\sw d}
+%% =  Q^f  M_e    N_{f }z_{t\sw e} \cwant\]
+%% Now the end property of $z$ is
+%% \[ N^{e}_{d \phi} z_\delta = N^{e\phi }_{d } z_\epsilon   \chave\]
 
-Actually I'm not sure I really need this lemma directly in exactly
-this way, as the focus rule wouldn't force you to factorize the
-proposition you already have in terms of some made-up substitution.
-Still feels good as a sanity-check, though. Maybe this reasoning will
-come in handy later.
+%% \subsection{The Extra Piece of Data}
+%% I was before attempting to ask for something like the following, but I'm going
+%% to try to simplify as much as I can along the way. If I have a pair
+%% of arrows
+%% \[
+%% \begin{tikzcd}
+%%   d \ar[r, "j"]& x \ar[r, "k"] & e
+%% \end{tikzcd}
+%% \]
+%% then I'm going to ask $M$ to provide
+%% \[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
+%% and perhaps a reasonable thing to ask is that
+%% \[M_x^{jk} \o N^{\cdot t^k_j}_{\cdot t^j_k} = M_x\]
+%% Now if this is the case I can rewrite my goal to
+%% \[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+%%  Q_f  M^{\cdot f}_d N^{\cdot t^f}_{\cdot t_f}    N^{f} z_{t\sw d}
+%% =  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
+%% and using the end-property of $z$ four times I get
+%% \[\left(z : \int_\beta N^{e \beta}_{d \beta} \right) \to
+%%  Q_f  M^{\cdot f}_d N^{\cdot t_f}_{\cdot t^f}    N^{f} z_{t\sw e}
+%% =  Q^f  M^{f \cdot }_e  N^{\cdot t_f}_{\cdot t^f}  N_{f }z_{t\sw e} \cwant\]
+%% Hm... I think I'm stuck here. I can't possibly get $N^{et^d_e}_{dt^e_d}$ by
+%% any projection from $z$, can I? So I need the condition on the extra data
+%% to mention that end explicitly. Guess I simplified too much.
+%% \subsection{Another Attempt At Extra Data}
+%% I'm still going to say that if I have a pair
+%% of arrows
+%% \[
+%% \begin{tikzcd}
+%%   d \ar[r, "j"]& x \ar[r, "k"] & e
+%% \end{tikzcd}
+%% \]
+%% then I'm going to ask $M$ to provide
+%% \[M_x^{jk} : N^{x t^{e}_{d}}_{x t^{d}_{e}} \to Q^x_x\]
+%% but the diagram I ask for is a bit different. I'll demand
+%% \[\begin{tikzcd}
+%%   \int_\beta N^{e\beta}_{d\beta} \ar[d, "\pi_{t^d_e}"'] \ar[r, "\pi_{t\sw x}"]
+%% & N^{et^x_x}_{dt^x_x}
+%% \ar[r, "N^{k}_{j}"]
+%% & N^{xt^x_x}_{xt^x_x}
+%% \ar[dr, bend left, "M_x"]
+%% \\
+%% N^{e t^d_e}_{d t^d_e}
+%% \ar[r, "N^{\cdot t\sw f}"']
+%% & N^{e t^e_d}_{d t^d_e}
+%% \ar[r, "N^{k}_j"']
+%% & N^{x t^e_d}_{x t^d_e}
+%% \ar[r, "M^{jk}_x"']
+%% & Q \sw x
+%% \end{tikzcd}\]
 
-\begin{lemma}[Focused Ends support Forall Left]
-\[
-\erule
-{\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
-{\int_\alpha \left(\int_\beta N\sw{\alpha \beta}\right) \to Q\sw \alpha}
-\]
-\end{lemma}
+%% Now if $M$ really is an end, then I should have... arg.
+%% %% \subsection{Going Back to What I did Before}
+%% %% Trying to guess in the middle of so much noise is still hard. Let me go incrementally
+%% %% from what I know works. I'm not going to even pay attention to the end property
+%% %% of $M$ itself; I'm just going to try to capture what's necessary for it as a super-end.
+%% %% Perhaps I'll going to go all the way back to $M_{<f}$ and $M_{>f}$ nonsense, even.
 
-\begin{proof}
-We have a focused end $M_\tau$. We're trying to make
-\[ L_d : \left( \int_\beta N\sw{d \beta} \right) \to Q\sw d \cwant \]
-so we set
-\[L_d(z) = M_{\rid_{\rid_d}} (z_{t^d_d})\]
-and we need to check that
-\[
-\left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
-Q_f  L_d  \left( \int N^f \right) (z)
-= Q^f  L_e  \left( \int N_f \right) (z) \]
-which means
-\[
-\left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
-Q_f  M_{\rid_{\rid_d}}   N^f  (z_{t\sw d})
-= Q^f  M_{\rid_{\rid_e}}   N_f  (z_{t\sw e}) \]
-which we can prove by chasing
-\[\begin{tikzcd}
-N^{et^d_d}_{dt^d_d} \arrow[d] \arrow[rd] &  & \int_\beta N^{e\beta}_{d\beta} \arrow[ll, orange] \arrow[d, orange] \arrow[rr, orange] &  & N^{et^e_e}_{dt^e_e} \arrow[ld] \arrow[d] \\
-N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] & N^{et^d_d}_{dt^d_e} \arrow[d] & N^{et^d_e}_{dt^d_e} \arrow[l] \arrow[d] \arrow[r] & N^{et^e_e}_{dt^d_e} \arrow[d] & N^{et^e_e}_{et^e_e} \arrow[ld] \arrow[dd, "M_{\rid_{\rid_e}}"] \\
-& N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[l] \arrow[r] \arrow[d, "M_{\rid_f}"] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
-Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
-\end{tikzcd}\]
-\cqed
-\end{proof}
+%% %% The critical thing is still that $M_d$ factors through $N^{dt^e_d}_{dt^e_d}$
+%% %% and $M_e$ factors through $N^{et^e_d}_{et^e_d}$. Let's say
+%% %% \[
+%% %% \begin{tikzcd}
+%% %%   N^{dt^d_d}_{dt^d_d} \ar[r, "{N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}}"] & N^{dt^e_d}_{dt^d_e}\ar[r, "M_{<f}"] & Q^d_d
+%% %% \end{tikzcd}
+%% %% \]
+%% %% and also $M_e$ factors as
+%% %% \[
+%% %% \begin{tikzcd}
+%% %%   N^{et^e_e}_{et^e_e} \ar[r, "{N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}}"] & N^{et^e_d}_{et^d_e}\ar[r, "M_{>f}"] & Q^e_e
+%% %% \end{tikzcd}
+%% %% \]
+%% %% \[ \left(z : \int_\alpha N^{e \alpha}_{d \alpha}\right) \to\]
+%% %% \[  Q_f  M_d   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}
+%% %% =  Q_f  (M_{<f}) N^{\cdot t^f_\cdot}_{\cdot t^\cdot_f}   N^{f\cdot}_{{\cdot}{\cdot}} z_{t^d_d}\]
+%% %% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N^{\cdot\cdot}_{\cdot t^\cdot_f} z_{t^d_d}\]
+%% %% \[=  Q_f  (M_{<f})    N^{f\cdot}_{{\cdot}{\cdot}} N^{\cdot t^f_\cdot}_{\cdot\cdot} N_{\cdot\cdot}^{\cdot t^\cdot_f} z_{t^d_e}\]
+%% %% \[=  Q_f  (M_{<f})     N^{f t^f_f}_{\cdot\cdot}  z_{t^d_e}\]
+%% %% and from the other side I have
+%% %% \[  Q^f  M_e   N^{\cdot \cdot}_{f\cdot} z_{t^e_e}
+%% %% =  Q^f  (M_{>f}) N^{\cdot t^\cdot_f}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} z_{t^e_e} \]
+%% %% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot t^\cdot_f}_{\cdot \cdot} z_{t^e_e} \]
+%% %% \[=  Q^f  (M_{>f}) N^{\cdot \cdot}_{\cdot t^f_\cdot}   N^{\cdot \cdot}_{f\cdot} N^{\cdot \cdot}_{\cdot t^\cdot_f} z_{t^e_d} \]
+%% %% \[=  Q^f  (M_{>f})   N^{\cdot \cdot}_{ft^f_f}  z_{t^e_d} \]
 
-\begin{lemma}[Focused Ends support Covariant Blur]
-\[
-\erule
-{\int_\alpha N^\alpha_{\alpha t\sw \alpha} \to Q\sw \alpha}
-{\int_\alpha [N^\alpha_{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
-\]
-\end{lemma}
+%% \subsection{Let's try this}
 
-\begin{proof}
-We have $M_d : N^d_{dt^d_d} \to Q\sw d$ and we know that
-\[ Q_f \o M_d \o N^f_{\cdot t^f}  = Q^f \o M_e \o N_{f t_f}\chave\]
-and we want to come up with
-\[ L_\tau : N^{c }_{b t^d_e} \to Q^b_c \cwant\]
-and... oooh, we can't, quite. We could, however make
-\[ L_\tau : N^{c }_{b t^e_d} \to Q^b_c \]
-by setting
-\[ L_\tau(x) = M_b(N^s_{\cdot t^{os}_i} x)\]
-Don't know what I can make with that though.
-\cqed
-\end{proof}
+%% Say for all `appropriate' twisted arrows
+%% \[
+%% t : f \to s \qquad=\qquad
+%% \begin{tikzcd}
+%%   d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
+%% b \ar[r, "s"']&c
+%% \end{tikzcd}
+%% \]
+%% We're supposed to have $M_t : N^{c t^e_d}_{b t^d_e} \to Q^b_c$. And if
+%% we have two different $t : f \to s$ and $t' : f \to s'$ out of the same $f$, then
+%% we want the following diagram to commute:
+%% \[
+%% \begin{tikzcd}
+%% N^{et^c_b}_{dt^b_c}\ar[d]
+%% &\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[r]
+%% & N^{et^{c'}_{b'}}_{dt^{b'}_{c'}}\ar[d]\\
+%% N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] && N^{c' t^e_d}_{b' t^d_e} \ar[d, "M_{t'}"]\\
+%% Q^b_c\ar[r] &Q^d_e & Q^{b'}_{c'}\ar[l]
+%% \end{tikzcd}
+%% \]
+%% So this actually now makes $\rid_f$ seem like an acceptable twisted arrow, since it
+%% only gets us a function $N^{et^e_d}_{dt^d_e} \to Q^d_e$, which is more end-like. And
+%% then we could just demand the diagram
+%% \[
+%% \begin{tikzcd}
+%% N^{et^c_b}_{dt^b_c}\ar[d]
+%% &\int_\beta N^{e\beta}_{d\beta}\ar[l]\ar[d]\\
+%% N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\\
+%% Q^b_c\ar[r] &Q^d_e
+%% \end{tikzcd}
+%% \]
+%% indeed can I require only the bottom half of this??
+%% \[
+%% \begin{tikzcd}
+%% N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]\\
+%% Q^b_c\ar[r] &Q^d_e
+%% \end{tikzcd}
+%% \]
+%% I think I may also want
+%% \[
+%% \begin{tikzcd}
+%% N^{c t^e_d}_{b t^d_e}\ar[d, "M_t"'] & N^{c t^c_b}_{b t^b_c} \ar[dl, "M_{\rid_s}", bend left]\ar[l]\\
+%% Q^b_c
+%% \end{tikzcd}
+%% \]
+%% to get that focused ends are ends.
 
-Dang, I thought I was close, and now I'm confused again. Probably should
-establish that it works with more special-case tools first.
+%% \section{Trying To Check These Definitions}
 
-\section{Going Way Back}
-I would have thought that an inhabitant of a left-focused end
-\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
-gives functions
-\[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
-\[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
-but I can't build either of these out of
-\[ M : N \sw {d t\sw d} \to Q \sw d\]
-even under the assumption that $N$ is univariant, can I? Could it be that I want to ask for
-\[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
-\[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
-What {\em can} I build out of this end $M$ when $N$ is univariant? Ok, when $N$ is covariant,
-the most I can build is
-\[  N^{e }_{d t^e_d} \to Q^d_e \]
-and the maximally specialized things I {\em can} build that are better than that are
-\[  N^{d }_{d t^d_d} \to Q^d_d \]
-\[  N^{e }_{e t^e_e} \to Q^e_e \]
-$\ldots$ don't know what to think about this.
-\section{Forall Left on a Product of Different Variances}
-Drawing out a diagram for
-\[
-\erule
-{ \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
-{\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
-\]
-which looks like
-\[\begin{tikzcd}
-\int_\beta F^d_{d\beta} \times H^{d\beta}_d \arrow[rdd, dotted] \arrow[ddd, "P_d"'] &  & \int_\beta F^e_{d\beta} \times H^{e\beta}_d \arrow[ll] \arrow[rr] \arrow[ld, dotted] \arrow[rd, dotted] \arrow[dd, "{\langle \pi_1\pi_{t^e_d},\pi_2\pi_{t^d_e}\rangle}" description, red] &  & \int_\beta F^e_{e\beta} \times H^{e\beta}_e \arrow[ldd, dotted] \arrow[ddd, "P_e"] \\
- & F^e_{d{t^d_d}} \times H^{e{t^d_d}}_d \arrow[d] &  & F^e_{d{t^e_e}} \times H^{e{t^e_e}}_d \arrow[d] &  \\
- & F^d_{dt^d_d} \times H^{dt^d_d}_d \arrow[ld, "M_d" description] & F^e_{dt^e_d} \times H^{et^d_e}_d \arrow[l] \arrow[r] & F^e_{et^e_e} \times H^{et^e_e}_e \arrow[rd, "M_e" description] &  \\
-G^d_d \arrow[rr] &  & G^d_e &  & G^e_e \arrow[ll]
-\end{tikzcd}\]
-makes me think there's something useful about, in the context of having a `focusable' type
-in the $N$-position of
-\[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
-of having a map
-\[ \left(\int_\beta N^{e\beta}_{d\beta}\right) \to N^{e t^d_e}_{d t^e_d} \]
-which role is played by the red arrow in the diagram.
+%% To repeat myself more clearly, the left-focused end
+%% \[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+%% is the set consisting of the functions
+%% \[ M_\tau : N^{c t^e_d}_{b t^d_e} \to Q^b_c \]
+%% for (perhaps some restricted set of) twisted morphisms
+%% \[
+%% \tau : f \to s \qquad=\qquad
+%% \begin{tikzcd}
+%%   d\ar[r, "f"]\ar[d, "i"']&e\ar[from=d, "o"']\\
+%% b \ar[r, "s"']&c
+%% \end{tikzcd}
+%% \]
+%% such that, for any such $t$,
+%% \[
+%% \begin{tikzcd}
+%% N^{c t^c_b}_{b t^b_c} \ar[r] \ar[d, "M_{\rid_s}"']
+%% & N^{c t^e_d}_{b t^d_e}\ar[d, "M_\tau" description]
+%% & N^{e t^e_d}_{d t^d_e} \ar[d, "M_{\rid_f}"]\ar[l]
+%% \\[1em]
+%% Q^b_c \ar[r, equal]& Q^b_c\ar[r] &Q^d_e
+%% \end{tikzcd}
+%% \]
+%% \begin{lemma}[Focused Ends imply Ends]
+%% \[
+%% \erule
+%% {\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+%% {\int_\alpha N\sw{\alpha t\sw\alpha} \to Q\sw \alpha}
+%% \]
+%% \end{lemma}
 
-\section{Something Like a Shift}
+%% \begin{proof}
+%% For any $d$, we need to construct $L_d : N\sw{d t\sw d} \to Q\sw d$.
+%% We set $L_d = M_{\rid_{\rid_d}}$. Then for any $f : d\to e$, chase
+%% the following diagram to see that we've made
+%% an end:
+%% \[
+%% \begin{tikzcd}
+%% N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] &  & N^{et^d_e}_{dt^e_d} \arrow[ll] \arrow[rr] \arrow[d] &  & N^{et^e_e}_{et^e_e} \arrow[dd, "M_{\rid_{\rid_e}}"] \arrow[ld] \\
+%% & N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[d, "M_{\rid_f}"] \arrow[l] \arrow[r] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
+%% Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
+%% \end{tikzcd}
+%% \]
+%% \cqed
+%% \end{proof}
+
+%% Actually I'm not sure I really need this lemma directly in exactly
+%% this way, as the focus rule wouldn't force you to factorize the
+%% proposition you already have in terms of some made-up substitution.
+%% Still feels good as a sanity-check, though. Maybe this reasoning will
+%% come in handy later.
+
+%% \begin{lemma}[Focused Ends support Forall Left]
+%% \[
+%% \erule
+%% {\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+%% {\int_\alpha \left(\int_\beta N\sw{\alpha \beta}\right) \to Q\sw \alpha}
+%% \]
+%% \end{lemma}
+
+%% \begin{proof}
+%% We have a focused end $M_\tau$. We're trying to make
+%% \[ L_d : \left( \int_\beta N\sw{d \beta} \right) \to Q\sw d \cwant \]
+%% so we set
+%% \[L_d(z) = M_{\rid_{\rid_d}} (z_{t^d_d})\]
+%% and we need to check that
+%% \[
+%% \left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
+%% Q_f  L_d  \left( \int N^f \right) (z)
+%% = Q^f  L_e  \left( \int N_f \right) (z) \]
+%% which means
+%% \[
+%% \left(z : \int_\beta N^{e \beta}_{d \beta}\right) \to
+%% Q_f  M_{\rid_{\rid_d}}   N^f  (z_{t\sw d})
+%% = Q^f  M_{\rid_{\rid_e}}   N_f  (z_{t\sw e}) \]
+%% which we can prove by chasing
+%% \[\begin{tikzcd}
+%% N^{et^d_d}_{dt^d_d} \arrow[d] \arrow[rd] &  & \int_\beta N^{e\beta}_{d\beta} \arrow[ll, orange] \arrow[d, orange] \arrow[rr, orange] &  & N^{et^e_e}_{dt^e_e} \arrow[ld] \arrow[d] \\
+%% N^{dt^d_d}_{dt^d_d} \arrow[dd, "M_{\rid_{\rid_d}}"'] \arrow[rd] & N^{et^d_d}_{dt^d_e} \arrow[d] & N^{et^d_e}_{dt^d_e} \arrow[l] \arrow[d] \arrow[r] & N^{et^e_e}_{dt^d_e} \arrow[d] & N^{et^e_e}_{et^e_e} \arrow[ld] \arrow[dd, "M_{\rid_{\rid_e}}"] \\
+%% & N^{dt^e_d}_{dt^d_e} \arrow[d, "M_{\lhd f}"] & N^{et^e_d}_{dt^d_e} \arrow[l] \arrow[r] \arrow[d, "M_{\rid_f}"] & N^{et^e_d}_{et^d_e} \arrow[d, "M_{\rhd f}"] &  \\
+%% Q^d_d \arrow[r, equal] & Q^d_d \arrow[r] & Q^d_e & Q^e_e \arrow[l] & Q^e_e \arrow[l, equal]
+%% \end{tikzcd}\]
+%% \cqed
+%% \end{proof}
+
+%% \begin{lemma}[Focused Ends support Covariant Blur]
+%% \[
+%% \erule
+%% {\int_\alpha N^\alpha_{\alpha t\sw \alpha} \to Q\sw \alpha}
+%% {\int_\alpha [N^\alpha_{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha}
+%% \]
+%% \end{lemma}
+
+%% \begin{proof}
+%% We have $M_d : N^d_{dt^d_d} \to Q\sw d$ and we know that
+%% \[ Q_f \o M_d \o N^f_{\cdot t^f}  = Q^f \o M_e \o N_{f t_f}\chave\]
+%% and we want to come up with
+%% \[ L_\tau : N^{c }_{b t^d_e} \to Q^b_c \cwant\]
+%% and... oooh, we can't, quite. We could, however make
+%% \[ L_\tau : N^{c }_{b t^e_d} \to Q^b_c \]
+%% by setting
+%% \[ L_\tau(x) = M_b(N^s_{\cdot t^{os}_i} x)\]
+%% Don't know what I can make with that though.
+%% \cqed
+%% \end{proof}
+
+%% Dang, I thought I was close, and now I'm confused again. Probably should
+%% establish that it works with more special-case tools first.
+
+%% \section{Going Way Back}
+%% I would have thought that an inhabitant of a left-focused end
+%% \[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+%% gives functions
+%% \[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
+%% \[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
+%% but I can't build either of these out of
+%% \[ M : N \sw {d t\sw d} \to Q \sw d\]
+%% even under the assumption that $N$ is univariant, can I? Could it be that I want to ask for
+%% \[ M_{< f} : N^{d t^e_d}_{d t^d_e} \to Q^d_d \]
+%% \[ M_{> f} : N^{e t^e_d}_{e t^d_e} \to Q^e_e \]
+%% What {\em can} I build out of this end $M$ when $N$ is univariant? Ok, when $N$ is covariant,
+%% the most I can build is
+%% \[  N^{e }_{d t^e_d} \to Q^d_e \]
+%% and the maximally specialized things I {\em can} build that are better than that are
+%% \[  N^{d }_{d t^d_d} \to Q^d_d \]
+%% \[  N^{e }_{e t^e_e} \to Q^e_e \]
+%% $\ldots$ don't know what to think about this.
+%% \section{Forall Left on a Product of Different Variances}
+%% Drawing out a diagram for
+%% \[
+%% \erule
+%% { \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
+%% {\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
+%% \]
+%% which looks like
+%% \[\begin{tikzcd}
+%% \int_\beta F^d_{d\beta} \times H^{d\beta}_d \arrow[rdd, dotted] \arrow[ddd, "P_d"'] &  & \int_\beta F^e_{d\beta} \times H^{e\beta}_d \arrow[ll] \arrow[rr] \arrow[ld, dotted] \arrow[rd, dotted] \arrow[dd, "{\langle \pi_1\pi_{t^e_d},\pi_2\pi_{t^d_e}\rangle}" description, red] &  & \int_\beta F^e_{e\beta} \times H^{e\beta}_e \arrow[ldd, dotted] \arrow[ddd, "P_e"] \\
+%%  & F^e_{d{t^d_d}} \times H^{e{t^d_d}}_d \arrow[d] &  & F^e_{d{t^e_e}} \times H^{e{t^e_e}}_d \arrow[d] &  \\
+%%  & F^d_{dt^d_d} \times H^{dt^d_d}_d \arrow[ld, "M_d" description] & F^e_{dt^e_d} \times H^{et^d_e}_d \arrow[l] \arrow[r] & F^e_{et^e_e} \times H^{et^e_e}_e \arrow[rd, "M_e" description] &  \\
+%% G^d_d \arrow[rr] &  & G^d_e &  & G^e_e \arrow[ll]
+%% \end{tikzcd}\]
+%% makes me think there's something useful about, in the context of having a `focusable' type
+%% in the $N$-position of
+%% \[\int_\alpha [N\sw{\alpha\beta}]^{[t\sw\alpha/\beta]}_\beta \to Q\sw \alpha\]
+%% of having a map
+%% \[ \left(\int_\beta N^{e\beta}_{d\beta}\right) \to N^{e t^d_e}_{d t^e_d} \]
+%% which role is played by the red arrow in the diagram.
+
+\section{Attempting Other Examples}
+\subsection{Something Like a Shift}
 \[
 \erule
 { \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha}}
 {\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta} \to G\sw{\alpha \beta}\right) \to G\sw {\alpha t\sw \alpha}}
 \]
 
+\subsection{Something In Positive Focus}
+\[
+\erule
+{\int_\alpha G^\alpha_\alpha \to F^\alpha_{\alpha t\sw \alpha} \x H^{\alpha t\sw \alpha}_\alpha}
+{\int_\alpha G^\alpha_\alpha \to \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\]
+We have
+\[ M_d : G^d_d \to F^d_{d t\sw d} \x H^{d t\sw d}_d \]
+and we want to construct
+\[ L_d : G^d_d \to \int^\beta F^d_{d \beta} \x H^{d \beta}_d \]
+so we set
+\[ L_d(g) = \pair{t\sw d}{M_d(g)} \]
+and we want to check
+\[(\int F_{f } \x H^{ }_f) \o L_d \o G^f =
+(\int F^f_{ } \x H^{f }) \o L_e \o G_f \]
+which means
+\[(\int F_{f } \x H^{ }_f)  \pair{t\sw d}{M_d(G^f g)}   =
+(\int F^f_{ } \x H^{f })  \pair{t\sw e}{M_e(G_f g)}   \]
+which means both of
+\[  \pair{t\sw d}{F_{f }   M^1_d(G^f g)}   =
+  \pair{t\sw e}{F^f M^1_e(G_f g)}   : G^e_d \to \int_\beta F^d_{e\beta}\]
+\[   \pair{t\sw d}{H_f M^2_d(G^f g)}   =
+ \pair{t\sw e}{H^{f }M^2_e(G_f g)}  : G^e_d \to \int_\beta H^{d\beta}_{e} \]
+Recall that the coend property for $\int_{\beta\in\B} F^d_{e\beta}$ says that
+for any $\phi : \delta \to \epsilon \in \B$ and $x : F^d_{e \delta}$,
+\[  \pair{\delta}{x}   =
+  \pair{\epsilon}{ F^d_{e\phi} x}   :  \int_\beta F^d_{e\beta}\]
+So I suspect I either want to think about $t^d_d \to t^d_e \leftarrow t^e_e$
+or $t^d_d \leftarrow t^e_d \to t^e_e$. What do I get out of these four arrows?
+
+\[  \pair{t^d_d}{x} = \pair{t^d_e}{ F^d_{e t_f} x} : \int_\beta F^d_{e\beta}
+\qquad
+  \pair{t^e_e}{x} = \pair{t^d_e}{ F^d_{e t^f} x} : \int_\beta F^d_{e\beta}\]
+\[  \pair{t^e_d}{x} = \pair{t^d_d}{ F^d_{e t^f} x} : \int_\beta F^d_{e\beta}
+\qquad
+  \pair{t^e_d}{x} = \pair{t^e_e}{ F^d_{e t_f} x} : \int_\beta F^d_{e\beta}\]
+Right, good, since what I already {\em have} is coend packs at $t^d_d$ and $t^e_e$, what
+I want is the first two. Using these I can transform my first goal to
+\[  \pair{t^d_e}{F_{ft_f }   M^1_d(G^f g)}   =
+  \pair{t^d_e}{F^f_{t^f} M^1_e(G_f g)}   : G^e_d \to \int_\beta F^d_{e\beta}\]
+and then
+\[  {F_{ft_f }   M^1_d(G^f g)}   =
+  {F^f_{t^f} M^1_e(G_f g)}   : G^e_d \to  F^d_{et^d_e}\]
+is provided by the end-property of $M$.
+
+\subsection{Trying To Guess at an Intermediate Property}
+Suppose we're trying to validate
+\[
+\erule
+{\int_\alpha G^\alpha_\alpha \to F^{\alpha t\sw\alpha}_{\alpha t\sw \alpha} }
+{\int_\alpha G^\alpha_\alpha \to \int^\beta F \sw {\alpha \beta} }
+\]
+but we have in our back pocket a map
+\[  F^{d t^e_d}_{e t^d_e} \to \left(\int^\beta F^{d\beta}_{e\beta}\right)\]
+The crucial commutativities we had in the $\forall L$ case I think were like
+the diagram (where $K = F \x H$)
+\[
+\begin{tikzcd}
+   K^{e t\sw d}_{d t\sw d} \ar[from=r, dotted] \ar[d]
+& \int_\beta K^{e\beta}_{d\beta} \ar[d, red] \ar[r, dotted] & K^{et\sw e}_{dt \sw e} \ar[d]\\
+   K \sw {d t\sw d} \ar[from=r] & K^{e t^d_e}_{d t^e_d}\ar[r] & K\sw {e t\sw e}\\
+\end{tikzcd}
+\]
+so I guess dually I want to demand
+\[
+\begin{tikzcd}
+ F\sw {d t\sw d} \ar[r] & F^{d t^e_d}_{e t^d_e}\ar[from=r] &   F \sw {e t\sw e}\\
+F^{dt\sw d}_{et \sw d}  \ar[r, dotted] \ar[from=u]
+& \int^\beta F^{d\beta}_{e\beta} \ar[from=u, red] \ar[from=r, dotted]
+&   F^{d t\sw e}_{e t\sw e} \ar[from=u]
+\end{tikzcd}
+\]
+
+Let's first make sure that I really believe that
+\[  F^{d }_{e t^d_e} \x H^{d t^e_d}_{e } \to
+\left(\int^\beta F^{d}_{e\beta}\x H^{d\beta}_{e}\right)\]
+because... heck, I don't think I do.
+\subsection{Doing That Example More Carefully}
+I think splitting the product so recklessly was a bad idea, but I should
+still be able to make progress by step-by-step doing equations. Let's go
+back to the point where we need
+\[(\int F_{f } \x H^{ }_f)  \pair{t\sw d}{M_d(G^f g)}   =
+(\int F^f_{ } \x H^{f })  \pair{t\sw e}{M_e(G_f g)}   \cwant\]
+which is still I think the same as
+\[  \pair{t\sw d}{F_f M^1_d(G^f g), H_f M^2_d(G^f g)}   =
+ \pair{t\sw e}{F^f M^1_e(G_f g), H^f M^2_e(G_f g)}   : \int_\beta F^d_{e\beta} \x H^{d\beta}_e\]
+even if I can't split the pair into two equations.
+
+But know, the only coend equations I seem to have are
+
+\[  \pair{t^d_d}{H^{d t_f}_e x} = \pair{t^d_e}{ F^d_{e t_f} x}
+\qquad
+  \pair{t^e_e}{H^{d t^f}_e x} = \pair{t^d_e}{ F^d_{e t^f} x}\]
+\[  \pair{t^e_d}{H^{d t^f}_e x} = \pair{t^d_d}{ F^d_{e t^f} x}
+\qquad
+  \pair{t^e_d}{H^{d t_f}_e x} = \pair{t^e_e}{ F^d_{e t_f} x}\]
+which I can't get going on.
+
+\subsection{Another Example I Might Think About}
+\[
+\erule
+{\int_\alpha G \sw { \alpha t \sw \alpha} \to F^\alpha_{\alpha t\sw \alpha} \x G \sw { \alpha t \sw \alpha}}
+{\int_\alpha G \sw { \alpha t \sw \alpha}
+\to \int^\beta F^\alpha_{\alpha \beta}  \x G\sw {\alpha \beta}}
+\]
+
+\subsection{Hunting For Counterexamples}
+What's a counterexample to
+\[
+\erule
+{\int_\alpha G \sw { \alpha } \to F \sw {\alpha t\sw \alpha}}
+{\int_\alpha G \sw { \alpha } \to \int^\beta F \sw {\alpha \beta}}
+\]
+? Can go through the proof and see where it breaks. We have
+$M_d :  G \sw { d  } \to F \sw {d  t\sw d }$. We try to set
+\[L_d(g) = \pair{t\sw d}{M_d(g)}\]
+we want to check
+\[(\int F_f) \o L_d \o G^f = (\int F^f) \o L_e \o G_f\]
+i.e.
+\[  \pair{t\sw d}{F_f M_d  G^f g} =  \pair{t\sw e}{F^f M_e  G_f g}\]
+but the end property of $M$ requires more $t^f/t_f$-ish transport, and the coend
+property of $g : \int^\beta F^{e\beta}_{d\beta}$ only says
+\[(x : F^{e\epsilon}_{d\delta})\to  \pair{\delta}{F^{\cdot \phi} x} =  \pair{\epsilon}{F_{\cdot \phi} x}\]
+
+My first instinct for how to break
+\[\int_\alpha G \sw { \alpha } \to \int^\beta F \sw {\alpha \beta}\]
+is to make $G \sw { \alpha } \to \int^\beta F \sw {\alpha \beta}$ as a function of
+$\alpha$ be 0112.
+
+\subsubsection{Actually, Do I need $G$?}
+
+What's the status of just
+\[
+\erule
+{\int_\alpha F \sw {\alpha t\sw \alpha}}
+{\int_\alpha \int^\beta F \sw {\alpha \beta}}
+\]
+? We have
+$M_d :   F \sw {d  t\sw d }$. We try to set
+\[L_d = \pair{t\sw d}{M_d}\]
+we want to check
+\[(\int F_f)  L_d  = (\int F^f)  L_e : \int^\beta F^{d\beta}_{e\beta}\]
+i.e.
+\[  \pair{t\sw d}{F_f M_d } =  \pair{t\sw e}{F^f M_e }: \int^\beta F^{d\beta}_{e\beta}\]
+but the end property of $M$  is
+\[ F^{\cdot t^f}_{ft_f} M_d = F^{f t_f}_{\cdot t^f} M_e : F^{d t^e_d}_{et^d_e}\]
+ and the coend
+property of $\int^\beta F^{d\beta}_{e\beta}$ only says
+\[(x : F^{d\epsilon}_{e\delta})\to  \pair{\delta}{F^{\cdot \phi} x} =  \pair{\epsilon}{F_{\cdot \phi} x}\]
+
+My first instinct for how to make
+\[\int_\alpha  \int^\beta F \sw {\alpha \beta}\]
+empty is to have
+$\int^\beta F \sw {\alpha \beta}$ be 0112 with respect to $\alpha$ somehow.
+
+\subsubsection{Actually, Do I need $t$?}
+What's the status of just
+\[
+\erule
+{\int_\alpha F \sw {\alpha \alpha}}
+{\int_\alpha \int^\beta F \sw {\alpha \beta}}
+\]
+? We have
+$M_d :   F \sw {d  d }$. We try to set
+\[L_d = \pair{ d}{M_d}\]
+we want to check
+\[(\int F_f)  L_d  = (\int F^f)  L_e : \int^\beta F^{d\beta}_{e\beta}\]
+i.e.
+\[  \pair{ d}{F_f M_d } =  \pair{ e}{F^f M_e }: \int^\beta F^{d\beta}_{e\beta}\]
+The end property of $M$  is
+\[ F_{ff} M_d = F^{ff} M_e : F^{dd}_{ee}\]
+ and the coend
+property of $\int^\beta F^{d\beta}_{e\beta}$ says
+\[(x : F^{d\epsilon}_{e\delta})\to  \pair{\delta}{F^{\cdot \phi} x} =  \pair{\epsilon}{F_{\cdot \phi} x}\]
+for instance
+\[(x : F^{de}_{ed})\to  \pair{d}{F^{\cdot f} x} =  \pair{e}{F_{\cdot f} x}\]
+and I still can't seem to apply that.
+
+My first instinct for how to make
+\[\int_\alpha  \int^\beta F \sw {\alpha \beta}\]
+empty is to have
+$\int^\beta F \sw {\alpha \beta}$ be 0112 with respect to $\alpha$ somehow.
+I think I can achieve this by letting the following be singletons:
+\[F^{dd}_{dd}\qquad F^{dd}_{de} \qquad \qquad F^{ee}_{ee}\qquad F^{ed}_{ee}\]
+\[F^{dd}_{ed}\qquad F^{dd}_{ee} \qquad F^{de}_{ee}\]
+and the remainder of $F$ empty. Here's a diagram:
+\def\inh#1{\textcolor{blue}{#1}}
+\[
+\begin{tikzcd}
+  F^{ee}_{dd} \ar[r]\ar[d]&   F^{ee}_{de}\ar[d] &   F^{ee}_{ed} \ar[r]\ar[d]&   \inh{F^{ee}_{ee}}\ar[d] \\
+  F^{ed}_{dd} \ar[r]&   F^{ed}_{de} &   F^{ed}_{ed} \ar[r]&   \inh{F^{ed}_{ee}} \\
+  F^{de}_{dd} \ar[r]\ar[d]&   F^{de}_{de}\ar[d] &   F^{de}_{ed} \ar[r]\ar[d]&   \inh{F^{de}_{ee}}\ar[d] \\
+  \inh{F^{dd}_{dd}} \ar[r]&   \inh{F^{dd}_{de}} &   \inh{F^{dd}_{ed}} \ar[r]&   \inh{F^{dd}_{ee}}
+\end{tikzcd}
+\]
+where the blue cells are inhabited, and the black cells are empty.
+
+\subsection{Attempting to factor $F$ as a product}
+If I take the product of
+\[
+\begin{tikzcd}
+  F^{ee}_{dd} \ar[r]\ar[d]&   F^{ee}_{de}\ar[d] &   F^{ee}_{ed} \ar[r]\ar[d]&   \inh{F^{ee}_{ee}}\ar[d] \\
+  F^{ed}_{dd} \ar[r]&   F^{ed}_{de} &   F^{ed}_{ed} \ar[r]&   \inh{F^{ed}_{ee}} \\
+  \inh{F^{de}_{dd}} \ar[r]\ar[d]&  \inh{ F^{de}_{de}}\ar[d] &  \inh{ F^{de}_{ed}} \ar[r]\ar[d]&   \inh{F^{de}_{ee}}\ar[d] \\
+  \inh{F^{dd}_{dd}} \ar[r]&   \inh{F^{dd}_{de}} &   \inh{F^{dd}_{ed}} \ar[r]&   \inh{F^{dd}_{ee}}
+\end{tikzcd}
+\]
+(which is mute in the argument $F^{\cdot \star}$)
+and
+\[
+\begin{tikzcd}
+  F^{ee}_{dd} \ar[r]\ar[d]&   F^{ee}_{de}\ar[d] &   \inh{F^{ee}_{ed}} \ar[r]\ar[d]&   \inh{F^{ee}_{ee}}\ar[d] \\
+  F^{ed}_{dd} \ar[r]&   F^{ed}_{de} &   \inh{F^{ed}_{ed}} \ar[r]&   \inh{F^{ed}_{ee}} \\
+  F^{de}_{dd} \ar[r]\ar[d]&   F^{de}_{de}\ar[d] &  \inh{ F^{de}_{ed}} \ar[r]\ar[d]&   \inh{F^{de}_{ee}}\ar[d] \\
+  \inh{F^{dd}_{dd}} \ar[r]&   \inh{F^{dd}_{de}} &   \inh{F^{dd}_{ed}} \ar[r]&   \inh{F^{dd}_{ee}}
+\end{tikzcd}
+\]
+(which is mute in the argument $F_{\cdot \star}$)
+I get
+\[
+\begin{tikzcd}
+  F^{ee}_{dd} \ar[r]\ar[d]&   F^{ee}_{de}\ar[d] &   F^{ee}_{ed} \ar[r]\ar[d]&   \inh{F^{ee}_{ee}}\ar[d] \\
+  F^{ed}_{dd} \ar[r]&   F^{ed}_{de} &   F^{ed}_{ed} \ar[r]&   \inh{F^{ed}_{ee}} \\
+  F^{de}_{dd} \ar[r]\ar[d]&   F^{de}_{de}\ar[d] &   \inh{F^{de}_{ed}} \ar[r]\ar[d]&   \inh{F^{de}_{ee}}\ar[d] \\
+  \inh{F^{dd}_{dd}} \ar[r]&   \inh{F^{dd}_{de}} &   \inh{F^{dd}_{ed}} \ar[r]&   \inh{F^{dd}_{ee}}
+\end{tikzcd}
+\]
+In which case crucially $\int^\beta F \sw {\alpha \beta}$ is 0111
+instead of 0112; the element in $F^{de}_{ed}$ forces the
+coequalization of the elements in $F^{dd}_{ed}$ and $F^{de}_{ee}$.
+
+\subsection{But Somehow This Product Case Works?}
+\[
+\erule
+{\int_\alpha F^\alpha_{\alpha \alpha} \x H^{\alpha \alpha}_\alpha}
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\]
+Let $M_d :  F^d_{d d} \x H^{d d}_d$. The end property is
+\[(F_{ff} \x H_f)  M_d = (F^{f} \x H^{ff})  M_e\]
+so here we can split and say
+\[F_{ff}   M^1_d = F^{f}  M^1_e\]
+\[ H_f  M^2_d =  H^{ff}  M^2_e\]
+We construct $L_d : \int^\beta F^d_{d \beta} \x H^{d \beta}_d$ as
+$L_d = \pair d {M_d}$. We need to show
+\[(\int F_{ f} \x H_f)  L_d = (F^f \cdot \x H^{ f})  L_e\]
+\[ \pair d {F_{ f} M^1_d, H_f M^2_d} = \pair e {F^f M^1_e, H^{ f} M^2_e} : \int^\beta F^d_{e\beta} \x H^{d\beta}_e\]
+we can transform our goal using the end property to
+\[ \pair d {F_{ f} M^1_d, H^{ff} M^2_e} = \pair e {F_{ff} M^1_e, H^{ f} M^2_e} : \int^\beta F^d_{e\beta} \x H^{d\beta}_e\]
+and now it's an instance of the coend property applied to
+$ \pair {F_f M^1_d} {H^f M^2_e} : F^{d}_{ed} \x H^{de}_{e} $.
+
+\subsection{How About a Product With Terms?}
+\[
+\erule
+{\int_\alpha F^\alpha_{\alpha t\sw \alpha} \x H^{\alpha t\sw \alpha}_\alpha}
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\]
+Let $M_d :  F^d_{d t\sw d} \x H^{d t\sw d}_d$. The end property is
+\[(F_{f t_f} \x H^{t^f}_f)  M_d = (F_{t^f}^{f} \x H^{f t_f})  M_e\]
+so here we can split and say
+\[F_{f t_f}   M^1_d = F_{t^f}^{f}  M^1_e\]
+\[ H^{t^f}_f  M^2_d =  H^{f t_f}  M^2_e\]
+We construct $L_d : \int^\beta F^d_{d \beta} \x H^{d \beta}_d$ as
+$L_d = \pair {t\sw d} {M_d}$. We need to show
+\[(\int F_{ f} \x H_f)  L_d = (F^f  \x H^{ f})  L_e\]
+\[ \pair {t\sw d} {F_{ f} M^1_d, H_f M^2_d} = \pair {t\sw e} {F^f M^1_e, H^{ f} M^2_e} : \int^\beta F^d_{e\beta} \x H^{d\beta}_e\]
+and it seems impossible to apply the end property at this stage.
+
+\subsection{A Term without Product?}
+\[
+\erule
+{\int_\alpha F^\alpha_{\alpha t\sw \alpha} }
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta}}
+\]
+Let $M_d :  F^d_{d t\sw d} $. The end property is
+\[F_{f t_f}  M_d = F_{\cdot t^f}^{f}  M_e\]
+We construct $L_d : \int^\beta F^d_{d \beta} $ as
+$L_d = \pair {t\sw d} {M_d}$. We need to show
+\[(\int F_{ f} )  L_d = (\int F^f )  L_e\]
+\[ \pair {t^d_d} {F_{ f} M_d} = \pair {t^e_e} {F^f M_e} : \int^\beta F^d_{e\beta} \]
+and it seems impossible to apply the end property at this stage.
+But since $F$ is covariant in $\beta$, we seem to be able to directly appeal
+to the coend property
+\[ (x : F^d_{e t\sw d}) \to   \pair{t^d_d}{x} = \pair{t^d_e}{ F_{\cdot t_f} x} : \int_\beta F^d_{e\beta}
+\qquad
+  (x : F^d_{e t\sw e}) \to \pair{t^e_e}{x} = \pair{t^d_e}{ F_{\cdot t^f} x} : \int_\beta F^d_{e\beta}\]
+to reduce this to
+\[ \pair {t^d_e} {F_{ f t_f} M_d} = \pair {t^d_e} {F^f_{\cdot t^f} M_e} : \int^\beta F^d_{e\beta} \]
+which now follows from the end property.
 \end{document}
