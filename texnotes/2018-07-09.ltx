@@ -502,4 +502,50 @@ So calculate
 \[= H^{qq} \o N_{CC} \o   \pair{ F_{q q}} {  M_{CC} \o F_{q q}} \eqno(M(q ,\rid_C))\]
 \[= H^{qq} \o N_{CC} \o   \pair{ \rid} {  M_{CC} } \o F_{q q} \]
 
+\subsubsection{What's the Sequent Proof Look Like}
+
+\[
+\erule
+{
+\[
+\[
+\[
+\justifies
+  F^{aa}_{aa}\prov F^{aa}_{aa}
+\]
+\qquad
+\[
+\[
+\[
+\justifies
+   F^{aa}_{aa} \prov F^{aa}_{aa}
+\]
+\[
+\justifies
+   G^a_{aa} \prov G^a_{aa}
+\]
+\[
+\justifies
+H^{aa}_{aa}    \prov H^{aa}_{aa}
+\]
+\justifies
+   G^a_{aa}, F^{aa}_{aa} \x G^a_{aa} \to H^{aa}_{aa},
+ F^{aa}_{aa} \prov H^{aa}_{aa}
+\]
+\justifies
+   G^a_{aa}, \forall ab . F^{ab}_{ab} \x G^a_{ab} \to H^{ab}_{ab},
+ F^{aa}_{aa} \prov H^{aa}_{aa}
+\]
+\justifies
+  F^{aa}_{aa} \imp G^a_{aa}, \forall ab . F^{ab}_{ab} \x G^a_{ab} \to H^{ab}_{ab},
+ F^{aa}_{aa} \prov H^{aa}_{aa}
+\]
+\justifies
+\forall ab . F^{ab}_{ab} \imp G^b_{ab}, \forall ab . F^{ab}_{ab} \x G^a_{ab} \to H^{ab}_{ab},
+ F^{aa}_{aa} \prov H^{aa}_{aa}
+\]}
+{\forall ab . F^{ab}_{ab} \imp G^b_{ab}, \forall ab . F^{ab}_{ab} \x G^a_{ab} \to H^{ab}_{ab} \prov
+\forall a . F^{aa}_{aa} \imp H^{aa}_{aa}
+}
+\]
 \end{document}
