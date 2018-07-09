@@ -2,6 +2,7 @@
 \usepackage[tmargin=0.05in, bmargin=0.05in]{geometry}
 \input{theorem}
 \input{prooftree}
+\usepackage{relsize}
 \usepackage{stmaryrd}
 \usepackage{latexsym}
 \usepackage{yfonts}
@@ -15,6 +16,10 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
 \def\chave{\eqno \textcolor{blue}{\hbox{have}}}
 \def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
 \def\gol{\sqsubset}
@@ -653,6 +658,7 @@ Drawing out a diagram for
 \erule
 { \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
 {\int_{\alpha \in \A} \left(\int_{\beta \in \B} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
+\isok ?
 \]
 which looks like
 \[\begin{tikzcd}
@@ -837,6 +843,7 @@ What's the status of just
 \erule
 {\int_\alpha F \sw {\alpha \alpha}}
 {\int_\alpha \int^\beta F \sw {\alpha \beta}}
+\isbad
 \]
 ? We have
 $M_d :   F \sw {d  d }$. We try to set
@@ -912,6 +919,7 @@ coequalization of the elements in $F^{dd}_{ed}$ and $F^{de}_{ee}$.
 \erule
 {\int_\alpha F^\alpha_{\alpha \alpha} \x H^{\alpha \alpha}_\alpha}
 {\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\isok
 \]
 Let $M_d :  F^d_{d d} \x H^{d d}_d$. The end property is
 \[(F_{ff} \x H_f)  M_d = (F^{f} \x H^{ff})  M_e\]
@@ -932,6 +940,7 @@ $ \pair {F_f M^1_d} {H^f M^2_e} : F^{d}_{ed} \x H^{de}_{e} $.
 \erule
 {\int_\alpha F^\alpha_{\alpha t\sw \alpha} \x H^{\alpha t\sw \alpha}_\alpha}
 {\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\isopen
 \]
 Let $M_d :  F^d_{d t\sw d} \x H^{d t\sw d}_d$. The end property is
 \[(F_{f t_f} \x H^{t^f}_f)  M_d = (F_{t^f}^{f} \x H^{f t_f})  M_e\]
@@ -949,6 +958,7 @@ and it seems impossible to apply the end property at this stage.
 \erule
 {\int_\alpha F^\alpha_{\alpha t\sw \alpha} }
 {\int_\alpha \int^\beta F^\alpha_{\alpha \beta}}
+\isok
 \]
 Let $M_d :  F^d_{d t\sw d} $. The end property is
 \[F_{f t_f}  M_d = F_{\cdot t^f}^{f}  M_e\]
@@ -965,4 +975,14 @@ to the coend property
 to reduce this to
 \[ \pair {t^d_e} {F_{ f t_f} M_d} = \pair {t^d_e} {F^f_{\cdot t^f} M_e} : \int^\beta F^d_{e\beta} \]
 which now follows from the end property.
+
+\subsection{What's the original 0112 Counterexample?}
+It was
+\[
+\erule
+{\int_\alpha F^\alpha_\alpha \to G\sw \alpha}
+{\left(\int_\alpha F^\alpha_\alpha\right) \to \int_\alpha G\sw \alpha}
+\isbad
+\]
+Set $F$ to 0111 and $G$ to 0112.
 \end{document}
