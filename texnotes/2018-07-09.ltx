@@ -469,4 +469,37 @@ So calculate
 \[= H^{qq} \o N_{CC} \o G_{q} \o  M_{cC} \o F^{q}_{\cdot q}  \eqno(N(q ,\rid_C))\]
 \[= H^{qq} \o N_{CC}  \o  M_{CC} \o F_{q q}  \eqno(M(q ,\rid_C))\]
 
+\subsection{Something Like the $\mathsf S$-combinator}
+\[
+\erule
+{\int_{\alpha\beta} F\sw{\alpha\beta} \to G^\beta_{\alpha\beta}
+\qquad \int_{\alpha\beta} F\sw{\alpha\beta} \x  G^\alpha_{\alpha\beta} \to H\sw{\alpha\beta}}
+{\int_\alpha F\sw{\alpha\alpha} \to H\sw{\alpha\alpha}}
+\isok
+\]
+we construct
+\[
+\erule
+{M_{ab} : F\sw{ab} \to G^b_{ab}\qquad N_{ab} :  F\sw{ab}\x G^a_{ab} \to H\sw{ab}}
+{L_a : F\sw{aa} \to H\sw{aa}}
+\]
+as $L_a(x) = N_{aa} \o \pair{\rid}{ M_{aa}}$. We have the end-properties
+\[ G_{fg} \o M_{ab} \o F^{f g} = G^g \o M_{AB} \o F_{f g} : F^{AB}_{ab} \to G^b_{AB} \eqno(M(f, g))\]
+\[ H_{fg} \o N_{ab} \o (F^{fg} \x G^f) =  H^{fg} \o N_{AB} \o (F_{fg} \x G_{fg}) : F^{AB}_{ab} \x  G^A_{ab} \to H^{ab}_{AB} \eqno(N(f, g))\]
+for $f : a \to A$ and $g : b \to B$.
+and we need to check
+\[ H_{qq} \o L_{c} \o F^{qq} =  H^{qq} \o L_{C} \o F_{qq} : F^{CC}_{cc} \to H^{cc}_{CC}\]
+for any $q : c \to C$, i.e.
+\[ H_{qq} \o N_{cc} \o \pair{\rid}{ M_{cc}} \o F^{qq} =  H^{qq} \o N_{CC} \o \pair{\rid}{ M_{CC}} \o F_{qq} : F^{CC}_{cc} \to H^{cc}_{CC}\]
+So calculate
+\[ H_{qq} \o N_{cc} \o \pair{\rid}{ M_{cc}} \o F^{qq} \]
+\[ = H_{qq} \o N_{cc} \o \pair{ F^{qq}}{ M_{cc} \o  F^{qq}}  \]
+\[ = H_{qq} \o N_{cc} \o (F^{\cdot q} \x \rid) \o \pair{ F^{q}}{ M_{cc} \o  F^{qq}}  \]
+\[ = H^{\cdot q}_q \o N_{cC} \o (F_{\cdot q} \x G_{\cdot q}) \o  \pair{ F^{q}}{ M_{cc} \o  F^{qq}}  \eqno(N(\rid_c ,q))\]
+\[ = H^{\cdot q}_q \o N_{cC} \o  \pair{ F^{q}_{\cdot q}}{ G_{\cdot q} \o M_{cc} \o  F^{qq}}\]
+\[= H^{\cdot q}_q \o N_{cC} \o   \pair{ F^{q}_{\cdot q}} {G^{q} \o M_{cC} \o F^{q}_{\cdot q}}  \eqno(M(\rid_c ,q))\]
+\[  = H^{qq} \o N_{CC} \o   \pair{ F_{q q}} { G_q \o M_{cC} \o F^{q}_{\cdot q}}  \eqno(N(q ,\rid_C))\]
+\[= H^{qq} \o N_{CC} \o   \pair{ F_{q q}} {  M_{CC} \o F_{q q}} \eqno(M(q ,\rid_C))\]
+\[= H^{qq} \o N_{CC} \o   \pair{ \rid} {  M_{CC} } \o F_{q q} \]
+
 \end{document}
