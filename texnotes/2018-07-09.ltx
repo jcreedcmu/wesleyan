@@ -352,4 +352,121 @@ $F^{dt^e_d}_{et^d_e}$. Hm, but that isn't significant. Since it's by using the c
 rather than the end property, is it actually the case that the univariance check is
 baked directly into $\forall L$ and doesn't require coming up with any particular
 property? I don't really like that conclusion.
+
+\subsection{Some Examples of Composition}
+
+So I should be able to do
+
+\[
+\erule
+{\int_{\alpha\beta} F_\alpha \to G^\beta_{\alpha\beta}\qquad \int_{\alpha\beta}  G^\alpha_{\alpha\beta} \to H_\beta}
+{\int_\alpha F_\alpha \to H_\alpha}
+\isok
+\]
+Because it's a no-loop extranatural transformation composition.
+Specifically, we can construct
+\[
+\erule
+{M_{ab} : F_a \to G^b_{ab}\qquad N_{ab} :   G^a_{ab} \to H_b}
+{L_a : F_a \to H_a}
+\]
+as $L_a(x) = N_{aa}(M_{aa} x)$. We have the end-properties
+\[ G_{fg} \o M_{ab} = G^g \o M_{AB} \o F_f : F_a \to G^b_{AB} \]
+\[ H_g \o N_{ab} \o G^f =  N_{AB} \o G_{fg} : G^A_{ab} \to H_B\]
+for $f : a \to A$ and $g : b \to B$.
+and we need to check
+\[ H_f \o L_{a}  =  L_{A} \o F_f : F_a \to H_A\]
+i.e.
+\[ H_f \o N_{aa} \o M_{aa}  =  N_{AA} \o M_{AA} \o F_f : F_a \to H_A\]
+and there we're pretty much stuck. Or are we? Ah, I see, I can independently set
+$f$ and $g$ in the end-properties I have. So I have in particular
+
+\[ G_{f} \o M_{ab} = M_{Ab} \o F_f : F_a \to G^b_{Ab} \]
+\[ H_g \o N_{ab} =  N_{aB} \o G_{\cdot g} : G^a_{ab} \to H_B\]
+so I compute
+\[ H_f \o N_{aa} \o M_{aa}  =  N_{aA} \o G_{\cdot f} \o M_{aa}\]
+\[ =  N_{aA} \o G^f \o M_{aA} \]
+\[ =  N_{AA} \o G_f \o M_{aA} \]
+\[=  N_{AA} \o M_{AA} \o F_f \]
+And I kind of have a feel for how this is pushing a bead along the string diagram.
+
+\subsection{Attempting to Strengthen}
+\[
+\erule
+{\int_{\alpha\beta} F_\alpha \to G^\beta_{\alpha\beta}\qquad \int_{\alpha\beta}  G^\alpha_{\alpha\beta} \to H_\beta^\beta}
+{\int_\alpha F_\alpha \to H_\alpha^\alpha}
+\isok
+\]
+we construct
+\[
+\erule
+{M_{ab} : F_a \to G^b_{ab}\qquad N_{ab} :   G^a_{ab} \to H^b_b}
+{L_a : F_a \to H^a_a}
+\]
+as $L_a(x) = N_{aa}(M_{aa} x)$. We have the end-properties
+\[ G_{fg} \o M_{ab} = G^g \o M_{AB} \o F_f : F_a \to G^b_{AB} \]
+\[ H_g \o N_{ab} \o G^f =  H^g \o N_{AB} \o G_{fg} : G^A_{ab} \to H^b_B\]
+for $f : a \to A$ and $g : b \to B$.
+and we need to check
+\[ H_f \o L_{a}  =  H^f \o L_{A} \o F_f : F_a \to H^a_A\]
+i.e.
+\[ H_f \o N_{aa} \o M_{aa}  =  H^f \o N_{AA} \o M_{AA} \o F_f : F_a \to H^a_A\]
+So we try to calculate
+\[ H_f \o N_{aa} \o M_{aa}  =  H^f \o N_{aA} \o G_{\cdot f} \o M_{aa}\]
+\[ =  H^f \o N_{aA} \o G^f \o M_{aA} \]
+\[ =  H^f \o N_{AA} \o G_f \o M_{aA} \]
+\[=  H^f \o N_{AA} \o M_{AA} \o F_f \]
+\subsection{Attempting to Strengthen Noch Einmal}
+\[
+\erule
+{\int_{\alpha\beta} F^\alpha_\alpha \to G^\beta_{\alpha\beta}\qquad \int_{\alpha\beta}  G^\alpha_{\alpha\beta} \to H_\beta^\beta}
+{\int_\alpha F^\alpha_\alpha \to H_\alpha^\alpha}
+\isok
+\]
+we construct
+\[
+\erule
+{M_{ab} : F^a_a \to G^b_{ab}\qquad N_{ab} :   G^a_{ab} \to H^b_b}
+{L_a : F^a_a \to H^a_a}
+\]
+as $L_a(x) = N_{aa}(M_{aa} x)$. We have the end-properties
+\[ G_{fg} \o M_{ab} \o F^f = G^g \o M_{AB} \o F_f : F^A_a \to G^b_{AB} \eqno(M(f, g))\]
+\[ H_g \o N_{ab} \o G^f =  H^g \o N_{AB} \o G_{fg} : G^A_{ab} \to H^b_B \eqno(N(f, g))\]
+for $f : a \to A$ and $g : b \to B$.
+and we need to check
+\[ H_q \o L_{c} \o F^q =  H^q \o L_{C} \o F_q : F^C_c \to H^c_C\]
+for any $q : c \to C$, i.e.
+\[ H_q \o N_{cc} \o M_{cc} \o F^q  =  H^q \o N_{CC} \o M_{CC} \o F_q : F^C_c \to H^c_C\]
+So calculate
+\[ H_q \o N_{cc} \o M_{cc} \o F^q  = H^q \o N_{cC} \o G_{\cdot q} \o  M_{cc} \o F^q  \eqno(N(\rid_c ,q))\]
+\[= H^q \o N_{cC} \o G^{q} \o  M_{cC} \o F^q  \eqno(M(\rid_c ,q))\]
+\[= H^q \o N_{CC} \o G_{q} \o  M_{cC} \o F^q  \eqno(N(q ,\rid_C))\]
+\[= H^q \o N_{CC} \o  M_{CC} \o F_q  \eqno(M(q ,\rid_C))\]
+\subsection{Still More}
+\[
+\erule
+{\int_{\alpha\beta} F\sw{\alpha\beta} \to G^\beta_{\alpha\beta}\qquad \int_{\alpha\beta}  G^\alpha_{\alpha\beta} \to H\sw{\alpha\beta}}
+{\int_\alpha F\sw{\alpha\alpha} \to H\sw{\alpha\alpha}}
+\isok
+\]
+we construct
+\[
+\erule
+{M_{ab} : F\sw{ab} \to G^b_{ab}\qquad N_{ab} :   G^a_{ab} \to H\sw{ab}}
+{L_a : F\sw{aa} \to H\sw{aa}}
+\]
+as $L_a(x) = N_{aa}(M_{aa} x)$. We have the end-properties
+\[ G_{fg} \o M_{ab} \o F^{f g} = G^g \o M_{AB} \o F_{f g} : F^{AB}_{ab} \to G^b_{AB} \eqno(M(f, g))\]
+\[ H_{fg} \o N_{ab} \o G^f =  H^{fg} \o N_{AB} \o G_{fg} : G^A_{ab} \to H^{ab}_{AB} \eqno(N(f, g))\]
+for $f : a \to A$ and $g : b \to B$.
+and we need to check
+\[ H_{qq} \o L_{c} \o F^{qq} =  H^{qq} \o L_{C} \o F_{qq} : F^{CC}_{cc} \to H^{cc}_{CC}\]
+for any $q : c \to C$, i.e.
+\[ H_{qq} \o N_{cc} \o M_{cc} \o F^{qq} =  H^{qq} \o N_{CC} \o M_{CC} \o F_{qq} : F^{CC}_{cc} \to H^{cc}_{CC}\]
+So calculate
+\[ H_{qq} \o N_{cc} \o M_{cc} \o F^{qq}  = H^{\cdot q}_q \o N_{cC} \o G_{\cdot q} \o  M_{cc} \o F^{qq}  \eqno(N(\rid_c ,q))\]
+\[= H^{\cdot q}_q \o N_{cC} \o G^{q} \o  M_{cC} \o F^{q}_{\cdot q}  \eqno(M(\rid_c ,q))\]
+\[= H^{qq} \o N_{CC} \o G_{q} \o  M_{cC} \o F^{q}_{\cdot q}  \eqno(N(q ,\rid_C))\]
+\[= H^{qq} \o N_{CC}  \o  M_{CC} \o F_{q q}  \eqno(M(q ,\rid_C))\]
+
 \end{document}
