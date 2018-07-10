@@ -822,4 +822,85 @@ I'm just being pressured back into the application counterexmaple
 \isbad
 \]
 where $B$ is 0111 and $C$ is 0112. That's fine, it still breaks appropriately.
+\subsection{So What Intuition Can I Extract}
+Let's stare harder at that rule that fails, and see how I can enhance the premise to make
+it acceptable.
+\[
+\erule
+{[x/a]B^a_a \prov [x/a]B^a_a \qquad [x/a]C^a_a \prov C^x_x}
+{\forall a . B^a_a, \forall a . B^a_a \to C^a_a \prov C^x_x}
+\]
+Have $M_d : B\sw{d}$ with
+\[ B_{f} \o M_d = B^{f} \o M_e \]
+Construct
+\[L_d(E) = E_d(M_d) \]
+need to check
+\[(E : \int_b B^{b}_{b} \to C^{b}_{b}) \to
+ C_{f} L_d(E ) =
+ C^{f} L_e(E )\]
+i.e.
+\[(E : \int_b B^{b}_{b} \to C^{b}_{b}) \to
+ C_{f} E_d   M_d  = C^{f}  E_e  M_e \]
+and here we get stuck because $M$ and $E$'s end properties both want a $B_{ f}$
+or $B^{ f}$ to get started.
+
+Staring at $[x/a]B^a_a \prov [x/a]B^a_a$ and keeping in mind that when checking the end
+property for the overall sequent, we're sort of effectively substituting $f : d\to e$
+for $x$, it makes sense to ask for $M_f : B^d_e \to B^d_e$? No, maybe that doesn't make
+sense. Surely it works to ask for $M_f : B^e_d$ such that $M_d = B^f M_f$ and $M_e = B_f M_f$.
+
+\subsection{More Guesswork}
+What would be a sufficient condition on the first premise of the rule
+\[
+\erule
+{[t^x_x/a]A^a_a \prov [u^x_x/a]B^a_a \qquad [x/a]C^a_a \prov C^x_x}
+{\forall a . A^a_a, \forall a . B^a_a \to C^a_a \prov C^x_x}
+\]
+to make it work? Or indeed, on something like
+\[
+\erule
+{[t^x_x/a]A^{xa}_{xa} \prov [u^x_x/a]B \sw {xa}}
+{\forall a . A\sw {xa}\prov \exists a . B \sw {xa}}
+\]
+?
+
+We at least probably have some kind of function
+\[N_x : A\sw{x t\sw x} \to B\sw{x u\sw x}\]
+%\[M : \int_a A\sw {xa}\]
+and we are trying to make
+\[L_x : \int_a A\sw{xa} \to \int^b B\sw {xb}\]
+and
+so we set
+\[L_x(y) = \pair {u\sw x} {N_x(y_{t\sw x})} \]
+For any $f : d \to e$, we know the end and coend properties
+\[ A_{\cdot f} y_d = A^{\cdot f} y_e : A^{xd}_{xe} \qquad (q : B^{xe}_{xd}) \to \pair d {B^{\cdot f} q} = \pair e {B_{\cdot f} q} \]
+And we need to check for any $\phi : \delta \to \epsilon$ that
+\[B_\phi \o L_\delta \o A^\phi  = B^\phi \o L_\epsilon \o A_\phi \]
+i.e.
+\[(y : \int_a A^{\epsilon a}_{\delta a}) \to  B_\phi L_\delta A^\phi y = B^\phi L_\epsilon A_\phi y\]
+\[(y : \int_a A^{\epsilon a}_{\delta a}) \to
+   \pair {u\sw \delta} {B_\phi N_\delta(A^\phi y_{t\sw \delta})}
+   =
+   \pair {u\sw \epsilon} {B^\phi N_\epsilon(A_\phi y_{t\sw \epsilon})}
+: \int^b B^{\delta b}_{\epsilon b}
+\]
+So we want to imagine that we have some extra data on $N_x$ that lets us use
+some of our assumptions. One such bit of extra data is supposing that
+that $N_\delta$ factors to expose some kind of $B^{\cdot f}$ or $B_{\cdot f}$ so we can use the coend
+property of $B$. We could consider for $f$ either $u_\phi : u\sw \delta \to u^\delta_\epsilon$
+ or $u^\phi : u^\epsilon_\delta \to u\sw \delta$.
+Factorization assumptions we could make would include
+\[
+\begin{tikzcd}
+A\sw{\delta t\sw \delta} \ar[r, "N^1_\phi"] \ar[d, "N^2_\phi"'] \ar[dr, "N_\delta" description]
+& B^{\delta u^\delta_\epsilon}_{\delta u\sw \delta} \ar[d, "B^{\cdot u_\phi}"]\\
+B^{\delta u\sw \delta}_{\delta u^\epsilon_\delta} \ar[r, "B_{\cdot u^\phi}"']
+& B\sw{\delta u\sw \delta}
+\end{tikzcd}
+\]
+Ok, let's suppose we have $N^1_\phi$. Then we could compute
+\[  \pair {u\sw \delta} {B_\phi N_\delta A^\phi y_{t\sw \delta}}\]
+\[ = \pair {u\sw \delta} {B_\phi B^{\cdot u_\phi} N^1_\phi A^\phi y_{t\sw \delta}}\]
+\[ = \pair {u^\delta_\epsilon} {B_\phi B_{\cdot u_\phi} N^1_\phi A^\phi y_{t\sw \delta}}\]
+Oof my brain hurts.
 \end{document}
