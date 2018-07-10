@@ -680,4 +680,146 @@ i.e.
 \[(a : A^e_d) \to B_f L_d(M_{dd} (N_d A^f a)) = B^f L_e(M_{ee} (N_e A_f a))\]
 Now if $N$ and $L$ were merely ends, we'd already have ... ugh, I don't know if
 this line of thinking is going to get me anywhere.
+
+\subsection{A Different Simplification}
+
+\[
+\erule
+{A\sw x \prov [x/a] B\sw{ax} \qquad [x/a] C\sw{ax} \prov D\sw x}
+{\forall a . B\sw{ax} \to C\sw {ax}, A\sw x \prov D \sw x}
+\]
+\subsection{A Different Composition Challenge}
+\[
+\erule
+{}
+{\int_a \left(\int_b B\sw{ab} \to C\sw {ab}\right) \to (A\sw a \to B\sw {aa}) \to (A\sw a \to C \sw {aa})}
+\isok
+\]
+We define
+\[M_d(E, k, x) = E_d(k(x))\]
+and need to check
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db})(k : A^d_e \to B^{ee}_{dd})(x : A^e_d) \to\]
+\[ C_{ff} M_d({\textstyle\int} C^f \o E \o {\textstyle\int} B_f , B^{ff} \o k \o A_f, A^f x) =\]
+\[ C^{ff} M_e({\textstyle\int} C_f \o E \o {\textstyle\int} B^f , B_{ff} \o k \o A^f, A_f x)\]
+i.e.
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db})(k : A^d_e \to B^{ee}_{dd})(x : A^e_d) \to\]
+\[  C^f_{ff}  E_d     B^{ff}_f k  A^f_f x =  C^{ff}_f  E_e     B^f_{ff}  k  A^f_f x\]
+knowing that $E$'s end property gives
+\[C_{\cdot f}\o  E_d \o B^{\cdot f} = C^{\cdot f} \o E_d \o B_{\cdot f}\]
+but this is trivially true.
+\subsection{A Harder Composition Challenge}
+\[
+\erule
+{\int_a A\sw a \to B\sw {aa}}
+{\int_a \left(\int_b B\sw{ab} \to C\sw {ab}\right)  \to (A\sw a \to C \sw {aa})}
+\]
+Have $M_d : A\sw d \to B\sw{dd}$ with
+\[ B_{ff} \o M_d \o A^f = B^{ff} \o M_e \o A_f \]
+Construct
+\[L_d(E, x) = E_d(M_d(x)) \]
+need to check
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db})(x : A^e_d) \to\]
+\[ C_{ff} L_d({\textstyle\int} C^f \o E \o {\textstyle\int} B_f ,  A^f x) =
+ C^{ff} L_e({\textstyle\int} C_f \o E \o {\textstyle\int} B^f , A_f x)\]
+i.e.
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db})(x : A^e_d) \to\]
+\[ C_{ff}^f E_d  B_f M_d  A^f x = C^{ff}_f  E_e  B^f M_e A_f x\]
+and here we get stuck because $M$'s end property
+and $E$'s end property (the latter being
+\(C_{\cdot f}\o  E_d \o B^{\cdot f} = C^{\cdot f} \o E_d \o B_{\cdot f}\)
+)
+both want a $B_{\cdot f}$
+or $B^{\cdot f}$ to get started.
+
+
+\subsection{A Simpler Composition Challenge}
+\[
+\erule
+{\int_a B\sw {aa}}
+{\int_a \left(\int_b B\sw{ab} \to C\sw {ab}\right)  \to C \sw {aa}}
+\]
+Have $M_d : B\sw{dd}$ with
+\[ B_{ff} \o M_d = B^{ff} \o M_e \]
+Construct
+\[L_d(E) = E_d(M_d) \]
+need to check
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db}) \to
+ C_{ff} L_d({\textstyle\int} C^f \o E \o {\textstyle\int} B_f) =
+ C^{ff} L_e({\textstyle\int} C_f \o E \o {\textstyle\int} B^f)\]
+i.e.
+\[(E : \int_b B^{db}_{eb} \to C^{eb}_{db}) \to
+ C_{ff}^f E_d  B_f M_d  = C^{ff}_f  E_e  B^f M_e \]
+and here we get stuck because $M$ and $E$'s end properties both want a $B_{\cdot f}$
+or $B^{\cdot f}$ to get started.
+
+\subsection{Simpler Still}
+\[
+\erule
+{\int_a B\sw {aa}}
+{\int_a \left(\int_b B\sw{ab} \to C\right)  \to C}
+\]
+Have $M_d : B\sw{dd}$ with
+\[ B_{ff} \o M_d = B^{ff} \o M_e \]
+Construct
+\[L_d(E) = E_d(M_d) \]
+need to check
+\[(E : \int_b B^{db}_{eb} \to C) \to
+ L_d({\textstyle\int}  E \o {\textstyle\int} B_f) =
+ L_e({\textstyle\int}  E \o {\textstyle\int} B^f)\]
+i.e.
+\[(E : \int_b B^{db}_{eb} \to C) \to
+  E_d  B_f M_d  =   E_e  B^f M_e \]
+and here we get stuck because $M$ and $E$'s end properties both want a $B_{\cdot f}$
+or $B^{\cdot f}$ to get started.
+But I'm having trouble making a counterexample. It might be that $C$ being closed
+makes this trivially true somehow.
+
+\subsection{Reduce Dependencies of $B$ one way}
+\[
+\erule
+{\int_a B\sw {a}}
+{\int_a \left( B\sw{a} \to C\sw a\right)  \to C\sw a}
+\isok
+\]
+Have $M_d : B\sw{dd}$ with
+\[ B_{f} \o M_d = B^{f} \o M_e \]
+Construct
+\[L_d(E) = E(M_d) \]
+need to check
+\[(E : B^{d}_{e} \to C^e_d) \to
+ L_d(C^f \o  E \o  B_f) =
+ L_e(C_f \o  E \o  B^f)\]
+i.e.
+\[(E :  B^{d}_{e} \to C^e_d) \to
+  C^f E B_f M_d  =  C_f E  B^f M_e \]
+And here we can proceed just fine.
+\subsection{Reduce Dependencies of $B$ the other way}
+\[
+\erule
+{\int_a B\sw {a}}
+{\int_a \left( \int_b B\sw{b} \to C\sw a\right)  \to C\sw a}
+\]
+Have $M_d : B\sw{d}$ with
+\[ B_{f} \o M_d = B^{f} \o M_e \]
+Construct
+\[L_d(E) = E_d(M_d) \]
+need to check
+\[(E : \int_b B^{b}_{b} \to C^{e}_{d}) \to
+ C_{f} L_d({\textstyle\int} C^f \o E ) =
+ C^{f} L_e({\textstyle\int} C_f \o E )\]
+i.e.
+\[(E : \int_b B^{b}_{b} \to C^{e}_{d}) \to
+ C_{f}^f E_d   M_d  = C^{f}_f  E_e  M_e \]
+and here we get stuck because $M$ and $E$'s end properties both want a $B_{ f}$
+or $B^{ f}$ to get started.
+
+I can't seem to make a counterexample for this, either. Yeah,
+I'm just being pressured back into the application counterexmaple
+\[
+\erule
+{\int_a B\sw {a}}
+{\left( \int_b B\sw{b} \to C\sw {b}\right) \to \int_a    C\sw {a}}
+\isbad
+\]
+where $B$ is 0111 and $C$ is 0112. That's fine, it still breaks appropriately.
 \end{document}
