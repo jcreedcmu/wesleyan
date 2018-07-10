@@ -548,4 +548,136 @@ H^{aa}_{aa}    \prov H^{aa}_{aa}
 \forall a . F^{aa}_{aa} \imp H^{aa}_{aa}
 }
 \]
+\section{Loops In the Sequent Calculus}
+So what if syntactically the idea is that we do quantifier synchronous rules
+with suspended substitutions like
+\[
+\erule
+{\Gamma, [t/x]A^x_x }
+{\Gamma, \forall x . A^x_x \prov C}
+\]
+so we still have sthe structure of where the variables occurred, and the identity
+rule is something like
+\[
+\erule
+{\sigma  A \sim \sigma' A' }
+{\Gamma, \sigma A \prov \sigma' A'}
+\]
+Where $A \sim A'$ is some kind of loop-freeness and compatibility condition among the variables
+of $A$ and $A'$.
+
+Let's try to see how the examples I have fare under that conjecture.
+\[
+\erule
+{
+\[
+\[
+\isbad
+\justifies
+[x/\alpha]F\sw{\alpha\alpha} \prov [x/\beta] F \sw {x \beta}
+\]
+\justifies
+\forall\alpha. F \sw {\alpha \alpha} \prov \exists\beta. F \sw {x \beta}
+\]
+}
+{\forall\alpha. F \sw {\alpha \alpha}\prov \forall\alpha .\exists\beta. F \sw {\alpha \beta}}
+\]
+Good, this seems like it has a loop.
+\[
+\erule
+{
+\[
+\[
+\isbad
+\justifies
+[x/\alpha] F^\alpha_\alpha \prov  [x/\alpha] F^\alpha_\alpha
+\]
+\[
+\justifies
+[x/\alpha] G\sw \alpha \prov  G\sw x
+\]
+\justifies
+[x/\alpha] F^\alpha_\alpha \to G\sw \alpha, [x/\alpha] F^\alpha_\alpha \prov  G\sw x
+\]
+}
+{\forall\alpha. F^\alpha_\alpha \to G\sw \alpha, \forall\alpha. F^\alpha_\alpha \prov  G\sw x}
+\]
+This seems like a loop specifically at $F$; I think the $G$-identity might be acceptable.
+\[
+\erule
+{
+\[\justifies [t^x_x/\beta]F^x_{x\beta} \prov [x/\alpha]F^\alpha_{\alpha t\sw \alpha} \]
+\[\justifies [t^x_x/\beta]H^{x\beta}_x \prov [x/\alpha]H_\alpha^{\alpha t\sw \alpha} \]
+\[
+\justifies
+[x/\alpha] G\sw \alpha \prov  G\sw x
+\]
+}
+{ \forall\alpha .F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha,
+\forall{\beta}. F^x_{x\beta} \x H^{x \beta}_{x }\prov  G^x_x}
+\]
+Yeah, here the same $G$-identity reappears, and I suppose all three of these ought
+to be acceptable. I'm much less clear about my intuitions for general functor terms,
+but I guess the `concrete' $x$s in $[t^x_x/\beta]$ have some chance of meaningfully
+terminating the loop? Or something? Or maybe it's the other $x/\alpha$ interaction that
+gets things started. Not sure until I conjecture a meaning for delayed substitutions.
+\[
+\erule
+{[x/\alpha]F^\alpha_{\alpha\alpha} \prov [x/\beta] F^x_{x\beta}
+\qquad
+[x/\alpha]H_\alpha^{\alpha\alpha} \prov [x/\beta] H_x^{x\beta}}
+{\forall\alpha. F^\alpha_{\alpha \alpha} \x H^{\alpha \alpha}_\alpha \prov
+ \exists\beta. F^x_{x \beta} \x H^{x \beta}_x}
+\]
+Right, these would be loops except they're happening only at covariant or contravariant arguments.
+\[
+\erule
+{[x/\alpha]F^\alpha_{\alpha t\sw \alpha}\prov [ t^x_x/\beta]F^x_{x \beta}}
+{\forall\alpha. F^\alpha_{\alpha t\sw \alpha}  \prov \exists\beta. F^x_{x \beta}}
+\]
+Huh, this is a recurrence of the $F$-identity from two examples ago. So I guess
+it must be ok.
+
+That's my original batch of examples. Let's look at beefed-up composition.
+\[
+\erule
+{F\sw{xx} \prov [xx/ab]F\sw{ab}
+\qquad
+[xx/ab]G^b_{ab} \prov [xx/ab]G^a_{ab}
+\qquad[xx/ab]H\sw{ab} \prov H\sw{xx}}
+{\forall{ab}. F\sw{ab} \to G^b_{ab}, \forall{ab}.  G^a_{ab} \to H\sw{ab}
+,  F\sw{xx} \prov H\sw{xx}}
+\]
+What could these identity proofs (or variants of them) mean so that
+\[
+\erule
+{[xx/ab]G^b_{ab} \prov [xx/ab]G^a_{ab}
+\qquad[xx/ab]H\sw{ab} \prov H\sw{xx}}
+{\forall ab . G^{a}_{ab} \to H^{ab}_{ab} , [xx/ab]G^b_{ab} \prov  H\sw{xx}}
+\]
+would be sound? Does it simplify anything to consider
+\[
+\erule
+{A\sw x \prov [xx/ab]G^a_{ab}
+\qquad[xx/ab]H\sw{ab} \prov B\sw x}
+{\forall ab . G^{a}_{ab} \to H^{ab}_{ab} , A\sw x \prov  B\sw x}
+\]
+I know that I have an end
+\[M : \int_{ab} G^a_{ab} \to H\sw {ab}\]
+so I can get  $M_{xx} : G^x_{xx}$ to $H\sw {xx}$, with
+$H_{fg} \o M_{dd'} \o G^f = H^{fg} \o M_{ee'} \o G_{fg}$.
+I also probably have some sort of
+\[N_x : A\sw x \to G^x_{xx}\]
+\[L_x : H^{xx}_{xx} \to B\sw x\]
+with properties yet to be determined. I want
+to build
+\[P_x : \left(\int_{ab} G^a_{ab} \to H\sw {ab}\right) \to A\sw x \to B\sw x \]
+so obviously I set
+\[P_x (M, a) = L_x(M_{xx} (N_x a))\]
+and I want to check
+\[(a : A^e_d) \to B_f P_d (M, A^f a) = B^f P_e(M, A_f a)\]
+i.e.
+\[(a : A^e_d) \to B_f L_d(M_{dd} (N_d A^f a)) = B^f L_e(M_{ee} (N_e A_f a))\]
+Now if $N$ and $L$ were merely ends, we'd already have ... ugh, I don't know if
+this line of thinking is going to get me anywhere.
 \end{document}
