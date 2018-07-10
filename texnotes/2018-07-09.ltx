@@ -16,11 +16,12 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-
+\def\lint{{\textstyle\int}}
 \def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
 \def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
 \def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
 \def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
 \def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
 \def\gol{\sqsubset}
 \def\gor{\sqsupset}
@@ -902,5 +903,125 @@ Ok, let's suppose we have $N^1_\phi$. Then we could compute
 \[  \pair {u\sw \delta} {B_\phi N_\delta A^\phi y_{t\sw \delta}}\]
 \[ = \pair {u\sw \delta} {B_\phi B^{\cdot u_\phi} N^1_\phi A^\phi y_{t\sw \delta}}\]
 \[ = \pair {u^\delta_\epsilon} {B_\phi B_{\cdot u_\phi} N^1_\phi A^\phi y_{t\sw \delta}}\]
-Oof my brain hurts.
+And then stuck more or less.
+
+It seems like I have lots of options for factoring $N$ in various ways.
+\vfil\eject
+\subsection{Switching Notation}
+I don't like how I've aligned on $d$s and $\delta$s here. Let me swap them.
+We're trying to validate
+\[
+\erule
+{[t^x_x/a]A^{xa}_{xa} \prov [u^x_x/b]B \sw {xb}}
+{\int_a  A\sw {xa}\prov \int^b  B \sw {xb}}
+\]
+\[ N_d : A\sw {dt\sw d} \to B\sw{d u \sw d}\chave\]
+\[ L_d :  \int_a  A^{da}_{da} \to \int^b  B^{db}_{db} \cwant\]
+\[ L_d =\lambda y. \pair{u\sw d}{N_d y_{t\sw d}} \cset\]
+\[ \lint B_f \o L_d \o \lint  A^f = \lint  B^f \o L_e \o \lint  A_f \cwant \]
+\[ \left(y : \int_a A^{ea}_{da}\right) \to B_f L_d A^f y = B^f L_e A_f y : \int^b B^{db}_{eb}\cwant \]
+\[ \left(y : \int_a A^{ea}_{da}\right) \to  \pair{u\sw d}{B_f N_d A^f y_{t\sw d}}
+= \pair{u\sw e}{B^f N_e A_f y_{t\sw e}} : \int^b B^{db}_{eb}\cwant \]
+\[ A_{\cdot \phi} y_\delta = A^{\cdot \phi} y_\epsilon : A^{e\delta}_{d\epsilon} \qquad (q : B^{d\epsilon}_{e\delta}) \to \pair \delta {B^{\cdot \phi} q} = \pair \epsilon {B_{\cdot \phi} q} \chave \]
+
+So now I'm going to try to consistently lean towards factorizations of
+$N_d/N_e$ that lead towards $t^d_e/u^d_e$ for no particular reason.
+Assume:
+\[
+\begin{tikzcd}
+   A^{d t \sw d}_{d t^d_e}\ar[r, "N^<_{df}"]\ar[from=d]
+& B^{d u^d_e}_{d u \sw d} \ar[d]
+\\
+A\sw{d t \sw d} \ar[r, "N_d"']&B\sw{d u\sw d}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+ A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"]
+& B^{e u^d_e}_{e u \sw e}
+\\
+A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']&B\sw{e u\sw e}\ar[from=u]
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+&A^{dt^d_d}_{dt^d_e}\ar[r, "N^<_{df}"] & B^{du^d_e}_{du^d_d}
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{et^d_e}_{dt^d_e}\ar[u]\ar[d]
+&B^{du^d_e}_{eu^d_e} \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"'] & B^{e u^d_e}_{e u \sw e}
+\end{tikzcd}
+\]
+So I can try to compute
+\[   \pair{u\sw d}{B_f N_d A^f y_{t\sw d}} \]
+\[ =  \pair{u\sw d}{B_f^{\cdot u_f} N^<_{df} A_{\cdot u_f}^f y_{t\sw d}} \]
+\[ =  \pair{u^d_e}{B_{f u_f} N^<_{df} A^{f u_f} y_{t^d_e}} \]
+\[ =  \pair{u^d_e}{B^{f}_{\cdot u^f} N^>_{ef} A_{f}^{\cdot u^f} y_{t^d_e}} \]
+\[ =  \pair{u^e_e}{B^{f u^f} N^>_{ef} A_{f u^f} y_{t^e_e}} \]
+\[ =  \pair{u^e_e}{B^{f} N_e A_{f} y_{t^e_e}} \]
+If $A$ is contravariant and $B$ is covariant, we can get this out of a mere end, I think.
+
+\subsection{What If I go for $t^d_e$ but $u^e_d$?}
+\[
+\begin{tikzcd}
+   A^{d t \sw d}_{d t^d_e}\ar[r, "N^<_{df}"]\ar[from=d]
+& B^{d u^d_d}_{d u^e_d} \ar[d]
+\\
+A\sw{d t \sw d} \ar[r, "N_d"']&B\sw{d u\sw d}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+ A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"]
+& B^{e u^e_e}_{e u^e_d}
+\\
+A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']&B\sw{e u\sw e}\ar[from=u]
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}
+&A^{dt^d_d}_{dt^d_e}\ar[r, "N^<_{df}"] & B^{du^d_d}_{du^e_d}
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{et^d_e}_{dt^d_e}\ar[u]\ar[d]
+&B^{du^e_d}_{eu^e_d} \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"'] & B^{e u^e_e}_{e u^e_d}
+\end{tikzcd}
+\]
+So I can try to compute
+\[   \pair{u\sw d}{B_f N_d A^f y_{t\sw d}} \]
+\[ =  \pair{u\sw d}{B_{fu^f} N^<_{df} A_{\cdot u_f}^f y_{t\sw d}} \]
+\[ =  \pair{u^e_d}{B_{f}^{\cdot u^f} N^<_{df} A^{f u_f} y_{t^d_e}} \]
+\[ =  \pair{u^e_d}{B^{f u_f} N^>_{ef} A_{f}^{\cdot u^f} y_{t^d_e}} \]
+\[ =  \pair{u^e_e}{B^{f}_{\cdot u_f} N^>_{ef} A_{f u^f} y_{t^e_e}} \]
+\[ =  \pair{u^e_e}{B^{f} N_e A_{f} y_{t^e_e}} \]
+Seems ok? And would allow blur if $A$ and $B$ are both contravariant?
+
+Can maybe represent this derivation as a larger diagram
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&B\sw{d u\sw d}\ar[from=d]
+&B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
+\\
+&A^{dt^d_d}_{dt^d_e}\ar[r, "N^<_{df}"] & B^{du^d_d}_{du^e_d}
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{et^d_e}_{dt^d_e}\ar[u]\ar[d]
+&B^{du^e_d}_{eu^e_d} \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"'] & B^{e u^e_e}_{e u^e_d}
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e u\sw e}\ar[from=u]
+&B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
+\end{tikzcd}
+\]
+
 \end{document}
