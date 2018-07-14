@@ -490,14 +490,22 @@ $\Delta_2 \sim^v_w \Omega_2$ and
 No, this isn't right either.
 
 Maybe we can do
-\begin{lemma}[Completeness]\ \\
-1. If $\Delta \prov [P^u_v]$, then there exists an $\Omega$ with $\Delta \sim^u_v \Omega$
-and $\Omega \prov [P]$.\\
-2. $\Delta [N^{tu}_{wv}]\prov Q^t_w$ then there exist
-$\Omega_1$ and $\Omega_2$ such that
-\[\Delta \sim^t_u \Omega_1 \qquad \Delta \sim^v_w \Omega_2 \]
-and
-\[\Omega_1  [N] \Omega_2 \prov Q\]
+\begin{lemma}[Completeness]\ %
+\begin{enumerate}
+\item If $\Delta \prov [P^u_v]$, then there exists an $\Omega$ with $\Delta \sim^u_v \Omega$
+and $\Omega \prov [P]$.
+\item If $\Delta [N^{tu}_{wv}]\prov Q^t_w$ then at least one of the following is true:
+\begin{enumerate}
+\item there exist
+  $\Omega_1$ and $\Omega_2$ such that
+  \[\Delta \sim^t_u \Omega_1 \qquad \Delta \sim^v_w \Omega_2 \qquad \Omega_1  [N] \Omega_2 \prov Q\]
+\item there exists $\Omega$ such that
+$\Delta \sim^t_w \Omega$ and $\Omega \prov Q$
+\end{enumerate}
+\item If $\Delta, \tok^t_w \prov Q^t_w$, then
+there exists $\Omega$ such that
+$\Delta \sim^t_w \Omega$ and $\Omega \prov Q$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
 \item[Case:] $\rrto$\\
@@ -511,7 +519,8 @@ and
 \] \qquad x \in [v, w]}
 {\Delta[ \forall x \in [v, w] . P^{v}_{x} \to  N^{tu}_{wx} ] \prov Q^t_w}
 \]
-Using the induction hypothesis, we find $\Omega_1, \Omega_2, \Omega_3$ such that
+Using the induction hypothesis on $P$ and $N$, in case $(a)$ for $N$,
+we find $\Omega_1, \Omega_2, \Omega_3$ such that
 \[\Delta \sim^v_x \Omega_2 \qquad \Delta \sim^t_u \Omega_1  \qquad \Delta \sim^x_w \Omega_3\]
 and
 \[\Omega_2 \prov [P] \qquad \Omega_1  [N] \Omega_3\prov Q\]
@@ -524,33 +533,26 @@ so it's straightforward to derive
 and output the contexts $\Omega_1$ and $\Omega_2, \Omega_3$ noting that we can
 establish that $\Delta\sim^v_w \Omega_2, \Omega_3$.
 
+In case $(b)$ for $N$, we immediately return the same reading.
 \item[Case:] $\ups P$\\
 \[
 \erule
 {\[
-\Delta \prov [ P^{v}_{x}] \qquad \Delta[ N^{tu}_{wx} ] \prov Q^t_w
 \justifies
-\Delta[ P^{v}_{x} \to  N^{tu}_{wx} ] \prov Q^t_w
-\] \qquad x \in [v, w]}
+\Delta, \tok^t_w, P^u_v \prov Q^t_w
+\]}
 {\Delta[ \ups (\tok^t_w \tensor P^u_v) ] \prov Q^t_w}
 \]
+By i.h., there is some reading of $(\Delta, P^u_v) \sim^t_w Q^t_w$.
+It either uses $P^u_v$ or it doesn't. If it does, it breaks up
+into two smaller readings $\Delta \sim^t_u \Omega_1$
+and
+$\Delta \sim^v_w \Omega_2$, and so we have $\Omega_1, P, \Omega_2 \prov Q$.
+From that we can derive $\Omega_1[\ups P]\Omega_2 \prov Q$ as required.
+Otherwise, it doesn't use $P^u_v$, and so we just know we have
+a reading $\Delta \sim^t_w \Omega$ and $\Omega \prov Q$, which
+also suffices for the conclusion.
 \cqed
 \end{proof}
 
 \end{document}
-
-%% \subsection{An alternative thought}
-%% Can I show that in
-%% \[
-%% \begin{tikzcd}
-%%   u \ar[r, "P \rrto N"] \ar[rr, bend right, "N"'] & v \ar[r, "P"]& w
-%% \end{tikzcd}
-%% \]
-%% that having the  $N^u_w$ is somehow a strictly better assumption than separately having
-%% $u(P \rrto N)^{u}_v$ and $P^v_w$? No, surely that's not the case; of course
-%% uses of synchronous rules may paint you into a corner. That's why they're not asynchronous!
-%% Counterexample:
-%% \[(P \rrto N) \rrto A, P \rrto N, P, P \llto A \llto 0 \prov 0\]
-%% Here focusing on $P \rrto N$ first is a mistake, assuming $N$ is a negative atom,
-%% $P$ is positive, and $A$ is negative. We first focus on $P \llto A \llto 0$,
-%% and then try to prove $(P \rrto N) \rrto A, P \rrto N \prov A$.
