@@ -5030,3 +5030,257 @@ A: It doesn't seem obvious to me that there is.
 
 Q: Or can I just take the product?
 A: ???
+
+=== 2018.07.11
+
+Q: Reading Nuyts's LICS paper. Thoughts?
+A:
+- What happens if instead of just "depth n" you have a poset/category representing the
+structure of which relations extend one another?
+
+- Can these relations be thought of as equality under hott-like modalities?
+For it feels like to have a dependent type
+B : A → type
+would say that if you have a ∈ A, then you get a type B(a), and of course
+if you have a = a', then you should have, by continuity, an equality B(a) = B(a'),
+by univalence, the same thing as an equivalence B(a) ≅ B(a'). So if you have
+a ⌢n b, which I am imagining is something like ◯n(a = b), then you maybe get
+◯n(B(a) = B(a')), which is some further kind of relation on those types?
+
+Modalities are functors, the order relation on them is the existence
+of natural transformations.
+
+=== 2018.07.12
+
+Q: What's interesting about the warping operator of
+Adrien Guatto's
+"A Generalized Modality for Recursion"?
+A: It resembles Nuyts's definition of modalities as 'warping'
+relational depths of types.
+
+∀f ∃x (P(x) → P(f x))
+
+Pick 0. if P(f 0), then 0 is a witness.
+If ¬P(f 0), then f 0 is a witness.
+
+=== 2018.07.13
+
+Q: What was that thought that talking to Max New triggered the other day?
+A: That the modular identity proof for ordinary focusing might have
+something to do with thunkability in duploids?
+
+Q: Some further thoughts on dynamic logic & ordered logic and stuff?
+A:
+One knob I can turn is how many 'cursors' are lodged in the set of possible
+worlds. The way I had been doing it, there was only one, at the 'later'
+end of the timeline. This let me have only one kind of additive
+implication (which hypothesizes a proposition at that distinguished
+current world) and one fairly canonical choice
+for multiplicative implication --- the [α]A modality, which grafts
+on a binary relation onto the context. However, already I realize
+I could graft on an edge in the other direction, some kind of [∼α]A,
+by saying
+
+    [∼α]A @ u = ∀v. u ≥_α v ⇒ A
+
+in contrast to
+
+    [α]A @ u = ∀v. v ≥_α u ⇒ A
+
+But the generalization I want to think about has a
+semantic @-function with more arguments; let's think about
+the case of 2 arguments first, with them representing the first
+and last time, so I'd get something like an ordered logic
+with left and right implication.
+
+Oh yeah! Observe that already additive implication
+A ⇒ B was decomposable as [?A]B. So I should be writing
+the 'modality' [α]A as the implication α ↠ A. But
+now I can also write α ↣ A, with rules like
+
+Δ, α ⊢ A
+----------
+Δ ⊢ α ↠ A
+
+α, Δ ⊢ A
+----------
+Δ ⊢ α ↣ A
+
+and interestingly of the 'additive/persistent' implications there are
+also two! They are !α ↣ A and !α ↠ A if I write the test as a !
+(well... it's more of an F) instead of a ?, which seems appropriate,
+for the left rule is
+
+Δ, A true, Δ' ⊢ C
+-----------------
+Δ, !A act, Δ' ⊢ C
+
+But hmm what is the difference between !α ↣ A and !α ↠ A on the left?
+The semantics of
+
+    Δ ⊢ A
+
+is supposed to do something like
+
+∀ u, v . Δ @ (u, v) ⊢ A @ (u, v)
+
+with things like
+
+· @ (u, v) = (u ≡ v)
+Δ, A true @ (u, v) = (Δ @ (u, v)) ∧ A ( ...? )
+
+oh wait yeah I am confused. Do propositions take one argument or two
+or what? Maybe the context semantics are more like
+
+(Δ, A true) @ (u, v) = ∃ w . Δ @ (u, w) ∧ A (w, v)
+
+No, that's confusing, it makes A seem more like an action than a prop.
+
+Maybe what's going on is that props are '1-ary props', actions are
+'2-ary props'. You have to judge a n-ary prop in a context with
+n cursors.
+
+So this makes me think that focally *negative* actions would
+be where the left and right ordered arrows would live? Kind
+of? It's unclear to me when I can *drop* information from the context.
+It seems like it might depend globally on what judgmental stuff is
+around. Like --- can I get away with dropping the Δ/Δ/Δ judgment
+and just talk about
+
+Δ2 ⊢ α     Δ1, Δ2, A, Δ3 ⊢ C
+---------------------------
+Δ1, [α]A, Δ2, Δ3 ⊢ C
+
+Of course, I could also conceive of the context as a graph, and never
+drop anything.
+
+Q: Actually, do I or don't I recover exactly ordered logic if I just have
+everything be binary, and only have one kind of action?
+A:
+A proposition is parameterized over two worlds.
+
+(A ↠ B)(u, v) = ∀ x . v ≤ x ⇒ A(v, x) ⇒ B(u, x)
+(A ↣ B)(u, v) = ∀ x . x ≤ u ⇒ A(x, u) ⇒ B(x, v)
+(A • B)(u, v) = ∃ x . u ≤ x ∧ x ≤ v ∧ A(u, x) ∧ B(x, v)
+
+So the asynchronous rules for all of these are I think what I expect.
+What about the synchronous rules? For • it works out ok;
+you have to divide up the context. (Although really you're just dividing
+it up as two array slices --- the remainder of the context data is morally
+still there)
+
+So if I have
+
+'u' Δ1 'v' A ↠ B 'w' Δ2 'x' Δ3 'z'  ⊢ C(u, z)
+
+so we have to choose an x in the future of w, so we choose in fact x.
+We must prove A at (w, x), so Δ2 ⊢ A, and our continuation
+is that we get B back, at (v, x), so we must prove Δ1, B, Δ3 ⊢ C(u, z).
+Yes, good, this makes sense!
+
+So there are some easy to imagine coercions back and forth between
+binary things and unary things, yeah?
+
+If I have a unary proposition A(v) then I can talk about
+!A(u, v) = (u = v) ∧ A(v)
+which clearly comes from existentially
+"pulling back" along the diagonal W → W × W
+
+but I could also invent
+
+◁A(u, v) = A(u)
+▷A(u, v) = A(v)
+
+which are "push forward" along projections W × W → W, and for an
+action α : W × W → type, we could pull back along projections
+
+▸α(u) = ∃ v . α(u, v)
+◂α(u) = ∃ v . α(v, u)
+
+or push forward along the diagonal
+
+Δα(u) = α(u, u)
+
+oh but I could also "universally pull back along the diagonal" to get
+
+?A(u, v) = (u = v) ⇒ A(v)
+
+or along the projections to get
+
+▸*α(u) = ∀ v . α(u, v)
+◂*α(u) = ∀ v . α(v, u)
+
+So what's the modality [α]A then? Being ∀ v . v ≥ w ⇒ A
+Well... α ↠ !A would have
+
+(α ↠ !A)(u, v) = ∀ x . x ≥ v ⇒ α(v, x) ⇒ !A(u, x)
+
+Actually, wait a minute...
+
+Q: The previous definitions of all the ordered logic
+connectives is redundant, isn't it?
+A:
+Yeah, shouldn't I just write something like
+
+   (A ↠ B)(u, v) = ∀ x . A(v, x) ⇒ B(u, x)
+   (A ↣ B)(u, v) = ∀ x . A(x, u) ⇒ B(x, v)
+   (A • B)(u, v) = ∃ x . A(u, x) ∧ B(x, v)
+
+and let the propositions themselves describe the accessibility
+relations?
+
+Then
+◂*(α ↠ ?A)(u) = ∀ v . (α ↠ ?A)(v, u)
+   = ∀ vx . α(u, x) ⇒ ?A(v, x)
+   = ∀ vx . α(u, x) ⇒ (v = x) ⇒ A(v)
+   = ∀ v . α(u, v) ⇒ A(v)
+
+aha, so
+
+   [α]A = ◂*(α ↠ ?A)
+
+I should pay attention to the fact that
+
+   (α ↠ ?B)(u, v) = α(v, u) ⇒ B(u)
+   (α ↣ ?B)(u, v) = α(v, u) ⇒ B(v)
+
+are themselves interesting connectives.
+
+Q: Does 'left-box' exist?
+A: I can do
+
+   [[α]]A = ▸*(α ↣ ?A)
+
+with
+
+[[α]]A(u) = ∀ v . α(v, u) ⇒ B(v)
+
+Q: But is this what I want?
+A:
+Well, this is inserting a backwards-α-edge *from* the futuremost world
+of the context. If I commit to a unary predicate meaning being
+on the right end, then I just can't access the left end.
+
+So clearly there are two sequent-level judgments for unary predicates,
+left and right, even though there is only one truth judgment *in*
+the context, because every location... is a location?
+
+Q: Could you do a higher-dimensional ordered logic make sense? Like in
+two dimensions, every proposition a predicate over, like, commutative
+squares in a category? And tensor would come in horizontal and
+vertical variants, and be interpreted as: there exists a factorization
+of the top and bottom (or left and right) morphisms, and an
+appropriate intermediate vertical (or horizontal morphism) resulting
+in two new commutative squares?
+A: I suppose so.
+
+=== 2018.07.14
+
+Q: What prior work on constructive dynamic logic could I find?
+A: "Tableaux for constructive concurrent dynamic logic"
+https://www.sciencedirect.com/science/article/pii/S0168007204001794
+but it's super axiomy.
+Also
+"Proof theoretic methodology for Propositional Dynamic Logic"
+https://link.springer.com/content/pdf/10.1007/3-540-10699-5_111.pdf
+same deal.

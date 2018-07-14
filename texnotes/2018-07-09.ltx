@@ -1024,4 +1024,153 @@ A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
 \end{tikzcd}
 \]
 
+\section{Just Left Forall By itself}
+
+If there's no substitution of $u$ for a variable in $B$, this diagram would look like
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&B\sw{d }\ar[from=d, equal]
+\\
+&A^{dt^d_d}_{dt^d_e}\ar[r, "N^<_{df}"] & B^{d}_{d}
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{et^d_e}_{dt^d_e}\ar[u]\ar[d]
+&B^{d}_{e} \ar[from=u]\ar[from=d]
+& B^{d}_{e}\ar[from=l]
+\\
+& A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"'] & B^{e }_{e }
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e }\ar[from=u, equal]
+\end{tikzcd}
+\]
+What this diagram is saying is that if we postulate the three cells in the middle column,
+then we have an
+inhabitant of the end
+\[\int_x \left(\int_a A^{xa}_{xa}\right)  \to B^x_x \]
+If $A$ is contravariant in its $a$-argument, and $N$ is already an end,
+then $N^>_{df}$ and $N^<_{ef}$ trivially
+exist; we can just assign $N_d$ and $N_e$ to them.
+
+Ok, notation time. The relevant knobs to turn are: is it covariant/contravariant,
+is it positive/negative, and is it connected to the source/destination of the arrow
+being substituted for the variable. My sequent is going to look like
+
+\[[t^x_x/a]^\nu\cdots [t^x_x/a]^\nu A, \ldots \prov [u^x_x / b]^\mu\cdots [u^x_x / b]^\mu B\]
+
+where $\nu, \mu ::= \dns \celse \ups  $. (co, contra-variant).
+
+\[\textcolor{red}{wrong?}\ups_{xf}^+(u) = {}^{u^e_d}_{u^x_x} \qquad \ups_{xf}^-(t) = {}_{t^d_e}^{t^x_x}\]
+\[\ups_{f}^+(u) = {}^{u^e_d}_{u^e_d} \qquad \ups_{f}^-(t) = {}_{t^d_e}^{t^d_e}\]
+\[\dns_{xf}^+(u) = {}^{u^d_e}_{u^x_x} \qquad \dns_{xf}^-(t) = {}^{t^e_d}_{t^x_x}\]
+\[\dns_{f}^+(u) = {}^{u^d_e}_{u^d_e} \qquad \dns_{f}^-(t) = {}^{t^e_d}_{t^e_d}\]
+and the diagram looks like (leaving $f$ implicit)
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&B\sw{d u\sw d}\ar[from=d]
+&B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
+\\
+&A^{d}_d \nu^-_{df }(t) \ar[r, "N_{df}"] & B^{d}_d \nu^+_{df }(t)
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{e}_{d} \nu^-_f(t)\ar[u]\ar[d]
+&B^{d}_{e} \nu^+_f(t) \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e}_{e} \nu^-_{ef }(t) \ar[r, "N_{ef}"'] & B^{e}_{e} \nu^+_{ef }(t)
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e u\sw e}\ar[from=u]
+&B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
+\end{tikzcd}
+\]
+And I think I can dispense with the $</>$ distinction since giving the $x$ and the $f$ suffices.
+
+\subsection{Coincidences}
+I notice that $\ups^+$ and $\dns^-$ give exactly the same results. So instead of talking about
+pairs of arguments
+$\nu^-$ vs. $\nu^+$, I should just talk about $\nu$ and $\bar\nu$. Furthermore, clearly
+I should be considering twisted arrows of $f$ down to $d$ and $e$. Given a
+$\tau : f \to s$, where $s : d' \to e'$, I define
+\[\ups_{\tau}(u) = {}_{u^e_d}^{u^{e'}_{d'}} \qquad \dns_{\tau}(u) = {}^{u^d_e}_{u^{d'}_{e'}}\]
+and my diagram is then
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&[2em]B\sw{d u\sw d}\ar[from=d]
+&B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
+\\
+&A^{d}_d \bar\nu_{\ltri f }(t) \ar[r, "N_{\ltri f}"] & B^{d}_d \nu_{\ltri f }(u)
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{e}_{d} \bar\nu_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
+&B^{d}_{e} \nu_{\rid_f}(u) \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e}_{e} \bar\nu_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \nu_{\rtri f }(u)
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e u\sw e}\ar[from=u]
+&B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
+\end{tikzcd}
+\]
+No, this doesn't check out, something went wrong.
+
+Let's revisit these:
+\[\textcolor{blue}{\ups_{xf}^+(u) = {}_{u^e_d}^{u^x_x}} \qquad \ups_{xf}^-(t) = {}_{t^d_e}^{t^x_x}\]
+\[\ups_{f}^+(u) = {}^{u^e_d}_{u^e_d} \qquad \ups_{f}^-(t) = {}_{t^d_e}^{t^d_e}\]
+\[\dns_{xf}^+(u) = {}^{u^d_e}_{u^x_x} \qquad \dns_{xf}^-(t) = {}^{t^e_d}_{t^x_x}\]
+\[\dns_{f}^+(u) = {}^{u^d_e}_{u^d_e} \qquad \dns_{f}^-(t) = {}^{t^e_d}_{t^e_d}\]
+I fixed the blue one; there aren't as many coincidences as I thought.
+So I should still have the argument be a twisted arrow $\tau : f \to s$. But now it's looking
+like
+\[\ups_{\tau}^+(u) = {}_{u^e_d}^{u^{e'}_{d'}} \qquad \ups_{\tau}^-(u) = {}_{u^d_e}^{u^{d'}_{e'}}\]
+\[\dns_{\tau}^+(u) = {}^{u^d_e}_{u^{d'}_{e'}} \qquad \dns_{\tau}^-(u) = {}^{u^e_d}_{u^{e'}_{d'}}\]
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&[2em]B\sw{d u\sw d}\ar[from=d]
+&B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
+\\
+&A^{d}_d \nu^-_{\ltri f }(t) \ar[r, "N_{\ltri f}"] & B^{d}_d \nu^+_{\ltri f }(u)
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{e}_{d} \nu^-_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
+&B^{d}_{e} \nu^+_{\rid_f}(u) \ar[from=u]\ar[from=d]
+&\int_b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e}_{e} \nu^-_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \nu^+_{\rtri f }(u)
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e u\sw e}\ar[from=u]
+&B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
+\end{tikzcd}
+\]
+
+Perhaps in general
+\[
+\begin{tikzcd}
+  A^{e}_{d} \nu^-_{\rid_{\ll\tau}}(t)\ar[d]\ar[r, "N_{\rid_{\ll\tau}}" description]
+&[4em]B^{d}_{d'} \nu^+_{\rid_{\ll\tau}}(u) \ar[from=d]
+\\
+ A^{e'}_{d'} \nu^-_{\tau }(t) \ar[r, "N_{\tau}"'] & B^{d'}_{e'} \nu^+_{\tau }(u)
+\\
+A\sw{e t \sw e} \ar[u]\ar[r, "N_{\rid_{\rr\tau}}"']
+&B\sw{e u\sw e}\ar[from=u]
+\end{tikzcd}
+\]
+\[\begin{tikzcd}
+  d \ar[d]\ar[r]& e\ar[from=d]\\
+d'\ar[r] &e'
+\end{tikzcd}\]
 \end{document}
