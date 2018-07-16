@@ -881,4 +881,91 @@ $ UL $
 &$ F_a U_a \ort L$
 \end{tabular}
 \]
+\subsection{Actions Again}
+So how might actions and props look in that light?
+Let $f, g$ denote entire intervals. We
+translate actions at intervals, and props at worlds.
+
+When propositions do $U_a$ and $F_a$, I am imagining that they're
+just grabbing the right end of the full token $\tok^u_v$. Or
+rather... hm. Maybe they do different things on the left vs. on the right.
+
+So
+\[\olt U_a^{uv.} X = \forall uv . a \in [u,v] \to \tok^u_v \lol  X\]
+\[\olt F_a^{uv} X =  a\in[u,v]\land \tok^u_v \tensor  X\]
+\[\ort U_a X = \tok_a \lol  X\]
+\[\ort F_a X = \tok_a \tensor  X\]
+\[ F^* X = \exists a . \tok^a \tensor  X\]
+
+and we just omit $uv$ bindings and uses where they're obvious from context.
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A_a $&$  \ort A_a$ \\
+\hline
+$ A \& B$
+&$ \olt U_a (\olt F_a \olt A_a \& \olt F_a \olt B_a)$
+&$  \ort F_a\ort U_a(\ort A_a \& \ort B_a)$
+ \\
+$ A \oplus B$
+&$ \olt U_a \olt F_a (\olt A_a \oplus \olt B_a)$
+&$  \ort F_a(\ort U_a\ort A_a \oplus \ort U_a\ort B_a)$
+ \\
+$ A \imp B$
+&$ \olt U_a( \ort U_a \ort A_a \imp \olt F_a \olt B_a)$
+&$  \ort F_a \ort U_a (\olt A_a \imp \ort B_a)$
+ \\
+$ p^+$
+&$ \olt U_a \olt F_a p(a)$
+&$  \ort F_a F^* p(a)$
+ \\
+$ p^-$
+&$ \olt U_a p(a)$
+&$  \ort F_a \ort U_a p(a)$
+\end{tabular}
+\]
+
+I can't guess the theorems for this, though.
+\subsection{Existentials}
+I wonder what happens if I do
+
+\[\olt U_a^{uv.} X = \forall uv . a \in [u,v] \to \tok^u_v \lol  X\]
+\[\olt F_a^{uv} X =  a\in[u,v]\land \tok^u_v \tensor  X\]
+\[\ort U_a^{tw} X = a\in[t,w] \to \tok^t_w \lol  X\]
+\[\ort F_a^{tw.} X = \exists tw . a \in [t,w] \land \tok^t_w \tensor  X\]
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A_a $&$  \ort A_a$ \\
+\hline
+$ A \& B$
+&$ \olt U_a (\olt F_a \olt A_a \& \olt F_a \olt B_a)$
+&$  \ort F_a\ort U_a(\ort A_a \& \ort B_a)$
+ \\
+$ A \oplus B$
+&$ \olt U_a \olt F_a (\olt A_a \oplus \olt B_a)$
+&$  \ort F_a(\ort U_a\ort A_a \oplus \ort U_a\ort B_a)$
+ \\
+$ A \imp B$
+&$ \olt U_a( \ort U_a \ort A_a \imp \olt F_a \olt B_a)$
+&$  \ort F_a \ort U_a (\olt A_a \imp \ort B_a)$
+ \\
+$ p^+$
+&$ \olt U_a \olt F_a p(a)$
+&$  \ort F_a  p(a)$
+ \\
+$ p^-$
+&$ \olt U_a p(a)$
+&$  \ort F_a \ort U_a p(a)$
+\end{tabular}
+\]
+
+\[\olt A_v, v \in [t, w], \tok^t_w \prov \ort A_v\]
+so maybe
+\[\olt N_a \prequiv \olt U^{tw}_a \ort N_a \]
+? Actually yeah, looks possible for the negative atom, at least.
+\[\olt U_a p(a) \prov \olt U_a \ort F_a \ort U_a p(a) \]
+has us first generate a neighborhood of $a$, then plug it into $F$, then get
+a token from $U$ on the right for the same neighborhood, which we can
+plug into $U$ on the left.
+\[\olt U_a \ort F_a \ort U_a p(a) \prov  \olt U_a p(a)\]
+has us generate a neighborhood of $a$ on the right, which we plug into the left.
+Then the $F$ generates another neighborhood, which we plug into $U$ on the left.
+
 \end{document}
