@@ -555,4 +555,330 @@ also suffices for the conclusion.
 \cqed
 \end{proof}
 
+
+\section{Serious Problems With Propositions}
+
+I think this may work for just ordered logic by itself, but
+I don't really understand how many kripke arguments are needed for propositions.
+My best guesses so far are like
+
+
+\[\begin{tabular}{r@{ }c@{ }c@{ }l}
+   Props&$A$&$::=$&$[\alpha]A \celse \cdots$\\
+  Pos. Actions&$\alpha$&$::=$&$?A \celse \alpha \cdot \alpha $
+$ \celse \alpha \rrto \alpha \celse \alpha \llto \alpha\celse \cdots$\\
+\end{tabular}\]
+
+\def\olt{\overleftarrow}
+\def\ort{\overrightarrow}
+Use a token $\tok^t_w$. The sequent $A, \alpha, B \prov C$ means for example
+
+\[u < v, \olt A_u, \olt \alpha^u_v, \olt B_v, \tok^u_v \prov \ort C\]
+
+and define translations $\olt\alpha^u_v$
+and $\ort\alpha$ and $\olt A_v$ and $\ort A$ by
+\[\begin{tabular}{cl}
+$A$ or $\alpha$ & $\olt A_v ; \ort A$  or $\olt \alpha^u_v ; \ort \alpha$\\
+$[\alpha] A$
+& \(\forall tw . \tok^t_w \lol \forall x \in [v, w].
+(\tok^v_x \lol \ort \alpha) \to (\tok^t_w \tensor \olt A_x) \)
+ \\
+& $\exists tw . \tok^t_w \tensor \forall x > w. \olt \alpha^w_x \to \tok^t_x \lol \ort A $
+\\
+$\alpha \rrto  \beta$
+& \(\forall tw . \tok^t_w \lol \forall x \in [v, w].
+(\tok^v_x \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^u_x) \)
+ \\
+& $\exists tw . \tok^t_w \tensor \forall x > w. \olt \alpha^w_x \to \tok^t_x \lol \ort \beta $
+\\
+$\alpha \llto \beta$
+& \(\forall tw . \tok^t_w \lol \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \)
+  \\
+& $\exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta $
+\end{tabular}
+\]
+
+And some nice properties I might try to guess and check by trying to reason about identity
+and cut are
+\[\exists u . \olt A_u \tensor \tok^u_u \prequiv \ort A
+\qquad \olt A_u   \prequiv \tok^u_u \lol \ort A\]
+\[\exists u < v . \olt \alpha^u_v \tensor \tok^u_v \prequiv \ort \alpha
+\qquad \olt \alpha^u_v   \prequiv u < v \to \tok^u_v \lol  \ort \alpha\]
+
+For instance, consider $\alpha \llto \beta$. There are four things we might try to
+prove. Let's see which feel easy and what they require.
+\[\olt{\alpha \llto \beta}^u_v \prov u < v \to \tok^u_v \lol \ort{\alpha \llto \beta}\]
+\[u < v \to \tok^u_v \lol \ort{\alpha \llto \beta} \prov \olt{\alpha \llto \beta}^u_v \]
+\[\exists u < v . \olt {\alpha \llto \beta}^u_v \tensor \tok^u_v \prov \ort {\alpha \llto\beta}\]
+\[\ort {\alpha \llto\beta} \prov \exists u < v . \olt {\alpha \llto \beta}^u_v \tensor \tok^u_v  \]
+expand to
+
+\[\forall tw . \tok^t_w \lol \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \prov
+ u < v \to \tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+\[u < v \to \tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \]
+\[\exists u < v . \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v \prov
+ \exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+\[\exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \exists u < v . \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v  \]
+Let's ignore the ambient inequality just to simplify this a tiny bit
+
+%1
+\[\forall tw . \tok^t_w \lol \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \prov
+ \tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+%2
+\[\tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \]
+%3
+\[\exists uv . \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v \prov
+ \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+%4
+\[\exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \exists uv . \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v  \]
+Ok, let's take these one at a time.
+\subsection{Proof 1}
+\[\forall tw . \tok^t_w \lol \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \prov
+ \tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+inverts to
+\[\forall tw . \tok^t_w \lol \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v), \tok^u_v \prov
+  \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+and there are two choices I have to make, which seems uncertain what to do yet.
+
+\subsection{Proof 2}
+\[\tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \]
+inverts to
+\[\tok^u_v \lol \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol
+ \ort \beta, \tok^x_u \lol \ort \alpha \prov \tok^t_w \tensor \olt \beta^x_v\]
+This is a nonstarter, since I can token consumers everywhere, and no token producers.
+
+\subsection{Proof 3}
+\[\exists uv . \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v \prov
+ \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+This inverts to
+\[ \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v), \tok^u_v \prov
+ \exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta\]
+and again like Proof 1, I have a token, but I don't know precisely what I should do with it.
+Although I have a hunch I should send it to the right.
+
+\subsection{Proof 4}
+\[\exists tw . \tok^t_w \tensor \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \exists uv . \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v  \]
+inverts to
+\[ \tok^t_w , \forall x. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \prov
+ \exists uv . \forall x .
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v) \tensor \tok^u_v  \]
+and I have a token and some things I could do with it.
+
+\subsection{No, Wait, I made a mistake}
+I didn't instantiate $\olt{\alpha \llto \beta}$ correctly.
+What a mess this is. Let's try doing $\prequiv$ all at once another time,
+guessing that $\tensor$-esque equivalence goes counterintuitively with the negatives.
+So
+\[\exists u < v . \olt {\alpha \llto \beta}^u_v \tensor \tok^u_v \prequiv \ort {\alpha \llto \beta}\]
+
+\[\exists u < v . \forall tw . \tok^t_w \lol \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v)
+ \tensor \tok^u_v
+\]
+\[  \prequiv \exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \]
+
+%% \[\begin{tabular}{r@{ }c@{ }c@{ }l}
+%%   Pos. Props&$P$&$::=$&$\alpha \celse \cdots$\\
+%%   Neg. Props&$N$&$::=$&$\phi \celse \cdots$\\
+%%   Pos. Actions&$\alpha$&$::=$&$?P \celse \alpha \cdot \alpha \celse \cdots$\\
+%%   Neg. Actions&$\nu$&$::=$&$\alpha \llto \nu \celse \alpha \rrto \nu \celse \cdots$\\
+%% \end{tabular}\]
+Using
+\[\exists u < v . \olt \beta^u_v \tensor \tok^u_v \prequiv \ort \beta
+\qquad \olt \alpha^x_t   \prequiv x < t \to \tok^x_t \lol  \ort \alpha\]
+this might be roughly the same as showing
+\[\exists u < v . \forall tw . \tok^t_w \lol \forall y \in [t, u].
+(\tok^y_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^y_v)
+ \tensor \tok^u_v
+\]
+\[  \prequiv \exists tw . \tok^t_w \tensor \forall x < t. (x < t \to \tok^x_t \lol  \ort \alpha) \to \tok^x_w \lol  (\exists u < v . \olt \beta^u_v \tensor \tok^u_v) \]
+I can't really see how that works.
+
+Let's just take the other side to see what happens.
+\[ \forall tw . \tok^t_w \lol \forall x \in [t, u].
+(\tok^x_u \lol \ort \alpha) \to (\tok^t_w \tensor \olt \beta^x_v)   \prequiv u < v \to \tok^u_v \lol  \exists tw . \tok^t_w \tensor \forall x < t. \olt \alpha^x_t \to \tok^x_w \lol \ort \beta \]
+
+No, this looks like garbage all the same.
+
+\section{How Did It Work With Modal Logic}
+\[\begin{tabular}{ccc}
+$A$ & $\olt A_a $&$ \ort A$ \\
+\hline
+$ A \& B$
+&$ U_a (F_a \olt A_a \& F_a \olt B_a)$
+&$ \ort A \& \ort B$
+ \\
+$ A \oplus B$
+&$ U_a F_a (\olt A_a \oplus \olt B_a)$
+&$ \ort A \oplus \ort B$
+ \\
+$ A \imp B$
+&$  (U_a \ort A) \imp \olt B_a$
+&$ \exists b . F_b U_b (\olt A_b \imp \ort B)$
+\end{tabular}
+\]
+Can I check that
+\[ \exists b . F_b \olt P_b \prequiv \ort P \]
+\[  \olt N_a \prequiv U_a \ort N \]
+Well for $\imp$ this comes out to
+\[(U_a (\exists b . F_b \olt A_b)) \imp U_a \ort B  \prequiv U_a (\exists b . F_b U_b (\olt A_b \imp \ort B))\]
+This reduces in the forward direction
+\[U_a(\exists b . F_b \olt A_b) \imp U_a \ort B, \tok_a  \prov  (\exists b . F_b U_b (\olt A_b \imp \ort B))\]
+\[U_a(\exists b . F_b \olt A_b) \imp U_a \ort B, \tok_a, \olt A_a  \prov   \ort B\]
+\[\olt  A_a  \prov   U_a(\exists b . F_b \olt A_b)\]
+and in the backwards direction
+\[  U_a (\exists b . F_b U_b (\olt A_b \imp \ort B)) \prov (U_a (\exists b . F_b \olt A_b)) \imp U_a \ort B \]
+\[  U_a (\exists b . F_b U_b (\olt A_b \imp \ort B)), U_a (\exists b . F_b \olt A_b), \tok_a \prov \ort B \]
+This is a problem because I don't have enough tokens! Let's try maybe the longer guess
+\[\begin{tabular}{ccc}
+$A$ & $\olt A_a $&$ \ort A$ \\
+\hline
+$ A \& B$
+&$ U_a (F_a \olt A_a \& F_a \olt B_a)$
+&$ \ort A \& \ort B$
+ \\
+$ A \oplus B$
+&$ U_a F_a (\olt A_a \oplus \olt B_a)$
+&$ \ort A \oplus \ort B$
+ \\
+$ A \imp B$
+&$ U_a( U_a \ort A \imp F_a \olt B_a)$
+&$ \exists b . F_b U_b (\olt A_b \imp \ort B)$
+\end{tabular}
+\]
+in which the theorem for $\imp$ is
+\[   U_a( U_a \ort A \imp  F_a \olt B_a) \prequiv U_a \exists b . F_b U_b (\olt A_b \imp \ort B)\]
+which is by i.h. the same as
+\[   U_a( U_a (\exists b . F_b \olt A_b) \imp  F_a U_a \ort B) \prequiv U_a \exists b . F_b U_b (\olt A_b \imp \ort B)\]
+which backwards is
+\[ U_a \exists b . F_b U_b (\olt A_b \imp \ort B) \prov   U_a( U_a (\exists b . F_b \olt A_b) \imp  F_a U_a \ort B) \]
+\[ U_a \exists b . F_b U_b (\olt A_b \imp \ort B), \tok_a, U_a (\exists b . F_b \olt A_b)\prov  F_a U_a \ort B \]
+\[ U_a \exists b . F_b U_b (\olt A_b \imp \ort B), \tok_a, U_a (\exists b . F_b \olt A_b)\prov  \ort B \]
+Stuck again! Is it at all possible that the quantifier in the positive theorem is a $\forall$?
+That seems unlikely. Let me try to prove the $\oplus$ case to check.
+\[ \forall b . F_b ( U_b F_b (\olt A_b \oplus \olt B_b)) \prequiv \ort A \oplus \ort B \]
+by i.h.,
+\[ \forall b . F_b ( U_b F_b (\olt A_b \oplus \olt B_b)) \prequiv \forall b . F_b \olt A_b \oplus \forall b . F_b \olt B_b \]
+Yeah, no way, it needs to be $\exists$.
+
+\subsection{What's Going On?}
+
+The identity proof of $A \imp B$ looks like
+
+\[
+\erule
+{
+\[
+\[
+\justifies
+A \wat a \prov A \wat a
+\]
+\[
+\justifies
+B \wat a \prov B \wat a
+\]
+\justifies
+A \imp B \wat a, A \wat a \prov B \wat a
+\]}
+{A \imp B \wat a \prov A \imp B \wat a}
+\]
+and with tokens
+\[
+\erule
+{
+\[
+\justifies
+ U_a( U_a \ort A \imp F_a \olt B_a), \tok_a, \olt A_a \prov  \ort B
+\]}
+{ U_a( U_a \ort A \imp F_a \olt B_a), \tok_a \prov \exists b . F_b U_b (\olt A_b \imp \ort B)}
+\]
+Oh, wait, that's the forward direction, that's easy.
+
+\subsection{Keeping Worlds On The Right}
+Is the problem fundamentally that I'm trying to avoid passing information on the right?
+\[\begin{tabular}{ccc}
+$A$ & $\olt A_a $&$ \ort A_a$ \\
+\hline
+$ A \& B$
+&$ U_a (F_a \olt A_a \& F_a \olt B_a)$
+&$  F_aU_a(\ort A_a \& \ort B_a)$
+ \\
+$ A \oplus B$
+&$ U_a F_a (\olt A_a \oplus \olt B_a)$
+&$  F_a(U_a\ort A_a \oplus U_a\ort B_a)$
+ \\
+$ A \imp B$
+&$ U_a( U_a \ort A_a \imp F_a \olt B_a)$
+&$  F_a U_a (\olt A_a \imp \ort B_a)$
+ \\
+$ p^+$
+&$ U_a F_a p$
+&$  F_a p$
+ \\
+$ p^-$
+&$ U_a p$
+&$  F_a U_a p$
+\end{tabular}
+\]
+with theorems
+\[  F_a \olt P_a \prequiv \ort P_a \qquad
+  \olt N_a \prequiv U_a \ort N_a \]
+To check the implication, we need
+\[ U_a( U_a \ort A_a \imp F_a \olt B_a) \prequiv   U_a F_a U_a (\olt A_a \imp \ort B_a)\]
+i.e.
+\[ U_a( U_a F_a \olt A_a \imp F_a U_a \ort B_a) \prequiv    U_a (\olt A_a \imp \ort B_a)\]
+Forward direction is easy, and backward direction is
+\[U_a (\olt A_a \imp \ort B_a) \prov  U_a( U_a F_a \olt A_a \imp F_a U_a \ort B_a) \]
+\[U_a (\olt A_a \imp \ort B_a) , \tok_a,  U_a F_a \olt A_a \prov  F_a U_a \ort B_a \]
+\[\olt A_a \imp \ort B_a,   \olt A_a \prov  \ort B_a \]
+
+Now we can think about adding world-invariant, i.e. valid propositions $V, W$.
+\[\begin{tabular}{ccc}
+$A/V$ & $\olt A_a/\olt V $&$ \ort A_a/\ort V$ \\
+\hline
+$ FV $
+&$ U_a F_a \olt V$
+&$  F_a \ort V$
+ \\
+$ UA $
+&$ \forall a . U_a F_a \olt A_a$
+&$  \forall a . U_a \ort A_a$
+\end{tabular}
+\]
+My theorem about $V$ is just uniformly $\olt V \prequiv \ort V$.
+This generates something that feels like validity. What about a dual situation
+with existentials?
+\[\begin{tabular}{ccc}
+$A/L$ & $\olt A_a/\olt L $&$ \ort A_a/\ort L$ \\
+\hline
+$ FA $
+&$  \exists a . F_a \olt A_a$
+&$ \exists a . F_a U_a \ort A_a$
+ \\
+$ UL $
+&$  U_a \olt L$
+&$ F_a U_a \ort L$
+\end{tabular}
+\]
 \end{document}
