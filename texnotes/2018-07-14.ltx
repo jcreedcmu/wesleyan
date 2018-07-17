@@ -16,7 +16,11 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-\def\lint{{\textstyle\int}}
+\def\olt{\overleftarrow}
+\def\ort{\overrightarrow}
+\def\ollt#1{\overleftarrow{\overline{#1}}}
+\def\orrt#1{\overrightarrow{\overline{#1}}}
+
 \def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
 \def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
 \def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
@@ -569,8 +573,6 @@ My best guesses so far are like
 $ \celse \alpha \rrto \alpha \celse \alpha \llto \alpha\celse \cdots$\\
 \end{tabular}\]
 
-\def\olt{\overleftarrow}
-\def\ort{\overrightarrow}
 Use a token $\tok^t_w$. The sequent $A, \alpha, B \prov C$ means for example
 
 \[u < v, \olt A_u, \olt \alpha^u_v, \olt B_v, \tok^u_v \prov \ort C\]
@@ -925,6 +927,7 @@ $ p^-$
 
 I can't guess the theorems for this, though.
 \subsection{Existentials}
+\label{existentials}
 I wonder what happens if I do
 
 \[\olt U_a^{uv.} X = \forall uv . a \in [u,v] \to \tok^u_v \lol  X\]
@@ -968,4 +971,426 @@ plug into $U$ on the left.
 has us generate a neighborhood of $a$ on the right, which we plug into the left.
 Then the $F$ generates another neighborhood, which we plug into $U$ on the left.
 
+\subsection{Simpler Things}
+Really going way back, trying to remember how the most abstract linear
+tethering scheme works. We set $U = q \lol$ and $F = q \tensor$ and define
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A $&$  \ort A$ \\
+\hline
+$ A \& B$
+&$ U (F \olt A \& F \olt B)$
+&$  F(U\ort A \& U\ort B)$
+ \\
+$ A \oplus B$
+&$ U  (F \olt A \oplus F \olt B)$
+&$  F(U\ort A \oplus U\ort B)$
+ \\
+$ A \imp B$
+&$ U( U \ort A \imp F \olt B)$
+&$  F  (\olt A \imp  U\ort B)$
+ \\
+$ p^+$
+&$ U F p$
+&$  F  p$
+ \\
+$ p^-$
+&$ U p$
+&$  F U p$
+\end{tabular}
+\]
+and we get regular proof behavior out of this. We prove $F \olt P \prequiv \ort P$
+ and $U \ort N \prequiv \olt N$.
+With this particular translation, can I prove the `wrong' direction? I can for the atoms,
+but let's try to the positive theorem for $A \imp B$. I get
+\[F U( U \ort A \imp F \olt B) \prequiv F  (\olt A \imp  U\ort B)\]
+and by the `wrong' uses of the i.h.,
+\[F U( U \ort A \imp F \olt B) \prequiv F  (U \ort A \imp  UF \olt B)\]
+Forward, I get to
+\[ U( U \ort A \imp F \olt B) ,   U \ort A, \tok \prov  F \olt B\]
+and I finish ok. Backward, I try
+\[F  (U \ort A \imp  UF \olt B) \prov F U( U \ort A \imp F \olt B) \]
+which leads to
+\[\tok,   (U \ort A \imp  UF \olt B) , U \ort A \prov F \olt B \]
+which is also ok. Hmm.
+
+Maybe what I'm remembering is
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A $&$  \ort A$ \\
+\hline
+$ A \& B$
+&$  F \ollt A \& F \ollt B$
+&$  U\orrt A \& U\orrt B$
+ \\
+$ A \oplus B$
+&$ F \ollt A \oplus F \ollt B$
+&$ U\orrt A \oplus U\orrt B$
+ \\
+$ A \imp B$
+&$ U \orrt A \imp F \ollt B$
+&$  \ollt A \imp  U\orrt B$
+ \\
+$ p^+$
+&$  F p$
+&$    p$
+ \\
+$ p^-$
+&$  p$
+&$   U p$
+\end{tabular}
+\]
+and $\ollt A = U \olt A$ and $\orrt A = F \ort A$.
+In which case I could conjecture from the atom cases that $F \ort P \prequiv \olt P$
+and $U\olt N \prequiv \ort N$.
+
+If that's true, we can derive
+\[ \orrt A \prequiv F \ollt A \qquad \ollt A \prequiv U\orrt A\]
+ for either polarization of $A$. Why?
+These expand to $ F \ort A \prequiv F U \olt A$ and
+$U \olt A \prequiv UF\ort A$. We can then observe
+\[ F \ort P \prequiv F U F \ort P \qquad UF \ort P \prequiv UF\ort P\]
+\[ FU \olt N \prequiv F U \olt N \qquad U \olt N \prequiv UFU\olt N\]
+
+Let's look at $\oplus$; we need to check
+\[ F \ollt A \oplus F \ollt B\prequiv F(U\orrt A \oplus U\orrt B)\]
+and by i.h. it suffices to show
+\[ F A \oplus F  B\prequiv F(UF A \oplus UF B)\]
+But we can do precisely this. Let's look at $\imp$; we need to check that
+\[ U(U \orrt A \imp F \ollt B) \prequiv  \ollt A \imp  U\orrt B\]
+and by i.h. it suffices to show
+\[ U(U \orrt A \imp F \ollt B) \prequiv U \orrt A \imp  UF \ollt B\]
+or merely
+\[ U(A \imp B) \prequiv A \imp  UB\]
+
+which we can. Great, this is the focal theorem I remember proving long ago.
+
+\subsubsection{Popping Back Up To Tethered Modal}
+If our propositions are indexed by worlds, this looks like
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A_a $&$  \ort A_a$ \\
+\hline
+$ A \& B$
+&$  F_a \ollt A_a \& F_a \ollt B_a$
+&$  U_a\orrt A_a \& U_a\orrt B_a$
+ \\
+$ A \oplus B$
+&$ F_a \ollt A_a \oplus F_a \ollt B_a$
+&$ U_a\orrt A_a \oplus U_a\orrt B_a$
+ \\
+$ A \imp B$
+&$ U_a \orrt A_a \imp F_a \ollt B_a$
+&$  \ollt A_a \imp  U_a\orrt B_a$
+ \\
+$ p^+$
+&$  F_a p$
+&$    p$
+ \\
+$ p^-$
+&$  p$
+&$   U_a p$
+ \\
+$ \textcolor{red}{\square A}$
+&$  \textcolor{red}{ \forall x \ge a .  F_x \ollt A_x}$
+&$   \forall x \ge a . U_x \orrt A_x$
+ \\
+$ \square A$
+&$  F_a \forall x \ge a . U_x F_x \ollt A_x$
+&$   \forall x \ge a . U_x \orrt A_x$
+\end{tabular}
+\]
+with
+\[U_a = a \lol {}\qquad F_a = a\tensor{}\]
+\[ \orrt A_a = F_a \ort A_a \qquad \ollt A_a = U_a \olt A_a \]
+\[F_a \ort P_a \prequiv \olt P_a \qquad U_a \olt N_a \prequiv \ort N_a\]
+\[ \orrt A_a \prequiv F_a \ollt A_a \qquad  \ollt A_a \prequiv U_a \orrt A_a\]
+Let's try to to prove the validity of $\square$. We claim it's positive on the outside,
+assuming $A$ is negative. Let's first show that the first, wrong definition, is wrong.
+We'd try to show
+\[ F_a  \forall x \ge a . U_x \orrt A_x \prequiv  \forall x \ge a . F_x \ollt A_x  \]
+and regardless of how we try to apply the i.h., we're stuck on the backwards half
+\[ \forall x \ge a . F_x \ollt A_x  \prov F_a  \forall x \ge a . U_x \orrt A_x  \]
+so, great, we take the correct definition of $\square$ that immediately returns the token
+and we try for
+\[ F_a \forall x \ge a . U_x F_x \ollt A_x  \prov F_a  \forall x \ge a . U_x \orrt A_x  \]
+and by the i.h. this is
+\[ F_a \forall x \ge a . U_x  \orrt A_x  \prov F_a  \forall x \ge a . U_x \orrt A_x  \]
+which is identical.
+
+\subsection{Enforcing a Property of World relative to Tether}
+The original business of
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A $&$  \ort A$ \\
+\hline
+$ A \& B$
+&$  F \ollt A \& F \ollt B$
+&$  U\orrt A \& U\orrt B$
+ \\
+$ A \oplus B$
+&$ F \ollt A \oplus F \ollt B$
+&$ U\orrt A \oplus U\orrt B$
+ \\
+$ A \imp B$
+&$ U \orrt A \imp F \ollt B$
+&$  \ollt A \imp  U\orrt B$
+ \\
+$ p^+$
+&$  F p$
+&$    p$
+ \\
+$ p^-$
+&$  p$
+&$   U p$
+\end{tabular}
+\]
+should work for any adjunction $F \dashv U$. So
+why not set $U_a A_a = \forall x R a . x \lol A_a$
+and $F_a A_a = \exists x R a . x \tensor A_a$. It's
+easy to check that $F_a U_a A_a \prov A_a$ and $A_a \prov U_a F_a A_a $.
+
+\subsection{Reconsidering `Existentials'}
+Back up in Section~\ref{existentials}, what I was really curious about is whether I could
+get away with slightly disconnected $U$s and $F$s depending on which side of the judgment
+I was on. What's really going on, I think, is merely that I was trying to make up two
+syntactic families of propositions, which accordingly went to different judgments, and
+somewhat accidentally maintaining a kind of discipline about the fact that positively
+occurring propositions were always of one class (which was translated at three worlds ${}^{tw}_a$)
+and negatively occurring the other (which was translated at one world $a$).
+
+Trying to simplify this to something I can more easily check, I get
+\[\olt U_a^{x.} X = \forall \hat x R a  \lol  X = \forall x . x R a \imp \tok_x \lol X\]
+\[\olt F_a^{x} X =  \hat x R a \tensor  X = x R a \land \tok_x \tensor X\]
+\[\ort U_a^{x} X = \hat x R a \lol X = x R a \imp \tok_x \lol X\]
+\[\ort F_a^{x.} X = \exists \hat x R a \tensor X = \exists x . xRa \land \tok_x \tensor  X\]
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A^x_a $&$  \ort A^x_a$ \\
+\hline
+$ A \& B$
+&$ \olt F^x_a \ollt A_a \& \olt F^x_a \ollt B_a$
+&$  \ort U^x_a \orrt A_a \& \ort U^x_a \orrt B_a$
+ \\
+$ A \oplus B$
+&$  \olt F^x_a \ollt A_a \oplus \olt F^x_a \ollt B_a$
+&$  \ort U^x_a\orrt A_a \oplus \ort U^x_a\orrt B_a$
+ \\
+$ A \imp B$
+&$  \ort U^x_a \orrt A_a \imp \olt F^x_a \ollt B_a$
+&$    \ollt A_a \imp \ort U^x_a \orrt B_a$
+ \\
+$ p^+$
+&$  \olt F^x_a p$
+&$  p$
+ \\
+$ p^-$
+&$  p$
+&$   \ort U^x_a p$
+\end{tabular}
+\]
+Oh, weird, the only place the binding constructors come up now is in the definition
+\[ \orrt A_a = \ort F^{.x}_a \ort A^x_a \qquad \ollt A_a = \olt U^{x.}_a \olt A^x_a \]
+So I could instead just strip off a lot of arrows and say
+
+\[ F_a^{x} X =  \hat x R a \tensor  X \qquad U_a^{x} X = \hat x R a \lol X \]
+\[ \orrt A_a = \exists x . F_a^x \ort A^x_a
+\qquad
+ \ollt A_a = \forall x . U_a^x  \olt A^x_a \]
+\[\begin{tabular}{ccc}
+$ A$ & $ \olt A^x_a $&$  \ort A^x_a$ \\
+\hline
+$ A \& B$
+&$ F^x_a \ollt A_a \& F^x_a \ollt B_a$
+&$  U^x_a \orrt A_a \& U^x_a \orrt B_a$
+ \\
+$ A \oplus B$
+&$  F^x_a \ollt A_a \oplus F^x_a \ollt B_a$
+&$  U^x_a\orrt A_a \oplus U^x_a\orrt B_a$
+ \\
+$ A \imp B$
+&$  U^x_a \orrt A_a \imp F^x_a \ollt B_a$
+&$    \ollt A_a \imp U^x_a \orrt B_a$
+ \\
+$ p^+$
+&$  F^x_a p$
+&$  p$
+ \\
+$ p^-$
+&$  p$
+&$   U^x_a p$
+\end{tabular}
+\]
+\[ F^x_a \ort P^x_a \prequiv \olt P^x_a
+\qquad
+ U^x_a \olt N^x_a \prequiv \ort N^x_a \]
+\[  \orrt A_a \prequiv \exists x. F^x_a \ollt A_a
+\qquad
+ \ollt A_a \prequiv  \forall x . U^x_a \orrt A_a \]
+That last one because it expands to
+\[  \exists x. F^x_a \ort A^x_a \prequiv \exists x. F^x_a \forall x . U^x_a \olt A^x_a
+\]
+\[ \forall x . U^x_a \olt A^x_a \prequiv  \forall x . U^x_a  \exists x. F^x_a \ort A^x_a \]
+which is proved either by
+\[  \exists x. F^x_a \ort P^x_a \prequiv \exists x. F^x_a \forall x . U^x_a \exists x . F^x_a \ort P^x_a
+\]
+\[ \forall x . U^x_a \exists x . F^x_a \ort P^x_a \prequiv  \forall x . U^x_a  \exists x. F^x_a \ort P^x_a \]
+or
+\[  \exists x. F^x_a  \forall x . U^x_a  \olt N^x_a \prequiv \exists x. F^x_a \forall x . U^x_a \olt N^x_a
+\]
+\[ \forall x . U^x_a \olt N^x_a \prequiv  \forall x . U^x_a  \exists x. F^x_a  \forall x . U^x_a  \olt N^x_a \]
+Actually, wait, those aren't true, are they? I can prove
+\[\forall x . x \lol A_x \prov \forall x . x \lol \exists y . y \tensor \forall z . z \lol A_z\]
+but the reverse
+\[ \forall x . x \lol \exists y . y \tensor \forall z . z \lol A_z \prov \forall x . x \lol A_x\]
+fails because we try to prove $A_y \prov A_x$. Dang.
+
+\subsection{What's the Dogma}
+Every syntactic class/judgment comes with a characteristic adjunction between positives
+and negatives at that judgment. A proposition can {\em focus through} an output-input
+pair, assuming wlog that both output and input are positive, if like... what is the condition?
+Some display-like exchange of $F$s, I should think. Is it just that? That the propositional
+function $C(\dash)$ admits an alternate `factorization' $C'$, an alternate way of decomposing itself such that
+\[C'(FA) \prequiv FC(A)\]?
+Similarly something like
+\[C'(UA) \prequiv UC(A)\]
+for negatives? And for the first argument of $\imp$, it'd be the statement that
+there is some $C'$ such that
+\[C'(FA) \prequiv U(A \imp B)\]
+If I can't get that, then maybe something weaker, like the two conditions
+\[U(UFA \imp B) \prequiv U(A \imp B)\]
+\[U(A \imp FUB) \prequiv U(A \imp B)\]
+would suffice.
+These are both definitely true, at least. Ah, but that means
+the `alternate form' of implication is exactly
+\[\lambda X . U(UX \imp B)\]
+
+So if I say $S^+ = F$ and $S^- = U$, then a proposition that has focal polarity $\omega$
+on the outside and $\iota$ on the inside is a propositional function $C(\dash)$ equipped
+with a focusing witness $C'(\dash)$ such that
+\[S^\omega C(A) \prequiv C'(S^\iota A) \eqno(1)\]
+which is an equivalent to condition to asking for
+\[S^\omega C(A) \prequiv S^\omega C(S^{\bar \iota} S^\iota A) \eqno(2) \]
+To see that $(1) \imp (2)$, we reason
+\[S^\omega C(A) \prequiv  C'(S^\iota A) \prequiv C'(S^\iota S^{\bar \iota} S^\iota A)
+ \prequiv S^\omega C(S^{\bar \iota} S^\iota A) \]
+To see that $(2) \imp (1)$, we set $C'(X) = S^\omega(C S^{\bar \iota} X)$ and
+then $(1)$ is exactly the same thing as $(2)$.
+
+Why is $\square$ ok in this dogma? I can't really say conclusively what judgment
+its inner proposition is at, since it's quantified. This bothers me a bit.
+I guess the way out of that is to say that it has an unbounded collection of
+subformulae? One for each element of the domain of worlds? When I say
+\[(\square N)_u = \dns \forall v \ge u . U_v N_v\]
+is like a big conjunction. So we want to check focusing for {\em each} of those conjuncts.
+This would still be a check-for-{\em all}-of-them situation
+ even if the quantifier were existential. Since I would claim $\square$ is positive
+on the outside, negative on the inside, I can observe that there {\em exists}
+a reformulation of $\square$ that puts a $U_v$ next to the argument, since we
+explicitly have a $U_v$ in the connective for every $v$.
+
+How do I tell this sort of reasoning/criterion is ultimately correct? The theorem
+I want at the very end is that provability is not affected by insertion of double-shifts,
+where I can assume my global situation looks like a provability query
+\[ \prov U_a N_a\]
+for some judgment $a$.
+
+Ok, so I can start just trying to explore the space of what adjunctions exist
+that are more slack than exact token matches. Let's take as an assumption that
+the index on the judgments takes the form of a single world. I want to test the
+hypothesis that
+\[U_a A_a = \forall  x R a \to x \lol A_a \qquad
+F_a A_a = \exists  x R a \land x \tensor A_a \]
+constitutes an adjunction. Now this actually looks fine, I think because the scope
+of the variable $x$ is more limited than in what I was considering above. Right --- I'm
+using the quantified shifts everywhere, and what went wrong above was trying to {\em capture}
+the $x$ and continuing to use it internally. Now it might well be that most of the connectives
+retain their usual focusing properties, but the smaller subset that want to maniuplate
+the tethering data need to be unpolarized, just like $\square$ is.
+
+But how does this square with focally appropriate $\rrto$ and $\llto$? I feel like I've
+failed in this particular attempt if I can't accommodate them as proper $(+, -) \to -$
+connectives. Yet on the left they seem to not only want to check that their
+location fits inside the tether interval, but also they want to use the tether endpoints
+to set the scope with which they extend.
+
+If I try to generalize to sort of `transverse shifts'
+\[U(x.A) = \forall x. x \lol A_x \qquad
+F(x.A) = \exists  x.x \tensor A_x \]
+these are nonshift modalities in the sense that they convert a type-with-world-parameter
+into a closed type. I could also write them as
+\[U(x.A) = \forall x. U_x A_x \qquad
+F(x.A) = \exists  x. F_x A_x \]
+Yeah, these are basically $\square$ and some sort of $\Diamond$.
+They don't do anything special with respect to focusing. And I don't have
+\[\Diamond A \prov \Diamond \square \Diamond A
+\qquad \square \Diamond \square A   \prov \square A \]
+although I do have the reverse implications, which makes sense even for PfD box and diamond.
+Really the crux of it is the direct failure of
+\[A \prov \square \Diamond A
+\qquad \Diamond \square A   \prov  A \]
+i.e.
+\[A_x \prov \forall y . y \lol \exists z . z\tensor A_z \]
+\[ \exists y . y \lol \forall z . z\tensor A_z \prov  A_x\]
+We have enough tokens around, but we get the wrong $A$.
+
+\def\uu{\mathbf{u}}
+\def\ff{\mathbf{f}}
+But can I still write clauses for $\rrto$? The adjunction for $N^u_v$ and $P^u_v$
+I would still expect to be
+\[U^u_v A^u_v = \forall tw \supset uv \to \#^t_w \lol A^u_v \qquad
+F^u_v A^u_v = \exists tw \supset uv \land \#^t_w \tensor A^u_v \]
+and I can cautiously make some more definitions
+\[U^{tu}_{wv} X^u_v = \forall tw \supset uv \to \#^t_w \lol X^{t}_{w} \qquad
+F^{tu}_{wv} X^u_v = \exists tw \supset uv \land \#^t_w \tensor X^{t}_{w} \]
+\[\uu^{t}_{w} X = \#^t_w \lol X \qquad
+\ff^{t}_{w} X = \#^t_w \tensor X \]
+
+where this is just a macro on already-translated expressions.
+
+So my left and right translations would be
+\[\begin{tabular}{ccc}
+$ A$ & $ \ollt A^u_v $&$  \orrt A^u_v$ \\
+\hline
+$A \rrto B$
+&
+$U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w \orrt A^v_x \imp \ff^t_w \ollt B^u_x  )$
+&
+$F^{tu}_{wv} (\forall x \in [v, w]. \ollt A^v_x \imp \uu^t_w \orrt B^u_x  )$
+\end{tabular}\]
+Then could I check the theorems
+\[  \orrt P^u_v \prequiv F^u_v \ollt P^u_v \qquad \ollt N^u_v \prequiv U^u_v \orrt N^u_v \]
+This would entail checking
+\[U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w \orrt A^v_x \imp \ff^t_w \ollt B^u_x  )
+\prequiv U^u_v F^{tu}_{wv} (\forall x \in [v, w]. \ollt A^v_x \imp \uu^t_w \orrt B^u_x  )\]
+and the i.h. gives us
+\[U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x \ollt A^v_x \imp \ff^t_w U^u_x \orrt B^u_x  )
+\prequiv U^u_v F^{tu}_{wv} (\forall x \in [v, w]. \ollt A^v_x \imp \uu^t_w \orrt B^u_x  )\]
+so we can drop arrows and ask
+\[U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x  A^v_x \imp \ff^t_w U^u_x  B^u_x  )
+\prequiv U^u_v F^{tu}_{wv} (\forall x \in [v, w].  A^v_x \imp \uu^t_w  B^u_x  )\]
+\subsubsection{Just Go For It}
+Forward:
+\[U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x  A^v_x \imp \ff^t_w U^u_x  B^u_x  )
+\prov U^u_v F^{tu}_{wv} (\forall x \in [v, w].  A^v_x \imp \uu^t_w  B^u_x  )\]
+%
+\[TW \supset uv, \tok^T_W, U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x  A^v_x \imp \ff^t_w U^u_x  B^u_x  )
+\prov  F^{tu}_{wv} (\forall x \in [v, w].  A^v_x \imp \uu^t_w  B^u_x  )\]
+%
+\[TW \supset uv, x \in [v, W], A^v_x, \tok^T_W, U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x  A^v_x \imp \ff^t_w U^u_x  B^u_x  )
+\prov   B^u_x  \]
+%
+\[TW \supset uv, x \in [v, W], A^v_x,   \forall x \in [v,W] . \uu^T_W F^v_x  A^v_x \imp \ff^T_W U^u_x  B^u_x
+\prov   B^u_x  \]
+%
+\[TW \supset uv, x \in [v, W], A^v_x,   \uu^T_W F^v_x  A^v_x \imp \ff^T_W U^u_x  B^u_x
+\prov   B^u_x  \]
+\[\isok\]
+
+Backward:
+\[U^u_v F^{tu}_{wv} (\forall x \in [v, w].  A^v_x \imp \uu^t_w  B^u_x  )
+\prov
+U^{tu}_{wv} (\forall x \in [v,w] . \uu^t_w F^v_x  A^v_x \imp \ff^t_w U^u_x  B^u_x  )\]
+%
+\[TW \supset uv, x \in [v, W],\uu^T_W F^v_x  A^v_x,
+U^u_v F^{tu}_{wv} (\forall x \in [v, w].  A^v_x \imp \uu^t_w  B^u_x  )
+\prov
+  \ff^T_W U^u_x  B^u_x  \]
+I think this is $\isbad$. There's all kinds of things generating fresh intervals that I don't
+seem to have any control over.
 \end{document}
