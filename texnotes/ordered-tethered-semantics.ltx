@@ -1,0 +1,630 @@
+\documentclass{article}
+\usepackage[tmargin=0.1in, bmargin=0.1in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\tok{\#}
+\def\fuse{\bullet}
+\def\olt{\overleftarrow}
+\def\ort{\overrightarrow}
+\def\ollt#1{\overleftarrow{\overline{#1}}}
+\def\orrt#1{\overrightarrow{\overline{#1}}}
+
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
+\def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
+\def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.9}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\def\xxxcite{\textcolor{red}{CITE }}
+
+\def\tpos{10}
+\def\upos{25}
+\def\vpos{55}
+\def\wpos{70}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{rid}{rgb}{1,0.2,0.7}
+\definecolor{grn}{rgb}{0.1,0.7,0.3}
+\def\framework{
+% the line
+  \draw[mydrawstyle](0,0)--(80,0);
+  \draw[mydrawstyle](0,10)--(80,10);
+% tick marks
+  \draw (\tpos,0)--(\tpos,13) node[above]{$t$};
+  \draw (\upos,0)--(\upos,13) node[above]{$u$};
+  \draw (\vpos,0)--(\vpos,13) node[above]{$v$};
+  \draw (\wpos,0)--(\wpos,13) node[above]{$w$};
+}
+
+\title{Tethered Interval Semantics of Ordered Logic}
+\begin{document}
+
+
+\maketitle
+\section{Introduction}
+I notice there's an interesting translation that explains ordered
+logic \xxxcite as arising from a logic that can talk about linear
+assumptions that behave like {\em intervals} on an abstract line. This
+translation is a `syntactic semantics' in the sense that it's a
+translation whose source and destination languages admit a complete
+focusing proof strategy, and the translation preserves not just
+provability, but focused proof search behavior.
+
+I certainly would not claim that this semantics is unequivocally {\em
+  better} than setting up a resource semantics where every ordered
+assumption is labelled by an element of a (crucially not assumed to be
+commutative) monoid, but it's interesting that ordered logic can be
+`implemented' in more than one way. This explanation, in terms of the
+behavior of intervals and concatenation, does have the salient
+advantage, however, that associativity arises somewhat naturally,
+instead of needing to be imposed. I think it may for similar reasons
+more easily generalize to hypergraph-like relations on more than 2
+endpoints, or higher-dimensional cells.
+
+\section{A Sketch of the Semantics}
+
+Consider the language of ordered logic:
+\[\begin{tabular}{r@{ }ccl}
+Propositions&$A$&$::=$&$p \celse A \rrto B \celse A \llto B \celse 1\celse A \fuse B \celse $\\
+&&&$0 \celse A \oplus B \celse \top \celse A \amp B$
+\end{tabular}\]
+We have atomic propositions $p$ and all the usual connectives, multiplicative and additive.
+
+
+We take a stab at how to interpret this language into constructive first-order
+logic with equality. We say that every ordered logic proposition is to be interpreted as
+a binary relation on some Kripke-like syntactic sort of worlds. We
+require for every atom $p$ a base relation $\eta_p(u, v)$ on worlds be
+provided, and then we can define $A^u_v$, a function whose inputs are
+an ordered language proposition $A$ and two worlds $u$ and $v$, and
+which outputs a first-order proposition. It is defined by recursion on
+$A$:
+\[   (A \rrto B)^u_v = \forall x . A^v_x \imp B^u_x\]
+\[   (A \llto B)^u_v = \forall x . A^x_u \imp B^x_v\]
+\[   1^u_v = (u = v)\qquad   (A \fuse B)^u_v = \exists x . A^u_x \land B^x_v\]
+\[   0^u_v = \bot\qquad   (A \oplus B)^u_v = A^u_v \lor B^u_v\]
+\[   \top^u_v = \top\qquad   (A \amp B)^u_v = A^u_v \land B^u_v\]
+\[   p^u_v = \eta_p(u, v)\]
+
+We can think of $A^u_v$ as meaning `$A$ is true in the interval from $u$ to $v$'.
+
+A context $\Omega = A_1, \ldots, A_n$ is interpreted by
+saying
+\[\Omega^{u_0}_{u_n} = (A_1 \bullet \cdots \bullet A_n)^{u_0}_{u_n} \]
+\[ = \exists u_1 \cdots u_{n-1} . (A_1)^{u_0}_{u_1} \land \cdots \land (A_n)^{u_{n-1}}_{u_n} \]
+and we say the meaning of a sequent $\Omega \prov A$ is the closed first-order entailment
+\[ \prov \forall uv . \Omega^u_v \imp A^u_v \]
+
+It is straightforward to prove that this interpretation is sound.
+\begin{lemma}
+If \(\Omega \prov A\), then
+\( \prov \forall uv . \Omega^u_v \imp A^u_v \).
+\end{lemma}
+
+\begin{proof}
+Asynchronous rules pretty much come for free, since by design we have rigged things
+so that the top of each asynchronous rule has the same interpretation as the bottom.
+For example, let's look at $\rrto R$:
+\[
+\erule
+{\Omega, A \rrto B}
+{\Omega \prov A \rrto B}
+\]
+Suppose $\Omega = A_1,\ldots,A_n$. Then the interpretation of the top
+of the rule is the first-order
+provability
+\[\prov \forall u_0 v . (\exists u_n . \Omega^{u_0}_{u_n}\land (A)^{u_n}_v) \imp B^{u_0}_v \]
+which is the same thing (by right-invertibility of first-order
+connectives like $\imp$ and $\forall$ and left-invertibility of
+$\land$ and $\exists$) as requiring
+\[ (A_1)^{u_0}_{u_1}, \ldots, (A_n)^{u_{n-1}}_{u_n}, (A)^{u_n}_v \prov B^{u_0}_v \eqno(*)\]
+and the bottom of the rule means
+\[\prov \forall u_0 u_n . \Omega^{u_0}_{u_n} \imp (\forall v . A^{u_n}_v \imp B^{u_0}_v)\]
+also means the same thing as $(*)$.
+
+
+Let's now turn to the synchronous rules, starting with $\rrto L$.
+\[
+\erule
+{\Omega_2 \prov A \qquad \Omega_1, B, \Omega_3 \prov C}
+{\Omega_1, A \rrto B, \Omega_2, \Omega_3 \prov C}
+\]
+By induction hypothesis, we know $(\Omega_2)^w_y \prov A^w_y$
+and $(\Omega_1)^u_v,B^v_y, (\Omega_3)^y_z \prov C^u_z$. From them we can derive
+\[
+\erule
+{\[
+(\Omega_2)^w_y \prov A^w_y
+\qquad
+ (\Omega_1)^u_v,B^v_y, (\Omega_3)^y_z \prov C^u_z
+\justifies
+(\Omega_1)^u_v,  A^w_y \imp B^v_y, (\Omega_2)^w_y, (\Omega_3)^y_z \prov C^u_z
+\]}
+{(\Omega_1)^u_v, \forall x . A^w_x \imp B^v_x, (\Omega_2)^w_y, (\Omega_3)^y_z \prov C^u_z}
+\]
+And $\llto$ and $\fuse$ go pretty similarly.
+\cqed
+\end{proof}
+
+Unfortunately, this semantics is not complete.
+A shibboleth sequent distinguishing them is:
+\[A \llto B \rrto 0, B \prov (A \llto 0) \fuse B\]
+First let's see why it fails in real ordered logic. We assume focusing to make
+the proof of underivability easier. Assume $A$ and $B$ are positive atoms.
+So focus on $A \llto B \rrto 0$ fails because we don't have $A$ yet. We must focus on the right, so we have
+to consume the $B$. Then we have the goal $A, A \llto B \rrto 0 \prov 0$, and although we can capture the $A$,
+we have no $B$.
+
+On the other hand, we can prove
+
+\[
+\erule
+{\[
+\[
+\[
+\[
+\[
+\[
+\[
+\justifies
+ B^v_w \prov B^v_w
+\]
+\[
+\using \textcolor{blue}{0L}
+\justifies
+0^t_w \prov  0^t_v
+\]
+\justifies
+ B^v_w \imp 0^t_w, B^v_w \prov  0^t_v
+\]
+\using \textcolor{blue}{\forall L} \justifies
+\forall x . B^v_x \imp 0^t_x, B^v_w \prov  0^t_v
+\]
+\justifies
+( B \rrto 0)^t_v, B^v_w \prov  0^t_v
+\]
+\[
+\justifies
+A^t_u \prov A^t_u
+\]
+\justifies
+A^t_u, (A \llto B \rrto 0)^u_v, B^v_w \prov  0^t_v
+\]
+\justifies
+(A \llto B \rrto 0)^u_v, B^v_w \prov (A \llto 0)^u_v
+\]
+\[
+ \justifies B^v_w \prov B^v_w
+\]
+\justifies
+(A \llto B \rrto 0)^u_v, B^v_w \prov (A \llto 0)^u_v \land B^v_w
+\]}
+{(A \llto B \rrto 0)^u_v, B^v_w \prov ((A \llto 0) \fuse B)^u_w}
+\]
+
+There are two critical inference steps going on here. One is the
+highlighted $0L$, which relies on the fact that the interpretation of
+$0$ is uniformly always false, at any pair of worlds, so the
+`mismatch' between the left and right side of the sequent doesn't
+matter. The other is $\forall L$, which choose an instantiation for
+the variable that somehow {\em doesn't make sense} given the intended
+meaning of the intervals involved. Namely, it sets $x = w$ which is
+outside the interval $[t,v]$.
+
+Here's a diagrammatic story of the proof: We start with the goal
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\upos,0)--(\wpos,0) node[midway, below=1]{$(A \llto 0) \fuse B$};
+  \draw[line width=1mm, blu](\vpos,10)--(\wpos,10) node[midway, below=1]{$B$};
+  \draw[line width=1mm, rid](\upos,10)--(\vpos,10) node[midway, below=1]{$A \llto B \rrto 0$};
+\end{tikzpicture}\]
+Assumptions are on the top line, conclusions are on the bottom line.
+We apply $\fuse R$ to split the context. We choose to split at $v$, so we must prove
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\vpos,0)--(\wpos,0) node[midway, below=1]{$B$};
+  \draw[line width=1mm, blu](\vpos,10)--(\wpos,10) node[midway, below=1]{$B$};
+  \draw[line width=1mm, rid](\upos,10)--(\vpos,10) node[midway, below=1]{$A \llto B \rrto 0$};
+\end{tikzpicture}\]
+and
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\upos,0)--(\vpos,0) node[midway, below=1]{$A \llto 0$};
+  \draw[line width=1mm, blu](\vpos,10)--(\wpos,10) node[midway, below=1]{$B$};
+  \draw[line width=1mm, rid](\upos,10)--(\vpos,10) node[midway, below=1]{$A \llto B \rrto 0$};
+\end{tikzpicture}\]
+The former follows from the identity rule, so we concentrate on the latter. We apply
+$\llto L$, extending the context with an extra interval:
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\tpos,0)--(\vpos,0) node[midway, below=1]{$0$};
+  \draw[line width=1mm, blu](\vpos,10)--(\wpos,10) node[midway, below=1]{$B$};
+  \draw[line width=1mm, grn](\tpos,10)--(\upos,10) node[midway, below=1]{$A$};
+  \draw[line width=1mm, rid](\upos,10)--(\vpos,10) node[midway, below=1]{$A \llto B \rrto 0$};
+\end{tikzpicture}\]
+We apply ${\llto} L$, which consumes the $A$ on the left, leaving us with the goal
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\tpos,0)--(\vpos,0) node[midway, below=1]{$0$};
+  \draw[line width=1mm, blu](\vpos,10)--(\wpos,10) node[midway, below=1]{$B$};
+  \draw[line width=1mm, rid](\tpos,10)--(\vpos,10) node[midway, below=1]{$ B \rrto 0$};
+\end{tikzpicture}\]
+The semantics of $B \rrto 0$ expects us to choose a right-extention of the interval
+it is at such that the extention satisfies $B$, and guarantees us that
+the whole extended interval will satsify $0$ --- but at this
+stage it is apparent in what sense choosing $w$ is somehow `wrong' --- it's {\em outside}
+the interval of the conclusion! Although we can proceed to
+\[\begin{tikzpicture}[mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+  \framework
+% segments
+  \draw[line width=1mm, orng](\tpos,0)--(\vpos,0) node[midway, below=1]{$0$};
+  \draw[line width=1mm, rid](\tpos,10)--(\wpos,10) node[midway, below=1]{$0$};
+\end{tikzpicture}\]
+and complete the proof, it feels like cheating. The assumption $B$ was supposed to
+be `consumed' by the earlier use of ${\fuse}R$.
+
+The solution to this problem will be a form of {\em tethering} assumptions to
+a notion of {\em currently active} interval.
+\section{Tethering}
+The idea of tethering \xxxcite comes out of trying to explain
+the way in which Pfenning-Davies modal logic is a
+constructive S4 logic of possible worlds. There is a
+similar counterexample that shows that it's incomplete to suppose that
+one can simply interpret $\square$ as meaning `for all future
+worlds' in the sense of the quantifier $\forall$ in constructive
+first-order logic, without any further constraints.
+This interpretation is essentially what's given by Simpson \xxxcite.
+The fix is to refine the semantics by adding a notion of {\em tethering} assumptions
+to a {\em currently active} world.
+We'll imitate and generalize this below, to have a notion of tethering
+to a certain {\em interval} of kripke worlds, instead of a single one.
+
+\subsection{Modal Logic Without Tethering}
+Let's first recapitulate the untethered modal semantics here for easy
+comparison with the situation above. The language of modal
+logic is:
+\[\begin{tabular}{r@{ }ccl}
+Propositions&$A$&$::=$&$p \celse \square A \celse A \imp B \celse  $\\
+&&&$0 \celse A \oplus B \celse \top \celse A \amp B$
+\end{tabular}\]
+We say that every modal logic proposition is to be interpreted as
+a unary relation on some Kripke-like syntactic sort of worlds, on
+which there is a reflexive, transitive relation $\le$.  We
+require for every atom $p$ a base relation $\eta_p(u)$ on worlds be
+provided, and then we can define $A_u$, a function whose inputs are
+an ordered language proposition $A$ and a world $u$, and
+which outputs a first-order proposition. It is defined by recursion on
+$A$:
+\[   (\square A)_u = \forall v \ge u. A_v\]
+\[   (A \imp B)_u = A_u \imp B_u\]
+\[   0_u = \bot\qquad   (A \oplus B)_u = A_u \lor B_u\]
+\[   \top_u = \top\qquad   (A \amp B)_u = A_u \land B_u\]
+\[   p_u = \eta_p(u)\]
+Interpretation of contexts is conjunctive, treating comma like $\amp$.
+
+We write $\prov_{PD}$ provability in Pfenning-Davies modal logic.
+As before, we have soundness
+\begin{lemma}
+If $\Gamma \prov_{PD} A$, then $\Gamma_u \prov A_u$.
+\end{lemma}
+but not completeness. A counterexample is
+$\lnot \lnot \square \lnot A \prov \square \lnot A$.
+This is interpreted as
+\[\lnot \lnot \forall v \ge u . \lnot A_v \prov \forall v\ge u.\lnot A_v\]
+and we can prove it as
+\[
+\erule
+{
+\[
+\[
+\[
+\[
+\[
+\justifies
+A_v \prov A_v
+\]
+\justifies
+A_v, \lnot A_v \prov
+\]
+\justifies
+v \ge u, A_v, \forall v \ge u . \lnot A_v \prov
+\]
+\justifies
+v \ge u, A_v \prov \lnot \forall v \ge u . \lnot A_v
+\]
+\justifies
+v \ge u, \lnot \lnot \forall v \ge u . \lnot A_v , A_v \prov
+\]}
+{\lnot \lnot \forall v \ge u . \lnot A_v \prov \forall v\ge u.\lnot A_v}
+\]
+In Pfenning-Davies, we cannot make progress because we have $\square$ on the right
+(which would clear the context) and $\lnot$ on the left (which would clear the right-hand
+side if used).
+\subsection{Modal Logic With Tethering}
+I described a tethered semantics for Pfenning-Davies modal logic in \xxxcite.
+The gist of it is that you when pass to a polarized language and focused proof theory,
+the shift operators either produce or consume a linear {\em token} which represents
+the sequent's notion of the {\em current} world. The context-clearing effect
+of the $\square R$ rule is achieved by actually statefully updating the current world.
+Every assumption in the context, by virtue of how the shifts work, must
+pass a check that it is at the current world before being further decomposed.
+
+The modal language when polarized becomes
+\[\begin{tabular}{r@{ }ccl}
+Positive Props&$P$&$::=$&$p \celse \square N \celse 0 \celse P \oplus P \celse \dns N  $\\
+Negative Props&$N$&$::=$&$n \celse P \imp N \celse \top \celse N \amp N \celse \ups P$
+\end{tabular}\]
+and the semantics becomes
+\[   (\dns N)_u = \tok_u \lol N_u \qquad (\ups P)_u = \tok_u \tensor P_u\]
+\[   (\square N)_u = \forall v \ge u. (\tok_v \lol N_v)\]
+\[   (P \imp N)_u = P_u \imp N_u\]
+\[   0_u = \bot\qquad   (P \oplus P)_u = P_u \lor P'_u\]
+\[   \top_u = \top\qquad   (N \amp N')_u = N_u \land N'_u\]
+\[   p_u = \eta_p(u) \qquad n_u = \eta_n(u)\]
+
+The counterexample $\lnot \lnot \square \lnot A  \imp \square \lnot A$
+is polarized (assuming $A$ is positive) as
+\[\dns \lnot \dns \lnot \square \lnot A \prov \ups \square \lnot A\]
+and so it's translated by the semantics to
+(abbreviating $\tok_u \lol$ as $U_u$ and $\tok_u \tensor$ as $F_u$)
+\[\tok_u, U_u  \lnot U_u \lnot \forall v \ge u . U_v \lnot A_v \prov F_u
+\forall v \ge u . U_v \lnot A_v\]
+And we find, correctly, that this cannot be proved.
+Either we focus on the right, spending the token $\tok_u$, and getting
+back a token $\tok_v$ that can't be used on the left, or else
+we focus on the left, spending the token and obtaining only the unprovable goal
+\[  \prov U_u \lnot \forall v \ge u . U_v \lnot A_v \]
+which has clobbered the original right-hand side of the sequent.
+
+\section{Linear Interval Assumptions}
+
+Our goal is now to describe the data to which we will be tethered in the ordered case.
+Recall that the mental image we're supposed to have in ordinary linear logic
+is that the context is a soup of propositions
+that behave like resources, in that they cannot be freely duplicated
+or erased, although they have no fixed order. We mean to augment this
+picture with one special family of linear atomic propositions $\pair u v$
+which are supposed to mean `a resource is available everywhere in the
+interval between $u$ and $v$'. Such an assumption is not contractible or weakenable;
+having one resource between $u$ and $v$ cannot be turned into having zero
+or two resources there.
+
+However, we will postulate that worlds come equipped with a transitive total order $<$,
+and that a context consisting of two adjoining
+interval-resource-assumptions should be considered definitionally equal to
+a context with the concatenated interval:
+\[\erule
+{\Delta \prov u < v\qquad \Delta \prov v < w}
+{ \Delta, \pair u v , \pair v w = \Delta, \pair u w }\eqno(\dagger)\]
+This requirement would be satisfied if $\pair u v$ were thought of
+as either orientation of half-open interval
+of, e.g. real numbers, $(u, v]$ or $[u, v)$. We side-step the question
+of whether endpoints are thought of as included on one end or the other by only
+depending on the merging postulate $(\dagger)$.
+
+\subsection{Ordered Logic via Tethering}
+The polarized language of ordered logic is
+\[\begin{tabular}{r@{ }ccl}
+Positive Props&$P$&$::=$&$p\celse 1 \celse P \fuse P \celse 0 \celse P \oplus P \celse \dns N  $\\
+Negative Props&$N$&$::=$&$n \celse P \rrto N \celse P \llto N \celse \top \celse N \amp N \celse \ups P$
+\end{tabular}\]
+and the semantics of propositions is
+\[   (\ups P)^u_v = \pair u v \tensor P^u_v \qquad   (\dns N)^u_v = \pair u v \lol N^u_v \]
+\[   (P \rrto N)^u_v = \forall x . P^v_x \imp N^u_x\]
+\[   (P \llto N)^u_v = \forall x . P^x_u \imp N^x_v\]
+\[   1^u_v = (u = v)\qquad   (P \fuse P')^u_v = \exists x . P^u_x \land (P')^x_v\]
+\[   0^u_v = \bot\qquad   (P \oplus P')^u_v = P^u_v \lor (P')^u_v\]
+\[   \top^u_v = \top\qquad   (N \amp N')^u_v = N^u_v \land (N')^u_v\]
+\[   p^u_v = \eta_p(u, v) \qquad  n^u_v = \eta_n(u, v)\]
+The semantics of contexts is the same as before,
+\[\Omega^{u_0}_{u_n} = \exists u_1 \cdots u_{n-1} . (A_1)^{u_0}_{u_1} \land \cdots \land (A_n)^{u_{n-1}}_{u_n} \]
+and the meaning of a sequent now includes a token: $\Omega \prov A$ is translated as
+\[ \pair u v, \Omega^u_v \prov A^u_v \]
+
+\end{document}

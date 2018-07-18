@@ -5293,3 +5293,45 @@ A:
 http://buszko.home.amu.edu.pl/actlog2.pdf
 "Action Logic and Pure Induction" Vaughan Pratt
 http://boole.stanford.edu/pub/jelia.pdf
+
+=== 2018.07.17
+
+Q: One quick thought before I go to sleep?
+A:
+What if I take the focused translations
+(P_1 · P_2)(u, v) = ∃x . P_1(u, x) ∧ P_2(x, v)
+(P ↠ N)(u, v) = ∀x . #(v, x) ⊸ P(v, x) ⇒ N(u, x)
+(P ↣ N)(u, v) = ∀x . #(x, u) ⊸ P(x, u) ⇒ N(x, v)
+?
+
+Then it seems like for ·, you (in the natural course of doing shifts)
+consume the whole tether interval, and you give mere portions of it back in both
+branches.
+
+For ↠, you consume (u, v), and then furthermore you have to consume (v, x)
+--- so now you've consumed all of (u, x). You now try to prove P(v, x)
+in the empty context, so it yields #(v, x), which is just the right amount.
+In the other branch you try to prove with N(u, x), which gives back #(u, x),
+which is all the stuff you consumed.
+
+For double shift elimination, we need only that
+#(u, v) ⊸ ∀x . #(v, x) ⊸ P(v, x) ⇒ N(u, x)
+can transpose its way down to #(v, x) ⊗ P(v, x) (which already obtains)
+or #(u, x) ⊸ N(u, x) (which it does by combining with the #(v, x) token)
+
+So, success??
+
+Q: What about props and actions?
+A: Maybe something like
+([α+]N)(v) = ∀x . #(v, x) ⊸ P(v, x) ⇒ N(x)
+Although this seems to have the complication that N(x) won't replace
+the tethering segment between v and x. Hmm. Maybe this is just an
+unavoidable consequence of tethering. Maybe we're forced to consume
+the interval instead of merely lobbing a proposition across it
+nondestructively.
+
+Q: If I'm careful about endpoints might I be able to save the context
+information present *at* v, even if the tethering is destroyed for
+actions that transact between v and x?
+A: Not sure; it does feel like we have to eat up the tethering data
+*at* v right away when we focus on [α+]N at v.
