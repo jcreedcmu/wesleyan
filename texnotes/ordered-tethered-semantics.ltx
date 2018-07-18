@@ -218,14 +218,17 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\zero{\texttt{0}}
 \def\xxxcite{\textcolor{red}{CITE }}
 
-\def\tpos{10}
-\def\upos{25}
-\def\vpos{55}
-\def\wpos{70}
 \definecolor{orng}{rgb}{1,0.5,0.3}
 \definecolor{blu}{rgb}{0.1,0.5,1}
 \definecolor{rid}{rgb}{1,0.2,0.7}
 \definecolor{grn}{rgb}{0.1,0.7,0.3}
+
+
+\def\tpos{10}
+\def\upos{25}
+\def\vpos{55}
+\def\wpos{70}
+
 \def\framework{
 % the line
   \draw[mydrawstyle](0,0)--(80,0);
@@ -235,6 +238,26 @@ boxrule=0pt,boxsep=0pt,breakable}
   \draw (\upos,0)--(\upos,13) node[above]{$u$};
   \draw (\vpos,0)--(\vpos,13) node[above]{$v$};
   \draw (\wpos,0)--(\wpos,13) node[above]{$w$};
+}
+
+\def\stpos{5}
+\def\supos{15}
+\def\svpos{25}
+\def\swpos{35}
+
+\def\sframe#1{
+\begin{tikzpicture}[baseline=-0.5ex,mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+% the line
+  \draw[mydrawstyle](0,0)--(40,0);
+  \draw[mydrawstyle](0,10)--(40,10);
+  \draw[mydrawstyle](0,-10)--(40,-10);
+% tick marks
+  \draw (\stpos,10)--(\stpos,13) node[above]{$t$};
+  \draw (\supos,10)--(\supos,13) node[above]{$u$};
+  \draw (\svpos,10)--(\svpos,13) node[above]{$v$};
+  \draw (\swpos,10)--(\swpos,13) node[above]{$w$};
+#1
+\end{tikzpicture}
 }
 
 \title{Tethered Interval Semantics of Ordered Logic}
@@ -608,23 +631,109 @@ of, e.g. real numbers, $(u, v]$ or $[u, v)$. We side-step the question
 of whether endpoints are thought of as included on one end or the other by only
 depending on the merging postulate $(\dagger)$.
 
-\subsection{Ordered Logic via Tethering}
+\section{Ordered Logic via Tethering}
+Now we say what the semantics is.
+
 The polarized language of ordered logic is
 \[\begin{tabular}{r@{ }ccl}
 Positive Props&$P$&$::=$&$p\celse 1 \celse P \fuse P \celse 0 \celse P \oplus P \celse \dns N  $\\
 Negative Props&$N$&$::=$&$n \celse P \rrto N \celse P \llto N \celse \top \celse N \amp N \celse \ups P$
 \end{tabular}\]
-and the semantics of propositions is
+and the semantics of propositions is (abbreviating $x \in (u, v) = u < x \land x < v)$
 \[   (\ups P)^u_v = \pair u v \tensor P^u_v \qquad   (\dns N)^u_v = \pair u v \lol N^u_v \]
-\[   (P \rrto N)^u_v = \forall x . \pair v x \lol  P^v_x \imp N^u_x\]
-\[   (P \llto N)^u_v = \forall x . \pair x u \lol  P^x_u \imp N^x_v\]
-\[   1^u_v = (u = v)\qquad   (P \fuse P')^u_v = \exists x . P^u_x \land (P')^x_v\]
+\[   (P \rrto N)^u_v = \forall x > v. \pair v x \lol  P^v_x \imp N^u_x\]
+\[   (P \llto N)^u_v = \forall x < u. \pair x u \lol  P^x_u \imp N^x_v\]
+\[   1^u_v = (u = v)\qquad   (P \fuse P')^u_v = \exists x \in (u, v) . P^u_x \land (P')^x_v\]
 \[   0^u_v = \bot\qquad   (P \oplus P')^u_v = P^u_v \lor (P')^u_v\]
 \[   \top^u_v = \top\qquad   (N \amp N')^u_v = N^u_v \land (N')^u_v\]
 \[   p^u_v = \eta_p(u, v) \qquad  n^u_v = \eta_n(u, v)\]
 The semantics of contexts is the same as before,
 \[\Omega^{u_0}_{u_n} = \exists u_1 \cdots u_{n-1} . (A_1)^{u_0}_{u_1} \land \cdots \land (A_n)^{u_{n-1}}_{u_n} \]
-and the meaning of a sequent now includes a token: $\Omega \prov A$ is translated as
+and the meaning of a sequent now includes a linear interval
+ token: $\Omega \prov A$ is translated as
 \[ \pair u v, \Omega^u_v \prov A^u_v \]
 
+\subsection{Some Pictures}
+Before we get to claiming soundness and completeness, we want to provide some depictions
+of how the semantic clauses achieve the same effects as ordered logic.
+
+The behavior of $\dns$ on the left is to consume the interval of the shifted assumption.
+This corresponds to left focus in focused ordered logic
+\[
+\erule
+{\Omega [N] \Omega' \prov C}
+{\Omega, N, \Omega' \prov C}
+\]
+The semantics turns this into the partial derivation
+\[
+\erule
+{
+\[
+\pair t u, \pair v w, \Omega^t_u [N^u_v] (\Omega')^v_w \prov C^t_w
+\qquad
+\pair u v \prov \pair u v
+\justifies
+\pair t w, \Omega^t_u [\pair u v \lol N^u_v] (\Omega')^v_w \prov C^t_w
+\]}
+{\pair t w, \Omega^t_u, (\ups N)^u_v, (\Omega')^v_w \prov C^t_w}
+\]
+
+Visually, we draw the `tether interval' as a gray bar.
+As we proceed in proof search {\em from}  the bottom of the inference rule
+{\em toward} the top, the effect is the consumption of a portion of the tether.
+\[
+\sframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
+  \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$N$};
+  \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+   \draw[line width=1mm, gray](\stpos,-10)--(\swpos,-10) ;
+}
+\quad\to\quad
+\sframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
+  \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$[N]$};
+  \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
+  \draw[line width=1mm, gray](\svpos,-10)--(\swpos,-10) ;
+}
+\]
+
+The blur of a proposition on the left returns the tether:
+\[
+\erule
+{\Omega, P, \Omega' \prov C}
+{\Omega [\dns P] \Omega' \prov C}
+\]
+corresponds to
+
+\[
+\sframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
+  \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$[\dns P]$};
+  \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
+  \draw[line width=1mm, gray](\svpos,-10)--(\swpos,-10) ;
+}
+\quad \to \quad
+\sframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
+  \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$P$};
+  \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+   \draw[line width=1mm, gray](\stpos,-10)--(\swpos,-10) ;
+}
+\]
+Observe that crucially a proposition on the left whose interval is {\em not entirely contained}
+by the tether interval {\em cannot} be focused on.
+
+We now consider how $\rrto$ behaves on the
+left. The inference rule in ordered logic is
+\[
+\erule
+{\Omega_2 \prov [P] \qquad \Omega_1 [N] \Omega_3 \prov C}
+{\Omega_1 [P \rrto N] \Omega_2, \Omega_3 \prov C}
+\]
 \end{document}
