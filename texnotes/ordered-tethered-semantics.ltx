@@ -616,8 +616,8 @@ Negative Props&$N$&$::=$&$n \celse P \rrto N \celse P \llto N \celse \top \celse
 \end{tabular}\]
 and the semantics of propositions is
 \[   (\ups P)^u_v = \pair u v \tensor P^u_v \qquad   (\dns N)^u_v = \pair u v \lol N^u_v \]
-\[   (P \rrto N)^u_v = \forall x . P^v_x \imp N^u_x\]
-\[   (P \llto N)^u_v = \forall x . P^x_u \imp N^x_v\]
+\[   (P \rrto N)^u_v = \forall x . \pair v x \lol  P^v_x \imp N^u_x\]
+\[   (P \llto N)^u_v = \forall x . \pair x u \lol  P^x_u \imp N^x_v\]
 \[   1^u_v = (u = v)\qquad   (P \fuse P')^u_v = \exists x . P^u_x \land (P')^x_v\]
 \[   0^u_v = \bot\qquad   (P \oplus P')^u_v = P^u_v \lor (P')^u_v\]
 \[   \top^u_v = \top\qquad   (N \amp N')^u_v = N^u_v \land (N')^u_v\]
