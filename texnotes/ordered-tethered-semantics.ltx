@@ -219,6 +219,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\xxxcite{\textcolor{red}{CITE }}
 
 \definecolor{orng}{rgb}{1,0.5,0.3}
+\definecolor{gld}{rgb}{0.8,0.75,0.2}
 \definecolor{blu}{rgb}{0.1,0.5,1}
 \definecolor{rid}{rgb}{1,0.2,0.7}
 \definecolor{grn}{rgb}{0.1,0.7,0.3}
@@ -244,6 +245,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\supos{15}
 \def\svpos{25}
 \def\swpos{35}
+\def\sypos{45}
 
 \def\sframe#1{
 \begin{tikzpicture}[baseline=-0.5ex,mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
@@ -260,14 +262,32 @@ boxrule=0pt,boxsep=0pt,breakable}
 \end{tikzpicture}
 }
 
+\def\syframe#1{
+\begin{tikzpicture}[baseline=-0.5ex,mydrawstyle/.style={draw=black}, x=1mm, y=1mm, z=1mm]
+% the line
+  \draw[mydrawstyle](0,0)--(50,0);
+  \draw[mydrawstyle](0,10)--(50,10);
+  \draw[mydrawstyle](0,-10)--(50,-10);
+% tick marks
+  \draw (\stpos,10)--(\stpos,13) node[above]{$t$};
+  \draw (\supos,10)--(\supos,13) node[above]{$u$};
+  \draw (\svpos,10)--(\svpos,13) node[above]{$v$};
+  \draw (\swpos,10)--(\swpos,13) node[above]{$w$};
+  \draw (\sypos,10)--(\sypos,13) node[above]{$y$};
+#1
+\end{tikzpicture}
+}
+
 \title{Tethered Interval Semantics of Ordered Logic}
+\bibliographystyle{alpha}
+
 \begin{document}
 
 
 \maketitle
 \section{Introduction}
 I notice there's an interesting translation that explains ordered
-logic \xxxcite as arising from a logic that can talk about linear
+logic \cite{Polakow99mfps} as arising from a logic that can talk about linear
 assumptions that behave like {\em intervals} on an abstract line. This
 translation is a `syntactic semantics' in the sense that it's a
 translation whose source and destination languages admit a complete
@@ -370,6 +390,8 @@ And $\llto$ and $\fuse$ go pretty similarly.
 \cqed
 \end{proof}
 
+\subsection{Counterexample to Completeness}
+\label{counterexample}
 Unfortunately, this semantics is not complete.
 A shibboleth sequent distinguishing them is:
 \[A \llto B \rrto 0, B \prov (A \llto 0) \fuse B\]
@@ -495,14 +517,14 @@ be `consumed' by the earlier use of ${\fuse}R$.
 The solution to this problem will be a form of {\em tethering} assumptions to
 a notion of {\em currently active} interval.
 \section{Tethering}
-The idea of tethering \xxxcite comes out of trying to explain
-the way in which Pfenning-Davies modal logic is a
+The idea of tethering \cite{tethering} comes out of trying to explain
+the way in which Pfenning-Davies modal logic \cite{jrml01} is a
 constructive S4 logic of possible worlds. There is a
 similar counterexample that shows that it's incomplete to suppose that
 one can simply interpret $\square$ as meaning `for all future
 worlds' in the sense of the quantifier $\forall$ in constructive
 first-order logic, without any further constraints.
-This interpretation is essentially what's given by Simpson \xxxcite.
+This interpretation is essentially what's given by Simpson \cite{simpson.thesis}.
 The fix is to refine the semantics by adding a notion of {\em tethering} assumptions
 to a {\em currently active} world.
 We'll imitate and generalize this below, to have a notion of tethering
@@ -570,7 +592,7 @@ In Pfenning-Davies, we cannot make progress because we have $\square$ on the rig
 (which would clear the context) and $\lnot$ on the left (which would clear the right-hand
 side if used).
 \subsection{Modal Logic With Tethering}
-I described a tethered semantics for Pfenning-Davies modal logic in \xxxcite.
+I described a tethered semantics for Pfenning-Davies modal logic in \cite{jcreed.linear-modal}.
 The gist of it is that you when pass to a polarized language and focused proof theory,
 the shift operators either produce or consume a linear {\em token} which represents
 the sequent's notion of the {\em current} world. The context-clearing effect
@@ -653,7 +675,7 @@ and the meaning of a sequent now includes a linear interval
  token: $\Omega \prov A$ is translated as
 \[ \pair u v, \Omega^u_v \prov A^u_v \]
 
-\subsection{Some Pictures}
+\subsection{Visual Intuition for the Correctness of the Semantics}
 Before we get to claiming soundness and completeness, we want to provide some depictions
 of how the semantic clauses achieve the same effects as ordered logic.
 
@@ -661,21 +683,21 @@ The behavior of $\dns$ on the left is to consume the interval of the shifted ass
 This corresponds to left focus in focused ordered logic
 \[
 \erule
-{\Omega [N] \Omega' \prov C}
-{\Omega, N, \Omega' \prov C}
+{\Omega [N] \Omega' \prov Q}
+{\Omega, N, \Omega' \prov Q}
 \]
 The semantics turns this into the partial derivation
 \[
 \erule
 {
 \[
-\pair t u, \pair v w, \Omega^t_u [N^u_v] (\Omega')^v_w \prov C^t_w
+\pair t u, \pair v w, \Omega^t_u [N^u_v] (\Omega')^v_w \prov Q^t_w
 \qquad
 \pair u v \prov \pair u v
 \justifies
-\pair t w, \Omega^t_u [\pair u v \lol N^u_v] (\Omega')^v_w \prov C^t_w
+\pair t w, \Omega^t_u [\pair u v \lol N^u_v] (\Omega')^v_w \prov Q^t_w
 \]}
-{\pair t w, \Omega^t_u, (\ups N)^u_v, (\Omega')^v_w \prov C^t_w}
+{\pair t w, \Omega^t_u, (\ups N)^u_v, (\Omega')^v_w \prov Q^t_w}
 \]
 
 Visually, we draw the `tether interval' as a gray bar.
@@ -686,7 +708,7 @@ As we proceed in proof search {\em from}  the bottom of the inference rule
   \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
   \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$N$};
   \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
-  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$Q$};
    \draw[line width=1mm, gray](\stpos,-10)--(\swpos,-10) ;
 }
 \quad\to\quad
@@ -694,7 +716,7 @@ As we proceed in proof search {\em from}  the bottom of the inference rule
   \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
   \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$[N]$};
   \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
-  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$Q$};
   \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
   \draw[line width=1mm, gray](\svpos,-10)--(\swpos,-10) ;
 }
@@ -703,8 +725,8 @@ As we proceed in proof search {\em from}  the bottom of the inference rule
 The blur of a proposition on the left returns the tether:
 \[
 \erule
-{\Omega, P, \Omega' \prov C}
-{\Omega [\dns P] \Omega' \prov C}
+{\Omega, P, \Omega' \prov Q}
+{\Omega [\dns P] \Omega' \prov Q}
 \]
 corresponds to
 
@@ -713,7 +735,7 @@ corresponds to
   \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
   \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$[\dns P]$};
   \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
-  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$Q$};
   \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
   \draw[line width=1mm, gray](\svpos,-10)--(\swpos,-10) ;
 }
@@ -722,18 +744,183 @@ corresponds to
   \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega$};
   \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$P$};
   \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega'$};
-  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$C$};
+  \draw[line width=1mm, grn](\stpos,0)--(\swpos,0) node[midway, below=1]{$Q$};
    \draw[line width=1mm, gray](\stpos,-10)--(\swpos,-10) ;
 }
 \]
 Observe that crucially a proposition on the left whose interval is {\em not entirely contained}
 by the tether interval {\em cannot} be focused on.
 
+On the right, the entire tether is consumed by right focus, and is put back by right-blur.
+
 We now consider how $\rrto$ behaves on the
 left. The inference rule in ordered logic is
 \[
 \erule
-{\Omega_2 \prov [P] \qquad \Omega_1 [N] \Omega_3 \prov C}
-{\Omega_1 [P \rrto N] \Omega_2, \Omega_3 \prov C}
+{\Omega_2 \prov [P] \qquad \Omega_1 [N] \Omega_3 \prov Q}
+{\Omega_1 [P \rrto N] \Omega_2, \Omega_3 \prov Q}
 \]
+The semantic translation of this ends up being the derivation
+\[
+\erule
+{
+\[
+\[
+\[
+ (\Omega_2)^v_w \prov [   P^v_w ]
+\qquad
+\pair t u, \pair w y, (\Omega_1)^t_u [ N^u_w]
+(\Omega_3)^w_y \prov Q^t_y
+\justifies
+\pair t u, \pair w y, (\Omega_1)^t_u [   P^v_w \imp N^u_w] (\Omega_2)^v_w
+(\Omega_3)^w_y \prov Q^t_y
+\]
+\justifies
+\pair t u, \pair v y, (\Omega_1)^t_u [ \pair w x \lol  P^v_w \imp N^u_w] (\Omega_2)^v_w
+(\Omega_3)^w_y \prov Q^t_y
+\]
+\justifies
+\pair t u, \pair v y, (\Omega_1)^t_u [\forall x > v. \pair v x \lol  P^v_x \imp N^u_x] (\Omega_2)^v_w
+(\Omega_3)^w_y \prov Q^t_y
+\]}
+{\pair t u, \pair v y, (\Omega_1)^t_u [(P \rrto N)^u_v] (\Omega_2)^v_w (\Omega_3)^w_y \prov Q^t_y}
+\]
+\[
+\syframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega_1$};
+  \draw[line width=1mm, blu](\supos,10)--(\svpos,10) node[midway, below=1]{$P\rrto N$};
+  \draw[line width=1mm, orng](\svpos,10)--(\swpos,10) node[midway, below=1]{$\Omega_2$};
+  \draw[line width=1mm, gld](\swpos,10)--(\sypos,10) node[midway, below=1]{$\Omega_3$};
+  \draw[line width=1mm, grn](\stpos,0)--(\sypos,0) node[midway, below=1]{$Q$};
+   \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
+   \draw[line width=1mm, gray](\svpos,-10)--(\sypos,-10) ;
+}
+\quad \to \quad
+\syframe{
+  \draw[line width=1mm, rid](\stpos,10)--(\supos,10) node[midway, below=1]{$\Omega_1$};
+  \draw[line width=1mm, blu](\supos,10)--(\swpos,10) node[midway, below=1]{$N$};
+  \draw[line width=1mm, gld](\swpos,10)--(\sypos,10) node[midway, below=1]{$\Omega_3$};
+  \draw[line width=1mm, grn](\stpos,0)--(\sypos,0) node[midway, below=1]{$Q$};
+   \draw[line width=1mm, gray](\stpos,-10)--(\supos,-10) ;
+   \draw[line width=1mm, gray](\swpos,-10)--(\sypos,-10) ;
+}
+\]
+\subsection{Correctness}
+
+We come now to stating the precise sense in which semantics is correct:
+\begin{theorem}[Soundness]\ %
+  \begin{enumerate}
+  \item If $\Omega \prov Q$, then $\pair u v, \Omega^u_v \prov Q^u_v$.
+  \item If $\Omega \prov [P]$, then $ \Omega^u_v \prov [P^u_v]$.
+  \item If $\Omega[N]\Omega' \prov Q$, then $ \Omega^t_u [N^u_v] (\Omega')^v_w \prov Q^t_w$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By induction on the ordered logic derivation.
+\cqed
+\end{proof}
+
+For completeness, we need a relation between ordered logic contexts $\Omega$
+and (unrestricted) contexts $\Gamma$ in the target language of the semantics, written
+$\Gamma \sim^u_v \Omega$, thought of as meaning `a way to understand what $\Gamma$
+assumes about the interval $\pair u v$ is as the ordered context $\Omega$', or,
+more concisely,
+`$\Gamma$ can be read as $\Omega$'.
+The general pattern of the completeness theorem will be statements of the form
+`if something can be proved in the target language, then there is some reading of the
+context there that can be proved in ordered logic'.
+
+We therefore define $\Gamma \sim^{u_0}_{u_n} \Omega$ when $\Omega = N_1, \ldots, N_n$ to mean
+that there are worlds $u_1, \ldots, u_{n-1}$ such that $\Gamma \prov u_0 < \cdots < u_n$
+and for every $i \in 1\ldots n$, we have $(N_i)^{u_{i-1}}_{u_i} \in \Gamma$.
+
+An easy lemma to prove is that we can concatenate readings in a suitable sense:
+\begin{lemma}
+If $\Gamma \sim^u_v \Omega$ and $\Gamma\sim^v_w \Omega'$, then $\Gamma \sim^u_w \Omega, \Omega'$.
+\end{lemma}
+
+We now state completeness:
+\begin{theorem}[Completeness]\ %
+\begin{enumerate}
+\item If $ \Gamma \prov [P^u_v]$, then there exists an $\Omega$ with $\Gamma \sim^u_v \Omega$
+and $\Omega \prov [P]$.
+\item If $\pair t u, \pair v w, \Gamma [N^{u}_{v}]\prov Q^t_w$ then at least one of the following is true:
+\begin{enumerate}
+\item there exist
+  $\Omega_1$ and $\Omega_2$ such that
+  \[\Gamma \sim^t_u \Omega_1 \qquad \Gamma \sim^v_w \Omega_2 \qquad \Omega_1  [N] \Omega_2 \prov Q\]
+\item there exists $\Omega$ such that
+$\Gamma \sim^t_w \Omega$ and $\Omega \prov Q$
+\end{enumerate}
+\item If $\Gamma, \pair t w \prov Q^t_w$, then
+there exists $\Omega$ such that
+$\Gamma \sim^t_w \Omega$ and $\Omega \prov Q$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We give some representative cases.
+\item[Case:] $\rrto$\\
+ We have a derivation that has the form
+\[
+\erule
+{\[
+\Gamma \prov [ P^{v}_{y}] \qquad \pair t u, \pair y w, \Gamma[ N^{u}_{y} ] \prov Q^t_w
+\justifies
+\pair t u, \pair y w, \Gamma[   P^{v}_{y} \to  N^{u}_{y} ] \prov Q^t_w
+\] \qquad y \in (v, w)}
+{\pair t u, \pair v w, \Gamma[ \forall x > v . \pair v x \lol  P^{v}_{x} \to  N^{u}_{x} ] \prov Q^t_w}
+\]
+The reason that whatever $y$ that was chosen as the instantiation
+of the $\forall L$-quantified $x$ must be in the interval $(v, w)$
+comes half from the explicit requirement that $x > v$ in the semantics
+of $\rrto$, and half from the fact that the tether-interval consumption
+$\pair v x \lol {\cdots}$ {\em can't succeed} if $x > w$, because only the interval $\pair v w$
+is available. This phenomenon is
+what directly rules out the kind of strange `reuse' of previously consumed
+hypotheses as in \S\ref{counterexample} simply because they still happen to be lying around in the translated
+context $\Gamma$.
+
+We appeal to the induction hypothesis on $P$ and $N$, splitting cases on what
+comes back from $N$. In case $(a)$ for $N$,
+we get $\Omega_1, \Omega_2, \Omega_3$ such that
+\[\Gamma \sim^v_y \Omega_2 \qquad \Gamma \sim^t_u \Omega_1  \qquad \Gamma \sim^y_w \Omega_3\]
+and
+\[\Omega_2 \prov [P] \qquad \Omega_1  [N] \Omega_3\prov Q\]
+so it's straightforward to use the above lemma to
+conclude $\Gamma \sim^v_w \Omega_2, \Omega_3$ and derive
+\[
+\erule
+{\Omega_{2} \prov [P] \qquad \Omega_1, [N], \Omega_{3} \prov Q}
+{\Omega_1[P\rrto N]\Omega_{2}\Omega_{3} \prov Q}
+\]
+
+In case $(b)$ for $N$, we immediately return the same reading.
+\item[Case:] $\ups P$\\
+We have a derivation of the form
+\[
+\erule
+{\[
+\pair t w, \Gamma, P^u_v \prov Q^t_w
+\justifies
+\pair t u, \pair v w, \Gamma[  \ups(\pair u v \tensor P^u_v) ] \prov Q^t_w
+\]}
+{\pair t u, \pair v w, \Gamma[  (\ups P)^u_v ] \prov Q^t_w}
+\]
+By i.h., there exists some $\Omega$ and
+ some reading $(\Gamma, (\ups P)^u_v) \sim^t_w \Omega$.
+This reading either uses $P^u_v$ or it doesn't. If it does, it breaks up
+into two smaller readings (neither of which uses $P$, because otherwise we would
+have a cycle in $<$) which we can call $\Gamma \sim^t_u \Omega_1$
+and
+$\Gamma \sim^v_w \Omega_2$. Therefore we have $\Omega_1, P, \Omega_2 \prov Q$.
+From that we can derive $\Omega_1[\ups P]\Omega_2 \prov Q$ as required.
+Otherwise, the reading obtained from the i.h. doesn't use $P^u_v$, and so we just know we have
+a reading $\Gamma \sim^t_w \Omega$ and $\Omega \prov Q$, which
+also suffices for the conclusion.
+\cqed
+\end{proof}
+
+\bibliography{../wes}
+
 \end{document}
