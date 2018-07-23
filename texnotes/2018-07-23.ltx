@@ -356,5 +356,59 @@ with $\tau$ being the outer square, and $\sigma$ being the inner,
 Aha, now it's easier to check that setting
 \[\ups_{\tau}^+(u) = {}_{u^y_x}^{u^{e}_{d}} \qquad \ups_{\tau}^-(u) = {}_{u^x_y}^{u^{d}_{e}}\]
 \[\dns_{\tau}^+(u) = {}^{u^x_y}_{u^{d}_{e}} \qquad \dns_{\tau}^-(u) = {}^{u^y_x}_{u^{e}_{d}}\]
-does in fact give me the mere {\em existence} of the arrows on the left and right sides of this diagram.
+does in fact give me at least the
+{\em existence} of the arrows on the left and right sides of this diagram.
+
+\subsection{How Is This a Natural Transformation?}
+It certainly seems like it should be one, somehow.
+For every {\em object} (e.g. $\tau, \sigma$) of $\tw(\tw(\C))$, we get
+the data $N_\tau$, $N_\sigma$, etc. And for every morphism $\tau \to \sigma$,
+we get a commutativity requirement. What's the target category of the functors
+that $N$ is a natural transformation between? Is it just $\rset$? To the extent
+that I'm thinking of $A$ and $B$ as functors $\doubs \C \x \doubs \D \to \rset$, I suppose so.
+Ok, so then, yeah, when I write
+\[B^d_e \mu^+_\tau(t)\]
+that should be thought of as a functor $\tw(\tw(\C)) \to \rset$,
+remembering that $t : \doubs \D \to \C$. I observe now that just as I
+increased generality by splitting the polarity choice $\nu$ into $\nu$
+and $\mu$ since I figured those choices could be made independently on the left
+and right side of the turnstile, I figure I could talk about $t$ and $u$ as coming
+from different categories, saying $t : \doubs \D \to \C$ and $u : \doubs \E \to \C$
+and saying $A : \doubs \C \x\doubs \D \to \rset$ and $B : \doubs \C \x \doubs \E\to \rset$.
+I think I'm going to take a pass on doing that for right now; I don't think that extra
+generality is of any help to me having clear thoughts at the moment, but it must
+eventually fall out of the more general case where I have lots
+of substitutions for lots of disparate variables.
+
+Ok, let's pick apart some things, now. When I have
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, " g" description] &e
+\end{tikzcd}\]
+I want to claim that projecting out the $d$-object is a functor $\tw^2(\C) \to \C^\op$.
+For if I have a morphism $\tau \to \sigma$ in $\tw^2(\C)$, like
+\[
+\begin{tikzcd}
+x \ar[ddd]\ar[rrr]\ar[dr] &&& y\ar[from=ddd]\ar[from=dl]
+\\
+&x'\ar[r]\ar[d] &y'\ar[from=d]
+\\
+&d' \ar[dl]\ar[r]&e'\ar[from=dr]
+\\
+d \ar[rrr] &&& e
+\end{tikzcd}
+\]
+then I get a morphism from $\sigma$'s d --- namely, $d'$ --- to $\tau$'s. Ok, good, likewise
+projecting $e$ and $x$ are covariant, and $y$ is also contravariant.
+Ok, now I can reason that $u^d_e$ represents a functor $\tw^2(\C) \to \D$, if
+I think of the symbols $d$ and $e$ as projections from the ambient input $\tau$.
+Now I want to check that $u^x_y : \tw^2(\C) \to \D^\op$.
+
+This makes me slightly confused. Let's recall what constructions are generally available.
+If $F : \C \to \D$, then $F^\op : \C^\op \to \D^\op$. If $F : \C \to \D$ and $G: \C \to \E$,
+then $\pair F G : \C \to \D \x \E$. There exist
+functors $\dom : \tw(\C) \to \C$ and $\cod : \tw(\C) \to \C^\op$ if I use the convention I've
+been using here that $\tw$ goes from supermorphism to submorphism.
+
+Okay, doing {\texttt{2018-07-23.agda}} helps a bit.
 \end{document}
