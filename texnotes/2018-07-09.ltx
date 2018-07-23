@@ -1013,7 +1013,7 @@ A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
 \int_a A^{ea}_{da}\ar[r]
 &  A^{et^d_e}_{dt^d_e}\ar[u]\ar[d]
 &B^{du^e_d}_{eu^e_d} \ar[from=u]\ar[from=d]
-&\int_b B^{db}_{eb}\ar[from=l]
+&\int^b B^{db}_{eb}\ar[from=l]
 \\
 & A^{e t \sw e}_{e t^d_e}\ar[r, "N^>_{ef}"'] & B^{e u^e_e}_{e u^e_d}
 \\
@@ -1080,7 +1080,7 @@ A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
 \int_a A^{ea}_{da}\ar[r]
 &  A^{e}_{d} \nu^-_f(t)\ar[u]\ar[d]
 &B^{d}_{e} \nu^+_f(t) \ar[from=u]\ar[from=d]
-&\int_b B^{db}_{eb}\ar[from=l]
+&\int^b B^{db}_{eb}\ar[from=l]
 \\
 & A^{e}_{e} \nu^-_{ef }(t) \ar[r, "N_{ef}"'] & B^{e}_{e} \nu^+_{ef }(t)
 \\
@@ -1112,7 +1112,7 @@ A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
 \int_a A^{ea}_{da}\ar[r]
 &  A^{e}_{d} \bar\nu_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
 &B^{d}_{e} \nu_{\rid_f}(u) \ar[from=u]\ar[from=d]
-&\int_b B^{db}_{eb}\ar[from=l]
+&\int^b B^{db}_{eb}\ar[from=l]
 \\
 & A^{e}_{e} \bar\nu_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \nu_{\rtri f }(u)
 \\
@@ -1146,7 +1146,7 @@ A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
 \int_a A^{ea}_{da}\ar[r]
 &  A^{e}_{d} \nu^-_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
 &B^{d}_{e} \nu^+_{\rid_f}(u) \ar[from=u]\ar[from=d]
-&\int_b B^{db}_{eb}\ar[from=l]
+&\int^b B^{db}_{eb}\ar[from=l]
 \\
 & A^{e}_{e} \nu^-_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \nu^+_{\rtri f }(u)
 \\
@@ -1158,19 +1158,22 @@ A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
 \]
 
 Perhaps in general
+\[ N_\tau : A^{e'}_{d'} \nu^-_\tau(t) \to B^{d'}_{e'} \nu^+_\tau(u) \]
+and
 \[
 \begin{tikzcd}
-  A^{e}_{d} \nu^-_{\rid_{\ll\tau}}(t)\ar[d]\ar[r, "N_{\rid_{\ll\tau}}" description]
+  A^{d'}_{d} \nu^-_{\rid_{\ll\tau}}(t)\ar[d]\ar[r, "N_{\rid_{\ll\tau}}"]
 &[4em]B^{d}_{d'} \nu^+_{\rid_{\ll\tau}}(u) \ar[from=d]
 \\
- A^{e'}_{d'} \nu^-_{\tau }(t) \ar[r, "N_{\tau}"'] & B^{d'}_{e'} \nu^+_{\tau }(u)
+ A^{e'}_{d'} \nu^-_{\tau }(t) \ar[r, "N_{\tau}" description] & B^{d'}_{e'} \nu^+_{\tau }(u)
 \\
-A\sw{e t \sw e} \ar[u]\ar[r, "N_{\rid_{\rr\tau}}"']
-&B\sw{e u\sw e}\ar[from=u]
+  A^{e}_{e'} \nu^-_{\rid_{\rr\tau}}(t)\ar[u]\ar[r, "N_{\rid_{\rr\tau}}"']
+&[4em]B^{e'}_{e} \nu^+_{\rid_{\rr\tau}}(u) \ar[from=u]
 \end{tikzcd}
 \]
+Where $\tau$ looks like
 \[\begin{tikzcd}
-  d \ar[d]\ar[r]& e\ar[from=d]\\
+  d \ar[d, "\ll \tau"']\ar[r]& e\ar[from=d, "\rr\tau"']\\
 d'\ar[r] &e'
 \end{tikzcd}\]
 \end{document}
