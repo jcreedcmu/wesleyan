@@ -410,5 +410,36 @@ then $\pair F G : \C \to \D \x \E$. There exist
 functors $\dom : \tw(\C) \to \C$ and $\cod : \tw(\C) \to \C^\op$ if I use the convention I've
 been using here that $\tw$ goes from supermorphism to submorphism.
 
-Okay, doing {\texttt{2018-07-23.agda}} helps a bit.
+Okay, doing {\texttt{2018-07-23.agda}} helps a bit. $A$ and $B$ are indeed functors
+$\doubs \C \x \doubs \D \to \rset$. From them we construct functors
+$\tw^2(\C) \to \rset^\op$ and $\tw^2(\C) \to \rset$. In general if we have
+$F : \C \to \D^\op$ and $G : \C \to \D$ there's an evident notion of `natural transformation'
+from $F$ to $G$, namely an assignment of morphisms $X \mapsto \alpha_X : FX \to GX$ such
+that
+\[
+\begin{tikzcd}
+FX \ar[r, "\alpha_X"]\ar[from=d, "Ff"]& GX\ar[d, "Gf"]\\
+FY \ar[r, "\alpha_Y"']& GY
+\end{tikzcd}
+\]
+always commutes in $\D$ for any $f : X \to Y \in \C$. Oh, I guess what I'm expected
+to do is regard $F$ as $\C^\op \to \D$ and realize that this is a dinatural transformation, with
+hexagon
+\[
+\begin{tikzcd}
+&F^X \ar[r, "\alpha_X"]\ar[from=dl, "F^f"]& G_X\ar[dr, "G_f"]\\
+F^Y &&& G_Y\\
+&F^Y \ar[r, "\alpha_Y"]\ar[from=ul, equal]& G_Y\ar[ur, equal]
+\end{tikzcd}
+\]
+
+Okay, so I guess that's my answer. What I'm claiming $N$ has to be is
+a dinatural transformation from one functor to another. The real game I have
+to play is articulating the constructions
+\[ \doubs \C \x \doubs \D \to \rset \qquad \mapsto_{\mu, t} \qquad \tw^2(\C)^\op \to \rset\]
+\[ \doubs \C \x \doubs \E \to \rset \qquad \mapsto_{\nu, u} \qquad \tw^2(\C) \to \rset\]
+for which what's really essential is
+\[ \tw^2(\C)^\op  \qquad \mapsto_{\mu, t} \qquad \doubs \C \x \doubs \D \]
+\[ \tw^2(\C)  \qquad \mapsto_{\nu, u} \qquad \doubs \C \x \doubs \E \]
+
 \end{document}
