@@ -375,10 +375,10 @@ and $\mu$ since I figured those choices could be made independently on the left
 and right side of the turnstile, I figure I could talk about $t$ and $u$ as coming
 from different categories, saying $t : \doubs \D \to \C$ and $u : \doubs \E \to \C$
 and saying $A : \doubs \C \x\doubs \D \to \rset$ and $B : \doubs \C \x \doubs \E\to \rset$.
-I think I'm going to take a pass on doing that for right now; I don't think that extra
-generality is of any help to me having clear thoughts at the moment, but it must
-eventually fall out of the more general case where I have lots
-of substitutions for lots of disparate variables.
+%% I think I'm going to take a pass on doing that for right now; I don't think that extra
+%% generality is of any help to me having clear thoughts at the moment, but it must
+%% eventually fall out of the more general case where I have lots
+%% of substitutions for lots of disparate variables.
 
 Ok, let's pick apart some things, now. When I have
 \[\tau \quad =\qquad \begin{tikzcd}
@@ -436,10 +436,115 @@ F^Y &&& G_Y\\
 Okay, so I guess that's my answer. What I'm claiming $N$ has to be is
 a dinatural transformation from one functor to another. The real game I have
 to play is articulating the constructions
-\[ \doubs \C \x \doubs \D \to \rset \qquad \mapsto_{\mu, t} \qquad \tw^2(\C)^\op \to \rset\]
-\[ \doubs \C \x \doubs \E \to \rset \qquad \mapsto_{\nu, u} \qquad \tw^2(\C) \to \rset\]
+\[ \doubs \C \x \doubs \D \to \rset \qquad \mapsto_{\nu, t} \qquad \tw^2(\C)^\op \to \rset\]
+\[ \doubs \C \x \doubs \E \to \rset \qquad \mapsto_{\mu, u} \qquad \tw^2(\C) \to \rset\]
 for which what's really essential is
 \[ \tw^2(\C)^\op  \qquad \mapsto_{\mu, t} \qquad \doubs \C \x \doubs \D \]
 \[ \tw^2(\C)  \qquad \mapsto_{\nu, u} \qquad \doubs \C \x \doubs \E \]
 
+\subsection{Trying To Check Things With This Definition}
+Some essential things I expect to hold are the focus rule, $\forall
+L$, and some form of univariant blur, or, barring that, some kind of
+init rule with a cycle-freeness side condition.
+
+Actually, since this seems more about suspended substitutions rather
+than focus, maybe focus/blur isn't the issue? That's sad to the extent
+that I was eager for it to be about focusing, but obviously I have to follow
+what actually works and not what I want to work. It may still turn out that
+things are compatible with limits and not colimits or something like that.
+So let's stare at $\forall L$. I suppose there are two choices for $\nu$,
+so let me just pick $\nu =\ups$ and consider that special case.
+\[
+\erule
+{[t/\alpha]^\ups A\sw{x\alpha} \prov C\sw x \qquad x : \C \prov t : \D}
+{x : \C ; (\forall \alpha : \D . A\sw{x\alpha}) \prov C\sw x}
+\]
+The entailment $x : \C \prov t : \D$ means that $t$ is a functor $\doubs \C \to \D$.
+The entailment $[t/\alpha] A\sw{x\alpha} \prov C\sw x$ means that
+I have an inhabitant of the end
+\[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e\]
+(where $d, e, x, y$ are actually projections from $\tau$)
+and what I want to build is an inhabitant of the end
+\[\int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x\]
+Let me take a step back and see if I can convince myself of some plausible-sounding
+lemmas. Like: can I establish anything like
+\[
+\int_{f\in \tw(\C)}  C^d_e
+\quad\cong\quad
+\int_{x\in \C}  C^x_x
+\]
+where I regard $e$ and $d$ as projections from $f$?
+Left to right, I need to make $ C^x_x$ for every $x$. Ok,
+project at $\rid_x$ from the end on the left. Then I need to show
+\[\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{\rid_y}"']& C^x_x\ar[d]\\
+ C^y_y\ar[r]& C^x_y
+\end{tikzcd}\]
+I want to then consider the arrows $\lhd f : f \to \rid_x$ and $\rhd f : f \to \rid_y$.
+For these I get the diagrams
+\[\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{f}"']& C^x_x\ar[d]\\
+ C^x_y\ar[r, equal]& C^x_y
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_y}"]\ar[d, "\pi_{f}"']& C^y_y\ar[d]\\
+ C^x_y\ar[r, equal]& C^x_y
+\end{tikzcd}\]
+which suffices. For right to left, I need to build a morphism $ C^d_e$
+for any $f \in \tw(\C)$. But surely this is possible; I can $f$-transport $ C\sw e$, and then $f$-transport to $C^d_e$. The
+end property of the end in $\C$ guarantees this is the same as passing through
+$A\sw d \to C\sw d$. To check the end property in $\tw(\C)$, I let
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, " g"'] &e
+\end{tikzcd}\]
+and check
+\[\begin{tikzcd}
+\int_{x\in \C}  C^x_x\ar[r, "\pi_{y}"]\ar[d, "\pi_{e}"']
+& C^y_y\ar[r]\ar[d]
+& C^x_y\ar[dd]
+\\
+ C^e_e\ar[d]\ar[r]
+& C^e_y\ar[dr]
+\\
+ C^d_e\ar[rr]&& C^x_y
+\end{tikzcd}\]
+
+\subsubsection{Doing This Construction}
+\[M \in \int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e \chave\]
+\[N \in \int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x \cwant\]
+I set
+\[N_x(E) = M_{\rid_{\rid_x}}(E_{t\sw x})\]
+and then I need to check that this really is an end, that for any $f : x \to y$, I have
+\[ C_f \o N_x \o \int A^f = C^f \o N_y \o \int A_f : \left(\int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to C^x_y\]
+i.e.
+\[\left( E : \int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to  C_f M_{\rid_{\rid_x}}(A^f E_{t\sw x})  = C^f  M_{\rid_{\rid_y}}(A_f E_{t\sw y}) :   C^x_y\]
+and the diagram-chase that establishes this is
+\[
+\begin{tikzcd}
+A^{yt\sw x}_{xt\sw x}\ar[from=dd]\ar[r, "A^f"]
+&A\sw{x t \sw x} \ar[d]\ar[r, "M_{\rid_{\rid_x}}"]
+&[4em]C\sw{x }\ar[from=d, equal]
+\\
+&A^{xt^x_x}_{xt^x_y}\ar[r, "M_{\lhd f}"] & C^{x}_{x}
+\\
+\int_\alpha  A^{y\alpha }_{x\alpha }\ar[r]
+&  A^{yt^x_y}_{xt^x_y}\ar[u]\ar[d]\ar[r, "M_{\rid_f}" description]
+&C^{x}_{y} \ar[from=u, "C_f"]\ar[from=d, "C^f"']
+\\
+& A^{y t \sw y}_{y t^x_y}\ar[r, "M_{\rhd f}"'] & C^{y }_{y }
+\\
+A^{yt\sw y}_{xt\sw y}\ar[from=uu]\ar[r, "A_f"']
+&A\sw{y t \sw y} \ar[u]\ar[r, "M_{\rid_{\rid_y}}"']
+&C\sw{y }\ar[from=u, equal]
+\end{tikzcd}
+\]
+\section{Less-Connected Notes}
+\[\dom : \tw(\C) \to \C\]
+\[\cod : \tw(\C) \to \C^\op\]
+\[\bar\dom : \tw(\C)^\op \to \C^\op\]
+\[\bar\cod : \tw(\C)^\op \to \C\]
+
+\[\int_{f,\bar f \in \tw(\C)} C(\bar\dom \bar f, \bar\cod \bar f) \cong \int_{x,\bar x \in \C} C(\bar x, x) \]
 \end{document}
