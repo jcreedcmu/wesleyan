@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[tmargin=0.05in, bmargin=0.05in]{geometry}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
 \input{theorem}
 \input{prooftree}
 \usepackage{relsize}
@@ -540,6 +540,20 @@ A^{yt\sw y}_{xt\sw y}\ar[from=uu]\ar[r, "A_f"']
 &C\sw{y }\ar[from=u, equal]
 \end{tikzcd}
 \]
+\subsection{Blur}
+Maybe the right thing to call this isn't blur so much as `resolving the delayed substitution'
+or something like that.
+
+With the `contravariant option' for instantiating $A$, I can say
+if $A$ were contravariant in its $\D$-argument, and we had
+\[\int_{x \in \C} A^{xt^x_x}_{x} \to C^x_x\]
+then I claim we could make
+\[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{d} \to C^d_e\]
+Because I can instantiate the end I have at $d$, and transport all the appropriate things
+forward to $e$, or instantiate at $e$ and transport back to $d$.
+
+
+
 \section{Less-Connected Notes}
 \[\dom : \tw(\C) \to \C\]
 \[\cod : \tw(\C) \to \C^\op\]
