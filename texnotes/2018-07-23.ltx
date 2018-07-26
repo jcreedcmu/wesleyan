@@ -64,7 +64,7 @@
 \definecolor{cyan}{rgb}{0.80,0.95,0.95}
 \definecolor{lorange}{rgb}{0.95,0.90,0.80}
 \definecolor{bluegray}{rgb}{0.6,0.6,0.85}
-\definecolor{lgray}{gray}{0.9}
+\definecolor{lgray}{gray}{0.8}
 \newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
 boxrule=0pt,boxsep=0pt,breakable}
 \newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
@@ -870,5 +870,69 @@ I can't find an object in $\twi \C$ that contains $f$ at $\tau_1 \to \tau_2$,
 such that I can reach it from
 both the constantly $\rid_x$ object and the constantly $\rid_y$ object.
 \end{proof}
+
+\subsection{Why Did It Work Before?}
+
+I think the critical thing is this: when I established that
+
+\[
+\int_{\tau \in \tw^2(\C)} C^d_e \quad \cong \quad \int_{x\in\C} C^x_x
+\]
+(for the super-to-submorphism convention of $\tw$ and
+\[ \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, "g"'] &e
+\end{tikzcd}\]
+being the shape of $\tau$) that it actually took {\em more than one use} of the
+end property on the left to establish that I have an end in the ordinary sense, didn't it?
+
+Remember that in general if I have an end $E \in \int_{x \in \C} F^x_x$ and $f : d \to e \in \C$,
+then $F_f E_d = F^f E_e$. So, given an $f : d \to e \in \C$,
+I want to consider the diagram in $\tw^2(\C)$ that looks like
+\[
+\begin{tikzcd}
+\rid_{\rid_d} & \lhd f\ar[r]\ar[l] &  \rid_{f}  & \rhd f\ar[r]\ar[l] & \rid_{\rid_e}
+\end{tikzcd}
+\]
+or, spelling it out,
+\[
+\begin{tikzcd}
+ & d \arrow[rrd, lgray, -] \arrow[ld, lgray, -] &  &  \\
+d \arrow[rrd, lgray, -] \arrow[d, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] &  & d \arrow[d] \\
+d \arrow[rrd, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] & d \arrow[ru, lgray, -] & e \\
+d \arrow[rrd] \arrow[u, lgray, -] \arrow[d] & d \arrow[rrd] \arrow[ld] \arrow[u, lgray, -] \arrow[d] & d \arrow[ru] \arrow[u, lgray, -] \arrow[d] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
+e \arrow[rrd, lgray, -] & e \arrow[rrd, lgray, -] \arrow[ld, lgray, -] & e \arrow[ru, lgray, -] & e \\
+e \arrow[rrd, lgray, -] \arrow[u, lgray, -] &  & e \arrow[ru, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \arrow[u, lgray, -] \\
+ &  & e \arrow[ru, lgray, -] &
+\end{tikzcd}
+\]
+Or, spelling it out more linearlizably:
+\[\begin{tikzcd}
+d \arrow[r, lgray, -] & d \arrow[r, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[d] \\
+d \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \\
+d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
+d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \\
+e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -]
+\end{tikzcd}\]
+Therefore the following diagram commutes:
+\[
+\begin{tikzcd}
+\int_x C^{x}_{x}\ar[d, equal]\ar[r, "N_{\rid_{\rid_d}}" ]
+&[2em]C\sw{d }\ar[from=d, equal]
+\\
+\int_x C^{x}_{x}\ar[r, "N_{\lhd f}" ]
+ & C^{d}_d
+\\
+ \int_x C^{x}_{x} \ar[u, equal]\ar[d, equal]
+\ar[r, "N_{\rid_f}" description]
+&C^{d}_{e}  \ar[from=u, "C_f"]\ar[from=d, "C^f"']
+\\
+\int_x C^{x}_{x}\ar[r, "N_{\rhd f}"']
+ & C^{e}_{e}
+\\
+\int_x C^{x}_{x}\ar[from=u, equal]\ar[r, "N_{\rid_{\rid_e}}"']
+&C\sw{e }\ar[from=u, equal]
+\end{tikzcd}
+\]
 
 \end{document}
