@@ -227,713 +227,713 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\doubs#1{{}^{{#1}^\op}_{\x {#1}}}
 \def\doub#1{{#1}^\op \x {#1}}
 
-%% \section{Towards a Quasinaturality Condition}
-%% For $\nu\mu  ::=  \ups \celse \dns$, and
-%% $s  ::=  {+} \celse {-}$, and
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   d \ar[d, "\ll \tau"']\ar[r]& e\ar[from=d, "\rr\tau"']\\
-%% d'\ar[r] &e'
-%% \end{tikzcd}\]
+\section{Towards a Quasinaturality Condition}
+For $\nu\mu  ::=  \ups \celse \dns$, and
+$s  ::=  {+} \celse {-}$, and
+\[\tau \quad =\qquad \begin{tikzcd}
+  d \ar[d, "\ll \tau"']\ar[r]& e\ar[from=d, "\rr\tau"']\\
+d'\ar[r] &e'
+\end{tikzcd}\]
 
-%%  we define
-%% a symbol $\nu_\tau^s(u)$
-%% by
-%% \[\ups_{\tau}^+(u) = {}_{u^e_d}^{u^{e'}_{d'}} \qquad \ups_{\tau}^-(u) = {}_{u^d_e}^{u^{d'}_{e'}}\]
-%% \[\dns_{\tau}^+(u) = {}^{u^d_e}_{u^{d'}_{e'}} \qquad \dns_{\tau}^-(u) = {}^{u^e_d}_{u^{e'}_{d'}}\]
+ we define
+a symbol $\nu_\tau^s(u)$
+by
+\[\ups_{\tau}^+(u) = {}_{u^e_d}^{u^{e'}_{d'}} \qquad \ups_{\tau}^-(u) = {}_{u^d_e}^{u^{d'}_{e'}}\]
+\[\dns_{\tau}^+(u) = {}^{u^d_e}_{u^{d'}_{e'}} \qquad \dns_{\tau}^-(u) = {}^{u^e_d}_{u^{e'}_{d'}}\]
 
-%% Perhaps of these four should be thought of as a functor $\tw(\tw(\C)) \to \doubs \D$,
-%% (or, I guess, for all I know, $\tw(\C)^\to \to \doubs \D$,
-%% but my gut tells me iterated-twisted-category is somehow more
-%% plausible) assuming $u$ is a functor $\doubs \C \to \D$, and the rest
-%% are various dualization choices relative to that.
+Perhaps of these four should be thought of as a functor $\tw(\tw(\C)) \to \doubs \D$,
+(or, I guess, for all I know, $\tw(\C)^\to \to \doubs \D$,
+but my gut tells me iterated-twisted-category is somehow more
+plausible) assuming $u$ is a functor $\doubs \C \to \D$, and the rest
+are various dualization choices relative to that.
 
-%% The big diagram that's supposed to represent what this is good for is
-%% \[
-%% \begin{tikzcd}
-%% A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
-%% &A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
-%% &[2em]B\sw{d u\sw d}\ar[from=d]
-%% &B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
-%% \\
-%% &A^{d}_d \nu^-_{\ltri f }(t) \ar[r, "N_{\ltri f}"] & B^{d}_d \mu^+_{\ltri f }(u)
-%% \\
-%% \int_a A^{ea}_{da}\ar[r]
-%% &  A^{e}_{d} \nu^-_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
-%% &B^{d}_{e} \mu^+_{\rid_f}(u) \ar[from=u]\ar[from=d]
-%% &\int^b B^{db}_{eb}\ar[from=l]
-%% \\
-%% & A^{e}_{e} \nu^-_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \mu^+_{\rtri f }(u)
-%% \\
-%% A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
-%% &A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
-%% &B\sw{e u\sw e}\ar[from=u]
-%% &B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
-%% \end{tikzcd}
-%% \]
+The big diagram that's supposed to represent what this is good for is
+\[
+\begin{tikzcd}
+A^{et\sw d}_{dt\sw d}\ar[from=dd]\ar[r]
+&A\sw{d t \sw d} \ar[d]\ar[r, "N_d"]
+&[2em]B\sw{d u\sw d}\ar[from=d]
+&B^{d u\sw d}_{e u\sw d}\ar[from=l]\ar[dd]
+\\
+&A^{d}_d \nu^-_{\ltri f }(t) \ar[r, "N_{\ltri f}"] & B^{d}_d \mu^+_{\ltri f }(u)
+\\
+\int_a A^{ea}_{da}\ar[r]
+&  A^{e}_{d} \nu^-_{\rid_f}(t)\ar[u]\ar[d]\ar[r, "N_{\rid_f}" description]
+&B^{d}_{e} \mu^+_{\rid_f}(u) \ar[from=u]\ar[from=d]
+&\int^b B^{db}_{eb}\ar[from=l]
+\\
+& A^{e}_{e} \nu^-_{\rtri f }(t) \ar[r, "N_{\rtri f}"'] & B^{e}_{e} \mu^+_{\rtri f }(u)
+\\
+A^{et\sw e}_{dt\sw e}\ar[from=uu]\ar[r]
+&A\sw{e t \sw e} \ar[u]\ar[r, "N_e"']
+&B\sw{e u\sw e}\ar[from=u]
+&B^{d u\sw e}_{e u\sw e}\ar[from=l]\ar[uu]
+\end{tikzcd}
+\]
 
-%% A semantic proof object for a sequent
-%% \[ [t^x_x/a]^\nu A^{xa}_{xa} \prov [u^x_x/b]^\mu B^{xb}_{xb}\]
-%% is supposed to be some data for each $\tau$
-%% \[ N_\tau : A^{e'}_{d'} \nu^-_\tau(t) \to B^{d'}_{e'} \mu^+_\tau(u) \]
-%% such that
-%% \[
-%% \begin{tikzcd}
-%%   A^{d'}_{d} \nu^-_{\rid_{\ll\tau}}(t)\ar[d]\ar[r, "N_{\rid_{\ll\tau}}"]
-%% &[4em]B^{d}_{d'} \mu^+_{\rid_{\ll\tau}}(u) \ar[from=d]
-%% \\
-%%  A^{e'}_{d'} \nu^-_{\tau }(t) \ar[r, "N_{\tau}" description] & B^{d'}_{e'} \mu^+_{\tau }(u)
-%% \\
-%%   A^{e}_{e'} \nu^-_{\rid_{\rr\tau}}(t)\ar[u]\ar[r, "N_{\rid_{\rr\tau}}"']
-%% &[4em]B^{e'}_{e} \mu^+_{\rid_{\rr\tau}}(u) \ar[from=u]
-%% \end{tikzcd}
-%% \]
-%% And I reckon this is a `for every object in $\tw(\tw(\C))$' kind of condition.
-%% There's some `reduction' that those two twisted arrow category constructions
-%% are eligible for, but they're not quite the same. The inner
-%%  `reduced' twisted arrow category need only have the morphisms
-%% that relate morphism-objects to their domain and codomain, and the outer
-%% one needs only the ones that relate a $\tau$ to its
-%% $\rid_{\ll \tau}$ and $\rid_{\rr \tau}$.
+A semantic proof object for a sequent
+\[ [t^x_x/a]^\nu A^{xa}_{xa} \prov [u^x_x/b]^\mu B^{xb}_{xb}\]
+is supposed to be some data for each $\tau$
+\[ N_\tau : A^{e'}_{d'} \nu^-_\tau(t) \to B^{d'}_{e'} \mu^+_\tau(u) \]
+such that
+\[
+\begin{tikzcd}
+  A^{d'}_{d} \nu^-_{\rid_{\ll\tau}}(t)\ar[d]\ar[r, "N_{\rid_{\ll\tau}}"]
+&[4em]B^{d}_{d'} \mu^+_{\rid_{\ll\tau}}(u) \ar[from=d]
+\\
+ A^{e'}_{d'} \nu^-_{\tau }(t) \ar[r, "N_{\tau}" description] & B^{d'}_{e'} \mu^+_{\tau }(u)
+\\
+  A^{e}_{e'} \nu^-_{\rid_{\rr\tau}}(t)\ar[u]\ar[r, "N_{\rid_{\rr\tau}}"']
+&[4em]B^{e'}_{e} \mu^+_{\rid_{\rr\tau}}(u) \ar[from=u]
+\end{tikzcd}
+\]
+And I reckon this is a `for every object in $\tw(\tw(\C))$' kind of condition.
+There's some `reduction' that those two twisted arrow category constructions
+are eligible for, but they're not quite the same. The inner
+ `reduced' twisted arrow category need only have the morphisms
+that relate morphism-objects to their domain and codomain, and the outer
+one needs only the ones that relate a $\tau$ to its
+$\rid_{\ll \tau}$ and $\rid_{\rr \tau}$.
 
-%% Actually, no, that doesn't quite work. For the sake of this immediately below
-%% discussion, name things like
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% d\ar[r, "g"'] &e
-%% \end{tikzcd}\]
-%% I can't construe $\rid_\iota$
-%% as a sub-arrow of $\tau : s \to g$, because although $\iota$ is a subarrow of $g$,
-%% I don't have that $g$ is not a subarrow of $\iota$.
+Actually, no, that doesn't quite work. For the sake of this immediately below
+discussion, name things like
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, "g"'] &e
+\end{tikzcd}\]
+I can't construe $\rid_\iota$
+as a sub-arrow of $\tau : s \to g$, because although $\iota$ is a subarrow of $g$,
+I don't have that $g$ is not a subarrow of $\iota$.
 
-%% However... I could consider $\rid_{\omega g}$ or $\rid_{g \iota}$ to be subarrows of $\tau$,
-%% couldn't I? Yeah:
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, equal]\\
-%% d\ar[r, "\omega g" description] \ar[d, equal]&y \ar[d, equal]
-%% \\
-%% d\ar[r, "\omega g" description] \ar[d, equal]&y\ar[from=d, "\omega"']
-%% \\
-%% d\ar[r, "g"'] &e
-%% \end{tikzcd}
-%% \qquad
-%%  =\qquad \begin{tikzcd}
-%%   x \ar[d, equal]\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% x\ar[r, "g \iota" description] \ar[d, equal]&e \ar[d, equal]
-%% \\
-%% x\ar[r, "g \iota" description] \ar[d, "\iota"']&e\ar[from=d, equal]
-%% \\
-%% d\ar[r, "g"'] &e
-%% \end{tikzcd}\]
-%% And {\em for in particular} $\lhd f$ and $\rhd f$, the appropriate choice of these
-%% is going to turn out to be $\rid_{\rid_d}$ or $\rid_{\rid_e}$ as required.
+However... I could consider $\rid_{\omega g}$ or $\rid_{g \iota}$ to be subarrows of $\tau$,
+couldn't I? Yeah:
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, equal]\\
+d\ar[r, "\omega g" description] \ar[d, equal]&y \ar[d, equal]
+\\
+d\ar[r, "\omega g" description] \ar[d, equal]&y\ar[from=d, "\omega"']
+\\
+d\ar[r, "g"'] &e
+\end{tikzcd}
+\qquad
+ =\qquad \begin{tikzcd}
+  x \ar[d, equal]\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+x\ar[r, "g \iota" description] \ar[d, equal]&e \ar[d, equal]
+\\
+x\ar[r, "g \iota" description] \ar[d, "\iota"']&e\ar[from=d, equal]
+\\
+d\ar[r, "g"'] &e
+\end{tikzcd}\]
+And {\em for in particular} $\lhd f$ and $\rhd f$, the appropriate choice of these
+is going to turn out to be $\rid_{\rid_d}$ or $\rid_{\rid_e}$ as required.
 
-%% And for sure $\rid_g$ is a subarrow of $\tau$:
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% d\ar[r, " g" description] \ar[d, equal]&e \ar[d, equal]
-%% \\
-%% d\ar[r, " g" description] \ar[d, equal]&e\ar[from=d, equal]
-%% \\
-%% d\ar[r, "g"'] &e
-%% \end{tikzcd}\]
-%% So perhaps the real requirement is that whenever $\sigma$ is (at least a certain sort of
-%% subarrow) of $\tau$, shaped like
-%% \[
-%% \begin{tikzcd}
-%% x \ar[ddd]\ar[rrr]\ar[dr] &&& y\ar[from=ddd]\ar[from=dl]
-%% \\
-%% &x'\ar[r]\ar[d] &y'\ar[from=d]
-%% \\
-%% &d' \ar[dl]\ar[r]&e'\ar[from=dr]
-%% \\
-%% d \ar[rrr] &&& e
-%% \end{tikzcd}
-%% \]
-%% with $\tau$ being the outer square, and $\sigma$ being the inner,
-%%  then we require
-%% \[
-%% \begin{tikzcd}
-%%  A^{e}_{d} \nu^-_{\tau }(t) \ar[r, "N_{\tau}" description] & B^{d}_{e} \mu^+_{\tau }(u)
-%% \\
-%%   A^{e'}_{d'} \nu^-_{\sigma}(t)\ar[u]\ar[r, "N_{\sigma}"']
-%% &B^{d'}_{e'} \mu^+_{\sigma}(u) \ar[from=u]
-%% \end{tikzcd}
-%% \]
-%% Aha, now it's easier to check that setting
-%% \[\ups_{\tau}^+(u) = {}_{u^y_x}^{u^{e}_{d}} \qquad \ups_{\tau}^-(u) = {}_{u^x_y}^{u^{d}_{e}}\]
-%% \[\dns_{\tau}^+(u) = {}^{u^x_y}_{u^{d}_{e}} \qquad \dns_{\tau}^-(u) = {}^{u^y_x}_{u^{e}_{d}}\]
-%% does in fact give me at least the
-%% {\em existence} of the arrows on the left and right sides of this diagram.
+And for sure $\rid_g$ is a subarrow of $\tau$:
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, " g" description] \ar[d, equal]&e \ar[d, equal]
+\\
+d\ar[r, " g" description] \ar[d, equal]&e\ar[from=d, equal]
+\\
+d\ar[r, "g"'] &e
+\end{tikzcd}\]
+So perhaps the real requirement is that whenever $\sigma$ is (at least a certain sort of
+subarrow) of $\tau$, shaped like
+\[
+\begin{tikzcd}
+x \ar[ddd]\ar[rrr]\ar[dr] &&& y\ar[from=ddd]\ar[from=dl]
+\\
+&x'\ar[r]\ar[d] &y'\ar[from=d]
+\\
+&d' \ar[dl]\ar[r]&e'\ar[from=dr]
+\\
+d \ar[rrr] &&& e
+\end{tikzcd}
+\]
+with $\tau$ being the outer square, and $\sigma$ being the inner,
+ then we require
+\[
+\begin{tikzcd}
+ A^{e}_{d} \nu^-_{\tau }(t) \ar[r, "N_{\tau}" description] & B^{d}_{e} \mu^+_{\tau }(u)
+\\
+  A^{e'}_{d'} \nu^-_{\sigma}(t)\ar[u]\ar[r, "N_{\sigma}"']
+&B^{d'}_{e'} \mu^+_{\sigma}(u) \ar[from=u]
+\end{tikzcd}
+\]
+Aha, now it's easier to check that setting
+\[\ups_{\tau}^+(u) = {}_{u^y_x}^{u^{e}_{d}} \qquad \ups_{\tau}^-(u) = {}_{u^x_y}^{u^{d}_{e}}\]
+\[\dns_{\tau}^+(u) = {}^{u^x_y}_{u^{d}_{e}} \qquad \dns_{\tau}^-(u) = {}^{u^y_x}_{u^{e}_{d}}\]
+does in fact give me at least the
+{\em existence} of the arrows on the left and right sides of this diagram.
 
-%% \subsection{How Is This a Natural Transformation?}
-%% It certainly seems like it should be one, somehow.
-%% For every {\em object} (e.g. $\tau, \sigma$) of $\tw(\tw(\C))$, we get
-%% the data $N_\tau$, $N_\sigma$, etc. And for every morphism $\tau \to \sigma$,
-%% we get a commutativity requirement. What's the target category of the functors
-%% that $N$ is a natural transformation between? Is it just $\rset$? To the extent
-%% that I'm thinking of $A$ and $B$ as functors $\doubs \C \x \doubs \D \to \rset$, I suppose so.
-%% Ok, so then, yeah, when I write
-%% \[B^d_e \mu^+_\tau(t)\]
-%% that should be thought of as a functor $\tw(\tw(\C)) \to \rset$,
-%% remembering that $t : \doubs \D \to \C$. I observe now that just as I
-%% increased generality by splitting the polarity choice $\nu$ into $\nu$
-%% and $\mu$ since I figured those choices could be made independently on the left
-%% and right side of the turnstile, I figure I could talk about $t$ and $u$ as coming
-%% from different categories, saying $t : \doubs \D \to \C$ and $u : \doubs \E \to \C$
-%% and saying $A : \doubs \C \x\doubs \D \to \rset$ and $B : \doubs \C \x \doubs \E\to \rset$.
-%% %% I think I'm going to take a pass on doing that for right now; I don't think that extra
-%% %% generality is of any help to me having clear thoughts at the moment, but it must
-%% %% eventually fall out of the more general case where I have lots
-%% %% of substitutions for lots of disparate variables.
+\subsection{How Is This a Natural Transformation?}
+It certainly seems like it should be one, somehow.
+For every {\em object} (e.g. $\tau, \sigma$) of $\tw(\tw(\C))$, we get
+the data $N_\tau$, $N_\sigma$, etc. And for every morphism $\tau \to \sigma$,
+we get a commutativity requirement. What's the target category of the functors
+that $N$ is a natural transformation between? Is it just $\rset$? To the extent
+that I'm thinking of $A$ and $B$ as functors $\doubs \C \x \doubs \D \to \rset$, I suppose so.
+Ok, so then, yeah, when I write
+\[B^d_e \mu^+_\tau(t)\]
+that should be thought of as a functor $\tw(\tw(\C)) \to \rset$,
+remembering that $t : \doubs \D \to \C$. I observe now that just as I
+increased generality by splitting the polarity choice $\nu$ into $\nu$
+and $\mu$ since I figured those choices could be made independently on the left
+and right side of the turnstile, I figure I could talk about $t$ and $u$ as coming
+from different categories, saying $t : \doubs \D \to \C$ and $u : \doubs \E \to \C$
+and saying $A : \doubs \C \x\doubs \D \to \rset$ and $B : \doubs \C \x \doubs \E\to \rset$.
+%% I think I'm going to take a pass on doing that for right now; I don't think that extra
+%% generality is of any help to me having clear thoughts at the moment, but it must
+%% eventually fall out of the more general case where I have lots
+%% of substitutions for lots of disparate variables.
 
-%% Ok, let's pick apart some things, now. When I have
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% d\ar[r, " g" description] &e
-%% \end{tikzcd}\]
-%% I want to claim that projecting out the $d$-object is a functor $\tw^2(\C) \to \C^\op$.
-%% For if I have a morphism $\tau \to \sigma$ in $\tw^2(\C)$, like
-%% \[
-%% \begin{tikzcd}
-%% x \ar[ddd]\ar[rrr]\ar[dr] &&& y\ar[from=ddd]\ar[from=dl]
-%% \\
-%% &x'\ar[r]\ar[d] &y'\ar[from=d]
-%% \\
-%% &d' \ar[dl]\ar[r]&e'\ar[from=dr]
-%% \\
-%% d \ar[rrr] &&& e
-%% \end{tikzcd}
-%% \]
-%% then I get a morphism from $\sigma$'s d --- namely, $d'$ --- to $\tau$'s. Ok, good, likewise
-%% projecting $e$ and $x$ are covariant, and $y$ is also contravariant.
-%% Ok, now I can reason that $u^d_e$ represents a functor $\tw^2(\C) \to \D$, if
-%% I think of the symbols $d$ and $e$ as projections from the ambient input $\tau$.
-%% Now I want to check that $u^x_y : \tw^2(\C) \to \D^\op$.
+Ok, let's pick apart some things, now. When I have
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, " g" description] &e
+\end{tikzcd}\]
+I want to claim that projecting out the $d$-object is a functor $\tw^2(\C) \to \C^\op$.
+For if I have a morphism $\tau \to \sigma$ in $\tw^2(\C)$, like
+\[
+\begin{tikzcd}
+x \ar[ddd]\ar[rrr]\ar[dr] &&& y\ar[from=ddd]\ar[from=dl]
+\\
+&x'\ar[r]\ar[d] &y'\ar[from=d]
+\\
+&d' \ar[dl]\ar[r]&e'\ar[from=dr]
+\\
+d \ar[rrr] &&& e
+\end{tikzcd}
+\]
+then I get a morphism from $\sigma$'s d --- namely, $d'$ --- to $\tau$'s. Ok, good, likewise
+projecting $e$ and $x$ are covariant, and $y$ is also contravariant.
+Ok, now I can reason that $u^d_e$ represents a functor $\tw^2(\C) \to \D$, if
+I think of the symbols $d$ and $e$ as projections from the ambient input $\tau$.
+Now I want to check that $u^x_y : \tw^2(\C) \to \D^\op$.
 
-%% This makes me slightly confused. Let's recall what constructions are generally available.
-%% If $F : \C \to \D$, then $F^\op : \C^\op \to \D^\op$. If $F : \C \to \D$ and $G: \C \to \E$,
-%% then $\pair F G : \C \to \D \x \E$. There exist
-%% functors $\dom : \tw(\C) \to \C$ and $\cod : \tw(\C) \to \C^\op$ if I use the convention I've
-%% been using here that $\tw$ goes from supermorphism to submorphism.
+This makes me slightly confused. Let's recall what constructions are generally available.
+If $F : \C \to \D$, then $F^\op : \C^\op \to \D^\op$. If $F : \C \to \D$ and $G: \C \to \E$,
+then $\pair F G : \C \to \D \x \E$. There exist
+functors $\dom : \tw(\C) \to \C$ and $\cod : \tw(\C) \to \C^\op$ if I use the convention I've
+been using here that $\tw$ goes from supermorphism to submorphism.
 
-%% Okay, doing {\texttt{2018-07-23.agda}} helps a bit. $A$ and $B$ are indeed functors
-%% $\doubs \C \x \doubs \D \to \rset$. From them we construct functors
-%% $\tw^2(\C) \to \rset^\op$ and $\tw^2(\C) \to \rset$. In general if we have
-%% $F : \C \to \D^\op$ and $G : \C \to \D$ there's an evident notion of `natural transformation'
-%% from $F$ to $G$, namely an assignment of morphisms $X \mapsto \alpha_X : FX \to GX$ such
-%% that
-%% \[
-%% \begin{tikzcd}
-%% FX \ar[r, "\alpha_X"]\ar[from=d, "Ff"]& GX\ar[d, "Gf"]\\
-%% FY \ar[r, "\alpha_Y"']& GY
-%% \end{tikzcd}
-%% \]
-%% always commutes in $\D$ for any $f : X \to Y \in \C$. Oh, I guess what I'm expected
-%% to do is regard $F$ as $\C^\op \to \D$ and realize that this is a dinatural transformation, with
-%% hexagon
-%% \[
-%% \begin{tikzcd}
-%% &F^X \ar[r, "\alpha_X"]\ar[from=dl, "F^f"]& G_X\ar[dr, "G_f"]\\
-%% F^Y &&& G_Y\\
-%% &F^Y \ar[r, "\alpha_Y"]\ar[from=ul, equal]& G_Y\ar[ur, equal]
-%% \end{tikzcd}
-%% \]
+Okay, doing {\texttt{2018-07-23.agda}} helps a bit. $A$ and $B$ are indeed functors
+$\doubs \C \x \doubs \D \to \rset$. From them we construct functors
+$\tw^2(\C) \to \rset^\op$ and $\tw^2(\C) \to \rset$. In general if we have
+$F : \C \to \D^\op$ and $G : \C \to \D$ there's an evident notion of `natural transformation'
+from $F$ to $G$, namely an assignment of morphisms $X \mapsto \alpha_X : FX \to GX$ such
+that
+\[
+\begin{tikzcd}
+FX \ar[r, "\alpha_X"]\ar[from=d, "Ff"]& GX\ar[d, "Gf"]\\
+FY \ar[r, "\alpha_Y"']& GY
+\end{tikzcd}
+\]
+always commutes in $\D$ for any $f : X \to Y \in \C$. Oh, I guess what I'm expected
+to do is regard $F$ as $\C^\op \to \D$ and realize that this is a dinatural transformation, with
+hexagon
+\[
+\begin{tikzcd}
+&F^X \ar[r, "\alpha_X"]\ar[from=dl, "F^f"]& G_X\ar[dr, "G_f"]\\
+F^Y &&& G_Y\\
+&F^Y \ar[r, "\alpha_Y"]\ar[from=ul, equal]& G_Y\ar[ur, equal]
+\end{tikzcd}
+\]
 
-%% Okay, so I guess that's my answer. What I'm claiming $N$ has to be is
-%% a dinatural transformation from one functor to another. The real game I have
-%% to play is articulating the constructions
-%% \[ \doubs \C \x \doubs \D \to \rset \qquad \mapsto_{\nu, t} \qquad \tw^2(\C)^\op \to \rset\]
-%% \[ \doubs \C \x \doubs \E \to \rset \qquad \mapsto_{\mu, u} \qquad \tw^2(\C) \to \rset\]
-%% for which what's really essential is
-%% \[ \tw^2(\C)^\op  \qquad \mapsto_{\mu, t} \qquad \doubs \C \x \doubs \D \]
-%% \[ \tw^2(\C)  \qquad \mapsto_{\nu, u} \qquad \doubs \C \x \doubs \E \]
+Okay, so I guess that's my answer. What I'm claiming $N$ has to be is
+a dinatural transformation from one functor to another. The real game I have
+to play is articulating the constructions
+\[ \doubs \C \x \doubs \D \to \rset \qquad \mapsto_{\nu, t} \qquad \tw^2(\C)^\op \to \rset\]
+\[ \doubs \C \x \doubs \E \to \rset \qquad \mapsto_{\mu, u} \qquad \tw^2(\C) \to \rset\]
+for which what's really essential is
+\[ \tw^2(\C)^\op  \qquad \mapsto_{\mu, t} \qquad \doubs \C \x \doubs \D \]
+\[ \tw^2(\C)  \qquad \mapsto_{\nu, u} \qquad \doubs \C \x \doubs \E \]
 
-%% \subsection{Trying To Check Things With This Definition}
-%% Some essential things I expect to hold are the focus rule, $\forall
-%% L$, and some form of univariant blur, or, barring that, some kind of
-%% init rule with a cycle-freeness side condition.
+\subsection{Trying To Check Things With This Definition}
+Some essential things I expect to hold are the focus rule, $\forall
+L$, and some form of univariant blur, or, barring that, some kind of
+init rule with a cycle-freeness side condition.
 
-%% Actually, since this seems more about suspended substitutions rather
-%% than focus, maybe focus/blur isn't the issue? That's sad to the extent
-%% that I was eager for it to be about focusing, but obviously I have to follow
-%% what actually works and not what I want to work. It may still turn out that
-%% things are compatible with limits and not colimits or something like that.
-%% So let's stare at $\forall L$. I suppose there are two choices for $\nu$,
-%% so let me just pick $\nu =\ups$ and consider that special case.
-%% \[
-%% \erule
-%% {[t/\alpha]^\ups A\sw{x\alpha} \prov C\sw x \qquad x : \C \prov t : \D}
-%% {x : \C ; (\forall \alpha : \D . A\sw{x\alpha}) \prov C\sw x}
-%% \]
-%% The entailment $x : \C \prov t : \D$ means that $t$ is a functor $\doubs \C \to \D$.
-%% The entailment $[t/\alpha] A\sw{x\alpha} \prov C\sw x$ means that
-%% I have an inhabitant of the end
-%% \[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e\]
-%% (where $d, e, x, y$ are actually projections from $\tau$)
-%% and what I want to build is an inhabitant of the end
-%% \[\int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x\]
-%% Let me take a step back and see if I can convince myself of some plausible-sounding
-%% lemmas. Like: can I establish anything like
-%% \[
-%% \int_{f\in \tw(\C)}  C^d_e
-%% \quad\cong\quad
-%% \int_{x\in \C}  C^x_x
-%% \]
-%% where I regard $e$ and $d$ as projections from $f$?
-%% Left to right, I need to make $ C^x_x$ for every $x$. Ok,
-%% project at $\rid_x$ from the end on the left. Then I need to show
-%% \[\begin{tikzcd}
-%% \int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{\rid_y}"']& C^x_x\ar[d]\\
-%%  C^y_y\ar[r]& C^x_y
-%% \end{tikzcd}\]
-%% I want to then consider the arrows $\lhd f : f \to \rid_x$ and $\rhd f : f \to \rid_y$.
-%% For these I get the diagrams
-%% \[\begin{tikzcd}
-%% \int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{f}"']& C^x_x\ar[d]\\
-%%  C^x_y\ar[r, equal]& C^x_y
-%% \end{tikzcd}
-%% \qquad
-%% \begin{tikzcd}
-%% \int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_y}"]\ar[d, "\pi_{f}"']& C^y_y\ar[d]\\
-%%  C^x_y\ar[r, equal]& C^x_y
-%% \end{tikzcd}\]
-%% which suffices. For right to left, I need to build a morphism $ C^d_e$
-%% for any $f \in \tw(\C)$. But surely this is possible; I can $f$-transport $ C\sw e$, and then $f$-transport to $C^d_e$. The
-%% end property of the end in $\C$ guarantees this is the same as passing through
-%% $A\sw d \to C\sw d$. To check the end property in $\tw(\C)$, I let
-%% \[\tau \quad =\qquad \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% d\ar[r, " g"'] &e
-%% \end{tikzcd}\]
-%% and check
-%% \[\begin{tikzcd}
-%% \int_{x\in \C}  C^x_x\ar[r, "\pi_{y}"]\ar[d, "\pi_{e}"']
-%% & C^y_y\ar[r]\ar[d]
-%% & C^x_y\ar[dd]
-%% \\
-%%  C^e_e\ar[d]\ar[r]
-%% & C^e_y\ar[dr]
-%% \\
-%%  C^d_e\ar[rr]&& C^x_y
-%% \end{tikzcd}\]
+Actually, since this seems more about suspended substitutions rather
+than focus, maybe focus/blur isn't the issue? That's sad to the extent
+that I was eager for it to be about focusing, but obviously I have to follow
+what actually works and not what I want to work. It may still turn out that
+things are compatible with limits and not colimits or something like that.
+So let's stare at $\forall L$. I suppose there are two choices for $\nu$,
+so let me just pick $\nu =\ups$ and consider that special case.
+\[
+\erule
+{[t/\alpha]^\ups A\sw{x\alpha} \prov C\sw x \qquad x : \C \prov t : \D}
+{x : \C ; (\forall \alpha : \D . A\sw{x\alpha}) \prov C\sw x}
+\]
+The entailment $x : \C \prov t : \D$ means that $t$ is a functor $\doubs \C \to \D$.
+The entailment $[t/\alpha] A\sw{x\alpha} \prov C\sw x$ means that
+I have an inhabitant of the end
+\[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e\]
+(where $d, e, x, y$ are actually projections from $\tau$)
+and what I want to build is an inhabitant of the end
+\[\int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x\]
+Let me take a step back and see if I can convince myself of some plausible-sounding
+lemmas. Like: can I establish anything like
+\[
+\int_{f\in \tw(\C)}  C^d_e
+\quad\cong\quad
+\int_{x\in \C}  C^x_x
+\]
+where I regard $e$ and $d$ as projections from $f$?
+Left to right, I need to make $ C^x_x$ for every $x$. Ok,
+project at $\rid_x$ from the end on the left. Then I need to show
+\[\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{\rid_y}"']& C^x_x\ar[d]\\
+ C^y_y\ar[r]& C^x_y
+\end{tikzcd}\]
+I want to then consider the arrows $\lhd f : f \to \rid_x$ and $\rhd f : f \to \rid_y$.
+For these I get the diagrams
+\[\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_x}"]\ar[d, "\pi_{f}"']& C^x_x\ar[d]\\
+ C^x_y\ar[r, equal]& C^x_y
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\int_{f\in \tw(\C)}  C^d_e\ar[r, "\pi_{\rid_y}"]\ar[d, "\pi_{f}"']& C^y_y\ar[d]\\
+ C^x_y\ar[r, equal]& C^x_y
+\end{tikzcd}\]
+which suffices. For right to left, I need to build a morphism $ C^d_e$
+for any $f \in \tw(\C)$. But surely this is possible; I can $f$-transport $ C\sw e$, and then $f$-transport to $C^d_e$. The
+end property of the end in $\C$ guarantees this is the same as passing through
+$A\sw d \to C\sw d$. To check the end property in $\tw(\C)$, I let
+\[\tau \quad =\qquad \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, " g"'] &e
+\end{tikzcd}\]
+and check
+\[\begin{tikzcd}
+\int_{x\in \C}  C^x_x\ar[r, "\pi_{y}"]\ar[d, "\pi_{e}"']
+& C^y_y\ar[r]\ar[d]
+& C^x_y\ar[dd]
+\\
+ C^e_e\ar[d]\ar[r]
+& C^e_y\ar[dr]
+\\
+ C^d_e\ar[rr]&& C^x_y
+\end{tikzcd}\]
 
-%% \subsubsection{Doing This Construction}
-%% \[M \in \int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e \chave\]
-%% \[N \in \int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x \cwant\]
-%% I set
-%% \[N_x(E) = M_{\rid_{\rid_x}}(E_{t\sw x})\]
-%% and then I need to check that this really is an end, that for any $f : x \to y$, I have
-%% \[ C_f \o N_x \o \int A^f = C^f \o N_y \o \int A_f : \left(\int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to C^x_y\]
-%% i.e.
-%% \[\left( E : \int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to  C_f M_{\rid_{\rid_x}}(A^f E_{t\sw x})  = C^f  M_{\rid_{\rid_y}}(A_f E_{t\sw y}) :   C^x_y\]
-%% and the diagram-chase that establishes this is
-%% \[
-%% \begin{tikzcd}
-%% A^{yt\sw x}_{xt\sw x}\ar[from=dd]\ar[r, "A^f"]
-%% &A\sw{x t \sw x} \ar[d]\ar[r, "M_{\rid_{\rid_x}}"]
-%% &[4em]C\sw{x }\ar[from=d, equal]
-%% \\
-%% &A^{xt^x_x}_{xt^x_y}\ar[r, "M_{\lhd f}"] & C^{x}_{x}
-%% \\
-%% \int_\alpha  A^{y\alpha }_{x\alpha }\ar[r]
-%% &  A^{yt^x_y}_{xt^x_y}\ar[u]\ar[d]\ar[r, "M_{\rid_f}" description]
-%% &C^{x}_{y} \ar[from=u, "C_f"]\ar[from=d, "C^f"']
-%% \\
-%% & A^{y t \sw y}_{y t^x_y}\ar[r, "M_{\rhd f}"'] & C^{y }_{y }
-%% \\
-%% A^{yt\sw y}_{xt\sw y}\ar[from=uu]\ar[r, "A_f"']
-%% &A\sw{y t \sw y} \ar[u]\ar[r, "M_{\rid_{\rid_y}}"']
-%% &C\sw{y }\ar[from=u, equal]
-%% \end{tikzcd}
-%% \]
-%% \subsection{Blur}
-%% Maybe the right thing to call this isn't blur so much as `resolving the delayed substitution'
-%% or something like that.
+\subsubsection{Doing This Construction}
+\[M \in \int_{\tau \in \tw^2(\C)} A^{et^d_e}_{dt^x_y} \to C^d_e \chave\]
+\[N \in \int_{x \in \C} \left( \int_{\alpha \in \D} A^{x\alpha}_{x\alpha}\right) \to C^x_x \cwant\]
+I set
+\[N_x(E) = M_{\rid_{\rid_x}}(E_{t\sw x})\]
+and then I need to check that this really is an end, that for any $f : x \to y$, I have
+\[ C_f \o N_x \o \int A^f = C^f \o N_y \o \int A_f : \left(\int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to C^x_y\]
+i.e.
+\[\left( E : \int_{\alpha\in\D} A^{y\alpha}_{x\alpha}\right) \to  C_f M_{\rid_{\rid_x}}(A^f E_{t\sw x})  = C^f  M_{\rid_{\rid_y}}(A_f E_{t\sw y}) :   C^x_y\]
+and the diagram-chase that establishes this is
+\[
+\begin{tikzcd}
+A^{yt\sw x}_{xt\sw x}\ar[from=dd]\ar[r, "A^f"]
+&A\sw{x t \sw x} \ar[d]\ar[r, "M_{\rid_{\rid_x}}"]
+&[4em]C\sw{x }\ar[from=d, equal]
+\\
+&A^{xt^x_x}_{xt^x_y}\ar[r, "M_{\lhd f}"] & C^{x}_{x}
+\\
+\int_\alpha  A^{y\alpha }_{x\alpha }\ar[r]
+&  A^{yt^x_y}_{xt^x_y}\ar[u]\ar[d]\ar[r, "M_{\rid_f}" description]
+&C^{x}_{y} \ar[from=u, "C_f"]\ar[from=d, "C^f"']
+\\
+& A^{y t \sw y}_{y t^x_y}\ar[r, "M_{\rhd f}"'] & C^{y }_{y }
+\\
+A^{yt\sw y}_{xt\sw y}\ar[from=uu]\ar[r, "A_f"']
+&A\sw{y t \sw y} \ar[u]\ar[r, "M_{\rid_{\rid_y}}"']
+&C\sw{y }\ar[from=u, equal]
+\end{tikzcd}
+\]
+\subsection{Blur}
+Maybe the right thing to call this isn't blur so much as `resolving the delayed substitution'
+or something like that.
 
-%% With the `contravariant option' for instantiating $A$, I can say
-%% if $A$ were contravariant in its $\D$-argument, and we had
-%% \[\int_{x \in \C} A^{xt^x_x}_{x} \to C^x_x\]
-%% then I claim we could make
-%% \[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{d} \to C^d_e\]
-%% Because I can instantiate the end I have at $d$, and transport all the appropriate things
-%% forward to $e$, or instantiate at $e$ and transport back to $d$.
-
-
-
-%% \section{Less-Connected Notes}
-%% Let's use the other convention where $\tw$ goes from submorphism to supermorphism.
-%% Let me overload $\dom$ and $\cod$ to mean all of
-%% \[\cod : \tw(\C) \to \C \quad\&\quad \tw(\C)^\op \to \C^\op\]
-%% \[\dom : \tw(\C) \to \C^\op \quad\&\quad \tw(\C)^\op \to \C\]
-%% and carefully check for $F : \doub \C \to \rset$ which of
-%% \[
-%% \int_{f/\bar f\in \tw(\C)}  F({\dom f}, {\cod f})
-%% \qquad
-%% \int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\cod f})
-%% \]
-%% \[
-%% \int_{f/\bar f\in \tw(\C)}  F({\dom f}, {\dom \bar f})
-%% \qquad
-%% \int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\dom \bar f})
-%% \]
-%% are isomorphic to \[\int_{x/\bar x\in \C}  F(\bar x, x)\]
-%% The thing I know I have to do right away is {\em from}
-%% $\int_{x/\bar x\in \C}  F(\bar x, x)$ get into something of the shape
-%% $F(\dash, \dash)$ for an arbitrary $f$. This means that
-%% \[\int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\dom \bar f})\]
-%% is ruled out! Even though it's well-typed, I can't necessarily produce $F(e, d)$
-%% from the bare end over $\C$ when $f : d \to e$.
-%% \section{Rampant Speculation On Fixpoints of $\tw$}
-%% How might I make sense of $\tw^\infty(\C)$? I think I need to understand what morphisms
-%% are between $\rid_{\rid_x}$ and $\rid_{\rid_y}$ in $\tw^2(\C)$.
-%% Between $\rid_x$ and $\rid_y$ in $\tw(\C)$, I need a section/retraction:
-%% \[
-%% \begin{tikzcd}
-%% x\ar[d, >->] \ar[r, "1"] &x\ar[from=d, ->>]\\
-%% y \ar[r, "1"'] &y
-%% \end{tikzcd}
-%% \]
-%% nLab's convention for $\tw$ puts the morphism in the same direction as the retraction,
-%% mine the section.
-
-%% Now a morphism $1_{1_x} \to 1_{1_y}$ using nLab convention is an $f, g, h, k$
-%% such that
-%% \[
-%% \begin{tikzcd}
-%% y \ar[ddd]\ar[rrr]\ar[dr, "f" description] &&& y\ar[from=ddd]\ar[from=dl, "g" description]
-%% \\
-%% &x\ar[r]\ar[d] &x\ar[from=d]
-%% \\
-%% &x \ar[dl, "h" description]\ar[r]&x\ar[from=dr, "k" description]
-%% \\
-%% y \ar[rrr] &&& y
-%% \end{tikzcd}
-%% \]
-%% with all unlabelled morphisms being identities.
-
-%% This forces $h$ and $k$ to be split epi {\em and} split mono. So $f = k$ and $h = g$
-%% and we have an isomorphism $x \cong y$.
-
-%% \subsection{An Object of $\tw^\infty$}
-%% An object $X$ of $\tw^\infty(\C)$ is a big hypercube made of objects and morphisms
-%% of $\C$. I want to say that I can canonically pick out the `codomainiest' object
-%% of $X$, so say
-%% \[ X_\zed \in \C \]
-%% That zero is really sort of a zero vector. I should also be able to ask for
-%% the `domain' along any dimension. So like
-%% \[ X_{\{0,4,5\}} = X_{045} \in \C \]
-%% also exists. In general, for finite $S \subseteq \N$, we have $X_S \in \C$.
-%% What about morphisms? Surely we should have
-%% \[
-%% \begin{tikzcd}
-%% X_{0} \ar[ddd]\ar[rrr]\ar[dr] &&& X_\zed\ar[from=ddd]\ar[from=dl]
-%% \\
-%% &X_{02}\ar[r]\ar[d] &X_2\ar[from=d]
-%% \\
-%% &X_{012} \ar[dl]\ar[r]&X_{12}\ar[from=dr]
-%% \\
-%% X_{01} \ar[rrr] &&& X_{1}
-%% \end{tikzcd}
-%% \]
-%% So I think the rule is: you always move in the direction of losing $0$:
-%% \[X_{0S} \to X_{S}\]
-%% You always move in the direction of losing $1$ {\em unless} you have $0$,
-%% in which case you gain it:
-%% \[X_{1S} \to X_{S} \qquad X_{0S} \to X_{01S}\]
-%% You move in the direction of losing $2$ {\em unless} you have an odd
-%% parity of $0,1$:
-%% \[X_{2S} \to X_{S} \qquad X_{0S} \to X_{02S}\]
-%% \[X_{1S} \to X_{12S} \qquad X_{012S} \to X_{01S}\]
-%% So generally if I enforce the convention that the sets in the subscript of $X$
-%% are written in order, I can say that there's morphisms
-%% \[\ell_n : X_{\mathcal E n S} \to X_{\mathcal E S} \qquad
-%% g_n : X_{\mathcal O S} \to X_{\mathcal O n S} \]
-%% I can `lose' or `gain' $n$ accordingly.
-
-%% Right, there is a category $\T$ whose objects
-%% are finite sets of natural numbers and whose morphisms are generated by
-%% \[\mathcal E S \le \mathcal E n S   \qquad
-%% \mathcal O n S \le  \mathcal O S  \]
-%% Actually, is this a total order?
-%% Yeah, I think so.
-%% In reverse, I get like
-%% \[\begin{tabular}{llll}
-%% 0&1&2&3\\
-%% \hline
-%% $\zed$&$\zed$&$\zed$&$\zed$\\
-%% 0&1&2&3\\
-%% &01&12&23\\
-%% &0&1&2\\
-%% &&01&12\\
-%% &&012&123\\
-%% &&02&13\\
-%% &&0&1\\
-%% &&&01\\
-%% &&&013\\
-%% &&&0123\\
-%% &&&012\\
-%% &&&02\\
-%% &&&023\\
-%% &&&03\\
-%% &&&0
-%% \end{tabular}\]
-%% So I can assign a `real'-valued measure to every finite subset of naturals,
-%% \[\begin{tabular}{ll}
-%% $S$&$\mu(S)$\\
-%% \hline
-%% $\zed$&$\epsilon$\\
-%% 3&$1/8$\\
-%% 23&$1/8+\epsilon$\\
-%% 2&$1/4$\\
-%% 12&$1/4 + \epsilon$\\
-%% 123&$3/8$\\
-%% 13&$3/8 + \epsilon$\\
-%% 1&$1/2$\\
-%% 01&$1/2 + \epsilon$\\
-%% 013&$5/8$\\
-%% 0123&$5/8 + \epsilon$\\
-%% 012&$3/4$\\
-%% 02&$3/4 + \epsilon$\\
-%% 023&$7/8$\\
-%% 03&$7/8 + \epsilon$\\
-%% 0&1
-%% \end{tabular}\]
-
-%% I think the pattern is:
-
-%% \[\mu(S n) = \begin{cases} \mu(S) - \epsilon  + 2^{-n}&\hbox{if $\epsilon \in \mu(S)$;}
-%% \\
-%% \mu(S) + \epsilon - 2^{-n}&\hbox{otherwise.} \end{cases}\]
-%% Or simply
-%% \[\mu(S n) = \mu(S)  + (2^{-n} - \epsilon )(-1)^{|S|} \]
-%% \subsection{Morphisms of $\tw^\infty$}
-%% It seems like a morphism from $X$ to $Y$ would be a thing that has
-%% $X_{\mathcal E} \to Y_{\mathcal E}$
-%% and
-%% $Y_{\mathcal O} \to X_{\mathcal O}$.
-
-%% \subsection{A Cantor-Like Measure}
-%% \[\begin{tabular}{lll}
-%% $S$&$27 \mu(S)$&$27 \mu(S)$\\
-%% \hline
-%% $\zed$&$0$\\
-%% 3&$1$&$1/27$\\
-%% 23&$2$&$2/27$\\
-%% 2&$3$&$1/9$\\
-%% 12&$6$&$2/9$\\
-%% 123&$7$\\
-%% 13&$8$\\
-%% 1&$9$&$1/3$\\
-%% 01&$18$&$2/3$\\
-%% 013&$19$\\
-%% 0123&$20$\\
-%% 012&$21$\\
-%% 02&$24$\\
-%% 023&$25$\\
-%% 03&$26$\\
-%% 0&$27$
-%% \end{tabular}\]
-%% \[\mu(S n) = \mu(S)  + (3^{-n})(-1)^{|S|} \]
-
-%% \subsection{An Actual Fixpoint of $\tw$}
-
-%% This is a bit of a different approach. Instead of a cantor-set-like shape,
-%% we can just consider a $\Z$-shaped (or $\N$-shaped) list of objects with
-%% connecting morphisms.
-
-%% I say that an object in $\tw^\infty(\C)$ is a functor from the
-%% total order $\Z$ to $\C$, and a morphism $F \to G$ is
-%% a diagram
-%% \[\begin{tikzcd}
-%% \cdots \ar[r] & F_{-2} \ar[d] \ar[r] & F_{-1} \ar[r]\ar[from=d]&  F_0\ar[d]\ar[r] & F_1\ar[from=d]\ar[r] & F_2\ar[d]\ar[r]& \cdots\\
-%% \cdots \ar[r] & G_{-2} \ar[r] & G_{-1} \ar[r]&  G_0\ar[r] & G_1\ar[r] & G_2 \ar[r]&\cdots
-%% \end{tikzcd}\]
-%% My visualization for why this is a fixedpoint of $\tw$ is
-%% \[\begin{tikzpicture}
-%% % the line
-%%   \draw[<->] (0,0)--(9,0);
-%% % tick marks
-%%   \draw (1,0)--(1,0.3) node[above]{$-4\textcolor{white}{-}$};
-%%   \draw (2,0)--(2,0.3) node[above]{$-3\textcolor{white}{-}$};
-%%   \draw (3,0)--(3,0.3) node[above]{$-2\textcolor{white}{-}$};
-%%   \draw (4,0)--(4,0.3) node[above]{$-1\textcolor{white}{-}$};
-%%   \draw (5,0)--(5,0.3) node[above]{$0$};
-%%   \draw (6,0)--(6,0.3) node[above]{$1$};
-%%   \draw (7,0)--(7,0.3) node[above]{$2$};
-%%   \draw (8,0)--(8,0.3) node[above]{$3$};
-%%   \draw[line width=2pt, -stealth, blu] (1,0)--(2,0);
-%%   \draw[line width=2pt, -stealth, blu] (4,0)--(3,0);
-%%   \draw[line width=2pt, -stealth, blu] (5,0)--(6,0);
-%%   \draw[line width=2pt, -stealth, blu] (8,0)--(7,0);
-%% \end{tikzpicture}\]
+With the `contravariant option' for instantiating $A$, I can say
+if $A$ were contravariant in its $\D$-argument, and we had
+\[\int_{x \in \C} A^{xt^x_x}_{x} \to C^x_x\]
+then I claim we could make
+\[\int_{\tau \in \tw^2(\C)} A^{et^d_e}_{d} \to C^d_e\]
+Because I can instantiate the end I have at $d$, and transport all the appropriate things
+forward to $e$, or instantiate at $e$ and transport back to $d$.
 
 
-%% More formally, an object of $\tw^\infty(\C)$ is given
-%% by a family of objects $F : \Z \to \C$ and a family of morphisms
-%% $(f_n : F_n \to F_{n+1} \st n \in \Z)$.
-%% A morphism $\mu: (F,f) \to (G,g)$ is, for each $n$, morphisms
-%% \[
-%% \mu^+_n :  F_{2n} \to G_{2n} \qquad
-%% \mu^-_n :  G_{2n+1} \to F_{2n+1}
-%% \]
-%% such that
-%% \[ f_{2n} = \mu^-_{n} \o g_{2n} \o \mu^+_n \]
-%% \[ g_{2n+1} = \mu^+_{n+1} \o f_{2n+1} \o \mu^-_n \]
-%% that is,
-%% \[
-%% \begin{tikzcd}
-%%   F_{2n} \ar[r, "f_{2n}"] \ar[d, "\mu^+_n"']
-%% & F_{2n+1}\ar[from=d, "\mu^-_{n}"'] \ar[r, "f_{2n+1}"]
-%% & F_{2n+2}\ar[d, "\mu^+_{n+1}"]\\
-%%   G_{2n} \ar[r, "g_{2n}"'] & G_{2n+1}\ar[r, "g_{2n+1}"'] & G_{2n+2}\\
-%% \end{tikzcd}
-%% \]
 
-%% \begin{lemma}
-%% Let $T = \tw^\infty(\C)$. Then $\tw(T) \cong T$
-%% \end{lemma}
+\section{Less-Connected Notes}
+Let's use the other convention where $\tw$ goes from submorphism to supermorphism.
+Let me overload $\dom$ and $\cod$ to mean all of
+\[\cod : \tw(\C) \to \C \quad\&\quad \tw(\C)^\op \to \C^\op\]
+\[\dom : \tw(\C) \to \C^\op \quad\&\quad \tw(\C)^\op \to \C\]
+and carefully check for $F : \doub \C \to \rset$ which of
+\[
+\int_{f/\bar f\in \tw(\C)}  F({\dom f}, {\cod f})
+\qquad
+\int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\cod f})
+\]
+\[
+\int_{f/\bar f\in \tw(\C)}  F({\dom f}, {\dom \bar f})
+\qquad
+\int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\dom \bar f})
+\]
+are isomorphic to \[\int_{x/\bar x\in \C}  F(\bar x, x)\]
+The thing I know I have to do right away is {\em from}
+$\int_{x/\bar x\in \C}  F(\bar x, x)$ get into something of the shape
+$F(\dash, \dash)$ for an arbitrary $f$. This means that
+\[\int_{f/\bar f\in \tw(\C)}  F({\cod \bar f}, {\dom \bar f})\]
+is ruled out! Even though it's well-typed, I can't necessarily produce $F(e, d)$
+from the bare end over $\C$ when $f : d \to e$.
+\section{Rampant Speculation On Fixpoints of $\tw$}
+How might I make sense of $\tw^\infty(\C)$? I think I need to understand what morphisms
+are between $\rid_{\rid_x}$ and $\rid_{\rid_y}$ in $\tw^2(\C)$.
+Between $\rid_x$ and $\rid_y$ in $\tw(\C)$, I need a section/retraction:
+\[
+\begin{tikzcd}
+x\ar[d, >->] \ar[r, "1"] &x\ar[from=d, ->>]\\
+y \ar[r, "1"'] &y
+\end{tikzcd}
+\]
+nLab's convention for $\tw$ puts the morphism in the same direction as the retraction,
+mine the section.
 
-%% \begin{proof}
-%% We describe a functor $\tw(T) \to T$.
-%% We must take an object of $\tw(T)$ --- a morphism of $T$ --- to an object of $T$.
-%% Given $\mu : (F, f) \to (G, g)$ we define $X_\mu = (H, h)$ by
-%% \[H_{4n} = F_{2n} \qquad H_{4n+1} = G_{2n} \qquad H_{4n+2} = G_{2n+1} \qquad H_{4n+3} = F_{2n+1}\]
-%% \[h_{4n} = \mu^+_{n} \qquad H_{4n+1} = g_{2n} \qquad H_{4n+2} = \mu^-_{n} \qquad H_{4n+3} = f_{2n+1}\]
-%% i.e.
-%% \[\begin{tikzpicture}
-%% % the line
-%%   \draw[<->] (0,0)--(9,0);
-%% % tick marks
-%%   \draw (1,-0.3) node[below]{$H_{-3}$}--(1,0.3)  node[above]{$G_{-2}$};
-%%   \draw (2,-0.3) node[below]{$H_{-2}$}--(2,0.3)  node[above]{$G_{-1}$};
-%%   \draw (3,-0.3) node[below]{$H_{-1}$}--(3,0.3)  node[above]{$F_{-1}$};
-%%   \draw (4,-0.3) node[below]{$H_0$}--(4,0.3)  node[above]{$F_0$};
-%%   \draw (5,-0.3) node[below]{$H_1$}--(5,0.3)  node[above]{$G_0$};
-%%   \draw (6,-0.3) node[below]{$H_2$}--(6,0.3)  node[above]{$G_1$};
-%%   \draw (7,-0.3) node[below]{$H_3$}--(7,0.3)  node[above]{$F_1$};
-%%   \draw (8,-0.3) node[below]{$H_4$}--(8,0.3)  node[above]{$F_2$};
-%%   \draw[line width=2pt, -stealth, orng] (1,0)--(2,0);
-%%   \draw[line width=2pt, -stealth, blu] (3,0)--(4,0);
-%%   \draw[line width=2pt, -stealth, orng] (5,0)--(6,0);
-%%   \draw[line width=2pt, -stealth, blu] (7,0)--(8,0);
-%% \end{tikzpicture}\]
-%% Given a morphism of $\tw(T)$ --- say, $\alpha : (\nu : E \to H) \to (\mu : F \to G)$
-%% \[\begin{tikzcd}
-%% \cdots \ar[r] & E_{-2} \ar[ddd, bend left]\ar[d] \ar[r] & E_{-1} \ar[r]\ar[from=d]\ar[from=ddd, bend right]&  E_0\ar[d]\ar[ddd, bend left, "\nu^+_0"]\ar[r] & E_1\ar[from=d]\ar[from=ddd, bend right]\ar[r] & E_2\ar[d]\ar[ddd, bend left]\ar[r]& \cdots\\
-%% \cdots \ar[r] & F_{-2} \ar[d] \ar[r] & F_{-1} \ar[r]\ar[from=d]&  F_0\ar[d, "\mu^+_0"']\ar[r] & F_1\ar[from=d]\ar[r] & F_2\ar[d]\ar[r]& \cdots\\
-%% \cdots \ar[r] & G_{-2} \ar[d] \ar[r] & G_{-1} \ar[r]\ar[from=d]&  G_0\ar[d]\ar[r] & G_1\ar[from=d]\ar[r] & G_2\ar[d]\ar[r]& \cdots\\
-%% \cdots \ar[r] & H_{-2} \ar[r] & H_{-1} \ar[r]&  H_0\ar[r] & H_1\ar[r] & H_2 \ar[r]&\cdots
-%% \end{tikzcd}\]
-%% we reconstrue this as a morphism $X_\nu \to X_\mu$:
+Now a morphism $1_{1_x} \to 1_{1_y}$ using nLab convention is an $f, g, h, k$
+such that
+\[
+\begin{tikzcd}
+y \ar[ddd]\ar[rrr]\ar[dr, "f" description] &&& y\ar[from=ddd]\ar[from=dl, "g" description]
+\\
+&x\ar[r]\ar[d] &x\ar[from=d]
+\\
+&x \ar[dl, "h" description]\ar[r]&x\ar[from=dr, "k" description]
+\\
+y \ar[rrr] &&& y
+\end{tikzcd}
+\]
+with all unlabelled morphisms being identities.
 
-%% \[\begin{tikzcd}
-%% \cdots \ar[r]
-%% &[-1em] H_{-1} \ar[r]\ar[d]
-%% &[-1em]  E_{-1}\ar[from=d]\ar[r]
-%% &[-1em] E_{0} \ar[r]\ar[d]
-%% &[-1em]  H_0\ar[from=d]\ar[r]
-%% &[-1em] H_{1} \ar[r]\ar[d]
-%% &[-1em]  E_1\ar[from=d]\ar[r]
-%% &[-1em] E_2\ar[d]\ar[r]
-%% &[-1em] H_2\ar[from=d]\ar[r]
-%% &[-1em] \cdots
-%% \\
-%% \cdots \ar[r]
-%% & G_{-1} \ar[r]
-%% &  F_{-1}\ar[r]
-%% & F_{0} \ar[r]
-%% &  G_0\ar[r]
-%% & G_{1} \ar[r]
-%% &  F_1\ar[r]
-%% & F_2\ar[r]
-%% & G_2 \ar[r]
-%% &\cdots
-%% \end{tikzcd}\]
+This forces $h$ and $k$ to be split epi {\em and} split mono. So $f = k$ and $h = g$
+and we have an isomorphism $x \cong y$.
 
-%% \cqed
-%% \end{proof}
+\subsection{An Object of $\tw^\infty$}
+An object $X$ of $\tw^\infty(\C)$ is a big hypercube made of objects and morphisms
+of $\C$. I want to say that I can canonically pick out the `codomainiest' object
+of $X$, so say
+\[ X_\zed \in \C \]
+That zero is really sort of a zero vector. I should also be able to ask for
+the `domain' along any dimension. So like
+\[ X_{\{0,4,5\}} = X_{045} \in \C \]
+also exists. In general, for finite $S \subseteq \N$, we have $X_S \in \C$.
+What about morphisms? Surely we should have
+\[
+\begin{tikzcd}
+X_{0} \ar[ddd]\ar[rrr]\ar[dr] &&& X_\zed\ar[from=ddd]\ar[from=dl]
+\\
+&X_{02}\ar[r]\ar[d] &X_2\ar[from=d]
+\\
+&X_{012} \ar[dl]\ar[r]&X_{12}\ar[from=dr]
+\\
+X_{01} \ar[rrr] &&& X_{1}
+\end{tikzcd}
+\]
+So I think the rule is: you always move in the direction of losing $0$:
+\[X_{0S} \to X_{S}\]
+You always move in the direction of losing $1$ {\em unless} you have $0$,
+in which case you gain it:
+\[X_{1S} \to X_{S} \qquad X_{0S} \to X_{01S}\]
+You move in the direction of losing $2$ {\em unless} you have an odd
+parity of $0,1$:
+\[X_{2S} \to X_{S} \qquad X_{0S} \to X_{02S}\]
+\[X_{1S} \to X_{12S} \qquad X_{012S} \to X_{01S}\]
+So generally if I enforce the convention that the sets in the subscript of $X$
+are written in order, I can say that there's morphisms
+\[\ell_n : X_{\mathcal E n S} \to X_{\mathcal E S} \qquad
+g_n : X_{\mathcal O S} \to X_{\mathcal O n S} \]
+I can `lose' or `gain' $n$ accordingly.
 
-%% \def\twi{\bigcirc}
-%% Let $\twi = \tw^\infty$.
-%% Observe that there are functors
-%% \[\tau \mapsto \tau_{2n} : \twi \C \to \C \qquad
-%% \tau \mapsto \tau_{2n+1} : \twi \C \to \C^\op\]
-%% \begin{lemma}
-%% \[\int_{\tau \in \twi \C} C^{\tau_1}_{\tau_2} \cong \int_{x\in\C} C^x_x\]
-%% \end{lemma}
+Right, there is a category $\T$ whose objects
+are finite sets of natural numbers and whose morphisms are generated by
+\[\mathcal E S \le \mathcal E n S   \qquad
+\mathcal O n S \le  \mathcal O S  \]
+Actually, is this a total order?
+Yeah, I think so.
+In reverse, I get like
+\[\begin{tabular}{llll}
+0&1&2&3\\
+\hline
+$\zed$&$\zed$&$\zed$&$\zed$\\
+0&1&2&3\\
+&01&12&23\\
+&0&1&2\\
+&&01&12\\
+&&012&123\\
+&&02&13\\
+&&0&1\\
+&&&01\\
+&&&013\\
+&&&0123\\
+&&&012\\
+&&&02\\
+&&&023\\
+&&&03\\
+&&&0
+\end{tabular}\]
+So I can assign a `real'-valued measure to every finite subset of naturals,
+\[\begin{tabular}{ll}
+$S$&$\mu(S)$\\
+\hline
+$\zed$&$\epsilon$\\
+3&$1/8$\\
+23&$1/8+\epsilon$\\
+2&$1/4$\\
+12&$1/4 + \epsilon$\\
+123&$3/8$\\
+13&$3/8 + \epsilon$\\
+1&$1/2$\\
+01&$1/2 + \epsilon$\\
+013&$5/8$\\
+0123&$5/8 + \epsilon$\\
+012&$3/4$\\
+02&$3/4 + \epsilon$\\
+023&$7/8$\\
+03&$7/8 + \epsilon$\\
+0&1
+\end{tabular}\]
 
-%% \begin{proof}
-%% From left to right, pick the constantly $\rid_x$ element of $\twi \C$.
-%% $\isbad$
-%% No, wait, I have a problem establishing the end-condition.
-%% I can't find an object in $\twi \C$ that contains $f$ at $\tau_1 \to \tau_2$,
-%% such that I can reach it from
-%% both the constantly $\rid_x$ object and the constantly $\rid_y$ object.
-%% \end{proof}
+I think the pattern is:
 
-%% \subsection{Why Did It Work Before?}
+\[\mu(S n) = \begin{cases} \mu(S) - \epsilon  + 2^{-n}&\hbox{if $\epsilon \in \mu(S)$;}
+\\
+\mu(S) + \epsilon - 2^{-n}&\hbox{otherwise.} \end{cases}\]
+Or simply
+\[\mu(S n) = \mu(S)  + (2^{-n} - \epsilon )(-1)^{|S|} \]
+\subsection{Morphisms of $\tw^\infty$}
+It seems like a morphism from $X$ to $Y$ would be a thing that has
+$X_{\mathcal E} \to Y_{\mathcal E}$
+and
+$Y_{\mathcal O} \to X_{\mathcal O}$.
 
-%% I think the critical thing is this: when I established that
+\subsection{A Cantor-Like Measure}
+\[\begin{tabular}{lll}
+$S$&$27 \mu(S)$&$27 \mu(S)$\\
+\hline
+$\zed$&$0$\\
+3&$1$&$1/27$\\
+23&$2$&$2/27$\\
+2&$3$&$1/9$\\
+12&$6$&$2/9$\\
+123&$7$\\
+13&$8$\\
+1&$9$&$1/3$\\
+01&$18$&$2/3$\\
+013&$19$\\
+0123&$20$\\
+012&$21$\\
+02&$24$\\
+023&$25$\\
+03&$26$\\
+0&$27$
+\end{tabular}\]
+\[\mu(S n) = \mu(S)  + (3^{-n})(-1)^{|S|} \]
 
-%% \[
-%% \int_{\tau \in \tw^2(\C)} C^d_e \quad \cong \quad \int_{x\in\C} C^x_x
-%% \]
-%% (for the super-to-submorphism convention of $\tw$ and
-%% \[ \begin{tikzcd}
-%%   x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
-%% d\ar[r, "g"'] &e
-%% \end{tikzcd}\]
-%% being the shape of $\tau$) that it actually took {\em more than one use} of the
-%% end property on the left to establish that I have an end in the ordinary sense, didn't it?
+\subsection{An Actual Fixpoint of $\tw$}
 
-%% Remember that in general if I have an end $E \in \int_{x \in \C} F^x_x$ and $f : d \to e \in \C$,
-%% then $F_f E_d = F^f E_e$. So, given an $f : d \to e \in \C$,
-%% I want to consider the diagram in $\tw^2(\C)$ that looks like
-%% \[
-%% \begin{tikzcd}
-%% \rid_{\rid_d} & \lhd f\ar[r]\ar[l] &  \rid_{f}  & \rhd f\ar[r]\ar[l] & \rid_{\rid_e}
-%% \end{tikzcd}
-%% \]
-%% or, spelling it out,
-%% \[
-%% \begin{tikzcd}
-%%  & d \arrow[rrd, lgray, -] \arrow[ld, lgray, -] &  &  \\
-%% d \arrow[rrd, lgray, -] \arrow[d, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] &  & d \arrow[d] \\
-%% d \arrow[rrd, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] & d \arrow[ru, lgray, -] & e \\
-%% d \arrow[rrd] \arrow[u, lgray, -] \arrow[d] & d \arrow[rrd] \arrow[ld] \arrow[u, lgray, -] \arrow[d] & d \arrow[ru] \arrow[u, lgray, -] \arrow[d] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
-%% e \arrow[rrd, lgray, -] & e \arrow[rrd, lgray, -] \arrow[ld, lgray, -] & e \arrow[ru, lgray, -] & e \\
-%% e \arrow[rrd, lgray, -] \arrow[u, lgray, -] &  & e \arrow[ru, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \arrow[u, lgray, -] \\
-%%  &  & e \arrow[ru, lgray, -] &
-%% \end{tikzcd}
-%% \]
-%% Or, spelling it out more linearlizably:
-%% \[\begin{tikzcd}
-%% d \arrow[r, lgray, -] & d \arrow[r, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[d] \\
-%% d \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \\
-%% d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
-%% d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \\
-%% e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -]
-%% \end{tikzcd}\]
-%% Therefore the following diagram commutes:
-%% \[
-%% \begin{tikzcd}
-%% \int_x C^{x}_{x}\ar[d, equal]\ar[r, "N_{\rid_{\rid_d}}" ]
-%% &[2em]C\sw{d }\ar[from=d, equal]
-%% \\
-%% \int_x C^{x}_{x}\ar[r, "N_{\lhd f}" ]
-%%  & C^{d}_d
-%% \\
-%%  \int_x C^{x}_{x} \ar[u, equal]\ar[d, equal]
-%% \ar[r, "N_{\rid_f}" description]
-%% &C^{d}_{e}  \ar[from=u, "C_f"]\ar[from=d, "C^f"']
-%% \\
-%% \int_x C^{x}_{x}\ar[r, "N_{\rhd f}"']
-%%  & C^{e}_{e}
-%% \\
-%% \int_x C^{x}_{x}\ar[from=u, equal]\ar[r, "N_{\rid_{\rid_e}}"']
-%% &C\sw{e }\ar[from=u, equal]
-%% \end{tikzcd}
-%% \]
+This is a bit of a different approach. Instead of a cantor-set-like shape,
+we can just consider a $\Z$-shaped (or $\N$-shaped) list of objects with
+connecting morphisms.
+
+I say that an object in $\tw^\infty(\C)$ is a functor from the
+total order $\Z$ to $\C$, and a morphism $F \to G$ is
+a diagram
+\[\begin{tikzcd}
+\cdots \ar[r] & F_{-2} \ar[d] \ar[r] & F_{-1} \ar[r]\ar[from=d]&  F_0\ar[d]\ar[r] & F_1\ar[from=d]\ar[r] & F_2\ar[d]\ar[r]& \cdots\\
+\cdots \ar[r] & G_{-2} \ar[r] & G_{-1} \ar[r]&  G_0\ar[r] & G_1\ar[r] & G_2 \ar[r]&\cdots
+\end{tikzcd}\]
+My visualization for why this is a fixedpoint of $\tw$ is
+\[\begin{tikzpicture}
+% the line
+  \draw[<->] (0,0)--(9,0);
+% tick marks
+  \draw (1,0)--(1,0.3) node[above]{$-4\textcolor{white}{-}$};
+  \draw (2,0)--(2,0.3) node[above]{$-3\textcolor{white}{-}$};
+  \draw (3,0)--(3,0.3) node[above]{$-2\textcolor{white}{-}$};
+  \draw (4,0)--(4,0.3) node[above]{$-1\textcolor{white}{-}$};
+  \draw (5,0)--(5,0.3) node[above]{$0$};
+  \draw (6,0)--(6,0.3) node[above]{$1$};
+  \draw (7,0)--(7,0.3) node[above]{$2$};
+  \draw (8,0)--(8,0.3) node[above]{$3$};
+  \draw[line width=2pt, -stealth, blu] (1,0)--(2,0);
+  \draw[line width=2pt, -stealth, blu] (4,0)--(3,0);
+  \draw[line width=2pt, -stealth, blu] (5,0)--(6,0);
+  \draw[line width=2pt, -stealth, blu] (8,0)--(7,0);
+\end{tikzpicture}\]
+
+
+More formally, an object of $\tw^\infty(\C)$ is given
+by a family of objects $F : \Z \to \C$ and a family of morphisms
+$(f_n : F_n \to F_{n+1} \st n \in \Z)$.
+A morphism $\mu: (F,f) \to (G,g)$ is, for each $n$, morphisms
+\[
+\mu^+_n :  F_{2n} \to G_{2n} \qquad
+\mu^-_n :  G_{2n+1} \to F_{2n+1}
+\]
+such that
+\[ f_{2n} = \mu^-_{n} \o g_{2n} \o \mu^+_n \]
+\[ g_{2n+1} = \mu^+_{n+1} \o f_{2n+1} \o \mu^-_n \]
+that is,
+\[
+\begin{tikzcd}
+  F_{2n} \ar[r, "f_{2n}"] \ar[d, "\mu^+_n"']
+& F_{2n+1}\ar[from=d, "\mu^-_{n}"'] \ar[r, "f_{2n+1}"]
+& F_{2n+2}\ar[d, "\mu^+_{n+1}"]\\
+  G_{2n} \ar[r, "g_{2n}"'] & G_{2n+1}\ar[r, "g_{2n+1}"'] & G_{2n+2}\\
+\end{tikzcd}
+\]
+
+\begin{lemma}
+Let $T = \tw^\infty(\C)$. Then $\tw(T) \cong T$
+\end{lemma}
+
+\begin{proof}
+We describe a functor $\tw(T) \to T$.
+We must take an object of $\tw(T)$ --- a morphism of $T$ --- to an object of $T$.
+Given $\mu : (F, f) \to (G, g)$ we define $X_\mu = (H, h)$ by
+\[H_{4n} = F_{2n} \qquad H_{4n+1} = G_{2n} \qquad H_{4n+2} = G_{2n+1} \qquad H_{4n+3} = F_{2n+1}\]
+\[h_{4n} = \mu^+_{n} \qquad H_{4n+1} = g_{2n} \qquad H_{4n+2} = \mu^-_{n} \qquad H_{4n+3} = f_{2n+1}\]
+i.e.
+\[\begin{tikzpicture}
+% the line
+  \draw[<->] (0,0)--(9,0);
+% tick marks
+  \draw (1,-0.3) node[below]{$H_{-3}$}--(1,0.3)  node[above]{$G_{-2}$};
+  \draw (2,-0.3) node[below]{$H_{-2}$}--(2,0.3)  node[above]{$G_{-1}$};
+  \draw (3,-0.3) node[below]{$H_{-1}$}--(3,0.3)  node[above]{$F_{-1}$};
+  \draw (4,-0.3) node[below]{$H_0$}--(4,0.3)  node[above]{$F_0$};
+  \draw (5,-0.3) node[below]{$H_1$}--(5,0.3)  node[above]{$G_0$};
+  \draw (6,-0.3) node[below]{$H_2$}--(6,0.3)  node[above]{$G_1$};
+  \draw (7,-0.3) node[below]{$H_3$}--(7,0.3)  node[above]{$F_1$};
+  \draw (8,-0.3) node[below]{$H_4$}--(8,0.3)  node[above]{$F_2$};
+  \draw[line width=2pt, -stealth, orng] (1,0)--(2,0);
+  \draw[line width=2pt, -stealth, blu] (3,0)--(4,0);
+  \draw[line width=2pt, -stealth, orng] (5,0)--(6,0);
+  \draw[line width=2pt, -stealth, blu] (7,0)--(8,0);
+\end{tikzpicture}\]
+Given a morphism of $\tw(T)$ --- say, $\alpha : (\nu : E \to H) \to (\mu : F \to G)$
+\[\begin{tikzcd}
+\cdots \ar[r] & E_{-2} \ar[ddd, bend left]\ar[d] \ar[r] & E_{-1} \ar[r]\ar[from=d]\ar[from=ddd, bend right]&  E_0\ar[d]\ar[ddd, bend left, "\nu^+_0"]\ar[r] & E_1\ar[from=d]\ar[from=ddd, bend right]\ar[r] & E_2\ar[d]\ar[ddd, bend left]\ar[r]& \cdots\\
+\cdots \ar[r] & F_{-2} \ar[d] \ar[r] & F_{-1} \ar[r]\ar[from=d]&  F_0\ar[d, "\mu^+_0"']\ar[r] & F_1\ar[from=d]\ar[r] & F_2\ar[d]\ar[r]& \cdots\\
+\cdots \ar[r] & G_{-2} \ar[d] \ar[r] & G_{-1} \ar[r]\ar[from=d]&  G_0\ar[d]\ar[r] & G_1\ar[from=d]\ar[r] & G_2\ar[d]\ar[r]& \cdots\\
+\cdots \ar[r] & H_{-2} \ar[r] & H_{-1} \ar[r]&  H_0\ar[r] & H_1\ar[r] & H_2 \ar[r]&\cdots
+\end{tikzcd}\]
+we reconstrue this as a morphism $X_\nu \to X_\mu$:
+
+\[\begin{tikzcd}
+\cdots \ar[r]
+&[-1em] H_{-1} \ar[r]\ar[d]
+&[-1em]  E_{-1}\ar[from=d]\ar[r]
+&[-1em] E_{0} \ar[r]\ar[d]
+&[-1em]  H_0\ar[from=d]\ar[r]
+&[-1em] H_{1} \ar[r]\ar[d]
+&[-1em]  E_1\ar[from=d]\ar[r]
+&[-1em] E_2\ar[d]\ar[r]
+&[-1em] H_2\ar[from=d]\ar[r]
+&[-1em] \cdots
+\\
+\cdots \ar[r]
+& G_{-1} \ar[r]
+&  F_{-1}\ar[r]
+& F_{0} \ar[r]
+&  G_0\ar[r]
+& G_{1} \ar[r]
+&  F_1\ar[r]
+& F_2\ar[r]
+& G_2 \ar[r]
+&\cdots
+\end{tikzcd}\]
+
+\cqed
+\end{proof}
+
+\def\twi{\bigcirc}
+Let $\twi = \tw^\infty$.
+Observe that there are functors
+\[\tau \mapsto \tau_{2n} : \twi \C \to \C \qquad
+\tau \mapsto \tau_{2n+1} : \twi \C \to \C^\op\]
+\begin{lemma}
+\[\int_{\tau \in \twi \C} C^{\tau_1}_{\tau_2} \cong \int_{x\in\C} C^x_x\]
+\end{lemma}
+
+\begin{proof}
+From left to right, pick the constantly $\rid_x$ element of $\twi \C$.
+$\isbad$
+No, wait, I have a problem establishing the end-condition.
+I can't find an object in $\twi \C$ that contains $f$ at $\tau_1 \to \tau_2$,
+such that I can reach it from
+both the constantly $\rid_x$ object and the constantly $\rid_y$ object.
+\end{proof}
+
+\subsection{Why Did It Work Before?}
+
+I think the critical thing is this: when I established that
+
+\[
+\int_{\tau \in \tw^2(\C)} C^d_e \quad \cong \quad \int_{x\in\C} C^x_x
+\]
+(for the super-to-submorphism convention of $\tw$ and
+\[ \begin{tikzcd}
+  x \ar[d, "\iota"']\ar[r, "s"]& y\ar[from=d, "\omega"']\\
+d\ar[r, "g"'] &e
+\end{tikzcd}\]
+being the shape of $\tau$) that it actually took {\em more than one use} of the
+end property on the left to establish that I have an end in the ordinary sense, didn't it?
+
+Remember that in general if I have an end $E \in \int_{x \in \C} F^x_x$ and $f : d \to e \in \C$,
+then $F_f E_d = F^f E_e$. So, given an $f : d \to e \in \C$,
+I want to consider the diagram in $\tw^2(\C)$ that looks like
+\[
+\begin{tikzcd}
+\rid_{\rid_d} & \lhd f\ar[r]\ar[l] &  \rid_{f}  & \rhd f\ar[r]\ar[l] & \rid_{\rid_e}
+\end{tikzcd}
+\]
+or, spelling it out,
+\[
+\begin{tikzcd}
+ & d \arrow[rrd, lgray, -] \arrow[ld, lgray, -] &  &  \\
+d \arrow[rrd, lgray, -] \arrow[d, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] &  & d \arrow[d] \\
+d \arrow[rrd, lgray, -] & d \arrow[rrd] \arrow[ld, lgray, -] & d \arrow[ru, lgray, -] & e \\
+d \arrow[rrd] \arrow[u, lgray, -] \arrow[d] & d \arrow[rrd] \arrow[ld] \arrow[u, lgray, -] \arrow[d] & d \arrow[ru] \arrow[u, lgray, -] \arrow[d] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
+e \arrow[rrd, lgray, -] & e \arrow[rrd, lgray, -] \arrow[ld, lgray, -] & e \arrow[ru, lgray, -] & e \\
+e \arrow[rrd, lgray, -] \arrow[u, lgray, -] &  & e \arrow[ru, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \arrow[u, lgray, -] \\
+ &  & e \arrow[ru, lgray, -] &
+\end{tikzcd}
+\]
+Or, spelling it out more linearlizably:
+\[\begin{tikzcd}
+d \arrow[r, lgray, -] & d \arrow[r, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[d] \\
+d \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \\
+d \arrow[r, lgray, -] & d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -] \arrow[d, lgray, -] \\
+d \arrow[r] \arrow[u, lgray, -] \arrow[d] & e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] \arrow[d, lgray, -] & e \\
+e \arrow[r, lgray, -] & e \arrow[r, lgray, -] \arrow[u, lgray, -] & e \arrow[r, lgray, -] & e \arrow[u, lgray, -]
+\end{tikzcd}\]
+Therefore the following diagram commutes:
+\[
+\begin{tikzcd}
+\int_x C^{x}_{x}\ar[d, equal]\ar[r, "N_{\rid_{\rid_d}}" ]
+&[2em]C\sw{d }\ar[from=d, equal]
+\\
+\int_x C^{x}_{x}\ar[r, "N_{\lhd f}" ]
+ & C^{d}_d
+\\
+ \int_x C^{x}_{x} \ar[u, equal]\ar[d, equal]
+\ar[r, "N_{\rid_f}" description]
+&C^{d}_{e}  \ar[from=u, "C_f"]\ar[from=d, "C^f"']
+\\
+\int_x C^{x}_{x}\ar[r, "N_{\rhd f}"']
+ & C^{e}_{e}
+\\
+\int_x C^{x}_{x}\ar[from=u, equal]\ar[r, "N_{\rid_{\rid_e}}"']
+&C\sw{e }\ar[from=u, equal]
+\end{tikzcd}
+\]
 
 \section{Checking Examples From Before}
 
