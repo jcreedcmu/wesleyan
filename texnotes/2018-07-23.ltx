@@ -1032,4 +1032,26 @@ should be an inhabitant of one of the ends
 \[ \int_{\tau\in\tw^2(\C)} F^{et^y_x}_{dt^e_d} \to F^{dt^e_d}_{et^d_e} \eqno(covar)\]
 But that doesn't work at all; it does suffice when $F$ is appropriately co- or contravariant,
 but that's not what I wanted to establish.
+
+\subsection{Why Doesn't This Work?}
+Well, the similar thing I thought worked was this:
+\[
+\erule
+{\using \isok}
+{\int_a \left(\int_b F\sw {a b}\right) \to  F\sw {a t\sw a}}
+\]
+I can set $M_d(E) = E_{t^d_d}$, and then I want to check,
+for any $f : d \to e$, that
+\[ F^{\cdot t^f}_{ft_f} \o M_d \o \int F^f = F^{f t_f}_{\cdot t^f} \o M_e \o \int F_f\]
+i.e.
+\[ \left(\int_b F^{eb}_{db}\right) \to F^{\cdot t^f}_{ft_f}  F^f E_{t\sw d} = F^{f t_f}_{\cdot t^f} F_f E_{t\sw e}  : F^{dt^e_d}_{et^d_e}\]
+for which it would suffice to show
+\[ \left(\int_b F^{eb}_{db}\right) \to F^{\cdot t^f}_{\cdot t_f}  E_{t\sw d} = F^{\cdot t_f}_{\cdot t^f}E_{t\sw e}  : F^{et^e_d}_{dt^d_e}\]
+And the way we do that is through three uses of the end-property of $\int_b F^{eb}_{db}$?
+\[\begin{tikzcd}
+{[eeee]}\ar[dd]  &&\int_bF^{eb}_{db}\ar[dl, "\pi"']\ar[dr, "\pi"]\ar[ll, "\pi"']\ar[rr, "\pi"] &&  {[dddd]}\ar[dd]\\
+ & {[dede]}\ar[dr]\ar[dl] && {[eded]}\ar[dr]\ar[dl] \\
+ {[eede]} \ar[rr]&& {[edde]} && {[eddd]}\ar[ll]
+\end{tikzcd}\]
+Where $[ijk\ell]$ means $F^{e t^i_j}_{d t^k_\ell}$.
 \end{document}
