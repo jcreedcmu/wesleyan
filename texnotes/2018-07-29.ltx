@@ -1,0 +1,275 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\zed{\emptyset}
+\def\lint{{\textstyle\int}}
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
+\def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
+\def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\def\doubs#1{{}^{{#1}^\op}_{\x {#1}}}
+\def\doub#1{{#1}^\op \x {#1}}
+
+\section{Collecting Examples, Again}
+\[
+\erule
+{\int_\alpha F \sw {\alpha \alpha}}
+{\int_\alpha \int^\beta F \sw {\alpha \beta}}
+\isbad
+\qquad
+\erule
+{\int_\alpha F^\alpha_\alpha \to G\sw \alpha}
+{\left(\int_\alpha F^\alpha_\alpha\right) \to \int_\alpha G\sw \alpha}
+\isbad
+\]
+\[
+\erule
+{\int_\alpha F^\alpha_{\alpha t\sw \alpha} \x H^{\alpha t\sw \alpha}_\alpha}
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\isopen
+\qquad
+\erule
+{ \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
+{\int_{\alpha} \left(\int_{\beta} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
+\isok
+\]
+\[
+\erule
+{\int_\alpha F^\alpha_{\alpha t_\alpha} \x H^{\alpha t_\alpha}_\alpha}
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+\isok
+\qquad
+\erule
+{\int_\alpha F^\alpha_{\alpha t\sw \alpha} }
+{\int_\alpha \int^\beta F^\alpha_{\alpha \beta}}
+\isok
+\]
+
+Counterexample to the first $\isbad$ is the ``$\lrcorner$''-shaped diagram in 6.6.2 of \texttt{2018-07-04}. Counterexample to the second is $F = 0111$ and $G = 0112$.
+I was going to add
+\[
+\erule
+{\int_\alpha F^{\alpha t_\alpha}_{\alpha t_\alpha}}
+{\int_\alpha \int^\beta F^{\alpha \beta}_{\alpha \beta} }
+\isbad
+\]
+as an open example, but I realize it's a special case of the first counterexample,
+with $t$ the identity functor.
+\end{document}
