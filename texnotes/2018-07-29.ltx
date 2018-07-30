@@ -228,48 +228,140 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\doub#1{{#1}^\op \x {#1}}
 
 \section{Collecting Examples, Again}
+$\forall$ means end and $\exists$ means coend. The variable
+$a$ is free in the top and bottom of every rule, and there is an implicit end over it.
+Rules marked $\star$ are newly proved below in this document.
+
 \[
 \erule
-{\int_\alpha F \sw {\alpha \alpha}}
-{\int_\alpha \int^\beta F \sw {\alpha \beta}}
+{ F \sw {a a}}
+{ \exists b. F \sw {a b}}
 \isbad
 \qquad
 \erule
-{\int_\alpha F^\alpha_\alpha \to G\sw \alpha}
-{\left(\int_\alpha F^\alpha_\alpha\right) \to \int_\alpha G\sw \alpha}
+{ F^a_a \to G\sw a}
+{\left(\forall b. F^b_b\right) \to  G\sw a}
 \isbad
 \]
 \[
 \erule
-{\int_\alpha F^\alpha_{\alpha t\sw \alpha} \x H^{\alpha t\sw \alpha}_\alpha}
-{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+{ F^a_{a t\sw a} \x H^{a t\sw a}_a}
+{ \exists b. F^a_{a b} \x H^{a b}_a}
 \isopen
 \qquad
 \erule
-{ \int_\alpha F^{\alpha}_{\alpha t^\alpha_\alpha} \x H^{\alpha t^\alpha_\alpha}_{\alpha } \to G^\alpha_\alpha}
-{\int_{\alpha} \left(\int_{\beta} F^\alpha_{\alpha\beta} \x H^{\alpha \beta}_{\alpha }\right) \to G^\alpha_\alpha}
+{  F^{a}_{a t^a_a} \x H^{a t^a_a}_{a } \to G^a_a}
+{ \left(\forall b. F^a_{ab} \x H^{a b}_{a }\right) \to G^a_a}
 \isok
 \]
 \[
 \erule
-{\int_\alpha F^\alpha_{\alpha t_\alpha} \x H^{\alpha t_\alpha}_\alpha}
-{\int_\alpha \int^\beta F^\alpha_{\alpha \beta} \x H^{\alpha \beta}_\alpha}
+{ F^a_{a t_a} \x H^{a t_a}_a}
+{ \exists b. F^a_{a b} \x H^{a b}_a}
 \isok
 \qquad
 \erule
-{\int_\alpha F^\alpha_{\alpha t\sw \alpha} }
-{\int_\alpha \int^\beta F^\alpha_{\alpha \beta}}
+{ F^a_{a t\sw a} }
+{ \exists b. F^a_{a b}}
 \isok
 \]
+\[
+\erule
+{\using \isok}
+{ \left(\forall b. F\sw {a b}\right) \to  F\sw {a t\sw a}}
+\qquad
+\erule
+{ \using \isok \star}
+{ F\sw {a t\sw a} \to \exists b. F\sw {a b} }
+\]
+\[
+\erule
+{G\sw a \to H^a_{at\sw a}
+\using \isok  \star}
+{  F\sw {a t\sw a} \x G^{a}_{a} \to \exists b. F\sw {a b}\x H^a_{ab} }
+\]
+
 
 Counterexample to the first $\isbad$ is the ``$\lrcorner$''-shaped diagram in 6.6.2 of \texttt{2018-07-04}. Counterexample to the second is $F = 0111$ and $G = 0112$.
 I was going to add
 \[
 \erule
-{\int_\alpha F^{\alpha t_\alpha}_{\alpha t_\alpha}}
-{\int_\alpha \int^\beta F^{\alpha \beta}_{\alpha \beta} }
+{ F^{a t_a}_{a t_a}}
+{ \exists b. F^{a b}_{a b} }
 \isbad
 \]
 as an open example, but I realize it's a special case of the first counterexample,
 with $t$ the identity functor.
+
+\subsection{Existential Version of Identity}
+\[
+\erule
+{\using \isok}
+{ F\sw {a t\sw a} \to \exists b. F\sw {a b} }
+\]
+We are trying to make $M_d : F\sw {d t\sw d} \to \exists b. F\sw {d b} $, so
+we set $M_d (x) = \pair {t^d_d} x$. Want to check the end-property
+that
+\[(\exists b . F_f) \o M_d \o  F_{\cdot t^f}^{f t_f} = (\exists b . F^f) \o M_e \o F_{ft_f}^{\cdot t^f} \]
+i.e.
+\[ (x : F^{et^e_d}_{dt^d_e}) \to \pair {t^d_d} {F_{f t^f}^{f t_f} x} = \pair {t^e_e} {F_{f t_f}^{f t^f} x} : \exists b . F^{db}_{eb}\]
+for which it would suffice
+\[ (y : F^{dt^e_d}_{et^d_e}) \to \pair {t^d_d} {F_{\cdot t^f}^{\cdot t_f} y} = \pair {t^e_e} {F_{\cdot t_f}^{\cdot t^f} y} : \exists b . F^{db}_{eb}\]
+and I can reason
+\[\begin{tikzcd}
+{[eeee]}\ar[from=dd]  &&\exists b . F^{db}_{eb}\ar[from=dl, "\iota"']\ar[from=dr, "\iota"]\ar[from=ll, "\iota"']\ar[from=rr, "\iota"] &&  {[dddd]}\ar[from=dd]\\
+ & {[dede]}\ar[from=dr]\ar[from=dl] && {[eded]}\ar[from=dr]\ar[from=dl] \\
+ {[eede]} \ar[from=rr]&& {[edde]} && {[eddd]}\ar[from=ll]
+\end{tikzcd}\]
+Where $[ijk\ell]$ means $F^{d t^i_j}_{e t^k_\ell}$.
+
+\subsection{An Important Case For Existentials and Products}
+\[
+\erule
+{G\sw a \to H^a_{at\sw a}
+\using \isok}
+{  F\sw {a t\sw a} \x G^{a}_{a} \to \exists b. F\sw {a b}\x H^a_{ab} }
+\]
+We have $L_d : G^d_d \to H^d_{dt\sw d}$. We know the end-property
+\[H_{ft_f} \o L_d \o  G^f = H^f_{t^f} \o L_e \o G_f \chave\]
+
+We are trying to make $M_d :  F\sw {d t\sw d} \x G\sw d \to \exists b. F\sw {d b} \x H^d_{db}$, so
+we set
+\[M_d (x, z) = \pair {t^d_d} {x, L_d(z)}\]
+ Want to check the end-property
+that
+\[(\exists b . F_f \x H_f) \o M_d \o  (F_{\cdot t^f}^{f t_f} \x G^f) = (\exists b . F^f \x H^f) \o M_e \o (F_{ft_f}^{\cdot t^f} \x G_f) \]
+i.e.
+\[ (x : F^{et^e_d}_{dt^d_e}) (z : G^e_d) \to \pair {t^d_d} {F_{f t^f}^{f t_f} x, H_f L_dG^f z}
+= \pair {t^e_e} {F_{f t_f}^{f t^f} x, H^fL_eG_f z} \cwant\]
+\[: \exists b . F^{db}_{eb} \x H^{d}_{eb} \]
+
+I appear to be blocked on applying the {\em end} property that I have,
+for lack of $t^f$/$t_f$ appearing here in the rightmost component of the tuple. However,
+maybe I can exploit the coend property since $H$ is covariant in $b$. I know
+the coend property of $\exists b .  C^b_b$ tells me that for any $s : u \to v$
+and $K : C^v_u$ that
+\[ \pair u {C^s K} = \pair v {C_s K}\]
+so the coend property for $\exists b . F\sw{ab} \x H^a_{ab}$ tells me that for any
+$s : u \to v$ and $K : F^{av}_{au} \x H^a_{au}$ that
+\[ \pair u {F^{\cdot s} K^1, K^2} = \pair v {F_{\cdot s} K^1, H_{\cdot s} K^2}\]
+That unadorned $K^2$ there is the thing giving me hope! So let me guess that I want
+$u = t^d_d$ and $v = t^d_e$ and
+$s = t_f : t\sw d \to t^d_e$ and $K^1 = F^{f}_{ft^f} x$ and $K^2 = H_f L_d G^f z$.
+Then I get
+\[ (x : F^{et^e_d}_{dt^d_e}) (z : G^e_d) \to \pair {t^d_d} {F_{f t^f}^{f t_f} x, H_f L_dG^f z}
+= \pair {t^d_e} {F_{f t^f_f}^{f } x, H_{f t_f} L_dG^f z} \]
+\[: \exists b . F^{db}_{eb} \x H^{d}_{eb}\]
+and {\em now} we can use the end-property we have to see this is the same as
+\[ (x : F^{et^e_d}_{dt^d_e}) (z : G^e_d) \to \pair {t^d_d} {F_{f t^f}^{f t_f} x, H_f L_dG^f z}
+= \pair {t^d_e} {F_{f t^f_f}^{f } x, H^{f}_{\cdot t^f} L_eG_f z} \chave \]
+\[: \exists b . F^{db}_{eb} \x H^{d}_{eb}\]
+and we can also use the {\em coend} property with $u = t^e_e$ and $v = t^d_e$
+and $s = t^f : t\sw e \to t^d_e$
+and $K^1 = F^f_{f t_f} x$ and $K^2 = H^f L_e G_f z$ to see
+\[ (x : F^{et^e_d}_{dt^d_e}) (z : G^e_d) \to
+ \pair {t^e_e} {F_{f t_f}^{f t^f} x, H^f L_eG_f z}
+= \pair {t^d_e} {F_{f t^f_f}^{f } x, H^{f}_{\cdot t^f} L_eG_f z} \chave \]
+\[: \exists b . F^{db}_{eb} \x H^{d}_{eb}\]
+and combining the two `have's I get my goal by transitivity.
 \end{document}
