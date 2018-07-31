@@ -503,4 +503,38 @@ and all ways of proving $\Phi \seq_\Delta \Gamma[N] \prov Q$, if there are
 inhabitants of every $(\int_{\delta\in  \Delta} F_\delta \st F \in \Phi)$, then there
 is an inhabitant of $\int_{\delta\in\Delta} \Gamma_\delta \x N_\delta \to Q_\delta$.
 
+\subsection{Known Examples In This Setting}
+I guess I'll be assuming that all atoms mentioned can depend on the $a$-variable
+however they like.
+\[
+ \exists b. \dns n \sw { b}
+\isbad
+\qquad
+\forall b. \ups p^b_b
+\isbad
+\]
+\[
+ \exists b. \dns n'_b \otimes \dns n^b
+\isopen
+\qquad
+\forall b. \ups p'_b \amp \ups p^b
+\isok
+\]
+\[
+ \exists^+ b. \dns n'_b \otimes \dns n^b
+\isok
+\qquad
+ \exists b. \dns n_b
+\isok
+\]
+\[
+ \forall b. n\sw { b} \isok
+\qquad
+ \exists b. p\sw { b} \isok
+\]
+\[
+\exists b. p \sw { b}\otimes \dns n_b \isok
+\]
+The quantifier $\exists^+$ only quantifies over $\Delta$-covariant instantiations of
+the variable.
 \end{document}
