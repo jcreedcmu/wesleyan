@@ -5335,3 +5335,20 @@ information present *at* v, even if the tethering is destroyed for
 actions that transact between v and x?
 A: Not sure; it does feel like we have to eat up the tethering data
 *at* v right away when we focus on [α+]N at v.
+
+=== 2018.07.30
+
+Q: Is it sensible to imagine that the place where we need to commit to a variance
+is neither focus nor identity rule, but tensor?
+A: I think the idea I have in mind is that there are two asymmetrically different
+asymmetric tensors. Like,
+
+`covariant tensor' takes in a bivariant and a covariant proposition,
+yielding a bivariant one.
+
+`contravariant tensor' takes in a bivariant and a contravariant proposition,
+yielding a bivariant one.
+
+Q: Wait, but wouldn't this allow me to spool out contra and covariant
+things in the same space, proving the "open inference" I don't think is valid?
+A: Oh, yeah, it would.

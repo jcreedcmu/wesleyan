@@ -281,7 +281,6 @@ Rules marked $\star$ are newly proved below in this document.
 {  F\sw {a t\sw a} \x G^{a}_{a} \to \exists b. F\sw {a b}\x H^a_{ab} }
 \]
 
-
 Counterexample to the first $\isbad$ is the ``$\lrcorner$''-shaped diagram in 6.6.2 of \texttt{2018-07-04}. Counterexample to the second is $F = 0111$ and $G = 0112$.
 I was going to add
 \[
@@ -293,6 +292,19 @@ I was going to add
 as an open example, but I realize it's a special case of the first counterexample,
 with $t$ the identity functor.
 
+Another good thing to observe is the rule
+\[
+\erule
+{G\sw a \to H^a_{at\sw a}
+\qquad
+G\sw a \to F\sw {a t\sw a}
+\using \isbad  \star}
+{   G^{a}_{a} \to \exists b. F\sw {a b}\x H^a_{ab} }
+\]
+is no good; just substitute $1$ for $G$ and $H$, and set $t^x_y = y$, and we're
+back to counterexample number one again. This is the kind of thing that {\em does}
+feel very much like focusing to me --- we seem to be pressured to {\em already have}
+$F\sw{a t\sw a}$ `in the context'.
 \subsection{Existential Version of Identity}
 \[
 \erule
@@ -364,4 +376,131 @@ and $K^1 = F^f_{f t_f} x$ and $K^2 = H^f L_e G_f z$ to see
 = \pair {t^d_e} {F_{f t^f_f}^{f } x, H^{f}_{\cdot t^f} L_eG_f z} \chave \]
 \[: \exists b . F^{db}_{eb} \x H^{d}_{eb}\]
 and combining the two `have's I get my goal by transitivity.
+
+\section{Formaling the Question of Which Connectives Exist}
+If I consider a polarized language that leaves out the shifts:
+\[
+\begin{tabular}{rccl}
+Positives&$P$&$::=$&$\exists x . P \celse P \tensor P \celse P \oplus P \celse 1 \celse 0\celse p(\vec t)$\\
+Negatives&$N$&$::=$&$\forall x . N \celse P \lol N \celse N \amp N \celse \top \celse n(\vec t)$
+\end{tabular}
+\]
+
+Then there's a specific `megaconnective' inference rule associated
+with each positive and negative proposition. This can be expressed like so:
+
+
+There is direct end/coend interpretation of each proposition. This will be the conclusion
+of the rule. For this we require that $p$ and $n$ be given functorial interpretations.
+If $\Delta \prov P : \rtype$, then $\sem P : \sem \Delta \to \rset$ is a functor,
+with the usual thing about $\sem \Delta$ including the co- and contravariant versions
+of every variable in $\Delta$. This is defined by
+\[ \sem{\exists x . P}_\delta = \int^x \sem P_\delta \qquad  \sem{\forall x . N}_\delta = \int_x \sem N_\delta\]
+\[ \sem{P\tensor P}_\delta = \sem P_\delta \x \sem P_\delta \qquad  \sem{N \amp N}_\delta = \sem N_\delta \x \sem N_\delta\]
+\[ \sem{P\oplus P}_\delta = \sem P_\delta + \sem P_\delta \qquad  \sem{P \lol N}_\delta = \sem P_{\bar \delta} \to \sem N_\delta\]
+
+The thing I need to express is what it means for a list of functors
+$\Phi = F_1, \ldots, F_n$ to `count as' a premise
+for a rule. Maybe these functors have different sources? If we need that, we
+give them names like $F_i : \sem{\Delta_i} \to \rset$. But I think I may not
+need that. We're only trying to capture the {\em synchronous} rules of megaconnectives,
+so maybe we won't be varying the $\Delta$ context in the course of unpacking
+one such rule. We have rules like
+\[
+\erule
+{\Phi \prov [P_1]  }
+{\Phi \prov [P_1 \oplus P_2] }
+\qquad
+\erule
+{\Phi \prov [P_2] }
+{\Phi \prov [P_1 \oplus P_2] }
+\]
+\[
+\erule
+{\Phi_1 \prov [P_1] \qquad \Phi_2 \prov [P_1] }
+{\Phi_1, \Phi_2 \prov [P_1 \times P_2] }
+\]
+No, wait, I'm off to a slightly wrong start. This scheme isn't taking into
+account focusing forcing things to be in the context.
+If my proposition I start with is $\exists x . p \tensor n$, then the derived inference rule
+is something like
+\[
+\erule
+{\Gamma \prov n(t)}
+{\Gamma, p(t) \prov [\exists x . p(x) \tensor n(x)]}
+\]
+So what I really want to say is that there is some relation
+established between a sequence of functors $\sem \Delta \to \rset$
+(these being all the premises, considered as ends over the free
+variables from $\Delta$) to a functor that is supposed to be a conclusion
+from them.
+
+\def\seq{\longrightarrow}
+I think this means that the actual data I want the judgment to be over is like
+\[ \Phi \seq_\Delta \Gamma \prov [P] \]
+\[ \Phi \seq_\Delta \Gamma [N] \prov Q \]
+for $\Phi$ being a sequence of $\sem{\Delta} \to \rset$ functors, and $\Gamma$
+and $P$ and $N$ and $Q$ being individual such functors. These judgments mean
+that {\em if} we have inhabitants for all of
+$(\int_{\delta\in  \Delta} F_\delta \st F \in \Phi)$, then we can make an
+inhabitant of $\int_{\delta\in\Delta} \Gamma_\delta \to P_\delta$ or
+$\int_{\delta\in\Delta} \Gamma_\delta \x N_\delta \to Q_\delta$
+as appropriate.
+
+I think the moding is therefore that $\Phi$ is thought of as output,
+and we have to be clever enough to `guess' a $\Gamma/Q$ that eventually
+matches up with focused atoms.
+ In the quantifier rules, we have to guess
+the instantiation as well.
+\[
+ \erule
+{\Phi \seq_\Delta \Gamma \prov [[t/x] P]}
+{ \Phi \seq_\Delta \Gamma \prov [\exists x . P] }
+\qquad
+ \erule
+{\Phi \seq_\Delta \Gamma [[t/x]N] \prov Q}
+{ \Phi \seq_\Delta \Gamma  [\forall x . N] \prov Q}
+\]
+\[
+\erule
+{\Phi_1 \seq_\Delta \Gamma \prov  [P_1]\qquad \Phi_2 \seq_\Delta \Gamma \prov  [P_2]}
+{ \Phi_1, \Phi_2 \seq_\Delta \Gamma \prov [P_1 \otimes P_2] }
+\]
+\[
+\erule
+{\Phi_1 \seq_\Delta \Gamma \prov  [P]\qquad \Phi_2 \seq_\Delta \Gamma[N] \prov  Q}
+{ \Phi_1, \Phi_2 \seq_\Delta \Gamma  [P \lol N] \prov Q}
+\]
+\[
+\erule
+{}
+{ \cdot \seq_\Delta \Gamma, p \prov [p] }
+\qquad
+\erule
+{}
+{ \cdot \seq_\Delta \Gamma [n] \prov n }
+\]
+
+\[
+\erule
+{}
+{ \Gamma \to N  \seq_\Delta \cdot \prov \Gamma \prov [\dns N] }
+\qquad
+\erule
+{}
+{ \Gamma \x P \to Q  \seq_\Delta \Gamma [\ups P] \prov Q }
+\]
+
+So a proposition $P$ over $\Delta$ is {\em sound} iff
+for all choices of functors for its atoms,
+and all ways of proving $\Phi \seq_\Delta \Gamma \prov [P]$, if there are
+inhabitants of every $(\int_{\delta\in  \Delta} F_\delta \st F \in \Phi)$, then there
+is an inhabitant of $\int_{\delta\in\Delta} \Gamma_\delta \to P_\delta$.
+
+Likewise $N$ over $\Delta$ is sound iff
+for all choices of functors for its atoms,
+and all ways of proving $\Phi \seq_\Delta \Gamma[N] \prov Q$, if there are
+inhabitants of every $(\int_{\delta\in  \Delta} F_\delta \st F \in \Phi)$, then there
+is an inhabitant of $\int_{\delta\in\Delta} \Gamma_\delta \x N_\delta \to Q_\delta$.
+
 \end{document}
