@@ -680,6 +680,55 @@ i.e.
 \[ p_{\cdot t_f} \pi_1 w_{t^e_d} = \pi_1 w_{t^e_e} : p^{e}_{dt^e_e} \chave\]
 and again, combining the three $\mhave$s gives us the $\mwant$.
 
+\subsection{How to Extend the Forall-atom Case}
+I have two guesses for how to extend $\forall b . n^b_b$, they are
+\[ \forall b. \dns m_b \lol n\sw { b}\isok \qquad  \forall b. p\sw { b} \lol \ups q_b\]
+I like the first one much better because, er,
+ it actually is a generalization of $\forall b . n^b_b$.
+So let's try that. The derived rule is I think
+\[
+\erule
+{\int_a \Gamma^a_a \to  m^a_{at\sw a}}
+{\int_a \Gamma^a_a \to (\int_b m^a_{ab} \to n^{ab}_{ab}) \to n\sw {at^a_a}}
+\]
+We suppose we have $M_d : \Gamma^d_d \to  m^d_{dt\sw d}$ with
+\[ (g : \Gamma^e_d) \to
+ m_{ft_f}  M_d  \Gamma^f g= m^{f}_{\cdot t^f}  M_e  \Gamma_f g
+: \Gamma^e_d \to m^{d}_{et^d_e}
+\chave \star\]
+and we set
+\[ L_d(g, w) = w_{t\sw d}(M_d(g)) \cset\]
+looking to satisfy
+\[ (g : \Gamma^e_d) (w : \int_b m^d_{eb} \to n^{eb}_{db}) \to\]
+\[ n_{ft_f}^{\cdot t^f} L_d(\Gamma^f g , \left( \int (m \to n)^f \right)w)   =
+n_{\cdot t^f}^{f t_f}  L_e(\Gamma_f g , \left( \int (m \to n)_f \right)w)\]
+\[ : n_{e t^d_e}^{d t^e_d}\]
+i.e.
+\[ (g : \Gamma^e_d) (w : \int_b m^d_{eb} \to n^{eb}_{db}) \to\]
+\[ n_{ft_f}^{f t^f}   w_{t\sw d}  m_f M_d \Gamma^f g   =
+n_{f t^f}^{f t_f}    w_{t\sw e} m^f M_e \Gamma_f g : n_{e t^d_e}^{d t^e_d} \cwant\]
+Let's attend to the end-property of $w$. It says for any $h : x \to y$ that
+\[
+n_{\cdot h} \o w_x = n^{\cdot h} \o w_y \o m_{\cdot h}
+: m^d_{ex} \to n^{ex}_{dy}
+\]
+Ok, so let's consider $t_f : t\sw d \to t^d_e$ and $t^f : t\sw e \to t^d_e$. These should tell me that
+\[
+n_{\cdot {t_f}} \o w_{t\sw d} = n^{\cdot {t_f}} \o w_{t^d_e} \o m_{\cdot {t_f}}
+: m^d_{e{t\sw d}} \to n^{e{t\sw d}}_{d{t^d_e}}
+\chave
+\]
+\[
+n_{\cdot {t^f}} \o w_{t\sw e} = n^{\cdot {t^f}} \o w_{t^d_e} \o m_{\cdot {t^f}}
+: m^d_{e{t\sw e}} \to n^{e{t\sw e}}_{d{t^d_e}}
+\chave
+\]
+So with these I can rewrite my goal to
+\[ (g : \Gamma^e_d) (w : \int_b m^d_{eb} \to n^{eb}_{db}) \to\]
+\[ n_{f}^{f t^f_f}  w_{t^d_e}   m_{ft_f} M_d \Gamma^f g   =
+n_{f }^{f t^f_f}  w_{t^d_e}  m_{\cdot t^f}^f M_e \Gamma_f g : n_{e t^d_e}^{d t^e_d} \cwant\]
+and this follows directly from the $\mhave\star$ above.
+
 \section{Known Examples As of Now}
 Dropping some subsumed ones.
 \[
@@ -705,9 +754,8 @@ Dropping some subsumed ones.
  \forall b. \ups (p_b \otimes q^b) \isok
 \]
 \[
- \forall b. n\sw { b} \isok
+ \forall b. \dns m_b \to n\sw { b} \isok
 \qquad
 \exists b. p \sw { b}\otimes \dns n_b \isok
 \]
-
 \end{document}
