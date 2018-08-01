@@ -21,9 +21,13 @@
 \def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
 \def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
 \def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
-\def\chave{\eqno \textcolor{blue}{\hbox{have}}}
+
+\def\mhave{\textcolor{blue}{\hbox{have}}}
+\def\mwant{\textcolor{orange}{\hbox{want}}}
+
+\def\chave{\eqno\mhave}
 \def\cset{\eqno \textcolor{green}{\hbox{set}}}
-\def\cwant{\eqno \textcolor{orange}{\hbox{want}}}
+\def\cwant{\eqno\mwant}
 \def\gol{\sqsubset}
 \def\gor{\sqsupset}
 
@@ -490,6 +494,15 @@ the instantiation as well.
 {}
 { \Gamma \x P \to Q  \seq_\Delta \Gamma [\ups P] \prov Q }
 \]
+\[
+ \erule
+{\Phi \seq_\Delta \Gamma \prov [P_i]}
+{ \Phi \seq_\Delta \Gamma \prov [P_1 \oplus P_2] }
+\qquad
+ \erule
+{\Phi \seq_\Delta \Gamma [N_i] \prov Q}
+{ \Phi \seq_\Delta \Gamma  [N_1 \amp N_2] \prov Q}
+\]
 
 So a proposition $P$ over $\Delta$ is {\em sound} iff
 for all choices of functors for its atoms,
@@ -518,7 +531,7 @@ however they like.
 \isopen
 \qquad
 \forall b. \ups p'_b \amp \ups p^b
-\isok
+\isok \hbox{(but see \S\ref{questioning})}
 \]
 \[
  \exists^+ b. \dns n'_b \otimes \dns n^b
@@ -537,4 +550,86 @@ however they like.
 \]
 The quantifier $\exists^+$ only quantifies over $\Delta$-covariant instantiations of
 the variable.
+\subsection{Confused About a Difference}
+The main thing that's still very mysterious to me is why
+$\exists b. \dns n'_b \otimes \dns n^b$
+doesn't {\em seem} to work, at least (although I still lack a counterexample)
+and yet $\forall b. \ups p'_b \amp \ups p^b$ does work. I suppose the real
+categorical dual would be
+$\exists b. \dns n'_b \oplus \dns n^b$. Let's see if I can do that.
+I can determine all the ways that
+\[\Phi \seq_\Delta \exists b .  \Gamma \prov [\dns n'_b \oplus \dns n^b]\]
+can be derived. They are
+\[(\Gamma^a_a \to n^{t^a_a}) \seq_\Delta \Gamma \prov \exists b .  [\dns n'_b \oplus \dns n^b]\]
+\[(\Gamma^a_a \to n'_{t^a_a}) \seq_\Delta \Gamma \prov \exists b .  [\dns n'_b \oplus \dns n^b]\]
+So there are two derived inference rules whose soundness I want to verify:
+\[
+\erule{\int_a \Gamma^a_a \to n^{at^a_a}_a}
+{ \int_a \Gamma^a_a \to \int^b  (n')^a_{ab} \oplus  n^{ab}_a }
+\qquad
+\erule{\int_a \Gamma^a_a \to n'_{t^a_a}}
+{ \int_a \Gamma^a_a \to \int^b  (n')^a_{ab} \oplus  n^{ab}_a }
+\]
+So let's tackle the first one.
+We have $M_d : \Gamma^d_d \to n^{d t\sw d}_d$ with
+\[ n^{\cdot t^f}_f \o M_d \o \Gamma^f = n^{ft_f} \o M_e \o \Gamma_f : \Gamma^e_d \to n^{dt^e_d}_e
+\chave \]
+We set $N_d(g) = \pair{t^d_d} {\binr M_d(g)}$. We need to check
+\[ (\int n'_f \oplus n_f) \o N_d \o \Gamma^f = (\int (n')^f \oplus n^f)\o N_e \o \Gamma_f \]
+i.e.
+\[  (g : \Gamma^e_d) \to \pair{t^d_d} {\binr n_f M_d(\Gamma^f g)}
+ = \pair{t^e_e} {\binr n^f M_e(\Gamma_f g)} : \int^b (n')^d_{eb} \oplus n^{db}_e
+\cwant\]
+Now I'm going to try to exploit the coend property and the fact that the $\binr$ {\em branch}
+of the coproduct only really cares about one variance.
+
+We know that since $t_f : t^d_d \to t^d_e$,
+for any  $K : (n')^d_{et^d_d} \oplus n^{dt^d_e}_e$ that
+\[ \pair {t^d_d} {(\binr n^{\cdot t_f}) K} = \pair {t^d_e} {(\binl (n')_{\cdot t_f}) K}
+: \int^b (n')^d_{eb} \oplus n^{db}_e\]
+Hm, this doesn't look useful yet. How about the fact that
+since $t^f : t^e_d \to t^d_d$,
+ we're allowed to take any  $K : (n')^d_{et^e_d} \oplus n^{dt^d_d}_e$
+and conclude
+\[ \pair {t^e_d} {(\binr n^{\cdot t^f}) K} = \pair {t^d_d} {(\binl (n')_{\cdot t^f}) K}
+: \int^b (n')^d_{eb} \oplus n^{db}_e\]
+and in particular for $K =\binr n_f M_d(\Gamma^f g)$ this means
+\[ \pair {t^e_d} { \binr n^{\cdot t^f}_f M_d(\Gamma^f g)} = \pair {t^d_d} { \binr n_f M_d(\Gamma^f g)}
+: \int^b (n')^d_{eb} \oplus n^{db}_e \chave\]
+Right, this is looking good. Then we consider the coend property for
+$t_f : t^e_d \to t^e_e$, which says that for any
+$K : (n')^d_{et^e_d} \oplus n^{dt^e_e}_e$
+we know that
+\[ \pair {t^e_d} {(\binr n^{\cdot t_f}) K} = \pair {t^e_e} {(\binl (n')_{\cdot t_f}) K}
+: \int^b (n')^d_{eb} \oplus n^{db}_e\]
+so we plug in $K = \binr n^f M_e(\Gamma_f g)$ to get
+\[ \pair {t^e_d} { \binr n^{ft_f} M_e(\Gamma_f g)} = \pair {t^e_e} { \binr n^f M_e(\Gamma_f g)}
+: \int^b (n')^d_{eb} \oplus n^{db}_e
+\chave\]
+And now stringing together the three $\mhave$s gives us our $\mwant$.
+\subsection{Actually, Is the Universally Quantified one Correct?}
+\label{questioning}
+
+Oh, wait, it doesn't actually feel like
+\[
+\erule
+{  F^{a}_{a t^a_a} \x H^{a t^a_a}_{a } \to G^a_a}
+{ \left(\forall b. F^a_{ab} \x H^{a b}_{a }\right) \to G^a_a}
+\isok
+\]
+is the same thing as $\forall b. \ups p'_b \amp \ups p^b$ at all.
+No, I think it's actually $\forall b. \ups (p'_b \tensor  p^b)$.
+
+So what is the dual of this? Maybe something more like
+$\exists b. \dns (p_b \lol  n^b)$ or $\exists b. \dns (p^b \lol  n_b)$?
+The asymmetry of $\lol$ is confusing here. Anyhow I'm not sure what
+a priority this construction is right now, since it doesn't seem relevant
+to explaining the end/coend semantics of focusing specifically.
+
+\subsection{Trying to Express an Informal Intuition}
+So currently it feels like the required restriction might be something like:
+the variables quantified by $\forall$ and $\exists$ feel `linear' in some way
+that {\em is} broken up by tensor, but not additives, but the linear counting that
+goes on is {\em how many times the variable gets to pass through shifts}.
+And each distinct variance counts as one use.
 \end{document}
