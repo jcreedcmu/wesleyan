@@ -632,4 +632,82 @@ the variables quantified by $\forall$ and $\exists$ feel `linear' in some way
 that {\em is} broken up by tensor, but not additives, but the linear counting that
 goes on is {\em how many times the variable gets to pass through shifts}.
 And each distinct variance counts as one use.
+
+Oh, but I'm not sure how this fits with
+$\forall b. \ups (p'_b \tensor  p^b)$, though.
+\subsection{Double-checking the Forall-Amp Case}
+Despite it not being the same thing as $\forall b. \ups (p_b \tensor  q^b)$,
+I think $\forall b. \ups p_b \amp  \ups q^b$ should be sound anyhow.
+
+I think the derivable $\seq_\Delta$ judgments are
+\[(\Gamma^a_a \x p^a_{at^a_a} \to Q^a_a) \seq_\Delta \Gamma[\forall b. \ups p_b \amp  \ups q^b] \prov Q\]
+\[(\Gamma^a_a \x q^{at^a_a}_{a} \to Q^a_a) \seq_\Delta \Gamma[\forall b. \ups p_b \amp  \ups q^b] \prov Q\]
+So the sound rules should be (letting $R = \Gamma \to Q$)
+\[
+\erule{\int_a q^{at^a_a}_a\to R^a_a }
+{ \int_a \left( \int_b  p^a_{ab} \amp  q^{ab}_a\right) \to R^a_a }
+\qquad
+\erule{\int_a p^a_{at^a_a} \to R^a_a}
+{ \int_a \left( \int_b  p^a_{ab} \amp  q^{ab}_a\right) \to R^a_a }
+\]
+Let's do the second one.
+
+We suppose we have $M_d : p^d_{dt\sw d} \to R\sw d$ with
+\[ R_f \o M_d \o p^{f}_{\cdot t^f} = R^f \o M_e \o p_{f t_f} :  p^{e}_{dt^e_d} \to R^d_e
+\chave \]
+We then set
+\[ L_d(w) = M_d(\pi_1 w_{t^d_d}) \cset\]
+and need to check that
+\[ R_f \o L_d \o \int (p^f \amp q^f) = R^f \o L_e \o \int (p_f \amp q_f)
+:  \left(\int_b p^{e}_{db}\right) \to R^d_e \]
+i.e.
+\[ \left(w : \int_b p^{e}_{db} \amp q^{eb}_d \right) \to R_f  M_d(p^{f} \pi_1  w_{t^d_d})   = R^f  M_e(p_f \pi_1  w_{t^e_e})
+:  R^d_e \cwant\]
+And what I suspect I need to do is look at the end-property of $w$ itself, which says
+for $t_f : t^d_d \to t^d_e$ that
+\[ (p_{\cdot t_f} \amp \cdot) w_{t^d_d} = (\cdot \amp q^{\cdot t_f}) w_{t^d_e} \]
+which means
+\[ p_{\cdot t_f} \pi_1 w_{t^d_d} = \pi_1 w_{t^d_e} \]
+and once again I think I guessed the wrong morphism at first. Let's do
+for $t^f : t^e_d \to t^d_d$ and $t_f : t^e_d \to t^e_e$. We get
+\[ (p_{\cdot t^f} \amp \cdot) w_{t^e_d} = (\cdot \amp q^{\cdot t^f}) w_{t^d_d} : p^{e}_{dt^d_d} \amp q^{et^e_d}_d\]
+\[ (p_{\cdot t_f} \amp \cdot) w_{t^e_d} = (\cdot \amp q^{\cdot t_f}) w_{t^e_e} : p^{e}_{dt^e_e} \amp q^{et^e_d}_d\]
+and by projecting we get
+\[ \pi_1 (p_{\cdot t^f} \amp \cdot) w_{t^e_d} = \pi_1 (\cdot \amp q^{\cdot t^f}) w_{t^d_d} : p^{e}_{dt^d_d} \]
+\[\pi_1 (p_{\cdot t_f} \amp \cdot) w_{t^e_d} = \pi_1 (\cdot \amp q^{\cdot t_f}) w_{t^e_e} : p^{e}_{dt^e_e} \]
+i.e.
+\[ p_{\cdot t^f} \pi_1 w_{t^e_d} = \pi_1 w_{t^d_d} : p^{e}_{dt^d_d} \chave\]
+\[ p_{\cdot t_f} \pi_1 w_{t^e_d} = \pi_1 w_{t^e_e} : p^{e}_{dt^e_e} \chave\]
+and again, combining the three $\mhave$s gives us the $\mwant$.
+
+\section{Known Examples As of Now}
+Dropping some subsumed ones.
+\[
+ \exists b. \dns n \sw { b}
+\isbad
+\qquad
+\forall b. \ups p^b_b
+\isbad
+\qquad
+ \exists b. \dns n'_b \otimes \dns n^b
+\isopen
+\]
+\[
+\forall b. \ups p'_b \amp \ups p^b
+\isok
+\qquad
+\exists b. \dns n'_b \oplus \dns n^b
+\isok
+\]
+\[
+ \exists^+ b. \dns n'_b \otimes \dns n^b \isok
+\qquad
+ \forall b. \ups (p_b \otimes q^b) \isok
+\]
+\[
+ \forall b. n\sw { b} \isok
+\qquad
+\exists b. p \sw { b}\otimes \dns n_b \isok
+\]
+
 \end{document}
