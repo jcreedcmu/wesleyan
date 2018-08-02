@@ -759,4 +759,278 @@ These two I feel like I really don't understand:
 \qquad
  \forall b. \ups (p_b \otimes q^b) \isok
 \]
+I don't think the $+$ in $\exists^+$ is essential; it could also be $-$. It's
+just essential that it's one or the other. Similarly, everywhere I have just
+co- or contravariant arguments to an atom, I think it would work symmetrically
+if I flipped all variances in the overall proposition.
+\subsection{Trying to Find a Counterexample}
+Let's stare hard at the currently open
+\[ \exists b. \dns m_b \otimes \dns n^b\]
+The inference rule for it is
+\[
+\erule
+{\int_a \Gamma^a_a \to  m^a_{at^a_a} \qquad \int_a \Gamma^a_a \to  n^{at^a_a}_a}
+{\int_a \Gamma^a_a \to \int^b  m^a_{ab} \otimes n^{ab}_a}
+\]
+and I suspect that if I can falsify it, then I can falsify it with merely
+\[
+\erule
+{\int_a   m^a_{at^a_a} \qquad \int_a  n^{at^a_a}_a}
+{\int_a  \int^b  m^a_{ab} \otimes n^{ab}_a}
+\]
+And the way the proof gets stuck is by supposing I have $M_d : m^d_{dt\sw d}$ and
+$N_d : n^{dt\sw d}_d$ with
+\[ m_{ft_f} M_d = m^f_{\cdot t^f} M_e : m^d_{et^d_e} \qquad
+ n^{\cdot t^f}_{f} N_d = n^{f t_f} N_e : n^{dt^e_d}_{e} \chave\]
+and then I set
+\[ L_d = \pair {t^d_d} {M_d, N_d} \cset\]
+and try to show
+\[ (\int m_{f} \otimes  n_{f}) L_d = (\int m^f \otimes n^{f})  L_e : \int^b m^d_{eb} \otimes n^{db}_{e} \]
+i.e.
+\[ \pair {t^d_d} {m_f M_d, n_f N_d} = \pair {t^e_e} {m^f M_e, n^f N_e}
+: \int^b m^d_{eb} \otimes n^{db}_{e}
+\cwant\]
+And at this point using the end properties of the premises and the coend property of the
+desired conclusion both seem unusable.
+
+Actually, is this perhaps already falsifiable without direct $a\in \A$-arguments
+for $m$ and $n$?
+\[
+\erule
+{\int_a   m_{t^a_a} \qquad \int_a  n^{t^a_a}}
+{ \int^b  m_b \otimes n^b} \isok
+\]
+Suppose I have $M_d : m_{t\sw d}$ and
+$N_d : n^{t\sw d}$ with
+\[ m_{t_f} M_d = m_{t^f} M_e : m_{t^d_e} \qquad
+ n^{ t^f} N_d = n^{ t_f} N_e : n^{t^e_d} \chave\]
+and then I set
+\[ L_d = \pair {t^d_d} {M_d, N_d} \cset\]
+and try to show... oh, there's nothing to show.
+I do need the collateral variables to make it break.
+
+What if they only occur bivariantly in one of the functors?
+\[
+\erule
+{\int_a   m^a_{at^a_a} \qquad \int_a  n^{t^a_a}_a}
+{\int_a \int^b  m^a_{ab} \otimes n_a^b}
+\]
+supposing I have $M_d : m^d_{dt\sw d}$ and
+$N_d : n^{t\sw d}_d$ with
+\[ m_{ft_f} M_d = m^f_{\cdot t^f} M_e : m^d_{et^d_e} \qquad
+ n^{ t^f}_{f} N_d = n^{ t_f} N_e : n^{t^e_d}_{e} \chave\]
+and then I set
+\[ L_d = \pair {t^d_d} {M_d, N_d} \cset\]
+and try to show
+\[ (\int m_{f} \otimes  n_{f}) L_d = (\int m^f)  L_e : \int^b m^d_{eb} \otimes n^{b}_{e} \]
+i.e.
+\[ \pair {t^d_d} {m_f M_d, n_f N_d} = \pair {t^e_e} {m^f M_e,  N_e}
+: \int^b m^d_{eb} \otimes n^{b}_{e}
+\cwant\]
+and here, as far as I know, I still am stuck. What about with just one occurrence of $a$?
+
+\[
+\erule
+{\int_a   m_{t^a_a} \qquad \int_a  n^{t^a_a}_a}
+{\int_a \int^b  m_{b} \otimes n_a^b}
+\]
+supposing I have $M_d : m_{t\sw d}$ and
+$N_d : n^{t\sw d}_d$ with
+\[ m_{t_f} M_d = m_{ t^f} M_e : m_{t^d_e} \qquad
+ n^{ t^f}_{f} N_d = n^{ t_f} N_e : n^{t^e_d}_{e} \chave\]
+and then I set
+\[ L_d = \pair {t^d_d} {M_d, N_d} \cset\]
+and try to show
+\[ (\int   n_{f}) L_d =   L_e : \int^b m_{b} \otimes n^{b}_{e} \]
+i.e.
+\[ \pair {t^d_d} { M_d, n_f N_d} = \pair {t^e_e} { M_e,  N_e}
+: \int^b m_b \otimes n^{b}_{e}
+\cwant\]
+The coend property for $t_f : t^d_d \to t^d_e$ says for $K : m_{t^d_d} \tensor n^{t^d_e}_e$ that
+\[ \pair {t^d_d} {n^{t_f} K} = \pair {t^d_e} {m_{t_f} K} \]
+which we can use to get anywhere, I think.
+
+The coend property for $t^f : t^e_d \to t^d_d$ says for $K : m_{t^e_d} \tensor n^{t^d_d}_e$ that
+\[ \pair {t^e_d} {n^{t^f} K} = \pair {t^d_d} {m_{t^f} K} \]
+which also doesn't seem to get me anywhere. Still can't visualize a counterexample
+for it, thought.
+
+\subsection{Maybe With $\Gamma$ after all}
+\[
+\erule
+{\int_a \Gamma^a_a \to  m_{t^a_a} \qquad \int_a \Gamma^a_a \to  n^{t^a_a}}
+{\int_a \Gamma^a_a \to \int^b  m_{b} \otimes n^b}
+\]
+Suppose I have $M_d : \Gamma^d_d \to m_{t\sw d}$ and
+$N_d : \Gamma^d_d \to n^{t\sw d}$ with
+\[ m_{t_f} \o M_d \o \Gamma^f = m_{t^f} \o M_e \o \Gamma_f: \Gamma^e_d \to m_{t^d_e} \chave\]
+\[ n^{ t^f} \o N_d \o \Gamma^f= n^{ t_f}\o N_e \o \Gamma_f: \Gamma^e_d \to n^{t^e_d} \chave\]
+and then I set
+\[ L_d(g) = \pair {t^d_d} {M_d(g), N_d(g)} \cset\]
+and I want to check
+\[ L_d \o \Gamma^f= L_e \o \Gamma_f : \Gamma^e_d \to \int^b m_b \otimes n^{b} \]
+i.e.
+\[ (g : \Gamma^e_d) \to \pair {t^d_d} {M_d(\Gamma^f g), N_d(\Gamma^f g)} =
+\pair {t^e_e} {M_e(\Gamma_f g), N_e(\Gamma_f g)}
+:   \int^b m_b \otimes n^{b} \cwant\]
+Here I seem just about as stuck, in either the proving or disproving direction
+
+\subsection{Trying To Prove an Ugly Classical Lemma}
+Suppose we are just dealing with the arrow category $\A = d\to e$.
+I claim (assuming an ambient classical metalogic) that
+\begin{lemma}
+If $M \in \int_{a\in\A} F^a_a \to G^a_a$, then either
+there exists $N \in \int_{a\in\A} G^a_a$ or $F^e_d = \emptyset$.
+\end{lemma}
+
+\begin{proof}
+Suppose towards a contradiction that $\emptyset = \int_{a\in\A} G^a_a$ and $x \in F^e_d$.
+This means the images $G_f(G^d_d)$ and $G^f(G^e_e)$ are disjoint. The situation looks
+like
+\[\begin{tikzcd}
+  G^e_d = \emptyset \ar[r]\ar[d]& G^e_e = E\ar[d]\\
+  G^d_d = D \ar[r]& G^d_e = D + E
+\end{tikzcd}\]
+This also means that the situation for $\int_{a\in\A} F^a_a \to \emptyset$ must look like
+\[\begin{tikzcd}
+  F^e_d  \ar[r]\ar[d]& F^e_e \ar[d]\\
+  F^d_d  \ar[r]& F^d_e
+\end{tikzcd}\]
+with $x$ wlog belonging to all four sets. Now let's look at $F^a_a \to G^a_a$:
+\[\begin{tikzcd}
+   \emptyset \ar[r]\ar[d]& F^e_e \to E  \ar[d]\\
+  F^d_d \to D  \ar[r]& F^e_d \to (D + E)
+\end{tikzcd}\]
+We have to pick an $F^e_e \to E$ that does something with $x$, and a
+$F^d_d \to D$ that does something to $x$, and since $x$ is also in $F^e_d$,
+it will distinguish the two functions at input $x$. So
+$\int_{a\in\A} F^a_a \to G^a_a$ is empty.
+\cqed
+\end{proof}
+
+Oh, nevermind, this does have a one-line constructive proof:
+\begin{lemma}
+If $x \in F^e_d$ and $M \in \int_{a\in\A} F^a_a \to G^a_a$, then
+there exists $N \in \int_{a\in\A} G^a_a$.
+\end{lemma}
+
+\begin{proof}
+Set $N_d = M_d (F^f x)$ and $N_e = M_e(F_f x)$.
+\cqed
+\end{proof}
+
+So, then, maybe I can do
+\begin{lemma}
+Classically, when $a$ ranges over the arrow category $d \to e$,
+\[
+\erule
+{\int_a \Gamma^a_a \to  m_{t^a_a} \qquad \int_a \Gamma^a_a \to  n^{t^a_a}}
+{\int_a \Gamma^a_a \to \int^b  m_{b} \otimes n^b}
+\]
+\end{lemma}
+
+\begin{proof}
+Either $\Gamma^d_d$ is empty or not. If it's not empty, then we can make $m_{t^d_d}$ and
+$n^{t\sw d}$. If it is empty, then $\Gamma^e_d$ must be empty. This means we merely need
+to make both of
+\[ \Gamma^d_d \to \int^b  m_{b} \otimes n^b\]
+\[ \Gamma^e_e \to \int^b  m_{b} \otimes n^b\]
+and don't need to worry whether they're compatible, which we can easily do.
+\cqed
+\end{proof}
+
+\subsection{A Different Thought}
+I realize that a special case of
+\[
+\erule
+{ F^a_{a t\sw a} \x H^{a t\sw a}_a}
+{ \exists b. F^a_{a b} \x H^{a b}_a}
+\isopen
+\]
+is
+\[
+\erule
+{\int_a F^{a a}_{aa} \x H^{a a}_{aa}}
+{ \int_a \int^{ b c} F^{a b}_{a c} \x H^{a c}_{a b}}
+\isopen
+\]
+which my gut tells me might actually be provable. It's awfully close to
+a double use of
+\[
+\erule
+{\int_a F^{a a}_{a} \x H^{a}_{aa}}
+{ \int_a \int^{ b} F^{a b}_{a} \x H^{a}_{a b}}
+\]
+Let $M_d : F\sw{dd} \x H\sw{dd}$ be given such that
+\[ F_{ff}  M^1_d = F^{ff} M^1_e \chave\]
+\[ H_{ff}  M^2_d = H^{ff} M^2_e \chave\]
+Set
+\[L_d = \pair {d, d} { M^1_d, M^2_d}\cset\]
+We want to show
+\[ (F_f \x H_{f}) L_d  = (F^f \x H^f) L_e : \int^{bc} F^{db}_{ec} \x H^{dc}_{eb} \]
+i.e.
+\[  \pair {d, d} { F_f M^1_d, H_f M^2_d}  =  \pair {e, e} { F^f M^1_e, H^f M^2_e} : \int^{bc} F^{db}_{ec} \x H^{dc}_{eb} \cwant \]
+Ok, what can the coend properties tell me? If I have $K : \int^c F^{de}_{ec} \x H^{dc}_{ed}$
+then I can conclude
+\[  \pair {d}{F^{\cdot f} K}  =  \pair {e}{ H_{\cdot f} K} : \int^{bc} F^{db}_{ec} \x H^{dc}_{eb} \]
+Actually I should be reasoning about this through the lens of the Fubini theorem.
+If I have $(g ,h) : (u, x) \to (v, y)$, and I have
+$K :  F^{d v}_{e x} \x H^{d y}_{e u}$ then
+\[  \pair {u, x}{(F^{\cdot g} \x G^{\cdot h})K}  =  \pair {v, y}{ (F_{\cdot h} \x G_{\cdot g}) K} : \int^{bc} F^{db}_{ec} \x H^{dc}_{eb} \]
+Oh, wow, I'm stuck here, too!
+
+\subsubsection{Counterexample?}
+Let $F^a_a = 0111$ for $\A = d \to e$. Let me try to compute $\int^{bc} F^b_c \x F^c_b$.
+First let's look at $\int^c  F^b_c \x F^c_b$. This is still a two-argument bivariant functor
+into $\rset$. We want to figure out what
+\[
+\begin{tikzcd}
+  \int^c F^e_c \x F^c_d\ar[r]\ar[d]& \int^c F^e_c \x F^c_e\ar[d]\\
+  \int^c F^d_c \x F^c_d\ar[r]& \int^c F^d_c \x F^c_e
+\end{tikzcd}
+\]
+looks like. I think it looks like
+\[
+\begin{tikzcd}
+  0\ar[r]\ar[d]& 1\ar[d]\\
+  1\ar[r]&  ?
+\end{tikzcd}
+\]
+So let's take a harder look at $\int^c F^d_c \x F^c_e$. It's the coend of
+\[
+\begin{tikzcd}
+   F^d_d \x F^e_e\ar[r]\ar[d]&  F^d_e \x F^e_e\ar[d]\\
+   F^d_d \x F^d_e\ar[r]&  F^d_e \x F^d_e
+\end{tikzcd}
+\]
+which is just $1111$
+So this means $\int^c  F^b_c \x F^c_b$ is $0111$ and $\int^{bc}  F^b_c \x F^c_b$ is $2$.
+
+I think this means I'm convinced that setting $F = H = $
+\def\inh#1{\textcolor{blue}{#1}}
+\[
+\begin{tikzcd}
+  F^{ee}_{dd} \ar[r]\ar[d]&   F^{ee}_{de}\ar[d] &   F^{ee}_{ed} \ar[r]\ar[d]&   \inh{F^{ee}_{ee}}\ar[d] \\
+  F^{ed}_{dd} \ar[r]&   F^{ed}_{de} &   F^{ed}_{ed} \ar[r]&   \inh{F^{ed}_{ee}} \\
+  F^{de}_{dd} \ar[r]\ar[d]&   F^{de}_{de}\ar[d] &   F^{de}_{ed} \ar[r]\ar[d]&   \inh{F^{de}_{ee}}\ar[d] \\
+  \inh{F^{dd}_{dd}} \ar[r]&   \inh{F^{dd}_{de}} &   \inh{F^{dd}_{ed}} \ar[r]&   \inh{F^{dd}_{ee}}
+\end{tikzcd}
+\]
+is a counterexample to
+\[
+\erule
+{\int_a F^{a a}_{aa} \x H^{a a}_{aa}}
+{ \int_a \int^{ b c} F^{a b}_{a c} \x H^{a c}_{a b}}
+\isbad
+\]
+and therefore indirectly to
+\[
+\erule
+{ G^a_{a t\sw a} \x K^{a t\sw a}_a}
+{ \exists b. G^a_{a b} \x K^{a b}_a}
+\isbad
+\]
+Because I set $\B = \doubs \A$ and $t = \rid$ and $G^x_{y^z_w} = F^{xz}_{yw}$
+and $K^{x^w_z}_y = H^{xz}_{yw}$.
+
 \end{document}
