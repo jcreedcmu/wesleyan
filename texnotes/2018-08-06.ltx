@@ -553,6 +553,7 @@ is
 Hm, this seems backwards and wrong. I have $P$ at some particular $t^d_e$, and
 to use $\theta$ I need to make $P^{eb}_{db}$ for all $b$.
 
+\subsubsection{Dualizing}
 Here's a desperate move: maybe the exact dual
 \[
 \erule
@@ -572,4 +573,30 @@ i.e.
 Hm, here we're still pretty stuck. We get out a $b$ from $\theta$ and we can plug that
 into the end-argument of $\eta$. But we {\em also} need a certain choice of $b$
 in that end-argument to eventually give us the $P$ we want. So this seems like a no-go also.
+
+\subsubsection{Putting the Smoothness on the Other Side}
+I didn't want this to work, but let's see if it does.
+\[
+\erule
+{N^b_b  \smooth^-_t}
+{P^b \lol N^b_b \smooth^-_t}
+\qquad
+\erule
+{N^b_b  \smooth^-_t}
+{P_b \lol N^b_b \smooth^-_t}
+\]
+We have a natural transformation
+\[\theta_f : N^{dt^e_d}_{et^d_e} \to \int^b N^{db}_{eb}   \]
+and we want to build
+\[\eta_f : (P \to N)^{dt^e_d}_{et^d_e} \to \int^b (P \to N)^{db}_{eb} \]
+i.e.
+\[\eta_f : (P^{e}_{dt^e_d} \to N^{dt^e_d}_{et^d_e}) \to \int^b P^{e}_{db} \to N^{db}_{eb} \]
+So I attempt
+\[\eta_f(w) =  \blet \pair d x = \theta_f \bin \pair ? ?\]
+No, I can't. I have a sort of focusing violation going on here. I don't have the $N$
+yet to plug into $\theta$ to determine my choice of $b$ until I get the $P$,
+and I can't release the $P$ until I choose
+the $b$.
+
+
 \end{document}
