@@ -1033,4 +1033,115 @@ and therefore indirectly to
 Because I set $\B = \doubs \A$ and $t = \rid$ and $G^x_{y^z_w} = F^{xz}_{yw}$
 and $K^{x^w_z}_y = H^{xz}_{yw}$.
 
+\subsection{What's Special About the Forall-Tensor Case?}
+
+I think it's essentially contained in $\S 5$ of \texttt{2018-07-04}.
+Supposing I have a functor $F^{ab}_{ab}$ with a family of maps
+\[ \mu_f : \left(\int_b F^{eb}_{db}\right) \to F^{et^d_e}_{dt^e_d} \]
+where `appropriate' means some diagrams like
+\[
+\begin{tikzcd}
+  \int_b F\sw {db} \ar[d, "\pi_{\rid_d}"']& \int_b F^{eb}_{db} \ar[r]\ar[l]\ar[d, "\mu_{f}"]
+ & \int_b F\sw {eb}\ar[d, "\pi_{\rid_e}"]\\
+   F\sw {dt\sw d} &  F^{et^d_e}_{dt^e_d} \ar[r]\ar[l] & F\sw {et\sw e}
+\end{tikzcd}
+\]
+(which, for example,
+will be possible if $F$ is univariant in $b$, or separably-product-univariant,
+i.e. $F = K^{ab}_a \x H^a_{ab}$)
+then I should be able to come up with
+\[
+\erule
+{\int_a F\sw {at\sw a} \to G\sw a}
+{\int_a \left(\int_b F\sw {ab}\right) \to G\sw a}
+\]
+How? Let $M_d : F\sw {d t\sw d} \to G\sw d$ be given with
+\[ G_f \o  M_d \o F^{ft_f}_{\cdot t^f}  = G^f \o  M_e \o F^{\cdot t^f}_{ft_f} \chave\]
+we define $L_d : \left(\int_b F^{db}_{db}\right) \to G^d_d$ by
+\[ L_d(E) = M_d(E_{t\sw d}) \cset\]
+and need to check
+\[ G_f \o  L_d \o \int F^{f}  = G^f \o  L_e \o  \int F_f \]
+i.e.
+\[ (E : \int_b F^{eb}_{db} )\to G_f   M_d ( F^f E_{t\sw d})  = G^f M_e (F_f E_{t\sw e}) : G^d_e\cwant\]
+which follows directly from the diagram
+\[
+\begin{tikzcd}
+  \int_b F\sw {db} \ar[d, "\pi_{\rid_d}"']& \int_b F^{eb}_{db} \ar[r]\ar[l]\ar[d, "\mu_{f}"]
+ & \int_b F\sw {eb}\ar[d, "\pi_{\rid_e}"]\\
+   F\sw {dt\sw d} \ar[d, "M_d"']&  F^{et^d_e}_{dt^e_d} \ar[r]\ar[l] & F\sw {et\sw e}\ar[d, "M_e"]\\
+G\sw d & G^d_e \ar[from=l, "G_f"']\ar[from=r, "G^f"]& G\sw e
+\end{tikzcd}
+\]
+
+\subsection{Twisted Arrows Again}
+
+What's going on? Well, I know that
+\[
+\lhd f =
+\begin{tikzcd}
+  d \ar[r]\ar[d, equal] & e \ar[from=d] \\
+d \ar[r, equal] & d
+\end{tikzcd}
+\quad \hbox{leads to}\quad
+\begin{tikzcd}
+  \int_b F^{eb}_{db} \ar[r, "\mu_f"] \ar[d]& F^{et^d_e}_{dt^e_d}\ar[d]\\
+  \int_b F^{db}_{db} \ar[r, "\mu_{\rid_d}"'] & F^{dt^d_d}_{dt^d_d}\\
+\end{tikzcd}
+\]
+\[
+\rhd f =
+\begin{tikzcd}
+  d \ar[r]\ar[d] & e \ar[from=d, equal] \\
+e \ar[r, equal] & e
+\end{tikzcd}
+\quad \hbox{leads to}\quad
+\begin{tikzcd}
+  \int_b F^{eb}_{db} \ar[r, "\mu_f"] \ar[d]& F^{et^d_e}_{dt^e_d}\ar[d]\\
+  \int_b F^{eb}_{eb} \ar[r, "\mu_{\rid_e}"'] & F^{et^e_e}_{et^e_e}\\
+\end{tikzcd}
+\]
+So it feels like $\mu$ is a natural transformation between two functors $\tw(\C) \to \rset$.
+Right, sure, one is $f \mapsto \int_b F^{eb}_{db}$ and the other is
+$f \mapsto F^{et^d_e}_{dt^e_d}$. We're using the domain and codomain
+projections $\dom : \tw(\C) \to \C$ and $\cod : \tw(\C) \to \C^\op$ and building
+up stuff.
+
+\subsection{Dualizing}
+Suppose I have a functor $F$ equipped with a natural transformation
+$\nu_f : F^{dt^e_d}_{et^d_e} \to \int^b F^{db}_{eb} : \tw(\C) \to \rset$
+such that $\nu_{\rid_d} = \iota_{t^d_d}$ for all $d$.
+Then I should be able to do
+\[
+\erule
+{\int_a G^a_a \to  F\sw {at\sw a} }
+{\int_a G^a_a \to \int^b F\sw {ab} }
+\]
+Let $M_d : G^d_d \to F\sw{d t\sw d}$ be given with
+\[  F^{\cdot t^f}_{ft_f}  \o  M_d \o G^f = F^{ft_f}_{\cdot t^f} \o  M_e \o G_f \chave\]
+We're trying to make $L_d : G\sw d \to \int^b F^{db}_{db}$ so we set
+$L_d(x) = \pair{t\sw d} { M_dx}$. We need to check
+\[  \int F_f  \o  L_d \o G^f = \int F^{f}\o  L_e \o G_f \]
+i.e.
+\[ (g : G^e_d) \to  \pair{t\sw d} {F_f M_d G^f x} = \pair{t\sw e} {F^f M_e G_f x}
+: \int^b F^{db}_{eb} \cwant\]
+which follows from the diagram
+\[
+\begin{tikzcd}
+  \int^b F\sw {db} \ar[from=d, "\iota_{t\sw d}"]
+& \int^b F^{db}_{eb} \ar[from=r]\ar[from=l]\ar[from=d, "\nu_{f}"']
+ & \int^b F\sw {eb}\ar[from=d, "\iota_{t\sw e}"']\\
+   F\sw {dt\sw d} \ar[from=d, "M_d"]&  F^{dt^e_d}_{et^d_e} \ar[from=r]\ar[from=l] & F\sw {et\sw e}\ar[from=d, "M_e"']\\
+G\sw d & G^e_d \ar[l, "G^f"]\ar[r, "G_f"']& G\sw e
+\end{tikzcd}
+\]
+
 \end{document}
+%%  if we think of
+
+%% \[
+%% t \quad = \quad
+%% \begin{tikzcd}
+%%   x \ar[r]\ar[d] & y \ar[from=d] \\
+%% d \ar[r] & e
+%% \end{tikzcd}
+%% \]
