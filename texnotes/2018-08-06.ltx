@@ -598,5 +598,86 @@ yet to plug into $\theta$ to determine my choice of $b$ until I get the $P$,
 and I can't release the $P$ until I choose
 the $b$.
 
+\subsection{Multiple Smooth Subprops}
+Can I do like
+\[
+\erule
+{P \smooth^+_t \qquad Q\smooth^+_t}
+{\forall b. \ups P\sw b \amp \ups Q\sw b}
+\]
+which would mean
+\[\theta_f : \left(\int_b P^{eb}_{db}\right) \to P^{et^d_e}_{dt^e_d}  \qquad
+\phi_f : \left(\int_b Q^{eb}_{db}\right) \to Q^{et^d_e}_{dt^e_d}  \]
+and we'd be trying to show the soudness of the rules
+\[
+\erule
+{
+\int_a P\sw {at\sw a} \to R\sw a
+}
+{\int_a \left(\int_b  P\sw {ab} \amp  Q\sw {ab}\right) \to R\sw a}
+\qquad
+\erule
+{
+\int_a P\sw {at\sw a} \to R\sw a
+}
+{\int_a \left(\int_b  P\sw {ab} \amp  Q\sw {ab}\right) \to R\sw a}
+\]
+So let's do the first. We have $M_d : P\sw {dt\sw d} \to R \sw d$
+with
+\[ (g : P^{et^d_e}_{dt^e_d}) \to R_f M_d P^{f t_f}_{\cdot t^f} g = R^f M_e P^{\cdot t^f}_{ft_f}  g
+\chave\]
+we set
+\[L_d(E) = M_d(\pi_1 E_{t\sw d}) \cset\]
+and we check
+\[ (E : \int_b P^{eb}_{db} \amp Q^{eb}_{db}) \to R_f L_d (\int (P\amp Q)^{f}_{}) E
+= R^f L_e (\int (P \amp Q)^{}_{f} ) E \]
+i.e.
+\[ (E : \int_b P^{eb}_{db} \amp Q^{eb}_{db}) \to R_f M_d P^{f}_{} \pi_1 E_{t\sw d}
+= R^f M_e P^{}_{f} \pi_1 E_{t\sw e} \cwant\]
+and this feels like this all goes through just fine. I just first-project out of $E$
+and use $\theta$ like before, ignoring $\phi$ in this case, using it in the other case.
+\subsection{Current Epistemic State, Again}
+I haven't literally checked the oplus case, but I think it should go similarly.
+\[
+ \exists b. \dns n \sw { b}
+\isbad
+\qquad
+\forall b. \ups p^b_b
+\isbad
+\]
+
+\[
+ \exists b. \dns n'_b \otimes \dns n^b
+\isbad
+\qquad
+ \exists^\pm b. \dns n'_b \otimes \dns n^b \isok
+\]
+
+
+\[
+ \forall b. \dns m_b \lol n\sw { b} \isok
+\qquad
+\exists b. \dns n_b  \otimes p \sw { b}\isok
+\]
+\[
+\erule{  n, n' \smooth^-_t    } {\exists b. \dns n\sw b \oplus \dns (n')\sw b}
+\qquad
+\erule{   p, p' \smooth^+_t   } {\forall b. \ups p\sw b \amp \ups (p')\sw b }
+\]
+\[
+\erule{}{F^p \smooth^\pm_t}
+\qquad
+\erule{}{F_p \smooth^\pm_t}
+\]
+\[
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \otimes Q^b \smooth^+_t}
+\qquad
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \otimes Q_b \smooth^+_t}
+\]
+
 
 \end{document}
