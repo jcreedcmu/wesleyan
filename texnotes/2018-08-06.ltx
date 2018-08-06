@@ -1,0 +1,575 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\smooth{\mathrel{\mathsf{smooth}}}
+\def\zed{\emptyset}
+\def\lint{{\textstyle\int}}
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
+
+\def\mhave{\textcolor{blue}{\hbox{have}}}
+\def\mwant{\textcolor{orange}{\hbox{want}}}
+
+\def\chave{\eqno\mhave}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
+\def\cwant{\eqno\mwant}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\def\doubs#1{{}^{{#1}^\op}_{\x {#1}}}
+\def\doub#1{{#1}^\op \x {#1}}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+
+\section{Current Epistemic State}
+\[
+ \exists b. \dns n \sw { b}
+\isbad
+\qquad
+\erule{  n^{dt^e_d}_{et^d_e} \dto (\exists b.  n^{db}_{eb})    } {\exists b. \dns n\sw b }
+\isok
+\]
+\[
+\forall b. \ups p^b_b
+\isbad
+\qquad
+\erule{   (\forall b.  p^{eb}_{db}) \dto p^{et^d_e}_{dt^e_d}   } {\forall b. \ups p\sw b }
+\isok
+\]
+
+\[
+ \exists b. \dns n'_b \otimes \dns n^b
+\isbad
+\qquad
+ \exists^\pm b. \dns n'_b \otimes \dns n^b \isok
+\]
+
+
+\[
+\forall b. \ups p'_b \amp \ups p^b
+\isok
+\qquad
+\exists b. \dns n'_b \oplus \dns n^b
+\isok
+\]
+\[
+ \forall b. \dns m_b \lol n\sw { b} \isok
+\qquad
+\exists b. \dns n_b  \otimes p \sw { b}\isok
+\]
+
+\subsection{Does the LHS of implication behave like positive focus?}
+I wonder if I can do
+\[ \forall b. (\dns G_b \tensor \dns H^b) \lol F\sw { b}  \isopen\]
+i.e.
+\[
+\erule
+{\int_a F\sw {at\sw a} \to J \sw a
+\qquad \int_a G^a_{at\sw a}
+\qquad \int_a H_a^{at\sw a}}
+{\int_a   \left( \int_b G^a_{ab} \x H^{ab}_a \to F\sw {ab}\right) \to J \sw a }
+\]
+Suppose $M_d : F\sw {dt\sw d} \to J\sw d$ and $L_d : G^d_{dt\sw d}$ and $N_d : H_d^{dt\sw d}$.
+Want to set
+\[ P_d(E : \int_b G^d_{db} \x H^{db}_d \to F\sw {db}) = M_d(E_{t\sw d}(L_d, N_d)) \cset \]
+and check
+\[ (E : \int_b G^d_{eb} \x H^{db}_e \to  F^{eb}_{db}) \to \]
+\[J_f  P_d ( \int F^f \o E \o (G_f \x H_f))  = J^f P_e (\int F_f \o E \o (G^f \x H^f))  : J^d_e \]
+i.e.
+\[ (E : \int_b G^d_{eb} \x H^{db}_e \to  F^{eb}_{db}) \to \]
+\[J_f  M_d F^f  E_{t\sw d} (G_f L_d, H_f N_d)  = J^f  M_e F_f  E_{t\sw e} (G^f L_e, H^f N_e): J^d_e \cwant \]
+and what I know from end properties is
+\[ J_f \o M_d \o F^{ft_f}_{\cdot t^f} =  J^f \o M_e \o F_{ft_f}^{\cdot t^f} \chave\]
+\[ G_{ft_f}  L_d  =  G^{f}_{\cdot t^f} L_e \chave\]
+\[ H_{f}^{\cdot t^f}  N_d  =  H^{ft_f} N_e \chave\]
+and the end-property of $E$ itself is, for any $z : x \to y$,
+\[F_{\cdot z}\o E_x \o (\cdot \x H^{\cdot z})
+=
+F^{\cdot z} \o E_y \o (G_{\cdot z} \x \cdot)
+ : (G^d_{ex} \x H^{dy}_e) \to F^{ex}_{dy}\chave\]
+
+\subsubsection{Error-Correcting}
+Oh, I'm stuck, but I generated the wrong inference rule; I forgot $F$
+was supposed to behave like a negative atom. I should have
+
+\[
+\erule
+{\int_a \Gamma\sw a \to G^a_{at\sw a}
+\qquad \int_a \Gamma\sw a \to H_a^{at\sw a}}
+{\int_a \Gamma\sw a \to  \left( \int_b G^a_{ab} \x H^{ab}_a \to F\sw {ab}\right) \to F \sw {at\sw a} }
+\]
+Suppose $M_d :\Gamma\sw d \to  G^d_{dt\sw d}$ and $N_d : \Gamma\sw d \to H_d^{dt\sw d}$
+ with
+\[ (g : \Gamma^e_d) \to G_{ft_f}  M_d \Gamma^f g  =  G^{f}_{\cdot t^f} M_e\Gamma_f g \chave\]
+\[ (g : \Gamma^e_d) \to H_{f}^{\cdot t^f}  N_d \Gamma^f g =  H^{ft_f} N_e\Gamma_f g \chave\]
+Set
+\[ P_d(g : \Gamma\sw d, E : \int_b G^d_{db} \x H^{db}_d \to F\sw {db}) = E_{t\sw d}(M_d g, N_d g) \cset \]
+and check
+\[ (g : \Gamma^e_d) (E : \int_b G^d_{eb} \x H^{db}_e \to  F^{eb}_{db}) \to \]
+\[F^{\cdot t^f}_{ft_f}  P_d (\Gamma^f g,  \int F^f \o E \o (G_f \x H_f))
+  = F_{\cdot t^f}^{ft_f} P_e (\Gamma_f g, \int F_f \o E \o (G^f \x H^f))  : F^{dt^e_d}_{et^d_e} \]
+i.e.
+\[ (g : \Gamma^e_d) (E : \int_b G^d_{eb} \x H^{db}_e \to  F^{eb}_{db}) \to \]
+\[F^{f t^f}_{ft_f}     E_{t\sw d} (G_f M_d \Gamma^f g , H_f N_d\Gamma^f g )
+  = F_{f t^f}^{ft_f}     E_{t\sw e} (G^f M_e  \Gamma_f g, H^f N_e \Gamma_f g): F^{dt^e_d}_{et^d_e} \cwant \]
+and the end-property of $E$ itself is, for any $z : x \to y$,
+\[F_{\cdot z}\o E_x \o (\cdot \x H^{\cdot z})
+=
+F^{\cdot z} \o E_y \o (G_{\cdot z} \x \cdot)
+ : (G^d_{ex} \x H^{dy}_e) \to F^{ex}_{dy}\chave\]
+and here I {\em still} appear to be stuck, because although I have
+some $F_{\cdot t_f}$-esque things to work with, I can't seem to be able to pull the
+pair apart to work on one side.
+
+Now that I look again, it seems like I should have expected this failure. I wonder
+if I can get unstuck if I know that $t$ is univariant.
+\subsection{Another Attempt At Generalization}
+Suppose I know
+\[ \nu : G^{dt^e_d}_{et^d_e} \dto (\int^b  G^{db}_{eb})    \]
+with the usual thing about the natural transformation at identities
+ coinciding with injections. In that case can I show that
+\[ \forall b. \dns G^b_b \lol F\sw { b}  \isopen\]
+i.e.
+\[
+\erule
+{ \int_a \Gamma\sw a \to G\sw{at\sw a}}
+{\int_a \Gamma\sw a \to  \left( \int_b G^{ab}_{ab}\to F\sw {ab}\right) \to F \sw {at\sw a} }
+\]
+Suppose $M : \Gamma\sw d \to G\sw {dt\sw d}$  with
+\[ (g : \Gamma^e_d) \to G^{\cdot t^f}_{ft_f}  M_d \Gamma^f g  =  G^{f t_f}_{\cdot t^f} M_e\Gamma_f g \chave\]
+Set
+\[ P_d(g : \Gamma\sw d, E : \int_b G\sw{db}  \to F\sw {db}) = E_{t\sw d}(M_d g) \cset \]
+and check
+\[ (g : \Gamma^e_d) (E : \int_b G^{db}_{eb}  \to  F^{eb}_{db}) \to \]
+\[F^{\cdot t^f}_{ft_f}  P_d (\Gamma^f g,  \int F^f \o E \o G_f)
+  = F_{\cdot t^f}^{ft_f} P_e (\Gamma_f g, \int F_f \o E \o G^f)  : F^{dt^e_d}_{et^d_e} \]
+i.e.
+\[ (g : \Gamma^e_d) (E : \int_b G^{db}_{eb}  \to  F^{eb}_{db}) \to \]
+\[F^{f t^f}_{ft_f}     E_{t\sw d} (G_f M_d \Gamma^f g  )
+  = F_{f t^f}^{ft_f}     E_{t\sw e} (G^f M_e  \Gamma_f g): F^{dt^e_d}_{et^d_e} \cwant \]
+We have the diagram
+\[
+\begin{tikzcd}
+F^{et\sw d}_{dt\sw d}\ar[rr]
+&
+&
+F^{dt^e_d}_{et^d_e}
+&
+&
+F^{et\sw e}_{dt\sw e}\ar[ll]
+\\
+&  \int^b G\sw {db} \ar[from=d, "\iota_{t\sw d}"]
+& \int^b G^{db}_{eb} \ar[from=r]\ar[from=l]\ar[from=d, "\nu_{f}"']
+ & \int^b G\sw {eb}\ar[from=d, "\iota_{t\sw e}"']
+\\
+G^{dt\sw d}_{et\sw d}\ar[from=r]\ar[uu, "E_{t\sw d}"]
+&   G\sw {dt\sw d} \ar[from=d, "M_d"]
+&  G^{dt^e_d}_{et^d_e} \ar[from=r]\ar[from=l]
+ & G\sw {et\sw e}\ar[from=d, "M_e"']
+& G^{dt\sw e}_{et\sw e}\ar[from=l]\ar[uu, "E_{t\sw e}"']
+\\
+& \Gamma\sw d
+& \Gamma^e_d \ar[l, "\Gamma^f"]\ar[r, "\Gamma_f"']
+& \Gamma\sw e
+\end{tikzcd}
+\]
+But I seem stuck here; the bottom rectangle commutes because $M$ is an end.
+The middle two squares commute because of $\nu$'s naturality. But the outer wings
+don't commute as far as I know.
+
+I would need some further strengthening of $E$:
+\[
+\begin{tikzcd}
+F^{et\sw d}_{dt\sw d}\ar[r]
+&
+F^{dt\sw d}_{dt\sw d}\ar[r]\ar[from=d, dotted]
+&
+F^{dt^e_d}_{et^d_e}\ar[from=d, dotted]
+&
+F^{et\sw e}_{et\sw e}\ar[l]\ar[from=d, dotted]
+&
+F^{et\sw e}_{dt\sw e}\ar[l]
+\\
+&  \int^b G\sw {db} \ar[from=d, "\iota_{t\sw d}"]
+& \int^b G^{db}_{eb} \ar[from=r]\ar[from=l]\ar[from=d, "\nu_{f}"']
+ & \int^b G\sw {eb}\ar[from=d, "\iota_{t\sw e}"']
+\\
+G^{dt\sw d}_{et\sw d}\ar[from=r]\ar[uu, "E_{t\sw d}"]
+&   G\sw {dt\sw d} \ar[from=d, "M_d"]
+&  G^{dt^e_d}_{et^d_e} \ar[from=r]\ar[from=l]
+ & G\sw {et\sw e}\ar[from=d, "M_e"']
+& G^{dt\sw e}_{et\sw e}\ar[from=l]\ar[uu, "E_{t\sw e}"']
+\\
+& \Gamma\sw d
+& \Gamma^e_d \ar[l, "\Gamma^f"]\ar[r, "\Gamma_f"']
+& \Gamma\sw e
+\end{tikzcd}
+\]
+The dotted arrows being some kind of natural transformation
+from $\int^b G^{db}_{eb}$ to $F^{dt^e_d}_{et^d_e}$.
+
+\subsection{Maybe Try To Prove Small-Step Lemmas about this Property}
+Let's say a functor $F^{ab}_{ab} : \doubs \A \x \doubs \B \to \rset$ is
+ {\em
+positively smooth for $t : \doubs \A \to \B$} if there is a
+\[\theta : \int_b F^{eb}_{db} \dto F^{et^d_e}_{dt^e_d}  : \tw(\C) \to \rset\]
+such that
+\[\theta_{\rid_f} = \pi_{t^d_d} \]
+For $F$ to be negatively smooth with respect to
+$t$ is asking for a natural transformation
+\[\theta : F^{dt^e_d}_{et^d_e} \to \int^b F^{db}_{eb}   : \tw(\C) \to \rset\]
+such that
+\[\theta_{\rid_f} = \iota_{t^d_d} \]
+
+
+I know covariant and contravariant (in $b$)
+props are smooth, and products one of each variance are. But can I show
+\[
+\erule
+{P\sw{ab} \smooth^+_t}
+{P\sw{ab} \x Q^{a}_{ab} \smooth^+_t}
+\]
+I have a natural transformation
+$\theta : \int_b P^{eb}_{db} \dto P^{et^d_e}_{dt^e_d} : \tw(\C) \to \rset$.
+The candidate for natural transformation
+\[\eta : \int_b P^{eb}_{db} \x Q^{e}_{db} \dto P^{et^d_e}_{dt^e_d}\x Q^{e}_{dt^e_d} \]
+should be clear. It's
+\[\eta_f(E) = \pair{\theta_f(\lambda z . \pi_1 E_z)} {\pi_2 E_{t^e_d}}\]
+I need to check that this is a natural transformation with the identity property.
+Let's check the identity property first:
+\[\eta_{\rid_d}(E) = \pair{ \theta_{\rid_d} \pi_1 E_{z}} {\pi_2 E_{t^d_d}}\]
+\[ = \pair{ \pi_1 E_{t\sw d}} {\pi_2 E_{t^d_d}} = E_{t^d_d}\]
+yes, great, it works, because $\theta$ has this property. How does naturality work?
+The naturality I know for $\theta$ is
+\[
+\begin{tikzcd}
+  \int_b P\sw {db} \ar[d, "\pi_{t\sw d}"']
+& \int_b P^{eb}_{db} \ar[r]\ar[l]\ar[d, "\theta_{f}"']
+ & \int_b P\sw {eb}\ar[d, "\pi_{t\sw e}"]
+\\
+   P\sw {dt\sw d}
+&  P^{et^d_e}_{dt^e_d} \ar[r]\ar[l]
+ & P\sw {et\sw e}
+\end{tikzcd}
+\]
+and then I stare at
+\[
+\begin{tikzcd}
+  \int_b P\sw {db} \x Q^d_{db} \ar[d, "\pi_{t\sw d}"']
+& \int_b P^{eb}_{db} \x Q^e_{db} \ar[r]\ar[l]\ar[d, "\lambda E . \pair{\theta_f(\lambda z . \pi_1 E_z)} {\pi_2 E_{t^e_d}}" description]
+ & \int_b P\sw {eb} \x Q^e_{eb}\ar[d, "\pi_{t\sw e}"]
+\\
+   P\sw {dt\sw d} \x Q^d_{dt^d_d}
+&  P^{et^d_e}_{dt^e_d} \x Q^e_{dt^e_d} \ar[r]\ar[l]
+ & P\sw {et\sw e} \x Q^e_{et^e_e}
+\end{tikzcd}
+\]
+which breaks up into
+\[
+\begin{tikzcd}
+  \int_b P\sw {db} \x Q^d_{db} \ar[d, "\pi_1"']
+& \int_b P^{eb}_{db} \x Q^e_{db} \ar[r]\ar[l]\ar[d, "\pi_1"]
+ & \int_b P\sw {eb} \x Q^e_{eb}\ar[d, "\pi_{1}"]
+\\
+  \int_b P\sw {db}  \ar[d, "\pi_{t\sw d}"']
+& \int_b P^{eb}_{db}  \ar[r]\ar[l]\ar[d, "\theta_f" description]
+ & \int_b P\sw {eb} \ar[d, "\pi_{t\sw e}"]
+\\
+   P\sw {dt\sw d}
+&  P^{et^d_e}_{dt^e_d}  \ar[r]\ar[l]
+ & P\sw {et\sw e}
+\end{tikzcd}
+\]
+and
+\[
+\begin{tikzcd}
+  \int_b P\sw {db} \x Q^d_{db} \ar[d, "\pi_2"']
+& \int_b P^{eb}_{db} \x Q^e_{db} \ar[r]\ar[l]\ar[d, "\pi_2"]
+ & \int_b P\sw {eb} \x Q^e_{eb}\ar[d, "\pi_2"]
+\\
+  \int_b  Q^d_{db} \ar[d, "\pi_{t\sw d}"']
+& \int_b Q^e_{db} \ar[r]\ar[l]\ar[d, " \pi_{t^e_d}" description]
+ & \int_b  Q^e_{eb}\ar[d, "\pi_{t\sw e}"]
+\\
+   Q^d_{dt^d_d}
+&  Q^e_{dt^e_d} \ar[r]\ar[l]
+ & Q^e_{et^e_e}
+\end{tikzcd}
+\]
+Both of which hold.
+
+\subsubsection{What I Know Now}
+With implicit ${}\sw a$ everywhere:
+\[
+\erule{  n \smooth^-_t    } {\exists b. \dns n\sw b }
+\qquad
+\erule{   p \smooth^+_t   } {\forall b. \ups p\sw b }
+\]
+\[
+\erule{}{F^p \smooth^\pm_t}
+\qquad
+\erule{}{F_p \smooth^\pm_t}
+\]
+\[
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \otimes Q^b \smooth^+_t}
+\qquad
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \otimes Q_b \smooth^+_t}
+\]
+
+\subsection{Possible Smoothness Lemma for Implication}
+I conjecture
+\[
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \lol N^b \smooth^-_t}
+\qquad
+\erule
+{P^b_b  \smooth^+_t}
+{P^b_b \lol N_b \smooth^-_t}
+\]
+Let's take a stab at proving that second one.
+I have a natural transformation
+$\theta : \int_b P^{eb}_{db} \dto P^{et^d_e}_{dt^e_d} : \tw(\C) \to \rset$.
+The candidate for natural transformation
+\[\eta_f : (P^{et^d_e}_{dt^e_d}\to N^{d}_{et^d_e}) \dto \left( \int^b P^{eb}_{db} \to N^{d}_{eb}\right)   \]
+is
+\[\eta_f(w) = \pair {t^d_e} {\lambda x : P^{et^d_e}_{dt^d_e} . ?}\]
+Hm, this seems backwards and wrong. I have $P$ at some particular $t^d_e$, and
+to use $\theta$ I need to make $P^{eb}_{db}$ for all $b$.
+
+Here's a desperate move: maybe the exact dual
+\[
+\erule
+{N^b_b  \smooth^-_t}
+{N^b_b \lol P^b \smooth^+_t}
+\qquad
+\erule
+{N^b_b  \smooth^-_t}
+{N^b_b \lol P_b \smooth^+_t}
+\]
+is somehow true? Again, let's try to prove the second one. We have a natural transformation
+\[\theta_f : N^{dt^e_d}_{et^d_e} \to \int^b N^{db}_{eb}   \]
+and we want to build
+\[\eta_f : \left(\int_b (N \to P)^{eb}_{db}\right) \to (N \to P)^{et^d_e}_{dt^e_d}  \]
+i.e.
+\[\eta_f : \left(\int_b N^{db}_{eb} \to P^{e}_{db}\right) \to N^{dt^e_d}_{et^d_e} \to P^{e}_{dt^e_d}  \]
+Hm, here we're still pretty stuck. We get out a $b$ from $\theta$ and we can plug that
+into the end-argument of $\eta$. But we {\em also} need a certain choice of $b$
+in that end-argument to eventually give us the $P$ we want. So this seems like a no-go also.
+\end{document}
