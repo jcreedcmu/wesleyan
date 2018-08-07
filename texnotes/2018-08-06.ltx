@@ -16,6 +16,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\inh#1{\textcolor{blue}{#1}}
 \def\smooth{\mathrel{\mathsf{smooth}}}
 \def\zed{\emptyset}
 \def\lint{{\textstyle\int}}
@@ -190,6 +191,21 @@ boxrule=0pt,boxsep=0pt,breakable}
   \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
 }
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+
+
+
+\def\fcont{^{f t_f}_{\cdot t^f}}
+\def\fco{_{f t_f}^{\cdot t^f}}
+\def\fcontf{^{f t_f}_{f t^f}}
+\def\fcof{_{f t_f}^{f t^f}}
+\def\deco{^{dt^e_d}_{et^d_e}}
+\def\decont{^{et^d_e}_{dt^e_d}}
+
+\def\fcontbot{^{f }_{\cdot t^f}}
+\def\fcobot{_{f t_f}}
+\def\fconttop{^{f t_f}}
+\def\fcotop{_{f}^{\cdot t^f}}
+
 \author{Jason Reed}
 \definecolor{fib}{HTML}{ff7f00}
 \definecolor{green}{HTML}{007f00}
@@ -679,5 +695,179 @@ I haven't literally checked the oplus case, but I think it should go similarly.
 {P^b_b \otimes Q_b \smooth^+_t}
 \]
 
+\subsection{Pushing at this Frontier}
+
+How about
+\[\erule{  G \smooth^-_t    } {\exists b.  F^b_b \otimes \dns G \sw b} \isopen\]
+where I think of $F$ as a positive atom and $G$ as some other random negative thing?
+The inference rule is
+\[\erule{  \int_a F\sw {at\sw a} \to G \sw  {at\sw a} }
+{\int_a F\sw {at\sw a} \to \int^b  F\sw {ab} \x  G \sw {ab}}\]
+
+I have $M_d : F\sw{dt\sw d} \to G\sw{dt\sw d}$ with
+\[ G\fco \o M_d \o F\fcont  = G\fcont \o M_e \o F\fco : F\decont \to G\deco \chave\]
+and I'm trying to make
+\[L_d : F \sw {dt\sw d} \to \int^b F\sw {db} \x G\sw {db}\]
+by setting
+\[L_d(x) = \pair{t^d_d}{x, M_d(x)} \cset\]
+and checking
+\[ (\int F \x G)_f \o L_d \o F\fcont  = (\int F \x G)^f \o L_e \o F\fco
+: F\decont \to \int^b F^{db}_{eb} \x G^{db}_{eb}\]
+i.e.
+\[ (y : F\decont) \to   \pair{t^d_d}{ F\fcontf y, G_f M_d F\fcont y}  =
+  \pair{t^e_e}{F\fcof y, G^f M_eF\fco y}
+:   \int^b F^{db}_{eb} \x G^{db}_{eb}
+\cwant\]
+What I know from $G$'s smoothness is the diagram
+\[
+\begin{tikzcd}
+  \int^b G\sw {db} \ar[from=d, "\iota_{t\sw d}"]
+& \int^b G^{db}_{eb} \ar[from=r]\ar[from=l]\ar[from=d, "\nu_{f}"']
+ & \int^b G\sw {eb}\ar[from=d, "\iota_{t\sw e}"']
+\\
+   G\sw {dt\sw d} \ar[from=d, "M_d"]
+&  G^{dt^e_d}_{et^d_e} \ar[from=r]\ar[from=l]
+ & G\sw {et\sw e}\ar[from=d, "M_e"']
+\\
+ F\sw {dt\sw d}
+& F\decont \ar[l]\ar[r]
+& F\sw {et\sw e}
+\end{tikzcd}
+\]
+but what I need is
+\[
+\begin{tikzcd}
+  \int^b F\sw{db} \x G\sw {db} \ar[from=d, dotted]
+& \int^b F^{db}_{eb} \x G^{db}_{eb} \ar[from=r]\ar[from=l]\ar[from=d, dotted]
+ & \int^b F\sw{eb} \x  G\sw {eb}\ar[from=d, dotted]
+\\
+   G\sw {dt\sw d} \ar[from=d, "M_d"]
+&  G^{dt^e_d}_{et^d_e} \ar[from=r]\ar[from=l]
+ & G\sw {et\sw e}\ar[from=d, "M_e"']
+\\
+ F\sw {dt\sw d}
+& F\decont \ar[l]\ar[r]
+& F\sw {et\sw e}
+\end{tikzcd}
+\]
+Okay, so the thing I seem to need is not just the full
+$G\deco \to \int^b G^{db}_{db}$ but... some factorized form of
+it that I could join together with something I can access from $F\decont$,
+and then inject into $\int^b$ with that.
+
+I don't really know where to go with this because I lack nontrivial examples of
+smooth negative propositions. What about the dual? Abstractly I could ask
+whether
+\[\erule{  G \smooth^-_t    } {\forall b.  \dns G^b_b \lol F \sw b} \isopen\]
+and more concretely I could ask... oh, wait, that's negative smoothness again. Nevermind.
+\subsection{Wild Guesses About What Consistutes Negative Smoothness}
+How about one of
+\[\exists b.  \dns(F^b \lol G_b)\isok\qquad \exists b.  \dns(F_b \lol G^b)\isok\]
+? Let's just take the first one. The inference rule is
+\[\erule{  \int_a F^{at\sw a}_a \to G^a_{at\sw a} }
+{\int_a \int^b F^{ab}_{a} \to G^a_{ab}}\]
+We have $M_d : F^{dt\sw d}_d \to G^d_{dt\sw d}$ with
+\[ G \fcobot \o M_d \o F\fconttop = G\fcontbot \o M_e \o F\fcotop
+: F^{et^d_e}_{d} \to G^{d}_{et^d_e} \chave\]
+and we set
+\[L_d = \pair{t\sw d}{M_d}\cset\]
+and check
+\[ (\int F \to G)_f L_d = (\int F \to G)^f L_e \]
+i.e.
+\[ \pair {t\sw d} {\lambda x : F^{et\sw d}_d . G_f M_d F^f x}
+= \pair {t\sw e} {\lambda x : F^{et\sw e}_d . G^f M_e F_f x}
+ : \int^b F^{eb}_d \to G^d_{eb}
+\cwant\]
+Ok, so now I'm stuck and I look to the coend property for help.
+If I have $K : F^{et^d_d}_{d} \to G^d_{et^d_d}$, then I know
+\[ \pair {t\sw d} {K}
+= \pair {t^d_e} {G_{\cdot t_f} \o K \o F^{\cdot t_f}}
+\chave\]
+Oho, this looks promising. And if
+$K : F^{et^e_e}_{d} \to G^d_{et^e_e}$
+\[ \pair {t\sw e} {K}
+= \pair {t^d_e} {G_{\cdot t^f} \o K \o F^{\cdot t^f}}
+\chave\]
+Ok, so my goal is now
+\[ \pair {t^d_e} {\lambda x : F^{et\sw d}_d . G_{ft_f} M_d F^{ft_f} x}
+= \pair {t^d_e} {\lambda x : F^{et\sw e}_d . G_{\cdot t^f}^f M_e F^{\cdot t^f}_f x}
+ : \int^b F^{eb}_d \to G^d_{eb}
+\cwant\]
+and this is exactly the end-property I have above. Great!
+
+Oh, but wait, I didn't do anything interesting. When I have opposite variances
+in and out of a function, they're the same variance overall, obviously. So
+I haven't learned anything new.
+\subsection{Another Shot At That}
+\[\exists b.  \dns(F_b \lol G_b)\isbad\qquad \exists b.  \dns(F^b \lol G^b)\isbad\]
+Let's take the first one. The inference rule is
+\[\erule{  \int_a F_{at\sw a}^a \to G^a_{at\sw a} }
+{\int_a \int^b F^{a}_{ab} \to G^a_{ab}}\]
+We have $M_d : F^{dt\sw d}_d \to G^d_{dt\sw d}$ with
+\[ G \fcobot \o M_d \o F\fcontbot = G\fcontbot \o M_e \o F\fcobot
+: F^{e}_{dt^e_d} \to G^{d}_{et^d_e} \chave\]
+and we set
+\[L_d = \pair{t\sw d}{M_d}\cset\]
+and check
+\[ (\int F \to G)_f L_d = (\int F \to G)^f L_e \]
+i.e.
+\[ \pair {t\sw d} {\lambda x : F^{e}_{dt\sw d} . G_f M_d F^f x}
+= \pair {t\sw e} {\lambda x : F^{e}_{dt\sw e} . G^f M_e F_f x}
+ : \int^b F^{eb}_d \to G^d_{eb}
+\cwant\]
+\subsubsection{Simplifying}
+I think the following is a special case of the above:
+\[\erule{  \int_a F\sw{aa} \to G\sw {aa} }
+{\int_a \int^{bc} F^{ab}_{ac} \to G^{ab}_{ac}}\isopen\]
+Does this work for the example that was a counterexample before, where $F$
+and $G$ are both $\lrcorner$? Yeah, it goes through ok, because then
+I'm just asking about the everywhere-identity-function.
+
+Let's go ahead and try: $M_d : F\sw{dd} \to G\sw {dd}$
+\[ G_{ff} \o M_d \o F^{ff} = G^{ff} \o M_e \o F_{ff} \chave\]
+\[ L_d = \pair{d, d}{M_d} \cset\]
+\[ \pair{dd}{G_f \o M_d \o F^f} = \pair{ee}{G^f \o M_e \o F_f} :\int^{bc} F^{eb}_{dc} \to G^{db}_{ec}   \cwant\]
+So if we had $K : F^{ed}_{de} \to G^{ee}_{dd}$ we'd have by coend property that
+\[\pair{dd} {G^{\cdot f} \o K \o F_{\cdot f}} = \pair{ee} {G_{\cdot f} \o K \o F^{\cdot f}} \chave\]
+and various other permutations that involve at least one $\cdot f$ on each side of the equation
+no matter how I swing it. I can do just $b$ or just $c$ but that doesn't seem to help.
+
+\subsubsection{Simplifying Further}
+I don't think I even know the status of
+\[\erule{  \int_a F_{aa} \to G_ {aa} }
+{\int_a \int^{c} F_{ac} \to G_{ac}}\isopen\]
+For this I'd have
+$M_d : F_{dd} \to G_{dd}$
+\[ G_{ff} \o M_d  =  M_e \o F_{ff} \chave\]
+\[ L_d = \pair{d}{M_d} \cset\]
+\[ \pair{d}{G_f \o M_d } = \pair{e}{ M_e \o F_f} :\int^{c} F_{dc} \to G_{ec}   \cwant\]
+And now the only thing the coend property is telling me is that if I have a
+$K : F_{de} \to G_{ed}$, that
+\[\pair d {K \o F_{\cdot f}} = \pair e {G_{\cdot f} \o K} \chave \]
+and I don't see any use I can make of this.
+
+\subsubsection{A Counterexample, I think?}
+Let $F_{ab}$ be $0111$ and $G_{ab}$ be $0001$. That is, if the category is the single
+arrow $d \to e$, then $F_{dd}$ is empty and all other values of $F$ are singleton sets,
+and $G_{ee}$ is a singleton and all other values are empty. Then I observe that
+$\int_{a} F_{aa} \to G_{aa}$ is inhabited because $F_{dd} \to G_{dd}$ is $0 \to 0$,
+and $F_{ee} \to G_{ee}$ is $1 \to 1$, and they need to be compatible on $F_{dd} \to G_{ee}$,
+which is $0 \to 1$, so they can't help but be compatible.
+
+Then we bring our attention to the coend. We write ${}^{ab}_{cd}$ for $F_{ab} \to G_{cd}$,
+and stare at
+
+\[
+\begin{tikzcd}
+  {}^{ee}_{dd} \ar[r]\ar[d]&   {}^{ee}_{de}\ar[d] &   {}^{ee}_{ed} \ar[r]\ar[d]&   \inh{{}^{ee}_{ee}}\ar[d] \\
+  {}^{ed}_{dd} \ar[r]&   {}^{ed}_{de} &   {}^{ed}_{ed} \ar[r]&   \inh{{}^{ed}_{ee}} \\
+  {}^{de}_{dd} \ar[r]\ar[d]&   {}^{de}_{de}\ar[d] &   {}^{de}_{ed} \ar[r]\ar[d]&   \inh{{}^{de}_{ee}}\ar[d] \\
+  \inh{{}^{dd}_{dd}} \ar[r]&   \inh{{}^{dd}_{de}} &   \inh{{}^{dd}_{ed}} \ar[r]&   \inh{{}^{dd}_{ee}}
+\end{tikzcd}
+\]
+and we see the highlighted squares are where $F$ is empty or $G$ is inhabited. We take
+the coend of this over the second $F$-argument and the second $G$-argument, and get 0112 as
+before, which has no end-inhabitant as required. So, winding way up the stack, I conclude
+\[\exists b.  \dns(F_b \lol G_b)\isbad\]
 
 \end{document}
