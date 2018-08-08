@@ -1,0 +1,282 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+
+\input{linear}
+\def\tok#1{\mathop{\mathbf{#1}}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\tensor{\otimes}
+\def\fut#1{\{#1\}}
+\def\wrt#1{\langle #1\rangle}
+\def\lc{\mathrel{\hat :}}
+\def\x{\times}
+\author{Jason Reed}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+
+\section{Some Thoughts About Sessions And Futures}
+Where in session types we'd say
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensor B \prov x(y).P :: T}
+\]
+I'd rather say something more like
+\[
+\erule
+{
+\[
+\Delta, y \lc \fut A, x' \lc \fut B \prov P :: T
+\justifies
+\Delta, z \lc \fut A \tensor \fut B \prov \blet (y, x') = z \bin P :: T
+\]
+}
+{\Delta, x \lc \fut{\fut A \tensor \fut B} \prov x(z). \blet (y, x') = z \bin P :: T}
+\]
+and instead of
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
+{\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensor B)}
+\]
+I'd say
+\[
+(\nu xy) (P \celse Q \celse x(x_v).y(y_v).\pair {x_v}{y_v}) :: A \tensor B
+\]
+with the general rules being perhaps something like
+\[
+\erule
+{\Delta, y \lc A \prov P :: T}
+{\Delta, x \lc \fut A \prov x(y).P :: T}
+\]
+\[
+\erule
+{\Delta, x : \fut A \prov P  : \sharp \qquad \Delta', y : [A] \prov P : \sharp}
+{\Delta,\Delta' \prov \nu x.(P\celse Q) :: T}
+\]
+Ack, no, this is a classical cut, what am I doing.
+
+\subsection{The Type Translation}
+{\em Session} types
+\[
+\begin{tabular}{rccl}
+Session Types&$A$&$::=$&$A \tensor B \celse A \lol B \celse \cdots$
+\end{tabular}
+\]
+are a thing, and I mean to translate them to futures somehow. A session
+has a distinguished channel. The distinguished channel of an $A \tensor B$-typed
+process has an $A$ written to it, and then the process after that transition
+now has session type $B$.
+
+There is a term-translation I have in my head that is merely forcing all channels to be
+linear. It takes a read like $x(z).P$ and changes it to $x(z, x').[x'/x]P$. Every time
+you would have read some data and potentially changed the expectations of the channel
+it was read along, instead you `CPS-ify' the continuation channel into a fresh one.
+What happens with writes? I guess every time I do a write $x\wrt y.P$ it changes to
+$(\nu x') x\wrt{y,x'}.[x'/x]P$. Writes consume the channel also.
+
+Do I change synchronous rules to simply produce {\em the data} they want to write instead
+of a $\sharp$-typed classical sequent?
+
+If I just do the translation I said to
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensor B \prov x(y).P :: T}
+\]
+I get
+\[
+\erule
+{\Delta, y : A, x' : B \prov P :: T}
+{\Delta, x : A \tensor B\prov x(y, x').P :: T}
+\]
+?
+\subsection{Ternary $\tensor$}
+There should be a legitimate form of ternary tensor even
+in Caires-Pfenning, like
+\[
+\erule
+{\Delta, y_1 : A_1, y_2 : A_2, x : B \prov P :: T}
+{\Delta, x : \tensor\{A_1 A_2 B\} \prov x(y_1, y_2).P :: T}
+\]
+\[
+\erule{
+\Delta_1 \prov P_1 :: (y_1:A_1)\qquad
+\Delta_2 \prov P_2 :: (y_2:A_2)\qquad
+  \Delta \prov Q :: (x : B)}
+{\Delta_1, \Delta_2, \Delta \prov (\nu y_1y_2) x \wrt {y_1,y_2} . (P_1 \celse P_2 \celse Q)
+:: (x : \tensor \{A_1A_2B\})}
+\]
+
+I think the type mapping I have in mind smells like
+\[(A \tensor B)^* = \tensor\{A^* B^* 1\} \]
+\[(A \& B)^* = ? \]
+Dang, I don't know where I'm going here.
+
+I want to picture a fairly ordinary lambda calculus with channel types like
+$\fut A$
+ that stay the same and have actual values
+passed along them.
+
+A process with a channel that is session-typed $A \tensor B$ is a channel
+that provides an $A$, and also a $\fut B$. So perhaps
+
+\[(A \tensor B)^* = \fut{A^* \x \fut {B^*}}\]
+\[(A \amp B)^* = \fut{A^* \amp B^*}\]
+No... hm. No matter what, if I have
+\[\Delta \prov P :: T\]
+then $T$ is notionally a {\em channel} type, so I should devise the translation
+to not involve $\fut{}$. The theorem will be something like
+\begin{theorem}
+If
+$\Delta \prov P :: T$
+then $\fut{\Delta^*} \prov P^* :: T^*$.
+\end{theorem}
+and maybe
+\[(A \tensor B)^* = A^* \x \fut {B^*}\]
+\[(A \amp B)^* = \fut{A^*} \amp \fut{B^*}\]
+\subsection{Maybe I Should Think About Focusing}
+When I have a {\em positive} prop on the right, what's going on is
+that I'm {\em writing} to a channel. When I have a negative prop on the
+right, what's going on is that I'm reading from a channel.
+
+A {\em goal} of $A \tensor B$ is like having
+\[\lnot ( A \x \lnot(\lnot B )) \]
+We can make progress if we provide an $A$, and provide some continuation for what to do
+when our counterparty provides us a $B$-sink.
+
+Maybe it goes like this: in right focus, we are really building a value.
+With some positive prop on the right, we are committed to eventually write something
+to a channel. In left focus, we have read a value and we're decomposing it. An
+unfocused negative prop on the left is just some channel we can write to.
+A negative prop on the right reads from the channel, a positive prop on the left
+reads from a channel.
+
+Perhaps the session-typed $A \tensor B$ is something like $\ups (A \tensor \dns\ups B)$.
+
+\[
+\erule
+{\Delta \prov v : [P] \qquad \Delta' \prov v' : [P']}
+{\Delta, \Delta' \prov \pair v {v'} : [P \tensor P']}
+\]
+\[
+\erule
+{\Delta \prov E :: (x : N)}
+{\Delta \prov \tok{thunk} x.E : [\dns N]}
+\]
+\[
+\erule
+{\Delta \prov E :: (x : P)}
+{\Delta \prov  E :: (x : \ups P)}
+\]
+\[
+\erule
+{\Delta, y : P \prov E :: (x : Q)}
+{\Delta[\ups P] \prov \tok{end} y.E : (x : Q)}
+\]
+\[
+\erule
+{\Delta, y : N \prov E :: (x : Q)}
+{\Delta, y : \dns N \prov  E :: (x : Q)}
+\]
+
+\[
+\erule
+{\Delta \prov v : [P]}
+{\Delta \prov x\wrt v :: (x : P)}
+\]
+\[
+\erule
+{\Delta [N] \prov S :: (x : Q)}
+{\Delta, y : N \prov y\wrt S  :: (x : Q)}
+\]
+
+This is confusing, but tantalizingly close to what happens in the
+focusing-creating translation. The one I have in mind is where we translate
+everything into positives:
+\[
+ (P \tensor P)^* = P^* \tensor P^*
+\qquad
+ (P \oplus P)^* = P^* \oplus P^*
+\]
+\[ (P \lol N)^\phi = P^* \tensor N^\phi
+\qquad
+ (N \amp N)^\phi = N^\phi \oplus N^\phi \]
+\[ (\ups P)^\phi = P^* \to \#(\phi) \]
+\[ (\dns N)^* = \forall \phi . N^\phi \to \#(\phi) \]
+and we have like
+\[ \Gamma \prov P \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups P)^\phi \prov \#(\phi)\]
+\[ \Gamma \prov [P] \quad\Leftrightarrow\quad (\dns\Gamma)^* \prov [P^*]\]
+\[ \Gamma[N] \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi \prov [N^\phi]\]
+\[ \Gamma, P \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi, P^* \prov \#(\phi)\]
+\[ \Gamma \prov N \quad\Leftrightarrow\quad (\dns\Gamma)^*, N^\phi \prov \#(\phi)\]
+
+Let's look at how a case compiles down.
+\[
+\erule
+{ y : N \prov e : P \qquad  y' : N' \prov e' : P}
+{ x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^\phi \prov e : \#(\phi) \qquad
+  y' : (\dns N')^*, k : (\ups P)^\phi \prov e' : \#(\phi)
+\justifies
+ k : (\ups P)^\phi, q : (\dns N \oplus \dns N')^* \prov {\bcase} : \#(\phi)
+\]
+\justifies
+ k : (\ups P)^\phi \prov {\lambda q . \bcase} : [\ups(\dns N \oplus \dns N')^\phi]
+\]}
+{ x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^\phi \prov {x [\phi] \lambda q . \bcase} : \#(\phi) }
+\]
+What about tensor R, say?
+\[
+\begin{prooftree}
+\[
+\[
+y : (\ups P)^\psi \prov ? : \#(\psi)
+\justifies
+ \prov ? : [(\dns \ups P)^* ]
+\]
+\[
+\[
+\justifies
+y : (\ups \dns \ups P')^\psi \prov ? : \#(\psi)
+\]
+\justifies
+ \prov ? : [ (\dns\ups\dns\ups P')^*]
+\]
+\justifies
+ \prov ? : [(\dns \ups P \tensor \dns\ups\dns\ups P')^*]
+\]
+\justifies
+x : (\ups (\dns \ups P \tensor \dns\ups\dns\ups P'))^\phi \prov ? : \#(\phi)
+\end{prooftree}
+\]
+I can't see where the asymmetry comes from, hmm.
+\end{document}
