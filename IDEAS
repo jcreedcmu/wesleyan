@@ -5352,3 +5352,14 @@ yielding a bivariant one.
 Q: Wait, but wouldn't this allow me to spool out contra and covariant
 things in the same space, proving the "open inference" I don't think is valid?
 A: Oh, yeah, it would.
+
+=== 2018.08.08
+
+Q: What's the thought I had about session types and futures?
+A:
+To a first approximation, ignoring exponentials, *reuse* of channels
+is a distraction and the essence of communication in process calculi is really
+about *futures*.
+
+I can, however, reasonably demand some sort of linearity to guarantee that futures
+aren't fulfilled or consumed more than once.
