@@ -5363,3 +5363,24 @@ about *futures*.
 
 I can, however, reasonably demand some sort of linearity to guarantee that futures
 aren't fulfilled or consumed more than once.
+
+=== 2018.08.09
+
+Q: What strikes me as interesting?
+A: Asynchronicity appears as premise-less axiom-esque rules for synchronous rules.
+But these feel awfully close to a special case of focusing discipline where
+the atoms already are in the context or already are the conclusion.
+
+=== 2018.08.10
+
+Q: An interesting old thread about resource semantics
+I found while trying to search to see if I had had a conversation
+with frank about session types?
+A:
+https://mail.google.com/mail/u/0/#search/session+types/FMfcgxmMmWGgZwjHKHrsTWxJvDfjTWhL
+
+Q: Also?
+A:
+This "heavy rain" draft, which seems to prefigure a lot of the later papers
+frank wrote with collaborators:
+https://mail.google.com/mail/u/0/#search/heavy+rain/FMfcgxcllHsmGgTRLKLPHvBjslkKwGrV
