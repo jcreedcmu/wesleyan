@@ -18,6 +18,7 @@
 
 
 \input{linear}
+\def\rfalse{\mathop\mathsf{false}}
 \def\tensoru{\tensor\!\!|\,}
 \def\lolu{\lol\!\!|\,}
 \def\ampu{\amp\!\!|\,}
@@ -499,6 +500,138 @@ And then I think I can do a certain process-assignment to {\em that}, and get th
 as before.
 
 \section{Introduction}
-\section{Language}
+I'm going to sketch out what I think is a certain interesting way of
+decomposing the way that processes are assigned to proofs in
+intuitionistic linear logic. In the interested of getting to the meat
+of the proofs I'm going to skip the exponential and atoms, but
+obviously they ought to be dealt with. If this is already in the
+literature somewhere I would definitely like to read it, but I
+couldn't seem to find what I was looking for in Pfenning \&
+Griffiths's ``Polarized Substructural Session Types'', which seemed
+like the most likely place to look, given the title.
+
+\section{Languages}
+The unpolarized propositions I care about are
+\[\hbox {Propositions } A ::= A \tensor A \celse A \oplus A \celse A \lol A \celse A \amp A \celse \cdots \]
+The polarized propositions are
+\[\hbox {Positive Props } P ::= \dns N \celse P \tensor P \celse P \oplus P \celse \cdots \]
+\[\hbox {Negative Props } N ::= \ups P \celse P \lol N \celse N \amp N \celse \cdots \]
+And at the end I'll want a language of `classical' positive propositions, which
+contains all the usual positive propositional connectives, plus a single negative
+connective with a built-in shift: a sort of negation, which uses an atomic negative
+proposition $\#$.
+\def\tnot{{\sim}}
+\[\hbox {Classical Props } R ::= \tnot R \celse R \tensor R \celse R \oplus R \celse \cdots \]
+This $\tnot R$ is basically $\dns(R \lol \#)$. We could make up
+a judgment $\rfalse$ for its unfocused presence on the left, and
+give inference rules (in an ambient focused
+proof system) as
+\[
+\erule
+{\Delta, R \prov \#}
+{\Delta \prov [\tnot R]}
+\qquad
+\erule
+{\Delta, R\rfalse \prov R'}
+{\Delta, \tnot R \prov R'}
+\qquad
+\erule
+{\Delta \prov [R]}
+{\Delta, R\rfalse \prov \#}
+\]
+
+By indexing $\#$ with a parameter $\phi$, and having two different negations
+(a binding quantifier $\N \phi . R$ that behaves like $\dns \forall \phi . (R(\phi) \lol \#(\phi))$ and
+a $\tnot_\phi$ that behaves like $R \lol \#(\phi)$)
+we could make this language not classical but constructive, instead, but I'm not sure that's
+needed for the process interpretation.
 \section{Translations}
+\subsection{Polarizing Translation}
+Given an unpolarized props $A$, the `fully unpolarized polarization' of $A$
+into a positive (resp. negative) prop is $A_+$ (resp. $A_-$) by
+
+\[\begin{tabular}{l|l|l}
+  $A$&$A_+$&$A_-$\\
+\hline
+  $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
+  $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
+\end{tabular}\]
+where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
+
+\begin{lemma}
+We have $\Delta \prov A$ in an unfocused proof system exactly
+when (and with exactly as many proofs as) we have $\Delta^- \prov A^+$.
+\end{lemma}
+
+\begin{proof}
+By induction. For example, to decompose $\oplus$ on the left, as
+\[
+\erule
+{\Delta, A \prov C \qquad \Delta, B \prov C}
+{\Delta, A \oplus B \prov C}
+\]
+corresponds exactly to choosing a focus (and being forced through the
+asynchronous decomposition exactly one step) as
+\[
+\begin{prooftree}
+\[
+\[
+\[
+ \Delta_-, A_- \prov C_+
+\justifies
+ \Delta_-, \dns A_- \prov C_+
+\]
+\[
+ \Delta_-, B_- \prov C_+
+\justifies
+ \Delta_-, \dns B_- \prov C_+
+\]
+\justifies
+ \Delta_-, \dns A_- \oplus \dns B_- \prov C_+
+\]
+\justifies
+ \Delta_-, [\ups(\dns A_- \oplus \dns B_-)] \prov C_+
+\]
+\justifies
+ \Delta_-, \ups(\dns A_- \oplus \dns B_-) \prov C_+
+\end{prooftree}
+\]
+\cqed
+\end{proof}
+
+\def\bfut{\mathbf{fut}}
+\def\bpol{\mathbf{pol}}
+\def\bproc{\mathbf{proc}}
+\def\provf{\prov_\mathsf{f}}
+
+\begin{lemma}
+If $\Delta \prov e : A$, then $\Delta \prov_\pi \bproc(e) : A$
+\end{lemma}
+
+\begin{lemma}
+If $\Delta \prov_\pi e : A$, then $\Delta \provf \bfut(e) : A$
+\end{lemma}
+
+
+\begin{lemma}
+If $\Delta \prov e : A$, then $\Delta_- \prov \bpol(e) : A_+$
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{theorem}
+Suppose we have a session-typing $\Delta \prov e : A$.
+Then $\bfut (e) = \bpol(e)$
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
 \end{document}
