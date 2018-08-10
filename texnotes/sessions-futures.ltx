@@ -18,6 +18,9 @@
 
 
 \input{linear}
+\def\tensoru{\tensor\!\!|\,}
+\def\lolu{\lol\!\!|\,}
+\def\ampu{\amp\!\!|\,}
 \def\tok#1{\mathop{\mathbf{#1}}}
 \def\dns{{\downarrow}}
 \def\ups{{\uparrow}}
@@ -37,7 +40,7 @@
    arrow style=tikz,
    diagrams={>=stealth}}
 
-
+\setcounter{section}{-1}
 \section{Some Thoughts About Sessions And Futures}
 Where in session types we'd say
 \[
@@ -279,4 +282,223 @@ x : (\ups (\dns \ups P \tensor \dns\ups\dns\ups P'))^\phi \prov ? : \#(\phi)
 \end{prooftree}
 \]
 I can't see where the asymmetry comes from, hmm.
+\subsection{Do I even need $\phi$?}
+I do after all have linearity around.
+I could try something like
+\[
+ (P \tensor P)^* = P^* \tensor P^*
+\qquad
+ (P \oplus P)^* = P^* \oplus P^*
+\]
+\[ (P \lol N)^* = P^* \tensor N^*
+\qquad
+ (N \amp N)^* = N^* \oplus N^* \]
+\[ (\ups P)^* = P^* \lol \# \]
+\[ (\dns N)^* = N^* \lol \# \]
+This would make the case
+\[
+\erule
+{ y : N \prov e : P \qquad  y' : N' \prov e' : P}
+{ x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
+  y' : (\dns N')^*, k : (\ups P)^* \prov e' : \#
+\justifies
+ k : (\ups P)^*, q : (\dns N \oplus \dns N')^* \prov {\bcase\ q \bof \cdots} : \#
+\]
+\justifies
+ k : (\ups P)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\ups(\dns N \oplus \dns N')^*]
+\]}
+{ x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^* \prov {x\  \lambda q . \bcase\ q \bof \cdots} : \# }
+\]
+and actual $\oplus L$ in session types looks like
+\[
+\erule
+{\Delta, x : A \prov P :: T \qquad \Delta, x:B \prov Q :: T}
+{\Delta, x : A \oplus B \prov x .\tok{case}(P, Q) :: T}
+\]
+
+And for comparison,
+\[
+\erule
+{ y : N \prov e : P \qquad  y : N \prov e' : P'}
+{y : N \prov e : P \amp P' }
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
+  y : (\dns N)^*, k : (\ups P)^* \prov e' : \#
+\justifies
+ y : (\dns N)^*, q : (\ups P \amp \ups P')^* \prov {\bcase\ q \bof \cdots} : \#
+\]
+\justifies
+ y : (\dns N)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\dns(\ups P \oplus \dns P')^*]
+\]}
+{ k : (\ups\dns(\ups P \amp \ups P'))^*, y : (\dns N)^* \prov {k\  \lambda q . \bcase\ q \bof \cdots} : \# }
+\]
+So let's just do the minimal $\tensor R$ case and see what shape it has.
+\[
+\erule
+{\Delta \prov e : P \qquad \Delta' \prov e' : P' }
+{\Delta,\Delta'  \prov \pair{e}{e'} : P \tensor P'}
+\mapsto \]
+
+\[
+\begin{prooftree}
+\[
+\[
+\Delta, k : (\ups P)^* \prov e : \#
+\justifies
+\Delta \prov \lambda k . e : [(\dns \ups P)^* ]
+\]
+\[
+\Delta', k' : ( \ups P')^* \prov e' : \#
+\justifies
+\Delta' \prov \lambda k' . e' : [ (\dns\ups P')^*]
+\]
+\justifies
+\Delta, \Delta' \prov \pair{\lambda k .e}{\lambda k'.e'} : [(\dns \ups P \tensor \dns\ups P')^*]
+\]
+\justifies
+\Delta, \Delta', K : (\ups (\dns\ups P \tensor \dns\ups P'))^* \prov K\ \pair{\lambda k .e}{\lambda k'.e'} : \#
+\end{prooftree}
+\]
+This feels like what the future-session-typed rule ought to look like. Something like
+taking
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
+{\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensoru B)}
+\]
+(where $A \tensoru B$ is the version of $\tensor$ that preserves the
+channel into $B$) and instead doing
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (z : B)}
+{\Delta, \Delta' \prov (\nu yz) x \wrt{y, z} . (P \celse Q) :: (x : A \tensor B)}
+\]
+Where the term translation again is a thing that affects reads and writes by
+\[
+x\wrt t . P \quad \mapsto\quad \nu z . x \wrt{t,z} . [z/x]P
+\]
+\[
+x(y) . Q \quad \mapsto\quad  x (y,w) . [w/x]Q
+\]
+Before the translation I'd do a communication
+\[ x\wrt t . P \celse x(y) . Q \quad \to \quad P \celse  [t/y] Q  \]
+after the translation I do
+\[
+(\nu z . x \wrt{t,z} . [z/x]P) \celse
+(x (y,w) . [w/x]Q)
+ \quad \to  \quad
+ x \wrt{t,z} . [z/x]P \celse
+x (y,w) . [w/x]Q
+\]
+\[
+  \to  \quad
+  [z/x]P \celse
+ [t/y][z/w][w/x]Q
+\ \equiv\ %
+  [z/x]P \celse [t/y][z/x]Q
+\ \equiv\ %
+  P \celse [t/y]Q
+\]
+What's $\tensor L$ in this setting, then?
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensoru B \prov x(y).P :: T}
+\]
+becomes
+\[
+\erule
+{\Delta, y : A, w : B \prov P :: T}
+{\Delta, x : A \tensor  B \prov x(y,w).P :: T}
+\]
+\subsection{Implication}
+Channel-preserving process assignment for implication goes like
+\[
+\erule
+{\Delta, y : A \prov P :: (x : B)}
+{\Delta \prov x(y).P :: (x : A \lolu B)}
+\]
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta', x : B \prov Q :: T}
+{\Delta, \Delta', (x : A \lolu B) \prov (\nu y) x \wrt y . (P \celse Q) :: T}
+\]
+and non-preserving like
+\[
+\erule
+{\Delta, y : A \prov P :: (w : B)}
+{\Delta \prov x(y, w).P :: (x : A \lol B)}
+\]
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta', z : B \prov Q :: T}
+{\Delta, \Delta', (x : A \lol B) \prov (\nu yz) x \wrt {y, z} . (P \celse Q) :: T}
+\]
+\subsection{Channel Reuse for Additives}
+Let's try additive conjunction. Preserving like
+\[
+\erule
+{\Delta \prov P :: (x : A)
+\qquad \Delta \prov Q :: (x : B)}
+{\Delta \prov x(y).\bcase y.(P\celse Q) :: (x : A \ampu B)}
+\]
+\[
+\erule
+{\Delta, x : A \prov P :: T}
+{\Delta, x : A \ampu B\prov x\wrt\binl.P :: T}
+\qquad
+\erule
+{\Delta, x : B \prov P :: T}
+{\Delta, x : A \ampu B\prov x\wrt\binr.P :: T}
+\]
+and non-preserving like
+\[
+\erule
+{\Delta \prov P :: (w : A)
+\qquad \Delta \prov Q :: (w : B)}
+{\Delta \prov x(y, w).\bcase y.(P\celse Q) :: (x : A \amp B)}
+\]
+\[
+\erule
+{\Delta, z : A \prov P :: T}
+{\Delta, x : A \amp B\prov \nu z . x\wrt{\binl,z}.P :: T}
+\qquad
+\erule
+{\Delta, z : B \prov P :: T}
+{\Delta, x : A \amp B\prov \nu z . x\wrt{\binr,z}.P :: T}
+\]
+
+\subsection{Polarizing Translation}
+Given unpolarized props, we can talk about the `fully polarizing' translations
+$A_+$ and $A_-$ that go
+
+\[\begin{tabular}{l|l|l}
+  $A$&$A_+$&$A_-$\\
+\hline
+  $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
+  $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
+\end{tabular}\]
+where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
+If we have a sequent like $ \Gamma_-  \prov  C_+$.
+
+So what's the theorem?
+Suppose I have a proof of a proposition. I can do the session-types process-assignment to
+it. I can do the non-channel-preserving session-types process-assignment to it.
+
+But separately, I can take a proof of $\Gamma \prov C$ and turn it into a proof
+of $\Gamma_- \prov C_+$. I can turn {\em that} into a proof of $(\Gamma_-)^* \prov (C_+)^*$.
+And then I think I can do a certain process-assignment to {\em that}, and get the same answer
+as before.
+
+\section{Introduction}
+\section{Language}
+\section{Translations}
 \end{document}
