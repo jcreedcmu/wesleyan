@@ -18,6 +18,8 @@
 
 
 \input{linear}
+\def\chan{\overline}
+\def\tnot{{\sim}}
 \def\rfalse{\mathop\mathsf{false}}
 \def\tensoru{\tensor\!\!|\,}
 \def\lolu{\lol\!\!|\,}
@@ -499,6 +501,152 @@ of $\Gamma_- \prov C_+$. I can turn {\em that} into a proof of $(\Gamma_-)^* \pr
 And then I think I can do a certain process-assignment to {\em that}, and get the same answer
 as before.
 
+\subsection{Focusing Process Assignment}
+
+The judgment for focus is
+\[ \Delta ; \Xi \prov e : [R]\]
+The context $\Xi$ is residuated channel variables for sending to $\nu$.
+The expression $v$ is a value to send to a channel, and $\rho$s are process
+expressions. We say
+\[
+\erule
+{\Delta_1 ; \Xi_1 \prov v_1; \rho_1 : [R_1] \qquad \Delta_2 ; \Xi_2 \prov v_2; \rho_2 : [R_2]
+\using \tensor R}
+{\Delta_1, \Delta_2 ; \Xi_1, \Xi_2 \prov \pair {v_1} {v_2} ; (\rho_1 \celse \rho_2) : [R_1 \tensor R_2]}
+\]
+\[
+\erule
+{\Delta ; \Xi \prov v; \rho : [R_1] \using \oplus R_1}
+{\Delta ; \Xi \prov \binl v; \rho : [R_1 \oplus R_2]}
+\qquad
+\erule
+{\Delta ; \Xi \prov v; \rho : [R_2] \using \oplus R_2}
+{\Delta ; \Xi \prov \binr v; \rho : [R_1 \oplus R_2]}
+\]
+\[
+\erule
+{\Delta, x : R \prov \rho ::  \# \using \tnot R}
+{\Delta; c \prov \tok{chan} x ; c(x).\rho :: [\tnot R]}
+\]
+\[
+\erule
+{\Delta; \Xi \prov v ; \rho :: [R] \using focR}
+{\Delta \prov (\nu \Xi )c\wrt v.\rho :: (c : R)}
+\]
+\[
+\erule
+{\Delta; \Xi \prov v ; \rho :: [R] \using focL}
+{\Delta, c : R\rfalse  \prov (\nu \Xi)c\wrt v.\rho :: \#}
+\]
+\[
+\erule
+{\Delta, x_1 : R_1, x_2 : R_2 \prov \rho :: T \using \tensor L}
+{\Delta, x : R_1 \tensor R_2 \prov \blet \pair {x_1}{x_2} = x \bin \rho :: T}
+\]
+\[
+\erule
+{\Delta, x_1 : R_1 \prov \rho_1 :: T \qquad
+\Delta, x_2 : R_2 \prov \rho_2 :: T
+ \using \oplus L}
+{\Delta, x : R_1 \oplus R_2 \prov \bcase x \bof x_1.\rho_1 | x_2.\rho_2 :: T}
+\]
+\[
+\erule
+{\Delta, c : R \rfalse \prov \rho :: T \using \tnot L}
+{\Delta, x : \tnot R \prov \blet \tok{chan} x = c \bin \rho :: T}
+\]
+
+Maybe $focR$ never comes up?
+
+Let's do examples. Let's warm up with a write, say $\tensor R$.
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\Delta, d :  R\rfalse \prov \rho :: \#
+\justifies
+\Delta, d : \tnot R \prov \rho :: \#
+\]
+\justifies
+ \Delta; d \prov  \chan{d} ;  \rho : [ \tnot\tnot R]
+\]
+\[
+\[
+\Delta', d' :  R' \rfalse \prov \rho' :: \#
+\justifies
+\Delta', d' :  \tnot R' \prov \rho' :: \#
+\]
+\justifies
+ \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \tnot\tnot R']
+\]
+\justifies
+\Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\tnot \tnot R \tensor \tnot\tnot R']
+\]
+\using focL \justifies
+\Delta, \Delta', c :  \tnot\tnot R \tensor \tnot\tnot R' \rfalse \prov (\nu dd')
+ c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
+\end{prooftree}
+\]
+Hm, but I'm worried those $\tnot L$ decomps at the leaves want reads. Or maybe
+I need to split up the semantics of the different shifts.
+
+Something more like
+\[
+\begin{prooftree}
+\[
+\[
+\Delta, d :  R\rfalse \prov \rho :: \#
+\justifies
+ \Delta; d \prov  \chan{d} ;  \rho : [ \dns\ups R]
+\]
+\[
+\Delta', d' :  R' \rfalse \prov \rho' :: \#
+\justifies
+ \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \dns\ups R']
+\]
+\justifies
+\Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\dns\ups R \tensor \dns\ups R']
+\]
+\using focL \justifies
+\Delta, \Delta', c :  \dns\ups R \tensor \dns\ups R' \rfalse \prov (\nu dd')
+ c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
+\end{prooftree}
+\]
+
+so that the $\oplus L$ case looks like
+
+\[
+\erule
+{
+\[
+\[
+\[
+\[
+\justifies
+\Delta,  c_1 : R_1\rfalse   \prov \rho_1 :: \#
+\]
+\justifies
+\Delta, x_1 : \ups R_1   \prov \blet \tok{ch} c_1 = x_1 \bin \rho_1 :: \#
+\]
+\[
+\[
+\justifies
+\Delta,   c_2 : R_2\rfalse  \prov \rho_2 :: \#
+\]
+\justifies
+\Delta,  x_2:  \ups R_2  \prov \tok{ch} c_2 = x_2 \bin \rho_2 :: \#
+\]
+\justifies
+\Delta, x :\ups R \oplus  \ups R'  \prov \bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#
+\]
+\justifies
+\Delta  \prov \lambda x.\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) : [\dns (\ups R \oplus  \ups R') \rfalse]
+\]
+}
+{\Delta, c : \dns (\ups R \oplus  \ups R') \rfalse \prov c(x).\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#}
+\]
+
 \section{Introduction}
 I'm going to sketch out what I think is a certain interesting way of
 decomposing the way that processes are assigned to proofs in
@@ -520,7 +668,7 @@ And at the end I'll want a language of `classical' positive propositions, which
 contains all the usual positive propositional connectives, plus a single negative
 connective with a built-in shift: a sort of negation, which uses an atomic negative
 proposition $\#$.
-\def\tnot{{\sim}}
+
 \[\hbox {Classical Props } R ::= \tnot R \celse R \tensor R \celse R \oplus R \celse \cdots \]
 This $\tnot R$ is basically $\dns(R \lol \#)$. We could make up
 a judgment $\rfalse$ for its unfocused presence on the left, and
