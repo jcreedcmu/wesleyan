@@ -25,6 +25,7 @@
 \def\lolu{\lol\!\!|\,}
 \def\ampu{\amp\!\!|\,}
 \def\tok#1{\mathop{\mathbf{#1}}}
+\def\tk#1{\mathbf{#1}}
 \def\dns{{\downarrow}}
 \def\ups{{\uparrow}}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -937,6 +938,165 @@ x : \lnot A_- \tensor \lnot  B_- \prov  \blet (y,z) = x \bin P  : \#
   c : \lnot\lnot(\lnot A_- \tensor \lnot  B_-) \prov c(x).\blet (y,z) = x \bin P : \#
 \end{prooftree}
 \]
+\subsection{Resolving a Confusion}
+I think I was confused partly because I need to carefully distinguish the {\em term} constructors
+responsible for injecting channel names into values, and the {\em type} constructors
+creating channel types.
+\[\begin{tabular}{rccl}
+Value Types&$A$&$::=$&$A \tensor A \celse A \oplus A \celse \tk{R} A \celse \tk{W} A$\\
+Values&$e$&$::=$&$\tok{rd} c \celse \tok{wr} c$\\
+Channel Names&$c$&$::=$&$\cdots$
+\end{tabular}\]
+which means the rules that seem somewhat clearer to me are now perhaps
+\[
+\erule
+{c : \tk{W} A \prov P : \#}
+{c \prov \tok{rd} c / P : [\lnot\tk{W} A]}
+\qquad
+\erule
+{c : \tk{R} A \prov P : \#}
+{c \prov \tok{wr} c / P : [\lnot\tk{R} A]}
+\]
+But, hm, I'm still stymied by the fact that after I do the shift-adding translation, I still
+don't seem to have enough information to say which shifts become $\tk{W}$ and which become $\tk{R}$.
 
+Let me look at two particular examples, of $(A\tensor B) \tensor C$ and $(A \amp B) \tensor C$.
+If we start these off on the right, we do a write, but afterwards maybe stay writing and maybe
+shift to reading. The $\dash_+$ translations are
+\[((A\tensor B) \tensor C)_+ = \dns \ups (A \tensor B)_+ \tensor \dns \ups C_+\]
+\[ = \dns \ups (\dns \ups A_+ \tensor \dns \ups B_+) \tensor \dns \ups C_+\]
+\[((A \amp B) \tensor C)_+ = \dns \ups (A \amp B)_+ \tensor \dns \ups C_+\]
+\[ = \dns \ups \dns (\ups A_+ \amp \ups B_+) \tensor \dns \ups C_+\]
+so that
+%% \[((A\tensor B) \tensor C)^\bullet_+
+%%  = \dns \ups (\dns \ups A^\bullet_+ \tensor \dns \ups B^\bullet_+) \tensor \dns \ups C^\bullet_+\]
+%% \[((A \amp B) \tensor C)^\bullet_+
+%%  = \dns \ups \dns (\ups A^\bullet_+ \oplus \ups B^\bullet_+) \tensor \dns \ups C^\bullet_+\]
+\[((A\tensor B) \tensor C)^\bullet_+
+ = \lnot \lnot (\lnot \lnot A^\bullet_+ \tensor \lnot \lnot B^\bullet_+) \tensor \lnot \lnot C^\bullet_+\]
+\[((A \amp B) \tensor C)^\bullet_+
+ = \lnot \lnot \lnot (\lnot A^\bullet_+ \oplus \lnot B^\bullet_+) \tensor \lnot \lnot C^\bullet_+\]
+Eliminating all the translation noise, we can think of this as just
+\[((A\tensor B) \tensor C)
+ \mapsto \lnot \lnot (\lnot \lnot A \tensor \lnot \lnot B) \tensor \lnot \lnot C\]
+\[((A \amp B) \tensor C)
+ \mapsto \lnot \lnot \lnot (\lnot A \oplus \lnot B) \tensor \lnot \lnot C\]
+and try to prove the things on the right. Well, negated because of the `judgmental' shift.
+The question I'm trying to answer for myself is whether that second negation is either a write
+or a read conditionally depending on the stuff inside it. I conjecture yes.
+
+For the first one we have
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+y : \lnot_w (\lnot \lnot A \tensor \lnot \lnot B) \prov  P : \#
+\]
+\justifies
+\prov y  / P : [\lnot \lnot (\lnot \lnot A \tensor \lnot \lnot B) ]
+\]
+\qquad
+\cdots
+\justifies
+\prov \pair y z / (P\celse Q) : [\lnot \lnot (\lnot \lnot A \tensor \lnot \lnot B) \tensor \lnot \lnot C]
+\]
+\justifies
+c : \lnot_w(\lnot \lnot (\lnot \lnot A \tensor \lnot \lnot B) \tensor \lnot \lnot C) \prov c\wrt{y,z} :: \#
+\end{prooftree}
+\]
+and for the second
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+y : \lnot_r \lnot (\lnot A \tensor \lnot B) \prov  P : \#
+\]
+\justifies
+\prov y  / P : [\lnot \lnot \lnot (\lnot A \tensor \lnot B) ]
+\]
+\qquad
+\cdots
+\justifies
+\prov \pair y z / (P\celse Q) : [\lnot \lnot \lnot (\lnot  A \oplus  \lnot B) \tensor \lnot \lnot C]
+\]
+\justifies
+c : \lnot_w(\lnot \lnot \lnot (\lnot  A \oplus \lnot  B) \tensor \lnot \lnot C) \prov c\wrt{y,z} :: \#
+\end{prooftree}
+\]
+I know that $\lnot_w$ wants to take a $A ::= A\oplus A \celse A \tensor A \celse \cdots$,
+and $\lnot_r$ wants to take a $\lnot A$.
+
+What if I try to define $\dash^+$ and $\dash^-$ directly?
+\[\begin{tabular}{l|l|l}
+  $A$&$A^+$&$A^-$\\
+\hline
+  $A \otimes B$&$ \ups_w(\dns  A^+ \otimes \dns  B^+) $&$ \dns_r\ups (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \ups_w(\dns A^+ \oplus \dns B^+) $&$ \dns_r\ups( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \ups_r\dns (A^- \imp  B^+) $&$  \dns_w(\dns A^+ \imp  \ups B^-)$\\
+  $A \amp B$&$ \ups_r\dns (A^+ \amp  B^+) $&$  \dns_w(\ups A^- \amp  \ups B^-)$\\
+\end{tabular}\]
+or, combining this with the $\dash^\bullet$ translation, what if I just say
+\[\begin{tabular}{l|l|l}
+  $A$&$A^+$&$A^-$\\
+\hline
+  $A \otimes B$&$ \lnot_w(\lnot  A^+ \otimes \lnot  B^+) $&$ \lnot_r\lnot (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \lnot_w(\lnot A^+ \oplus \lnot B^+) $&$ \lnot_r\lnot( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \lnot_r\lnot (A^- \tensor  B^+) $&$  \lnot_w(\lnot A^+ \tensor  \lnot B^-)$\\
+  $A \amp B$&$ \lnot_r\lnot (A^+ \oplus  B^+) $&$  \lnot_w(\lnot A^- \oplus  \lnot B^-)$\\
+\end{tabular}\]
+
+Tensor write:
+\[
+\begin{prooftree}
+\[
+\[
+{d_1} : A^+ \prov  P : \#
+\justifies
+[d_1] \prov {{d_1}} / P : [ \lnot A^+  ]
+\]
+\[
+d_2 :  B^+ \prov  Q : \#
+\justifies
+[d_2] \prov {{d_2}} / Q : [ \lnot B^+  ]
+\]
+\justifies
+[d_1, d_2] \prov \pair{{d_1}}{{d_2}} / (P\celse Q) : [ \lnot A^+ \tensor \lnot  B^+ ]
+\]
+\justifies
+  d : \lnot_w(\lnot A^+ \tensor  \lnot B^+) \prov (\nu d_1d_2).d
+\pair{{d_1}}{{d_2}}.(P\celse Q) : \#
+\end{prooftree}
+\]
+Tensor read:
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+y :  A^- , z :   B^- \prov  P  : \#
+\]
+\justifies
+x :  A^- \tensor   B^- \prov  \blet (y,z) = x \bin P  : \#
+\]
+\justifies
+\prov \lambda x . \blet (y,z) = x \bin P  : [\lnot( A^- \tensor   B^-)]
+\]
+\justifies
+  c : \lnot_r \lnot ( A^- \tensor  B^-) \prov c(x).\blet (y,z) = x \bin P : \#
+\end{prooftree}
+\]
+How does $((A \amp B) \tensor C)^+$ look? It's
+\[\lnot_w(\lnot \lnot_r \lnot ( A^+ \oplus   B^+) \tensor \lnot  C^+)\]
+So what's the pattern here?
+\[\begin{tabular}{rccl}
+Read Types&$R$&$::=$&$R \tensor R \celse R \oplus R \celse C$\\
+Write Types&$W$&$::=$&$W \tensor W \celse W \oplus W \celse \lnot C$\\
+Channel Types&$C$&$::=$&$\lnot_w W \celse \lnot_r \lnot R$
+\end{tabular}\]
 
 \end{document}
