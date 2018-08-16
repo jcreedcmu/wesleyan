@@ -17,6 +17,7 @@
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
 
+\def\binj{\mathop\mathbf{inj}\nolimits}
 \input{linear}
 \def\chan{\overline}
 \def\tnot{{\sim}}
@@ -44,744 +45,744 @@
    arrow style=tikz,
    diagrams={>=stealth}}
 
-%% \setcounter{section}{-1}
-%% \section{Some Thoughts About Sessions And Futures}
-%% Where in session types we'd say
-%% \[
-%% \erule
-%% {\Delta, y : A, x : B \prov P :: T}
-%% {\Delta, x : A \tensor B \prov x(y).P :: T}
-%% \]
-%% I'd rather say something more like
-%% \[
-%% \erule
-%% {
-%% \[
-%% \Delta, y \lc \fut A, x' \lc \fut B \prov P :: T
-%% \justifies
-%% \Delta, z \lc \fut A \tensor \fut B \prov \blet (y, x') = z \bin P :: T
-%% \]
-%% }
-%% {\Delta, x \lc \fut{\fut A \tensor \fut B} \prov x(z). \blet (y, x') = z \bin P :: T}
-%% \]
-%% and instead of
-%% \[
-%% \erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
-%% {\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensor B)}
-%% \]
-%% I'd say
-%% \[
-%% (\nu xy) (P \celse Q \celse x(x_v).y(y_v).\pair {x_v}{y_v}) :: A \tensor B
-%% \]
-%% with the general rules being perhaps something like
-%% \[
-%% \erule
-%% {\Delta, y \lc A \prov P :: T}
-%% {\Delta, x \lc \fut A \prov x(y).P :: T}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, x : \fut A \prov P  : \sharp \qquad \Delta', y : [A] \prov P : \sharp}
-%% {\Delta,\Delta' \prov \nu x.(P\celse Q) :: T}
-%% \]
-%% Ack, no, this is a classical cut, what am I doing.
+\setcounter{section}{-1}
+\section{Some Thoughts About Sessions And Futures}
+Where in session types we'd say
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensor B \prov x(y).P :: T}
+\]
+I'd rather say something more like
+\[
+\erule
+{
+\[
+\Delta, y \lc \fut A, x' \lc \fut B \prov P :: T
+\justifies
+\Delta, z \lc \fut A \tensor \fut B \prov \blet (y, x') = z \bin P :: T
+\]
+}
+{\Delta, x \lc \fut{\fut A \tensor \fut B} \prov x(z). \blet (y, x') = z \bin P :: T}
+\]
+and instead of
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
+{\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensor B)}
+\]
+I'd say
+\[
+(\nu xy) (P \celse Q \celse x(x_v).y(y_v).\pair {x_v}{y_v}) :: A \tensor B
+\]
+with the general rules being perhaps something like
+\[
+\erule
+{\Delta, y \lc A \prov P :: T}
+{\Delta, x \lc \fut A \prov x(y).P :: T}
+\]
+\[
+\erule
+{\Delta, x : \fut A \prov P  : \sharp \qquad \Delta', y : [A] \prov P : \sharp}
+{\Delta,\Delta' \prov \nu x.(P\celse Q) :: T}
+\]
+Ack, no, this is a classical cut, what am I doing.
 
-%% \subsection{The Type Translation}
-%% {\em Session} types
-%% \[
-%% \begin{tabular}{rccl}
-%% Session Types&$A$&$::=$&$A \tensor B \celse A \lol B \celse \cdots$
-%% \end{tabular}
-%% \]
-%% are a thing, and I mean to translate them to futures somehow. A session
-%% has a distinguished channel. The distinguished channel of an $A \tensor B$-typed
-%% process has an $A$ written to it, and then the process after that transition
-%% now has session type $B$.
+\subsection{The Type Translation}
+{\em Session} types
+\[
+\begin{tabular}{rccl}
+Session Types&$A$&$::=$&$A \tensor B \celse A \lol B \celse \cdots$
+\end{tabular}
+\]
+are a thing, and I mean to translate them to futures somehow. A session
+has a distinguished channel. The distinguished channel of an $A \tensor B$-typed
+process has an $A$ written to it, and then the process after that transition
+now has session type $B$.
 
-%% There is a term-translation I have in my head that is merely forcing all channels to be
-%% linear. It takes a read like $x(z).P$ and changes it to $x(z, x').[x'/x]P$. Every time
-%% you would have read some data and potentially changed the expectations of the channel
-%% it was read along, instead you `CPS-ify' the continuation channel into a fresh one.
-%% What happens with writes? I guess every time I do a write $x\wrt y.P$ it changes to
-%% $(\nu x') x\wrt{y,x'}.[x'/x]P$. Writes consume the channel also.
+There is a term-translation I have in my head that is merely forcing all channels to be
+linear. It takes a read like $x(z).P$ and changes it to $x(z, x').[x'/x]P$. Every time
+you would have read some data and potentially changed the expectations of the channel
+it was read along, instead you `CPS-ify' the continuation channel into a fresh one.
+What happens with writes? I guess every time I do a write $x\wrt y.P$ it changes to
+$(\nu x') x\wrt{y,x'}.[x'/x]P$. Writes consume the channel also.
 
-%% Do I change synchronous rules to simply produce {\em the data} they want to write instead
-%% of a $\sharp$-typed classical sequent?
+Do I change synchronous rules to simply produce {\em the data} they want to write instead
+of a $\sharp$-typed classical sequent?
 
-%% If I just do the translation I said to
-%% \[
-%% \erule
-%% {\Delta, y : A, x : B \prov P :: T}
-%% {\Delta, x : A \tensor B \prov x(y).P :: T}
-%% \]
-%% I get
-%% \[
-%% \erule
-%% {\Delta, y : A, x' : B \prov P :: T}
-%% {\Delta, x : A \tensor B\prov x(y, x').P :: T}
-%% \]
-%% ?
-%% \subsection{Ternary $\tensor$}
-%% There should be a legitimate form of ternary tensor even
-%% in Caires-Pfenning, like
-%% \[
-%% \erule
-%% {\Delta, y_1 : A_1, y_2 : A_2, x : B \prov P :: T}
-%% {\Delta, x : \tensor\{A_1 A_2 B\} \prov x(y_1, y_2).P :: T}
-%% \]
-%% \[
-%% \erule{
-%% \Delta_1 \prov P_1 :: (y_1:A_1)\qquad
-%% \Delta_2 \prov P_2 :: (y_2:A_2)\qquad
-%%   \Delta \prov Q :: (x : B)}
-%% {\Delta_1, \Delta_2, \Delta \prov (\nu y_1y_2) x \wrt {y_1,y_2} . (P_1 \celse P_2 \celse Q)
-%% :: (x : \tensor \{A_1A_2B\})}
-%% \]
+If I just do the translation I said to
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensor B \prov x(y).P :: T}
+\]
+I get
+\[
+\erule
+{\Delta, y : A, x' : B \prov P :: T}
+{\Delta, x : A \tensor B\prov x(y, x').P :: T}
+\]
+?
+\subsection{Ternary $\tensor$}
+There should be a legitimate form of ternary tensor even
+in Caires-Pfenning, like
+\[
+\erule
+{\Delta, y_1 : A_1, y_2 : A_2, x : B \prov P :: T}
+{\Delta, x : \tensor\{A_1 A_2 B\} \prov x(y_1, y_2).P :: T}
+\]
+\[
+\erule{
+\Delta_1 \prov P_1 :: (y_1:A_1)\qquad
+\Delta_2 \prov P_2 :: (y_2:A_2)\qquad
+  \Delta \prov Q :: (x : B)}
+{\Delta_1, \Delta_2, \Delta \prov (\nu y_1y_2) x \wrt {y_1,y_2} . (P_1 \celse P_2 \celse Q)
+:: (x : \tensor \{A_1A_2B\})}
+\]
 
-%% I think the type mapping I have in mind smells like
-%% \[(A \tensor B)^* = \tensor\{A^* B^* 1\} \]
-%% \[(A \& B)^* = ? \]
-%% Dang, I don't know where I'm going here.
+I think the type mapping I have in mind smells like
+\[(A \tensor B)^* = \tensor\{A^* B^* 1\} \]
+\[(A \& B)^* = ? \]
+Dang, I don't know where I'm going here.
 
-%% I want to picture a fairly ordinary lambda calculus with channel types like
-%% $\fut A$
-%%  that stay the same and have actual values
-%% passed along them.
+I want to picture a fairly ordinary lambda calculus with channel types like
+$\fut A$
+ that stay the same and have actual values
+passed along them.
 
-%% A process with a channel that is session-typed $A \tensor B$ is a channel
-%% that provides an $A$, and also a $\fut B$. So perhaps
+A process with a channel that is session-typed $A \tensor B$ is a channel
+that provides an $A$, and also a $\fut B$. So perhaps
 
-%% \[(A \tensor B)^* = \fut{A^* \x \fut {B^*}}\]
-%% \[(A \amp B)^* = \fut{A^* \amp B^*}\]
-%% No... hm. No matter what, if I have
-%% \[\Delta \prov P :: T\]
-%% then $T$ is notionally a {\em channel} type, so I should devise the translation
-%% to not involve $\fut{}$. The theorem will be something like
-%% \begin{theorem}
-%% If
-%% $\Delta \prov P :: T$
-%% then $\fut{\Delta^*} \prov P^* :: T^*$.
-%% \end{theorem}
-%% and maybe
-%% \[(A \tensor B)^* = A^* \x \fut {B^*}\]
-%% \[(A \amp B)^* = \fut{A^*} \amp \fut{B^*}\]
-%% \subsection{Maybe I Should Think About Focusing}
-%% When I have a {\em positive} prop on the right, what's going on is
-%% that I'm {\em writing} to a channel. When I have a negative prop on the
-%% right, what's going on is that I'm reading from a channel.
+\[(A \tensor B)^* = \fut{A^* \x \fut {B^*}}\]
+\[(A \amp B)^* = \fut{A^* \amp B^*}\]
+No... hm. No matter what, if I have
+\[\Delta \prov P :: T\]
+then $T$ is notionally a {\em channel} type, so I should devise the translation
+to not involve $\fut{}$. The theorem will be something like
+\begin{theorem}
+If
+$\Delta \prov P :: T$
+then $\fut{\Delta^*} \prov P^* :: T^*$.
+\end{theorem}
+and maybe
+\[(A \tensor B)^* = A^* \x \fut {B^*}\]
+\[(A \amp B)^* = \fut{A^*} \amp \fut{B^*}\]
+\subsection{Maybe I Should Think About Focusing}
+When I have a {\em positive} prop on the right, what's going on is
+that I'm {\em writing} to a channel. When I have a negative prop on the
+right, what's going on is that I'm reading from a channel.
 
-%% A {\em goal} of $A \tensor B$ is like having
-%% \[\lnot ( A \x \lnot(\lnot B )) \]
-%% We can make progress if we provide an $A$, and provide some continuation for what to do
-%% when our counterparty provides us a $B$-sink.
+A {\em goal} of $A \tensor B$ is like having
+\[\lnot ( A \x \lnot(\lnot B )) \]
+We can make progress if we provide an $A$, and provide some continuation for what to do
+when our counterparty provides us a $B$-sink.
 
-%% Maybe it goes like this: in right focus, we are really building a value.
-%% With some positive prop on the right, we are committed to eventually write something
-%% to a channel. In left focus, we have read a value and we're decomposing it. An
-%% unfocused negative prop on the left is just some channel we can write to.
-%% A negative prop on the right reads from the channel, a positive prop on the left
-%% reads from a channel.
+Maybe it goes like this: in right focus, we are really building a value.
+With some positive prop on the right, we are committed to eventually write something
+to a channel. In left focus, we have read a value and we're decomposing it. An
+unfocused negative prop on the left is just some channel we can write to.
+A negative prop on the right reads from the channel, a positive prop on the left
+reads from a channel.
 
-%% Perhaps the session-typed $A \tensor B$ is something like $\ups (A \tensor \dns\ups B)$.
+Perhaps the session-typed $A \tensor B$ is something like $\ups (A \tensor \dns\ups B)$.
 
-%% \[
-%% \erule
-%% {\Delta \prov v : [P] \qquad \Delta' \prov v' : [P']}
-%% {\Delta, \Delta' \prov \pair v {v'} : [P \tensor P']}
-%% \]
-%% \[
-%% \erule
-%% {\Delta \prov E :: (x : N)}
-%% {\Delta \prov \tok{thunk} x.E : [\dns N]}
-%% \]
-%% \[
-%% \erule
-%% {\Delta \prov E :: (x : P)}
-%% {\Delta \prov  E :: (x : \ups P)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, y : P \prov E :: (x : Q)}
-%% {\Delta[\ups P] \prov \tok{end} y.E : (x : Q)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, y : N \prov E :: (x : Q)}
-%% {\Delta, y : \dns N \prov  E :: (x : Q)}
-%% \]
+\[
+\erule
+{\Delta \prov v : [P] \qquad \Delta' \prov v' : [P']}
+{\Delta, \Delta' \prov \pair v {v'} : [P \tensor P']}
+\]
+\[
+\erule
+{\Delta \prov E :: (x : N)}
+{\Delta \prov \tok{thunk} x.E : [\dns N]}
+\]
+\[
+\erule
+{\Delta \prov E :: (x : P)}
+{\Delta \prov  E :: (x : \ups P)}
+\]
+\[
+\erule
+{\Delta, y : P \prov E :: (x : Q)}
+{\Delta[\ups P] \prov \tok{end} y.E : (x : Q)}
+\]
+\[
+\erule
+{\Delta, y : N \prov E :: (x : Q)}
+{\Delta, y : \dns N \prov  E :: (x : Q)}
+\]
 
-%% \[
-%% \erule
-%% {\Delta \prov v : [P]}
-%% {\Delta \prov x\wrt v :: (x : P)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta [N] \prov S :: (x : Q)}
-%% {\Delta, y : N \prov y\wrt S  :: (x : Q)}
-%% \]
+\[
+\erule
+{\Delta \prov v : [P]}
+{\Delta \prov x\wrt v :: (x : P)}
+\]
+\[
+\erule
+{\Delta [N] \prov S :: (x : Q)}
+{\Delta, y : N \prov y\wrt S  :: (x : Q)}
+\]
 
-%% This is confusing, but tantalizingly close to what happens in the
-%% focusing-creating translation. The one I have in mind is where we translate
-%% everything into positives:
-%% \[
-%%  (P \tensor P)^* = P^* \tensor P^*
-%% \qquad
-%%  (P \oplus P)^* = P^* \oplus P^*
-%% \]
-%% \[ (P \lol N)^\phi = P^* \tensor N^\phi
-%% \qquad
-%%  (N \amp N)^\phi = N^\phi \oplus N^\phi \]
-%% \[ (\ups P)^\phi = P^* \to \#(\phi) \]
-%% \[ (\dns N)^* = \forall \phi . N^\phi \to \#(\phi) \]
-%% and we have like
-%% \[ \Gamma \prov P \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups P)^\phi \prov \#(\phi)\]
-%% \[ \Gamma \prov [P] \quad\Leftrightarrow\quad (\dns\Gamma)^* \prov [P^*]\]
-%% \[ \Gamma[N] \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi \prov [N^\phi]\]
-%% \[ \Gamma, P \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi, P^* \prov \#(\phi)\]
-%% \[ \Gamma \prov N \quad\Leftrightarrow\quad (\dns\Gamma)^*, N^\phi \prov \#(\phi)\]
+This is confusing, but tantalizingly close to what happens in the
+focusing-creating translation. The one I have in mind is where we translate
+everything into positives:
+\[
+ (P \tensor P)^* = P^* \tensor P^*
+\qquad
+ (P \oplus P)^* = P^* \oplus P^*
+\]
+\[ (P \lol N)^\phi = P^* \tensor N^\phi
+\qquad
+ (N \amp N)^\phi = N^\phi \oplus N^\phi \]
+\[ (\ups P)^\phi = P^* \to \#(\phi) \]
+\[ (\dns N)^* = \forall \phi . N^\phi \to \#(\phi) \]
+and we have like
+\[ \Gamma \prov P \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups P)^\phi \prov \#(\phi)\]
+\[ \Gamma \prov [P] \quad\Leftrightarrow\quad (\dns\Gamma)^* \prov [P^*]\]
+\[ \Gamma[N] \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi \prov [N^\phi]\]
+\[ \Gamma, P \prov Q \quad\Leftrightarrow\quad (\dns\Gamma)^*, (\ups Q)^\phi, P^* \prov \#(\phi)\]
+\[ \Gamma \prov N \quad\Leftrightarrow\quad (\dns\Gamma)^*, N^\phi \prov \#(\phi)\]
 
-%% Let's look at how a case compiles down.
-%% \[
-%% \erule
-%% { y : N \prov e : P \qquad  y' : N' \prov e' : P}
-%% { x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
-%% \]
-%% \[
-%% \mapsto \erule
-%% {
-%% \[
-%% \[ y : (\dns N)^*, k : (\ups P)^\phi \prov e : \#(\phi) \qquad
-%%   y' : (\dns N')^*, k : (\ups P)^\phi \prov e' : \#(\phi)
-%% \justifies
-%%  k : (\ups P)^\phi, q : (\dns N \oplus \dns N')^* \prov {\bcase} : \#(\phi)
-%% \]
-%% \justifies
-%%  k : (\ups P)^\phi \prov {\lambda q . \bcase} : [\ups(\dns N \oplus \dns N')^\phi]
-%% \]}
-%% { x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^\phi \prov {x [\phi] \lambda q . \bcase} : \#(\phi) }
-%% \]
-%% What about tensor R, say?
-%% \[
-%% \begin{prooftree}
-%% \[
-%% \[
-%% y : (\ups P)^\psi \prov ? : \#(\psi)
-%% \justifies
-%%  \prov ? : [(\dns \ups P)^* ]
-%% \]
-%% \[
-%% \[
-%% \justifies
-%% y : (\ups \dns \ups P')^\psi \prov ? : \#(\psi)
-%% \]
-%% \justifies
-%%  \prov ? : [ (\dns\ups\dns\ups P')^*]
-%% \]
-%% \justifies
-%%  \prov ? : [(\dns \ups P \tensor \dns\ups\dns\ups P')^*]
-%% \]
-%% \justifies
-%% x : (\ups (\dns \ups P \tensor \dns\ups\dns\ups P'))^\phi \prov ? : \#(\phi)
-%% \end{prooftree}
-%% \]
-%% I can't see where the asymmetry comes from, hmm.
-%% \subsection{Do I even need $\phi$?}
-%% I do after all have linearity around.
-%% I could try something like
-%% \[
-%%  (P \tensor P)^* = P^* \tensor P^*
-%% \qquad
-%%  (P \oplus P)^* = P^* \oplus P^*
-%% \]
-%% \[ (P \lol N)^* = P^* \tensor N^*
-%% \qquad
-%%  (N \amp N)^* = N^* \oplus N^* \]
-%% \[ (\ups P)^* = P^* \lol \# \]
-%% \[ (\dns N)^* = N^* \lol \# \]
-%% This would make the case
-%% \[
-%% \erule
-%% { y : N \prov e : P \qquad  y' : N' \prov e' : P}
-%% { x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
-%% \]
-%% \[
-%% \mapsto \erule
-%% {
-%% \[
-%% \[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
-%%   y' : (\dns N')^*, k : (\ups P)^* \prov e' : \#
-%% \justifies
-%%  k : (\ups P)^*, q : (\dns N \oplus \dns N')^* \prov {\bcase\ q \bof \cdots} : \#
-%% \]
-%% \justifies
-%%  k : (\ups P)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\ups(\dns N \oplus \dns N')^*]
-%% \]}
-%% { x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^* \prov {x\  \lambda q . \bcase\ q \bof \cdots} : \# }
-%% \]
-%% and actual $\oplus L$ in session types looks like
-%% \[
-%% \erule
-%% {\Delta, x : A \prov P :: T \qquad \Delta, x:B \prov Q :: T}
-%% {\Delta, x : A \oplus B \prov x .\tok{case}(P, Q) :: T}
-%% \]
+Let's look at how a case compiles down.
+\[
+\erule
+{ y : N \prov e : P \qquad  y' : N' \prov e' : P}
+{ x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^\phi \prov e : \#(\phi) \qquad
+  y' : (\dns N')^*, k : (\ups P)^\phi \prov e' : \#(\phi)
+\justifies
+ k : (\ups P)^\phi, q : (\dns N \oplus \dns N')^* \prov {\bcase} : \#(\phi)
+\]
+\justifies
+ k : (\ups P)^\phi \prov {\lambda q . \bcase} : [\ups(\dns N \oplus \dns N')^\phi]
+\]}
+{ x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^\phi \prov {x [\phi] \lambda q . \bcase} : \#(\phi) }
+\]
+What about tensor R, say?
+\[
+\begin{prooftree}
+\[
+\[
+y : (\ups P)^\psi \prov ? : \#(\psi)
+\justifies
+ \prov ? : [(\dns \ups P)^* ]
+\]
+\[
+\[
+\justifies
+y : (\ups \dns \ups P')^\psi \prov ? : \#(\psi)
+\]
+\justifies
+ \prov ? : [ (\dns\ups\dns\ups P')^*]
+\]
+\justifies
+ \prov ? : [(\dns \ups P \tensor \dns\ups\dns\ups P')^*]
+\]
+\justifies
+x : (\ups (\dns \ups P \tensor \dns\ups\dns\ups P'))^\phi \prov ? : \#(\phi)
+\end{prooftree}
+\]
+I can't see where the asymmetry comes from, hmm.
+\subsection{Do I even need $\phi$?}
+I do after all have linearity around.
+I could try something like
+\[
+ (P \tensor P)^* = P^* \tensor P^*
+\qquad
+ (P \oplus P)^* = P^* \oplus P^*
+\]
+\[ (P \lol N)^* = P^* \tensor N^*
+\qquad
+ (N \amp N)^* = N^* \oplus N^* \]
+\[ (\ups P)^* = P^* \lol \# \]
+\[ (\dns N)^* = N^* \lol \# \]
+This would make the case
+\[
+\erule
+{ y : N \prov e : P \qquad  y' : N' \prov e' : P}
+{ x : N \oplus N' \prov \bcase x \bof y.e \celse y'.e' : P}
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
+  y' : (\dns N')^*, k : (\ups P)^* \prov e' : \#
+\justifies
+ k : (\ups P)^*, q : (\dns N \oplus \dns N')^* \prov {\bcase\ q \bof \cdots} : \#
+\]
+\justifies
+ k : (\ups P)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\ups(\dns N \oplus \dns N')^*]
+\]}
+{ x : (\dns\ups(\dns N \oplus \dns N'))^*, k : (\ups P)^* \prov {x\  \lambda q . \bcase\ q \bof \cdots} : \# }
+\]
+and actual $\oplus L$ in session types looks like
+\[
+\erule
+{\Delta, x : A \prov P :: T \qquad \Delta, x:B \prov Q :: T}
+{\Delta, x : A \oplus B \prov x .\tok{case}(P, Q) :: T}
+\]
 
-%% And for comparison,
-%% \[
-%% \erule
-%% { y : N \prov e : P \qquad  y : N \prov e' : P'}
-%% {y : N \prov e : P \amp P' }
-%% \]
-%% \[
-%% \mapsto \erule
-%% {
-%% \[
-%% \[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
-%%   y : (\dns N)^*, k : (\ups P)^* \prov e' : \#
-%% \justifies
-%%  y : (\dns N)^*, q : (\ups P \amp \ups P')^* \prov {\bcase\ q \bof \cdots} : \#
-%% \]
-%% \justifies
-%%  y : (\dns N)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\dns(\ups P \oplus \dns P')^*]
-%% \]}
-%% { k : (\ups\dns(\ups P \amp \ups P'))^*, y : (\dns N)^* \prov {k\  \lambda q . \bcase\ q \bof \cdots} : \# }
-%% \]
-%% So let's just do the minimal $\tensor R$ case and see what shape it has.
-%% \[
-%% \erule
-%% {\Delta \prov e : P \qquad \Delta' \prov e' : P' }
-%% {\Delta,\Delta'  \prov \pair{e}{e'} : P \tensor P'}
-%% \mapsto \]
+And for comparison,
+\[
+\erule
+{ y : N \prov e : P \qquad  y : N \prov e' : P'}
+{y : N \prov e : P \amp P' }
+\]
+\[
+\mapsto \erule
+{
+\[
+\[ y : (\dns N)^*, k : (\ups P)^* \prov e : \# \qquad
+  y : (\dns N)^*, k : (\ups P)^* \prov e' : \#
+\justifies
+ y : (\dns N)^*, q : (\ups P \amp \ups P')^* \prov {\bcase\ q \bof \cdots} : \#
+\]
+\justifies
+ y : (\dns N)^* \prov {\lambda q . \bcase\ q \bof \cdots} : [\dns(\ups P \oplus \dns P')^*]
+\]}
+{ k : (\ups\dns(\ups P \amp \ups P'))^*, y : (\dns N)^* \prov {k\  \lambda q . \bcase\ q \bof \cdots} : \# }
+\]
+So let's just do the minimal $\tensor R$ case and see what shape it has.
+\[
+\erule
+{\Delta \prov e : P \qquad \Delta' \prov e' : P' }
+{\Delta,\Delta'  \prov \pair{e}{e'} : P \tensor P'}
+\mapsto \]
 
-%% \[
-%% \begin{prooftree}
-%% \[
-%% \[
-%% \Delta, k : (\ups P)^* \prov e : \#
-%% \justifies
-%% \Delta \prov \lambda k . e : [(\dns \ups P)^* ]
-%% \]
-%% \[
-%% \Delta', k' : ( \ups P')^* \prov e' : \#
-%% \justifies
-%% \Delta' \prov \lambda k' . e' : [ (\dns\ups P')^*]
-%% \]
-%% \justifies
-%% \Delta, \Delta' \prov \pair{\lambda k .e}{\lambda k'.e'} : [(\dns \ups P \tensor \dns\ups P')^*]
-%% \]
-%% \justifies
-%% \Delta, \Delta', K : (\ups (\dns\ups P \tensor \dns\ups P'))^* \prov K\ \pair{\lambda k .e}{\lambda k'.e'} : \#
-%% \end{prooftree}
-%% \]
-%% This feels like what the future-session-typed rule ought to look like. Something like
-%% taking
-%% \[
-%% \erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
-%% {\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensoru B)}
-%% \]
-%% (where $A \tensoru B$ is the version of $\tensor$ that preserves the
-%% channel into $B$) and instead doing
-%% \[
-%% \erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (z : B)}
-%% {\Delta, \Delta' \prov (\nu yz) x \wrt{y, z} . (P \celse Q) :: (x : A \tensor B)}
-%% \]
-%% Where the term translation again is a thing that affects reads and writes by
-%% \[
-%% x\wrt t . P \quad \mapsto\quad \nu z . x \wrt{t,z} . [z/x]P
-%% \]
-%% \[
-%% x(y) . Q \quad \mapsto\quad  x (y,w) . [w/x]Q
-%% \]
-%% Before the translation I'd do a communication
-%% \[ x\wrt t . P \celse x(y) . Q \quad \to \quad P \celse  [t/y] Q  \]
-%% after the translation I do
-%% \[
-%% (\nu z . x \wrt{t,z} . [z/x]P) \celse
-%% (x (y,w) . [w/x]Q)
-%%  \quad \to  \quad
-%%  x \wrt{t,z} . [z/x]P \celse
-%% x (y,w) . [w/x]Q
-%% \]
-%% \[
-%%   \to  \quad
-%%   [z/x]P \celse
-%%  [t/y][z/w][w/x]Q
-%% \ \equiv\ %
-%%   [z/x]P \celse [t/y][z/x]Q
-%% \ \equiv\ %
-%%   P \celse [t/y]Q
-%% \]
-%% What's $\tensor L$ in this setting, then?
-%% \[
-%% \erule
-%% {\Delta, y : A, x : B \prov P :: T}
-%% {\Delta, x : A \tensoru B \prov x(y).P :: T}
-%% \]
-%% becomes
-%% \[
-%% \erule
-%% {\Delta, y : A, w : B \prov P :: T}
-%% {\Delta, x : A \tensor  B \prov x(y,w).P :: T}
-%% \]
-%% \subsection{Implication}
-%% Channel-preserving process assignment for implication goes like
-%% \[
-%% \erule
-%% {\Delta, y : A \prov P :: (x : B)}
-%% {\Delta \prov x(y).P :: (x : A \lolu B)}
-%% \]
-%% \[
-%% \erule{\Delta \prov P :: (y:A) \qquad \Delta', x : B \prov Q :: T}
-%% {\Delta, \Delta', (x : A \lolu B) \prov (\nu y) x \wrt y . (P \celse Q) :: T}
-%% \]
-%% and non-preserving like
-%% \[
-%% \erule
-%% {\Delta, y : A \prov P :: (w : B)}
-%% {\Delta \prov x(y, w).P :: (x : A \lol B)}
-%% \]
-%% \[
-%% \erule{\Delta \prov P :: (y:A) \qquad \Delta', z : B \prov Q :: T}
-%% {\Delta, \Delta', (x : A \lol B) \prov (\nu yz) x \wrt {y, z} . (P \celse Q) :: T}
-%% \]
-%% \subsection{Channel Reuse for Additives}
-%% Let's try additive conjunction. Preserving like
-%% \[
-%% \erule
-%% {\Delta \prov P :: (x : A)
-%% \qquad \Delta \prov Q :: (x : B)}
-%% {\Delta \prov x(y).\bcase y.(P\celse Q) :: (x : A \ampu B)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, x : A \prov P :: T}
-%% {\Delta, x : A \ampu B\prov x\wrt\binl.P :: T}
-%% \qquad
-%% \erule
-%% {\Delta, x : B \prov P :: T}
-%% {\Delta, x : A \ampu B\prov x\wrt\binr.P :: T}
-%% \]
-%% and non-preserving like
-%% \[
-%% \erule
-%% {\Delta \prov P :: (w : A)
-%% \qquad \Delta \prov Q :: (w : B)}
-%% {\Delta \prov x(y, w).\bcase y.(P\celse Q) :: (x : A \amp B)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, z : A \prov P :: T}
-%% {\Delta, x : A \amp B\prov \nu z . x\wrt{\binl,z}.P :: T}
-%% \qquad
-%% \erule
-%% {\Delta, z : B \prov P :: T}
-%% {\Delta, x : A \amp B\prov \nu z . x\wrt{\binr,z}.P :: T}
-%% \]
+\[
+\begin{prooftree}
+\[
+\[
+\Delta, k : (\ups P)^* \prov e : \#
+\justifies
+\Delta \prov \lambda k . e : [(\dns \ups P)^* ]
+\]
+\[
+\Delta', k' : ( \ups P')^* \prov e' : \#
+\justifies
+\Delta' \prov \lambda k' . e' : [ (\dns\ups P')^*]
+\]
+\justifies
+\Delta, \Delta' \prov \pair{\lambda k .e}{\lambda k'.e'} : [(\dns \ups P \tensor \dns\ups P')^*]
+\]
+\justifies
+\Delta, \Delta', K : (\ups (\dns\ups P \tensor \dns\ups P'))^* \prov K\ \pair{\lambda k .e}{\lambda k'.e'} : \#
+\end{prooftree}
+\]
+This feels like what the future-session-typed rule ought to look like. Something like
+taking
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (x : B)}
+{\Delta, \Delta' \prov (\nu y) x \wrt y . (P \celse Q) :: (x : A \tensoru B)}
+\]
+(where $A \tensoru B$ is the version of $\tensor$ that preserves the
+channel into $B$) and instead doing
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta' \prov Q :: (z : B)}
+{\Delta, \Delta' \prov (\nu yz) x \wrt{y, z} . (P \celse Q) :: (x : A \tensor B)}
+\]
+Where the term translation again is a thing that affects reads and writes by
+\[
+x\wrt t . P \quad \mapsto\quad \nu z . x \wrt{t,z} . [z/x]P
+\]
+\[
+x(y) . Q \quad \mapsto\quad  x (y,w) . [w/x]Q
+\]
+Before the translation I'd do a communication
+\[ x\wrt t . P \celse x(y) . Q \quad \to \quad P \celse  [t/y] Q  \]
+after the translation I do
+\[
+(\nu z . x \wrt{t,z} . [z/x]P) \celse
+(x (y,w) . [w/x]Q)
+ \quad \to  \quad
+ x \wrt{t,z} . [z/x]P \celse
+x (y,w) . [w/x]Q
+\]
+\[
+  \to  \quad
+  [z/x]P \celse
+ [t/y][z/w][w/x]Q
+\ \equiv\ %
+  [z/x]P \celse [t/y][z/x]Q
+\ \equiv\ %
+  P \celse [t/y]Q
+\]
+What's $\tensor L$ in this setting, then?
+\[
+\erule
+{\Delta, y : A, x : B \prov P :: T}
+{\Delta, x : A \tensoru B \prov x(y).P :: T}
+\]
+becomes
+\[
+\erule
+{\Delta, y : A, w : B \prov P :: T}
+{\Delta, x : A \tensor  B \prov x(y,w).P :: T}
+\]
+\subsection{Implication}
+Channel-preserving process assignment for implication goes like
+\[
+\erule
+{\Delta, y : A \prov P :: (x : B)}
+{\Delta \prov x(y).P :: (x : A \lolu B)}
+\]
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta', x : B \prov Q :: T}
+{\Delta, \Delta', (x : A \lolu B) \prov (\nu y) x \wrt y . (P \celse Q) :: T}
+\]
+and non-preserving like
+\[
+\erule
+{\Delta, y : A \prov P :: (w : B)}
+{\Delta \prov x(y, w).P :: (x : A \lol B)}
+\]
+\[
+\erule{\Delta \prov P :: (y:A) \qquad \Delta', z : B \prov Q :: T}
+{\Delta, \Delta', (x : A \lol B) \prov (\nu yz) x \wrt {y, z} . (P \celse Q) :: T}
+\]
+\subsection{Channel Reuse for Additives}
+Let's try additive conjunction. Preserving like
+\[
+\erule
+{\Delta \prov P :: (x : A)
+\qquad \Delta \prov Q :: (x : B)}
+{\Delta \prov x(y).\bcase y.(P\celse Q) :: (x : A \ampu B)}
+\]
+\[
+\erule
+{\Delta, x : A \prov P :: T}
+{\Delta, x : A \ampu B\prov x\wrt\binl.P :: T}
+\qquad
+\erule
+{\Delta, x : B \prov P :: T}
+{\Delta, x : A \ampu B\prov x\wrt\binr.P :: T}
+\]
+and non-preserving like
+\[
+\erule
+{\Delta \prov P :: (w : A)
+\qquad \Delta \prov Q :: (w : B)}
+{\Delta \prov x(y, w).\bcase y.(P\celse Q) :: (x : A \amp B)}
+\]
+\[
+\erule
+{\Delta, z : A \prov P :: T}
+{\Delta, x : A \amp B\prov \nu z . x\wrt{\binl,z}.P :: T}
+\qquad
+\erule
+{\Delta, z : B \prov P :: T}
+{\Delta, x : A \amp B\prov \nu z . x\wrt{\binr,z}.P :: T}
+\]
 
-%% \subsection{Polarizing Translation}
-%% Given unpolarized props, we can talk about the `fully polarizing' translations
-%% $A_+$ and $A_-$ that go
+\subsection{Polarizing Translation}
+Given unpolarized props, we can talk about the `fully polarizing' translations
+$A_+$ and $A_-$ that go
 
-%% \[\begin{tabular}{l|l|l}
-%%   $A$&$A_+$&$A_-$\\
-%% \hline
-%%   $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
-%%   $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
-%%   $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
-%%   $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
-%% \end{tabular}\]
-%% where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
-%% If we have a sequent like $ \Gamma_-  \prov  C_+$.
+\[\begin{tabular}{l|l|l}
+  $A$&$A_+$&$A_-$\\
+\hline
+  $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
+  $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
+\end{tabular}\]
+where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
+If we have a sequent like $ \Gamma_-  \prov  C_+$.
 
-%% So what's the theorem?
-%% Suppose I have a proof of a proposition. I can do the session-types process-assignment to
-%% it. I can do the non-channel-preserving session-types process-assignment to it.
+So what's the theorem?
+Suppose I have a proof of a proposition. I can do the session-types process-assignment to
+it. I can do the non-channel-preserving session-types process-assignment to it.
 
-%% But separately, I can take a proof of $\Gamma \prov C$ and turn it into a proof
-%% of $\Gamma_- \prov C_+$. I can turn {\em that} into a proof of $(\Gamma_-)^* \prov (C_+)^*$.
-%% And then I think I can do a certain process-assignment to {\em that}, and get the same answer
-%% as before.
+But separately, I can take a proof of $\Gamma \prov C$ and turn it into a proof
+of $\Gamma_- \prov C_+$. I can turn {\em that} into a proof of $(\Gamma_-)^* \prov (C_+)^*$.
+And then I think I can do a certain process-assignment to {\em that}, and get the same answer
+as before.
 
-%% \subsection{Focusing Process Assignment}
+\subsection{Focusing Process Assignment}
 
-%% The judgment for focus is
-%% \[ \Delta ; \Xi \prov e : [R]\]
-%% The context $\Xi$ is residuated channel variables for sending to $\nu$.
-%% The expression $v$ is a value to send to a channel, and $\rho$s are process
-%% expressions. We say
-%% \[
-%% \erule
-%% {\Delta_1 ; \Xi_1 \prov v_1; \rho_1 : [R_1] \qquad \Delta_2 ; \Xi_2 \prov v_2; \rho_2 : [R_2]
-%% \using \tensor R}
-%% {\Delta_1, \Delta_2 ; \Xi_1, \Xi_2 \prov \pair {v_1} {v_2} ; (\rho_1 \celse \rho_2) : [R_1 \tensor R_2]}
-%% \]
-%% \[
-%% \erule
-%% {\Delta ; \Xi \prov v; \rho : [R_1] \using \oplus R_1}
-%% {\Delta ; \Xi \prov \binl v; \rho : [R_1 \oplus R_2]}
-%% \qquad
-%% \erule
-%% {\Delta ; \Xi \prov v; \rho : [R_2] \using \oplus R_2}
-%% {\Delta ; \Xi \prov \binr v; \rho : [R_1 \oplus R_2]}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, x : R \prov \rho ::  \# \using \tnot R}
-%% {\Delta; c \prov \tok{chan} x ; c(x).\rho :: [\tnot R]}
-%% \]
-%% \[
-%% \erule
-%% {\Delta; \Xi \prov v ; \rho :: [R] \using focR}
-%% {\Delta \prov (\nu \Xi )c\wrt v.\rho :: (c : R)}
-%% \]
-%% \[
-%% \erule
-%% {\Delta; \Xi \prov v ; \rho :: [R] \using focL}
-%% {\Delta, c : R\rfalse  \prov (\nu \Xi)c\wrt v.\rho :: \#}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, x_1 : R_1, x_2 : R_2 \prov \rho :: T \using \tensor L}
-%% {\Delta, x : R_1 \tensor R_2 \prov \blet \pair {x_1}{x_2} = x \bin \rho :: T}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, x_1 : R_1 \prov \rho_1 :: T \qquad
-%% \Delta, x_2 : R_2 \prov \rho_2 :: T
-%%  \using \oplus L}
-%% {\Delta, x : R_1 \oplus R_2 \prov \bcase x \bof x_1.\rho_1 | x_2.\rho_2 :: T}
-%% \]
-%% \[
-%% \erule
-%% {\Delta, c : R \rfalse \prov \rho :: T \using \tnot L}
-%% {\Delta, x : \tnot R \prov \blet \tok{chan} x = c \bin \rho :: T}
-%% \]
+The judgment for focus is
+\[ \Delta ; \Xi \prov e : [R]\]
+The context $\Xi$ is residuated channel variables for sending to $\nu$.
+The expression $v$ is a value to send to a channel, and $\rho$s are process
+expressions. We say
+\[
+\erule
+{\Delta_1 ; \Xi_1 \prov v_1; \rho_1 : [R_1] \qquad \Delta_2 ; \Xi_2 \prov v_2; \rho_2 : [R_2]
+\using \tensor R}
+{\Delta_1, \Delta_2 ; \Xi_1, \Xi_2 \prov \pair {v_1} {v_2} ; (\rho_1 \celse \rho_2) : [R_1 \tensor R_2]}
+\]
+\[
+\erule
+{\Delta ; \Xi \prov v; \rho : [R_1] \using \oplus R_1}
+{\Delta ; \Xi \prov \binl v; \rho : [R_1 \oplus R_2]}
+\qquad
+\erule
+{\Delta ; \Xi \prov v; \rho : [R_2] \using \oplus R_2}
+{\Delta ; \Xi \prov \binr v; \rho : [R_1 \oplus R_2]}
+\]
+\[
+\erule
+{\Delta, x : R \prov \rho ::  \# \using \tnot R}
+{\Delta; c \prov \tok{chan} x ; c(x).\rho :: [\tnot R]}
+\]
+\[
+\erule
+{\Delta; \Xi \prov v ; \rho :: [R] \using focR}
+{\Delta \prov (\nu \Xi )c\wrt v.\rho :: (c : R)}
+\]
+\[
+\erule
+{\Delta; \Xi \prov v ; \rho :: [R] \using focL}
+{\Delta, c : R\rfalse  \prov (\nu \Xi)c\wrt v.\rho :: \#}
+\]
+\[
+\erule
+{\Delta, x_1 : R_1, x_2 : R_2 \prov \rho :: T \using \tensor L}
+{\Delta, x : R_1 \tensor R_2 \prov \blet \pair {x_1}{x_2} = x \bin \rho :: T}
+\]
+\[
+\erule
+{\Delta, x_1 : R_1 \prov \rho_1 :: T \qquad
+\Delta, x_2 : R_2 \prov \rho_2 :: T
+ \using \oplus L}
+{\Delta, x : R_1 \oplus R_2 \prov \bcase x \bof x_1.\rho_1 | x_2.\rho_2 :: T}
+\]
+\[
+\erule
+{\Delta, c : R \rfalse \prov \rho :: T \using \tnot L}
+{\Delta, x : \tnot R \prov \blet \tok{chan} x = c \bin \rho :: T}
+\]
 
-%% Maybe $focR$ never comes up?
+Maybe $focR$ never comes up?
 
-%% Let's do examples. Let's warm up with a write, say $\tensor R$.
-%% \[
-%% \begin{prooftree}
-%% \[
-%% \[
-%% \[
-%% \Delta, d :  R\rfalse \prov \rho :: \#
-%% \justifies
-%% \Delta, d : \tnot R \prov \rho :: \#
-%% \]
-%% \justifies
-%%  \Delta; d \prov  \chan{d} ;  \rho : [ \tnot\tnot R]
-%% \]
-%% \[
-%% \[
-%% \Delta', d' :  R' \rfalse \prov \rho' :: \#
-%% \justifies
-%% \Delta', d' :  \tnot R' \prov \rho' :: \#
-%% \]
-%% \justifies
-%%  \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \tnot\tnot R']
-%% \]
-%% \justifies
-%% \Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\tnot \tnot R \tensor \tnot\tnot R']
-%% \]
-%% \using focL \justifies
-%% \Delta, \Delta', c :  \tnot\tnot R \tensor \tnot\tnot R' \rfalse \prov (\nu dd')
-%%  c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
-%% \end{prooftree}
-%% \]
-%% Hm, but I'm worried those $\tnot L$ decomps at the leaves want reads. Or maybe
-%% I need to split up the semantics of the different shifts.
+Let's do examples. Let's warm up with a write, say $\tensor R$.
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\Delta, d :  R\rfalse \prov \rho :: \#
+\justifies
+\Delta, d : \tnot R \prov \rho :: \#
+\]
+\justifies
+ \Delta; d \prov  \chan{d} ;  \rho : [ \tnot\tnot R]
+\]
+\[
+\[
+\Delta', d' :  R' \rfalse \prov \rho' :: \#
+\justifies
+\Delta', d' :  \tnot R' \prov \rho' :: \#
+\]
+\justifies
+ \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \tnot\tnot R']
+\]
+\justifies
+\Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\tnot \tnot R \tensor \tnot\tnot R']
+\]
+\using focL \justifies
+\Delta, \Delta', c :  \tnot\tnot R \tensor \tnot\tnot R' \rfalse \prov (\nu dd')
+ c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
+\end{prooftree}
+\]
+Hm, but I'm worried those $\tnot L$ decomps at the leaves want reads. Or maybe
+I need to split up the semantics of the different shifts.
 
-%% Something more like
-%% \[
-%% \begin{prooftree}
-%% \[
-%% \[
-%% \Delta, d :  R\rfalse \prov \rho :: \#
-%% \justifies
-%%  \Delta; d \prov  \chan{d} ;  \rho : [ \dns\ups R]
-%% \]
-%% \[
-%% \Delta', d' :  R' \rfalse \prov \rho' :: \#
-%% \justifies
-%%  \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \dns\ups R']
-%% \]
-%% \justifies
-%% \Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\dns\ups R \tensor \dns\ups R']
-%% \]
-%% \using focL \justifies
-%% \Delta, \Delta', c :  \dns\ups R \tensor \dns\ups R' \rfalse \prov (\nu dd')
-%%  c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
-%% \end{prooftree}
-%% \]
+Something more like
+\[
+\begin{prooftree}
+\[
+\[
+\Delta, d :  R\rfalse \prov \rho :: \#
+\justifies
+ \Delta; d \prov  \chan{d} ;  \rho : [ \dns\ups R]
+\]
+\[
+\Delta', d' :  R' \rfalse \prov \rho' :: \#
+\justifies
+ \Delta'; d' \prov  \chan{d'} ;  \rho' : [ \dns\ups R']
+\]
+\justifies
+\Delta, \Delta'; d,d' \prov \pair {\chan d} {\chan{d'}} ; (\rho \celse \rho') : [\dns\ups R \tensor \dns\ups R']
+\]
+\using focL \justifies
+\Delta, \Delta', c :  \dns\ups R \tensor \dns\ups R' \rfalse \prov (\nu dd')
+ c\wrt{\chan d,\chan{d'}}.(\rho \celse \rho') :: \#
+\end{prooftree}
+\]
 
-%% so that the $\oplus L$ case looks like
+so that the $\oplus L$ case looks like
 
-%% \[
-%% \erule
-%% {
-%% \[
-%% \[
-%% \[
-%% \[
-%% \justifies
-%% \Delta,  c_1 : R_1\rfalse   \prov \rho_1 :: \#
-%% \]
-%% \justifies
-%% \Delta, x_1 : \ups R_1   \prov \blet \tok{ch} c_1 = x_1 \bin \rho_1 :: \#
-%% \]
-%% \[
-%% \[
-%% \justifies
-%% \Delta,   c_2 : R_2\rfalse  \prov \rho_2 :: \#
-%% \]
-%% \justifies
-%% \Delta,  x_2:  \ups R_2  \prov \tok{ch} c_2 = x_2 \bin \rho_2 :: \#
-%% \]
-%% \justifies
-%% \Delta, x :\ups R \oplus  \ups R'  \prov \bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#
-%% \]
-%% \justifies
-%% \Delta  \prov \lambda x.\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) : [\dns (\ups R \oplus  \ups R') \rfalse]
-%% \]
-%% }
-%% {\Delta, c : \dns (\ups R \oplus  \ups R') \rfalse \prov c(x).\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#}
-%% \]
+\[
+\erule
+{
+\[
+\[
+\[
+\[
+\justifies
+\Delta,  c_1 : R_1\rfalse   \prov \rho_1 :: \#
+\]
+\justifies
+\Delta, x_1 : \ups R_1   \prov \blet \tok{ch} c_1 = x_1 \bin \rho_1 :: \#
+\]
+\[
+\[
+\justifies
+\Delta,   c_2 : R_2\rfalse  \prov \rho_2 :: \#
+\]
+\justifies
+\Delta,  x_2:  \ups R_2  \prov \tok{ch} c_2 = x_2 \bin \rho_2 :: \#
+\]
+\justifies
+\Delta, x :\ups R \oplus  \ups R'  \prov \bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#
+\]
+\justifies
+\Delta  \prov \lambda x.\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) : [\dns (\ups R \oplus  \ups R') \rfalse]
+\]
+}
+{\Delta, c : \dns (\ups R \oplus  \ups R') \rfalse \prov c(x).\bcase x\bof (\tok{ch} c_1.\rho_1)\celse(\tok{ch} c_2.\rho_2) :: \#}
+\]
 
-%% \section{Introduction}
-%% I'm going to sketch out what I think is a certain interesting way of
-%% decomposing the way that processes are assigned to proofs in
-%% intuitionistic linear logic. In the interested of getting to the meat
-%% of the proofs I'm going to skip the exponential and atoms, but
-%% obviously they ought to be dealt with. If this is already in the
-%% literature somewhere I would definitely like to read it, but I
-%% couldn't seem to find what I was looking for in Pfenning \&
-%% Griffiths's ``Polarized Substructural Session Types'', which seemed
-%% like the most likely place to look, given the title.
+\section{Introduction}
+I'm going to sketch out what I think is a certain interesting way of
+decomposing the way that processes are assigned to proofs in
+intuitionistic linear logic. In the interested of getting to the meat
+of the proofs I'm going to skip the exponential and atoms, but
+obviously they ought to be dealt with. If this is already in the
+literature somewhere I would definitely like to read it, but I
+couldn't seem to find what I was looking for in Pfenning \&
+Griffiths's ``Polarized Substructural Session Types'', which seemed
+like the most likely place to look, given the title.
 
-%% \section{Languages}
-%% The unpolarized propositions I care about are
-%% \[\hbox {Propositions } A ::= A \tensor A \celse A \oplus A \celse A \lol A \celse A \amp A \celse \cdots \]
-%% The polarized propositions are
-%% \[\hbox {Positive Props } P ::= \dns N \celse P \tensor P \celse P \oplus P \celse \cdots \]
-%% \[\hbox {Negative Props } N ::= \ups P \celse P \lol N \celse N \amp N \celse \cdots \]
-%% And at the end I'll want a language of `classical' positive propositions, which
-%% contains all the usual positive propositional connectives, plus a single negative
-%% connective with a built-in shift: a sort of negation, which uses an atomic negative
-%% proposition $\#$.
+\section{Languages}
+The unpolarized propositions I care about are
+\[\hbox {Propositions } A ::= A \tensor A \celse A \oplus A \celse A \lol A \celse A \amp A \celse \cdots \]
+The polarized propositions are
+\[\hbox {Positive Props } P ::= \dns N \celse P \tensor P \celse P \oplus P \celse \cdots \]
+\[\hbox {Negative Props } N ::= \ups P \celse P \lol N \celse N \amp N \celse \cdots \]
+And at the end I'll want a language of `classical' positive propositions, which
+contains all the usual positive propositional connectives, plus a single negative
+connective with a built-in shift: a sort of negation, which uses an atomic negative
+proposition $\#$.
 
-%% \[\hbox {Classical Props } R ::= \tnot R \celse R \tensor R \celse R \oplus R \celse \cdots \]
-%% This $\tnot R$ is basically $\dns(R \lol \#)$. We could make up
-%% a judgment $\rfalse$ for its unfocused presence on the left, and
-%% give inference rules (in an ambient focused
-%% proof system) as
-%% \[
-%% \erule
-%% {\Delta, R \prov \#}
-%% {\Delta \prov [\tnot R]}
-%% \qquad
-%% \erule
-%% {\Delta, R\rfalse \prov R'}
-%% {\Delta, \tnot R \prov R'}
-%% \qquad
-%% \erule
-%% {\Delta \prov [R]}
-%% {\Delta, R\rfalse \prov \#}
-%% \]
+\[\hbox {Classical Props } R ::= \tnot R \celse R \tensor R \celse R \oplus R \celse \cdots \]
+This $\tnot R$ is basically $\dns(R \lol \#)$. We could make up
+a judgment $\rfalse$ for its unfocused presence on the left, and
+give inference rules (in an ambient focused
+proof system) as
+\[
+\erule
+{\Delta, R \prov \#}
+{\Delta \prov [\tnot R]}
+\qquad
+\erule
+{\Delta, R\rfalse \prov R'}
+{\Delta, \tnot R \prov R'}
+\qquad
+\erule
+{\Delta \prov [R]}
+{\Delta, R\rfalse \prov \#}
+\]
 
-%% By indexing $\#$ with a parameter $\phi$, and having two different negations
-%% (a binding quantifier $\N \phi . R$ that behaves like $\dns \forall \phi . (R(\phi) \lol \#(\phi))$ and
-%% a $\tnot_\phi$ that behaves like $R \lol \#(\phi)$)
-%% we could make this language not classical but constructive, instead, but I'm not sure that's
-%% needed for the process interpretation.
-%% \section{Translations}
-%% \subsection{Polarizing Translation}
-%% Given an unpolarized props $A$, the `fully unpolarized polarization' of $A$
-%% into a positive (resp. negative) prop is $A_+$ (resp. $A_-$) by
+By indexing $\#$ with a parameter $\phi$, and having two different negations
+(a binding quantifier $\N \phi . R$ that behaves like $\dns \forall \phi . (R(\phi) \lol \#(\phi))$ and
+a $\tnot_\phi$ that behaves like $R \lol \#(\phi)$)
+we could make this language not classical but constructive, instead, but I'm not sure that's
+needed for the process interpretation.
+\section{Translations}
+\subsection{Polarizing Translation}
+Given an unpolarized props $A$, the `fully unpolarized polarization' of $A$
+into a positive (resp. negative) prop is $A_+$ (resp. $A_-$) by
 
-%% \[\begin{tabular}{l|l|l}
-%%   $A$&$A_+$&$A_-$\\
-%% \hline
-%%   $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
-%%   $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
-%%   $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
-%%   $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
-%% \end{tabular}\]
-%% where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
+\[\begin{tabular}{l|l|l}
+  $A$&$A_+$&$A_-$\\
+\hline
+  $A \otimes B$&$ \dns  A^+ \otimes \dns  B^+ $&$ \ups (  A^- \otimes  B^-)$\\
+  $A \oplus B$&$ \dns A^+ \oplus \dns B^+ $&$ \ups( A^- \oplus  B^-)$\\
+  $A \imp B$&$ \dns (A^- \imp  B^+) $&$  \dns A^+ \imp  \ups B^-$\\
+  $A \amp B$&$ \dns (A^+ \amp  B^+) $&$  \ups A^- \amp  \ups B^-$\\
+\end{tabular}\]
+where $A^- = \dns A_-$ and $A^+ = \ups A_+$.
 
-%% \begin{lemma}
-%% We have $\Delta \prov A$ in an unfocused proof system exactly
-%% when (and with exactly as many proofs as) we have $\Delta^- \prov A^+$.
-%% \end{lemma}
+\begin{lemma}
+We have $\Delta \prov A$ in an unfocused proof system exactly
+when (and with exactly as many proofs as) we have $\Delta^- \prov A^+$.
+\end{lemma}
 
-%% \begin{proof}
-%% By induction. For example, to decompose $\oplus$ on the left, as
-%% \[
-%% \erule
-%% {\Delta, A \prov C \qquad \Delta, B \prov C}
-%% {\Delta, A \oplus B \prov C}
-%% \]
-%% corresponds exactly to choosing a focus (and being forced through the
-%% asynchronous decomposition exactly one step) as
-%% \[
-%% \begin{prooftree}
-%% \[
-%% \[
-%% \[
-%%  \Delta_-, A_- \prov C_+
-%% \justifies
-%%  \Delta_-, \dns A_- \prov C_+
-%% \]
-%% \[
-%%  \Delta_-, B_- \prov C_+
-%% \justifies
-%%  \Delta_-, \dns B_- \prov C_+
-%% \]
-%% \justifies
-%%  \Delta_-, \dns A_- \oplus \dns B_- \prov C_+
-%% \]
-%% \justifies
-%%  \Delta_-, [\ups(\dns A_- \oplus \dns B_-)] \prov C_+
-%% \]
-%% \justifies
-%%  \Delta_-, \ups(\dns A_- \oplus \dns B_-) \prov C_+
-%% \end{prooftree}
-%% \]
-%% \cqed
-%% \end{proof}
+\begin{proof}
+By induction. For example, to decompose $\oplus$ on the left, as
+\[
+\erule
+{\Delta, A \prov C \qquad \Delta, B \prov C}
+{\Delta, A \oplus B \prov C}
+\]
+corresponds exactly to choosing a focus (and being forced through the
+asynchronous decomposition exactly one step) as
+\[
+\begin{prooftree}
+\[
+\[
+\[
+ \Delta_-, A_- \prov C_+
+\justifies
+ \Delta_-, \dns A_- \prov C_+
+\]
+\[
+ \Delta_-, B_- \prov C_+
+\justifies
+ \Delta_-, \dns B_- \prov C_+
+\]
+\justifies
+ \Delta_-, \dns A_- \oplus \dns B_- \prov C_+
+\]
+\justifies
+ \Delta_-, [\ups(\dns A_- \oplus \dns B_-)] \prov C_+
+\]
+\justifies
+ \Delta_-, \ups(\dns A_- \oplus \dns B_-) \prov C_+
+\end{prooftree}
+\]
+\cqed
+\end{proof}
 
-%% \def\bfut{\mathbf{fut}}
-%% \def\bpol{\mathbf{pol}}
-%% \def\bproc{\mathbf{proc}}
-%% \def\provf{\prov_\mathsf{f}}
+\def\bfut{\mathbf{fut}}
+\def\bpol{\mathbf{pol}}
+\def\bproc{\mathbf{proc}}
+\def\provf{\prov_\mathsf{f}}
 
-%% \begin{lemma}
-%% If $\Delta \prov e : A$, then $\Delta \prov_\pi \bproc(e) : A$
-%% \end{lemma}
+\begin{lemma}
+If $\Delta \prov e : A$, then $\Delta \prov_\pi \bproc(e) : A$
+\end{lemma}
 
-%% \begin{lemma}
-%% If $\Delta \prov_\pi e : A$, then $\Delta \provf \bfut(e) : A$
-%% \end{lemma}
+\begin{lemma}
+If $\Delta \prov_\pi e : A$, then $\Delta \provf \bfut(e) : A$
+\end{lemma}
 
 
-%% \begin{lemma}
-%% If $\Delta \prov e : A$, then $\Delta_- \prov \bpol(e) : A_+$
-%% \end{lemma}
+\begin{lemma}
+If $\Delta \prov e : A$, then $\Delta_- \prov \bpol(e) : A_+$
+\end{lemma}
 
-%% \begin{proof}
+\begin{proof}
 
-%% \cqed
-%% \end{proof}
+\cqed
+\end{proof}
 
-%% \begin{theorem}
-%% Suppose we have a session-typing $\Delta \prov e : A$.
-%% Then $\bfut (e) = \bpol(e)$
-%% \end{theorem}
+\begin{theorem}
+Suppose we have a session-typing $\Delta \prov e : A$.
+Then $\bfut (e) = \bpol(e)$
+\end{theorem}
 
-%% \begin{proof}
+\begin{proof}
 
-%% \cqed
-%% \end{proof}
+\cqed
+\end{proof}
 
 \def\ch{\bullet}
 \section{Starting Over}
@@ -1098,5 +1099,180 @@ Read Types&$R$&$::=$&$R \tensor R \celse R \oplus R \celse C$\\
 Write Types&$W$&$::=$&$W \tensor W \celse W \oplus W \celse \lnot C$\\
 Channel Types&$C$&$::=$&$\lnot_w W \celse \lnot_r \lnot R$
 \end{tabular}\]
+
+\section{Another Start}
+I think I might be able to get away with
+\[\begin{tabular}{rccl}
+Value Types&$A$&$::=$&$A \tensor A \celse A \oplus A \celse \tok{ch} C$\\
+Channel Types&$C$&$::=$&$\tok{rd} A \celse \tok{wr} A$\\
+Channel Name Lists&$K$&$::=$&$ \cdot \celse K, c$\\
+Values&$v$&$::=$&$ x \celse \pair v v \celse \binl v \celse \binr v \celse \tok{ch} c$\\
+Processes&$P$&$::=$&$ c\wrt v \celse c(x). P \celse (\nu c)P$\\
+Process Contexts&$\Delta$&$::=$&$ \cdot \celse \Delta, c : C$\\
+Value Contexts&$\Omega$&$::=$&$ \cdot \celse \Omega, x : A$\\
+\end{tabular}\]
+
+Judgments are
+\[\begin{tabular}{ll}
+Right Focus&$\Delta \prov_K v :: P : [A]$\\
+Left Inversion&$\Delta; \Omega \prov P : \#$\\
+Neutral&$\Delta \prov P : \#$\\
+\end{tabular}\]
+The right-focus judgment deserves some explanation: the idea
+is that at the same time that you build up a value $v$ that proves $A$,
+you also build up a set of channel names $K$ along which you're
+going to do communication for the leaves of $A$, and a process $P$ which
+actually accomplishes that communication.
+\vfil\eject
+Typing rules are
+\[
+\erule
+{\Delta \prov_{K} v :: P : [A] \using write}
+{\Delta, c : \tok{wr} A \prov (\nu K) c\wrt v.  P : \#}
+\qquad
+\erule
+{\Delta; x : A \prov P : \# \using read}
+{\Delta, c : \tok{rd} A \prov  c(x).  P : \#}
+\]
+\[
+\erule
+{
+\Delta_1 \prov_{K_1} v_1 :: P_1 : [A_1]
+\qquad
+\Delta_2 \prov_{K_2} v_2 :: P_2 : [A_2]
+\using \tensor R}
+{\Delta_1,\Delta_2 \prov_{K_1,K_2} \pair {v_1} {v_2} :: (P_1 \celse P_2) : [A_1 \tensor A_2]}
+\]
+\[
+\erule
+{\Delta; \Omega, y : A, z : B\prov P : \# \using \tensor L}
+{\Delta; \Omega, x: A \tensor B \prov \blet \pair y z = x \bin P : \#}
+\]
+\[
+\erule
+{
+\Delta \prov_{K} v :: P : [A_i]
+\using \oplus R_i}
+{\Delta \prov_{K} \binj_i v :: P : [A_1 \oplus A_2]}
+\]
+\[
+\erule
+{
+\Delta; \Omega, y : A \prov P : \#
+\qquad
+\Delta; \Omega, z : B \prov P : \#
+\using \oplus L}
+{\Delta; \Omega, x: A \oplus B \prov \bcase x \bof (y.P) \celse (z.Q) : \#}
+\]
+\[
+\erule
+{
+\Delta, c : \bar C \prov P : \#
+\using \tok{ch} R}
+{\Delta \prov_{c} \tok{ch} c :: P : [\tok{ch} C]}
+\]
+\[
+\erule
+{
+\Delta, c : C; \Omega \prov P : \#
+\using \tok{ch} L}
+{\Delta; \Omega, x: \tok{ch} C \prov \blet \tok{ch} c = x \bin P : \#}
+\]
+Where the overline operation used in $\tok{ch} R$ is defined by
+$\overline{\tok{rd} A} = \tok{wr} A$ and $\overline{\tok{wr} A} = \tok{rd} A$.
+The cut principles are
+
+\[
+\erule
+{\Delta_1 \prov_K v :: P : [A] \qquad
+\Delta_2; \Omega, x : A \prov Q : \# \using cut_A}
+{\Delta_1, \Delta_2; \Omega \prov (\nu K) (P \celse [v/x]Q) : \#}
+\]
+
+\[
+\erule
+{\Delta_1, d :\bar C \prov  P : \# \qquad
+\Delta_2, c :  C; \prov Q : \# \using cut_C}
+{\Delta_1, \Delta_2 \prov (\nu d)( P \celse [d/c]Q) : \#}
+\]
+
+With the principal cut reductions embodying computation steps like
+
+\begin{tabbing}
+\(
+(\nu c)(((\nu K) c\wrt v.  P) \celse c(x).  Q)
+\mapsto
+(\nu K) (P \celse [v/x] Q)
+\)
+ \` ($cut_{\tok{rw} A}$)\\
+\(
+(\nu K_1,K_2) (P_1 \celse P_2 \celse \blet \pair y z = \pair{v_1}{v_2} \bin Q)
+\mapsto
+(\nu K_1) (P_1 \celse [v_1/y]
+(\nu K_2) (P_2 \celse [v_2/z] Q)
+\)
+ \` ($cut_{A \tensor B}$)\\
+\(
+(\nu K) (P \celse \bcase \binl v \bof (y.Q_1)\celse(z.Q_2))
+\mapsto
+(\nu K) (P \celse [v/y]Q_1)
+\)
+ \` ($cut_{A \oplus B_1}$)
+\\
+\(
+(\nu K) (P \celse \bcase \binr v \bof (y.Q_1)\celse(z.Q_2))
+\mapsto
+(\nu K) (P \celse [v/z]Q_2)
+\)
+ \` ($cut_{A \oplus B_2}$)
+\\
+\(
+(\nu d) (P \celse \blet \tok{ch} c = \tok{ch} d \bin Q)
+\mapsto
+(\nu d) (P \celse [d/c]Q)
+\)
+ \` ($cut_{\tok{ch} C}$)
+\end{tabbing}
+
+There is a pair of translations we could define, from unpolarized linear logic propositions,
+to channel types, as follows:
+\[\begin{tabular}{l|l|l}
+  $A$&$A^+$&$A^-$\\
+\hline
+  $A \otimes B$&$ \tok{wr}(\tok{ch}  A^+ \otimes \tok{ch}  B^+) $&$ \tok{rd} (\tok{ch}  A^- \otimes\tok{ch}  B^-)$\\
+  $A \oplus B$&$ \tok{wr}(\tok{ch} A^+ \oplus \tok{ch} B^+) $&$ \tok{rd}(\tok{ch} A^- \oplus\tok{ch}  B^-)$\\
+  $A \lol B$&$ \tok{rd} (\tok{ch} A^- \tensor \tok{ch} B^+) $&$  \tok{wr}(\tok{ch} A^+ \tensor  \tok{ch} B^-)$\\
+  $A \amp B$&$ \tok{rd} (\tok{ch} A^+ \oplus  \tok{ch} B^+) $&$  \tok{wr}(\tok{ch} A^- \oplus  \tok{ch} B^-)$\\
+\end{tabular}\]
+Then there's some sort of theorem to be had, I think, relating a session-typed
+\[\Gamma \prov P :: (x : A)\]
+to a judgment
+\[\Gamma^-; x : A^+ \prov P : \#\]
+{\em with the crucial caveat} that, as a `session-typed'
+system, what I've described is entirely broken, because every channel
+is only ever used once, and never sticks around, changing type as the
+session evolves. It's sort of a CPS-translated/destination-passing
+thing where you send, as an extra bit of data, the next channel you
+want to use. To put it another way, these are more like futures than
+channels.
+
+%% \[
+%% \erule
+%% {
+%% \[
+%% \Delta_1, d : \bar C \prov P : \#
+%% \using \tok{ch} R
+%% \justifies
+%% \Delta_1 \prov_{d} \tok{ch} d :: P : [\tok{ch} C]
+%% \]
+%% \[
+%% \Delta, c : C; \Omega \prov Q : \#
+%% \using \tok{ch} L
+%% \justifies
+%% \Delta_2; \Omega, x : \tok{ch} C \prov \blet \tok{ch} c = x \bin Q : \#
+%% \]\using cut_{\tok{ch} C}}
+%% {\Delta_1, \Delta_2; \Omega \prov (\nu d) (P \celse \blet \tok{ch} c = \tok{ch} d \bin Q) : \#}
+%% \]
+
 
 \end{document}
