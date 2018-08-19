@@ -1,0 +1,207 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+
+\def\binj{\mathop\mathbf{inj}\nolimits}
+\input{linear}
+\def\chan{\overline}
+\def\tnot{{\sim}}
+\def\rfalse{\mathop\mathsf{false}}
+\def\tensoru{\tensor\!\!|\,}
+\def\lolu{\lol\!\!|\,}
+\def\ampu{\amp\!\!|\,}
+\def\tok#1{\mathop{\mathbf{#1}}}
+\def\tk#1{\mathbf{#1}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\tensor{\otimes}
+\def\fut#1{\{#1\}}
+\def\wrt#1{\langle #1\rangle}
+\def\lc{\mathrel{\hat :}}
+\def\x{\times}
+\author{Jason Reed}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\section{Thinking about DAGs as Binding Trees}
+
+\def\rok{\,\mathsf{ok}}
+\def\rout{\,\mathsf{out}}
+\def\var#1{\overline{#1}}
+\[
+\begin{tabular}{rccl}
+DAG Expressions&$e$&$::=$&$ \var x \celse x \celse N^{\var x}(e, e)$
+\end{tabular}
+\]
+All overlined variables are meant to be binding positions, and conventionally
+are all bound variables are distinct. The way
+that scoping works should emerge from the following rules:
+\[
+\erule
+{}
+{\Gamma, x \prov x \rok}
+\qquad
+\erule
+{}
+{\prov x \imp \cdot}
+\]
+\[
+\erule
+{}
+{\Gamma \prov \var x \rok}
+\qquad
+\erule
+{}
+{\prov \var x \imp x}
+\]
+
+\[
+\erule
+{ \Gamma \prov e_1 \rok \qquad \prov e_1 \imp \Gamma_1 \qquad \Gamma, \Gamma_1 \prov e_2 \imp \rok}
+{\Gamma \prov N^{\var x}(e_1, e_2) \rok}
+\qquad
+\erule
+{\prov e_1 \imp \Gamma_1 \qquad \prov e_2 \imp \Gamma_2}
+{\prov N^{\var x}(e_1, e_2) \imp \Gamma_1, \Gamma_2, x}
+\]
+There are two judgments, $\Gamma \prov e \rok$ says that $e$ is syntactically well-formed
+if the available variables are $\Gamma$. The other is $\prov e \imp \Gamma$ which
+says that the variables bound in $e$ form the context $\Gamma$.
+\subsection{Combining?}
+Can I combine these judgments into one, if I wave my hands enough and use linearity?
+\[
+\erule
+{}
+{\Gamma, x \rok ; \cdot \prov x \rok}
+\qquad
+\erule
+{}
+{\Gamma ; x \rout \prov \var x \rok }
+\]
+\[
+\erule
+{\Gamma; \Delta_1 \prov e_1 \rok \qquad \Gamma, \Delta_1 ; \Delta_2 \prov e_2 \rok}
+{\Gamma; \Delta_1, \Delta_2, x \rout \prov N^{\var x}(e_1, e_2) \rok}
+\]
+The judgment is just $\Gamma ; \Delta \prov e \rok$, with
+$\Delta$ consisting of a bunch of $x \rout$ assumptions.
+What syntactic discipline does $\Delta$ actually satisfy?
+I want to think that it satisfies a strengthening principle
+\[
+\erule
+{\Gamma; \Delta, x \rout \prov e \rok}
+{\Gamma; \Delta \prov e \rok}
+\]
+which is weird. It {\em doesn't} satisfy weakening
+\[
+\erule
+{\Gamma; \Delta \prov e \rok}
+{\Gamma; \Delta, x \rout \prov e \rok}
+\]
+so it's sort of like it's strict.
+
+\subsection{Breaking Out Binding}
+I could also imagine something decomposed differently, like
+\[
+\begin{tabular}{rccl}
+DAG Expressions&$e$&$::=$&$  x \celse \beta x . e \celse \bullet \celse (e, e) $
+\end{tabular}
+\]
+with
+\[
+\erule
+{}
+{\Gamma, x \rok ; \cdot \prov x \rok}
+\qquad
+\erule
+{\Gamma; \Delta \prov e \rok}
+{\Gamma ; \Delta, x \rout \prov \beta x . e \rok }
+\qquad
+\erule{}{\Gamma ; \cdot \prov \bullet \rok}
+\]
+\[
+\erule
+{\Gamma; \Delta_1 \prov e_1 \rok \qquad \Gamma, \Delta_1 ; \Delta_2 \prov e_2 \rok}
+{\Gamma; \Delta_1, \Delta_2 \prov (e_1, e_2) \rok}
+\]
+So that $\var x = \beta x . \bullet$ and $N^{\var x}(e_1, e_2) = \beta x . (e_1, e_2)$.
+Can I give these types? Like
+\[
+\erule
+{}
+{\Gamma, x : A ; \cdot \prov x : A}
+\qquad
+\erule
+{\Gamma; \Delta \prov e : B}
+{\Gamma ; \Delta, x : A \prov \beta x . e : A \lol B }
+\qquad
+\erule{}{\Gamma ; \cdot \prov \bullet  : 1}
+\]
+\[
+\erule
+{\Gamma; \Delta_1 \prov e_1 : A \qquad \Gamma, \Delta_1 ; \Delta_2 \prov e_2 : B}
+{\Gamma; \Delta_1, \Delta_2 \prov (e_1, e_2) : A \tensor B}
+\]
+\subsection{Matching Prev. Definition of Binary DAGs}
+Actually this captures what I want precisely if I just finesse the syntax a little:
+\[
+\begin{tabular}{rccl}
+DAG Expressions&$e$&$::=$&$  x \celse \beta x . t$\\
+Terms&$t$&$::=$&$\bullet \celse (e, e)$
+\end{tabular}
+\]
+So let's look at some examples.
+\[
+\begin{tikzcd}
+&  \circ\ar[dl]\ar[dr]\\
+\circ && \circ
+\end{tikzcd}
+\]
+This is
+\[ \cdot ; x : A, y : B, z : C \prov \beta x . (\var y , \var z ) : A \lol ((B \lol 1) \otimes (C \lol 1))\]
+If I still allow myself the abbreviation $\var x = \beta x . \bullet$. In fact let me also
+abbreviate $B \lol 1$ as $\var B$ so this type is
+$A \lol (\var B \otimes \var C)$.
+
+\[
+\begin{tikzcd}
+  \circ\ar[d, bend left]\ar[d, bend right]\\
+\circ
+\end{tikzcd}
+\]
+is
+\[ \cdot ; x : A, y : B \prov \beta x . (\var y , y ) : A \lol (\var B \otimes B)\]
+
+\[
+\begin{tikzcd}
+&  \circ\ar[d, bend left]\ar[d, bend right]\\
+&  \circ\ar[dl]\ar[dr]\\
+\circ && \circ
+\end{tikzcd}
+\]
+is
+\[ \cdot ; x : A, y : B, z : C, w : D \prov \beta x . (\beta y . (\var z, \var w) , y )
+: A \lol ((B \lol (\var C \otimes \var D)) \otimes B)\]
+
+\end{document}
