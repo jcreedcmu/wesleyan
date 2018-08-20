@@ -203,5 +203,13 @@ is
 is
 \[ \cdot ; x : A, y : B, z : C, w : D \prov \beta x . (\beta y . (\var z, \var w) , y )
 : A \lol ((B \lol (\var C \otimes \var D)) \otimes B)\]
+\subsection{Backreferences}
+It doesn't seem impossible to say that you could have forward and backward references
+to binding occurrences, by altering the $\tensor$ typing rule to be more symmetric:
+\[
+\erule
+{\Gamma, \Delta_2; \Delta_1 \prov e_1 : A \qquad \Gamma, \Delta_1 ; \Delta_2 \prov e_2 : B}
+{\Gamma; \Delta_1, \Delta_2 \prov (e_1, e_2) : A \tensor B}
+\]
 
 \end{document}
