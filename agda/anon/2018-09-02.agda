@@ -53,3 +53,6 @@ lemma A B α = ua (equiv into out zig zag) where
         (cop (λ x₁ → dat (coe pS (inl x₁))) (λ x₁ → dat (coe pS (inr x₁))))
         (ten x y pA pB idp) == ser n dat (ten x y pA pB pS)
     lem idp = ap (λ z → ser (Coprod x y) z (ten x y pA pB idp)) (λ= (copη dat))
+
+thm : (A B : Sset) → Series (A ⊗ B) == (Series A s× Series B)
+thm A B = λ= (lemma A B)
