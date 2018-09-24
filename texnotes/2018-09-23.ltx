@@ -269,7 +269,7 @@ But I guess there's a general principle of interposing more non-$\bu$ symbols.
 So I might as well say that the prototypical arrow $\bu$ goes $0 \to 1$
 and the prototypical $2$-cell $\bu \bu$ goes
 $$0\bu  ; \bu  1 \to \bu  0 ;  1 \bu $$
-Now let's try to figure out the $3$-cell.
+Now let's name the $3$-cell.
 \[\begin{tikzcd}
   000 \ar[r, "0\bu0"]\ar[d, "\bu00"']& 01 \ar[d, "\bu10"] \ar[dl, phantom, "\swarrow_{\bu\bu 0}"]\\
   100 \ar[r, "1\bu0"']& 110
@@ -293,9 +293,47 @@ The domain and codomain 1-cells are
 $$00\bu ; 0\bu 1 ; \bu 11 \to \bu 00 ; 1 \bu 0 ; 11 \bu$$
 There should be two ways of achieving this, the domain, which goes through
 010, and the codomain, which goes through 101.
-
-The way through 101 is:
-$$\bu \bu 1 ; \bu 0 \bu ; 1 \bu \bu$$
-The way through 010 is:
+The way through 010, call it the domain, is:
 $$0 \bu \bu ; \bu 1 \bu ;  \bu \bu 0$$
+
+The way through 101, call it the codomain is:
+$$\bu \bu 1 ; \bu 0 \bu ; 1 \bu \bu$$
+Actually, to be more honest, I should horizontally include some identity arrows on
+either side of these vertical compositions.
+
+I'm dealing with a 3-cell
+$$(0 \bu \bu * \bu 11) ; (0\bu 0 * \bu 1 \bu) ; ( \bu \bu 0 * 11 \bu)$$
+$$\to$$
+$$(00\bu * \bu \bu 1) ; (\bu 0 \bu * 1 \bu 1) ; (\bu 0 0 * 1 \bu \bu)$$
+
+\section{What's the pattern}
+We want to say an $n$-cell $b$ (with $n$ copies of $\bu$ in it) sits inside the domain
+or codomain of $c$ (which is $b$ with one bit replaced by a $\bu$). Or more
+to the point we want to derive the whole domain and codomain from $c$.
+
+The immediate domain and codomain of an $n$-cell are sequences $(n-1)$-cells, of
+length $n$.
+
+$$\dom(i) = [p_i/i]\bu^n\qquad \cod = \mathsf{rev} (\mathsf{flip} \dom)$$
+$$n \in \{0, \ldots, n-1\}$$
+$$p_i = \begin{cases}0&i\hbox{ even} \\ 1&i\hbox{ odd} \end{cases}$$
+
+So what's the 4-dimensional case? I predict $\bu^4$ should have shape
+$$0\bu\bu\bu ; \bu 1 \bu\bu ; \bu\bu 0\bu ; \bu\bu\bu 1$$
+$$\to \bu\bu\bu 0 ; \bu \bu 1\bu ; \bu 0 \bu \bu ; 1\bu\bu\bu $$
+So if $\bu^3$ has shape
+$$0 \bu \bu ; \bu 1 \bu ;  \bu \bu 0 \to \bu \bu 1 ; \bu 0 \bu ; 1 \bu \bu$$
+then I'm going to sum up the contributions from the domain ignoring
+order and get
+$$00 \bu \bu , 0\bu 1 \bu ,  0\bu \bu 0 \to 0\bu \bu 1 , 0\bu 0 \bu , 01 \bu \bu$$
+$$01 \bu \bu , \bu 11 \bu ,  \bu 1\bu 0 \to \bu 1 \bu 1 , \bu 10 \bu , 1 1\bu \bu$$
+$$0 \bu 0\bu , \bu 1 0\bu ,  \bu \bu0 0 \to \bu \bu0 1 , \bu 0 0\bu , 1 \bu0 \bu$$
+$$0 \bu \bu 1, \bu 1 \bu 1,  \bu \bu 0 1\to \bu \bu 1 1, \bu 0 \bu 1, 1 \bu \bu 1$$
+cancelling out things that are both consumed and produced I get
+$$00\bu\bu, 0\bu1\bu,  0\bu\bu0 \to  $$
+$$ \bu11\bu, \bu1\bu0 \to 11\bu\bu$$
+$$ \bu\bu00 \to \bu00\bu,1\bu0\bu$$
+$$ \to \bu\bu11,\bu0\bu1,1\bu\bu1$$
+Hm, time to write some code, as I'm starting to distrust my ability to
+keep doing this by hand without making mistakes.
 \end{document}
