@@ -336,4 +336,52 @@ $$ \bu\bu00 \to \bu00\bu,1\bu0\bu$$
 $$ \to \bu\bu11,\bu0\bu1,1\bu\bu1$$
 Hm, time to write some code, as I'm starting to distrust my ability to
 keep doing this by hand without making mistakes.
+
+\section{Having Written Some Code}
+
+The pattern is that the $k^{th}$ boundary of $*^n$ is somehow giving us
+$n \choose k$ and some choices of bit values. In the example above,
+I'm looking at $4\choose 2$ and getting out
+\[\dom = 00\bu\bu, 0\bu1\bu,  0\bu\bu0, \bu11\bu, \bu1\bu0, \bu\bu00\]
+\[\cod =  11\bu\bu,
+  \bu00\bu,1\bu0\bu,
+ \bu\bu11,\bu0\bu1,1\bu\bu1\]
+I have to choose 2 out of the 4 positions to be bits rather than $\bu$,
+and having done that the bit values are determined. I flip bits every time
+I encounter a $\bu$ from the left to right, and I initialize with $0$ if
+I'm talking about the domain, $1$ if codomain.
+
+\section{Ordering}
+
+The composition order of the $(n-1)$-cells in the boundary of $\bu^n$ is clear.
+The 1-dimensional domain of $\bu^5$ for instance is
+\[ 0000\bu; 000\bu1; 00\bu11; 0\bu111; \bu1111 \]
+and those must be composed in that order. Its codomain at that dimension is
+\[ \bu 0000; 1\bu000; 11\bu 00; 111 \bu 0;  1111\bu \]
+and must be composed in that order. Let's look at the things belonging to the
+domain of the 2-dimensional domain of $\bu^4$.
+\vfil\eject
+\[a: 00\bu\bu/ b: 0\bu1\bu/  c: 0\bu\bu0/ d: \bu11\bu/ e: \bu1\bu0/ f: \bu\bu00\]
+For each of these $\bu^2$ occurrences, it has domain $0\bu, \bu1$ and codomain
+$1\bu, \bu0$.
+So hopefully I can line these up visually in a way that makes sense to me and say that the domain elements of these are
+\[000\bu/ 001\bu/  00\bu0/ 011\bu/ 01\bu0/ 0\bu00\]
+\[00\bu1/ 0\bu11/  0\bu10/ \bu111/ \bu110/ \bu100\]
+and the codomain elements of these are
+\[001\bu/ 011\bu/  01\bu0/ 111\bu/ 11\bu0/ 1\bu00\]
+\[00\bu0/ 0\bu10/  0\bu00/ \bu110/ \bu100/ \bu000\]
+
+\noindent
+$ 001\bu \prov a \le b$\\
+$ 00\bu0 \prov a \le c$\\
+$ 011\bu \prov a \le d$\\
+$ 01\bu0 \prov c \le e$\\
+$ 0\bu00 \prov c \le f$\\
+$ 0\bu10 \prov b \le c$\\
+$ \bu110 \prov d \le e$\\
+$ \bu100 \prov e \le f$
+
+Okay, so I think this is a sufficient counterexample to show that the composition
+order is not fixed; $c$ and $d$ are concurrently applicable to
+\[00\bu0 ; 0\bu10; 011\bu; \bu111\]
 \end{document}
