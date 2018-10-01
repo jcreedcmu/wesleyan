@@ -384,4 +384,211 @@ $ \bu100 \prov e \le f$
 Okay, so I think this is a sufficient counterexample to show that the composition
 order is not fixed; $c$ and $d$ are concurrently applicable to
 \[00\bu0 ; 0\bu10; 011\bu; \bu111\]
+
+\section{Paths}
+
+Consider a strict $n$-category $\C$ with a distinguished subset $W$ of cells, such that
+\begin{itemize}
+\item
+For any $f\in W$ we have $\dom f\in W$ and $\cod f \in W$.
+\item
+for every cell in $\C$ (whose domain and codomain, if any, are in $W$)
+there is a cell in $W$ (with the same domain and codomain)
+that is equivalent to it.
+\end{itemize}
+ What does
+equivalent mean? $C \equiv D$ are equivalent if there are $f : C \to D$ and $g : D \to C$
+such that $f \o g \equiv \rid$ and $g \o f \equiv \rid$.
+
+There is a weak composition operator on $W$ which takes $f, g\in W$, forms
+$f \o g$ in the larger category $\C$, then reflects back into $W$. Call this
+$f \o_W g$.
+Similarly there is $\rid_W$ for every cell.
+
+Weak composition isn't necessarily strictly associative, but
+it should be weakly associative. Here's a
+counterexample to strict associativity. Let $\C$ be a 2-category
+that has only one $0$-object,
+call it $*$. 1-cells in $\C$ are strings over some alphabet plus $*$.
+1-cells in $W$ are the strings that begin with $*$. There are unique 2-cells
+between any pair of strings that are the same after erasing all $*$s.
+All 2-cells between 1-cells in $W$ are in $W$ --- this is necessarily the
+case, as the only 2-cell equivalent to a given 2-cell $\alpha$ is $\alpha$ itself.
+
+Strict associativity fails like this: an iterated
+weak composite of ($f$ and $g$) and $h$ is ${**}fgh$.
+Associated the other way, it's ${*}f{*}gh$.
+
+Let $C \equiv_W D$ mean that there are cells $f$ and $g$ in $W$ such that
+$f \o_W g \equiv_W \rid_W$ and $g \o_W f \equiv_W \rid_W$
+
+
+\begin{lemma}
+$\equiv$ is transitive.
+\end{lemma}
+
+
+\begin{lemma}
+If $f \equiv f'$ and $g \equiv g'$, then
+$f \o g \equiv f' \o g'$.
+\end{lemma}
+
+\begin{proof}
+Compose the given data horizontally:
+\[  \begin{tikzcd}
+  * \ar[r, "f"]\ar[dr, phantom, "\Downarrow"]
+& * \ar[r, "g"] \ar[dr, phantom, "\Downarrow"]&  *\\
+  * \ar[r, "f'"'] & * \ar[r, "g'"']&  *
+  \end{tikzcd}
+\]
+and
+\[  \begin{tikzcd}
+  * \ar[r, "f'"]\ar[dr, phantom, "\Downarrow"]
+& * \ar[r, "g'"] \ar[dr, phantom, "\Downarrow"]&  *\\
+  * \ar[r, "f"'] & * \ar[r, "g"']&  *
+  \end{tikzcd}
+\]
+
+Critically using the interchange law to show that we get identities
+out of the composition of the 2-cells. This then depends on the fact
+that $\alpha * \beta \equiv \alpha' \equiv \beta'$ when $\alpha \equiv \alpha'$
+and $\beta \equiv \beta'$ (specifically for $\alpha'$ and  $\beta'$ being identities)
+so this lemma should be generalized to all vertical, horizontal, etc. forms of composition.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $C, D\in W$ and $C \equiv D$ then $C\equiv_W D$.
+\end{lemma}
+
+\begin{proof}
+We have by assumption $f$ and $g$ such that
+$f \o g \equiv \rid$.
+We can find $f', g' \in W$ with $f \equiv f'$ and $f \equiv g'$.  By previous lemma
+we have $f' \o g' \equiv \rid$.
+
+We know that $f' \o_W g' \equiv f' \o g' \equiv \rid \equiv \rid_W$.
+Transitivity of $\equiv$ gives
+$f' \o_W g' \equiv  \rid_W$.
+Coinduction hypothesis gives
+$f' \o_W g' \equiv_W  \rid_W$.
+The $g-f$ case is symmetric to the $f-g$ reasoning we just did.
+We now see that $C \equiv_W D$.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $C\equiv_W D$ then $C \equiv D$.
+\end{lemma}
+
+\begin{proof}
+Necessarily $C, D \in W$. We have $f, g$ such that
+$f \o_W g \equiv_W \rid_W$.
+By coinduction hypothesis, $f \o_W g \equiv \rid_W$.
+We observe
+$f \o g \equiv f \o_W g \equiv \rid_W \equiv \rid$
+and by transitivity of $\equiv$
+(and a symmetric argument for $g \o f$) we have what's claimed.
+\cqed
+\end{proof}
+
+\section{Some Thoughts about Matroids}
+
+The usual definition of matroids in terms of a closure operator goes like this.
+
+\def\sq{\square}
+A matroid is a set $E$ together with an operation $\sq : \ps E \to \ps E$
+which is a closure operator, i.e.
+\begin{enumerate}
+\item $X  \subseteq Y \imp \sq X  \subseteq \sq Y$
+\item $X \subseteq \sq X$
+\item $\sq\sq X \subseteq \sq X$
+\end{enumerate}
+and which satisfies MacLane-Steinitz exchange, i.e.
+\begin{quote}
+(E)$\ $ For any $X, a, b$, if
+$a \in \sq (X + b) \setminus \sq X$,
+then
+$b \in \sq (X + a) \setminus \sq X$.
+\end{quote}
+writing $X + a$ to mean $X \cup \{a\}$.
+
+I want to claim that an alternative --- and more constructively
+pleasant --- definition is (classically) equivalent to this one.
+I say that the {\em constructive exchange} property is
+\begin{quote}
+(CE)$\ $  For any $X, a, b$, if
+$a \in \sq (X + b)$,
+then either
+$b \in \sq (X + a)$ or $a \in \sq X$.
+\end{quote}
+
+\begin{lemma}(LEM)
+Assuming $\sq$ is a closure operator, then $(E)$ implies $(CE)$.
+\end{lemma}
+
+\begin{proof}
+Suppose $(E)$. Let $X, a, b$ be given, suppose $a\in \sq(X + b)$.
+By LEM, either $a \in \sq X$ or not. If it does, we're done.
+So assume $a \not\in\sq X$. Hence the premise of $(E)$ is satisfied,
+and we get $b\in \sq (X + a)\setminus \sq X$, which is stronger
+than the required conclusion.
+\cqed
+\end{proof}
+
+\begin{lemma}
+Assuming $\sq$ is a closure operator, then $(CE)$ implies $(E)$.
+\end{lemma}
+
+\begin{proof}
+Suppose $(CE)$. Let $X, a, b$ be given, suppose $a\in \sq(X + b) \setminus \sq(X)$.
+Well, $a \in \sq(X + b)$ so the premise of $(CE)$ is satisfied, and we learn
+that either $a \in \sq(X)$ or $b \in \sq(X + a)$. But it can't be that $a\in \sq(X)$
+by assumption. So definitely $b\in \sq(X + a)$. We must show $b\not\in \sq X$.
+Suppose $b\in \sq X$. We claim that $\sq (X + b) = \sq X$, which would mean
+we're done, since $a \in \sq (X + b) = \sq X$ would be a contradiction.
+
+Why is this? by monotonicity
+$\sq X \subseteq \sq (X + b)$, and conversely
+\[\sq (X + b) \subseteq \sq (\sq X + b) = \sq \sq X = \sq X\]
+\cqed
+\end{proof}
+
+\subsection{Generalizing}
+
+A thing that occurs to me is that augmenting to force membership of
+individual elements in sets is itself a closure operation. For every
+$a \in X$ there is a closure $F_a : \ps E \to \ps E$ which is just
+$\dash \cup \{a\}$. So what $(CE)$ is really saying is
+
+\begin{quote}
+For any $X, a, b$, if
+$F_a \sq F_b X =  \sq F_b X $,
+then either
+$F_b \sq  F_a X = \sq  F_a X $ or $F_a  \sq X = \sq X$.
+\end{quote}
+
+And we can apply Postel's law to this to refine it to
+the following. Suppose we have a category $\C$ with some monads
+$\sq, F_a, F_b, \ldots$. We say that $F_a$ and $F_b$ exchange
+around $\sq$ when
+
+\begin{quote}
+From a morphism $\sq F_b X  \to F_a \sq F_b X $,
+we can build either a morphism
+$F_b \sq  F_a X \to \sq  F_a X $ or $F_a  \sq X \to  \sq X$.
+\end{quote}
+
+This is a bit of a mess. Suppose
+I start with a morphism like
+$f : A \to \sq F_b X$. The object
+ $A$ acts as a generalized element of $\sq (X + b)$.
+Oh wait but I need to get at elements of the set to call $F$.
+
+Hm... maybe I want $F_A$ for arbitrary {\em objects} of the category.
+Or something more like $A \tensor \dash$. So suppose
+I have a morphism $f : A \to \sq(B \tensor X)$. Then I should
+get out something like a tradeoff between $B \to \sq(A \tensor X)$
+and $A \to \sq X$. One possibility is to say $f$ yields a decomposition
+$A_1 + A_2$ of $A$ and further $A_1 \to \sq X$ and $B \to \sq(A_2 \tensor X)$.
 \end{document}
