@@ -586,9 +586,34 @@ $f : A \to \sq F_b X$. The object
 Oh wait but I need to get at elements of the set to call $F$.
 
 Hm... maybe I want $F_A$ for arbitrary {\em objects} of the category.
-Or something more like $A \tensor \dash$. So suppose
+Or something more like $A \tensor \dash$. Where in the actual
+matroid case, $\tensor$ is union of subsets of the carrier. So suppose
 I have a morphism $f : A \to \sq(B \tensor X)$. Then I should
 get out something like a tradeoff between $B \to \sq(A \tensor X)$
 and $A \to \sq X$. One possibility is to say $f$ yields a decomposition
 $A_1 + A_2$ of $A$ and further $A_1 \to \sq X$ and $B \to \sq(A_2 \tensor X)$.
+
+\subsection{Realizing this as a connective}
+
+Is there some kind of pair of logical connectives that reify this
+split? Like, assuming that $A \prov \sq (B \tensor X)$ holds,
+we get all of
+\[
+\star_1(ABX) \prov \sq X
+\qquad
+B \prov \sq(\star_2(ABX) \tensor X)
+\qquad
+\star_1(ABX) \lor \star_2(ABX) \prequiv A
+\]
+?
+I could make some educated guesses based on conjecturing that
+propositional variables `not in play' aren't actually used, so that
+maybe $\star_1(ABX) = \sq X$ and $\star_2(ABX)$ is just some binary
+operator $B \star X$ not involving $A$. My requirements are then
+(still assuming that $A \prov \sq(B \tensor X)$) that
+\[
+B \prov \sq((B \star X) \tensor X)
+\qquad
+\sq X \lor (B \star X) \prequiv A
+\]
 \end{document}
