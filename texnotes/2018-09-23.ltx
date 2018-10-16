@@ -385,112 +385,6 @@ Okay, so I think this is a sufficient counterexample to show that the compositio
 order is not fixed; $c$ and $d$ are concurrently applicable to
 \[00\bu0 ; 0\bu10; 011\bu; \bu111\]
 
-\section{Paths}
-
-Consider a strict $n$-category $\C$ with a distinguished subset $W$ of cells, such that
-\begin{itemize}
-\item
-For any $f\in W$ we have $\dom f\in W$ and $\cod f \in W$.
-\item
-for every cell in $\C$ (whose domain and codomain, if any, are in $W$)
-there is a cell in $W$ (with the same domain and codomain)
-that is equivalent to it.
-\end{itemize}
- What does
-equivalent mean? $C \equiv D$ are equivalent if there are $f : C \to D$ and $g : D \to C$
-such that $f \o g \equiv \rid$ and $g \o f \equiv \rid$.
-
-There is a weak composition operator on $W$ which takes $f, g\in W$, forms
-$f \o g$ in the larger category $\C$, then reflects back into $W$. Call this
-$f \o_W g$.
-Similarly there is $\rid_W$ for every cell.
-
-Weak composition isn't necessarily strictly associative, but
-it should be weakly associative. Here's a
-counterexample to strict associativity. Let $\C$ be a 2-category
-that has only one $0$-object,
-call it $*$. 1-cells in $\C$ are strings over some alphabet plus $*$.
-1-cells in $W$ are the strings that begin with $*$. There are unique 2-cells
-between any pair of strings that are the same after erasing all $*$s.
-All 2-cells between 1-cells in $W$ are in $W$ --- this is necessarily the
-case, as the only 2-cell equivalent to a given 2-cell $\alpha$ is $\alpha$ itself.
-
-Strict associativity fails like this: an iterated
-weak composite of ($f$ and $g$) and $h$ is ${**}fgh$.
-Associated the other way, it's ${*}f{*}gh$.
-
-Let $C \equiv_W D$ mean that there are cells $f$ and $g$ in $W$ such that
-$f \o_W g \equiv_W \rid_W$ and $g \o_W f \equiv_W \rid_W$
-
-
-\begin{lemma}
-$\equiv$ is transitive.
-\end{lemma}
-
-
-\begin{lemma}
-If $f \equiv f'$ and $g \equiv g'$, then
-$f \o g \equiv f' \o g'$.
-\end{lemma}
-
-\begin{proof}
-Compose the given data horizontally:
-\[  \begin{tikzcd}
-  * \ar[r, "f"]\ar[dr, phantom, "\Downarrow"]
-& * \ar[r, "g"] \ar[dr, phantom, "\Downarrow"]&  *\\
-  * \ar[r, "f'"'] & * \ar[r, "g'"']&  *
-  \end{tikzcd}
-\]
-and
-\[  \begin{tikzcd}
-  * \ar[r, "f'"]\ar[dr, phantom, "\Downarrow"]
-& * \ar[r, "g'"] \ar[dr, phantom, "\Downarrow"]&  *\\
-  * \ar[r, "f"'] & * \ar[r, "g"']&  *
-  \end{tikzcd}
-\]
-
-Critically using the interchange law to show that we get identities
-out of the composition of the 2-cells. This then depends on the fact
-that $\alpha * \beta \equiv \alpha' \equiv \beta'$ when $\alpha \equiv \alpha'$
-and $\beta \equiv \beta'$ (specifically for $\alpha'$ and  $\beta'$ being identities)
-so this lemma should be generalized to all vertical, horizontal, etc. forms of composition.
-\cqed
-\end{proof}
-
-\begin{lemma}
-If $C, D\in W$ and $C \equiv D$ then $C\equiv_W D$.
-\end{lemma}
-
-\begin{proof}
-We have by assumption $f$ and $g$ such that
-$f \o g \equiv \rid$.
-We can find $f', g' \in W$ with $f \equiv f'$ and $f \equiv g'$.  By previous lemma
-we have $f' \o g' \equiv \rid$.
-
-We know that $f' \o_W g' \equiv f' \o g' \equiv \rid \equiv \rid_W$.
-Transitivity of $\equiv$ gives
-$f' \o_W g' \equiv  \rid_W$.
-Coinduction hypothesis gives
-$f' \o_W g' \equiv_W  \rid_W$.
-The $g-f$ case is symmetric to the $f-g$ reasoning we just did.
-We now see that $C \equiv_W D$.
-\cqed
-\end{proof}
-
-\begin{lemma}
-If $C\equiv_W D$ then $C \equiv D$.
-\end{lemma}
-
-\begin{proof}
-Necessarily $C, D \in W$. We have $f, g$ such that
-$f \o_W g \equiv_W \rid_W$.
-By coinduction hypothesis, $f \o_W g \equiv \rid_W$.
-We observe
-$f \o g \equiv f \o_W g \equiv \rid_W \equiv \rid$
-and by transitivity of $\equiv$
-(and a symmetric argument for $g \o f$) we have what's claimed.
-\cqed
-\end{proof}
 
 \section{Some Thoughts about Matroids}
 
@@ -616,4 +510,148 @@ B \prov \sq((B \star X) \tensor X)
 \qquad
 \sq X \lor (B \star X) \prequiv A
 \]
+
+\vfil\eject
+\section{Paths}
+
+In a strict $\infty$-category $\C$ we define equivalence coinductively
+by saying that
+$C \equiv D$ (`cells $C$ and $D$ are equivalent')
+if there are $f : C \to D$ and $g : D \to C$ such
+that $f \o g \equiv \rid_D$ and $g \o f \equiv \rid_C$.
+
+\begin{lemma}
+$\equiv$ is symmetric, transitive, reflexive.
+\end{lemma}
+
+
+\begin{lemma}
+If $f \equiv f'$ and $g \equiv g'$, then
+$f \o g \equiv f' \o g'$.
+\end{lemma}
+
+\begin{proof}
+Compose the given data horizontally:
+\[  \begin{tikzcd}
+  * \ar[r, "f"]\ar[dr, phantom, "\Downarrow"]
+& * \ar[r, "g"] \ar[dr, phantom, "\Downarrow"]&  *\\
+  * \ar[r, "f'"'] & * \ar[r, "g'"']&  *
+  \end{tikzcd}
+\]
+and
+\[  \begin{tikzcd}
+  * \ar[r, "f'"]\ar[dr, phantom, "\Downarrow"]
+& * \ar[r, "g'"] \ar[dr, phantom, "\Downarrow"]&  *\\
+  * \ar[r, "f"'] & * \ar[r, "g"']&  *
+  \end{tikzcd}
+\]
+
+Critically using the interchange law to show that we get identities
+out of the composition of the 2-cells. This then depends on the fact
+that $\alpha * \beta \equiv \alpha' * \beta'$ when $\alpha \equiv \alpha'$
+and $\beta \equiv \beta'$ (specifically for $\alpha'$ and  $\beta'$ being identities)
+so this lemma should be generalized to all vertical, horizontal, etc. forms of composition.
+\cqed
+\end{proof}
+
+Consider a strict $\infty$-category $\C$ with a distinguished subset $W$ of cells, such that
+\begin{enumerate}
+\item
+For any $f\in W$ we have $\dom f\in W$ and $\cod f \in W$.
+\item
+for every cell in $\C$ whose domain and codomain are in $W$,
+there is a cell in $W$ (with the same domain and codomain)
+that is equivalent to it.
+\end{enumerate}
+
+The intuition is that the outer category $\C$ is playing the role
+of the free strict $\infty$-category on the weak $\infty$-category $W$ ---
+$\C$'s cells are composition diagrams of cells in $W$, and as such are strictly
+associative. The reflection principle (2) says that every diagram has a composite.
+
+There is a weak composition operator on $W$ which takes $f, g\in W$, forms
+$f \o g$ in the larger category $\C$, then reflects back into $W$. Call this
+$f \o_W g$.
+Similarly there is $\rid_W$ for every cell.
+
+Weak composition isn't necessarily strictly associative, but
+it should be weakly associative. Here's a
+counterexample to strict associativity. Let $\C$ be a 2-category
+that has only one $0$-object,
+call it $*$. 1-cells in $\C$ are strings over some alphabet plus $*$.
+1-cells in $W$ are the strings that begin with $*$. There are unique 2-cells
+between any pair of strings that are the same after erasing all $*$s.
+All 2-cells between 1-cells in $W$ are in $W$ --- this is necessarily the
+case, as the only 2-cell equivalent to a given 2-cell $\alpha$ is $\alpha$ itself.
+
+Strict associativity fails like this: an iterated
+weak composite of ($f$ and $g$) and $h$ is ${**}fgh$.
+Associated the other way, it's ${*}f{*}gh$.
+
+Let $C \equiv_W D$ mean that there are cells $f$ and $g$ in $W$ going between
+$C$ and $D$ such that
+$f \o_W g \equiv_W \rid_W$ and $g \o_W f \equiv_W \rid_W$
+
+
+
+\begin{lemma}
+If $C, D\in W$ and $C \equiv D$ then $C\equiv_W D$.
+\end{lemma}
+
+\begin{proof}
+We have by assumption $f: C \leftrightarrow D : g$ such that
+$f \o g \equiv \rid$.
+We can find $f', g' \in W$ with $f \equiv f'$ and $g \equiv g'$.  By earlier lemma
+we have $f' \o g' \equiv f \o g = \rid$.
+
+We know that $f' \o_W g' \equiv f' \o g' \equiv \rid \equiv \rid_W$.
+Transitivity of $\equiv$ gives
+$f' \o_W g' \equiv  \rid_W$.
+Coinduction hypothesis gives
+$f' \o_W g' \equiv_W  \rid_W$.
+The $g-f$ case is symmetric to the $f-g$ reasoning we just did.
+We now see that $C \equiv_W D$.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $C\equiv_W D$ then $C \equiv D$.
+\end{lemma}
+
+\begin{proof}
+Necessarily $C, D \in W$. We have $f, g$ such that
+$f \o_W g \equiv_W \rid_W$.
+By coinduction hypothesis, $f \o_W g \equiv \rid_W$.
+We observe
+$f \o g \equiv f \o_W g \equiv \rid_W \equiv \rid$
+and by transitivity of $\equiv$
+(and a symmetric argument for $g \o f$) we have what's claimed.
+\cqed
+\end{proof}
+
+\subsection{The Braided Category Counterexample}
+
+Picture a structure. It has an object $X$. It has a morphism $1_X$.
+It has a 2-cells which are finite sets of points in $[0,1] \x [0,1]$.
+It has 3-cells which are braidings of those finite sets. This structure
+is supposed to be $W$. We want $\C$ to feel like free $3$-category on this,
+but it won't be literally that, since we need to bake in composition.
+
+This will have an object $X$, and an infinite collection of morphisms,
+call them $\rid_X, \iota, \iota^2, \iota^3, \ldots$ where $\iota = 1_X$
+from the originally specified $W$. So the homset $[X, X]$ is just
+$\N$. It's always some number of copies of empty space. The
+2-dimensional homset between two of these thingies can include points,
+but we also want to allow purely syntactic compositions of them --- so
+$[n, m]$ is some type of pasting diagrams. A crucial
+constructor of this datatype
+is the `point' $\ell : 1 \to 1$. We can compose these horizontally
+$\ell_{nmk} * \ell_{n'm'k'} : (n + n') \to (m + m')$ which has $k + k'$
+points, or vertically
+$\ell_{nmk} \o \ell_{mpk'} : n \to p$ which also has $k + k'$ points,
+and associativity and interchange are built in.
+
+
+ The 3-dimensional homset between pasting diagrams
+$D_1$ and $D_2$ is braiding diagrams between the points of $D_1$ and $D_2$.
 \end{document}
