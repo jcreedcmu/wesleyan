@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\C{\mathbb{C}}
+\def\X{\mathbb{X}}
+\def\st{\mathrel|}
+\begin{document}
+
+\section{A Little (Topo)logical Lemma}
+
+\begin{lemma}
+Let $U(i), C(i), V$ be propositions.
+If
+\begin{enumerate}
+\item \(C(i), V \prov U(i)\)
+\item \( C(i), U(i) \prov V \)
+\item \(\prov \exists i.C(i)\)
+\end{enumerate}
+then
+\[V \prequiv \forall i . C(i) \imp U(i) \]
+\end{lemma}
+
+\begin{proof}
+The forward direction  follows from $(1)$.
+Backwards, use $(3)$ to produce $i$ be given such that $C(i)$.
+By assumption $\forall i . C(i) \imp U(i)$, also $U(i)$. Thus $(2)$ yields $V$.
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+Suppose we have a topological space $X$ with $V \subseteq X$ and a
+finite collection of closed sets $C_1,\ldots,C_n \subseteq X$
+and open sets $U_1, \ldots, U_n \subseteq X$ such that
+\[\bigcup_i C_i = X\]
+\[V \cap C_i = U_i \cap C_i\]
+Then $V$ is open.
+\end{corollary}
+
+\begin{proof}
+By previous lemma,
+\[V = \bigcap_i (\bar C_i \cup U_i)\]
+Observe that $V$ is open because $C_i$ is closed and $n$ is finite.
+\cqed
+\end{proof}
+
+\begin{lemma}
+Suppose we have $X$ with $V \subseteq X$ and a finite closed cover $C_1,\ldots,C_n$ as before.
+Suppose $Y$ is another topological space, and $\pi : X \to Y$ a function, not necessarily
+continuous. Let $\nu_i : C_i \to X$ be the inclusion of the subset topology on $C_i$
+into the space $X$. If $\pi \o \nu_i$ is continuous for all $i$, then $\pi$ is continuous.
+\end{lemma}
+
+\begin{proof}
+Let an open subset $U\subseteq Y$ be given.
+Since $\pi \o \nu_i$ is continuous, we know that  $\nu_i^{-1}(\pi^{-1}(U)) = \pi^{-1}(U) \cap C_i $ is open
+in the subset topology of $C_i$. Which means that for each $i$ there exists an open set $U_i$ of $X$
+such that $\pi^{-1}(U) \cap C_i = U_i \cap C_i$. By previous lemma, $\pi^{-1}(U)$ is open.
+\cqed
+\end{proof}
+
+\section{Textures}
+
+A {\em texture} $\X$ in $\C$ is a subcategory $\X$ of $\C$, together with $J$ a Grothendieck topology on $\X$.
+An {\em $\X$-structure} on an object $C \in \C$ is a subset $\sigma$ of the `maximal $\X$-sieve on $C$,'
+by which we mean
+$\{ \pi : X \to C \st X \in \X \}$.  Note that $C$ doesn't necessarily belong to $\X$.
+When $f \in \sigma$ we say $f$ is `smooth' according to $\sigma$.
+We require
+\begin{enumerate}
+\item (\textbf{Restriction}) If $\pi : X\to C$ is smooth, and $f : Y \to X \in \X$, then $\pi \o f : Y \to C$ is smooth.
+\item (\textbf{Amalgamation}) If $\pi : X\to C$ is a function, and $S$ is a $J$-covering sieve on $X$,
+and $\pi \o f : Y \to C$ is smooth for every $f : Y \to X \in S$, then $\pi$ is smooth.
+\end{enumerate}
+
+\subsection{The Continuity Texture}
+
+Here's an example of a texture. Set $\C = \X = \mathbf{Top}$.
+If $S$ is a sieve on a topological space $X$, say that a not-necessarily-open subset $V \subseteq X$
+is {\em $S$-open} if for any $f : Y \to X \in S$ we have $f^{-1}(V)$ is an open subset of $Y$.
+
+We give a grothendieck topology $J$ by saying a sieve $S$ on a space $X$ is covering
+when every $V \subseteq X$ that is $S$-open is in fact open.
+
+Let's check this is a Grothendieck topology.
+
+\begin{enumerate}
+\item The maximal sieve $M_X$ should cover $X$. If a subset $V$ is $M_X$-open, then
+also we can observe $\rid^{-1}(V)$ is open, since $\id_X \in M_X$. So the maximal sieve counts as covering.
+\item Intersections of covering sieves should cover. Let $S, S'$ be given.
+The condition `$S$ covers and $S'$ covers' should be the same
+as `$S \cap S'$ covers'.
+The former is
+
+\[ (\O_S \subseteq \O)\land(\O_{S'} \subseteq \O) \]
+and the latter
+\[ \O_{S \cap S'} \subseteq \O \]
+So I want to check that
+\[ \O_{S \cap S'} = \O_{S} \cup  \O_{S'}\]
+i.e.
+\[ \forall f \in S \cap S' . \ldots \prequiv (\forall f \in {S} . \ldots) \cup  (\forall f \in {S'} . \ldots)\]
+
+Suppose we know that $S \cap S'$ is covering. Then surely $S$ is covering and $S'$ covering just by monotonicity.
+The bigger an $S$ is, the harder it is for $f$ to be $S$-open, and the easier it is for $S$ to be covering.
+Suppose $S$ and $S'$ are both covering. We want to show that $S \cap S'$ is covering. That is,
+for every $f \in S \cap S'$ that if $f^{-1}(V)$ is open, then $V$ is open.
+
+Hm, maybe this isn't a Grothendieck topology at all, but some weaker notion of covering.
+\end{enumerate}
+
+\end{document}
