@@ -20,7 +20,7 @@
 \def\rset{\mathsf{Set}}
 \def\op{\mathsf{op}}
 \def\P{\mathbf{P}}
-
+\def\dash{\hbox{---}}
 \begin{document}
 \tikzset{
    commutative diagrams/.cd,
@@ -216,7 +216,7 @@ such that
 \subsection{Using a Variety of Probes}
 Can we say that we're given $\C$ and $\P = \{\Omega \ldots \}$, and an operation looks like
 $\O = (S, \iota: U \to S, \omega : T \to S)$
-where $A, B, C \in \{ \Omega, \ldots \}$.
+where $S, T, U \in \{ \Omega, \ldots \}$.
 
 Maybe $\P$ has (co)product structure as a category? To make an object, we pick a $C\in \C$,
 and for every $\Omega \in \P$, we demand
@@ -251,4 +251,38 @@ Actually, this makes sense as a general colimits-become-limits kind of thing.
 Since $3$ can be construed as the colimit of two copies of $2$, we should find that
 $R_3$ is the homset-like operation, that given 3 points, yields the pairs of composable morphisms
 via a pullback.
+
+\subsection{Can I Just Talk About Presheaves}
+Say we're given $\C$ and $\Omega$ again. An operation
+looks like $\O = (S, \iota: U \to S, \omega : T \to S)$ but in this case
+$S, T, U$ belong to $\hat \C$.
+The basic data we have is $R : \hom(\Omega, C) \to \rset$, but from that
+we want to be able to sort of automatically derive what
+$R_S : \hom_{\hat \C}(S, yC) \to \rset$ is generally, trading on the intuition that an element
+of $\hat \C$ is like a colimit.
+
+Or can I just ask for all $R_S : \hom_{\hat \C}(S, yC) \to \rset$,
+with equations like
+\[(f : [S, yC])(g: [T, yC]) \to R_{S+T} [f, g] = R_S f \x R_T g\]
+
+No, this isn't making much sense.
+
+\subsection{Pushouts?}
+Let's say we have $\C$ and $\Omega$. A {\em boundary} is a pushout diagram
+where all the sides are $\Omega$. We get to pick an index set $I$ and a base
+$B_0$ and some maps $b_i : B_0 \to \Omega$ and we take the pushout $B$, so we
+have a bunch of maps $\iota_i : \Omega \to B$.
+
+An operation is $\O = (S, \iota: U \to S, \omega : T \to S)$ where $S, T, U$ are boundaries.
+We ask for $R_\Omega : \hom(\Omega, C) \to \rset$. For any boundary $B$ we should
+be able to derive what $R_B : \hom(B, C) \to \rset$ is. Let a map $b : B \to C$ be given.
+Then $b \o \iota_i : \Omega \to C$ and $R_\Omega(b \o \iota_i)$ is a set.
+We set simply
+\[R_B(b) = \prod_i R_\Omega(b \o \iota_i)\]
+I think.
+
+For every operation we have a map
+\[ m : (s :  S \to C) \to  \prod_i R_\Omega( s \o \iota \o u_i)  \to \prod_i R_\Omega ( s \o \omega \o t_i)\]
+eh this is more of a mess than it's worth.
+
 \end{document}
