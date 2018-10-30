@@ -2,6 +2,8 @@
 \usepackage{amssymb}
 \input{theorem}
 
+\usepackage{tikz}
+\usepackage{tikz-cd}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
 \def\int{\square}
@@ -11,10 +13,19 @@
 \def\imp{\Rightarrow}
 \def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
 \def\o{\circ}
-\def\C{\mathbb{C}}
-\def\X{\mathbb{X}}
+\def\C{\mathbf{C}}
+\def\X{\mathbf{X}}
+\def\x{\times}
 \def\st{\mathrel|}
+\def\rset{\mathsf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbf{P}}
+
 \begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
 
 \section{A Little (Topo)logical Lemma}
 
@@ -45,7 +56,7 @@ and open sets $U_1, \ldots, U_n \subseteq X$ such that
 \[\bigcup_i C_i = X\]
 \[V \cap C_i = U_i \cap C_i\]
 Then $V$ is open.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
 By previous lemma,
@@ -96,7 +107,7 @@ Let's check this is a Grothendieck topology.
 
 \begin{enumerate}
 \item The maximal sieve $M_X$ should cover $X$. If a subset $V$ is $M_X$-open, then
-also we can observe $\rid^{-1}(V)$ is open, since $\id_X \in M_X$. So the maximal sieve counts as covering.
+also we can observe $\rid^{-1}(V)$ is open, since $\rid_X \in M_X$. So the maximal sieve counts as covering.
 \item Intersections of covering sieves should cover. Let $S, S'$ be given.
 The condition `$S$ covers and $S'$ covers' should be the same
 as `$S \cap S'$ covers'.
@@ -118,4 +129,126 @@ for every $f \in S \cap S'$ that if $f^{-1}(V)$ is open, then $V$ is open.
 Hm, maybe this isn't a Grothendieck topology at all, but some weaker notion of covering.
 \end{enumerate}
 
+\section{Chu Thoughts}
+
+What is a directed graph? It's a set $X$ together with, for each map $2 \to X$,
+a set of edges.
+
+What is a topological space? It's a set $X$ together with, for each map $X \to 2$,
+a bit of information saying whether that subset of $X$ counts as open, subject to some axioms.
+
+What is a category? It's a directed graph, subject to some axioms. Though this isn't quite
+as true as I'd like --- a functor is not just a graph homomorphism.
+
+What can I say about the axioms that a topological space is supposed to satisfy?
+Let me generalize to a proof-relevant relation: so $\O(f)$ is the {\em set} of open sets
+corresponding to the subset $f : X \to 2$ of $X$. I expect there to be operations
+\[ \O(f) \x \O(g) \to \O(f \cap g)\]
+\[ (\Pi i . \O(f_i)) \to \bigcup_i \O(f_i)\]
+where I am punning on functions as subsets --- I really mean
+\[ \O(f) \x \O(g) \to \O(\lambda x . f(x) \land g(x))\]
+\[ (\Pi i . \O(f_i)) \to \O(\lambda x . \bigvee_i f_i(x))\]
+where
+\[ \land : 2 \x 2 \to 2 \]
+\[ \bigvee : 2^I \to 2 \]
+are structure that I know to exist on $2 = \{\bot, \top\}$.
+I can sort of think as $\bigvee$ as parametrized on the index set $I$.
+
+\subsection{Defining}
+
+Fix a category $\C$ and an object $\Omega$. An {\em operation} is
+a map $\omega : \Omega^I \to \Omega$. An object of the spatial category
+is an object $C\in \C$ together with a relation $R :\hom(C, \Omega) \to \rset$.
+If $\omega$ is an operation, then we require that for every $I$-indexed
+family of maps $f_i \in \hom(C, \Omega)$, that there is a function
+\[ m_\omega : (\Pi i . R (f_i)) \to R (\omega \o \langle f_i \rangle )\]
+A morphism from $(C, R)$ to $(C', R')$ is a morphism $c : C \to C'\in \C$
+with a map $(f : C' \to \Omega) \to R'(f) \to R(f \o c)$.
+
+The topological example above sets $\C = \rset$ and $\Omega = 2$,
+and has an operation $\land$ for $I = 2$, and a family of operations
+$\bigvee$ one for each possible set $I$.
+\subsection{Dualizing}
+Suppose we take $\C = \rset^\op$
+I guess I could ask for operations $\omega : \Omega \to \Omega \cdot I$.
+But the evident map $2 \to 4$ that takes $0$ to $0$ and $1$ to $3$ would
+give us a `composition operation' that wouldn't require the intermediate
+points to match up.
+
+So maybe an operation is a set $S$ together with maps $\Omega \to S$
+for each of the inputs, (in other words, a map $\Omega \cdot I \to S$)
+and a map $\Omega \to S$ for the output. The thing for categorical
+composition would take $4$ to $3$ by collapsing the middle two, and
+$2$ to $3$ by missing the middle.
+
+To give names: An $I$-ary operation is an object $S \in \C$, and maps
+$\iota_i : \Omega \to S$ and $\omega : \Omega \to S$. If
+$R : \hom(\Omega, C) \to \rset$ is the dual relation, the requirement it induces
+is that for every  $s : \hom(S , C)$ there's a map
+\[ m_{\iota \omega s} : (\Pi i . R (s \o \iota_i)) \to R (s \o \omega )\]
+Back to the original orientation of arrows, this would
+ask for $\iota_i : S \to \Omega$ and $\omega : S \to \Omega$ and $s : \hom(C, S)$ such that
+(with $R$ being $\hom(C, \Omega) \to \rset$)
+\[ m_{\iota \omega s} : (\Pi i . R ( \iota_i \o s)) \to R ( \omega \o s)\]
+Let's try plugging in $S = 2 \x 2$ and $\iota_1 = \pi_1$ and $\iota_2 = \pi_2$.
+and $\omega = \land$. Then a choice of $s : C \to 2 \x 2$ is the same thing
+as an independent choice of $f : C \to 2$ and $g : C \to 2$.
+
+Same thing if I plug in $S = 2^I$ and $\iota_i = \pi_i : 2^I \to 2$ and
+$\omega = \bigvee$.
+
+\subsection{Summarizing}
+Assume we're given $\C$ and $\Omega\in \C$ and a collection of operations
+\[\O_j = (I_j ,  S_j, \iota_{ji} : \Omega \to S_j  , \omega_j : \Omega \to S_j )\]
+We build a category $\C[\Omega]$ by saying an object is $C\in \C$ plus a relation $R : \hom(\Omega, C) \to \rset$,
+plus for every operation $\O_j$ and we have a map
+\[ m_{j} : (s :  S_j \to C) \to (( i : I_j) \to  R (s \o \iota_{ji} )) \to R ( s\o\omega_j )\]
+A morphism from $(C, R, m) \to (C', R', m')$ needs to provide
+\[ f : C \to C' \in \C \qquad \rho_{(g : \Omega \to C)} :   R(g) \to R'(f \o g) \]
+such that
+\[
+ \begin{tikzcd}
+( i : I_j) \to R(s \iota_{ji}) \ar[d, "{\lambda \kappa i .\rho_{s\iota_{ji}}(\kappa(i))}"']\ar[r,"m_j(s)"] & R(s\omega_j)\ar[d,"\rho_{s\omega_j}"]\\[1em]
+( i : I_j) \to R'(f s \iota_{ji}) \ar[r,"m_j(fs)" swap] & R'(fs\omega_j)
+ \end{tikzcd}
+\]
+
+\subsection{Using a Variety of Probes}
+Can we say that we're given $\C$ and $\P = \{\Omega \ldots \}$, and an operation looks like
+$\O = (S, \iota: U \to S, \omega : T \to S)$
+where $A, B, C \in \{ \Omega, \ldots \}$.
+
+Maybe $\P$ has (co)product structure as a category? To make an object, we pick a $C\in \C$,
+and for every $\Omega \in \P$, we demand
+a relation $R_\Omega: \hom(\Omega, C) \to \rset$.
+
+For every operation we have a map
+\[ m : (s :  S \to C) \to   R_U (s  \iota)  \to R_T ( s\omega )\]
+a morphism  $(C, R_\Omega, m) \to (C', R'_\Omega, m')$ needs to provide
+\[ f : C \to C' \in \C \qquad \rho_{(g : \Omega \to C)} :   R_\Omega(g) \to R'_\Omega(f \o g) \]
+such that
+\[
+ \begin{tikzcd}
+ R_U(s \iota) \ar[d, "{\rho_{s\iota}}"']\ar[r,"m(s)"] & R_T(s\omega)\ar[d,"\rho_{s\omega}"]\\[1em]
+ R'_U(f s \iota) \ar[r,"m(fs)" swap] & R'_T(fs\omega)
+ \end{tikzcd}
+\]
+
+\subsubsection{What To Say About Products}
+In the topological case, the probe-shape
+$\hom(C, \Omega^I)$ is the same as $\hom(C, \Omega)^I$,
+so we can ask that $R_{\Omega^I}$ is the conjunction of $R_\Omega$ at the individual putatively-open sets.
+Let's just talk about the binary case first: if $P, Q \in \P$, then
+$R_{P \x Q} : \hom(C, P \x Q) \to \rset$ is supposed to be the conjunction of
+$R_{P} : \hom(C, P) \to \rset$  and $R_{Q} : \hom(C, Q) \to \rset$ .
+That is,
+\[ R_{P\x Q}\langle f, g\rangle \cong  R_P f \x R_Q g  \]
+That product on the left is inside the category $\P$, the one on the right is in $\rset$.
+If I'm back in the `graph-theoretic' orientation, I'm going to be talking about copairing.
+Suppose $f_i : \Omega_i \to C$. Then I demand
+\[R_{\coprod_i \Omega_i} [f_i] \cong \prod_i R_{\Omega_i} f_i\]
+Actually, this makes sense as a general colimits-become-limits kind of thing.
+Since $3$ can be construed as the colimit of two copies of $2$, we should find that
+$R_3$ is the homset-like operation, that given 3 points, yields the pairs of composable morphisms
+via a pullback.
 \end{document}
