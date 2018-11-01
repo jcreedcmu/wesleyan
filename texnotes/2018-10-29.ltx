@@ -4,6 +4,7 @@
 
 \usepackage{tikz}
 \usepackage{tikz-cd}
+\def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
 \def\int{\square}
@@ -17,10 +18,11 @@
 \def\X{\mathbf{X}}
 \def\x{\times}
 \def\st{\mathrel|}
-\def\rset{\mathsf{Set}}
+\def\rset{\mathbf{Set}}
 \def\op{\mathsf{op}}
 \def\P{\mathbf{P}}
 \def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
 \begin{document}
 \tikzset{
    commutative diagrams/.cd,
@@ -284,5 +286,205 @@ I think.
 For every operation we have a map
 \[ m : (s :  S \to C) \to  \prod_i R_\Omega( s \o \iota \o u_i)  \to \prod_i R_\Omega ( s \o \omega \o t_i)\]
 eh this is more of a mess than it's worth.
+
+\subsection{Thoughts From Last Night}
+
+Ok, forget about Grothendieck topologies. There are two sorts of
+phenomena going on when I consider the `texture' that consists of considering a subinterval
+$S$ of the directed interval, and probing some space $C$ by asking whether a map $S \to C$
+is compatible with the directed structure on $S$.
+
+They are {\em restriction} and {\em amalgamation}. In restriction I take a subinterval
+$f : T \to S$ of $S$, and a compatible/smooth/allowed map $s : S \to C$, and infer that $s\o f : T \to C$
+is smooth.
+In amalgamation, I take some kind of cover $f_1 : T_1 \to S, \ldots, f_n : T_n \to S$ of $S$
+by subintervals, and if all the $s \o f_i$ are smooth, then I conclude that $s$ is smooth.
+
+So I might think that a texture is a thing that tells me {\em which}
+restrictions and {\em which} amalgamations are allowed. I thought this was
+by simply providing a category (whose morphisms say which restrictions are allowed)
+with something like a grothendieck topology (which would say, via which sieves are covering,
+which amalgamations are allowed) but I think I want something more subtle.
+
+For categorical composition works by requiring a certain operation that is kind of simultaneously
+ part amalgamation and part restriction:
+\[\begin{tikzcd}
+2+2 \ar[r, "{[f, g]}"]& 3 \ar[from=r, "h"']& 2\\
+  0_L\ar[ddr, phantom, "f"] \ar[dr] \\[-1em]
+  1_L \ar[dr] & 0\ar[from=r] & 0\\[-1.5em]
+ & 1\\[-1.5em]
+  0_R \ar[ur] & 2\ar[from=r] & 1\\[-1em]
+  1_R \ar[uur, phantom, "g"] \ar[ur]
+\end{tikzcd}\]
+The two maps $2 \to 3$, call them $f$ and $g$,
+can be said to cover $3$ but only with respect to a mandated restriction $h$
+from $3$ back down to $2$. If I have a map $\pi : 3 \to C$ and proofs that $\pi \o f$
+and $\pi \o g$ are smooth, then I get a proof that $\pi \o h$ is smooth.
+
+Possibly I can eliminate this requirement of simultaneous amalgamation-and-restriction
+if I could have a good explanation of how the smoothness relation on $3$ is derivable
+from the canonical smoothness relation $R_2 : \hom(2, C) \to \rset$.
+
+This would take me back to saying that there are some allowed amalgamations, and some
+allowed restrictions. Curiously, the amalgamation here would be fairly trivial,
+and the restriction from $3\to C$ to $2\to C$ would seem to be the thing that
+would actually {\em accomplish} composition.
+
+\subsubsection{Are Amalgamations Ever Nontrivial?}
+Yeah, I think so. At least for the directed-interval case, it seems like
+the set of eligible maps from a covered interval (before we even involve smoothness!)
+is not just the product of eligible maps from the covering intervals --- since we
+need to require that the maps agree on the (in this case nontrivial) overlap.
+
+\subsubsection{But Having Said That}
+
+Given that I know the important probe object is $\Omega$, can I say that
+the objects of the `category of restrictions' are just colimit/pushout diagrams
+involving $\Omega$.
+
+Like... there's the category of all colimit diagrams of everything in $\C$,
+namely $\hat \C$. I want to single out a subcategory $\P \subseteq \hat \C$.
+This should have just the `good' colimit diagrams, and the `good' morphisms
+between them. Probably $\P$ should be closed under colimits as computed in $\hat\C$.
+For every $P \in \P$, there is the compatibility relation $R_P : \hom(P, C) \to \rset$.
+And somehow should have $R_{\coprod_i P_i}[ f_i] = \prod_i R_{P_i}(f_i) $
+for a family of arrows $f_i : P_i \to C$. Let's see if I can explicate this.
+To have colimits is the same thing as having an initial object and having arbitrarily big pushouts.
+I could do binary pushouts as a conceptually salient warm-up. I don't expect things
+to go significantly differently there.
+
+So I require the constantly empty presheaf, call it $\emptyset$, belongs to $\P$. The meaning of $R_\emptyset$ is
+clear. Its type is $R_\emptyset : \hom(\emptyset, yC) \to \rset$, which is the
+same as just saying $R_\emptyset : \rset$, which we set to the singleton set $1$.
+
+Let's try to think about a pushout.
+\[
+\begin{tikzcd}
+X\ar[r]\ar[d]\ar[dr, phantom, pos=1, "\ulcorner"]& P\ar[d, "\iota"]\\
+P'\ar[r, "\iota'"']& Q
+\end{tikzcd}
+\]
+All the objects here are presheaves in $\P$. We want to figure out
+what $R_Q$ has to be. Its type is $R_Q : \hom(Q, yC) \to \rset$. Ok, good,
+so let a map $f : Q \to yC$ be given.
+\[
+\begin{tikzcd}
+X\ar[r, "p"]\ar[d, "p'"']\ar[dr, phantom, pos=1, "\ulcorner"]& P\ar[d, "\iota"]\ar[ddr, bend left, "f\iota"]\\
+P'\ar[r, "\iota'"']\ar[drr, bend right, "f\iota'"']& Q\ar[dr, "f" description]\\
+&&yC
+\end{tikzcd}
+\]
+
+It's going to be {\em something} like the product $R_P(f\iota) \x R_{P'}(f\iota')$ but obviously
+we need to make it a pullback somehow, and filter out some stuff.
+
+Oh, but morphisms in $\P$ --- i.e. $p$ and $p'$ --- are supposed to be allowable restrictions.
+So if $k : P \to yC$ is a path into the space, and $p: X \to P$ is a morphism in $\P$,
+we should be do a restriction
+ $\sigma_{k, p} : R_P(k) \to R_X(k \o p)$. Then the pullback set that
+$R_Q(f)$ is equal to is, the set of pairs $t : R_P(f \iota)$ and $t' : R_{P'}(f \iota')$,
+such that $\sigma_{f\iota,p} (t) = \sigma_{f\iota', p'}(t')$.
+
+\subsection{Thinking With Comma Categories}
+
+Say a probe category $\P$ into $\C$ is a functor $F : \P \to \C$
+plus a notion of which sieves in $\P$ are covering.
+
+A $\P$-textured object in $\C$ is an object $C\in\C$ together with
+a functor
+\[\tau : (F/C)^\op \to \rset\]
+The objects of $F/C$ look like morphisms $f : FP \to C$. A morphism from $f' : FP' \to C$ to
+$f: FP \to C$ is a morphism $m : P' \to P$ such that $f \o Fm = f'$.
+What do we require for covering sieves? Let a covering
+\[S = \{ m : P' \to P \} \in \P\]
+of $P$ be given. Suppose we have a $f : FP \to C$. We want to give an inhabitant of $\tau(f)$
+iff there is a consistent family of inhabitants
+\[x_m \in \tau(f \o Fm)\]
+`Consistent' should mean that for any $m : P' \to P$ and $m' : P'' \to P'$,
+we have
+\[ x_{m \o m'} = \tau(m' )(x_m)\]
+
+Let's try to compress this definition into something
+more natural. A sieve is a subfunctor of $yP : \hat\P$.
+So an inhabitant of the sieve $S : \hat \P$ should probably be a natural
+transformation from $S$ to something like $\tau$. But $\tau$ has type $\widehat{F / C}$
+and $S$ has type $\hat \P$. We can however extract an object of $\P$ from any object of $F / C$.
+This means we have $D : \hat \P \to \widehat{F / C}$. So is what I want a natural transformation
+$x : D S \to \tau : (\widehat{F / C})^\op \to \rset$ for every covering sieve $S$?
+
+How does this unpack? For every object $f : FP' \to C \in \widehat {F/C}^\op$ we must produce a morphism
+$x_f : S(P' \to P) \to \tau(f)$. No I'm getting lost. Let me try to draw the naturality diagram
+I think I see:
+
+\[\begin{tikzcd}
+\hom(P', P) \ar[r, "\dash \o m'"]\ar[d, "x"'] & \hom(P'', P)\ar[d, "x"]\\
+\tau(f \o Fm) \ar[r, "{\tau(m')}"'] & \tau(f \o F(m \o m'))
+\end{tikzcd}\]
+and this works because $m'$ is actually a morphism from $f \o Fm$ to $f \o F(m \o m')$.
+Ok, so this looks I might have gotten it right after all. The morphism that this
+naturality square is talking about is $m' : f \o Fm \to f \o F(m \o m')$.
+
+But I need to take into account $f$ here, somehow. Ok, here's a thought:
+Maybe $x : US \to  U_f\tau : (\P / P)^\op \to \rset$.
+I need to say what I mean by $U$ and $U_f$. First of all $U : \hat \P \to \widehat{\P / P}$
+by taking the domain. Then $U_f : \widehat{F/C} \to \widehat{\P/P}$ works
+by taking $\tau$ and $m : P' \to P$ and returning $\tau(f \o F m)$.
+
+Ok, so if I have a covering sieve $S$ of $P$, and a boundary $f : FP \to C \in F / C$, and
+I have fillers as a natural transformation $x : US \to U_f\tau$ for everything in the sieve,
+then I should get a filler $[S, f, x] : \tau(f)$.
+
+\subsubsection{Does Anything Get Clearer if $\P$ is a Subcategory}
+
+Let $\C$ be a category, with a subcategory $\P$, which has a notion of covering sieve.
+A textured object on $C$ in $\C$ is a functor
+\[\tau : (\P/C)^\op \to \rset\]
+subject to the condition that whenever we have a $f : P \to C$ and a covering sieve $S$
+and a natural transformation $\alpha : U \to V : (\P / P)^\op \to \rset$, then we get
+an element of $\tau(f)$. Where $U, V : (\P / P)^\op \to \rset$ are defined by
+\[ U( m : (P' \to P)) . S(P') \]
+\[ V(m:(P' \to P)) = \tau(f \o m)\]
+
+\subsection{Actually This is Fine With Commas}
+
+Let $\C, \P$ be a categories with $F : \P \to \C$. Suppose $\P$ has a notion of covering sieve,
+i.e. some functors $S : \P^\op \to \rset$ are considered `covering'.
+A textured object on $C$ in $\C$ is a functor
+\[\tau : (F/C)^\op \to \rset\]
+subject to the condition that whenever we have a $f : FP \to C$ and a covering sieve $S$
+and a natural transformation $\alpha : U \to V : (\P / P)^\op \to \rset$, then we get
+a (unique?) element of $\tau(f)$ that yields that $\alpha$ upon restriction.
+Where $U, V : (\P / P)^\op \to \rset$ are defined by
+\[ U( m : (P' \to P)) . S(P') \]
+\[ V(m:(P' \to P)) = \tau(f \o Fm)\]
+\subsubsection{Maybe Even This}
+Let $\C, \P$ be a categories with $F : \P \to \C$.
+Suppose some functors $S : (\P/P)^\op \to \rset$ are considered to `cover' $P$.
+A textured object on $C$ in $\C$ is a functor
+\[\tau : (F/C)^\op \to \rset\]
+subject to the condition that whenever we have a $f : FP \to C$ and a covering functor $S$
+and a natural transformation $\alpha : S \to \tau\adjust_f : (\P / P)^\op \to \rset$, then we get
+a (unique?) element of $\tau(f)$ that yields that $\alpha$ upon restriction.
+Where $\tau\adjust_f : (\P / P)^\op \to \rset$ is defined by
+\[ \tau_f(m:(P' \to P)) = \tau(f \o Fm)\]
+
+How do we derive an $\alpha : S \to \tau\adjust_f$ from an element $x \in \tau(f)$, given $f$ and $S$?
+Let an object $m : P' \to P \in \P/P$ be given. We have to come up with an arrow
+$\alpha_m : S(m) \to \tau(f \o Fm)$. But $m$ is an arrow $(f \o Fm) \to f$ in $F/C$.
+So $\tau(m) : \tau(f) \to \tau(f \o Fm)$. So we can have $\alpha_m$ ignore its sieve
+argument and always return $\tau(m)(x)$.
+
+\subsubsection{Cleaning Up Further}
+Let $\C, \P$ be a categories with $F : \P \to \C$.
+Suppose some functors $S : \widehat{\P/P}$ are considered to `cover' $P$.
+Observe that an object $f : FP \to C$ of $F/C$ can be construed as
+a functor $[f] := (f\o F\dash) : \P/P \to F/C$.
+
+A textured object on $C$ in $\C$ is a functor
+\(\tau : \widehat{F/C}\)
+such that whenever we have a $f : FP \to C$ and  $S$ covering $P$
+and a natural transformation $\alpha : S \to \tau \o [f]^\op $, then
+there is a unique element $x \in \tau(f)$ such that $\alpha_m(\_) = \tau(m)(x)$.
+
 
 \end{document}
