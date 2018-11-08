@@ -568,6 +568,52 @@ is a morphism in $\hat\P$, whose codomain is of the form
 $\C[F\dash, C]$ for some $C\in\C$, and which
 has the right lifting property
 against any morphism in $J$.
+\subsection{Reprioritizing}
+Let $\P$ be a category, and $J$ be a subset of morphisms in $\hat\P$.
+A $J$-textured object is a morphism $\phi$ in $\hat \P$ that has the right lifting property
+with respect to every morphism in $J$.
 
+Separately, if we have a $\C$ and an $F : \P \to \C$, we can say that $\phi$
+is representable in $\C$ along $F$ as $C$  if $\phi$'s codomain
+is $\C[F\dash, C]$.
 
+\subsection{Examples}
+\subsubsection{Categories}
+Let $\P$ be finite sets with (not necessarily strictly) monotone maps.
+$J$ is something like the set of sieve inclusions  $S \hookrightarrow T$
+such that everything in $T$ can be covered by $S$.
+
+\subsubsection{Topological Spaces}
+Let $\P$ the category that looks a lot like $\rset$, except we also throw in
+ $\cap : 1 \to 2$  and $\cup_S : 1 \to S$.
+This means there are two new sorts of morphisms
+\[
+\begin{tikzcd}
+  X \ar[r, "!"] & 1 \ar[r, "\cap"] & 2 \ar[r] & Y\\
+  X \ar[r, "!"] & 1 \ar[r, "\cup_S"] & S \ar[r] & Y
+\end{tikzcd}
+\]
+but this is all the generality we need.
+I think the point of the covering sieves is that if we cover a set
+with {\em ordinary} maps,
+then it's fully covered, even including virtual points like $\cap : 1\to 2$.
+
+ We're going to pick $\C = \rset^\op$. The functor $F$ takes $P \in \P$ to the set $2^P$.
+We need to take $\cap$ to $(F \cap) : 2^2 \to 2^1$ which is going to be  logical
+$\land$ on $2 = \{\top, \bot\}$. We need to take $\cup_S$ to $(F\cup_S) : 2^S \to 2^1$
+which is going to be the existential quantifier on $S$-sized vectors over $\{\top, \bot\}$.
+We need to take an ordinary set function $n \to m$ to $2^m \to 2^n$ which is just projection/composition.
+
+So imagine $\pi$ is the evident pointwise-covering sieve of $S$. It consists of everything
+downwind from some point  $x : 1 \to S$. This is pretty easy to describe. As a presheaf,
+it has $x$ points absolutely everywhere.
+\[
+\begin{tikzcd}
+\pi \ar[r]\ar[d, "\phi"'] &\O \ar[d, "\tau"]\ar[from=dl, dotted]\\
+\hom_\P(\dash, S) \ar[r] & \hom_{\rset}(X, 2^{\dash})
+\end{tikzcd}
+\]
+The way we pick something across the bottom is by picking a $b : X \to 2^S$.
+That is, $S$ subsets of $X$. The diagram is telling us that openness is preserved
+by arbitrary unions.
 \end{document}
