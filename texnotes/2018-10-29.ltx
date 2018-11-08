@@ -486,5 +486,88 @@ such that whenever we have a $f : FP \to C$ and  $S$ covering $P$
 and a natural transformation $\alpha : S \to \tau \o [f]^\op $, then
 there is a unique element $x \in \tau(f)$ such that $\alpha_m(\_) = \tau(m)(x)$.
 
+\subsubsection{Still better}
+
+Let $\C, \P$ be a categories with $F : \P \to \C$.
+Suppose some functors $S : \widehat{\P/P}$ are considered to `cover' $P$.
+Observe that an object $f : FP \to C$ of $F/C$ can be construed as
+a functor $[f] := (f\o F\dash) : \P/P \to F/C$.
+
+A textured object on $C$ in $\C$ is a functor
+\(\tau : \widehat{F/C}\)
+such that whenever we have a $f : FP \to C$ and  $S$ covering $P$,
+then every $\alpha : S \to \tau \o [f]^\op $ factors uniquely
+through $S \to 1_P$:
+\[\begin{tikzcd}
+  1_P  \ar[r, dotted] & \tau \o {[f]}^\op\\
+S \ar[u, "!"]\ar[ur, "\alpha"']
+\end{tikzcd}\]
+($1_P : \widehat{\P/P}$ is the constantly-$1$ functor)
+
+\subsection{Modalities}
+The Lawvere-Tierney perspective says that there should be a natural
+transformation $j : \Omega \to \Omega$,
+where $\Omega$ is the presheaf that is the collection of sieves on each object.
+Let's suppose we're just talking about $\Omega \in \hat \P$ for now.
+Suppose we have a notion of covering sieve in mind.
+The action of the corresponding $j$ on a sieve $S \in \Omega(P)$ is to take $S$ to the
+set of arrows $f : Q \to P$ such that $S$ restricted along $f$  covers $Q$.
+\vfil\eject
+\section{From The Top Again}
+
+Let $\C, \P$ be a categories with $F : \P \to \C$. Suppose
+that for any $P\in \P$ and sieve $S$ on $P$, we have a notion
+of whether $S$ counts as `covering'.
+
+A {\em textured object} in $\C$ is a choice of object $C\in \C$,
+a presheaf $T \in \hat \P$, and a natural transformation
+\[
+\begin{tikzcd}
+T \ar[r, "\tau"'] & \C[F\dash, C]
+\end{tikzcd}
+\]
+such that for any sieve $S$ that covers $P$, any $b : FP \to C \in \C$, and any natural transformation $\sigma : S \to T$
+such that the outer square of
+\[
+\begin{tikzcd}
+S \ar[r, hook]\ar[d, "\sigma"'] & \P[\dash, P] \ar[d, "b \o F\dash"]\ar[dl, dotted]\\
+T \ar[r, "\tau"'] & \C[F\dash, C]
+\end{tikzcd}
+\]
+commutes, there exists a filling diagonal.
+
+So actually maybe I should observe there's a functor $Y : \C \to \hat \P$.
+It's just the two-argument yoneda functor, incorporating an $F$:
+\[Y(C)(P) = \C[FP, C]\]
+The textured objects are a certain special subset of the objects of the comma category $\hat \P / Y$.
+
+Oh, duh, by yoneda lemma, of course I know that $\mathrm{Nat}(\P[\dash, P], \C[F\dash, C]) \cong \C[FP, \C]$,
+and they {\em all} arise as $b \o F\dash$.
+
+So for my filling diagram, all I need to know is there is some magical set of morphisms $\Phi \subseteq \hat\P$,
+(which I will want to be the inclusions of covering sieves in the maximal sieve --- or perhaps I can just
+go with all sieve inclusions where the closure of the small thing contains the big thing)
+and $\tau : T \to U$ is properly textured if for any $\phi : S \to R\in \Phi$ we can fill
+\[
+\begin{tikzcd}
+S \ar[r, "\phi"]\ar[d] & R \ar[d]\ar[dl, dotted]\\
+T \ar[r, "\tau"'] & U
+\end{tikzcd}
+\]
+or maybe it's more perspicuous to write this as
+\[
+\begin{tikzcd}
+S \ar[r]\ar[d, "\phi"'] & T \ar[d, "\tau"]\ar[from=dl, dotted]\\
+R \ar[r] & U
+\end{tikzcd}
+\]
+\subsection{So I Have}
+Let $\C, \P$ be a categories with $F : \P \to \C$. Suppose
+we have a subcategory $J \subseteq \hat \P$. An {\em $F$-textured object}
+is a morphism in $\hat\P$, whose codomain is of the form
+$\C[F\dash, C]$ for some $C\in\C$, and which
+has the right lifting property
+against any morphism in $J$.
+
 
 \end{document}
