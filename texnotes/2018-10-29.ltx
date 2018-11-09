@@ -606,7 +606,7 @@ We need to take an ordinary set function $n \to m$ to $2^m \to 2^n$ which is jus
 
 So imagine $\pi$ is the evident pointwise-covering sieve of $S$. It consists of everything
 downwind from some point  $x : 1 \to S$. This is pretty easy to describe. As a presheaf,
-it has $x$ points absolutely everywhere.
+it has $S$ many points absolutely everywhere.
 \[
 \begin{tikzcd}
 \pi \ar[r]\ar[d, "\phi"'] &\O \ar[d, "\tau"]\ar[from=dl, dotted]\\
@@ -616,4 +616,41 @@ it has $x$ points absolutely everywhere.
 The way we pick something across the bottom is by picking a $b : X \to 2^S$.
 That is, $S$ subsets of $X$. The diagram is telling us that openness is preserved
 by arbitrary unions.
+\subsubsection{Topology, More Nicely}
+I could imagine the monad that represents finite unions of finite formal intersections
+of elements of a set. Do I still get a functor from the kleisli category of that monad,
+to $\rset^\op$? A morphism $f : X \to Y$ consists of, for every $x\in X$, saying
+what value
+\[\bigcup_{s\in S} y_{s1} \cap \cdots \cap y_{sn_1}  \]
+you get out, with each of the $y\in Y$ still.
+I should map this to a function $2^Y \to 2^X$. I guess to determine whether an $x$ is in the subset,
+you look at whether $y$ is in the input set, call it $\iota(y)$, and compute
+\[\bigvee_{s\in S} \iota(y_{s1}) \land \cdots \land \iota(y_{sn_1})  \]
+
+\subsubsection{Continuation Monad?}
+
+But really what's happening is we're saying a monadic morphism $X \to Y$
+consists of $X \to 2^{2^Y}$. And surely if we have a morphism
+$X \to (Y \to 2) \to 2$, we have a morphism $(Y \to 2) \to (X \to 2)$ by rearranging!
+But that function space is too big --- a topology doesn't have fillers for all
+possible continuation functions. So maybe the notion of what-covers-what
+can account for the portion of $2^{2^Y}$ --- or, like, the topology on $2^{2^Y}$ ---
+that gives us just finite intersections and arbitrary unions.
+
+Right, yeah; I can talk about the intersection of two functions $f, g : X \to (Y \to 2) \to 2$
+as being $(f \cap g) (x) (k) = f(x)(k) \land g(x)(k)$ and similarly for arbitrary unions.
+So a sieve on $Y$ (which is a collection of arrows $X \to 2^{2^Y}$) is covering if, after
+you close under finite unions and arbitrary intersections, it hits all of $2^{2^Y}$.
+But I'd rather think about the sieve inclusions (trivial cofibrations?) $S \hookrightarrow \bar S$ where
+$\bar S$ is what you get after closing $S$ up
+to finite intersections and arbitrary unions.
+
+\subsection{A Question I Don't Understand Yet}
+The Kleisli category on the continuation monad on $\rset$ also admits
+a functor {\em to} $\rset$, doesn't it? It takes each $S$ to $2^{2^S}$
+and each morphism $f : S \to 2^{2^T}$ to its Kleisli lifting
+$\bar f : 2^{2^S} \to 2^{2^T}$. The textured objects in this arrangement
+would be sets that are covariantly probed canonically by $2^{2^1}$??
+Any interesting results from replacing $2$ with some other poset with
+finite meets and arbitrary joins?
 \end{document}
