@@ -16,6 +16,7 @@
 \def\o{\circ}
 \def\C{\mathbf{C}}
 \def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
 \def\x{\times}
 \def\st{\mathrel|}
 \def\rset{\mathbf{Set}}
@@ -512,7 +513,7 @@ Let's suppose we're just talking about $\Omega \in \hat \P$ for now.
 Suppose we have a notion of covering sieve in mind.
 The action of the corresponding $j$ on a sieve $S \in \Omega(P)$ is to take $S$ to the
 set of arrows $f : Q \to P$ such that $S$ restricted along $f$  covers $Q$.
-\vfil\eject
+
 \section{From The Top Again}
 
 Let $\C, \P$ be a categories with $F : \P \to \C$. Suppose
@@ -653,4 +654,94 @@ $\bar f : 2^{2^S} \to 2^{2^T}$. The textured objects in this arrangement
 would be sets that are covariantly probed canonically by $2^{2^1}$??
 Any interesting results from replacing $2$ with some other poset with
 finite meets and arbitrary joins?
+
+\subsection{Comma Categories Again}
+Just filtering out the right-lifting-property morphisms $\phi \in \hat \P$
+that happen to have a codomain like $\C[F\dash, C]$ I think isn't good enough
+for capturing the morphisms between `models of the theory'. I actually
+want a comma category. So let me say instead:
+
+Let $F : \P \to \C$ be a functor, and $J$ a subset of morphisms in $\hat \P$.
+Let $R_J(\hat \P)$ be the subcategory of $\hat \P$ that has the right-lifting
+property against every morphism in $J$.
+Define $\Y : \C \to \hat\P$ by $\Y(C) = \C[F \dash, C]$.
+Without considering right-lifting-ness
+I'd be talking about the comma category $\hat \P /\Y$.
+I want to instead talk about $R_J(\hat \P) / \Y$.
+
+I think I just need to require that $\Y$ is able to lift from $\hat\P$
+to $R_J(\hat\P)$ to make this work. I think in the topological example
+this is the case. For every {\em set-valued} function $f : Y \to X$, there
+is a topology determined by staring at the $\hat\P$-diagram
+\[
+\begin{tikzcd}
+  X \to 2^{\dash}\ar[d, "\dash \o f"]\\
+Y \to 2^{\dash}
+\end{tikzcd}
+\]
+where I'm thinking of $X \to 2^{\dash}$ as the fibers sitting over
+$Y \to 2^{\dash}$. If $f$ is $! : Y \to 1$, this gives the indiscrete
+topology on $Y$. If $f$ is $\rid : Y \to Y$, this is the discrete
+topology on $Y$. Otherwise what's going on is I get the indiscrete
+topology `on each preimage of a point $x \in X$' as a chunk, but the
+discrete topology `among' these chunks. The open sets of the topology
+on $Y$ are the preimages of arbitrary subsets of $X$. This definitely
+{\em is} a topology in any event, and so $\dash\o f$ has the
+right-lifting property.
+
+\subsection{The Definition As Of Now}
+Any subset $J$ of morphisms of a category $\X$
+determines a wide subcategory of $\X$, call it $[J]$, whose objects
+whose morphisms are those that have the right lifting property against
+all morphisms in $J$.
+\[
+\begin{tikzcd}
+J_1 \ar[r]\ar[d, "j"'] &F_1 \ar[d, "\phi"]\ar[from=dl, dotted]\\
+J_2 \ar[r] & F_2
+\end{tikzcd}
+\]
+
+Suppose $F : \P \to \C$ be a functor, and $J$ a subset of morphisms of $\hat \P$.
+Define $\bar F : \C \to \hat\P$ by $\bar F(C) = \C[F \dash, C]$. Suppose $\bar F$ lifts to $[J]$:
+\[
+\begin{tikzcd}
+&{[J]}\ar[d, hook]\\
+  \C \ar[r, "\bar F"'] \ar[ur, "\tilde F"]& \hat\P
+\end{tikzcd}
+\]
+Then we say the category of {\em models} of $J, F$ is the comma category $[J] / \tilde F$.
+
+\subsubsection{Category Example}
+The category $\P$ is finite nonempty sets with monotone maps, call this $\Delta$. The category $\C$ is $\rset$.
+The functor $F$ is the obvious inclusion. The subset $J$ consists of inclusions of covering sieves
+in maximal sieves, where a sieve $S$ on a set $n$ is covering if for every $i < j \in n$,
+we can find a morphism in $S$ where both $i$ and $j$ are in its image.
+
+Can we see that $\bar F$ lifts to $[J]$? We want to see that for any morphism $f : C \to D \in \rset$,
+that $(f\o \dash) : \rset[ \dash, C] \to \rset[\dash, D]$ has the right lifting property against $J$.
+So let's consider a covering sieve $S$ on $n$, and look at
+\[
+\begin{tikzcd}
+S \ar[r, "g"]\ar[d, hook, "s"'] &\rset[ \dash, C] \ar[d, "f \o \dash"]\ar[from=dl, dotted]\\
+{\Delta}[\dash, n] \ar[r] & \rset[\dash, D]
+\end{tikzcd}
+\]
+By yoneda, we know the bottom arrow arises from $b : n \to D$.
+
+Right, so... the set of probe-able locations is $\rset[\dash, D]$. This
+is a presheaf in $\hat\P$ `arising as $\C[F\dash, C]$ for some $C$' so it's just telling
+us that the underlying set of objects of the category is in fact $D \in \C$.
+And then $\rset[\dash, C]$ is the actual fibered set of cells living over those locations.
+
+Hm, something feels a bit broken. When we have $f : 0 \to D$ we have no
+arrows. When $f : 1 \to D$ we have exactly one identity arrow sitting on
+top of the unique $f(*) \in D$ that $f$ picks out. When $f = \rid_D$,
+we have a sensible category with one morphism in every homset.
+
+Maybe this is ok, as long as I think of a category as having some outside
+noise --- some objects that don't even have identity arrows, like elements
+outside a PER that aren't even equal to themselves. If anything
+is hit by the 1-probe, then it must also be hit by the 2-probe, but things
+may not even be hit by the 1-probe.
+
 \end{document}
