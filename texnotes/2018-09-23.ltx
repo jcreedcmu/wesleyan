@@ -654,4 +654,73 @@ and associativity and interchange are built in.
 
  The 3-dimensional homset between pasting diagrams
 $D_1$ and $D_2$ is braiding diagrams between the points of $D_1$ and $D_2$.
+\section{Another Way to use Strict $n$-Categories}
+Consider the strict 3-category where there is one $0$-cell $X$
+one $1$-cell $\iota$ for each natural number. The $2$-cells
+from $n$ to $n$ (there are no heterogeneous $2$-cells generally from $n$ to $m$)
+are lists of naturals, whose length is $n$.
+
+Vertical composition of two $n$-lists is pointwise sum. Horizontal
+composition is concatenation. The $3$-cells from one list to another
+are braidings. Internally, we can see that $[2,0]$ and $[1,1]$ are
+internally equivalent, in the sense that there are $3$-cells that go back
+and forth and compose to the identity braiding.
+But $[0,0]$ and $[0]$ are not; the
+domain and codomain of $[0,0]$ are both $2$, and the domain and
+codomain of $0$ are both $1$. They're not eligible for even asking the
+question of internal equivalence.
+Indeed the $1$-cells are all not equivalent to one another; there are two 2-cells
+going from $n$ to $m$ for $n\ne m$.
+So there's genuinely more than 1 nonequivalent $1$-cell, so this isn't the `braids
+in $3$-space' tricategory.
+
+But let's postulate some more data, an equivalence relation $\sim$. Objects
+are eligible to be $\sim$. Morphisms with equivalent domains and equivalent codomains
+are eligible to be $\sim$, and so on.
+
+For this example we say that all $1$-cells are to be equivalent. (They all share
+the same domain and codomain, so that's ok). And we say that a pair of 2-cells
+$\ell$ and $\ell'$ are equivalent if $\sum \ell = \sum\ell'$. This is okay,
+since their domains and codomains are equivalent no matter what, since all 1-cells
+are equivalent. We say two $3$-cells are equivalent if... oh, hm, this is where
+the actual data of the {\em how} the domains and codomains are equivalent matters.
+
+Okay, so perhaps the $\sim$ relation is to be limited to when the domains and codomains
+are actually equal. We can still say that $[2,0] \sim [1,1]$.
+
+So the example is: All $1$-cells are equivalent. All $2$-cells with the same sum
+are equivalent. Two $3$-cells are equivalent only if they're equal.
+
+Now let's deal with some things
+I want to demand of $\sim$ that I want to prove do actually hold in this example.
+\begin{lemma}
+If $x \sim y$, then there exist $f : x \to y$ and $g : y \to x$
+such that $g \o f \equiv 1_x$ and $f \o g \equiv 1_y$.
+\end{lemma}
+
+\begin{proof}
+No this totally isn't true. For example, the $1$-cells aren't natively equivalent,
+we just want to assert that they are.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $f : C \to D$ and $g : D \to E$ and $f \sim f'$ and $g \sim g'$,
+then $g f \sim g' f'$.
+\end{lemma}
+
+\begin{proof}
+Vertical composition is easy. Horizontal composition of 2-cells also works.
+\cqed
+\end{proof}
+
+Bah, I don't think this works as such.
+
+\begin{question}
+Is there something that can be achieved by combining a strict $n$-category
+structure and a weak-$n$-groupoid structure? Is the equivalence I need
+something like HoTT equality?
+\end{question}
+
+
 \end{document}
