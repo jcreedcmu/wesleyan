@@ -1,0 +1,412 @@
+\documentclass{article}
+%\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{yfonts}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\zed{\emptyset}
+\def\lint{{\textstyle\int}}
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
+
+\def\mhave{\textcolor{blue}{\hbox{have}}}
+\def\mwant{\textcolor{orange}{\hbox{want}}}
+
+\def\chave{\eqno\mhave}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
+\def\cwant{\eqno\mwant}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+\def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+\def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+\def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+\def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+\def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+\def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+\def\prof{\nrightarrow}
+\def\tensor{\otimes}
+\def\htensor{\mathrel{\hat\otimes}}
+\def\lol{\multimap}
+\def\hlol{\mathrel{\hat\multimap}}
+\def\wtf{{\color{red}???}}
+
+\def\re{\mathbf{E}}
+\def\sh{\sharp}
+\def\shp{\mathrel{\sharp}}
+\def\zero{\texttt{0}}
+\title{Some More Thoughts About Polytopes}
+\begin{document}
+
+\maketitle
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Setup}
+
+Recall that the general idea is to think of a polytope as an action of
+a reflection group on a set. The set being acted on is to be thought
+of as the set of flags of the polytope. If the reflection group in
+question is the $n$-dimensional Grothendieck cartographic group
+\[\langle \sigma_0, \ldots, \sigma_{n}  \st \sigma_i^2 = 1, (\sigma_i\sigma_j)^2 = 1 \st |i-j| \ge 2\rangle\]
+then we can think of a $n$-cell of the polytope as an equivalence
+class of flags under the action of all generators {\em except for}
+$\sigma_n$.
+
+Note that this is not quite the same thing as an `abstract polytope'
+--- the sort of thing defined by a collection of cells and an
+incidence relation, requiring among other things the `diamond
+property' that the interval between any incident $n$-cell and
+$(n+2)$-cell there are exactly two $(n+1)$-cells. I'm not yet sure if
+the difference is essential or just a fiddly technical difference, but
+it is {\em at least} the latter: there is a 2-dimensional polytope in
+the `group action' sense, with four flags, and the action of the group
+\[\langle \sigma_0, \sigma_1, \sigma_2  \st \sigma_i^2 = 1, (\sigma_0\sigma_2)^2 = 1 \rangle\]
+on it is given by the evident edge-3-coloring of the tetrahedron. However, it then
+clearly has one vertex, one edge, and one face, which is not possible for an abstract polytope
+in the cells-and-incidence-relation sense.
+
+The following few sections give a brief description
+of the flag sets of various well-known polytopes as syntax.
+
+\section{The Permutahedron}
+Let an alphabet $\Sigma = \{a, b, c, \ldots \}$ be given. The set
+$P_n$ of flags is defined to be expressions of the form
+
+\[ {x_0}^{m_0} {x_1}^{m_1} \cdots {}^{m_{n-2}}{x_{n-1}}^{m_{n-1}}x_{n} \]
+where $x_i \in \Sigma$, the $m_i$ are natural numbers, and each number in $0,\ldots, n-1$ occurs exactly
+once as an $m_i$, and each element in $\Sigma$ occurs exactly once as an $x_i$. For example,
+
+\[ b^0a \in P_1 \qquad c^1b^0a \in P_2 \qquad a^0c^2d^1b \in P_3\]
+
+We define the action of $\sigma_0, \ldots, \sigma_{n-1}$ by saying:
+\[\begin{cases}
+ \hbox{$\sigma_0$ swaps the two letters adjacent to the superscript 0;} \\
+ \hbox{$\sigma_i$ swaps the $i-1$ and $i$ occurring in superscripts.} & (\hbox{if }i \ge 1)
+\end{cases}\]
+
+For example,
+\[ \sigma_0 \cdot b^0a = a^0b \qquad \sigma_0 \cdot c^1b^0a = c^1a^0b \qquad \sigma_0 \cdot a^0c^2d^1b = c^0a^2d^1b\]
+\[ \sigma_1 \cdot c^1b^0a = c^0b^1a \qquad \sigma_1 \cdot a^0c^2d^1b = a^1c^2d^0b \qquad \sigma_2 \cdot a^0c^2d^1b = a^0c^1d^2b\]
+\section{The Associahedron}
+
+\def\b{\star}
+
+Consider the language
+\[\begin{tabular}{rccl}
+  Terms&$t$&$::=$&$\b \celse (p)^m$\\
+  Products&$p$&$::=$&$tt$
+\end{tabular}\]
+where $m$ are natural numbers.
+For $n\in\N$, let $A_n$ be the set of products such that every number
+in $0, \ldots, n-1$ appears exactly once.
+Some examples of elements of $A_n$ are:
+\[ \b(\b\b)^0 \in A_1 \qquad (\b\b)^1(\b\b)^0 \in A_2 \qquad (\b(\b\b)^1)^0(\b\b)^2\in A_3\]
+
+We define the action of $\sigma_0, \ldots, \sigma_{n-1}$ by saying:
+\[\begin{cases}
+ \hbox{$\sigma_0$ reassociates the brackets with superscript 0;} \\
+ \hbox{$\sigma_i$ swaps the $i-1$ and $i$ occurring in superscripts.} & (\hbox{if }i \ge 1)
+\end{cases}\]
+
+%% We describe the action of generators $\sigma_0, \ldots, \sigma_n$ on these expressions.
+%% For $\sigma_1, \ldots, \sigma_n$, we say
+%% \[\hbox{$\sigma_i$ swaps the $i-1$ and $i$ occurring in superscripts.}\]
+
+For example,
+\[\sigma_0 \cdot \b(\b\b)^0 = (\b\b)^0\b\]
+\[\sigma_0 \cdot (\b\b)^1(\b\b)^0 = ((\b\b)^1\b)^0\b\]
+\[\sigma_0 \cdot (\b(\b\b)^1)^0(\b\b)^2 = \b((\b\b)^1(\b\b)^2)^0\]
+
+\[\sigma_1 \cdot (\b\b)^1(\b\b)^0 = (\b\b)^0(\b\b)^1\]
+\[\sigma_1 \cdot (\b(\b\b)^1)^0(\b\b)^2 = (\b(\b\b)^0)^1(\b\b)^2\]
+\[\sigma_2 \cdot (\b(\b\b)^1)^0(\b\b)^2 = (\b(\b\b)^2)^0(\b\b)^1\]
+
+%% For $\sigma_0$, we say the following.
+%% Let an element $a \in A_n$ be given. Since we required that every
+%% number appears exactly once in any element of $A_n$, it must be that
+%% $a$ has a unique term subexpression of the form $(p)^0$. But since
+%% terms only occur {\em in} products, it must also be that $a$ has a product
+%% subexpression of the form either
+
+%% \[t_1(t_2t_3)^0 \hbox{ or } (t_1t_2)^0 t_3\]
+
+%% And so we define the action of $\sigma_0$ to be rewriting any $e_1(e_2e_3)^0$,
+%% if that's what occurs, to $(e_1e_2)^0e_3$, or else vice-versa. In short,
+%% \[ \hbox{$\sigma_0$ reassociates the brackets labelled $(\cdots)^0$}\]
+%% For example,
+
+
+%% \subsection{Consequences}
+%% The action of $\sigma_0, \ldots, \sigma_n$ all together, acting on the
+%% set $A_n$, constitutes a polytope of flags and reflections. $\sigma_0$
+%% is the vertex flip, $\sigma_1$ is the edge flip, $\sigma_2$ is the face flip, etc.
+
+%% A vertex is what you get by quotienting by all of $\sigma_1, \ldots, \sigma_n$. You
+%% can permute around the superscripts however you like, but you can't actually reassociate
+%% brackets - so it's just a choice of bracketing of $\b$s.
+
+%% An edge is what you get by quotienting by $\sigma_0$ and all of $\sigma_2, \ldots, \sigma_n$.
+%% You can't interchange $0$ and $1$, but you can permute $1, \ldots, n-1$ to your heart's content,
+%% and you can reassociate $(\dash)^0$. So an edge is a choice of two vertices related by some
+%% reassociation.
+
+%% A face is what you get by quotienting by $\sigma_0,\sigma_1$, and all of $\sigma_3, \ldots, \sigma_n$.
+%% You can permute $2, \ldots, n-1$ all you want, so they don't matter. And you can swap $0,1$ around
+%% all you want, and reassociate whoever happens to be $(\dash)^0$ at the moment all you want ---
+%% which means that really you get two pick two brackets, and reassociate them all you want.
+
+%% Inductively, $n$-dimensional faces consist of a choice of $n$ brackets, and an equivalence class
+%% under reassociating all of those brackets as much as you want.
+
+%% We can read the superscripts as an ordered history of which associativities we demanded
+%% as we passed from vertex, (no associativities) to edge, (one associativity) to face,
+%% (one more associativity, now we have two: the ones labelled $0, 1$) to volume, (the ones labelled $0,1,2$) etc.
+
+\section{The Simple Permutoassociahedron}
+We augment the language of the associahedron by replacing $\b$ with letters $x \in \Sigma$,
+and adding one more place a superscript can go
+to each expression:
+\[\begin{tabular}{rccl}
+  Terms&$t$&$::=$&$x \celse (p)^m$\\
+  Products&$p$&$::=$&$tt$\\
+  Expressions&$e$&$::=$&$\square^m p$\\
+\end{tabular}\]
+The set $PA_n$ consists of expressions $e$ such that every number in
+ $0, \ldots, n-1$ appears exactly once as a superscript, and every letter in $\Sigma$ appears exactly
+once. For example,
+\[ \square^0 a b \in PA_1 \qquad \square^1 c(ab)^0 \in PA_2 \qquad \square^0 (dc)^1(ba)^2 \in PA_2\]
+
+We define the action of $\sigma_0, \ldots, \sigma_{n-1}$ by saying:
+\[\begin{cases}
+ \hbox{$\sigma_0$ reassociates the brackets with superscript 0;} & \hbox{(if $(\cdots)^0$ appears)} \\
+ \hbox{$\sigma_0$ swaps the two `middle letters'} & \hbox{(if $\square^0$ appears)} \\
+ \hbox{$\sigma_i$ swaps the $i-1$ and $i$ occurring in superscripts.} & (\hbox{if }i \ge 1)
+\end{cases}\]
+where the `middle letters' are the rightmost letter of the first $t$ in $\square^mtt$, and the
+leftmost letter of the second $t$. For example,
+\[ \sigma_0 \cdot \square^0 a b = \square^0 a b\]
+\[ \sigma_0 \cdot \square^1 c(ab)^0 = \square^1 (ca)^0b\]
+\[ \sigma_0 \cdot \square^0 (dc)^1(ba)^2 = \square^0 (db)^1(ca)^2 \]
+
+
+\[ \sigma_1 \cdot \square^1 c(ab)^0 = \square^0 c(ab)^1 \]
+\[ \sigma_1 \cdot \square^0 (dc)^1(ba)^2 = \square^1 (dc)^0(ba)^2\]
+\[ \sigma_2 \cdot \square^0 (dc)^1(ba)^2 = \square^0 (dc)^2(ba)^1 \]
+
+\section{Barycentric Subdivision}
+
+All of the above actions have the following structure: most generators simply permute
+some data around, and one generator is like an `apply' or `eval' sort of action which takes
+the position distinguished by the permutation and does something else with it.
+
+Barycentric subdivision of a polytope can also be described with such an arrangement.
+Suppose we have a $n$-dimensional polytope given as a flag set $X$ and an action of
+reflection group generators $\sigma_0, \ldots, \sigma_{n-1}$ on $X$. We can define a flag
+set $Y$ by saying its elements are expressions of the form
+\[ ({i_0}, \ldots,i_{n-1})x\]
+where $i_0, \ldots, i_{n-1}$ is a permutation of $0, \ldots, n-1$.
+
+We define an action on $Y$ whose generators are $\rho_0, \ldots, \rho_{n-1}$ by saying
+\[\begin{cases}
+ \hbox{$\rho_j$ swaps $i_{j}$ and $i_{j+1}$} & \hbox{(if $j < n-1$)} \\
+ \hbox{$\rho_{n-1}$ replaces $x$ with $\sigma_{i_{n-1}} \cdot x$}
+\end{cases}\]
+
+We can then see that the vertices of $Y$ --- the equivalence classes under action by every generator except
+$\rho_0$ --- are tantamount to choosing a dimension $d$ (since we aren't allowed to swap $i_0$ with anything,
+one number in the permutation gets stuck in that position) and then being allowed to apply
+$\sigma_i$ for any $i \ne d$. In other words, a vertex of $Y$ is a cell (of some dimension) of $X$.
+Also the facets of $Y$ --- which are the equivalence classes under
+action by every generator except $\rho_{n-1}$ --- are exactly the flags of $X$. This is the barycentric
+subdivision of $X$.
+
+\end{document}
