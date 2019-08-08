@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+\input{prooftree}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\C{\mathbf{C}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbf{P}}
+\def\dash{\hbox{---}}
+\def\celse{\mathrel{|}}
+\def\dom{\mathop{\mathrm{dom}}}
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Coloring Thoughts}
+
+Syntax is
+\[\begin{tabular}{rccl}
+  Terms &$M$&$::=$&$x \celse M\ M \celse \lambda x . M$\\
+  Colors &$c$&$::=$&$0 \celse 1 \celse 2$\\
+\end{tabular}\]
+and we are concerned with which terms can be $3$-colored
+by
+\[
+\begin{prooftree}
+\justifies
+  x : c \prov x : c
+\end{prooftree}
+\qquad
+\begin{prooftree}
+  \Omega, x : c \prov M : d\justifies \Omega \prov \lambda x . M : c \cdot d
+\end{prooftree}
+\qquad
+\begin{prooftree}
+  \Omega_1\prov M_1 : c_1 \qquad \Omega_2 \prov M_2 : c_2\justifies
+\Omega_1, \Omega_2 \prov M_1 \ M_2 \prov c_1 \cdot c_2
+\end{prooftree}
+\]
+where $c \cdot d$ is the partial operation that gives the third color not
+equal to $c$ or $d$, when $c\ne d$.
+
+The ultimate goal is
+\begin{theorem}[The Four-Coloring Theorem]
+For any term $M$ over one free variable $x$, we have
+\[x:0 \prov M :0\]
+\end{theorem}
+and I want to sketch out some generalizations/strengthenings of
+this claim to see where that goes.
+
+The first obvious step is to
+\begin{lemma}
+For any term $M$ with free variables $x_1, \ldots, x_n$, (for $n\ge 1$) there
+exist colors $c_1, \ldots c_n$ such that
+\[x_1:c_1, \ldots, x_n:c_n \prov M :0\]
+\end{lemma}
+
+We would say that the string $c_1\cdots c_n$ is a coloring of $M$, so this
+is just saying
+\begin{lemma}
+Every term has a coloring.
+\end{lemma}
+
+Were we to try to prove this over induction on $M$, the application
+case would be easy --- appeal to i.h. to color the subterms, permute their colors appropriately
+to arrive at a coloring of the whole term. However, the lambda case
+can't proceed without strengthening the induction hypothesis. It would require that
+\begin{lemma}
+Every term with $\ge 2$ free variables has a coloring
+that does not end with a $0$.
+\end{lemma}
+
+For consider a diagram like:
+\[
+\begin{tikzpicture}
+\input{tikz/lambda-diagram}
+\end{tikzpicture}
+\]
+The order of the context is reversed from the left-to-right order of dangling
+wires that reach the bottom of the diagram, so the $1$-wire is the last free
+variable of the subterm.
+
+If and only if we have a non-zero color assigned toq the bound variable, then we can permute
+colors around to color the larger lambda term.
+
+\end{document}
