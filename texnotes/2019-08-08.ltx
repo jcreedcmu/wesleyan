@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\C{\mathbf{C}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbf{P}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+\section{Definitions}
+\[
+\begin{tabular}{rccl}
+Scripts&$\sigma$&$::=$&$\cdot \celse \sigma, \alpha$\\
+Actions&$\alpha$&$::=$&$\says P m$\\
+Principals&$A$&$::=$&$A \celse B \celse \cdots$\\
+Messages&$m$&$::=$&$\rand P n \celse 0 \celse m \oplus m \celse [m] \celse m; m\celse \cdots $
+\end{tabular}
+\]
+
+We have \[\prov \sigma \rok\] a judgment that a script is well-formed.
+
+\[
+\erule
+{}
+{\prov \cdot \rok}
+\qquad
+\erule
+{\prov \sigma \rok \qquad \sigma/ P \prov  m }
+{\prov \sigma, \says P m \rok}
+\]
+
+We have \[\sigma/ P \prov m\] a judgment that after $\sigma$ is executed, $P$ can say $m$.
+
+\[
+\erule
+{}
+{\sigma, \says P m/ Q \prov m}
+\qquad
+\erule
+{\sigma / P \prov m}
+{\sigma, \alpha/ P \prov m}
+\qquad
+\erule
+{}
+{\sigma/ P \prov \rand P n}
+\]
+
+\[
+\erule
+{}
+{\sigma/ P \prov 0}
+\qquad
+\erule
+{\sigma/ P \prov m_1 \qquad \sigma/ P \prov m_2}
+{\sigma/ P \prov m_1 \oplus m_2}
+\qquad
+\]
+\[
+\erule
+{\sigma/ P \prov m}
+{\sigma/ P \prov [m]}
+\qquad
+\erule
+{\sigma/ P \prov m_1 \qquad \sigma/ P \prov m_2}
+{\sigma/ P \prov m_1 ; m_2}
+\]
+We assert $(\oplus, 0)$ is a commutative monoid, with $m \oplus m = 0$. We also
+assert an `accumulator axiom' $[m_1];m_2 = [m_1 \oplus m_2]$.
+\section{Consequences}
+Consider the script $\sigma = \says A {[\rand A 1]},\says B {[\rand A 1 \oplus \rand B 1]},\says B {\rand B 1 \oplus [\rand B 1]}$.
+We claim
+ \[\prov \sigma \rok \qquad
+ \sigma / A \prov \rand B 1\]
+ but an eavesdropper Eve cannot prove
+\[ \sigma / E \not\prov \rand B 1\]
+The first two claims follow because $B$ can construct from $A$'s broadcast the expression
+\[[\rand A 1] ; \rand B 1 = [\rand A 1 \oplus \rand B 1]  \]
+and $A$ can then construct
+\[([\rand A 1 \oplus \rand B 1]; \rand A 1) \oplus (\rand B 1 \oplus [\rand B 1]) = \rand B 1\]
+
+\end{document}
