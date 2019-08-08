@@ -109,5 +109,23 @@ The first two claims follow because $B$ can construct from $A$'s broadcast the e
 \[[\rand A 1] ; \rand B 1 = [\rand A 1 \oplus \rand B 1]  \]
 and $A$ can then construct
 \[([\rand A 1 \oplus \rand B 1]; \rand A 1) \oplus (\rand B 1 \oplus [\rand B 1]) = \rand B 1\]
+Showing conclusively that Eve {\em can't} get to $\rand B 1$ seems harder, but I also can't see any way that she'd be able to do it.
 
+\section{Question}
+If we disallow the accumulator operation $;$ is this situation still possible? Does there exist
+a script $\sigma$ such that
+ \[\prov \sigma \rok \qquad
+ \sigma / A \prov \rand B 1
+\qquad \sigma / E \not\prov \rand B 1\]
+? This is Bob communicating a message to Alice without Eve getting it.
+
+Although this doesn't cover {\em all} possible protocols that might be reasonably described as
+``Bob communicating a message to Alice without Eve getting it''. If Bob could communicate
+some message to Alice such that {\em only Alice} can tell whether it's equal to some pre-chosen message,
+that also might work.
+
+At the very least, if we could achieve the reverse communication, namely $\sigma / B \prov \rand A 1$,
+without Eve hearing about this agreement, and also subsequently e.g. $\sigma / B \prov \rand A 2$
+then Bob could send $\rand A 1$ or $\rand A 2$ in the open as a bit to Alice. But obviously by symmetry
+this is no easier.
 \end{document}
