@@ -128,4 +128,76 @@ At the very least, if we could achieve the reverse communication, namely $\sigma
 without Eve hearing about this agreement, and also subsequently e.g. $\sigma / B \prov \rand A 2$
 then Bob could send $\rand A 1$ or $\rand A 2$ in the open as a bit to Alice. But obviously by symmetry
 this is no easier.
+
+\section{Another Thought}
+
+Let $N$ be the number of bits in the output of some hash function $[\dash]$.
+The rules of the game are: Alice gets to say 3 $N$-bit messages publicly to both Bob and Eve,
+and gets to {\em propose} 3 $N$-bit messages to Bob, but Eve gets to destroy one before it gets to Bob.
+Alice's goal is to actually communicate 3 $N$-bit messages to Bob without Eve getting any of them.
+
+My solution-in-search-of-a-problem is:
+Alice publicly says
+\[m_1 \oplus [m_2] \oplus [m_3]\]
+\[[m_1] \oplus m_2 \oplus [m_3]\]
+\[[m_1] \oplus [m_2] \oplus m_3\]
+and privately tries to send
+\[[m_1], [m_2], [m_3]\]
+With any two-thirds of those messages, Bob can recover $m_1, m_2, m_3$, and I don't think Eve can get any.
+If Eve gets to intercept one, say $[m_3]$, she can make $m_1 \oplus m_2$.
+
+
+In general if Eve gets to destroy one message, we can publicly say
+\[m_i \oplus \bigoplus_{j\ne i} [m_j] \]
+for each $i$, and then privately attempt $[m_1], \ldots, [m_n]$.
+
+What if we have three messages and Eve gets to destroy two?
+Perhaps broadcast all of
+\[m_1 \oplus [m_2]\qquad m_1 \oplus [m_3]\]
+\[m_2 \oplus [m_1]\qquad m_2 \oplus [m_3]\]
+\[m_3 \oplus [m_1]\qquad m_3 \oplus [m_2]\]
+?
+Or we could make do with a cycle
+\[m_1 \oplus [m_2]\qquad m_2 \oplus [m_3] \qquad m_3 \oplus [m_1]\]
+Actually at this point, the `adversary gets to pick one of your proposed messages to send'
+is kind of silly, since we could determine which message gets sent by just proposing it $n$ times.
+
+Could say that we only get to nondeterministically send one of the $m_i$, hashed.
+
+\section{Quick Unrelated Thing I Want To Check}
+
+Is there provability in either direction between
+\[((S \to (X \x S)) \to R) \to R\]
+\[S \to (((X \to R) \to R) \x S)\]
+?
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\[
+\justifies
+X\x S, X \to R\prov   R
+\]
+\justifies
+S \to (X \x S), S, X \to R\prov   R
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S, X \to R\prov   R
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S\prov  (X \to R) \to R
+\]
+\[
+\justifies
+S\prov   S
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S\prov  ((X \to R) \to R) \x S
+\]
+\justifies
+{((S \to (X \x S)) \to R) \to R\prov S \to (((X \to R) \to R) \x S)}
+\end{prooftree}
+\]
 \end{document}
