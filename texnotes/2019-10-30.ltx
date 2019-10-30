@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\C{\mathbf{C}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+Let $J$ be a Grothendieck topology, i.e. for an object $P$ in a category $\P$, we'll
+have that $J(P)$ is a set of sieves that count as covering $P$. To be a Grothendieck topology
+we need:
+\begin{enumerate}
+\item $\hom(\dash, P)$ covers $P$.
+\item If $S$ covers $P$, then $T$ covers $P$ precisely when for all $f : Q \to P \in S$, we have
+$f^*T = \{ g : R \to Q \st f \o g \in T\}$ covers $Q$.
+\end{enumerate}
+
+
+Let's define a collection of morphisms $\Phi_J \subseteq \P$.
+We say:
+We'll say the natural transformation $\phi : S \to T \in \P$ is
+going to be in $\Phi_J$ if:
+\[
+\Phi_J = \{ \phi : S \to T \in \P \st \forall P \in \P .\  \forall t \in T(P).
+\]
+\[
+\exists j \in J(P) . \forall f : Q \to P \in j(Q) . \exists s \in S(Q) . \phi_Q(s) = T(f) (t)\}
+\]
+In words: a natural transformation $\phi : S \to T$ is going to
+ be in $\Phi$ if for every $P \in \P$ and every $t \in T(P)$, there exists a covering
+ sieve $j \in J(P)$ such that for every morphism $f : Q \to P \in j$, there exists $s \in S(Q)$
+ such that $\phi_Q(s) = T(f)(t)$.
+
+\begin{lemma}
+For any covering sieve $j \in J(P)$ we have $\iota \in \Phi_J$, where
+$\iota$ is the evident inclusion $\iota: j \to \hom(\dash, P)$
+\end{lemma}
+
+\begin{proof}
+We must show
+\[
+ \forall P' \in \P .\  \forall t : P'\to P.
+\exists j' \in J(P') . \forall f : Q \to P' \in j'(Q) . \exists s \in j(Q) . s = t \o f
+\]
+But we can just set $j' = t^* j$ and this holds by the base change axiom.
+\cqed
+\end{proof}
+
+What are these morphisms in terms of Lawvere-Tierney topologies? Are they perhaps the subobjects
+that are already closed?
+\end{document}

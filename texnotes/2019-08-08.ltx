@@ -200,4 +200,68 @@ S\prov   S
 {((S \to (X \x S)) \to R) \to R\prov S \to (((X \to R) \to R) \x S)}
 \end{prooftree}
 \]
+
+\section{Another Unrelated Thing}
+Say
+\[A_i = |P_i - A|^2 \qquad B_i = |P_i - B|^2 \]
+\[a_i = e^{-\eta|P_i - A|^2} \qquad b_i = e^{-\eta|P_i - B|^2} \]
+and given some points $P_i$ we want to choose $A$ and $B$ to
+minimize
+\[ \sum_i \mathrm{softmin}_\eta(A_i, B_i) \]
+\[ = \sum_i A_i {e^{-\eta A_i} \over e^{-\eta A_i} + e^{-\eta B_i}} + B_i{e^{-\eta B_i} \over e^{-\eta A_i} + e^{-\eta B_i}} \]
+\[ = \sum_i {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+so we want to set
+\[0 = {\partial \over \partial A} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+\[0 = {\partial \over \partial B} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+which expanding to particular dimensions in the 2-d case would be
+\[0 = {\partial \over \partial A^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \qquad
+0 = {\partial \over \partial A^y} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+\[0 = {\partial \over \partial B^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \qquad
+0 = {\partial \over \partial B^y} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+Let's try to compute some of these derivatives now.
+\[ {\partial \over \partial A^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \]
+\[=   \sum_i  {\partial \over \partial A^x} {A_i a_i \over a_i + b_i} + {\partial \over \partial A^x} {B_i b_i \over a_i + b_i} \]
+\[=   \sum_i   {(a_i + b_i) D_{A^x}(A_i a_i + B_i b_i) - (A_i a_i + B_i b_i) D_{A^x}(a_i + b_i)
+ \over (a_i + b_i)^2} \]
+\[=   \sum_i   {(a_i + b_i) (A_i  a'_i + a_i  A'_i + B_i  b'_i + b_i  B'_i)  - (A_i a_i + B_i b_i) (a'_i + b'_i)
+ \over (a_i + b_i)^2} \]
+\[=   \sum_i   {(a_i + b_i)(a_iA_i' + b_iB_i') + (a'_i b_i - a_ib'_i)(A_i - B_i)
+ \over (a_i + b_i)^2} \]
+Let's compute $D_{A^x}$ of $A_i$ and $a_i$.
+\[{\partial \over \partial A^x} A_i  = {\partial \over \partial A^x} ((P_i^x - A^x)^2 + (P_i^y - A^y)^2)   \]
+\[= {\partial \over \partial A^x} ((P_i^x - A^x)^2)    \]
+\[= 2  (A^x - P_i^x )    \]
+and
+\[{\partial \over \partial A^x} a_i = {\partial \over \partial A^x} e^{-\eta A_i} \]
+\[= -\eta ({\partial \over \partial A^x} A_i) e^{-\eta A_i} \]
+\[= 2\eta (P_i^x - A^x) e^{-\eta A_i} \]
+\[= -2\eta (A^x - P_i^x ) a_i \]
+and any $A^x$ derivatives of $B$-based expressions are zero.
+So for the $A^x$ derivative we get
+\[ 0
+=   \sum_i  (A^x - P_i^x ) {(a_i + b_i)a_i -\eta  (a_i b_i)(A_i - B_i)
+ \over (a_i + b_i)^2} \]
+This looks too complicated to solve analytically for $A^x$, so let's
+just think about regular $k$-means instead.
+
+For the `find the mean' step, can we just introduce a constraint that the
+mean lies on a certain line?
+
+If I have $P_i$ and I want to choose $(x, y)$ to minimize
+\[ E = \sum_i (P_i^x - x)^2 + (P_i^y - y)^2 \]
+then obvs
+\[ 0 = {\partial \over\partial x}E \]
+\[ = \sum_i 2(x - P^x_i) \]
+\[  \sum_i x  = \sum_i P^x_i \]
+\[   x  = {1\over N}\sum_i P^x_i \]
+and we just take the mean. If I want to instead choose $t$ such
+that $(x_0, y_0) + (x, y)t$ to minimize
+\[ E = \sum_i ((x_0 + tx) - P_i^x )^2 + ((y_0 + ty) - P_i^y)^2 \]
+then I set
+\[  0 = {\partial \over \partial t} E \]
+\[  0 = \sum_i 2x((x_0 + tx) - P_i^x ) + 2y((y_0 + ty) - P_i^y) \]
+\[  \sum_i x P_i^x + yP_i^y - xx_0 - yy_0 = \sum_i (x^2 + y^2) t \]
+\[  t = {1\over N(x^2 + y^2)} \sum_i x P_i^x + yP_i^y - xx_0 - yy_0  \]
+\[  t = {\sum_i x P_i^x + yP_i^y \over N(x^2 + y^2)}  - {xx_0 +  yy_0 \over x^2 + y^2} \]
+
 \end{document}
