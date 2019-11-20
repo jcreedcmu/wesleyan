@@ -7,6 +7,7 @@
 
 \usepackage{tikz}
 \usepackage{tikz-cd}
+\usetikzlibrary{calc}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
@@ -23,10 +24,14 @@
 \def\x{\times}
 \def\st{\mathrel|}
 \def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
 \def\op{\mathsf{op}}
 \def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\N{\mathbb{N}}
 \def\dash{\hbox{---}}
 \def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
 \def\celse{\mathrel{|}}
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
@@ -81,4 +86,279 @@ But we can just set $j' = t^* j$ and this holds by the base change axiom.
 
 What are these morphisms in terms of Lawvere-Tierney topologies? Are they perhaps the subobjects
 that are already closed?
+
+\section{Oops}
+
+Hm, I think I'm just grasping at the definition of local epimorphisms
+or local isomorphisms or something.
+
+Let's try to think of some concrete examples.
+
+For topological spaces, the relevant probe category I think is $\P$
+being something like the kleisli category for the set-of-finite-sets
+monad on $\rset$. We can think of a morphism $f : X \to Y$ as picking
+out for every $x\in X$ an arbitrary formal union of finite formal
+intersection of elements of $Y$. For example, a morphism $1 \to \{a,
+b, c\}$ is $a \cup (b \cap c)$. I suppose this isn't quite the
+straighforward monad I have in mind, since $a \cup (a \cap b)$ would
+be equal to $a$. I'd like to take as canonical representatives to be
+the maximal ones; so $T Y$ is a collection of subsets of subsets of
+$Y$, but closed in the following sense: In order for $S \in TY$, (e.g.
+$S = \{\{a\}, \{a, b\}, \{a, c\}, \{a, b, c\}\}$) and $U \in S$, and
+$U \subseteq V \subseteq Y$, then also $V \in S$. So basically filters on the
+power set of $Y$, except without the finite intersection condition.
+
+Or do I still want that? What would it mean. If $U \in S$ (e.g. $\{a, b\} \in S$
+ and $V\in S$ (e.g. $\{b, c\}\in S$) then I would require $U \cap V \in S$.
+(e.g. $\{b\}\in S$) No, that doesn't seem right.
+
+What's composition? Let $f: X \to Y$ and $g : Y \to Z$ be given.
+Suppose $x \in X$. Then $f(x) \in 2^{2^Y}$. We have $g$ as a function
+$Y \to 2^{2^z}$. We need a function $gf : X \to (Z \to 2) \to 2$.
+
+Thinking through the CPS monad I'd say
+\[ gf = \lambda x .\lambda k:(Z \to 2) .f\ x\ (\lambda y . g\ y\ k ) \]
+
+Let's see if I can convince myself this is right. What's the morphism $1 \to \{a, b\}$
+that assigns $a \cap b$? It's the function $1 \to (\{a, b\} \to 2) \to 2$ that returns
+true only if the continuation says true for $a$ and $b$.
+
+What's the morphism $1 \to \{a, b\}$
+that assigns $a \cup b \ (\cup (a \cap b))$? It's the function $1 \to (\{a, b\} \to 2) \to 2$ that returns
+true only if the continuation says true for $a$ or $b$.
+
+Given a function $f : X \to (Y \to 2) \to 2$ the setwise interpretation of it is
+
+\[ \lambda x . \{ S \subseteq Y \st f\ x\ (\lambda y . y \in S) = 1\}\]
+
+so the set interpretation of $gf$ is
+
+\[ \lambda x . \{ S \subseteq Z \st f\ x\ (\lambda y.g\ y\ (\lambda z . z \in S)) = 1\}\]
+
+or more like
+
+\[ \lambda x . \{ S \subseteq Z \st (\lambda y.g\ y\ (\lambda z . z \in S)) \in f(x) \}\]
+\[ \lambda x . \{ S \subseteq Z \st \{y \st  g\ y\ (\lambda z . z \in S)\} \in f(x) \}\]
+\[ \lambda x . \{ S \subseteq Z \st \{y \st  (\lambda z . z \in S) \in g(y)\} \in f(x) \}\]
+\[ (g\o f)(x) = \{ S \subseteq Z \st \{y \st  S \in g(y)\} \in f(x) \}\]
+
+Ok, let's test this out. Say my $f: 1\to \{a, b, c\}$ and $g : \{a, b, c\} \to \{a, b, d, e\}$.
+I give $f$ by $a \cup (b \cap c)$ i.e. $f = \{\{a\}, \{b, c\}, \ldots\}$
+and $g(a) = \{\{a\}, \ldots\}$ and $g(b) = \{\{b\}, \ldots\}$
+and $g(c) = \{\{d\}, \{e\}, \ldots\}$. I want to observe what happens when a $\cup$ lands
+under a $\cap$. What I expect to get out is $gf = a \cup (b \cap (d \cup e)) = a \cup (b\cap d) \cup (b\cap e)$.
+
+So I expect $\{b, d\} \in gf$. Is in fact $\{y \st \{b, d\} \in g(y)\} \in f(*)$? Yeah!
+By upward, closure $\{b, d\} \in g(b)$ and also $\{b, d\} \in g(c)$. And $\{b, c\} \in f(*)$.
+
+Ok, so that's my $\P$: it's the kleisli category for the ``upclosed-subsets of finite-subsets of''  monad on $\rset$.
+Let's now describe the functor from $\P$ to $\rset^\op$. We take $P\in \P$ to $2^P$ in $\rset$.
+We need to take $f : P \to Q \in \P$ to $2^Q \to 2^P \in \rset$. But we can regard
+$f$ as a special sort of function $P \to 2^{2^Q}$ and swizzle it around.
+
+Let $X = \N$. Let's look at two morphisms $1 \to X \in \P$ namely
+$\{\{3, 4\}\}$ and $\{\{0\},\{1\}, \ldots\}$.
+We should get out of these $\rset$-functions $2^X \to 2^1$.
+
+Suppose I have some other space $Y\in \rset^\op$, and a probe consisting of a bunch
+of putatively open sets taking the form of $2^X \to Y \in \rset^\op$, i.e.
+$Y \to 2^X \in \rset$.
+
+There should be a filling diagram like so in $\hat\P$.
+\[\begin{tikzcd}
+?\ar[r]\ar[d, hookrightarrow]& \mathcal{O}(Y) \ar[d, hookrightarrow]\\
+\hom_\P(\dash, 1)\ar[r]\ar[ur, dotted]&  \hom_{\rset^\op}(2^{\dash}, Y)\\
+\P\ar[r,"2^{\dash}"]&\rset^\op
+\end{tikzcd}\]
+This means I want a covering sieve on $1 \in \P$, because I ultimately want to get
+out a single {\em open set} that's the finite intersection or arbitrary union of some open sets.
+
+Could I take $\P$ to just be the CPS monad on $\rset$ and let the Grothendieck topology track
+the existence of finite intersections and arbitrary unions?
+
+The piece of $\hom_\P(\dash, 1)$ that I most care about is the identity morphism $1 \to 1\in \P$.
+The sieve that I want to put in $?$ to guarantee the existence of finite unions in the topology
+is I think something corresponding to a morphism $F \to 1$.
+
+\section{Thoughts about intervalically presented categories}
+
+Let's think about another probe category: let $\P$ have one object,
+thought of as the closed unit interval, and the morphisms are strictly
+monotone maps from the interval to itself, but allowing a finite
+number of discontinuities.
+
+An example of a graph of an allowed function is
+
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\[\begin{tikzpicture}
+\fill[fill={rgb:blue,5;yellow,8;white,14}] (-2,2)--(-2,-2)--(2,-2)--(2,2)--cycle;
+ \begin{scope}[shift={(0,-2.3)}]
+\draw (-2,-0.1)--(-2,0.1);
+\draw (2,-0.1)--(2,0.1);
+\draw (-2, 0)--(2,0);
+\coordinate [label={[label distance=5]below:$g\o f$}] (fg) at (0,0);
+\foreach \point in {fg}
+\fill [black] (\point) circle (2pt);
+\end{scope}
+
+ \begin{scope}[shift={(-2.3,0)}]
+\draw (-0.1,-2)--(0.1,-2);
+\draw (-0.1,2)--(0.1,2);
+\draw (0,-2)--(0,2);
+\coordinate [label={[label distance=5]left:$g$}] (g) at (0,0.5);
+\coordinate [label={[label distance=5]left:$f$}] (f) at (0,-0.5);
+\foreach \point in {g,f}
+\fill [black] (\point) circle (2pt);
+\end{scope}
+
+\draw (-2,-2)--(0,-1)--(0,1)--(2,2);
+\end{tikzpicture}\]
+I guess it's really more like a span $\I \leftarrow \I \to \I$ with some conditions.
+The point, however, is that the data of category is like a presheaf $P \in \hat\P$.
+$P(\I)$ is the set of all paths in the category, with morphisms in the path placed in particular
+points in time, for example
+\[\begin{tikzpicture}
+\draw (-2,-0.1)--(-2,0.1);
+\draw (2,-0.1)--(2,0.1);
+\draw (-2, 0)--(2,0);
+    \coordinate [label={[label distance=5]above:$g$}] (g) at (0.5,0);
+    \coordinate [label={[label distance=5]above:$f$}] (f) at (-0.5,0);
+    \foreach \point in {g,f}
+    \fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+Really I should be clear about the fact that the spaces between the morphisms
+are objects, like
+\[\begin{tikzpicture}
+\draw[line width=1pt, mred] (-2, 0)--(f);
+\draw[line width=1pt, mgreen] (g)--(f);
+\draw[line width=1pt, mblue] (2, 0)--(g);
+
+\draw (-2,-0.1)--(-2,0.1);
+\draw (2,-0.1)--(2,0.1);
+
+\coordinate [label={[mred, label distance=5]below:$A$}] (A) at ($0.5*(f)+0.5*(-2,0)$);
+\coordinate [label={[mgreen, label distance=5]below:$B$}] (B) at ($0.5*(f)+0.5*(g)$);
+\coordinate [label={[mblue, label distance=5]below:$C$}] (C) at ($0.5*(g)+0.5*(2,0)$);
+\coordinate [label={[label distance=5]above:$g$}] (g) at (0.5,0);
+\coordinate [label={[label distance=5]above:$f$}] (f) at (-0.5,0);
+\foreach \point in {g,f}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+and I think we want to identify paths that differ up to identities; e.g.
+the previous path is the same thing as
+\[\begin{tikzpicture}
+\draw[line width=1pt, mred] (-2, 0)--(f);
+\draw[line width=1pt, mgreen] (g)--(f);
+\draw[line width=1pt, mblue] (2, 0)--(g);
+
+\draw (-2,-0.1)--(-2,0.1);
+\draw (2,-0.1)--(2,0.1);
+
+\coordinate [label={[mred, label distance=5]below:$A$},label={[label distance=5]above:$\rid_A$}] (A) at ($0.5*(f)+0.5*(-2,0)$);
+\coordinate [label={[mgreen, label distance=5]below:$B$}] (B) at ($0.5*(f)+0.5*(g)$);
+\coordinate [label={[mblue, label distance=5]below:$C$}] (C) at ($0.5*(g)+0.5*(2,0)$);
+\coordinate [label={[label distance=5]above:$g$}] (g) at (0.5,0);
+\coordinate [label={[label distance=5]above:$f$}] (f) at (-0.5,0);
+\foreach \point in {g,f,A}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+
+Reparameterization may force us to squidge up the morphism-points next
+to each other: when this happens, we compose the morphisms. For this
+definition to be well-defined, composition must be associative.
+So a category is a certain sort of action for this monoid of endomorphisms on $\I$.
+
+Which maybe means that I can say identities {\em explicitly} show up when you do
+a squidge over a region that has zero morphisms in it.
+
+The objects of a category are the elements that are completely invariant under the action.
+If we `zoom in' to either endpoint, we eventually reach an object. In fact, for a cofinite
+set of points on the interval, if we `zoom in' there, we reach an object.
+
+Now let's consider a map from such a category to another. Is it actually a functor?
+Objects have to map to objects. Domains and codomains have to map to domains and codomains
+respectively. Given a single-morphism path, we have to actually map the object-like parts
+to object-like parts --- equivarance under
+local reparameterizations guarantees it. The morphism part could get mapped away, into purely
+object stuff, if the domain and codomain match after mapping.
+
+And under squidging reparameterizations, we see that presheaf-maps have to preserve composition.
+
+Under `zooming-in' reparameterizations, we see that paths made up from many morphisms have
+their mapping behavior determined by how the individual morphisms are mapped.
+
+So I think $\rcat$ is a full subcategory of $\hat\P$ here.
+
+\vskip 1em\hrule\vskip 1em
+
+I think another way to organize this is to avoid the requirement that the maps in $\P$
+have finitely many plateaus, but simply avoid having infinitely many morphisms
+in paths in a category. In fact a path in a category can be defined as a function
+$\pi$ from $[0,1]$ to morphisms in the category, but requiring that at every $t$,
+if $\pi(t) = f$, then there exist $a < t < b$ such that for any $u \in (a,t)$
+we have $\pi(u) = \rid_{\dom_f}$, and for any
+ $u \in (t,b)$ we have $\pi(u) = \rid_{\cod_f}$.
+
+\vskip 1em\hrule\vskip 1em
+
+The category $\P$ is the one where morphisms $A\to B$ are spans
+\[\begin{tikzcd}
+A & S\ar[l, ->>]\ar[r, >->] & B
+\end{tikzcd}\]
+and the individual arrows are continuous montone maps from the unit interval to itself.
+Composition is pullback.
+
+Possibly I want the open unit interval not closed.
+
+The main problem with this arrangement is I'm not sure the ``Grothendieck topology''
+that guarantees composites exist actually satisfies the axioms. If you pullback
+a covering sieve along a morphism that squashes an open interval to a point, does
+it still cover?
+
+It seems certain that {\em something} has to go wrong, or at least weird, since
+$\rcat$ being a category of sheaves would mean that it was a topos, and therefore
+lccc, which it is clearly not.
+
+\vskip 1em\hrule\vskip 1em
+
+Yeah, I think it's just not a Grothendieck topology. I think it might
+be worth thinking about the case of the interval under simply monotone
+injective continuous maps, and similarly for higher cubes under an
+appropriate notion of monotonicity.
+
+Suppose we have $f : \I \to \I$. Then
+monotonicity is just
+\[
+\erule
+{x_1 \le x_2}
+{f(x_1) \le f(x_2)}
+\]
+Suppose we have $f : \I^2 \to \I^2$. Then if two points are separated in 2-time, they must
+absolutely stay so separated.
+\[
+\erule
+{y_1 \le y_2}
+{f(x_1, y_1)_y \le f(x_2, y_2)_y}
+\]
+And for the same value of $y$, we must have that $f$ is monotone with respect to $x$:
+\[
+\erule
+{ x_1 \le x_2}
+{f(x_1, y)_x \le f(x_2, y)_x}
+\]
+In fact I think the $y$-coordinate of the output of $f$ must be determined by
+the input $y$ alone.
+
+So here is how you can build a valid reparameterizations $f :\I^n \to \I^n$. It is
+given as a sequence of functions $f_1, \ldots, f_n$. Each $f_i : \I^{n+1-i} \to \I$.
+We require
+\[
+\erule
+{x \le y}
+{f_i(x, \bar z) \le f_i(y, \bar z)}
+\]
+and we say
+\[ f(x_1, \ldots, x_n)_i = f_i(x_i, \ldots, x_n)\]
 \end{document}
