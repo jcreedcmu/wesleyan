@@ -1,0 +1,267 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\C{\mathbf{C}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbf{P}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+\section{Definitions}
+\[
+\begin{tabular}{rccl}
+Scripts&$\sigma$&$::=$&$\cdot \celse \sigma, \alpha$\\
+Actions&$\alpha$&$::=$&$\says P m$\\
+Principals&$A$&$::=$&$A \celse B \celse \cdots$\\
+Messages&$m$&$::=$&$\rand P n \celse 0 \celse m \oplus m \celse [m] \celse m; m\celse \cdots $
+\end{tabular}
+\]
+
+We have \[\prov \sigma \rok\] a judgment that a script is well-formed.
+
+\[
+\erule
+{}
+{\prov \cdot \rok}
+\qquad
+\erule
+{\prov \sigma \rok \qquad \sigma/ P \prov  m }
+{\prov \sigma, \says P m \rok}
+\]
+
+We have \[\sigma/ P \prov m\] a judgment that after $\sigma$ is executed, $P$ can say $m$.
+
+\[
+\erule
+{}
+{\sigma, \says P m/ Q \prov m}
+\qquad
+\erule
+{\sigma / P \prov m}
+{\sigma, \alpha/ P \prov m}
+\qquad
+\erule
+{}
+{\sigma/ P \prov \rand P n}
+\]
+
+\[
+\erule
+{}
+{\sigma/ P \prov 0}
+\qquad
+\erule
+{\sigma/ P \prov m_1 \qquad \sigma/ P \prov m_2}
+{\sigma/ P \prov m_1 \oplus m_2}
+\qquad
+\]
+\[
+\erule
+{\sigma/ P \prov m}
+{\sigma/ P \prov [m]}
+\qquad
+\erule
+{\sigma/ P \prov m_1 \qquad \sigma/ P \prov m_2}
+{\sigma/ P \prov m_1 ; m_2}
+\]
+We assert $(\oplus, 0)$ is a commutative monoid, with $m \oplus m = 0$. We also
+assert an `accumulator axiom' $[m_1];m_2 = [m_1 \oplus m_2]$.
+\section{Consequences}
+Consider the script $\sigma = \says A {[\rand A 1]},\says B {[\rand A 1 \oplus \rand B 1]},\says B {\rand B 1 \oplus [\rand B 1]}$.
+We claim
+ \[\prov \sigma \rok \qquad
+ \sigma / A \prov \rand B 1\]
+ but an eavesdropper Eve cannot prove
+\[ \sigma / E \not\prov \rand B 1\]
+The first two claims follow because $B$ can construct from $A$'s broadcast the expression
+\[[\rand A 1] ; \rand B 1 = [\rand A 1 \oplus \rand B 1]  \]
+and $A$ can then construct
+\[([\rand A 1 \oplus \rand B 1]; \rand A 1) \oplus (\rand B 1 \oplus [\rand B 1]) = \rand B 1\]
+Showing conclusively that Eve {\em can't} get to $\rand B 1$ seems harder, but I also can't see any way that she'd be able to do it.
+
+\section{Question}
+If we disallow the accumulator operation $;$ is this situation still possible? Does there exist
+a script $\sigma$ such that
+ \[\prov \sigma \rok \qquad
+ \sigma / A \prov \rand B 1
+\qquad \sigma / E \not\prov \rand B 1\]
+? This is Bob communicating a message to Alice without Eve getting it.
+
+Although this doesn't cover {\em all} possible protocols that might be reasonably described as
+``Bob communicating a message to Alice without Eve getting it''. If Bob could communicate
+some message to Alice such that {\em only Alice} can tell whether it's equal to some pre-chosen message,
+that also might work.
+
+At the very least, if we could achieve the reverse communication, namely $\sigma / B \prov \rand A 1$,
+without Eve hearing about this agreement, and also subsequently e.g. $\sigma / B \prov \rand A 2$
+then Bob could send $\rand A 1$ or $\rand A 2$ in the open as a bit to Alice. But obviously by symmetry
+this is no easier.
+
+\section{Another Thought}
+
+Let $N$ be the number of bits in the output of some hash function $[\dash]$.
+The rules of the game are: Alice gets to say 3 $N$-bit messages publicly to both Bob and Eve,
+and gets to {\em propose} 3 $N$-bit messages to Bob, but Eve gets to destroy one before it gets to Bob.
+Alice's goal is to actually communicate 3 $N$-bit messages to Bob without Eve getting any of them.
+
+My solution-in-search-of-a-problem is:
+Alice publicly says
+\[m_1 \oplus [m_2] \oplus [m_3]\]
+\[[m_1] \oplus m_2 \oplus [m_3]\]
+\[[m_1] \oplus [m_2] \oplus m_3\]
+and privately tries to send
+\[[m_1], [m_2], [m_3]\]
+With any two-thirds of those messages, Bob can recover $m_1, m_2, m_3$, and I don't think Eve can get any.
+If Eve gets to intercept one, say $[m_3]$, she can make $m_1 \oplus m_2$.
+
+
+In general if Eve gets to destroy one message, we can publicly say
+\[m_i \oplus \bigoplus_{j\ne i} [m_j] \]
+for each $i$, and then privately attempt $[m_1], \ldots, [m_n]$.
+
+What if we have three messages and Eve gets to destroy two?
+Perhaps broadcast all of
+\[m_1 \oplus [m_2]\qquad m_1 \oplus [m_3]\]
+\[m_2 \oplus [m_1]\qquad m_2 \oplus [m_3]\]
+\[m_3 \oplus [m_1]\qquad m_3 \oplus [m_2]\]
+?
+Or we could make do with a cycle
+\[m_1 \oplus [m_2]\qquad m_2 \oplus [m_3] \qquad m_3 \oplus [m_1]\]
+Actually at this point, the `adversary gets to pick one of your proposed messages to send'
+is kind of silly, since we could determine which message gets sent by just proposing it $n$ times.
+
+Could say that we only get to nondeterministically send one of the $m_i$, hashed.
+
+\section{Quick Unrelated Thing I Want To Check}
+
+Is there provability in either direction between
+\[((S \to (X \x S)) \to R) \to R\]
+\[S \to (((X \to R) \to R) \x S)\]
+?
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\[
+\justifies
+X\x S, X \to R\prov   R
+\]
+\justifies
+S \to (X \x S), S, X \to R\prov   R
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S, X \to R\prov   R
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S\prov  (X \to R) \to R
+\]
+\[
+\justifies
+S\prov   S
+\]
+\justifies
+((S \to (X \x S)) \to R) \to R, S\prov  ((X \to R) \to R) \x S
+\]
+\justifies
+{((S \to (X \x S)) \to R) \to R\prov S \to (((X \to R) \to R) \x S)}
+\end{prooftree}
+\]
+
+\section{Another Unrelated Thing}
+Say
+\[A_i = |P_i - A|^2 \qquad B_i = |P_i - B|^2 \]
+\[a_i = e^{-\eta|P_i - A|^2} \qquad b_i = e^{-\eta|P_i - B|^2} \]
+and given some points $P_i$ we want to choose $A$ and $B$ to
+minimize
+\[ \sum_i \mathrm{softmin}_\eta(A_i, B_i) \]
+\[ = \sum_i A_i {e^{-\eta A_i} \over e^{-\eta A_i} + e^{-\eta B_i}} + B_i{e^{-\eta B_i} \over e^{-\eta A_i} + e^{-\eta B_i}} \]
+\[ = \sum_i {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+so we want to set
+\[0 = {\partial \over \partial A} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+\[0 = {\partial \over \partial B} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+which expanding to particular dimensions in the 2-d case would be
+\[0 = {\partial \over \partial A^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \qquad
+0 = {\partial \over \partial A^y} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+\[0 = {\partial \over \partial B^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \qquad
+0 = {\partial \over \partial B^y} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i}\]
+Let's try to compute some of these derivatives now.
+\[ {\partial \over \partial A^x} \sum_i  {A_i a_i \over a_i + b_i} + {B_i b_i \over a_i + b_i} \]
+\[=   \sum_i  {\partial \over \partial A^x} {A_i a_i \over a_i + b_i} + {\partial \over \partial A^x} {B_i b_i \over a_i + b_i} \]
+\[=   \sum_i   {(a_i + b_i) D_{A^x}(A_i a_i + B_i b_i) - (A_i a_i + B_i b_i) D_{A^x}(a_i + b_i)
+ \over (a_i + b_i)^2} \]
+\[=   \sum_i   {(a_i + b_i) (A_i  a'_i + a_i  A'_i + B_i  b'_i + b_i  B'_i)  - (A_i a_i + B_i b_i) (a'_i + b'_i)
+ \over (a_i + b_i)^2} \]
+\[=   \sum_i   {(a_i + b_i)(a_iA_i' + b_iB_i') + (a'_i b_i - a_ib'_i)(A_i - B_i)
+ \over (a_i + b_i)^2} \]
+Let's compute $D_{A^x}$ of $A_i$ and $a_i$.
+\[{\partial \over \partial A^x} A_i  = {\partial \over \partial A^x} ((P_i^x - A^x)^2 + (P_i^y - A^y)^2)   \]
+\[= {\partial \over \partial A^x} ((P_i^x - A^x)^2)    \]
+\[= 2  (A^x - P_i^x )    \]
+and
+\[{\partial \over \partial A^x} a_i = {\partial \over \partial A^x} e^{-\eta A_i} \]
+\[= -\eta ({\partial \over \partial A^x} A_i) e^{-\eta A_i} \]
+\[= 2\eta (P_i^x - A^x) e^{-\eta A_i} \]
+\[= -2\eta (A^x - P_i^x ) a_i \]
+and any $A^x$ derivatives of $B$-based expressions are zero.
+So for the $A^x$ derivative we get
+\[ 0
+=   \sum_i  (A^x - P_i^x ) {(a_i + b_i)a_i -\eta  (a_i b_i)(A_i - B_i)
+ \over (a_i + b_i)^2} \]
+This looks too complicated to solve analytically for $A^x$, so let's
+just think about regular $k$-means instead.
+
+For the `find the mean' step, can we just introduce a constraint that the
+mean lies on a certain line?
+
+If I have $P_i$ and I want to choose $(x, y)$ to minimize
+\[ E = \sum_i (P_i^x - x)^2 + (P_i^y - y)^2 \]
+then obvs
+\[ 0 = {\partial \over\partial x}E \]
+\[ = \sum_i 2(x - P^x_i) \]
+\[  \sum_i x  = \sum_i P^x_i \]
+\[   x  = {1\over N}\sum_i P^x_i \]
+and we just take the mean. If I want to instead choose $t$ such
+that $(x_0, y_0) + (x, y)t$ to minimize
+\[ E = \sum_i ((x_0 + tx) - P_i^x )^2 + ((y_0 + ty) - P_i^y)^2 \]
+then I set
+\[  0 = {\partial \over \partial t} E \]
+\[  0 = \sum_i 2x((x_0 + tx) - P_i^x ) + 2y((y_0 + ty) - P_i^y) \]
+\[  \sum_i x P_i^x + yP_i^y - xx_0 - yy_0 = \sum_i (x^2 + y^2) t \]
+\[  t = {1\over N(x^2 + y^2)} \sum_i x P_i^x + yP_i^y - xx_0 - yy_0  \]
+\[  t = {\sum_i x P_i^x + yP_i^y \over N(x^2 + y^2)}  - {xx_0 +  yy_0 \over x^2 + y^2} \]
+
+\end{document}
