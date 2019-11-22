@@ -73,19 +73,22 @@ exist colors $c_1, \ldots c_n$ such that
 \[x_1:c_1, \ldots, x_n:c_n \prov M :0\]
 \end{lemma}
 
-We would say that the string $c_1\cdots c_n$ is a coloring of $M$, so this
+We will say that the string $c_n\cdots c_1$ is a coloring of $M$, so this
 is just saying
 \begin{lemma}
 Every term has a coloring.
 \end{lemma}
+I prefer the convention in which this order is reversed so that colors
+appear in the right order diagrammatically below.
 
 Were we to try to prove this over induction on $M$, the application
 case would be easy --- appeal to i.h. to color the subterms, permute their colors appropriately
 to arrive at a coloring of the whole term. However, the lambda case
 can't proceed without strengthening the induction hypothesis. It would require that
 \begin{lemma}
+\label{nozero}
 Every term with $\ge 2$ free variables has a coloring
-that does not end with a $0$.
+that does not begin with a $0$.
 \end{lemma}
 
 For consider a diagram like:
@@ -94,11 +97,110 @@ For consider a diagram like:
 \input{tikz/lambda-diagram}
 \end{tikzpicture}
 \]
-The order of the context is reversed from the left-to-right order of dangling
+Again, the order of the context is reversed from the left-to-right order of dangling
 wires that reach the bottom of the diagram, so the $1$-wire is the last free
-variable of the subterm.
+variable of the subterm. The order of coloring-strings is chosen to match the diagram
+left-to-right order.
 
-If and only if we have a non-zero color assigned toq the bound variable, then we can permute
+If and only if we have a non-zero color assigned to the bound variable, then we can permute
 colors around to color the larger lambda term.
 
+\vskip 1em \hrule \vskip 1em
+
+If we try to establish the application case of Lemma~\ref{nozero}, then
+we find we need either
+\begin{lemma}
+\label{noone}
+Every term with $\ge 2$ free variables has a coloring
+that does not begin with a $1$.
+\end{lemma}
+which would let us color the left arm of the application $1$, or
+\begin{lemma}
+\label{notwo}
+Every term with $\ge 2$ free variables has a coloring
+that does not begin with a $2$.
+\end{lemma}
+which would let us color the left arm of the application $2$.
+By symmetry, we expect that both of these are true if either one is.
+
+All three of these lemmas work mutually inductively through their
+application cases. What can we say about their lambda cases?
+
+To avoid an initial 0 arising {\em from} a lambda abstraction, we need
+to have a coloring that does not have either $12$ or $21$ as a prefix.
+To avoid a 1, we need to avoid $20$ and $11$. To avoid a 2, we need
+to avoid $10$ and $22$.
+
+Let's say that for a set $S$ of colorings strings, that a coloring $c$
+{\em avoids} $S$, if no element of $S$ is a prefix of $c$. We can reprhase
+\begin{lemma}
+For any $S \in \{0\},\{1\},\{2\}$, every term with $\ge 2$ free variables
+has a coloring that avoids $S$.
+\end{lemma}
+and further guess that
+\begin{lemma}
+For any $S \in \{12,21\},\{20,11\},\{10,22\}$, every term with $\ge 3$ free variables
+has a coloring that avoids $S$.
+\end{lemma}
+To prove the application case of that, we're probably going to at the
+very least need to undergo permutations $[0//1]$ and $[0//2]$ to
+descend under the $1$- and $2$-colored edges of the application. So this will end
+up doing arbitary $S_3$ permutations to the colors involved. So let's just conjecture
+that
+\begin{lemma}
+For any distinct colors $x,y,z$, and any $S \in \{xy,yx\},\{xy,zz\}$,
+every term with $\ge 3$ free variables
+has a coloring that avoids $S$.
+\end{lemma}
+
+\vskip 1em \hrule \vskip 1em
+
+Let's step back and understand how we got from one avoidance set to the next.
+There's some process that got us from $\{0\}$ to $\{12,21\}$. Let's try to define
+$F$ such that $F(\{0\}) = \{12,21\}$. Most likely
+$F(S) = F_1(S) \cup F_2(S)$.
+Then we can say
+\[F_1(S) = \{ 1 \cdot \sigma_1c \st c \in S\} \]
+\[F_2(S) = \{ 2 \cdot \sigma_2c  \st c \in S\} \]
+where $\sigma_1$ interchanges $0,2$ and $\sigma_2$ interchanges $0,1$.
+
+Say a {\em catalog} is a set of avoidance sets $S$. The initial catalog is
+\[K_0 = \{\{\}\}\]
+\[K_1 = \{\{0\}, \{1\}, \{2\}\}\]
+\[K_2 = \{\{ab, ba\}, \{ab, cc\} \st \#(a,b,c)\}\]
+
+In general
+
+\[K_{n+1} = \{ \pi F(S) \st \pi \in S_3, S \in K_n \}\]
+
+So let's try to compute $K_3$. Let's enumerate $K_2$ more
+fully first:
+
+\[K_2 = \{
+ \{01, 22\},
+ \{02, 11\},
+\{10, 01\}, \{10, 22\},\]
+\[\{12, 21\}, \{12, 00\},
+ \{21, 00\},
+\{20, 02\}, \{20, 11\}
+\}
+\]
+
+so $K_3$ at least has
+\[
+\{121, 100, 210, 222\},
+\{120, 111, 212, 200\},
+\{112, 121, 210, 201\},
+\{112, 100, 201, 222\},
+\]
+\[
+\{110, 101, 202, 220\},
+ \{110, 122, 202, 211\},
+ \{101, 122, 220, 211\},
+\{102, 120, 221, 212\},\]
+\[\{102, 111, 221, 200\}
+\]
+which we can summarize as
+\[K_3 = \{bab, bcc, abc, aaa\}, \{abc, acb, bba, bab\},
+\{abc, aaa, cbb, cca\}, \{?\}  \]
 \end{document}
