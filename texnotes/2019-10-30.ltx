@@ -8,6 +8,8 @@
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{calc}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
@@ -35,6 +37,7 @@
 \def\celse{\mathrel{|}}
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
 
 \begin{document}
 \tikzset{
@@ -323,7 +326,11 @@ lccc, which it is clearly not.
 
 \vskip 1em\hrule\vskip 1em
 
-Yeah, I think it's just not a Grothendieck topology. I think it might
+Yeah, I think it's just not a Grothendieck topology.
+
+\subsubsection*{Higher Cubes}
+
+I think it might
 be worth thinking about the case of the interval under simply monotone
 injective continuous maps, and similarly for higher cubes under an
 appropriate notion of monotonicity.
@@ -361,4 +368,240 @@ We require
 \]
 and we say
 \[ f(x_1, \ldots, x_n)_i = f_i(x_i, \ldots, x_n)\]
+
+\vskip 1em\hrule\vskip 1em
+
+(2019.11.21)
+
+Had some thoughts about how to express some properties of the directed
+interval type in a finite way, sort of reminiscent of the surreal
+number `up' and `down' operations.
+
+Postulate that $0:\I$ and $1:\I$, and that $\ups,\dns: \I \to \I$ exist.
+The intended meaning is that $\ups x = (x+1)/2$ and $\dns x = x/2$.
+
+So we can assert at least that $\ups 0 = \dns 1$, since both of them should represent $1/2$.
+Then we can say something about the kind of functions $f:\I \to \I$ we expect to exist.
+They should be well-behaved continuous monotone functions.
+Clearly these properties are preserved under taking the `left half' ($f \mapsto f \o \dns$)
+and `right half' ($f \mapsto f \o \ups$) of a function's graph. Moreover, given a pair of
+functions $\ell, r : \I \to \I$ such that $\ell(1) = r(0)$, we should be able to paste them
+together into a function $\ell * r$ such that $(\ell * r) \o \dns = \ell$ and $(\ell * r) \o \ups = r$.
+Note that since $\ell(1) = r(0)$ we must have $((\ell * r) \o \dns)(1) = ((\ell * r) \o \ups)(0))$
+so it's a good thing we required $\dns 1 = \ups 0$ earlier.
+
+In any event, we want to require that the `decomposition'
+map
+\[d :(\I \to \I) \to \Sigma \ell, r : \I \to \I . \ell(1) = r(0)\]
+ given
+by
+\[d(f) = \langle f \o \dns, f \o \ups, \mathsf{idp} \rangle\]
+ is an equivalence.
+
+In fact, if I can imagine a sheaf model where types are interpreted over $\rset^{\I^\op}$,
+then maybe I can even say that generally the map
+\[d : \{A:\rset\} \to (\I \to A) \to \Sigma \ell, r : \I \to A . \ell(1) = r(0)\]
+ given again by
+by
+\[d(f) = \langle f \o \dns, f \o \ups, \mathsf{idp} \rangle\]
+is an equivalence.
+
+\subsubsection*{An Undirected Interval}
+If I added $\lnot : \I \to \I$ with $\lnot 0 = 1$ and $\lnot 1 = 0$ and $\lnot (\ups x) = \dns (\lnot x)$
+and $\lnot (\dns x) = \ups (\lnot x)$ would I get an undirected interval?
+
+\subsubsection*{Homotopies}
+I sort of expect that if $e : \I \to \I$ is an equivalence, and $f : \I \to A$ is a path, then
+somehow $f \o e = f$, to get associativity of composition. Extensionality tells me that this is the same as expecting
+$\forall i : \I . f(e(i)) = f(i)$. So it would be sufficient to show $\forall i : \I . e(i) = i$,
+which is just $ e = \mathsf{id}$.
+
+This seems dangerous and close to wrong. I expect I can have equivalent paths $f, g$ such that $f(1/2) = 1/4$ and
+$g(1/2) = 3/4$, and I wouldn't want to conclude that $1/4 = 3/4$, right?
+
+\subsubsection*{Quotienting out by Homotopies?}
+Should I explicitly form a HIT by taking $\I \to A$ as the carrier and throwing in equality paths for precomposition
+by any equivalence on $\I$?
+
+Or do I postulate that there {\em exists} a directed path type $\pi A$ and that there's an
+evaluation map $\pi A \to \I \to A$, and that given an equality path $e : x =_{\pi A} y$
+in the directed path space, we can somehow extract an equivalence on $\I$ from this?
+That can't be right. What I want to postulate would be more like an elim rule, arising from the HIT.
+
+What's the source in the literature that I seem to be reinventing? Freyd 2008, ``Algebraic Real Analysis''.
+nLab has some stuff about the coalegbra of the real interval. Something about midpoint algebras etc.
+
+\subsubsection*{Midpoint operator}
+\def\hf{{\odot}}
+\def\uds{{\updownarrow}}
+Can I coinductively define midpoint $x|y$ of $x$ and $y$ thinking of $x$ and $y$ as inductive
+data defined over constants $0$, $1$, and operations $\ups,\dns$? I think so.
+Let $\hf := 1/2 = \ups 0 = \dns 1$. Define
+\[\uds(\ups x) = \ups\dns x\]
+\[\uds(\dns x) = \dns\ups x\]
+then
+\[x | 0 = \dns x \qquad x | 1 = \ups x\]
+\[ \ups x | \ups y = \ups(x | y)\]
+\[ \dns x | \dns y = \dns(x | y)\]
+\[ \ups x | \dns y = \uds(x | y) \]
+
+\subsubsection*{The open interval?}
+
+Let's say the inductively accessible points of the interval are just strings $\epsilon, \ups, \dns, \ups\ups, \ups\dns$, etc.
+$\epsilon$ represents one-half. There are maps $\dom : (\I \to A) \to A$ and $\cod : (\I \to A) \to A$ which take limits.
+These are fixpoint operators. $\dom (\rid_{\I})$ is 0. $\cod (\rid_{\I})$ is 1. Hm, this still doesn't absolve me from the
+need to assert $\ups \dom (\rid_{\I}) = \dns \cod (\rid_{\I})$. Although I could express it as
+$ \dom \ups = \cod \dns$ assuming shifts commute with $\dom/\cod$. And decomposition still takes $f : \I \to A$ to
+\[\langle f \o \dns, f \o \ups, \mathsf{idp} \rangle : \Sigma \ell, r : \I \to A . \cod \ell = \dom r\]
+and is supposed to be invertible. The definition of midpoint now runs:
+\[\uds(\epsilon) = \epsilon\]
+\[\uds(\ups x) = \ups\dns x\]
+\[\uds(\dns x) = \dns\ups x\]
+then
+\[x | \epsilon = \uds x\]
+\[ \ups x | \ups y = \ups(x | y)\]
+\[ \dns x | \dns y = \dns(x | y)\]
+\[ \ups x | \dns y = \uds(x | y) \]
+
+\subsubsection*{Defining Function Values at Midpoints}
+
+Here's another way to decompose a function into parts.
+Let $x \imp_A y$ be a type for any $A: \rset$ and $x, y : A$.
+It's intended to be the same as $f :\I \to A$ such that $f(0) = x$ and $f(1) = y$.
+Let's say there is an evaluation function
+\[ \_\cdot\_ : (x \imp_A y) \to \I \to A \]
+such that in fact
+\[ p : x \imp_A y \prov p\cdot0 = x\]
+\[ p : x \imp_A y \prov p\cdot1 = y\]
+And an abstraction rule like
+\[
+\erule
+{i : \I \prov e : A}
+{\llam i . e : [i/0]e \imp_A [i/1]e}
+\]
+This is all just like before, except there's more algebra to $\I$, that we can form midpoints.
+So given $f : x \imp z$, we can form
+\[\llam i . f \cdot \dns i : x \imp f \cdot \hf\]
+\[\llam i . f \cdot \ups i : f \cdot \hf \imp z\]
+Hm, wait, I've lost the information that $f \cdot \hf$ is actually in between $x$ and $z$.
+But do I need it?
+
+\subsubsection*{Graded Time Dimensions}
+
+I was trying to consider specific-dimensional higher cubes, but if I
+want to capture them all at once, I think I probably want a presheaf
+base category with one object per dimension, instead of one
+infinite-dimensional thing.
+
+So call these objects $C_1, C_2$, etc. Morphisms between them
+are allowable reparameterizations. See above in `Higher Cubes'.
+
+A typical element of the set produced by applying a presheaf over this
+category to, say, $C_2$, I imagine looking like a 2-cell string
+diagram:
+
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (-0.2,-2) }}
+\[\begin{tikzpicture}
+\fill[fill={lorange}] (-2,2)  \bitf{--plot} \bitfg{--plot} -- (-2,-2)-- cycle;
+\fill[fill={lgreen}] (2,2)  \bitg{--plot} \bitfg{--plot} -- (2,-2)--   cycle;
+\fill[fill={lblue}] (0,0) \bitgrev{--plot} \bitf{--plot}  --   cycle;
+\draw [mblue, line width=1.5pt] \bitf{plot};
+\draw [mblue, line width=1.5pt] \bitg{plot};
+\draw [mblue, line width=1.5pt] \bitfg{plot};
+\node at (1,0) {$C$};
+\node at (-1.25,-0.8) {$A$};
+\node at (0,1.2) {$B$};
+\node [mblue] at (-1.4,1) {$f$};
+\node [mblue] at (0.8,1) {$g$};
+\node [mblue] at (0.1,-1) {$h$};
+\coordinate [label={[label distance=5]left:$\alpha$}] (g) at (0,0);
+\foreach \point in {g}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+
+We can say that `1-time' proceeds from left to right: $f : A \to B$ and $g : B \to C$ are 1-cells.
+We can say that `2-time' proceeds from top to bottom: $\alpha : g \o f \imp h$ is a 2-cell.
+
+Restricting along reparameterization morphisms lets us zoom in on smaller parts of the diagram. Nonmonomorphic
+plateaus let us zoom `infinitely' at some points, so we must ensure that abrupt transitions --- i.e. where $n$-cells
+with $n > 1$ actually exist --- cannot be so zoomed. The global points of a presheaf are the 0-cells.
+I imagine something like allowing only those reparameterizations that
+preserve the rationals (or maybe the dyadic rationals) and that 1-cells, 2-cells, etc. live at irrational
+(or non-dyadic-rational, e.g. 1/3) coordinates. I could restrict to monomorphisms entirely to prevent the `infinitely
+thin' vertical wire of a 1-morphism being stretched out into nonzero measure, but I {\em want} to preserve the ability to zoom
+in infinitely at boundaries of the cube, to obtain domains and codomains.
+
+An observation that occurred to me this morning (= 2019.11.22) was
+maybe I can get away with having a family of intervals, i.e. $\I_1$
+the walking 1-time interval, $\I_2$ the walking 2-time interval, etc.
+and perhaps the representable $n$-cube is a product $yC_n = \I_1 \x \cdots \x \I_n$ of them
+in the category of presheaves. In particular, the diagram above
+is meant to depict a map $\I_1 \x \I_2 \to \C$ for a category $\C$,
+with the input of type $\I_1$ being the $x$-coordinate, and $\I_2$
+corresponding to the $y$-coordinate.
+
+I think the maps $\I_i \to \I_j$ are something like
+\[
+\cases{
+  \hbox{constants $\in [0,1]$} & if $i < j$\cr
+  \hbox{monotone continuous maps $[0,1] \to [0,1]$} & if $i = j$\cr
+  \hbox{continuous maps $[0,1] \to [0,1]$} & if $i > j$
+}
+\]
+
+This makes good modal sense: variables from higher intervals $\I_n$ for big $n$ are like
+more strongly boxed, coming from some $\square_n$. We delete lesser-boxed things from the context when trying to map
+into $\I_n$ --- we can't depend on them.
+
+\subsubsection*{Is this all completely broken?}
+
+If I take the 2-time interval $\I_2$ and map it into a 2-cell string diagram with one morphism that proceeds
+from top to bottom, in such a way that it wiggles back and forth in the $1$-time direction,
+ its object-level domain and codomain cease to be objects.
+
+Actually, there's an even simpler demonstration. Imagine trying to zoom into the following red rectangle:
+\[\begin{tikzpicture}
+\fill[fill={lorange}] (-2,2)  \bitf{--plot} \bitfg{--plot} -- (-2,-2)-- cycle;
+\fill[fill={lgreen}] (2,2)  \bitg{--plot} \bitfg{--plot} -- (2,-2)--   cycle;
+\fill[fill={lblue}] (0,0) \bitgrev{--plot} \bitf{--plot}  --   cycle;
+\draw [mblue, line width=1.5pt] \bitf{plot};
+\draw [mblue, line width=1.5pt] \bitg{plot};
+\draw [mblue, line width=1.5pt] \bitfg{plot};
+\node at (1,0) {$C$};
+\node at (-1.25,-0.8) {$A$};
+\node at (0,1.2) {$B$};
+\node [mblue] at (-1.4,1) {$f$};
+\node [mblue] at (0.8,1) {$g$};
+\node [mblue] at (0.1,-1) {$h$};
+\coordinate [label={[label distance=5]left:$\alpha$}] (g) at (0,0);
+\foreach \point in {g}
+\fill [black] (\point) circle (2pt);
+\draw [red, line width=1.5pt] (-1,2)--(2,2)--(2,-2)--(-1,-2)--cycle;
+\end{tikzpicture}\]
+
+The result isn't a well-formed 2-cell because the left edge isn't an object!
+But maybe this is somehow ok? Can I say that a $2$-cell in a type $\C$ is not just a map
+from $\I_1 \x \I_2$ into it, but rather one such that if you set the $1$-time to a constant
+0 or 1, that it's a constant? That sort of seems right from the way homotopy is usually defined.
+
+It still seems worrying that we can zoom in to the left edge at all,
+and get a horizontal stripe of pure $f$. I no longer know exactly how to characterize all the possible diagrams
+in terms of the data of $\C$.
+
+In general, a well-behaved map $\I_1 \x \cdots \x \I_n \to \C$ is one where if you set the $i$th argument
+to a constant, it doesn't depend on any $j$th argument for $j > i$.
+
+\subsubsection*{Maps into the universe}
+
+I'm eager to speculate wildly and prematurely about what maps $\I_i \to \rset$
+look like. I definitely hope that $\I_1 \to \rset$ looks
+like functions from one set to another, stretched out over time --- so
+that intermediate points in time are other sets.
+I'm starting to think that $\I_{\ge 2}$ maybe look like relations evolving over time?
 \end{document}
