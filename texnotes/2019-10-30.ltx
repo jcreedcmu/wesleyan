@@ -20,7 +20,9 @@
 \def\imp{\Rightarrow}
 \def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
 \def\o{\circ}
-\def\C{\mathbf{C}}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
 \def\X{\mathbf{X}}
 \def\Y{\mathcal{Y}}
 \def\x{\times}
@@ -30,7 +32,10 @@
 \def\op{\mathsf{op}}
 \def\P{\mathbb{P}}
 \def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
 \def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
 \def\dash{\hbox{---}}
 \def\dom{\mathop{\mathrm{dom}}}
 \def\cod{\mathop{\mathrm{cod}}}
@@ -486,8 +491,10 @@ So given $f : x \imp z$, we can form
 Hm, wait, I've lost the information that $f \cdot \hf$ is actually in between $x$ and $z$.
 But do I need it?
 
-\subsubsection*{Graded Time Dimensions}
 
+\subsubsection*{Graded Time Dimensions}
+[2019.11.22]
+%
 I was trying to consider specific-dimensional higher cubes, but if I
 want to capture them all at once, I think I probably want a presheaf
 base category with one object per dimension, instead of one
@@ -604,4 +611,708 @@ look like. I definitely hope that $\I_1 \to \rset$ looks
 like functions from one set to another, stretched out over time --- so
 that intermediate points in time are other sets.
 I'm starting to think that $\I_{\ge 2}$ maybe look like relations evolving over time?
+
+\subsubsection*{Undirected Intervals Again}
+
+Why not have undirected intervals for every time dimension? Presumably these mapped into set would require bijections.
+We'd allow arbitrary continuous maps $[0,1]\to [0,1]$ for black edges, and monotone continuous maps for red edges in:
+\[\begin{tikzcd}
+  \I_1 \ar[loop left, red, distance=1em] \ar[r] & \ar[loop right, distance=1em]\U_1\\
+  \I_2 \ar[loop left, red, distance=1em]\ar[r]\ar[u] & \ar[loop right, distance=1em]\U_2\ar[u]\\
+  \I_3 \ar[loop left, red, distance=1em] \ar[r]\ar[u] & \ar[loop right, distance=1em]\U_3\ar[u]\\
+  \vdots \ar[u] & \vdots\ar[u]\\
+\end{tikzcd}\]
+Actually, is this the same as the following?
+\[\begin{tikzcd}
+  \cdots \ar[r] &
+  \I_3 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_3 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_2 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_2 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_1 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_1 \ar[loop, out=110,in=70, distance=1em]
+\end{tikzcd}\]
+It's not the same, but I think it's actually what I want --- it seems sketchy to have maps going from
+$\U$ to $\I$, but higher dimensional going to strictly lower dimensional things should be ok.
+
+I'm not sure if this is a depiction of the category I want, but I'm
+more confident that it's at least some subset of the things I want to
+derive from it. The potentially missing piece is that I should be able
+to e.g. restrict along a map $C_2 \to C_2$ that actually wibbles
+around left and right in 1-time according to how 2-time varies.
+
+\subsubsection*{Equality}
+
+Which one of these undirected intervals is equality, if any? I think
+it might be $\U_1$. We {\em can't} nontrivially map $\U_i$ to a $\U_j$
+for a {\em bigger} $j$ than $i$, so smaller $\U_i$ must have `more
+glue glueing them together'. Indeed $\U_1$ has more glue than $\I_1$
+--- it has morphisms running both directions. So $\U_1$ has the most glue
+of anything in this diagram. Perhaps its points are so well glued together
+that they are all the same point.
+
+Ok, then, what do I make of the fact that {\em if} I have an
+isomorphism $f : \I_1 \to \I_1$ --- a monotone map
+with a monotone inverse --- and I have some path $g : \I_1 \to A$ in a type
+$A$, then I do expect the existence of a homotopy $h : \U_2 \x \I_1 \to A$
+which attains $g$ on $h(0, \dash)$ and $g \o f$ on $h(1, \dash)$.
+
+It's kinda like $g = g \o f$, but they only... $\U_2$-equal each other.
+If they were actually equal, then I'd get collapse in $\I_1$.
+
+\subsubsection*{Shift Modality}
+
+I think I generally want some sort of time-reindexing modality that given a type $X$,
+the $\U_2$-paths in $X$ become $\U_1$-paths in $\lx X$. Or more broadly, the $\U_{n+1}$ paths
+become $\U_n$ paths, and $\I_{n+1}$ paths become $\I_n$ paths.
+
+It seems like the $\I_1$-paths will also have to become equalities, and the $\U_1$ paths will
+stay equalities.
+
+Right, so I think $\lx$ is approximately the right symbol: it will be the case that there's a map
+$X \to \lx X$, though I don't expect $\lx$ to be idempotent. I do expect $\lx \U_{n+1}  = \U_n$
+and $\lx \I_{n+1}  = \I_n$ for all $n \ge 1$.
+
+I could define $x =^A_n y$ to correspond to the existence of a $\U_n$ path in a type $A$ with endpoints $x$
+and $y$, and $x \imp^A_n y$ to similarly be a $\I_n$ path in $A$.
+
+The type of morphisms as I normally understand it is $\lx (x \imp^A_1 y)$: we turn homotopies of morphisms ($=^A_2$ paths)
+into equalities. Write this as $\imp^A$. Then a 2-cell is $f \imp^{x \imp^A y} g $ --- this already takes care
+of higher homotopies because we have $\lx$-bumped twice.
+
+I think this is automatically taking care of making sure my boundaries
+are sufficiently like constant functions, i.e. the worry back in the
+`Is this all completely broken?' section.
+
+So what is $\lx A$? It has to be the universal thing for which we can
+turn any $f : \U_{n+1} \to A$ into a $f^* : \U_n \to A$, probably compatible with composition or something?
+
+\subsubsection*{Fixing a presheaf base category}
+[2019.11.25]
+
+The objects I'm confident are in the category are $\I_n$ and $\U_n$. Probably if the whole category is
+formal products of these things, and morphisms are more or less what I expect, then everything's fine?
+
+Let me do a little experiment to see if I can get away with smaller base categories.
+Suppose I just have an object $\tw$ and three morphisms $0,1,\rid : \tw \to \tw$.
+
+I can certainly picture $y \tw : \rset^{\tw^\op}$, and powers of it, since presheaf categories have products.
+I know $y\tw(\tw) = \{0,1,\rid\}$. I know $(y\tw \x y\tw)(\tw) = \{0,1,\rid\} \x \{0,1,\rid\}$ and so on.
+What are the morphisms $\alpha : y\tw \x y\tw \to y\tw$? It's a map from 9 to 3 such that:
+
+\[\begin{tikzcd}
+  \hom(A, \tw) \x \hom(A, \tw) \ar[r, "\alpha_A"]\ar[d, "{\hom(f,\tw)\x\hom(f,\tw)}"'] & \hom(A, \tw)\ar[d, "{\hom(f, \tw)}"]\\
+  \hom(B, \tw) \x \hom(B, \tw) \ar[r, "\alpha_B"'] & \hom(B, \tw)
+\end{tikzcd}\]
+for any $f : B \to A$. So $\alpha(x \o f, y \o f) = \alpha(x, y) \o f$, where like $\rid \o 0 = 0$ and $1 \o 0 = 1$.
+What real constraints can I extract from
+\[\alpha(x \o 0, y \o 0) = \alpha(x, y) \o 0\]
+\[\alpha(x \o 1, y \o 1) = \alpha(x, y) \o 1\]
+?
+Let's look at what $\alpha(\rid, \rid)$ is first. Whatever it is, it determines $\alpha(0,0)$ and $\alpha(1,1)$.
+If it's 0, then $\alpha(0,0) = 0$ and $\alpha(1,1) = 0$, if it's $\rid$, then $\alpha(0,0) = 0$ and $\alpha(1,1) = 1$.
+
+How about $\alpha(0, \rid)$?
+\[\alpha(0, 0) = \alpha(0, \rid) \o 0\]
+\[\alpha(0, 1) = \alpha(0, \rid) \o 1\]
+
+Ok, what about if I take instead a category whose objects are formal powers $\tw^n$.
+Then I'd expect the maps $\tw^2 \to \tw^1$ to be any maps from the set $\{0,1\}\x\{0,1\}$ to the set $\{0,1\}$
+that are monotone in each argument. I count 6 possibilities:
+\[0000\quad 0001\quad 0011\quad 0101\quad 0111\quad 1111 \]
+Hm, these two cases seem to be the same but I can't articulate why that seems insufficient.
+
+\subsubsection*{The big base category}
+
+Anyway here is a category I think will do: Its objects are contexts like $\Gamma = (x : \tau, \ldots)$.
+A type $\tau$ is either $\I_n$ or $\U_n$.
+A map from $\Gamma$ to $(\tau_1, \ldots, \tau_n)$ is an $n$-tuple
+of maps $(\Gamma \to \tau_1, \ldots, \Gamma \to \tau_n)$. A map from $\Gamma \to \tau$ is
+a continuous map of a cube into an interval $[0,1]^{|\Gamma|} \to [0,1]$
+that is `good' in each argument if you fix a value for all
+inputs except one --- it has to be a good map $[0,1]\to[0,1]$ for
+input type $\tau'$ and output type $\tau$. To be a good map $\I_i \to \U_j$ or vice-versa I've
+already described.
+
+\subsubsection*{Trying to shrink the category}
+
+Here's a conjecture I want to prove or disprove. Suppose we have a full subcategory $\B$ of $\C$
+such that every object in $\C$ is uniquely a finite product (in the category $\C$) of objects in $\B$.
+Then is it the case that $\hat \C \cong \hat \B$?
+
+The map $\hat \C \to \hat \B$ should be obvious. The map $k : \hat \B \to \hat\C$
+is meant to work by appealing to the product decomposition. If $C = B_1 \x \cdots \x B_n$,
+and we have a presheaf $F : \hat\B$, then we say $(kF)(C) = k(F(B_1)) \x \cdots \x k(F(B_n))$.
+But coming up with the morphism part of this functor $kF$ is not clear.
+
+\subsubsection*{Describing the category from the ground up}
+
+Monotone means nondecreasing; if $x \le y$, then $f(x) \le f(y)$.
+
+The category $\P$ contains a `directed interval object' $\I_n$ for each $n\in \{1,2,\ldots\}$.
+A map $\I_i \to \I_j$ is:
+\[
+\cases{
+  \hbox{a constant $\in [0,1]$} & if $i < j$\cr
+  \hbox{a monotone continuous map $[0,1] \to [0,1]$} & if $i = j$\cr
+  \hbox{a continuous map $[0,1] \to [0,1]$} & if $i > j$
+}
+\]
+The category $\P$ also contains an `undirected interval object' $\U_n$ for each $n\in \{1,2,\ldots\}$.
+A map $\U_i \to \U_j$ is:
+\[
+\cases{
+  \hbox{a constant $\in [0,1]$} & if $i < j$\cr
+  \hbox{a continuous map $[0,1] \to [0,1]$} & if $i \ge j$\cr
+}
+\]
+
+A map $\I_i \to \U_j$ is:
+\[
+\cases{
+  \hbox{a constant $\in [0,1]$} & if $i < j$\cr
+  \hbox{a continuous map $[0,1] \to [0,1]$} & if $i \ge j$\cr
+}
+\]
+
+A map $\U_i \to \I_j$ is:
+\[
+\cases{
+  \hbox{a constant $\in [0,1]$} & if $i \le j$\cr
+  \hbox{a continuous map $[0,1] \to [0,1]$} & if $i > j$\cr
+}
+\]
+Expressed in a diagram as
+\[\begin{tikzcd}
+  \cdots \ar[r] &
+  \I_3 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_3 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_2 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_2 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_1 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_1 \ar[loop, out=110,in=70, distance=1em]
+\end{tikzcd}\]
+where black arrows mean arbitrary continuous maps $[0,1]\to[0,1]$,
+and red arrows mean monotone ones, and the absence of arrows means
+the only available maps are constant maps.
+
+Let $\tau$ stand for any $\I_n$ or $\U_n$ type. We also equip the category
+with objects $\tau_1\x\cdots\x\tau_n$ and say that a map
+$\tau_1\x\cdots\x\tau_n \to \tau$ is a map $[0,1]^n \to [0,1]$ such
+that componentwise it is a good map $\tau_i \to \tau$ for every $i$,
+for every possible way of supplying constants to the arguments other
+than the $i^{th}$ argument.
+
+A map $\Gamma \to \tau_1 \x \cdots \x \tau_{n}$ is
+a tuple of maps of types $\Gamma \to \tau_1, \ldots, \Gamma \to \tau_{n}$.
+
+\subsubsection*{Path Types}
+[2019.11.26]
+Let $x \imp^A_n y$ be something like $\Sigma f : \I_n \to A . f(0) = x \land f(1) = y$.
+But really I want to think of it as its own type. As before, suppose I have evaluation
+\[ \_\cdot\_ : (x \imp^A_n y) \to \I_n \to A \]
+such that in fact
+\[ p : x \imp^A_n y \prov p\cdot0 = x\]
+\[ p : x \imp^A_n y \prov p\cdot1 = y\]
+And an abstraction rule like
+\[
+\erule
+{i : \I_n \prov e : A}
+{\llam i . e : [i/0]e \imp^A_n [i/1]e}
+\]
+Now I conjecture that the appropriate {\bf directed univalence} principle is
+some sort of equivalence between $A \to B$ and $\lx (A \imp^{\rset}_1 B)$.
+
+I want to describe some intuition behind why we should expect in particular
+\[\I_1 \to (A \to B) \approx \I_1 \to \lx (A \imp^{\rset}_1 B)\]
+
+A map $\I_1 \to \lx (A \imp B)$ is like a map $\I_2 \to A \imp B$,
+which unfolds to a special sort of map $\alpha : \I_2 \to \I_1 \to \rset$ such
+that $\alpha\ \dash\ 0$ is constantly $A$ and $\alpha\ \dash\ 1$ is constantly $B$.
+This is a 2-cell in $\rset$. Its domain is $f := \alpha\ 0\ \dash$
+and its codomain is $g := \alpha\ 1\ \dash$. And a map $k : \I_1 \to A \to B$ tells us that for
+every $a \in A$, we get a morphism $k\ \dash\ a$ in $B$.
+
+
+\subsubsection*{Orders}
+
+Can I get away with defining $x \le_n y : \tau$ like so:
+
+\[
+\erule
+{x \le_n y : \I_m}
+{x \le_n y : \U_m}
+\qquad
+\erule
+{}
+{x \le_n y : \U_n}
+\]
+\[
+\erule
+{m < n }
+{x \le_n y : \I_m}
+\qquad
+\erule
+{x \le_n y : [0,1]}
+{x \le_n y : \I_n}
+\qquad
+\erule
+{}
+{x \le_n x : \I_m}
+\]
+And then a morphism from one type to another is one that preserves all these relations?
+
+\subsubsection*{What are 2-paths in the universe?}
+[2019.11.27]
+
+I'm still pretty confused on what higher paths in the universe are
+supposed to look like, because of the `red rectangle' counterexample
+above. I can't think of any way of constraining which restrictions are
+allowed to only talk about those with left and right boundaries are
+well-formed $0$-cells, since restriction is totally blind to the
+semantics of an element of the presheaf.
+
+However, maybe I can make a sort of `defined locally' definition of what
+the contents of $\rset$'s presheaf sets actually are.
+
+Recall that a 1-path in the universe $\rset$ --- i.e. a function $\I_1 \to \rset$, or
+an occupant of the presheaf $\rset$ applied to $\I_1$ --- is supposed
+to be basically a functor from the ordered interval $[0,1]$ to the sheaf
+category of directed path spaces. I want a short name for them --- `weaves'?
+So it's not really $\rset$ at all, but `$\mathbf{Wv}$' or something, but I'm going to
+keep saying $\rset$ because of the role it plays.
+
+I had thought that a 2-path $\I_2 \x \I_1 \to \rset$ would involve relations for the 2-time bit.
+But I need to capture the `natural transformation'-like character of 2-dimensional patches of stuff.
+How about: for every sub-2-path, i.e. map $\I_2 \x \I_1 \to \I_2 \x \I_1$, which actually looks
+like a 2-{\em cell}, i.e. the left and right edges factor through $1$ (or at least through $\U_1$?)
+then there is a bit of data that looks like `for any $a \in A$, then we generate a 1-cell $f(a) \to g(a)$ in $B$'
+because then there is, up to $\U_1$ anyhow, a well-defined $A$ and $B$ to talk about.
+
+This is actually reasonably compatible with how I was talking about
+1-paths, since every 1-path is a 1-cell. They should be compatible with amalgamation somehow.
+
+If I define objects of the presheaf base category by relation, then maybe the 2-cell can be defined
+as $\I_2 \x \I_1$ with a bunch of $\U_1$ texture glued to the left $(i:\I_1 = 0)$ and right $(i:\I_1 = 1)$ edges.
+
+\subsubsection*{Relations in the 3-cell}
+
+What's the 3-cell look like, then? $\C_3$ is $[0,1]^3$ with the following relations.
+We first have the 1-texture going left to right across the cube:
+\[
+\erule
+{x \le x' : [0,1]}
+{(x,y,z) \le_1 (x',y,z)}
+\]
+But we also want to completely identify the object-level domain and codomain:
+\[
+\erule{}{(0,y,z) \le_1 (0,y',z')}\qquad
+\erule{}{(1,y,z) \le_1 (1,y',z')}
+\]
+We want to have the 2-texture going top-of-the-page to bottom-of-the-page, which
+can wiggle left and right as much as it likes, and which must stay at exactly the
+same height:
+\[
+\erule
+{y \le y' : [0,1]}
+{(x,y,z) \le_2 (x',y',z)}
+\]
+but we want to identify the morphism-level domain and codomain at each $x$:
+\[
+\erule{}{(x,0,z) \le_2 (x,0,z')}\qquad
+\erule{}{(x,1,z) \le_2 (x,1,z')}
+\]
+finally we want the 3-texture going top to bottom, which can wiggle
+in the $xy$-plane however it wants:
+\[
+\erule
+{z \le z' : [0,1]}
+{(x,y,z) \le_3 (x',y',z')}
+\]
+and there's no more endcap identification to do, since following the pattern
+up to now would give us the redundantly true
+\[
+\erule{}{(x,y,0) \le_3 (x,y,0)}\qquad
+\erule{}{(x,y,0) \le_3 (x,y,1)}
+\]
+Hm, these relations as given are not actually transitive, however. Let's see if I can formulate their
+transitive closure directly:
+\[
+\erule
+{x \le x' : [0,1]}
+{(x,y,z) \le_1 (x',y,z)}\qquad
+\erule{}{(0,y,z) \le_1 (x,y',z')}\qquad
+\erule{}{(x,y,z) \le_1 (1,y',z')}
+\]
+\[
+\erule
+{y \le y' : [0,1]}
+{(x,y,z) \le_2 (x',y',z)}\qquad
+\erule{}{(x,0,z) \le_2 (x',y,z')}\qquad
+\erule{}{(x,y,z) \le_2 (x',1,z')}
+\]
+\[
+\erule
+{z \le z' : [0,1]}
+{(x,y,z) \le_3 (x',y',z')}
+\]
+This is actually giving more $x$-wiggle room to $\le_2$ at endpoints, which I think is correcting an error I made above.
+
+I can streamline these a bit by defining relations $x,x' \prov (y,z) = (y',z')$ and $y,y' \prov z = z'$ by
+\[
+\erule{}{0,x' \prov (y,z) = (y',z')}\qquad
+\erule{}{x,1 \prov (y,z) = (y',z')}\qquad
+\erule{}{x,x' \prov (y,z) = (y,z)}
+\]
+\[
+\erule{}{0,y' \prov z=z'}\qquad
+\erule{}{y,1 \prov z=z'}\qquad
+\erule{}{y,y' \prov z=z}
+\]
+\[
+\erule
+{x \le x' : [0,1] \qquad x,x' \prov (y,z) = (y',z')}
+{(x,y,z) \le_1 (x',y',z')}\qquad
+\]
+\[
+\erule
+{y \le y' : [0,1] \qquad y,y' \prov z = z'}
+{(x,y,z) \le_2 (x',y',z')}
+\]
+\[
+\erule
+{z \le z' : [0,1]}
+{(x,y,z) \le_3 (x',y',z')}
+\]
+Actually, this makes me think I might have left out the way that $\le_2$ collapses when $x\in\{0,1\}$.
+Let $v,w\in [0,1]^n$ be 1-indexed vectors. I definitely have, like
+\[
+\erule{v_1 \le w_1 : [0,1] \qquad \forall i > 1 . v_i = w_i}{v \le_1 w}
+\qquad
+\erule{v_1 = 0}{v \le_1 w}
+\qquad
+\erule{w_1 = 1}{v \le_1 w}
+\]
+and at dimension 2:
+\[
+\erule{v_2 \le w_2 : [0,1] \qquad \forall i > 2 . v_i = w_i}{v \le_2 w}
+\qquad
+\erule{v_2 = 0}{v \le_2 w}
+\qquad
+\erule{w_2 = 1}{v \le_2 w}
+\]
+but also I should have
+\[
+\erule{v_1 = 0}{v \le_2 w}
+\qquad
+\erule{w_1 = 1}{v \le_2 w}
+\]
+So I think my rules are
+\[
+\erule{u_i \le v_i : [0,1] \qquad \forall j > i . u_j = v_j}{u \le_i v}
+\qquad
+\erule{v_j = 0\qquad j \le i}{v \le_i w}
+\qquad
+\erule{w_j = 1\qquad j \le i}{v \le_i w}
+\]
+But is this transitive in this formulation? I'm concerned about the interaction
+\[
+\erule{u_2 \le v_2 : [0,1] \qquad  u_3 = v_3}{u \le_2 v}
+\qquad
+\erule{v_1 = 0}{v \le_2 w}
+\]
+Specifically let's say $u,v,w = (0.9, 0.3, 0.5)(0, 0.4, 0.5)(0.1, 0.2, 0.4)$.
+
+Oof, something is deeply wrong here: it seems like there'd have to be an $\I_2$-path in the two-cell
+$\C_2$ like so:
+\[\begin{tikzpicture}
+\fill[fill={lblue}] (-2,2) -- (2,2) -- (2,-2) -- (-2,-2)-- cycle;
+\node at (0,2.5)[above]  {$\I_1$};
+\node at (-3,1)[left]  {$\I_2$};
+\node at (2,1)[right,gray]  {$\U_1$};
+\node at (-2,-1.5)[left,gray]  {$\U_1$};
+\draw [gray, line width=1.5pt] (-2,2) -- (-2,-2);
+\draw [gray, line width=1.5pt] (2,2) -- (2,-2);
+\draw [blue, -{stealth}, line width=1pt] plot [smooth, tension=0.8] coordinates {(0,0) (-1,-0.5) (-2,-0.75) };
+\draw [blue, -{stealth}, line width=1pt] (-2,-0.75)--(-2, 1.25);
+\draw [blue, -{stealth}, line width=1pt] plot [smooth, tension=0.8] coordinates {(-2,1.25) (-1,1) (0,0.5) };
+\end{tikzpicture}\]
+which seems really bad!
+
+\subsubsection*{What are 2-paths in the universe again?}
+[2019.11.28]
+
+Here's a sketch of an idea.
+\[\begin{tikzpicture}
+\fill[fill={lblue}] (-2,2) -- (2,2) -- (2,-2) -- (-2,-2)-- cycle;
+\node at (0,2.5)[above]  {$\I_1$};
+\node at (-4,0)  {$\I_2$};
+\node (X) at (-3,0)  {$X$};
+\node (Y) at (3,0)  {$Y$};
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (X) -- (-2.1,\h);
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (2.1,\h) -- (Y);
+\draw [orange, line width=1.5pt] (-2,2) -- (2,2);
+\draw [orange, line width=1.5pt] (-2,-2) -- (2,-2);
+\coordinate [label={[blue]above:$h$}] (f) at (1.5,2);
+\coordinate [label={[blue]below:$k$}] (g) at (0,-2);
+\coordinate [label={[mgreen]left:$\alpha$}] (alpha) at (0,0);
+\draw [blue, line width=1pt] plot [smooth, tension=1] coordinates {(f) (1,1) (alpha)  (g) };
+\fill [blue] (f) circle (2pt);
+\fill [blue] (g) circle (2pt);
+\fill [mgreen] (alpha) circle (2pt);
+\end{tikzpicture}\]
+A 2-path $f : \I_2 \x \I_1 \to \rset$ in the universe consists of the following data.
+First of all, for every point $i \in [0,1]$ we have the usual data for $f(i, \dash) : \I_1 \to \rset$,
+which in particular can be thought of as a function $f(i, *) : f(i, 0) \to f(i, 1)$.
+Second, we have a set $X$ and a set $Y$, and maps
+\[a : (i : \I_2) \to X \to f(i, 0)\]
+\[b : (i : \I_2) \to  f(i, 1) \to Y\]
+We have a map that actually looks like a natural transformation creating 1-cells in $Y$, call it
+\[g : (i : \I_1) \to  X \to Y\]
+and we require
+\[ (i : \I_2) \to  g\ i = b\ i \o f(i, *) \o a\ i\]
+Note that we're tacitly coercing the $i : \I_2$ into an $\I_1$ in the argument of $g$.
+So what we're saying is that even though $f$ is sort of $\I_2$-indexed, we can factor its
+action through something depending on only $\I_1$.
+
+Could this make sense if the thing at the $Y$-end was a relation instead of a co-relation?
+Maybe? I can at least make some plausibly typecheckable demands:
+\[\begin{tikzpicture}
+\fill[fill={lblue}] (-2,2) -- (2,2) -- (2,-2) -- (-2,-2)-- cycle;
+\node at (0,2.5)[above]  {$\I_1$};
+\node at (-4,0)  {$\I_2$};
+\node (X) at (-3,0)  {$X$};
+\node (Y) at (3,0)  {$Y$};
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (X) -- (-2.1,\h);
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (Y) -- (2.1,\h);
+\draw [orange, line width=1.5pt] (-2,2) -- (2,2);
+\draw [orange, line width=1.5pt] (-2,-2) -- (2,-2);
+\coordinate [label={[blue]above:$h$}] (f) at (1.5,2);
+\coordinate [label={[blue]below:$k$}] (g) at (0,-2);
+\coordinate [label={[mgreen]left:$\alpha$}] (alpha) at (0,0);
+\draw [blue, line width=1pt] plot [smooth, tension=1] coordinates {(f) (1,1) (alpha)  (g) };
+\fill [blue] (f) circle (2pt);
+\fill [blue] (g) circle (2pt);
+\fill [mgreen] (alpha) circle (2pt);
+\end{tikzpicture}\]
+\[a : (i : \I_2) \to X \to f(i, 0)\]
+\[b : (i : \I_2) \to Y \to f(i, 1) \]
+\[g : (i : \I_1) \to  X \to Y\]
+\[ (i : \I_2) \to  b\ i \o g\ i =  f(i, *) \o a\ i\]
+And then maybe I could unify $X$ and $Y$ as just a single $\I_1$-continuous phenomenon:
+
+\[\begin{tikzpicture}
+\fill[fill={lblue}] (-2,2) -- (2,2) -- (2,-2) -- (-2,-2)-- cycle;
+\node at (0,2.5)[above]  {$\I_1$};
+\node at (-4,0)  {$\I_2$};
+\node (X) at (-3,0)  {${X(0)}$};
+\node (Y) at (3,0)  {${X(1)}$};
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (X) -- (-2.1,\h);
+\foreach \h in {1.5, 0.7, 0, -0.7, -1.5}
+\draw [gray, line width=1.5pt, -{stealth}] (Y) -- (2.1,\h);
+\draw [orange, line width=1.5pt] (-2,2) -- (2,2);
+\draw [orange, line width=1.5pt] (-2,-2) -- (2,-2);
+\draw [orange, line width=1.5pt] plot [smooth, tension=1] coordinates {(-2.5,-0.25) (0,-1) (2.5,-0.25)};
+\coordinate [label={[blue]above:$h$}] (f) at (1.5,2);
+\coordinate [label={[blue]below:$k$}] (g) at (0,-2);
+\coordinate [label={[mgreen]left:$\alpha$}] (alpha) at (0,0);
+\draw [blue, line width=1pt] plot [smooth, tension=1] coordinates {(f) (1,1) (alpha)  (g) };
+\fill [blue] (f) circle (2pt);
+\fill [blue] (g) circle (2pt);
+\fill [mgreen] (alpha) circle (2pt);
+\end{tikzpicture}\]
+\[X : (j : \I_1) \to \rset\]
+\[a :  (j : \I_1)(i : \I_2) \to X(j) \to f(i, j)\]
+\[g : (i : \I_1) \to  X(0) \to X(1)\]
+\[ (i : \I_2) \to  a\ 0\ i ; f(i, *)   = g\ i ;  a\ 1\ i     \]
+\[
+\begin{tikzcd}
+  X(0)\ar[r, "a\ 0 \ i"] \ar[d, "{g\ i}"'] & f(i, 0)\ar[d, "{f(i, *)}"]\\
+  X(1)\ar[r, "a\ 1 \ i"'] & f(i, 1)\\
+\end{tikzcd}
+\]
+
+
+\subsubsection*{Revisiting 1-paths and 1-cells in the universe}
+[2019.11.29]
+The data of a 1-path in the universe at least includes a `function
+extended in time', a functor from the ordered set $[0,1]$ to the
+category of sets. (though actually includes mappings of higher cells as well)
+But what I'd said earlier implies that I think a well-behaved type of 1-{\em cells}
+in the universe from $A$ to $B$ would actually be something like $\lx (A \imp B)$,
+meaning that invertible 2-cells should count as equalities.
+
+So if in fact $h = g\o f$ in
+\[\begin{tikzpicture}
+\node at (0,2.5)[above]  {$\I_1$};
+\node at (-2.5,0)[left]  {$\I_2$};
+\fill[fill={lorange}] (-2,2)  \bitf{--plot} \bitfg{--plot} -- (-2,-2)-- cycle;
+\fill[fill={lgreen}] (2,2)  \bitg{--plot} \bitfg{--plot} -- (2,-2)--   cycle;
+\fill[fill={lblue}] (0,0) \bitgrev{--plot} \bitf{--plot}  --   cycle;
+\draw [mblue, line width=1.5pt] \bitf{plot};
+\draw [mblue, line width=1.5pt] \bitg{plot};
+\draw [mblue, line width=1.5pt] \bitfg{plot};
+\node at (1,0) {$C$};
+\node at (-1.25,-0.8) {$A$};
+\node at (0,1.2) {$B$};
+\node [mblue] at (-1.4,1) {$f$};
+\node [mblue] at (0.8,1) {$g$};
+\node [mblue] at (0.1,-1) {$h$};
+\coordinate [label={[label distance=5]left:$\alpha$}] (g) at (0,0);
+\foreach \point in {g}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+then $\alpha$ is a map from $\U_2$ into $\I_1 \to \rset$, which is to
+say (one representation of)
+$g \o f$ is going to be considered actually equal to (one representation of) $h$.
+Which means in fact that all the different representations of $g \o f$ and $h$ are individually
+equal to one another; for every mere bijective reparameterization of $\I_1$, there is a map in $\U_2 \x \I_1 \to \rset$
+that realizes it.
+
+This means the function type $A \to B$ need not be made exotic by directed univalence. I don't necessarily
+get the ability to arbitrarily `interpolate' every function, because in $(A \to B) = \lx (A \imp_{\rset} B)$,
+the modality $\lx$ hides the ability to see the interpolation precisely ---
+it blurs it up to $\U_2$ paths in $A \imp_{\rset} B$.
+
+\subsubsection*{Some intuitions about composites of 2-cells}
+
+Suppose I have $\alpha$ and $\beta$ which I can think of as having various types,
+depending on how I jump around various equivalences:
+
+\[\begin{tabular}{r|c|c|c}
+&  $\alpha$ & $\beta$ & $\beta * \alpha$\\
+\hline
+(a)&$\I_1 \to \lx(A \imp_{\rset} B)$&$\I_1 \to \lx(B \imp_{\rset} C)$&$\I_1 \to \lx(A \imp_{\rset} C)$\\
+(b)&$\I_1 \to A \to B$&$\I_1 \to B\to C$&$\I_1 \to A\to C$\\
+(c)&$\I_2 \x \I_1 \to \rset$&$\I_2 \x \I_1 \to \rset$&$\I_2 \x \I_1 \to \rset$
+\end{tabular}\]
+
+\[\begin{tikzcd}
+  A
+ \ar[r, bend left, "{\alpha(0)}",""{name=a0, below}]
+ \ar[r, bend right, "{\alpha(1)}"',""{name=a1, above}]
+ \ar[double, from=a0, to=a1, "\alpha"']
+&
+ B
+ \ar[r, bend left, "{\beta(0)}",""{name=b0, below}]
+ \ar[r, bend right, "{\beta(1)}"',""{name=b1, above}]
+ \ar[double, from=b0, to=b1, "\beta"']
+&
+ C
+\end{tikzcd}\]
+
+The composite $\beta * \alpha$ in type formulation (b) is obvious: $(\beta * \alpha)(i) = \beta(i) \o \alpha(i)$.
+The claim is that in formulation (c), this should actually correspond to horizonal composition of $\beta$ with
+$\alpha$, i.e.
+\[(\beta * \alpha)(i_2, \dns i_1) = \alpha(i_2, i_1)\]
+\[(\beta * \alpha)(i_2, \ups i_1) = \beta(i_2, i_1)\]
+
+Let's try vertical composition. Suppose I have $\alpha$ and $\beta$ like so:
+
+\[\begin{tabular}{r|c}
+&  $\alpha, \beta, \beta  \o \alpha$\\
+\hline
+(a)&$\I_1 \to \lx(A \imp_{\rset} B)$\\
+(b)&$\I_1 \to A \to B$\\
+(c)&$\I_2 \x \I_1 \to \rset$
+\end{tabular}\]
+
+\[\begin{tikzcd}
+  A
+ \ar[r, bend left=100, "{\alpha(0)}",""{name=a0, below}]
+ \ar[r, "{\alpha(1) = \beta(0)}" description,""{name=a1, above},""{name=b0, below}]
+ \ar[r, bend right=100, "{\beta(1)}"',""{name=b1, above}]
+ \ar[double, from=a0, to=a1, "\alpha"']
+ \ar[double, from=b0, to=b1, "\beta"']
+&[3em]
+ B
+\end{tikzcd}\]
+
+Here we express the composite in (b) as a composition of 1-cells:
+\[(\beta \o \alpha)(\dns i, a) = \alpha(i, a)\]
+\[(\beta \o \alpha)(\ups i, a) = \beta(i, a)\]
+And in (c) as a vertical composite:
+\[(\beta \o \alpha)(\dns i_2, i_1) = \alpha(i_2, i_1)\]
+\[(\beta \o \alpha)(\ups i_2,  i_1) = \beta(i_2, i_1)\]
+
+Staring at both of these, they seem sort of obvious in hindsight --- irrespective of thinking about 2-cell
+composition, the situation of horizontal composition simply makes sense as expressing the relationship
+between function composition and composing $\I_1$-paths. The latter is just kind of a congruence of how composites
+of shifted cells become shifted composites under $\lx$.
+
+Nonetheless, it seems like there's some interesting thing going on with horizontal composition, in that
+if I had natural transformations $\alpha : F \to G : A \to B$ and $\beta : H \to K : B \to C$, then their
+horizontal composite would be:
+\[
+\begin{tikzcd}
+  HFA \ar[r, "H\alpha_A"]\ar[d, "\beta_{FA}"']& HGA\ar[d, "\beta_{GA}"]\\
+KFA \ar[r, "K\alpha_A"']& KGA
+\end{tikzcd}
+=
+\begin{tikzcd}
+  \beta(0) \alpha(0) \ar[r, "\beta(0)\alpha(i)"]\ar[d, "\beta(i)\alpha(0)"']\ar[dr, "\beta(i)\alpha(i)" description]
+&   \beta(0) \alpha(1) \ar[d, "\beta(i)\alpha(1)"]\\
+  \beta(1) \alpha(0) \ar[r, "\beta(1)\alpha(i)"']&   \beta(1) \alpha(1)
+\end{tikzcd}
+\]
+so the fact of the matter is that I really am taking the diagonal of this $\I_1\x\I_1$ square as the horizontal composite.
+
+\subsubsection*{Taking advantage of dependent paths?}
+
+The correspondence I had been assuming worked was this: if you have a path $\Gamma, i : \I_1 \prov f : \rset$,
+then that should be the same thing as any of
+\[\Gamma \prov \llam i . f : [0/i]f \imp [1/i]f\]
+\[\Gamma^\ominus \prov {?} : \lx ([0/i]f \imp [1/i]f)\]
+\[\Gamma^\ominus \prov {?} : [0/i]f \to [1/i]f\]
+assuming {\em $f$ doesn't actually depend on $\Gamma$}. Where $\dash^\ominus$ means something like,
+convert all the $\U_{n+1}$ and $\I_{n+1}$ in the context to $\U_{n}$ and $\I_{n}$ somehow.
+But what if $f$ does depend on a variable, but in a restricted way such that it's still usable after the $\dash^\ominus$
+operation?
+
+In particular, suppose we have $A, B : \I_1 \to \rset$. Suppose we have $f : \I_2 \x \I_1 \to \rset$
+such that
+\[i : \I_2 \prov f(i, 0) = A(i)\]
+\[i : \I_2 \prov f(i, 1) = B(i)\]
+noting that there's a silent $\I_2 \to \I_1$ coercion happening when I plug $i$ into $A$ and $B$.
+Now I might think that there's some sort of entity
+\[i : \I_1 \prov f(i, *) : A(i) \to B(i)\]
+which if $A$ and $B$ {\em didn't} depend on $i$ would be the natural transformation data mapping elements
+ of $A$ into $\I_1$-paths in $B$.
+
+Another thought is to suppose that $A, B : \I_2 \to \rset$ in the first place, and surmise that what
+I get out at the end is
+\[i : \I_1 \prov f(i, *) : (\lx A)(i) \to (\lx B)(i)\]
+since a $\I_1$-path in $\lx A$ corresponds to a $\I_2$-path in $A$? But that seems to generalize
+wrongly. I do really want $\I_1$-paths in $B$ in the nondependent case.
+
+\subsubsection*{Negative dimensions}
+
+An idea that keeps occurring to me but I don't know if it works is
+this: what if there aren't $\N$ many dimensions, but $\Z$ many? This would mean that
+$\lx$ would have an inverse --- we wouldn't be collapsing weaker relations into equalities,
+but equality would be permanently relative.
+
+A path from $\U_1$ would establish, presumably, that two points are equal {\em as far as we can tell} using
+probes of $\U_1, \U_2, \U_3$, etc, even though $\U_0, \U_{-1}, \U_{-2}$ might be able to tell them apart.
+
+Can I convince myself to believe in this principle of relativity? Even if $\U_{< 1}$ don't {\em exist} per se,
+I could ask the question of whether life up at $\U_{123}$ and above actually resembles life at $\U_1$. I know
+from monoidal category theory that the two situations aren't {\em idential}, because the higher category
+I'm in, the more sorts of composition I can do --- but maybe all I need to do is disallow myself from
+using those compositional tools. Although it's simply {\em not} the case that every category is a monoidal
+category, right?
+
+This might be another situation where `weaves' or whatever I'm calling them are better behaved than categories.
+Consider this. If I have $\U_1, \U_2, \U_3$, etc. the `objects' inside $\U_1, \U_2, \U_3$ are single points.
+But if I had a $\U_0$, the maps up from it to $\U_1, \U_2, \U_3$ would also be mere points. Nothing
+seems to require me to have (or to not have) inhabitants of a presheaf at object $\U_0$.
+
+If I have a space --- a weave --- $X$, it can have a notion of a lowest dimension $\mu$ that it actually ``understands''
+in the sense that all maps $\U_i \to X$ for $i \le \mu$ are just the constant maps, i.e. they factor through
+the terminal presheaf.
 \end{document}

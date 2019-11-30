@@ -1,0 +1,252 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\D{\mathbb{D}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\grcat{\mathbf{GrCat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\R{\mathbb{R}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\mpo{\mathbf{MultOrdTop}}
+
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+\title{Gradual Categories}
+\author{Jason Reed}
+\maketitle
+\section{Goals and Non-goals}
+
+I want to better understand how homotopy type theory can generalize to
+a directed notion of space. I know that $\rcat$ isn't locally
+cartesian closed, so it's impossible to imagine that the pleasing
+narrative that HoTT provides, namely
+``all along, the types that you were programming with were secretly spaces''
+can simply be modified to
+``all along, the types that you were programming with were secretly categories''.
+
+And yet I do yearn for a conclusion of the form ``all along, the types
+that you were programming with were secretly $X$''. The Riehl-Shulman
+story, while correct and effective and fascinating in its own right,
+leaves me mathematically dissatisfied precisely because it only picks
+out some of the types as category-like.
+
+Maybe the conclusion we draw is: while `category' isn't ({\em can't}
+be) the right concept to shoehorn every type into, assuming we want a
+nice big well-behaved type theory with dependent types --- maybe
+something similar is.
+
+The goal of this note is to explore a particular candidate for that $X$.
+It is not a goal to be particularly rigorous. I'm mostly just speculating well
+in advance of the territory I see clearly.
+
+I want the $X$ to also tell a story about higher-dimensional directed
+structure, which carries extra risk of saying wrong or incoherent
+things, since I still don't understand higher categories perfectly.
+
+The $X$ I have in mind, the notion of `directed space', is in a way a
+retreat to fairly concrete stuff: in lieu of categories I direct my
+attention to members of a sheaf category which lets you probe the
+putative space with actual good old-fashioned honest intervals from
+$\R$. This will mean that a a `morphism' $f : A \to B$ in a `directed
+space' will admit --- and this is crucially unlike a morphism in a
+category! --- interpolation of all points between $A$ and $B$. We'll
+be able to ask for the domain of $f$ by asking for its value at time
+0, and its codomain by asking for its value at time 1, but we can also
+ask for its value at any time in between.
+
+The reason why I have any hope at all for this being interesting is I
+conjecture appropriate higher-dimensional directed space structure
+might allow an appropriate quotienting-out (similar to how the
+$\infty$-groupoid structure of HoTT `quotients out' path equalities
+while retaining the homotopical data of them) of the `interal
+behavior' of a morphism, letting us recover a category-like view of
+morphisms as discrete things.
+
+\section{Definitions}
+
+Consider the category $\mpo$ of topological spaces equipped with multiple preorders, indexed by natural numbers.
+We write $a \le_n b : X$ to say that $a \le b$ according to the $n^{th}$ preorder in $X$. Maps between
+sets are required to be continuous, and monotone in all orders simultaneously.
+
+Define a family of objects $C_n \in \mpo$ as follows. The underlying topological space of every $C_n$ is going to be
+the interval $[0,1] \in \R$. The relations are defined by inference rules
+
+\[
+\erule
+{}
+{x \le_m x : C_{n}}
+\qquad
+\erule
+{m < 2n+1}
+{x \le_n y : C_{m}}
+\qquad
+\erule
+{x \le y : [0,1]}
+{x \le_n y : C_{2n+1}}
+\]
+
+In $C_0$, everything is related to everything else at every relation. In $C_1$, everything
+is related to everything else at $\le_1$ and above, but $\le_0$ is the familiar total order on
+$[0,1]$. In $C_2$, everything is related to everything else at $\le_1$ and above, but we have
+only reflexivity at $\le_0$.
+
+A sense of the morphisms that exist between these objects is given by the following diagram:
+\[\begin{tikzcd}
+  \cdots \ar[r] &
+  C_5 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  C_4 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  C_3 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  C_2 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  C_1 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  C_0 \ar[loop, out=110,in=70, distance=1em]
+\end{tikzcd}\]
+where black arrows indicate arbitrary continuous maps, and red arrows indicate monotone maps.
+We can define $\I_n = C_{2n-1}$ (`the directed $n$-time interval') and $\U_n = C_{2n-2}$ (`the undirected $n$-time interval')
+and see this as
+\[\begin{tikzcd}
+  \cdots \ar[r] &
+  \I_3 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_3 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_2 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_2 \ar[loop, out=110,in=70, distance=1em] \ar[r] &
+  \I_1 \ar[loop, out=110,in=70, red, distance=1em] \ar[r] &
+  \U_1 \ar[loop, out=110,in=70, distance=1em]
+\end{tikzcd}\]
+The vague intuition behind the phrase `$n$-time' is that it's supposed to represent a time coordinate that increases as
+we proceed through the action of an $n$-cell in a higher category. The structure $\U_n$ represents the time coordinate
+for an invertible $n$-cell. Thus all the data of a (general, not assumed to be invertible)
+$n$-cell is some kind of map from $\I_1 \x \cdots \x \I_n$ into a space.
+
+So let $\P$ be the full subcategory of $\mpo$ whose objects are all finite products of $C_n$.
+Consider the Grothendieck topology on the presheaf category $\hat \P$ that says a sieve on $C_{n_1} \x \cdots \x C_{n_m}$
+is covering if in fact the union of the ranges of all the morphisms in the sieve cover $[0,1] \x \cdots \x [0,1]$.
+
+The category of sheaves on this site is named $\grcat$, the category of ---
+let's call them `gradual categories'. Calling them categories is an
+abuse of terminology at this point (like how a contravariant functor
+$\C \to \D$ is not a special kind of functor $\C \to \D$) but I hope to justify it by
+showing how they are category-like.
+
+\section{Things I don't know}
+
+I definitely don't know how the elim rule could look for the types $\U_n$.
+Let's review how equality induction works. Reading off what's in the HoTT book, if
+\[D : (x,y:A) (p : x = y) \to \rset\]
+\[d : (a : A) \to D(a,a,\ridp_a)\]
+then
+\[\mathsf{ind_=}(D, d) : (x,y:A) (p:x=y) \to D(x,y,p)\]
+with a $\beta$-reduction
+\[\mathsf{ind_=}(D, d, a, a, \ridp_a) \mapsto d(a) \]
+
+The sort of thing I'm hoping for --- especially to justify the `affine' picture of the world in which $\I$ and $\U$ are
+$\Z$-subscripted rather than $\N$-subscripted, and there's nothing particularly special about the $0$ index --- is
+a principle something like the utterly straightforward generalization to the following:
+
+If
+\[D : (x,y:A) (p : x =_n y) \to \rset\]
+\[d : (a : A) \to D(a,a,\ridp_{n;a})\]
+and
+\[\hbox{\em some other condition on $A$ or $D$, perhaps?} \]
+then
+\[\mathsf{ind_=}(D, d) : (x,y:A) (p:x=_ny) \to D(x,y,p)\]
+with a $\beta$-reduction
+\[\mathsf{ind_=}(D, d, a, a, \ridp_{n;a}) \mapsto d(a) \]
+
+My gut sense for what the {\em some other condition} has to be is that it requires the absence of
+interesting structure {\em below} dimension $n$.
+
+I think what I want to require is that an equality in a type
+$X$ at dimension $n$ implies equality for all lower dimensions: if $x =^X_n y$
+and $m < n$, then $x =^X_m y$. For the It's still not totally
+clear to me how I want to express that the fact that the maps
+$x =^X_m y \to x=^X_n y$ and $x =^X_n y \to x=^X_m y$ are mutually
+inverse, though.
+
+This means that I might have been thinking about this all backwards. With respect to
+low-dimensional equality probes, spaces become more tightly bound together, more incoherent,
+not more discrete.
+
+
+Let's stare at the non-path-dependent case a bit, and imagine that we are in a world where
+$\U_1$ is the `base equality'. I expect that in that case, where by default $D$ and $A$
+both lack any structure below dimension 1, that the equality elim
+
+\[
+\erule
+{D : (x,y:A) \to \rset \qquad d : (a : A) \to D(a,a)}
+{\mathsf{ind_{=_1}}(D, d) : (x,y:A) (p:x=_1 y) \to D(x,y)}
+\]
+
+just holds full stop. The thing I want to exercise my intuitions on is the $2$-equality elimination
+
+\[
+\erule
+{D : (x,y:A) \to \rset \qquad d : (a : A) \to D(a,a) \qquad \hbox{\em other condition}}
+{\mathsf{ind_{=_2}}(D, d) : (x,y:A) (p:x=_2 y) \to D(x,y)}
+\]
+
+which I want to justify by setting {\em other condition} to something prohitibiting interesting
+$1$-structure in $D$ or $A$. Alternatively I could think of this prohibition more positively
+as the ability to transform any $2$-structure I find into $1$-structure ---
+I can promote a $\U_2$-path into a $\U_1$-path. Intuitively from $x =_2 y$ I feel like
+by functoriality alone I should have $D(x,x) =_2 D(x,y) : \rset$. It would take
+$D(x,x) =_1 D(x,y) : \rset$ to actually be able to transport $d(x) : D(x,x)$ over to $D(x,y)$.
+So maybe {\em other condition} needs only be applied to $D$, that
+all of its $2$-paths imply $1$-paths, and that somehow lets us
+take a 2-path in $\rset$ to actual transport.
+
+On the other hand I'm pretty sure that elimination of directed paths cares about how the
+arguments of $D$ are used; something like
+\[
+\erule
+{D : (x:A^\op ,y:A) \to \rset \qquad d : (a : A) \to D(a,a) \qquad \hbox{\em other conditions?}}
+{\mathsf{ind_{\le_1}}(D, d) : (x,y:A) (p:x\le_1 y) \to D(x,y)}
+\]
+but how $d$ can even be well-formed when it uses $a$ co- and contravariantly is unclear.
+\end{document}
