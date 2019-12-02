@@ -249,4 +249,37 @@ arguments of $D$ are used; something like
 {\mathsf{ind_{\le_1}}(D, d) : (x,y:A) (p:x\le_1 y) \to D(x,y)}
 \]
 but how $d$ can even be well-formed when it uses $a$ co- and contravariantly is unclear.
+
+A thing that presently seems to anchor the meaning of the dimension indices is the fact
+that $\rset$, at dimension 1, has functions for $\I_1$ paths.
+
+Is it any easier to think about mere transport, instead of general induction?
+What I have for $\U_1$ transport is
+\[
+\erule
+{D : (x:A) \to \rset \qquad a  : A \qquad d :  D(a) }
+{\mathsf{coe_{=_1}}(D, d) : (b :A) (p:a =_1 b) \to D(b)}
+\]
+and what I suspect for $\U_2$ transport is something like
+\[
+\erule
+{D : (x:A) \to \rset \qquad a  : A \qquad d :  D(a) \qquad \hbox{\em other condition}}
+{\mathsf{coe_{=_2}}(D, d) : (b : A) (p:a =_2 b) \to D(b)}
+\]
+So in this case the gap I need to cross is exactly having $D(a) =_2 D(b) : \rset$, and
+needing $D(a) =_1 D(b) : \rset$. The sort of condition I was picturing that {\em each} fiber
+of the fibration $x : A \prov D : \rset$ is trivial under dimension 2 would look more like
+$(x : A) \to (\U_2 \to D(x)) \to (\U_1 \to D(x))$, which I think is a weaker and insufficient
+constraint. I need to pay more attention to what happens between fibers, I think.
+
+For the entire type family $D$ to be sufficiently trivial under dimension 2, I do think I need
+the entailment
+\[
+\erule
+{D(a) =_2 D(b) : \rset}
+{D(a) =_1 D(b) : \rset}
+\]
+and probably instead of requiring this as a functional input to the transport (or induction)
+rules this should be something that falls out naturally as a consequence of how we allow $D$
+to be syntactically be built up, but naturally I don't know how yet.
 \end{document}
