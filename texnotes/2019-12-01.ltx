@@ -1,0 +1,393 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\def\binj{\mathbf{inj}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+
+\begin{document}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+What's a plausible universe for a simple presheaf category? Like,
+presheaves over
+\[\P =
+\begin{tikzcd}
+  M \ar[r, "m"] & T
+\end{tikzcd}\]
+Conflate $M$ with $yM = (M \mapsto 1, T \mapsto 0)$. Notice it has no global points.
+Notice $T$ is terminal so $yT$ is terminal.
+Suppose in the ambient type theory we have an object classifier
+\[
+\begin{tikzcd}
+B\pbck\ar[r]\ar[d, "b"']& \hat U\ar[d, "u"]\\
+A\ar[r, "\bar b"']& U
+\end{tikzcd}
+\]
+so that for all `small' $b$ we know they have a name $\bar b$ that makes the above a pullback.
+
+We want to construct a reasonable candidate for object classifier for $\rset^{\P^\op}$.
+I think it's $V = (M \mapsto U, T \mapsto U \x U, m \mapsto \pi_1)$. Let's see how name
+construction works. Suppose we're given a morphism $b : B \to A \in \rset^{\P^\op}$. This means
+we have a naturality square
+\[
+\begin{tikzcd}
+BM\ar[from=r, "Bm"']\ar[d, "b_M"']& BT\ar[d, "b_T"]\\
+AM\ar[from=r, "Am"]& AT
+\end{tikzcd}
+\]
+so we can find codes for the components:
+\[
+\begin{tikzcd}
+BM\pbck\ar[r, "\pi_M"]\ar[d, "b_M"']& \hat U\ar[d, "u"]\\
+AM\ar[r, "\bar b_M"']& U
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+BT\pbck\ar[r, "\pi_T"]\ar[d, "b_T"']& \hat U\ar[d, "u"]\\
+AT\ar[r, "\bar b_T"']& U
+\end{tikzcd}
+\]
+so I think the morphism $A \to V$ I want to yield is the naturality square
+\[
+\bar b\quad = \qquad
+\begin{tikzcd}
+AM\ar[from=r, "Am"']\ar[d, "\bar b_M "']& AT\ar[d, "\pair {\bar b_M \o Am} {\bar b_T}"]\\
+U\ar[from=r, "\pi_1"]& U \x U
+\end{tikzcd}
+\]
+I also need to define $\hat V$ and $v$. How about:
+\[
+v \quad = \qquad
+\begin{tikzcd}
+\hat U\ar[from=r, "\pi_1"']\ar[d, "u"']& \hat U \x \hat U\ar[d, "{u} \x {u}"]\\
+U\ar[from=r, "\pi_1"]& U \x U
+\end{tikzcd}
+\]
+
+Does this yield a pullback? To check that
+\[
+\begin{tikzcd}
+B\pbck\ar[r]\ar[d, "b"']& \hat V\ar[d, "v"]\\
+A\ar[r, "\bar b"']& V
+\end{tikzcd}
+\]
+I want to check the overall commutativity of
+\[\begin{tikzcd}[row sep={40,between origins}, column sep={40,between origins}]
+      &[3em]BT \ar[rr, "\pair{\pi_M \o Bm}{\pi_T}"]\ar[dd, "Bm" pos=0.25]\ar[dl, "b_T"']
+&[1em]
+&[3em]
+ \hat U \x \hat U \ar[dd, "\pi_1"]\ar[dl, "u\x u" description] \\
+    AT \ar[rr, "\pair{\bar b_M \o Am}{\bar b_T}"' pos=0.3, crossing over] \ar[dd, "Am"'] & & U \x U \\
+      & BM  \ar[rr, "\pi_M" pos=0.7] \ar[dl, "b_M" description] & &  \hat U \ar[dl, "u"] \\
+    AM \ar[rr, "\bar b_M"'] && U \ar[from=uu,crossing over, "\pi_1" pos = 0.25]
+\end{tikzcd}\]
+and that the top and bottom squares are pullbacks.
+First note that the left face is a naturality
+square, the right easily commutes, and the front and back easily commute by reasoning about products.
+The bottom face is a pullback we've already seen, so let's just look at the top face.
+
+Checking commutativity entails checking both projections; the second is a pullback we've already seen, and the first
+is
+\[
+\begin{tikzcd}
+&BM\ar[ddr, "b_M" description]\ar[r, "\pi_M"]&\hat U\ar[dr, "u"]\\
+BT \ar[dr, "b_T"']\ar[ur, "Bm"]&&& U\\
+&AT\ar[r, "Am"']& AM\ar[ur, "\bar b_M"']
+\end{tikzcd}
+\]
+
+\subsection*{Arbitrary Presheaves}
+
+I think what I'm doing is setting up the covariant functor $E : \P \to \rset$
+which goes like this: on an object $P \in \P$, functor
+evaluation $E(P)$ gives the set of all morphisms in $\P$ whose
+codomain is $P$. The action on morpshisms $E(P) \to E(Q)$ on a
+morphism $q : P \to Q$ is just composition.
+
+Define the data of the universe in the presheaf category by
+\[VP = U^{EP}\]
+\[\hat VP = \hat U^{EP}\]
+with $v_P = u^{EP}$ exhibiting naturality squares like
+\[
+\begin{tikzcd}
+\hat VP\ar[from=r, "\hat Vq"']\ar[d, "v_P"']& \hat VQ\ar[d, "v_Q"]\\
+VP\ar[from=r, "Vq"]& VQ
+\end{tikzcd}
+\quad = \quad
+\begin{tikzcd}
+\hat U^{EP}\ar[from=r, "\hat U^{Eq}"']\ar[d, "u^{EP}"']& \hat U^{EQ}\ar[d, "u^{EQ}"]\\
+U^{EP}\ar[from=r, "U^{Eq}"]& U^{EQ}
+\end{tikzcd}
+\]
+for each $q : P \to Q \in \P$.
+
+Suppose we're given a morphism $b : B \to A \in \rset^{\P^\op}$.
+We have a naturality square for each $q : P \to Q \in \P$:
+\[
+\begin{tikzcd}
+BP\ar[from=r, "Bq"']\ar[d, "b_P"']& BQ\ar[d, "b_Q"]\\
+AP\ar[from=r, "Aq"]& AQ
+\end{tikzcd}
+\]
+and we can find codes for components:
+\[
+\begin{tikzcd}
+BP\pbck\ar[r, "\pi_P"]\ar[d, "b_P"']& \hat U\ar[d, "u"]\\
+AP\ar[r, "\overline{b_P}"']& U
+\end{tikzcd}
+\]
+I want to construct a single name $\bar b : A \to V$.
+So for each object $Q$ I need to make $\bar b_Q : AQ \to U^{EQ}$.
+For each morphism $q : P \to Q$ I need to find $\pi_{q}\bar b_Q : AQ \to U$.
+So I set
+\[\pi_{q}\bar b_Q : AQ \to U = \overline{b_P} \o Aq\]
+\[\bar b_Q : AQ \to U^{EQ} = \langle \overline{b_P} \o Aq \st q : P \to Q \in EQ \rangle\]
+also define
+\[\rho_Q : BQ \to \hat U^{EQ} = \langle \pi_P \o Bq \st q : P \to Q \in EQ \rangle\]
+so now for a morphism $q : P \to Q$ I'm staring at a diagram like
+\[\begin{tikzcd}[row sep={40,between origins}, column sep={40,between origins}]
+      &[3em]BQ \ar[rr, "\rho_Q"]\ar[dd, "Bm" pos=0.25]\ar[dl, "b_Q"']
+&[1em]
+&[3em]
+ \hat U^{EQ} \ar[dd, "\hat U^{Eq}"]\ar[dl, "u^{EQ}" description] \\
+    AQ \ar[rr, "\bar b_Q"' pos=0.3, crossing over] \ar[dd, "Aq"'] & & U^{EQ} \\
+      & BP  \ar[rr, "\rho_P" pos=0.7] \ar[dl, "b_P" description] & &  \hat U^{EP} \ar[dl, "u^{EP}"] \\
+    AP \ar[rr, "\bar b_P"'] && U^{EP} \ar[from=uu,crossing over, "U^{Eq}" pos = 0.25]
+\end{tikzcd}\]
+To check that the top square actually commutes for a particular coordinate $q : P \to Q \in EQ$ of $U^{EQ}$,
+we check the diagram
+\[
+\begin{tikzcd}
+BQ\ar[d,"b_Q"'] \ar[r, "Bq"]&  BP \pbck \ar[r, "\pi_P"] \ar[d, "b_P" description]& \hat U\ar[d, "u"]\\
+AQ\ar[r, "Aq"'] & AP\ar[r, "\overline{b_P}"'] & U
+\end{tikzcd}
+\]
+
+Is it actually a pullback for every $Q$? I'm suspicious because the above diagram is only partially a pullback.
+Suppose I have $f, g$ with
+\[
+\begin{tikzcd}
+X \ar[drr, bend left, "f"] \ar[ddr, bend right, "g"']\ar[dr, dotted]\\
+&BQ\ar[d,"b_Q"'] \ar[r, "\rho_Q"]&  \hat U^{EQ} \ar[d, "u^{EQ}"]\\
+&AQ\ar[r, "\bar b_Q"'] & U^{EQ}
+\end{tikzcd}
+\]
+I think something useful might come out of paying attention to the identity $Q \to Q$.
+So in particular $f$ projects to something $X \to \hat U$ at $\rid_Q \in EQ$. Let's look there.
+\[
+\begin{tikzcd}
+X \ar[drr, bend left, "\pi_{\rid_Q} \o f"] \ar[ddr, bend right, "g"']\ar[dr, dotted, "h_Q" description]\\
+&BQ \pbck\ar[d,"b_Q"'] \ar[r, "\pi_Q"]&  \hat U \ar[d, "u"]\\
+&AQ\ar[r, "\overline{b_Q}"'] & U
+\end{tikzcd}
+\]
+This does give us an $h_Q$ for each $Q$. Going back to the $f$ triangle of the original diagram, for an arbitrary
+$q : P \to Q \in EQ$, we need to check
+\[
+\begin{tikzcd}
+X \ar[d,"h_Q"'] \ar[rr, "f"]&&  \hat U^{EQ} \ar[d, "\pi_q"]\\
+BQ\ar[r, "Bq"'] & BP \ar[r,"\pi_P"'] &  \hat U
+\end{tikzcd}
+\]
+Hm, I'm not sure this actually works.
+\subsubsection*{Another Attempt}
+Could it me that I instead assign $\hat V = \Delta \hat U$? And set
+\[v_Q : \Delta\hat U \to U^{EQ} = \langle u | q : P \to Q \in EQ\rangle\]
+? Then my cube diagram would look like
+\[\begin{tikzcd}[row sep={40,between origins}, column sep={40,between origins}]
+      &[3em]BQ \ar[rr, "\pi_Q"]\ar[dd, "Bm" pos=0.25]\ar[dl, "b_Q"']
+&[1em]
+&[3em]
+ \hat U \ar[dd, equal]\ar[dl, "\Delta u" description] \\
+    AQ \ar[rr, "\bar b_Q"' pos=0.3, crossing over] \ar[dd, "Aq"'] & & U^{EQ} \\
+      & BP  \ar[rr, "\pi_P" pos=0.7] \ar[dl, "b_P" description] & &  \hat U \ar[dl, "\Delta u"] \\
+    AP \ar[rr, "\bar b_P"'] && U^{EP} \ar[from=uu,crossing over, "U^{Eq}" pos = 0.25]
+\end{tikzcd}\]
+But then I can't convince myself the top face commutes.
+\subsubsection*{More Yoneda}
+Do I need to pass from $U^{EQ}$ to actually $U^{yQ}$?
+I.e. let $yQ$ be the entire representable presheaf at object $Q \in \P$, and say that
+an element of the universe in the presheaf category
+is not just an {\em assignment} of a type to every morphism into $Q$, but a coherent one?
+
+How does that look? Let's retreat back to the 1-arrow presheaf case.
+I think what's going on is that $V(T)$ should not be just $U\x U$ but rather
+something like $(A\ B : U) \x (A \to B)$... Hm, don't know how to encode that
+
+\subsubsection*{Actually thinking with Yoneda}
+Wait, back in \textsf{2018-02-01.ltx} I had a good suggestive schema for thinking this through.
+By the yoneda lemma,
+\[ V(P) = \hom_{\hat \P}(yP, V) \]
+but I know that a morphism into the universe $V$ is supposed to look like a choice of a presheaf
+$F \in \hat \P$ together with a natural transformation $\hom_{\hat \P}(F, yP)$. So something like:
+\[ V(P) = (F : \hat \P) \x \hom_{\hat \P}(F, yP) \]
+should hold.
+
+Ah, this does line up with what I was trying to construct for the one-morphism $\P$ case.
+The universe $V$ evaluated at $M$ will give $(1,0)$, so that's why you only have to specify
+one set for $M$, and nothing for the $T$ side.
+
+This means that evaluating at the terminal object of the category should just give $V(1) = \hat \P$.
+The morphism part of $V$ works not by composition --- the variances work out wrong for that ---
+but rather by pullback. We view the data of the $F$ in $V(P)$ as fibered over $yP$.
+So to get from $(F : \hat \P) \x \hom(F, yQ) \in V(Q)$ to something in $V(P)$ we do the pullback
+\[
+\begin{tikzcd}
+G \pbck\ar[d] \ar[r]&  yP \ar[d]\\
+F\ar[r] & yQ
+\end{tikzcd}
+\]
+
+If I take $\P$ to be products of $\I_n, \U_n$, what is $V(\I_1)$ for example? It's
+a presheaf $F$ over $\P$ --- maybe should call it a `territory' rather than the term `weave' I was using before?
+Plus a map $F \to y\I_1$.
+
+How can I (if indeed I can?) extract the data I thought I could
+extract from this about a function evolving over time? I should bear in mind
+that the knob I still think I have available to twiddle a little bit is
+that $V(P)$ may not be {\em all} of $(F : \hat\P) \x \hom(F, yP)$, but just
+the sets so indexed that are well-behaved. I could see restricting to some notion of
+fibration for sure.
+
+An element of $V(1)$ is going to be a choice of $F : \hat\P$ together with trivial data.
+I have lots of maps $1 \to \I_1$, one for each number $[0,1]$. This should let me restrict
+from a $V(\I_1)$-element to a $V(1)$-element:
+\[
+\begin{tikzcd}
+G \pbck\ar[d] \ar[r]&  y1 \ar[d]\\
+F\ar[r] & y\I_1
+\end{tikzcd}
+\]
+
+\subsubsection*{Summarizing what I've learned}
+I want to feel the meaning of
+\[ V(Q) = (F : \hat \P) \x \hom_{\hat \P}(F, yQ) \]
+as the presheaf having fibers that live over $\hom(F, yQ)$.
+
+I think $V(Q)$ must specify, for each morphism $q : P \to Q$, some set $S(q)$ that
+lies over $q$ in the natural transformation $\hom(F, yQ)$. I should have something like
+\[F(P) = \coprod_{q : P \to Q} S(q) \]
+
+If I pick a $p : P_1 \to P_2$ and name $\alpha : \hom(F, yQ)$ and stare at the square
+\[
+\begin{tikzcd}
+FP_2 \ar[d, "Fp"'] \ar[r, "\alpha_{P_2}"]&  \hom(P_2, Q) \ar[d, "\dash \o p"]\\
+FP_1  \ar[r, "\alpha_{P_1}"']&  \hom(P_1, Q)
+\end{tikzcd}
+\]
+
+It should tell me what I have to do the restrict along $p: P_1 \to P_2$, to get
+\[Fp : F(P_2) \to F(P_1)\]
+\[Fp : \coprod_{q : P_2 \to Q} S(q) \to \coprod_{q : P_1 \to Q} S(q)\]
+I know then that $(Fp)(\binj_q\ s)$ has to be $\binj_{q \o p}(t)$ for some $t$.
+So the morphism part of $F$ is given by a mapping, for every  $q : P_2 \to Q$ and $p : P_1 \to P_2$,
+a map
+\[\sigma_{qp} : S(q) \to S(q \o p)\]
+and functoriality of $F$ is probably something like saying for any $p' : P_0 \to P_1$ that
+\[
+\begin{tikzcd}
+S(q) \ar[dr, "\sigma_{q,pp'}"'] \ar[r, "\sigma_{q,p}"]&  S(qp) \ar[d, "\sigma_{qp,p'}"]\\
+&  S(qpp')
+\end{tikzcd}
+\]
+Actually let me be more explicit about indexing.
+The value of the universal presheaf at $Q$ is the collection of ways you can choose $S_Q$ and $\sigma^{Q}_{q,p}$.
+Supposing you have a morphism $k : Q_1 \to Q_2$, I need to describe how to take a $S_{Q_2}$ and $\sigma^{Q_2}$ and
+construct a $S_{Q_1}$ and $\sigma^{Q_1}$ out of it. I think it is just
+\[S_{Q_1}(q : P \to Q_1) = S_{Q_2}(kq : P \to Q_2)\]
+\[ \sigma^{Q_1}_{q,p} := \sigma^{Q_2}_{kq,p} \]
+\[
+\begin{tikzcd}
+S_{Q_1}(q : P_2 \to Q_1) \ar[d, equal] \ar[r, "\sigma^{Q_1}_{q,p}"]&  S_{Q_1}(qp : P_1 \to Q_1) \ar[d, equal]\\
+S_{Q_2}(kq : P_2 \to Q_2)  \ar[r, "\sigma^{Q_2}_{kq,p}"']&  S_{Q_2}(kqp : P_1 \to Q_2)
+\end{tikzcd}
+\]
+\subsubsection*{Fibrancy, maybe?}
+[2019.12.02]
+
+So I think I believe that to a first approximation a $\I_1$-path in
+the universe is a territory that lies over $y\I_1$. I have some
+further expectations on the structure of such a thing, which I'm hoping turn out
+to be equivalent to some filling/lifting problem.
+
+For example: let's say I have a presheaf $p : F \to y\I_1$ over $y\I_1$. If I have
+a point, an element $x \in F(1)$, that lies over $0 : 1 \to \I_1$, then I expect that
+uniquely extends to an element $F(\I_1)$ that lies over $\rid : \I_1 \to \I_1$.
+So in fact yes, this feels like the diagram
+\[
+\begin{tikzcd}
+y1 \ar[d, "0"'] \ar[r, "x"]& F \ar[d, "p"]\\
+y\I_1\ar[r, "\rid"']\ar[ur, dotted] & y\I_1
+\end{tikzcd}
+\]
+and I think more general things might obtain, like
+\[
+\begin{tikzcd}
+y(1 \x \Gamma) \ar[d, "0 \x \rid"'] \ar[r, "x"]& F \ar[d, "p"]\\
+y(\I_1 \x \Gamma)\ar[r, "f"']\ar[ur, dotted] & y\I_1
+\end{tikzcd}
+\]
+Maybe with some restrictions on $f$? My intuition for $\U_1$ is allowing
+any single point $z$ to appear in
+\[
+\begin{tikzcd}
+y1 \ar[d, "z"'] \ar[r, "x"]& F \ar[d, "p"]\\
+y\U_1\ar[r, "\rid"']\ar[ur, dotted] & y\U_1
+\end{tikzcd}
+\]
+Although --- do I even need to say this explicitly? Can this be constructed
+out of the $\I_1$ path lifting somehow, since there are monotone and antitone maps
+$\I_1 \to \U_1$?
+
+The main thing that's confusing me is how to express the fact that I
+think is true, that if the bottom horizontal map (in the $\I_1$ case
+at least) is {\em strictly} monotone, I think the filler should be
+unique.
+\end{document}
