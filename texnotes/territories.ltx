@@ -8,6 +8,19 @@
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
 \def\ups{{\uparrow}}
 \def\dns{{\downarrow}}
 \def\adjust{\big|}
@@ -57,58 +70,187 @@
 \def\says#1#2{#1\{#2\}}
 \def\rand#1#2{#2_{#1}}
 
-\title{Gradual Categories}
+\title{Notes on Territories}
 \author{Jason Reed}
 \maketitle
 \section{Goals and Non-goals}
 
 I want to better understand how homotopy type theory can generalize to
-a directed notion of space. I know that $\rcat$ isn't locally
-cartesian closed, so it's impossible to imagine that the pleasing
+a directed notion of space. I know that $\rcat$ isn't even locally
+cartesian closed, so it's a nonstarter to imagine that the pleasing
 narrative that HoTT provides, namely
-``all along, the types that you were programming with were secretly spaces''
+\[\hbox{``all along, the types that you were programming with were secretly spaces''}\]
 can simply be modified to
-``all along, the types that you were programming with were secretly categories''.
+\[\hbox{``all along, the types that you were programming with were secretly categories''}\]
 
 And yet I do yearn for a conclusion of the form ``all along, the types
-that you were programming with were secretly $X$''. The Riehl-Shulman
-story, while correct and effective and fascinating in its own right,
-leaves me mathematically dissatisfied precisely because it only picks
+that you were programming with were secretly $X$s'' for some structure $X$. The
+Riehl-Shulman story, while correct and effective and fascinating in
+its own right, bums me out slightly precisely because it only picks
 out some of the types as category-like.
 
-Maybe the conclusion we draw is: while `category' isn't ({\em can't}
-be) the right concept to shoehorn every type into, assuming we want a
-nice big well-behaved type theory with dependent types --- maybe
-something similar is.
-
-The goal of this note is to explore a particular candidate for that $X$.
-It is not a goal to be particularly rigorous. I'm mostly just speculating well
+The goal of this note is to explore what else $X$ might be. It is not
+a goal to be particularly rigorous. I'm mostly just speculating well
 in advance of the territory I see clearly.
+I want the $X$s to also yield information about higher-{\em dimensional}
+directed structure, which carries extra risk of saying wrong or
+incoherent things, since I still don't feel like I understand higher
+categories terrifically well.
 
-I want the $X$ to also tell a story about higher-dimensional directed
-structure, which carries extra risk of saying wrong or incoherent
-things, since I still don't understand higher categories perfectly.
+I'm going to call them {\em territories} since it has the same
+scansion as `categories' and connotes a general sense of space-ness.
 
-The $X$ I have in mind, the notion of `directed space', is in a way a
-retreat to fairly concrete stuff: in lieu of categories I direct my
-attention to members of a sheaf category which lets you probe the
-putative space with actual good old-fashioned honest intervals from
-$\R$. This will mean that a a `morphism' $f : A \to B$ in a `directed
-space' will admit --- and this is crucially unlike a morphism in a
-category! --- interpolation of all points between $A$ and $B$. We'll
-be able to ask for the domain of $f$ by asking for its value at time
-0, and its codomain by asking for its value at time 1, but we can also
-ask for its value at any time in between.
+%% The sort of $X$ I have in mind, the notion of `directed space', is in
+%% a way a retreat to fairly concrete stuff: in lieu of categories I
+%% direct my attention to members of a sheaf category which lets you
+%% probe the putative space with actual good old-fashioned honest
+%% intervals from $\R$. This will mean that a a `morphism' $f : A \to B$
+%% in a `directed space' will admit --- and this is crucially unlike a
+%% morphism in a category! --- interpolation of all points between $A$
+%% and $B$. We'll be able to ask for the domain of $f$ by asking for its
+%% value at time 0, and its codomain by asking for its value at time 1,
+%% but we can also ask for its value at any time in between.
 
-The reason why I have any hope at all for this being interesting is I
-conjecture appropriate higher-dimensional directed space structure
-might allow an appropriate quotienting-out (similar to how the
-$\infty$-groupoid structure of HoTT `quotients out' path equalities
-while retaining the homotopical data of them) of the `interal
-behavior' of a morphism, letting us recover a category-like view of
-morphisms as discrete things.
+%% The reason why I have any hope at all for this being interesting is I
+%% conjecture appropriate higher-dimensional directed space structure
+%% might allow an appropriate quotienting-out (similar to how the
+%% $\infty$-groupoid structure of HoTT `quotients out' path equalities
+%% while retaining the homotopical data of them) of the `interal
+%% behavior' of a morphism, letting us recover a category-like view of
+%% morphisms as discrete things.
 
-\section{Definitions}
+\section{Toward some Definitions}
+
+A territory is some kind of directed space.
+What will the category of territories look like? Maybe it's a presheaf category
+$\rset^{\P^\op}$. If so, what does $\P$ look like? Any object $P \in \P$ is a probe,
+a question that we ask about a territory and get back an answer which is a set.
+What questions can we ask of a directed space? Some questions we'll want to ask are:
+What points does it have? What paths does it have? What higher paths does it have?
+
+\subsubsection*{String Diagrams}
+If we had a category $\C$ in our hands --- perhaps suppose also $\C$ is an $n$-category
+for some $n > 1$ --- a way of asking all those questions at once is
+\[\hbox{What {\em string diagrams} can we draw in $\C$?}\]
+
+For example, if $\C$ has some objects $A, B, C$, and morphisms $f : A \to B$ and $g : B \to C$
+and $h, k : A \to C$, and 2-cells $\alpha : g \o f \to h$ and $\beta : h \to k$,
+then an example of a string diagram we can draw is
+\[\begin{tikzpicture}
+%% \node at (0,2.5)[above]  {$\I_1$};
+%% \node at (-2.5,0)[left]  {$\I_2$};
+\fill[fill={lorange}] (-2,2)  \bitf{--plot} \bitfg{--plot} -- (-2,-2)-- cycle;
+\fill[fill={lgreen}] (2,2)  \bitg{--plot} \bitfg{--plot} -- (2,-2)--   cycle;
+\fill[fill={lblue}] (0,0) \bitgrev{--plot} \bitf{--plot}  --   cycle;
+\draw [mblue, line width=1.5pt] \bitf{plot};
+\draw [mblue, line width=1.5pt] \bitg{plot};
+\draw [mblue, line width=1.5pt] \bitfg{plot};
+\node at (1,0) {$C$};
+\node at (-1.25,-0.8) {$A$};
+\node at (0,1.2) {$B$};
+\node [mblue] at (-1.4,1) {$f$};
+\node [mblue] at (0.8,1) {$g$};
+\node [mblue] at (0.2,-0.5) {$h$};
+\node [mblue] at (0.2,-1.5) {$k$};
+\coordinate [label={[label distance=5]left:$\alpha$}] (alpha) at (0,0);
+\coordinate [label={[label distance=5]left:$\beta$}] (beta) at (0,-1);
+\foreach \point in {alpha,beta}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+This is a 2-dimensional string diagram; it depicts a composition of 2-cells.
+
+String diagrams naturally can also be 1-dimensional, they're just less fancy-looking:
+\[\begin{tikzpicture}
+\coordinate [label={[label distance=5]below:$f$}] (f) at (-1.4,0);
+\coordinate [label={[label distance=5]below:$g$}] (g) at (0.55,0);
+\draw [morange, line width=1.5pt] (-2,0)--(f);
+\draw [mblue2, line width=1.5pt] (g)--(f);
+\draw [mgreen, line width=1.5pt] (g)--(2,0);
+\node at (-1.8, 0)[above, morange] {$A$};
+\node at (-0.3, 0)[above, mblue2] {$B$};
+\node at (1.5, 0)[above, mgreen] {$C$};
+\foreach \point in {f,g}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+\[\begin{tikzpicture}
+\coordinate [label={[label distance=5]below:$h$}] (h) at (0,0);
+\draw [morange, line width=1.5pt] (-2,0)--(h);
+\draw [mgreen, line width=1.5pt] (h)--(2,0);
+\node at (-1, 0)[above, morange] {$A$};
+\node at (1, 0)[above, mgreen] {$C$};
+\foreach \point in {h}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+So for each $n \in 1, 2, 3, \ldots$ let's suppose that there is an object $P_n \in \P$
+which is what we use to probe for $n$-dimensional string diagrams. If
+$F \in \rset^{\P^\op}$ is a presheaf, then $F(P_1)$ is meant to be interpreted
+as the set of 1-dimensional paths in $F$, and $F(P_2)$ is 2-dimensional string diagrams,
+and so on.
+
+\subsubsection*{Identity of String Diagrams}
+Here's an important question I want to settle early: are
+\[\begin{tikzpicture}
+\coordinate [label={[label distance=5]below:$f$}] (f) at (-1.4,0);
+\coordinate [label={[label distance=5]below:$g$}] (g) at (0.55,0);
+\draw [morange, line width=1.5pt] (-2,0)--(f);
+\draw [mblue2, line width=1.5pt] (g)--(f);
+\draw [mgreen, line width=1.5pt] (g)--(2,0);
+\node at (-1.8, 0)[above, morange] {$A$};
+\node at (-0.3, 0)[above, mblue2] {$B$};
+\node at (1.5, 0)[above, mgreen] {$C$};
+\foreach \point in {f,g}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+and
+\[\begin{tikzpicture}
+\coordinate [label={[label distance=5]below:$f$}] (f) at (0,0);
+\coordinate [label={[label distance=5]below:$g$}] (g) at (1,0);
+\draw [morange, line width=1.5pt] (-2,0)--(f);
+\draw [mblue2, line width=1.5pt] (g)--(f);
+\draw [mgreen, line width=1.5pt] (g)--(2,0);
+\node at (-1, 0)[above, morange] {$A$};
+\node at (0.5, 0)[above, mblue2] {$B$};
+\node at (1.5, 0)[above, mgreen] {$C$};
+\foreach \point in {f,g}
+\fill [black] (\point) circle (2pt);
+\end{tikzpicture}\]
+to be considered the {\em same} string diagram? Perhaps surprisingly, I'm going to say {\em no}.
+Directly contrary to the usual reason that we use string diagrams --- which is that
+we can freely push and pull around parts of the diagram in topologically plausible ways,
+and be assured that it's really the same data we're talking about --- I'm {\em not}
+going to take that for granted. My intention/hope is that kind of invariance emerges from
+the machinery described later on.
+
+The story that a 1-dimensional string diagram tells, at least according to
+how I'm trying to set things up, is not merely an {\em abstract} sequence of events, like
+\begin{quote}
+We start in state $A$. We transition, via morphism $f$, to state $B$. Then we transition,
+via morphism $g$, to state $C$.
+\end{quote}
+but rather something involving {\em concrete} passage of time, like
+\begin{quote}
+At time 0, we start in state $A$. We transition, at time $t = 0.5$, via morphism $f$, to state $B$.
+Then we transition, at time $t = 0.75$, via morphism $g$, to state $C$, remaining there until
+the final time 1.
+\end{quote}
+\subsubsection*{Morphisms in $\P$}
+What morphisms should exist in $\P$? From the above considerations, we might suppose
+that if we do have a 1-dimensional string diagram which tells a story of how
+we make state transitions in time, then if we {\em reparameterize} time in a sensible
+way, the resulting string diagram should at least {\em be} a valid path, even if it is considered
+a different one from the original.
+
+So let us decide that the morphisms $P_1 \to P_1 \in \P$ are all monotone continuous maps of the real interval
+$[0,1]$ to itself. If I take a path $p \in F(P_1)$ and a reparameterization $f : [0,1] \to [0,1]$,
+then consider the path $p' = F(f)(p) \in F(P_1)$. We can think of $p$ as a map from $t\in [0,1]$
+to ``what is going on in path $p$ at time $t$''. Then ``what is going on in path $p'$ at time $t$''
+is defined as ``what is going on in path $p$ at time $f(t)$''.
+
+If $f$ is not surjective then the restriction $p'$ is a sort of
+zooming-in on a portion of path $p$; this reflects the intuition that
+if we have a valid path $p$ in a space, then a subpath of that path is
+also a valid path in that space.
+\end{document}
 
 Consider the category $\mpo$ of topological spaces equipped with multiple preorders, indexed by natural numbers.
 We write $a \le_n b : X$ to say that $a \le b$ according to the $n^{th}$ preorder in $X$. Maps between

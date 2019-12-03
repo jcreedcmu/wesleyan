@@ -9,6 +9,19 @@
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
 \def\binj{\mathbf{inj}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\ups{{\uparrow}}
@@ -48,6 +61,7 @@
 \def\llam#1{\langle {#1} \rangle}
 
 \begin{document}
+\tikzset{>=stealth}
 \tikzset{
    commutative diagrams/.cd,
    arrow style=tikz,
@@ -390,4 +404,363 @@ The main thing that's confusing me is how to express the fact that I
 think is true, that if the bottom horizontal map (in the $\I_1$ case
 at least) is {\em strictly} monotone, I think the filler should be
 unique.
+
+\subsubsection*{Cofibs and fibs in the base category}
+[2019.12.03]
+
+In order to understand what the (co)fibrations in the presheaf category should be,
+I want to figure them out for the
+presheaf category base (i.e. finite products of $\I_n$ and $\U_n$) first.
+
+I think $0 : 1 \to \I_1$ ought to be a cofibration.
+I think the backwards $C$-shape
+\[x : \I_1, y : \I_2 \prov x = 1 \lor y = 0 \lor y = 1\]
+might be a valid cofibration, because the mapping of that shape into $\I_1$
+via
+\[
+\cases{
+1 & $x = 1$  \cr
+1 & $y = 0$  \cr
+x & $y = 1$
+}
+\]
+can be extended to all of $\I_1 \x \I_2$ with $\max(x \lor \lnot y)$.
+However, the backwards $C$-shape with $\I_1$ instead of $\I_2$
+\[x : \I_1, y : \I_1 \prov x = 1 \lor y = 0 \lor y = 1\]
+is not a cofibration, because the same mapping of that shape into $\I_1$
+as above would give
+\[x : \I_1, y : \I_1 \prov e(x,y) : \I_1\]
+such that $e(0,0) = 1$ and $e(0,1) = 0$.
+
+I think $0 \in \I_1$ is a cofibration and
+$1 \in \I_1$ is not, but I'm not sure what I have to justify that.
+Correspondingly I think $\lambda x . x / 2 : \I_1 \to \I_1$ is {\em not} a fibration (it doesn't
+right lift against $0 \in \I_1$) and I think probably
+$\lambda x . (1 + x) / 2 : \I_1 \to \I_1$
+{\em is} eligible to be one (it doesn't right lift against $1 \in \I_1$, but I think that's acceptable).
+
+\subsubsection*{Is the path type fibrant?}
+
+Obviously we would like to have a proper hom-type $a : A, b : A \prov a \imp_1 b : \rset$
+whose elements are $\I_1$-paths in $A$. Written like this it probably can't work;
+we need to dualize the domain, at least. A candidate for something that might work is
+\[a : A^\op, b : A \prov a \imp_1 b : \rset\]
+and we think of this as a fibered type living over $A^\op \x A$:
+\[\lambda f . \pair{f(0)}{f(1)} : {A^{\I_1}} \to A^\op \x A\]
+Is this actually fibrant? Let's test it against the thing I'm most confident should be a cofibration:
+\[
+\begin{tikzcd}
+1 \ar[d, "0"'] \ar[r, "p"]& A^{\I_1} \ar[d, "{\lambda f . \pair{f(0)}{f(1)}}"]\\
+\I_1\ar[r, "\pair q r"']\ar[ur, dotted] & A^\op \x A
+\end{tikzcd}
+\]
+The two commuting triangles of this diagram would compel me to find a $\I_1 \x \I_1$ square in $A$
+that looks like this:
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[above] {$p$};
+\node at (1/6,0)[above] {$q$};
+\node at (5/6,0)[above] {$r$};
+\node at (0,0)[below] {$q(1)$};
+\node at (1/3,0)[below] {$q(0)$};
+\node at (2/3,0)[below] {$r(0)$};
+\node at (1,0)[below] {$r(1)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_1$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\end{scope}
+\end{tikzpicture}\]
+But I can't actually do this! The red arrow isn't necessarily a valid $\I_1$ path in $A$,
+for it runs backwards from the interior of the path segment $p$ to the interior of path segment $q$:
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[above] {$p$};
+\node at (1/6,0)[above] {$q$};
+\node at (5/6,0)[above] {$r$};
+\node at (0,0)[below] {$q(1)$};
+\node at (1/3,0)[below] {$q(0)$};
+\node at (2/3,0)[below] {$r(0)$};
+\node at (1,0)[below] {$r(1)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_1$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\draw[->, red] (0.2,1)--(0.2,0);
+\end{scope}
+\end{tikzpicture}\]
+There is however an $\I_2 \x \I_1$ path in $A$ that might solve some similar kind of filling problem:
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[above] {$p$};
+\node at (1/6,0)[above] {$q$};
+\node at (5/6,0)[above] {$r$};
+\node at (0,0)[below] {$q(1)$};
+\node at (1/3,0)[below] {$q(0)$};
+\node at (2/3,0)[below] {$r(0)$};
+\node at (1,0)[below] {$r(1)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_2$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\draw[->, gray] (0.2,1)--(0.2,0);
+\end{scope}
+\end{tikzpicture}\]
+So while the type $A^{\I_1}$ isn't fibrant over $A^\op \x A$,
+we might try to conclude that
+nonetheless the type $\lx A^{\I_1}$ is: for an $\I_2$ path into $A^{\I_1}$
+can be reflected into an $\I_1$ path into $\lx A^{\I_1}$.
+
+However, do I actually know that there is a term
+\[\hbox{``}\lambda f . \pair{f(0)}{f(1)}\hbox{''} : {\lx A^{\I_1}} \to A^\op \x A\]
+?
+The type $\lx A^{\I_1}$ `glues more things together' than $A^{\I_1}$, so it's not clear
+I can still have such a morphism. Suppose there is a square $s : \U_2 \x \I_1 \to A$.
+This means there is a map $\U_1 \to \lx A^{\I_1}$. Which is to say, $s(0, \dash)$ and $s(1, \dash)$
+are considered equal in $\lx A^{\I_1}$. So if we try to pull out their domain or codomain, those must
+be equal: $s(0, 0) =_{\U_1} s(0,1) : A$ and $s(1, 0) =_{\U_1} s(1,1) : A$.
+
+Which is the same worrying kind of condition of the form
+`the two lateral faces of a $\I_2 \x \I_1$ (meaning:
+where the $\I_1$-variable is 0 or 1) must actualy
+be $\U_1$-constant' that I don't really know how to impose very well.
+
+I might try to relax my assumptions about how $\lx$ is supposed to work. Or at least
+maybe I can think of what else might play the role of $\lx A^{\I_1}$, which could
+be fibered over $A^\op \x A$. The type $a \imp_1 b$ could look like this, maybe:
+its $0$-cells (i.e. the paths $1 \to a \imp b$) are
+paths $\I_1 \to A$, and its $1$-cells
+(i.e. the paths $\I_1 \to a \imp b$)
+could be those maps $f : \I_2 \x \I_1 \to A$
+which have the property that $f(\dash, 0)$ and $f(\dash, 1)$ are constant.
+
+What property to I expect of its $2$-cells, its paths $\I_2 \x \I_1 \to a \imp_1 b$?
+ I expect they look like maps
+$f : \I_3 \x \I_2 \x \I_1 \to A$. I expect $f(\dash,\dash,0)$
+and $f(\dash,\dash,1)$ to be constant. For any particular value of $i : \I_1$
+I expect $f(\dash,0,i)$ and $f(\dash,1,i)$ to be constant.
+
+Is that right, though? If I imagine a map $\I_3 \x \I_2 \x \I_1 \to A$, then
+I should expect a map $\I_2 \x \I_1 \to \lx A^{\I_1}$.
+\subsubsection*{Freely Putting In What I Must}
+I still think I want to define a path space $A^{\I_1}$ in such a way that it's fibrant over $A^\op \x A$.
+What if I say the occupants of the presheaf $A^{\I_1}$ at the $\P$-object $\I_1$ are
+tuples consisting of $p : \I_1 \to A$, $q : \I_1 \to A^\op$, $r : \I_1 \to A$, and a map
+$\alpha : \I_2 \x \I_1 \to A$ that looks like
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[above] {$p$};
+\node at (1/6,0)[above] {$q$};
+\node at (5/6,0)[above] {$r$};
+\node at (0,0)[below] {$q(1)$};
+\node at (1/3,0)[below] {$q(0)$};
+\node at (2/3,0)[below] {$r(0)$};
+\node at (1,0)[below] {$r(1)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_2$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\end{scope}
+\end{tikzpicture}\]
+We require things like $i_2 : \I_2 \prov \alpha(i_2, 0) = q(i_2)$
+and  $i_2 : \I_2 \prov \alpha(i_2, 1) = r(i_2)$ and
+ $i_1 : \I_2 \prov \alpha(0, i_1) = p(i_1)$.
+
+The `domain' of this data is the path $q$ and the `codomain' is the path $r$.
+I must say how it transforms with restrictions on $\I_1$. Reparameterization on
+that $\I_1$ operates on the $y$-coordinate of this diagram, despite it being typed $\I_2$.
+If I pick a particular time, I get an $\I_1$ path horizontally. If I pick the top half of
+the diagram by restriction $\dns : \I_1 \to \I_1$, I get domain $q \o \dns$ and codomain $r \o \dns$,
+as I must, by definition of a presheaf.
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[above] {$p$};
+\node at (1/6,0)[above] {$q$};
+\node at (5/6,0)[above] {$r$};
+\node at (0,1/2)[left, mblue] {$q(1/2)$};
+\node at (1/6,1/2)[above right, mblue] {$q(0)$};
+\node at (1/12,1/2)[below, mblue] {$q\dns$};
+\node at (11/12,1/2)[below, mblue] {$r\dns$};
+\node at (5/6,1/2)[above left, mblue] {$r(0)$};
+\node at (1,1/2)[right, mblue] {$r(1/2)$};
+\node at (1/3,0)[below] {$q(0)$};
+\node at (0,0)[below] {$q(1)$};
+\node at (2/3,0)[below] {$r(0)$};
+\node at (1,0)[below] {$r(1)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_2$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\draw[mblue, line width=1.5pt] (0,0.5)--(1,0.5)--(1,1)--(0,1)--cycle;
+\end{scope}
+\end{tikzpicture}\]
+ Likewise if I take the bottom half of the diagram via $\ups$, I get a 2-path
+which {\em adds on} compositionally $q  \ups$ and $r  \ups$ to the initial path
+$(q  \dns) ; p ; (r  \dns)$.
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$q(0)$};
+\node at (1,1)[above] {$r(0)$};
+\node at (0.5,1)[below] {$p$};
+\node at (0.5,0)[below] {$p$};
+\node at (0,1/2)[left, mblue] {$q(1/2)$};
+\node at (1/6,1/2)[below right, mblue] {$q(0)$};
+\node at (1/12,1/2)[above, mblue] {$q\dns$};
+\node at (11/12,1/2)[above, mblue] {$r\dns$};
+\node at (5/6,1/2)[below left, mblue] {$r(0)$};
+\node at (1,1/2)[right, mblue] {$r(1/2)$};
+
+\node at (1/12,0)[below, mblue] {$q\ups$};
+\node at (3/12,0)[below, mblue] {$q\dns$};
+\node at (11/12,0)[below, mblue] {$r\ups$};
+\node at (9/12,0)[below, mblue] {$r\dns$};
+
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$\I_2$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\draw[mblue, line width=1.5pt] (0,0.5)--(1,0.5)--(1,0)--(0,0)--cycle;
+\draw[mblue, line width=1.5pt] (0,0.5)--(1/6,0);
+\draw[mblue, line width=1.5pt] (1,0.5)--(5/6,0);
+\end{scope}
+\end{tikzpicture}\]
+Wait, this isn't that exotic at all. The domain and codomain are just reading down the left
+and right hand side of the diagram, actually. The notable thing is that even though
+I'm using $\I_2 \x \I_1$ to supply the {\em data} of the $\I_1$-paths in the path space,
+I don't have to obey all $\I_2 \x \I_1$-transformations --- only the $\I_1$-transformations!
+Therefore I actually stand a chance at {\em maintaining} the invariant that the left-hand
+side is a $\I_1 \to A^\op$ path and the right-hand side is a $\I_1 \to A$ path.
+
+\subsubsection*{Spelling out $\I_1$ paths in $A^{\I_1}$}
+Ok, we have to make sure that
+\[
+\begin{tikzcd}
+1 \ar[d, "0"'] \ar[r, "p"]& A^{\I_1} \ar[d, "{\lambda f . \pair{f(0)}{f(1)}}"]\\
+\I_1 \ar[r, "\pair q r"']\ar[ur, dotted] & A^\op \x A
+\end{tikzcd}
+\]
+is always solvable. We say:
+
+The presheaf evaluation $A^{\I_1}(1)$ consists of paths $\I_1 \to A$.
+
+The presheaf evaluation $A^{\I_1}(\I_1)$ consists
+of the set of tuples $(\alpha, q, r)$ where $\alpha : \I_2 \x \I_1 \to A$
+and $q : \I_1^\op \to A$ and $r : \I_1 \to A$ and
+\[
+\begin{tikzcd}
+\I_2 \ar[d] \ar[r, "\pair{\rid}{0}"]& \I_2 \x \I_1 \ar[d, "\alpha"]& \ar[l, "\pair{\rid}1"'] \ar[d]\I_2\\
+\I_1^\op \ar[r, "q"'] & A & \ar[l, "r"] \I_1
+\end{tikzcd}
+\]
+
+How do we restrict $(\alpha, q, r)$ along a morphism $1 \to \I_1$, i.e. a constant $t \in [0,1]$?
+We return the path $\lambda i . \alpha(t, i) : \I_1 \to A$.
+
+How do we restrict $(\alpha, q, r)$ along a morphism $\I_1 \to \I_1$, i.e. a monotone $f : [0,1] \to [0,1]$?
+We return the tuple
+\[(\lambda yx . \alpha(f(y), x), q \o \bar f, r \o f ) \]
+where $1 - \bar f (t) =  f(1- t)$.
+
+How do we map $A^{\I_1}$ to $A^\op \x A$? We take a point $f : \I_1 \to A$ to $\pair{f(0)}{f(1)}$.
+We take a path $(\alpha, q, r)$ to $(q^*, r)$ where $q^*$ is what you get from taking $q$ and
+transposing $\I_1^\op\to A$ to $\I_1\to A^\op$.
+
+\subsubsection*{Other Cofibration Candidates}
+I imagine probably this is a solvable lifting problem too:
+\[
+\begin{tikzcd}
+X \ar[d, "\pair 0 \rid"'] \ar[r, "p"]& A^{\I_1} \ar[d]\\
+\I_1 \x X\ar[r, "\pair Q R"']\ar[ur, dotted] & A^\op \x A
+\end{tikzcd}
+\]
+Let's see if I can make any progress thinking about $X = \I_1$.
+\[
+\begin{tikzcd}
+\I_1 \ar[d, "\pair 0 \rid"'] \ar[r, "p"]& A^{\I_1} \ar[d]\\
+\I_1 \x \I_1\ar[r, "\pair Q R"']\ar[ur, dotted] & A^\op \x A
+\end{tikzcd}
+\]
+Now I know what data constitutes $p$; it's a triple $(\alpha, q, r)$ as above.
+Generally, I can picture $Q$ and $R$ like:
+\[
+Q = \begin{tikzcd}
+{Q(0,0)} \ar[from=d, "\I_1"] \ar[from=r, "\I_1"']& {Q(1,0)} \ar[from=d, "\I_1"']\\
+{Q(0,1)} \ar[from=r, "\I_1"]& {Q(1,1)}
+\end{tikzcd}
+\qquad
+R = \begin{tikzcd}
+{R(0,0)} \ar[d, "\I_1"'] \ar[r, "\I_1"]& {R(1,0)} \ar[d, "\I_1"]\\
+{R(0,1)} \ar[r, "\I_1"']& {R(1,1)}
+\end{tikzcd}
+\]
+and I know $Q(0, t) = q(t)$ and $R(0, t) = r(t)$.
+
+I think $(A^{\I_1})(\I_1 \x \I_1)$ is going to consist primarily of a cell $\I_2 \x \I_2 \x \I_1 \to A$,
+and when you set the $\I_1$ coordinate to zero, you get something that's essentially
+$Q$, and when you set the $\I_1$ coordinate to one you get essentially $P$.
+
+It's starting to smell generally that for any $P \in \P$, we're going to expect
+$(A^\I_1)(P)$ to consist of some maps:
+\begin{enumerate}
+\item $\alpha : P^+ \x \I_1 \to A$
+\item $q : P^\op \to A$
+\item $r : P \to A$
+\end{enumerate}
+such that
+\[
+\begin{tikzcd}
+P^+ \ar[d] \ar[r, "\pair{\rid}{0}"]& P^+ \x \I_1 \ar[d, "\alpha"]& \ar[l, "\pair{\rid}1"'] \ar[d]P^+\\
+P^\op \ar[r, "q"'] & A & \ar[l, "r"] P
+\end{tikzcd}
+\]
+which means the action on $P$-cells taken by $A^{\I_1} \to A^\op \x A$ is again
+that we return $\pair{q^*} r$. The reason why we think this map might actually be fibrant
+is that we can at least solve
+\[
+\begin{tikzcd}
+P \ar[d, "\pair 0 \rid"'] \ar[r, "p"]& A^{\I_1} \ar[d]\\
+\I_1 \x P\ar[r, "\pair Q R"']\ar[ur, dotted] & A^\op \x A
+\end{tikzcd}
+\]
+Why? Because the underlying data of $p$ is the $(\alpha, q, r)$ as immediately above.
+We want to come up with $\alpha' : \I_2 \x P^+ \x \I_1 \to A$ such that its domain
+and codomain (wrt to the third, $\I_1$ argument) are exactly the
+$Q : \I_1^\op \x P^\op \to A$ and $R : \I_1 \x P \to A$ that we were given,
+and if we set the $\I_2$ argument to zero, then we get exactly the
+ $\alpha : P^+ \x \I_1 \to A$ that we were given.
+
+\textcolor{red} {This argument still needs to be completed}
 \end{document}
