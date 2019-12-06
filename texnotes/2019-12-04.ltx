@@ -1,0 +1,245 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\mpo{\mathbf{MultOrdTop}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\def\says#1#2{#1\{#2\}}
+\def\rand#1#2{#2_{#1}}
+
+Let $\mpo$ be the category defined as follows. An object is a
+topological space $X$ together with a countable family of
+partial orders ${\le_{i}} \subseteq X \x X$ indexed by $i = 1,2,3,\ldots$. A morphism
+is a continuous map of underlying spaces that is monotone in all the partial orders simultaneously.
+
+Let's define some directed interval objects $\I_n \in \mpo$ for each $n \in 1,2,3,\ldots$.
+The underlying space of every $\I_n$ is the real interval $[0,1]$ with the usual topology.
+For each $n$, the partial orders $x \le_i y$ in $\I_n$ are defined by
+\[
+\erule
+{i < n}
+{x \le_i x}
+\qquad
+\erule
+{x \le y}
+{x \le_n y}
+\qquad
+\erule
+{i > n}
+{x \le_i y}
+\]
+where $x \le y$ means the usual order on reals. The object $\I_n$ is directed `at dimension $n$'
+and `discretely undirected' below $n$ (only reflexivity holds), and `indiscretely undirected' above $n$
+(everything is related to everything).
+
+The intuition for what $\I_n$ is supposed to represent is that it's the structure of
+the {\em time coordinate} along which an $n$-cell in a higher category evolves:
+The passage along a morphism from one object to another takes place
+in $\I_1$-time. The passage from one morphism to another in a 2-cell takes place in $\I_2$-time.
+Therefore the entire behavior of a 2-cell is represented by mapping from $\I_1 \x \I_2$
+into a square in a space. The behavior of an $n$-cell is generally a cube from $\I_1 \x \cdots \x \I_n$
+into a space.
+
+We note that the morphisms $\I_n \to \I_m$ can be characterized as
+\[\begin{tabular}{r@{\qquad}l}
+the constant maps $[0,1] \to [0,1] $&if $n < m$;\\
+the monotone continuous maps $[0,1] \to [0,1] $&if $n = m$;\\
+the arbitrary continuous maps $[0,1] \to [0,1] $&if $n > m$.
+\end{tabular}\]
+Let the cube category $\C$ be the full subcategory of
+$\mpo$ whose objects are finite products of objects in $\{\I_1, \I_2, \ldots\}$.
+
+A {\em territory} is a presheaf in $\rset^{\C^\op}$.
+
+\subsection*{A Yoneda Digression}
+Suppose $\S$ is a full subcategory of $\M$, and call the inclusion functor $\iota : \S \to \M$.
+
+\def\easy{{\ominus}}
+\def\hard{{\oplus}}
+Given $G : \hat \M$, I can define $\easy G : \hat \S$ by saying
+\[(\easy G) S = G(\iota S)\]
+
+Given $F : \hat \S$, I can define $\hard F : \hat \M$ by saying
+\[ (\hard F) M = \hom_{\hat\S} (\hom_\M(\iota \dash, M) , F )\]
+
+Let's look at the roundtrips. One is easy.
+\[ (\easy\hard F) S = (\hard F)(\iota S) = \hom_{\hat\S} (\hom_\M(\iota \dash, \iota S) , F )\]
+\[ = \hom_{\hat\S} (\hom_\S( \dash,  S) , F )\]
+\[ = FS\]
+
+The other one looks like
+\[ (\hard\easy G) M = \hom_{\hat\S} (\hom_\M(\iota \dash, M) , \easy G ) =
+\hom_{\hat\S} (\hom_\M(\iota \dash, M) , G(\iota \dash) )\]
+and we want to compare it to
+\[G M = \hom_{\hat\M}(\hom_\M(\dash, M), G)\]
+
+I don't think these'll be equivalent in general, but maybe in the case of
+$\S = \{\I, \ldots\}$ and $\M = \{1, \I, \I \x \I, \ldots\}$ finite products
+of things in $\S$? No, I think the answer is still no.
+
+But somehow working in presheaves over the category consisting of only $\{\I_1, \I_2, \I_3, \ldots\}$
+seems attractive somehow. It seems to encode all information I really need --- maybe I need to take
+sheaves over a richer Grothendieck topology, one that notices when you criss-cross a $\I_1\x\I_2$ square
+with individual $\I_1$ and $\I_2$ paths.
+
+\subsubsection*{More filling problems}
+[2019.12.05]
+
+Here's a family of filling problems I just realized probably ought to be solvable:
+\[
+\begin{tikzcd}
+\Gamma \x \{0,1\} \ar[d] \ar[r, "x"]&\I_1\\
+\Gamma \x \I_2\ar[ur, dotted] &
+\end{tikzcd}
+\]
+because from the point of view of $\I_2$, basically $\I_1$ is contractible.
+Having contractible fibers smells like being an acyclic fibration, so we ought
+to be able to right lift it against {\em any} cofibration, so something more like
+arbitrary monomorphisms. So I think for any mono $f : \Delta \to \I_2$, we should be able to do
+\[
+\begin{tikzcd}
+\Gamma \x \Delta \ar[d, "\Gamma\x f"'] \ar[r, "x"]&\I_1\\
+\Gamma \x \I_2\ar[ur, dotted] &
+\end{tikzcd}
+\]
+although the $\{0,1\}$ case has a very evident concrete solution, namely linear interpolation.
+I might like to think about simultaneous interpolation along lots of $\I_2$ parameters:
+\[
+\begin{tikzcd}
+\Gamma \x \{0,1\}^n \ar[d] \ar[r, "x"]&\I_1\\
+\Gamma \x \I_2^n\ar[ur, dotted] &
+\end{tikzcd}
+\]
+or if $\Delta$ is a context of $i : \I_m$ variables all with $m > n$, then I suppose I can do
+\[
+\begin{tikzcd}
+\Gamma \x \{0,1\}^{|\Delta|} \ar[d] \ar[r, "x"]&\I_n\\
+\Gamma \x \Delta \ar[ur, dotted] &
+\end{tikzcd}
+\]
+
+Let's suppose I have a function
+\[\begin{tikzpicture}
+\begin{scope}[scale=4]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,0)--(1/4,1/2)--(1/2,3/4)--(1,1);
+\draw[dotted] (0,1/2)--(1,1/2);
+\draw[dotted] (1/2,0)--(1/2,1);
+\draw[dotted] (0,3/4)--(1,3/4);
+\draw[dotted] (1/4,0)--(1/4,1);
+\node at (0,1)[left] {$1$};
+\node at (0,3/4)[left] {$3/4$};
+\node at (0,1/2)[left] {$1/2$};
+\node at (0,0)[left] {$0$};
+\node at (0,0)[below] {$0$};
+\node at (1/4,0)[below] {$1/4$};
+\node at (1/2,0)[below] {$1/2$};
+\node at (1,0)[below] {$1$};
+\draw[->] (-0.3,0)--(-0.3,1);
+\node at (-0.3,1/2)[left] {$\I_1$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$\I_1$};
+\end{scope}
+\end{tikzpicture}\]
+
+This is a function $\I_1 \to \I_1$ I can represent as $(\dns * \ups\dns )* \ups\ups$
+where $*$ is forward-order composition such that $(f * g)\ups = g$ and $(f * g)\dns = f$.
+If I have $f,g,h : \I_1 \to A$ with $f(1)=g(0)$ and $g(1) = h(0)$,
+then $f * (g * h) : \I_1 \to A$. I want to reason somehow that
+\[ (f * (g * h)) \o ((\dns * \ups\dns )* \ups\ups) = (f * g) * h\]
+What other principle relating $*$ and $\o$ can I discern?
+Concretely, $ $
+\[(f * g)(t) = \cases{f(u) & if $t = \dns u$; \cr g(u) & if $t = \ups u$}\]
+\[ = \cases{f(2t) & if $t \le 1/2$; \cr g(2t - 1) & if $t \ge 1/2$}\]
+Let's see... I can test both sides of the equation on $\ups$ and $\dns$, to see if
+\[ (f * (g * h)) \o ((\dns * \ups\dns )* \ups\ups) \o \dns = ((f * g) * h) \o \dns\]
+\[ (f * (g * h)) \o ((\dns * \ups\dns )* \ups\ups) \o \ups = ((f * g) * h) \o \ups\]
+these would become
+\[ (f * (g * h)) \o (\dns * \ups\dns ) = (f * g)  \]
+\[ (f * (g * h)) \o  \ups\ups =  h \]
+Ah! Not only does the second of these immediately work, I think I see the principle I want:
+it's left distributivity
+\[f \o (g * h) = (f \o g) * (f \o h)\]
+This is simultaneously like normal distributivity
+\[f  (g + h) = (f  g) + (f  h)\]
+in that $*$ is kind of like a superposition of two possibility, and maybe even more directly like
+the equation
+\[f  (\bmatch x \bwith [g,h]) = {\bmatch x \bwith [f(g),f(h)]}\]
+
+Now I should be able to construct an interpolant filler
+\[ x : \I_1, z : \I_2  \prov \phi(x,z) = \mathsf{fill}^{\rid \mapsto (\dns * \ups\dns )* \ups\ups}(x,z) : \I_1 \]
+such that
+\[x : \I_1 \prov \phi(x,0) \equiv x \qquad x : \I_1 \prov \phi(x, 1) \equiv ((\dns * \ups\dns )* \ups\ups)(x)\]
+and then
+\[x: \I_1, z : \I_2 \prov (f * (g * h)) (  \phi(x, z))\]
+is the associativity 2-cell.
+
+I wonder how to show coherence of larger diagrams using the associator?
+\end{document}
