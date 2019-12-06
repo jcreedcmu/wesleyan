@@ -736,14 +736,14 @@ It's starting to smell generally that for any $P \in \P$, we're going to expect
 $(A^\I_1)(P)$ to consist of some maps:
 \begin{enumerate}
 \item $\alpha : P^+ \x \I_1 \to A$
-\item $q : P^\op \to A$
+\item $q : P \to A^\op$
 \item $r : P \to A$
 \end{enumerate}
 such that
 \[
 \begin{tikzcd}
 P^+ \ar[d] \ar[r, "\pair{\rid}{0}"]& P^+ \x \I_1 \ar[d, "\alpha"]& \ar[l, "\pair{\rid}1"'] \ar[d]P^+\\
-P^\op \ar[r, "q"'] & A & \ar[l, "r"] P
+P^\op \ar[r, "q^*"'] & A & \ar[l, "r"] P
 \end{tikzcd}
 \]
 which means the action on $P$-cells taken by $A^{\I_1} \to A^\op \x A$ is again
@@ -758,9 +758,68 @@ P \ar[d, "\pair 0 \rid"'] \ar[r, "p"]& A^{\I_1} \ar[d]\\
 Why? Because the underlying data of $p$ is the $(\alpha, q, r)$ as immediately above.
 We want to come up with $\alpha' : \I_2 \x P^+ \x \I_1 \to A$ such that its domain
 and codomain (wrt to the third, $\I_1$ argument) are exactly the
-$Q : \I_1^\op \x P^\op \to A$ and $R : \I_1 \x P \to A$ that we were given,
+$Q : \I_1 \x P \to A^\op$ and $R : \I_1 \x P \to A$ that we were given,
 and if we set the $\I_2$ argument to zero, then we get exactly the
  $\alpha : P^+ \x \I_1 \to A$ that we were given.
 
-\textcolor{red} {This argument still needs to be completed}
+We construct $\alpha'$ with the following diagram:
+\[\begin{tikzpicture}
+\begin{scope}[scale=5]
+\draw (0,0)--(0,1)--(1,1)--(1,0)--cycle;
+\draw (0,1)--(1/3,0);
+\draw (1,1)--(2/3,0);
+\node at (0,1)[above] {$Q(0, z)$};
+\node at (1,1)[above] {$R(0, z)$};
+\node at (0.5,1)[above] {$\alpha$};
+\node at (0.5,0)[above] {$\alpha$};
+\node at (1/6,0)[above] {$Q$};
+\node at (5/6,0)[above] {$R$};
+\node at (0,0)[below] {$Q(1,z)$};
+\node at (1/3,0)[below] {$Q(0, z)$};
+\node at (2/3,0)[below] {$R(0, z)$};
+\node at (1,0)[below] {$R(1,z)$};
+\draw[->] (-0.3,1)--(-0.3,0);
+\node at (-0.3,1/2)[left] {$y:\I_2$};
+\draw[->] (0,1.3)--(1,1.3);
+\node at (1/2, 1.3)[above] {$x: \I_1$};
+\end{scope}
+\end{tikzpicture}\]
+with labels on variables, we say
+\[\alpha' : (y : \I_2) \x (z : P^+) \x (x : \I_1) \to A\]
+\[Q : (y : \I_1) \x (z : P)  \to A^\op\]
+\[R : (y : \I_1) \x (z : P)  \to A\]
+I think it's crucial that the $\dash^\op$ that I'm talking about throughout this argument
+is the ``$\dash^{\op_1}$'' that only reverse direction of dimension $1$.
+\subsubsection*{What else might be a cofibration?}
+I wonder if
+\[\begin{tikzpicture}
+\draw (0,0)--(0,1)--(1,1)--(1,0);
+\node at (1/2,1)[above] {$\I_1$};
+\node at (0,1/2)[left] {$\I_2$};
+\node at (1,1/2)[right] {$\I_2$};
+\end{tikzpicture}\]
+is doable as a way to `complete' the transformation of a 1-cell across 2-time.
+The diagram
+\[\begin{tikzpicture}
+\draw (1,0)--(0,0)--(0,1)--(1,1);
+\node at (1/2,1)[above] {$\I_1$};
+\node at (0,1/2)[left] {$\I_2$};
+\node at (1/2,0)[below] {$\I_1$};
+\end{tikzpicture}\]
+seems plausible as an ordinary 1-time extension but with some more boundaries supplied.
+I know it {\em doesn't} work as a cofibration into $\I_1 \x \I_1$: we can't fill
+\[\begin{tikzpicture}
+\begin{scope}[scale=2]
+\draw (1,0)--(0,0)--(0,1)--(1,1);
+\node at (1/2,1)[above] {$\I_1$};
+\node at (0,1)[above left] {$p(0)$};
+\node at (1,1)[above right] {$p(1)$};
+\node at (0,0)[below left] {$p(0)$};
+\node at (1,0)[below right] {$p(0)$};
+\node at (0,1/2)[left] {$\I_1$};
+\node at (1,1/2)[right] {$\I_1$};
+\node at (1/2,0)[below] {$\I_1$};
+\draw[dotted, ->] (1,1)[below]--(1,0)[above];
+\end{scope}
+\end{tikzpicture}\]
 \end{document}
