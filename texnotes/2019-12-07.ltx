@@ -1,0 +1,803 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+
+\[\begin{tabular}{rcl}
+Closed interval values $c$&$::=$&$0 \celse i \celse 1$\\
+Open interval values $i,j$&$::=$&$\dns i \celse \hf \celse \ups i $
+\end{tabular}\]
+
+We can extend $\ups,\dns$ to functions $c \to c$:
+\[\begin{tabular}{rcl}
+$\dns 0$&$=$&$0$\\
+$\ups 0$&$=$&$\hf$\\
+$\dns 1$&$=$&$\hf$\\
+$\ups 1$&$=$&$1$\\
+\end{tabular}\]
+We can recursively define a midpoint function $i \sim j$ like so:
+\[\begin{array}{ccc}
+\dns i \sim \dns j&
+\hf \sim \dns j&
+\ups i \sim \dns j\cr
+\dns i \sim \hf&
+\hf \sim \hf&
+\ups i \sim \hf\cr
+\dns i \sim \ups j&
+\hf \sim \ups j&
+\ups i \sim \ups j
+\end{array}
+\qquad = \qquad
+\begin{array}{ccc}
+\dns (i \sim j)&
+\dns\ups j&
+i \sim j\cr
+\dns\ups i&
+\hf&
+\ups\dns i\cr
+i \sim j&
+\ups \dns j&
+\ups (i \sim j)
+\end{array}\]
+and extend it to $c \sim d$ like so:
+\[\begin{array}{ccc}
+0 \sim 0&
+i \sim 0&
+1 \sim 0\cr
+0 \sim j&
+i \sim j&
+1 \sim j\cr
+0 \sim 1&
+i \sim 1&
+1 \sim 1
+\end{array}
+\qquad = \qquad
+\begin{array}{ccc}
+0&
+\dns i&
+\hf\cr
+\dns j&
+i \sim j&
+\ups j\cr
+\hf&
+\ups i&
+1
+\end{array}\]
+We can define interpolation $b[c,d]$ as
+\[\begin{tabular}{rcl}
+$0[c,d]$&$=$&$c$\\
+$\dns i [c,d]$&$=$&$i [c, c \sim d]$\\
+$\hf$&$=$&$c \sim d$\\
+$\ups i [c,d]$&$=$&$i [c \sim d, d]$\\
+$1[c,d]$&$=$&$d$\\
+\end{tabular}\]
+Now I want to try to define the collection of monotone functions $\I \to \I$ in a nice way.
+\[\begin{tabular}{rcl}
+Monotone functions $f$&$::=$&$\star i \celse f *_c g$\\
+\end{tabular}\]
+We define $i[c]$ by
+\[(\dns i)[c] = \dns (i[c])\qquad \hf[c] = c \qquad (\ups i) [c] = \ups(i[c])  \]
+and $f[c]$ by
+\[(\star i)[c] = i[c] \]
+\[(f *_c g) [\dns i] = f[i] \qquad (f *_c g)[\hf] = c \qquad (f *_c g) [\ups i] = g[i]  \]
+We impose a typing discipline:
+\[
+\erule
+{}
+{\star i : i[0] \to i[1]}
+\qquad
+\erule
+{f : b \to c \qquad g : c \to d}
+{ f *_c g : b \to d}
+\]
+We can define composition $\alpha\o\beta$ by
+\[\begin{array}{c}
+(\dns \alpha) \o  \beta\cr
+\rid \o  \beta\cr
+(\ups\alpha) \o  \beta
+\end{array}
+\qquad = \qquad
+\begin{array}{c}
+\dns (\alpha \o  \beta)\cr
+  \beta\cr
+\ups (\alpha \o  \beta)
+\end{array}\]
+and
+\[(f * g) \o \dns \beta = f \o \beta\]
+\[(f * g) \o \rid = f * g\]
+\[(f * g) \o \ups \beta = g \o \beta\]
+\[f \o (g * h) = (f \o g) * (f \o h)\]
+Then I think I more generally have
+\[ (f \o \dns) *_{f[\hf]} (f \o \ups) \equiv f \]
+
+\subsection*{Path composition as homotopy lifting}
+\[
+\begin{tikzcd}
+  \I + \I \ar[r]\ar[d, "{[\dns,\ups]}"'] & \Gamma.A \ar[d]\\
+\I \ar[ur, dotted]\ar[r] &\Gamma
+\end{tikzcd}
+\]
+
+\[ \begin{prooftree}
+\begin{array}{l}
+\Psi \prov r : \I\\
+ \Psi, i : \I ; \Gamma \prov A : \rtype\\
+ \Psi, i : \I ; \Gamma \prov  a : [\dns i / i] A\\
+ \Psi, i : \I ; \Gamma \prov  b : [\ups i / i] A\\
+ {[1/i]}a \equiv [0/i] b
+\end{array}
+ \justifies
+\begin{array}{l}
+\Psi ; \Gamma \prov r \mapsto i.a * b : [r/i] A\\
+{\dns r} \mapsto i. a * b \equiv [r/i]a\\
+{\ups r} \mapsto i. a * b \equiv [r/i]b\\
+\end{array}
+\end{prooftree}
+\]
+
+Ok, but what is the relationship between this and the path type, like
+\[
+\erule
+{\Psi^+, i : \I; \Gamma \prov e : A}
+{\Psi; \Gamma \prov \llam i . e : A^\I}
+\]
+which maybe decomposes (???) as $A^\I = \I \to \lx A$ with
+\[
+\erule
+{\Psi^+ ;\Gamma \prov e : A}
+{\Psi; \Gamma \prov \lx e : \lx A}
+\qquad
+\erule
+{\Psi, i : \I ;\Gamma \prov e : A}
+{\Psi; \Gamma \prov \lambda i. e : \I \to A}
+\]
+
+Specifically I'm hoping for an indexed path type like
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi ;\Gamma \prov A : \rtype\\
+   \Psi ;\Gamma \prov a : A^\op\\
+   \Psi ;\Gamma \prov b : A\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov a \le b : \rtype}
+\qquad
+\erule
+{\Psi^+, i : \I; \Gamma \prov e : A}
+{\Psi; \Gamma \prov \llam i . e : [0/i]e \le [1/i]e}
+\qquad
+\erule
+{\Psi; \Gamma \prov e : a \le b
+\qquad \Psi^+ \prov r: \I}
+{\Psi^+; \Gamma \prov e\cdot r : A}
+\]
+maybe even a dependent one like
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ;\Gamma \prov A : \rtype\\
+   \Psi ;\Gamma \prov a : [0/i]A^\op\\
+   \Psi ;\Gamma \prov b : [1/i]A\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov a \le_{i.A} b : \rtype}
+\]
+
+The bare minimum fibrancy I think I need to turn paths in $\rset$ into functions is the following
+point-in-interval coercion:
+\[
+\begin{tikzcd}
+  \Psi \ar[r, "a"]\ar[d, "{[0/i]}"'] & \Gamma.A \ar[d]\\
+\Psi, i : \I \ar[ur, dotted]\ar[r] & \Gamma
+\end{tikzcd}
+\]
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r : \I\\
+   \Psi, i : \I ; \Gamma \prov A : \rtype\\
+   \Psi ;\Gamma \prov a : [0/i]A\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{0\to r}_{i.A} (a) : [r/i]A}
+\]
+
+Let me try to go through the exercise of constructing this coercion for $\Pi$ types. I think I need $A$ to be
+an op-fibrant type for $(x : A) \to B$ to be a fibrant type:
+\[
+\erule
+{\Gamma \prov  A : \rtype^\mp  \qquad \Gamma, x : A \prov  B : \rtype^\pm}
+{\Gamma \prov (x : A) \to B : \rtype^\pm}
+\]
+and I expect some kind of coercion-to-zero action for op-fibrant types??? And maybe filling from $1$?
+Like:
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r, r' : \I\\
+   \Psi \prov r \le r' \\
+   \Psi, i : \I ; \Gamma \prov B : \rtype\\
+   \Psi ;\Gamma \prov a : [r/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r\to r'}_{i.B} (a) : [r'/i]B}
+\]
+and an op-fibrant type $i.A$ would require $r' \le r$. With maybe some axioms like so?
+\[
+\erule
+{}
+{0 \le r}
+\qquad
+\erule
+{}
+{r \le 1}
+\qquad
+\erule
+{}
+{r \le r}
+\]
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r \le r' : \I\\
+   \Psi, i : \I ; \Gamma, x : A \prov B : \rtype\\
+   \Psi ;\Gamma \prov a : (x : [r/i]A) \to [r/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r\to r'}_{i.(x : A) \to B} (a) : (x: [r'/i]A) \to [r'/i]B}
+\]
+Note that
+\[ x : [r'/i]A \prov \rcoe^{r' \to r}_{i.A}(x) : [r/i]A\]
+\[a (\rcoe^{r' \to r}_{i.A}(x)) : [\rcoe^{r' \to r}_{i.A}(x) / x][r/i]B \]
+and I want to hit this with
+\[\rcoe^{r \to r'}_{i.[\rcoe^{r' \to i}_{i.A}(x) / x]B}\]
+Hm, that doesn't seem to work.
+
+\subsection*{Trying special cases}
+
+Ok, my intent is to let covariantly fibrant types coerce from zero to anything, and from anything to 1, and conversely
+let contravariantly fibrant types coerce from 1 to anything, and from anything to 0. This is what the above rule
+allows, but maybe I have to define the coercion separately for each case. So let me start with something simple.
+
+I want to try to first implement the filling-capable coercion from zero for $\Pi$-types.
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov 0 \le r : \I\\
+   \Psi, i : \I ; \Gamma, x : A \prov B : \rtype\\
+   \Psi ;\Gamma \prov a : (x : [0/i]A) \to [0/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{0\to r}_{i.(x : A) \to B} (a) : (x: [r/i]A) \to [r/i]B}
+\]
+I reason that
+\[ x : [r/i]A \prov \rcoe^{r \to 0}_{i.A}(x) : [0/i]A\]
+\[a (\rcoe^{r \to 0}_{i.A}(x)) : [\rcoe^{r \to 0}_{i.A}(x) / x][0/i]B \]
+Ack, this still doesn't work! It seem like I need to introduce a new hypothesis somehow.
+
+\subsection*{Introducing more inequalities}
+What if we only use $(x : A) \to B$ at values of $i$ greater than the start point $r$?
+The rules for contravariant and covariant types are:
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r \le r' : \I\\
+   \Psi, i : \I^{\le r'} ; \Gamma  \prov A : \rtype\\
+   \Psi ;\Gamma \prov a : [r'/i]A\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r'\to r}_{i\le r'. A} (a) :  [r/i]A}
+\qquad
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r \le r' : \I\\
+   \Psi, i : \I^{\ge r} ; \Gamma  \prov B : \rtype\\
+   \Psi ;\Gamma \prov a :  [r/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r\to r'}_{i\ge r. B} (a) :  [r'/i]B}
+\]
+trying to show
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r \le r' : \I\\
+   \Psi, i : \I^{\ge r} ; \Gamma, x : A \prov B : \rtype\\
+   \Psi ;\Gamma \prov a : (x : [r/i]A) \to [r/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r\to r'}_{i\ge r.(x : A) \to B} (a) : (x: [r'/i]A) \to [r'/i]B}
+\]
+Hey wait a minute... these are all $0\to 1$ compositions, but just slammed down into a certain range.
+Can I just implement the interpolations directly?
+
+\begin{lemma}
+If $r \le r'$, then there is a monotone interpolation function $t : \I \prov t[r,r'] : \I$.
+\end{lemma}
+
+\begin{proof}
+We can first split cases on proofs of $r \le r'$. Suppose $0 \le r$. Then we want
+to implement $t[0, r]$. We define:
+\[\begin{tabular}{rcl}
+$t[0,0]$&$=$&$0$\\
+$t[0,\dns i]$&$=$&$\dns (t[0,i])$\\
+$t[0,\hf]$&$=$&$\dns t$\\
+$t[0,\ups i]$&$=$&$ ??? $\\
+$t[0,1]$&$=$&$t$\\
+\end{tabular}\]
+Hm.
+\end{proof}
+I guess I'm actually not going to get a nice smooth simple linear dyadic monotone
+function that's $3/4$ times $t$. But I don't need a linear function! Any function that maps $0$ to $r$ and $1$ to $r'$ should do,
+I think?
+
+Anyway, how can I convince myself that a $0\to 1$ coercion is sufficient, then? Let's say the rule I have is
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ; \Gamma  \prov B : \rtype\\
+   \Psi ;\Gamma \prov a :  [0/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe_{i. B} (a) :  [1/i]B}
+\]
+and the rule I want to show admissible is
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi  \prov r \le r' : \I\\
+   \Psi, i : \I ; \Gamma  \prov B : \rtype\\
+   \Psi ;\Gamma \prov a :  [r/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{r\to r'}_{i. B} (a) :  [r'/i]B}
+\]
+I suppose for $r \le r'$ that there is an $i : \I \prov f_{r \le r'}(i) : \I$
+where $f_{r \le r'}(0) \equiv r$ and $f_{r \le r'}(1) \equiv r'$. I define
+\[\rcoe^{r\to r'}_{i. B} (a) = \rcoe_{i. [f_{r\le r'}(i) / i]B} (a)\]
+A comment about what happens when $r \equiv r'$. In this case $f_{r \le r}$ is the constant $\I$-expression $r$,
+and the resulting type $i.[r/i]B$ doesn't depend on the variable $i$ at all. I can say of the $0-1$ composition rule,
+then that $\rcoe_{i.B}(a) \equiv a$ if $i$ is not free in $B$.
+
+An apparent disadvantage of this approach is it makes the
+well-foundedness of induction potentially less clear, if I want to be
+type directed --- because I'm substituting expressions for interval
+variables as I descend. But maybe I can still descend on the type with
+all interval structure erased, or something?
+
+\vfil\eject
+\subsection*{Trying to finish the $0\to 1$ reasoning}
+We have
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ; \Gamma  \prov A : \rtype^-\\
+   \Psi ;\Gamma \prov a : [1/i]A\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe^{-}_{i. A} (a) :  [0/i]A}
+\qquad
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ; \Gamma  \prov B : \rtype\\
+   \Psi ;\Gamma \prov a :  [0/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe_{i. B} (a) :  [1/i]B}
+\]
+and we're trying to construct
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ; \Gamma, x : A \prov B : \rtype\\
+   \Psi ;\Gamma \prov a : (x : [0/i]A) \to [0/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe_{i.(x : A) \to B} (a) : (x: [1/i]A) \to [1/i]B}
+\]
+So we try
+\[\rcoe_{i.(x : A) \to B}(a)  = \lambda x .  \rcoe_{j.[\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B}( a(\rcoe^{-}_{i.A}(x) )) \]
+where $0 \lor j = j$ and $1 \lor j = 1$. Interesting to note that I wasn't paying attention and we were recursing under
+a substituted form of $B$ anyhow, so we have to be careful about the recursion terminating anyway. Let's see
+if this typechecks.
+
+We assume $x : [1/i]A$. We have
+\[\rcoe^{-}_{i.A}(x) : [0/i]A\]
+\[a(\rcoe^{-}_{i.A}(x)) : [\rcoe^{-}_{i.A}(x)/ x][0/i]B\]
+Let's write out the special case of the $B$ transport rule that we're using:
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, j : \I ; \Gamma  \prov [\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B : \rtype\\
+   \Psi ;\Gamma \prov a :  [0/j][\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B\\
+  \end{array}
+}
+{\Psi ; \Gamma \prov \rcoe_{j. [\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B} (a) :  [1/j][\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B}
+\]
+I notice $[0/j][\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B$ reduces to $[\rcoe^-_{i.A}(x)/x][0/i]B $, just as we need it to,
+and $[1/j][\rcoe^-_{i.[i \lor j/i]A}(x)/x][j/i]B$  reduces to $[\rcoe^-_{i.[1/i]A}(x)/x][1/i]B$. But this is
+where we observe that $[1/i]A$ does not depend at all on $A$, so $\rcoe^-_{i.[1/i]A}(x) = x$ and our output type
+is just $[1/i]B$, as required.
+
+\subsubsection*{Thoughts on what $\I_2$ is in $\rset$}
+
+I thought maybe that $\I_2$ paths in $\rset$ are like relations that come explicitly
+from zigzags of morphisms in $\rset$.
+
+I think this is constructing the free $\dagger$-category on a category
+$\C$: The morphisms of $F\C$ are composable lists of morphisms and
+formal comorphisms in $\C$, quotiented by saying that $f \o f^{-1}$
+and $f^{-1} \o f$ and all identity morphisms and comorphisms are equal
+to the empty list at the appropriate object. An empty list in $F\C$
+--- which is the identity morphism in the free dagger-category ---
+still carries the data of which object it is the empty path at.
+
+Question: is the evident injection $\C \to F \C$ always faithful?
+Absolutely not! If $h \o f  = h \o k $, then in the dagger category I can reason that
+\[f = h^{-1} \o h \o f = h^{-1} \o h \o k = k \]
+This is catastropic in $\rset$; I can just let $h = {!} : X \to 1$ and collapse
+all morphisms in any homset.
+
+Huh --- and maybe this is more in line with the spirit of
+$\dagger$-categories --- do I maybe want to quotient out compositions merely {\em
+  within} $\C$ and $\C^\op$ (and maybe coalesce identities) not
+presume that inverses are inverse?
+
+Also do I want to consider these two paths the same?
+\[\begin{tikzpicture}[dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt}]
+\begin{scope}[scale=1]
+\node[dot,label=left:{$x$}] (x) at (0,1) {};
+\node[dot,label=left:{$z$}] (z) at (0,0) {};
+\node[dot,label=above:{$y$}] (y) at (1,0.5) {};
+\node[dot,label=right:{$s$}] (s) at (2,0.5) {};
+\node[dot,label=left:{$w$}] (w) at (0,-1) {};
+\node[dot,label=above:{$v$}] (v) at (1,-1) {};
+\node[dot,label=right:{$u$}] (u) at (2,-1.5) {};
+\node[dot,label=right:{$t$}] (t) at (2,-0.5) {};
+\draw (x)--(y);
+\draw (y)--(s);
+\draw (y)--(z);
+\draw (w)--(v);
+\draw (t)--(v);
+\draw (u)--(v);
+\end{scope}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt}]
+\begin{scope}[scale=1]
+\node[dot,label=left:{$x$}] (x) at (0,1) {};
+\node[dot,label=above:{$x'$}] (x') at (1,1) {};
+\node[dot,label=left:{$z$}] (z) at (0,0) {};
+\node[dot,label=above:{$z'$}] (z') at (1,0) {};
+\node[dot,label=right:{$s$}] (s) at (2,0.5) {};
+\node[dot,label=left:{$w$}] (w) at (0,-1) {};
+\node[dot,label=right:{$u$}] (u) at (2,-1.5) {};
+\node[dot,label=right:{$t$}] (t) at (2,-0.5) {};
+\node[dot,label=below:{$u'$}] (u') at (1,-1.5) {};
+\node[dot,label=below:{$t'$}] (t') at (1,-0.5) {};
+\draw (x)--(x');
+\draw (z)--(z');
+\draw (t)--(t');
+\draw (u)--(u');
+\draw (w)--(t');
+\draw (w)--(u');
+\draw (s)--(x');
+\draw (s)--(z');
+\end{scope}
+\end{tikzpicture}\]
+This cospan and span form a commutative square, at least:
+\[
+\begin{tikzcd}
+\{x,y,w\} \ar[r] & \{y,v\}\\
+\{x',z',t',u'\} \ar[r]\ar[u] & \{s,t,u\} \ar[u]
+\end{tikzcd}
+\]
+This particular example happens to be a pullback and a pushout, though.
+Is that necessary and sufficient for it to be `just pushing things around diagramatically'?
+How about:
+\[\begin{tikzpicture}[dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt}]
+\begin{scope}[scale=1]
+\node[dot,label=left:{$x$}] (x) at (0,1) {};
+\node[dot,label=left:{$z$}] (z) at (0,0) {};
+\node[dot,label=above:{$y$}] (y) at (1,0.5) {};
+\node[dot,label=right:{$s$}] (s) at (2,0.5) {};
+\node[dot,label=left:{$w$}] (w) at (0,-1) {};
+\node[dot,label=above:{$v$}] (v) at (1,-1) {};
+\draw[->] (x)--(y);
+\draw[->] (s)--(y);
+\draw[->] (z)--(y);
+\draw[->] (w)--(v);
+\end{scope}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt}]
+\begin{scope}[scale=1]
+\node[dot,label=left:{$x$}] (x) at (0,1) {};
+\node[dot,label=above:{$x'$}] (x') at (1,1) {};
+\node[dot,label=left:{$z$}] (z) at (0,0) {};
+\node[dot,label=above:{$z'$}] (z') at (1,0) {};
+\node[dot,label=right:{$s$}] (s) at (2,0.5) {};
+\node[dot,label=left:{$w$}] (w) at (0,-1) {};
+\draw[->] (x')--(x);
+\draw[->] (z')--(z);
+\draw[->] (x')--(s);
+\draw[->] (z')--(s);
+\end{scope}
+\end{tikzpicture}\]
+Yeah, also diagrammatically valid, also a pullback and pushout at the same time.
+Maybe that is the right criterion.
+
+These commutative squares that are pullbacks and pushouts are apparently called `bicartesian'.
+
+\subsubsection*{Something about trees}
+
+A key property I'd expect of a map $\I_1 \to \rset$ --- or equivalently a fibrant map $X \to \I$ ---
+is that it should satisfy a {\em unique} path lifting property.
+\[
+\begin{tikzcd}
+  1 \ar[r, "x"]\ar[d, "{[0/i]}"'] & X \ar[d]\\
+\I \ar[ur, dotted]\ar[r, "f"'] & \I
+\end{tikzcd}
+\]
+The set $X$ over $\I$ looks like a tree which, as time proceeds to the right, acquires new
+branches and merges branches together. For an arbitary subset of the whole time interval
+over which $X$ exists (represented by the monotone map $f$) if we start at the point $x\in X$,
+there is a unique way to push forward.
+
+Another way of thinking about this is like this: let an $f : X \to \I$ be given.
+Think of it equivalently as $i : \I \prov X(i) : \rtype$.
+We want to find another type that's equivalent to $X$, which is morally `the set of paths in $X$
+that start at some time $t$ and end up at time $1$'. So such a thing will be a path $g : \I \to X$.
+And the composite $f \o g : \I \to \I$ will be $\lambda i . t \lor i$ for some particular $t$, I think?
+So it's something like the type
+\[ (t : \I) \x (g : \I \to X) \x f(g(i)) \equiv t \lor i\]
+that I think is equivalent to $X$, and the projection onto $i$ is exactly the first component $t : \I$.
+
+Hm, wait, isn't this actually the same thing as {\em all} of my $1 \to \I$ fibrant extensions being unique?
+
+More precisely, the thing I have in mind is an equivalence arising like so.
+If I have an $i : \I \prov X : \rset$, then the projection to the initial endpoint
+of any path in $X$
+\[ \lambda f . f(0) : ((i:\I) \to X(i)) \to X(0) \]
+should be an equivalence. Except... wait a minute, this whole picture where $i : \I \prov X : \rset$
+is a gradually merging tree shape with unique paths is only valid
+{\em if} $X$ itself has no interesting $1$-path structure.
+
+There nonetheless {\em exists} a converse function $X(0) \to ((i: \I) \to X(i))$,
+which is Kan filling, which follows only the `diachronic'
+fibrancy structure of $X$ and not the `synchronic' structure within a
+single time-slice of $X$, but it may not be unique.
+
+The round-trip $X(0) \to ((i: \I) \to X(i)) \to X(0)$ will surely be the identity, but
+$((i: \I) \to X(i)) \to X(0) \to ((i: \I) \to X(i))$ won't necessarily be; it will sort
+of `normalize' paths somehow?
+\subsubsection*{Timed sets}
+
+I have this feeling there's a bunch of analogies
+\begin{center}\begin{tabular}{ll}
+Totally ordered set mapped into $\U$ & Totally ordered set\\
+Totally ordered set mapped into $\U \x \U$ & Set\\
+Tree mapped into $\U \x \I$ & Ordered set homomorphism\\
+Tree mapped into $\U \x \U \x \I$ & Function
+\end{tabular}\end{center}
+
+Where the way you go from the left column to the right is by quotienting out by a bunch of reparameterization.
+
+I also want to think that it's something like a sheaf --- maybe dualized appropriately?
+In that given the whole interval $\U$, I might discover the set of points living on it,
+and then I can restrict to a smaller set by restricting the morphism $\U \to \U$ to just $\ups$ or $\dns$ or
+something.
+
+How do I express that a type `has only one object' even though it may have nontrivial morphisms?
+Is it just that it's $\U_1$-contractible, even though there may be nontrivial $\I_1$ paths?
+This seems right. Between any two objects {\em there is} an identity morphism, so it's contractible
+as a space, but there may be other morphisms, too. Except, wait, no, fibrancy means that quantifier
+is uniform, so maybe that collapses too much. I'm not really sure.
+
+\subsubsection*{Functionality of Coercion}
+
+Even though there may be lots of {\em vertical} $\I_1$-paths in a fibration over $\I_1$, there
+should be something functional or canonical or something about the horizontal paths --- or like,
+a canonical subset of them that are the avenues along which transport happens, which should form
+a merging tree shape. I think I can express this by saying that you can do transport in pieces:
+
+\[
+\erule
+{
+  \begin{array}{l}
+   \Psi, i : \I ; \Gamma  \prov A(i) : \rtype\\
+   \Psi ;\Gamma \prov a : A(0)\\
+  \end{array}
+}
+{   \Psi ;\Gamma \prov \rcoe_{i.A(i)}(a) : A(1) }
+\]
+\[\rcoe_{i.A(i)}(a) \equiv \rcoe_{i.A(\ups i)}(\rcoe_{i.A(\dns i)}(a))\]
+\[\rcoe_{i.A}(a) \equiv a\]
+(where I'm relying on $i.A$ to conventionally mean that $i$ does not occur in $A$)
+Or I guess I could have phrased the first one as simple functoriality
+\[\rcoe_{i.(A * B)(i)}(a) \equiv \rcoe_{i.B(i)}(\rcoe_{i.A(i)}(a))\]
+If $A$ and $B$ are regarded as maps $\I \to \rset$.
+
+Oh, actually I should also have if $A$ is a contravariantly fibered type, then I of course get
+the dual
+\[\rcoe^-_{i.A(i)}(a) \equiv \rcoe^-_{i.A(\dns i)}(\rcoe^-_{i.A(\ups i)}(a))\]
+
+So does my putative definition of $\Pi$ coercion above satisfy functoriality? I'm pretty
+sure it handles the identity case fine. Let's try composition. We want to check
+\[ \rcoe_{i.(x : A(i)) \to B(i, x)}(a)
+\equiv \rcoe_{i.(x : A(\ups i)) \to B(\ups i,x)}(\rcoe_{i.(x : A(\dns i)) \to B(\dns i,x)}(a))\]
+so we start trying to compute the rhs of this putative equivalence, and hope to get the lhs.
+According to
+\[\rcoe_{i.(x : A(i)) \to B(i,x)}(a)  = \lambda x .  \rcoe_{j.B(j, \rcoe^-_{i.A(i \lor j)}(x))}( a\ (\rcoe^{-}_{i.A(i)}(x) )) \]
+it's
+\[ \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))} \left( \rcoe_{i.(x : A(\dns i)) \to B(\dns i,x)}(a)\ (\rcoe^{-}_{i.A(\ups i)}(x) ) \right) \]
+\[\equiv \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))} \left(
+ \left(\lambda x .  \rcoe_{j.B(\dns j, \rcoe^-_{i.A(\dns(i \lor j))}(x))}( a\ (\rcoe^{-}_{i.A(\dns i)}(x) )) \right)
+\ (\rcoe^{-}_{i.A(\ups i)}(x) ) \right) \]
+\[\equiv_\beta \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))}
+ \left(  \rcoe_{j.B(\dns j, \rcoe^-_{i.A(\dns(i \lor j))}(\rcoe^{-}_{i.A(\ups i)}(x)))}( a\ (\rcoe^{-}_{i.A(\dns i)}(\rcoe^{-}_{i.A(\ups i)}(x) ) )) \right)
+  \]
+\[\equiv_{i.h.} \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))} \left(
+  \rcoe_{j.B(\dns j, \rcoe^-_{i.A(\dns(i \lor j))}(\rcoe^{-}_{i.A(\ups i)}(x)))}( a\ (\rcoe^{-}_{i.A( i)}(x)  )) \right)
+  \]
+I need to reconcile the mismatch
+\[\rcoe^-_{i.A(\ups (i \lor j))}(x) \not\equiv \rcoe^-_{i.A(\dns(i \lor j))}(\rcoe^{-}_{i.A(\ups i)}(x)) \]
+somehow.
+
+First of all I can consider the type $i.A((i.\dns(i \lor j)) * \ups)(i)$. If I use the i.h. at this I get
+\[\rcoe^-_{i.A((i.\dns(i \lor j)) * \ups)(\dns i)} \o \rcoe^-_{i.A((i.\dns(i \lor j)) * \ups)(\ups i)} = \rcoe^-_{i.A((i.\dns(i \lor j)) * \ups)(i)} \]
+which simplifies to
+\[\rcoe^-_{i.A(\dns(i \lor j))} \o \rcoe^-_{i.A(\ups i)} = \rcoe^-_{i.A((i.\dns(i \lor j)) * \ups)(i)} \]
+which is what I need to simplify my running computation to
+\[\equiv_{i.h.} \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))} \left(
+  \rcoe_{j.B(\dns j, \rcoe^-_{i.A((i.\dns(i \lor j)) * \ups)(i)}(x))}( a\ (\rcoe^{-}_{i.A( i)}(x)  )) \right)
+  \]
+which I can squint and believe this is maybe the same as
+\[\equiv_{i.h.} \lambda x .  \rcoe_{j.B( j, \rcoe^-_{i.  (j.A(\ups (i \lor j))) *  (j.(i.A((i.\dns(i \lor j)) * \ups)(i))) (j) }(x))}
+( a\ (\rcoe^{-}_{i.A( i)}(x)  ))
+  \]
+and so I want to believe that
+\[(j.A(\ups (i \lor j))) *  (j.(i.A((i.\dns(i \lor j)) * \ups)(i))) (j) \equiv A(i \lor j)\]
+Is this even true for endpoints? Let $j = 0$:
+\[A(\ups (i \lor 0)))  \equiv A(0)\]
+No, something has gone wrong.
+
+\vfil\eject
+\subsubsection*{Debugging}
+
+Let's return to
+\[ \lambda x .  \rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))} \left(
+  \rcoe_{j.B(\dns j, \rcoe^-_{i.A(\dns(i \lor j))}(\rcoe^{-}_{i.A(\ups i)}(x)))}( a\ (\rcoe^{-}_{i.A( i)}(x)  )) \right)
+  \]
+and check the types line up right.
+$\rcoe^{-}_{i.A(\ups i)}(x)$ should coerce from $A(1)$ to $A(\hf)$.
+Then $\rcoe^-_{i.A(\dns(i \lor j))}$ should coerce from $A(\hf)$ to $A(j)$. The whole of
+\[\rcoe_{j.B(\dns j, \rcoe^-_{i.A(\dns(i \lor j))}(\rcoe^{-}_{i.A(\ups i)}(x)))}\]
+should coerce from
+\[\rcoe_{j.B(0, \rcoe^-_{i.A( i)} (x))}\]
+to
+\[\rcoe_{j.B(\hf,  \rcoe^{-}_{i.A(\ups i)}(x))}\]
+and the outer
+\[\rcoe_{j.B(\ups j, \rcoe^-_{i.A(\ups (i \lor j))}(x))}\]
+should coerce from
+\[\rcoe_{j.B(\hf,  \rcoe^{-}_{i.A(\ups i)}(x))}\]
+to
+\[\rcoe_{j.B(1,  x)}\]
+So the whole pattern I seem to want to track with {\em one} coercion is
+\[\begin{tabular}{l|l}
+$j$\\
+\hline
+$0$&$B(0, \rcoe^-_{i.A( i)} (x))$\\
+$\hf$&$B(\hf,  \rcoe^{-}_{i.A(\ups i)}(x))$\\
+$1$&$B(1,  x)$
+\end{tabular}\]
+But the most evident way of expressing something similar with the right behavior at $0$ and
+$1$ is the $B(j, \rcoe^-_{i.A(i \lor j)})(x)$ that I started out with. But it's wrong at $\hf$.
+Unless the actual meaning of $i \lor j$ is like $1- (1 - i)(1- j)$ instead of $\max(i,j)$.
+
+Another alternative is to hope that in fact
+\[ \rcoe^{-}_{i.A(\ups i)}(x) \equiv \rcoe^{-}_{i.A(i \lor \hf)}(x) \]
+because the two coercions take place across the same path at different rates!
+That somehow $\ups i$ and $i \lor\hf$ are suitably homotopic to one another.
+
+In fact can I predicate the whole above theorem on the understanding that $\rid$ and $\dns * \ups$ are
+merely homotopic rather than equal, or something like that?
+
+The tricky thing about all of this is that the exact path I coerce
+along, the $i.A(i)$ absolutely {\em does} matter, since we could be
+coercing one way or the other around a circle or something, but replacing
+$i.A(i)$ with $i.A(r(i))$ for an (invertible?) interval term $r$ that's the identity
+at $0$ and $1$ should leave coercion invariant. And ideally I'd like to be able to
+prove that in some more foundational way, maybe involving $\I_2$-paths or something.
+
+(for recall the interpolation filling problem, that says that any two paths $\I_1 \to \I_1$
+should be $\I_2$-fillable)
+\end{document}

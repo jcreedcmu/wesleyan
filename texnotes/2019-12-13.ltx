@@ -1,0 +1,464 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\two{\mathbf{2}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+What is the `territory of sets'? I'd guess that its paths are all functors from the poset $[0,1]$
+to $\rset$. I can similarly turn any category $\C$ into a territory by considering all functors $[0,1]$
+to $\C$. Applying this construction to $[0,1]$ {\em doesn't} give me the representable interval $[0,1]$,
+because it doesn't take into account continuity. It has {\em more} paths in it than the representable,
+including discontinuous ones.
+
+I might also want to impose {\em some} notion of continuity even on
+other territories derived from categories, because I'm confused about
+the following phenomenon. Let $f : a \to b $ be the morphism in the
+walking arrow category $\two$. A functor $[0,1] \to \two$ is
+determined by its fiber over $a$, which must be a (and can be any)
+downward closed interval, so either $[0,x)$ (which is empty if $x=0$)
+%
+or $[0,x]$ for $x \in [0,1]$. I think of the map that sends $(0,x)$ to
+$a$ is one where $f$ `takes place just before time $t$', and the map
+that sends $[0,x]$ is one where $f$ `takes place just after time $t$'.
+Call these $f^{t-}$ and $f^{t+}$. It seems clear that $f^{t-}$ and
+$f^{u-}$ are in some sense `the same map' even for $t \ne u$ by
+homotopical reparameterization of the interval, and likewise $f^{t+}$
+and $f^{u+}$. But are $f^{t-}$ and $f^{t+}$ the same?
+
+It seems difficult to make them so --- there just {\em does not exist}
+a continuous monotone map from $[0,1]$ to itself fixing 0 and 1 that
+turns $f^{t-}$ into $f^{t+}$. Possibly it would be an interesting
+choice to convert $\C$ into a territory by breaking the symmetry and
+including only $f^{t-}$s or $f^{t+}$s.
+
+One way of expressing that requirement is in terms of one-sided limit topology, like so:
+The territory derived from $\C$ has for paths the functors $F : [0,1] \to \C$
+such that the fiber over any object $C$ is the union of of half-open
+ intervals $(x,y]$ or the single point $\{0\}$.
+ Symmetrically, I could have said $[x,y)$ or the single point $\{1\}$.
+
+Let's consider the territory derived from $\rset$. Depict time as flowing from left to right,
+as functions merge points together. I seem to have a choice between saying that the unique-up-to-homotopy
+ function $2 \to 1$
+can look like
+\[(a)\quad \begin{tikzpicture}[baseline=-1.5em,
+   dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt},
+   circ/.style={circle,inner sep=0pt,minimum size=4pt,draw,fill=white}]
+\begin{scope}[scale=1]
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,0.5) (-0.5,0.25) (0,0)};
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,-1.5) (-0.5,-1.25) (0,-1)};
+\draw plot [smooth, tension=0.8] coordinates {(0.8,0) (0.5,-0.25) (0,-0.5)};
+\node[circ]  at (0,0) {};
+\node[circ]  at (0,-1) {};
+\node[dot]  at (0,-0.5) {};
+\end{scope}
+\end{tikzpicture}
+\quad
+\hbox{or}
+\qquad
+(b)
+\quad
+\begin{tikzpicture}[baseline=-1.5em,
+   dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt},
+   circ/.style={circle,inner sep=0pt,minimum size=4pt,draw,fill=white}]
+\begin{scope}[scale=1]
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,0.5) (-0.5,0.25) (0,0)};
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,-1.5) (-0.5,-1.25) (0,-1)};
+\draw plot [smooth, tension=0.8] coordinates {(0.8,0) (0.5,-0.25) (0,-0.5)};
+\node[dot]  at (0,0) {};
+\node[dot]  at (0,-1) {};
+\node[circ]  at (0,-0.5) {};
+\end{scope}
+\end{tikzpicture}
+\]
+I think $(a)$ is the better option, because it has the same number of points as the geometrically
+glued-together space
+\[
+\begin{tikzpicture}[baseline=-1.5em,
+   dot/.style={circle,fill=black,inner sep=0pt, minimum size=5pt},
+   circ/.style={circle,inner sep=0pt,minimum size=4pt,draw,fill=white}]
+\begin{scope}[scale=1]
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,0) (-0.5,-.25) (0,-0.5)};
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,-1) (-0.5,-0.75) (0,-0.5)};
+\draw plot [smooth, tension=0.8] coordinates {(0.8,0) (0.5,-0.25) (0,-0.5)};
+\node[dot]  at (0,-0.5) {};
+\end{scope}
+\end{tikzpicture}
+\]
+which I imagine as giving the overall behavior of the evolving function correctly.
+So yeah, that breaks the symmetry. I think the inverse image of any object should
+be an open set in the topology where basic open sets are half-open intervals
+closed at the {\em bottom}, $[a,b)$ (plus the singleton $\{1\}$, which is a residue of
+any basic open set $[1,x)$ coming from the lower-limit topology on $\R$)
+
+This definition as such still seems a bit `evil' for $\rset$, but I
+feel good about using the intuition from it to break symmetry for what to do
+with smaller categories.
+
+\subsubsection*{Fibrational Perspective}
+
+To be less `evil' I might try to return to my thought from before and say that a
+path in $\rset$ is a topological space $X$
+together with a continuous map $X \to [0,1]$, such that every filling problem
+\[
+\begin{tikzcd}
+  1 \ar[r, "x"]\ar[d, "{[0/i]}"'] & X \ar[d]\\
+\I \ar[ur, dotted]\ar[r, "f"'] & \I
+\end{tikzcd}
+\]
+(for $f$ monotone and continuous) is uniquely solvable in the category of topological spaces.
+I {\em don't} expect this to be quite the same thing as a functor $[0,1] \to \rset$, because
+the latter would allow situations like $(b)$ above. Let me try to see where the proof of their
+equivalence fails, and maybe that will tell me a better, less evil way to characterize which functors
+$[0,1] \to \rset$ are well-behaved. For I think `inverse image of equivalence classes of sets
+are certain sorts of open intervals' doesn't even {\em work} --- for it can't detect
+$(b)$-like patterns of {\em isomorphisms}.
+
+Ok, so let's start with a fibration $p : X \to [0,1]$. From it we want to construct a functor
+$F : [0,1] \to \rset$. The object part of $F$ is taking the fibers of $p$; we say
+\[ F(t) = p^{-1}(t) = \{x \in X \st p(x) = t\}\]
+The morphism part of $F$ is fibrant transport. If we know $t \le u$, then
+\[ F(t \le u) : F(t) \to F(u) = \lambda x . \rcoe^{t \mapsto u}(x) \]
+We're relying on the fact that for $t \le u$ we can come up with an $f : \I \to \I$ such
+that $f(0) = t$ and $f(1) = u$. I want to convince myself that the choice of $f$ doesn't matter.
+Let me write
+\[
+\erule
+{x : X(f(0))}
+{
+i : \I \prov \rcoe_f(x, i) : X(f(i))
+}
+\]
+Suppose I have a $g : \I \to \I$ that preserves $0$ and $1$.
+There should be a {\em unique} $g^*$ that fills below:
+\[
+\begin{tikzcd}
+1 \ar[rr, "x"]\ar[dr, "0" description]\ar[d, "0"'] &&    X \ar[d]\\[3em]
+\I\ar[urr, dotted, "g^*" description]\ar[r, "g"']&\I \ar[ur, dotted, "f^*" description]\ar[r, "f"'] & \I
+\end{tikzcd}
+\]
+but by diagram chasing, in fact $f^* \o g$ satisfies the conditions $g^*$ is supposed to satisfy,
+so $f^* \o g = g^*$. Since $g$ preserves $1$, then $f^*(1) = f^*(g(1)) = g^*(1)$.
+
+
+A similar argument shows that $F$ preserves composition.
+
+In the other direction, let's start with a functor $F : [0,1] \to \rset$. How do we do the `Grothendieck
+construction', i.e. construct
+the total space $X$ over $[0,1]$? The carrier is the dependent pair type
+\[X = (t : [0,1]) \x F(t)\]
+and I think a basic open set of the topology is defined like so. For an open subset $U \subseteq [0,1]$
+we define a PER $(t_1,x_1) \sim_U (t_2,x_2)$ in $X$ to hold if there exists $(t,x) \in X$ such that
+\begin{enumerate}
+\item $t_i \le t$
+\item $[t_i,t] \subseteq U$
+\item $F(t_i \le t)(x_i) = x$
+\end{enumerate}
+for $i = 1,2$.
+
+A basic open set of $X$ is an equivalence class under $\sim_U$ for some $U$.
+
+\begin{lemma}
+The relation $\sim_U$ is symmetric and transitive.
+\end{lemma}
+
+\begin{lemma}
+If $U \subseteq V$, and  $x \sim_U y$, then $x \sim_V y$.
+\end{lemma}
+
+\begin{lemma}
+If $c \sim_U d$ and $c \sim_V d$, then $c\sim_{U \cap V} d$.
+\end{lemma}
+
+\begin{proof}
+Let's break this up into
+\[(d_t, d_x) \sim_U (c_t, c_x)\]
+\[(d_t, d_x) \sim_V (c_t, c_x)\]
+and ask for witnesses $t^*_U$ and $t^*_V$ and $x^*_U$ and $x^*_V$ such that
+\[d_t \le t^*_U \qquad c_t \le t^*_U \qquad d_t \le t^*_V \qquad c_t \le t^*_V \]
+\[[d_t, t^*_U] \subseteq U \qquad [c_t, t^*_U] \subseteq U \qquad [d_t, t^*_V] \subseteq V \qquad [c_t, t^*_V]\subseteq V \]
+\[F(d_t \le t^*_U)(d_x) = x^*_U \qquad F(c_t \le t^*_U)(c_x) = x^*_U\]
+\[F(d_t \le t^*_V)(d_x) = x^*_V \qquad F(c_t \le t^*_V)(c_x) = x^*_V\]
+The time we want to advance to is $t^* := \min(t_U^*, t_V^*)$. We then check that
+\[d_t \le t^* \qquad c_t \le t^*\]
+\[[d_t, t^*] \subseteq U \cap V \qquad [c_t, t^*] \subseteq U \cap V\]
+\[F(d_t \le t^*)(d_x) =  F(c_t \le t^*)(c_x) \]
+to show that
+\[(d_t, d_x) \sim_{U \cap V} (c_t, c_x)\]
+\cqed
+\end{proof}
+
+\begin{lemma}
+The intersection of two basic open sets is open.
+\end{lemma}
+
+\begin{proof}
+Let $U, V \subseteq [0,1]$ be given, as well as $a_t \in U$ and $b_t \in V$
+and $a_x \in F(a_t)$ and $b_x \in F(b_t)$. So we have two elements $a = (a_t,a_x)$ and $b = (b_t,b_x)$ from $X$.
+These are the representatives of equivalence classes. We want to show that
+\[[a]_{\sim_U} \cap [b]_{\sim_V}\]
+is an open set. If it's empty, it is trivially open. If it's nonempty, there is
+at least one point $c \in [a]_{\sim_U} \cap [b]_{\sim_V}$, meaning
+that $c \sim_U a$ and $c \sim_V b$. We now want to claim that
+\[[a]_{\sim_U} \cap [b]_{\sim_V} = [c]_{\sim_{U \cap V}}\]
+
+First let's show
+\[[c]_{\sim_{U \cap V}} \subseteq [a]_{\sim_U} \cap [b]_{\sim_V}  \]
+Suppose we have a $d$ with $d \sim_{U \cap V} c$. Therefore
+$d \sim_{U} c$ and $d \sim_{V} c$. By transitivity,
+$d \sim_{U} a$ and $d \sim_{V} b$, as required.
+
+Now let's show
+\[[a]_{\sim_U} \cap [b]_{\sim_V} \subseteq [c]_{\sim_{U \cap V}}\]
+Suppose we have $d$ with $d \sim_U a$ and $d \sim_V b$.
+By transitivity, $d \sim_U c$ and $d \sim_V c$.
+By previous lemma, we are done.
+\cqed
+\end{proof}
+
+I think I see what topology this gives for $(b)$ above --- and it's notable
+that it's not $T_1$. The two `closed points' have the same neighborhoods, since any neighborhood
+in the time dimension lets you project from one point forward and back to the other.
+
+Actually, this is making me think (unfortunately!) that there {\em is} an example of an undesired
+function representation even back in fibrations over $[0,1]$. I'm not sure what's stopping me from
+having basically
+\[
+\begin{tikzpicture}[baseline=-1.5em,
+   dot/.style={circle,fill=black,inner sep=0pt, minimum size=3pt},
+   circ/.style={circle,inner sep=0pt,minimum size=4pt,draw,fill=white},
+   bigcirc/.style={circle,inner sep=0pt,minimum size=12pt,draw,fill=white}]
+\begin{scope}[scale=1]
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,0) (-0.5,-.25) (0,-0.5)};
+\draw plot [smooth, tension=0.8] coordinates {(-0.8,-1) (-0.5,-0.75) (0,-0.5)};
+\draw plot [smooth, tension=0.8] coordinates {(0.8,0) (0.5,-0.25) (0,-0.5)};
+\node[bigcirc]  at (0,-0.5) {};
+\node[dot]  at (.07,-0.55) {};
+\node[dot]  at (-0.07,-0.45) {};
+\end{scope}
+\end{tikzpicture}
+\]
+with {\em two} points right at the conjunction. Fibrant transport is still unique, the only
+problem is that those two points have exactly the same neighborhoods so the space as a whole
+isn't $T_1$.
+
+Is this example also not a sober space? That might be more relevant. I
+think it's not; I think the set of those two points $\{a, b\}$ is an
+irreducible closed set that is the closure of either $a$ or $b$
+independently.
+\subsubsection*{Functoriality of $\Pi$ take 2}
+
+Consider a function $\I \to \I$ such as $k = (\dns * \ups\dns) * \ups\ups$.
+If I try to coerce along it, like $\rcoe_{i.X(k(i))}(a)$ I should conclude
+\[\rcoe_{i.X(k(i))}(a) \equiv \rcoe_{X \o (\dns * \ups\dns) * \ups\ups}(a)\]
+\[ \equiv \rcoe_{X \o (\dns * \ups\dns)} \rcoe_{X \o \ups\ups}(a)\]
+\[ \equiv \rcoe_{X \o \dns} \rcoe_{X \o \ups\dns} \rcoe_{X \o \ups\ups}(a)\]
+\[ \equiv \rcoe_{X \o \dns} \rcoe_{X \o \ups} (a)\]
+\[ \equiv \rcoe_{X} (a)\]
+So maybe aiming for maximal decomposition of $*$ would work better?
+Although the problem is still probably rooted in the connections $i\lor j$ or $i\land j$ or whatever.
+Hmm.
+
+\subsubsection*{Sober spaces and frames and such }
+How can I think above the fibrancy condition if I'm dually talking about algebras of open sets?
+I could draw the diagram
+\[
+\begin{tikzcd}
+  2 \ar[from=r, "x"']\ar[from=d, "0"] & X \ar[from=d]\\
+\Omega\I \ar[from=ur, dotted]\ar[from=r, "f"] & \Omega\I
+\end{tikzcd}
+\]
+or upside down so that the cofibration is on the left:
+\[
+\begin{tikzcd}
+ \Omega \I \ar[r, "f"]\ar[d] & \Omega\I \ar[d, "0"]\\
+X \ar[ur, dotted]\ar[r, "x"'] & 2
+\end{tikzcd}
+\]
+If $f : \I \to \I$ is monotone continuous, what characterizes $f^{-1}
+: \Omega\I \to \Omega \I$? At least it should be the case that it maps
+not just open sets to open sets, but interals to intervals. Is that
+enough? No, that would also include antitone functions. Something
+about how wiggling the bottom coordinate of the interval affects only
+the bottom coordinate of the output. I think a roughly appropriate function
+$g : \Omega \I \to \Omega \I$ arises from a suitable $h : \I \to \I$
+as $g(a,b) = (h(a), h(b))$, where $h$ is mostly injective (except for
+at 0 and 1) surjective and monotone (but not necessarily continuous).
+
+\subsubsection*{Giving up on that direction for now}
+
+Trying to think about things dually seems a bit too hard. Let me proceed by
+believing that a path in $\rset$ is {\em some} kind of sufficiently well-behaved space
+--- probably at least $T_1$ and/or sober, something that excludes the double-point scenario above ---
+over $\I$.
+
+What then is a $2$-path in $\rset$? Clearly at least homotopically gradual reparameterizations of $\I_1$
+should be allowed. Like --- if $i : \I_1 \prov f, g : \I_1$ are monotone, then there
+should be an interpolant
+\[i : \I_1, j : \I_2 \prov j[f,g]: \I_1\]
+such that
+\[i : \I_1 \prov 0[f,g] \equiv f(i)\]
+\[i : \I_1 \prov 1[f,g] \equiv g(i)\]
+So I expect by mere substitution compatibility that at least
+\[ i : \I_1, j : \I_2 \prov X(j[f,g]) : \rset\]
+to be valid, if $X : \I_1 \to \rset$ and $f,g : \I_1 \to \I_1$.
+
+\subsubsection*{Yoneda}
+
+Start with the thought
+\[\hom(yc, F) = F(c)\]
+
+Imagine that $F : C^\op \to \rset$.
+Then it must be that $c : C$. The function $y$ is defined by
+\[y : C \to (C^\op \to \rset)\]
+\[y\ c\ d = d \le c \]
+and of course
+\[\hom : C^\op \to C \to \rset\]
+\[\hom( c, d) = c \le d \]
+So we're really saying
+\[(\lambda d . d \le_C c) \le_{C^\op \to \rset} F = F(c)\]
+Univalence tells us to try to find an isomorphism. Suppose I have
+a path $(\lambda d . d \le_C c) \le_{C^\op \to \rset} F$.
+
+Right away I have a problem. I want to transport from the identity path, but how do I even type it?
+Maybe with some clever shifting around? Let me suppose I could do it. Then maybe I could derive
+$(c \le_C c) \le_{\rset} F\ c$. Then we put in the identity path and get out $F\ c$.
+
+In the other direction, suppose we have an $F\ c$. Then we want to make a path
+$(\lambda d . d \le_C c) \le_{C^\op \to \rset} F$. Maybe it suffices, for every $d: C^\op$, to make a path
+$(d \le_C c) \le_{ \rset} F\ d$ which is essentially a function
+$(d \le_C c) \to F\ d$. And if transport on $F$ works, then we can transport $F\ c$ back to $F\ d$.
+
+\subsubsection*{Identity Paths}
+
+Let's think about the fact that I can't naively have
+\[a : A \prov \ridp : a \le_A a \]
+since ostensibly what I'm supposed to have is
+\[a : A^\op, b : A \prov a \le_A b : \rset\]
+The way I want to weasel out of this is by saying something like
+\[a : \square A \prov \ridp : a \le_A a \]
+where $\square A$ is some shifted type from which I can make (i.e. is a subtype of) both $A$ and $A^\op$.
+
+Let's try to define this carefully. Either the $\I_1$-paths of $A$ correspond to $\I_2$-paths of $\square A$
+or vice versa. Things I know should exist include:
+\begin{enumerate}
+\item $\I_2 \to \I_1$
+\item $\I_2 \to \I_1^\op$
+\item $\square A \to A$
+\end{enumerate}
+
+Ok, so I should be able to map a path $\I_1 \to \square A$ into
+$\I_1 \to A$. Let's assume $\I_1 \to \square A$ is like $\I_2 \to A$. Then this is
+asking me to map $\I_2 \to A$ into $\I_1 \to A$. This would require $\I_1 \to \I_2$,
+which is backwards from what I have.
+
+So I conclude $\I_2 \to \square A$ is like $\I_1 \to A$. Mapping
+$\square A$ into $A$ requires
+mapping $\I_2 \to \square A$ into $\I_2 \to A$ which is equivalent to
+mapping $\I_1 \to A$ into $\I_2 \to A$, which can be achieved with $\I_2 \to \I_1$, which I have.
+I could have also reasoned that I need
+$\I_1 \to \square A$ into $\I_1\to A$ which is like $\I_1 \to \square A$ into $\I_2 \to \square A$, which
+can also be achieved with $\I_2 \to \I_1$, which I have.
+
+That leaves me not really knowing what the $\I_1$-paths in $\square A$ are. But I think the $\I_{n+1}$ paths
+in $\square A$ are the $\I_n$-paths in $A$.
+
+This sort of makes sense. $\square A$ is less connected than $A$ or $A^\op$, so it can map into them.
+It might also be that I'm somehow supposed to do the opposite shift, like
+\[a :  A \prov \ridp : a \le_{\lx A} a \]
+but I don't know how to pick. The approach with $\square$ maybe seems better to the extent that I think I ought to
+at least have identity paths for every type, not just laxified types.
+
+What would intro/elim rules look like for $A$?
+\[
+\erule
+{i : \I_n; \cdot \prov e : A}
+{i : \I_{n+1}; \cdot \prov \square e : \square A}
+\]
+
+\[
+\erule
+{
+{i : \I_{n+1}; \cdot \prov  e : \square A}
+\qquad
+{ x : A \prov  e' : C}
+}
+{i : \I_n; \cdot \prov \blet \square x = e \bin e': C}
+\]
+
+\end{document}
