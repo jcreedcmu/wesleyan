@@ -28,6 +28,7 @@
 \def\bmatch{\mathrel\mathbf{match}}
 \def\bwith{\mathrel\mathbf{with}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
 \def\ups{{\uparrow}}
 \def\dns{{\downarrow}}
 \def\adjust{\big|}
@@ -44,8 +45,10 @@
 \def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
 \def\o{\circ}
 \def\lx{\bigcirc}
-\def\B{\mathbb{B}}
+\def\B{\mathbf{B}}
 \def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
 \def\R{\mathbb{R}}
 \def\two{\mathbf{2}}
 \def\S{\mathbb{S}}
@@ -461,4 +464,265 @@ What would intro/elim rules look like for $A$?
 {i : \I_n; \cdot \prov \blet \square x = e \bin e': C}
 \]
 
+\subsection*{Fibrations}
+Suppose we have $p : \E \to \B$. Let's make up a category $\Sigma p$ whose objects are $\E_0 \cup \B_0$,
+and whose homsets are given by:
+\[\begin{tabular}{l}
+$ \Sigma p [E, E'] = \E[E, E']$\\
+$ \Sigma p [E, B] = \B[pE, B]$\\
+$ \Sigma p [B, B'] = \B[B, B']$\\
+$ \Sigma p [B, E] = \emptyset$
+\end{tabular}
+\]
+So we have all the morphisms from $\B$ and $\E$, and also some `transverse' morphisms $E \to B$.
+To compose $f : E \to E'$ and $g : E' \to B'$ we just compose
+$pf ; g$.
+
+Say $\Sigma p$ `has tranverse pullbacks' if it has all
+pullbacks of transverse morphisms against $\B$-morphisms, and the pullback
+of a transverse identity is another transverse identity.
+\begin{lemma}
+The functor $p$ is a grothendieck fibration iff $\Sigma p$ has transverse pullbacks.
+\end{lemma}
+
+\begin{proof}
+Suppose the desired pullbacks exist. Then we want to show that $p$ is a fibration.
+We need to show that every morphism $f : B' \to B$ has a cartesian lifting for a given
+$E$ that lies over $B$. Well, `$E$ lies over $B$' means $pE = B$, so we actually have $f : B' \to pE$,
+and the identity $\rid_{pE}$ is in $\Sigma p[E, pE]$,
+so we can ask for the pullback
+\[\begin{tikzcd}
+X \ar[r, dotted, "\phi"]\ar[d,dotted, "\pi"']\pbck & E\ar[d, "\rid_{pE}"] \\
+B' \ar[r, "f"'] & pE \\
+\end{tikzcd}\]
+Now observe that $X$ can't come from $\B$, because $\phi : X \to E$. So let's rename $X$ to $E' \in \E$:
+\[\begin{tikzcd}
+E' \ar[r,  "\phi"]\ar[d, "\pi"']\pbck & E\ar[d, "\rid_{pE}"] \\
+B' \ar[r, "f"'] & pE \\
+\end{tikzcd}\]
+Anyhow we said we had transverse pullbacks, so what we have is actually
+\[\begin{tikzcd}
+E' \ar[r,  "\phi"]\ar[d, "\rid_{pE'}"']\pbck & E\ar[d, "\rid_{pE}"] \\
+pE' \ar[r, "p\phi"'] & pE \\
+\end{tikzcd}\]
+Ok, is $\phi$ actually cartesian? We let $E''$ and $\psi : E'' \to E$ and $g : pE'' \to pE$ be given, and the pullback
+gives us $\chi$:
+\[\begin{tikzcd}
+E'' \ar[dr, dotted, "\chi" description] \ar[drr, bend left, "\psi"] \ar[d, "\rid_{pE''}"']\\
+p E''\ar[dr, bend right, "g"']&E' \ar[r,  "\phi"]\ar[d, "\rid_{pE'}"']\pbck & E\ar[d, "\rid_{pE}"] \\
+&pE' \ar[r, "p\phi"'] & pE \\
+\end{tikzcd}\]
+%
+In the other direction, assume $p$ is a fibration. Let's try to find a pullback of
+\[\begin{tikzcd}
+X \ar[r, dotted, "\phi"]\ar[d,dotted, "\pi"']\pbck & E\ar[d, "\rho"] \\
+B' \ar[r, "f"'] & B \\
+\end{tikzcd}\]
+We know that $\rho$, being transverse, factors as
+\[\begin{tikzcd}
+X \ar[r, dotted, "\phi"]\ar[dd,dotted, "\pi"']\pdbck & E\ar[d, "\rid_{pE}"] \\
+& pE \ar[d, "\rho_0"]\\
+B' \ar[r, "f"'] & B \\
+\end{tikzcd}\]
+Maybe we need to ask that $\B$ has pullbacks! Then we could do
+\[\begin{tikzcd}
+X \ar[r, dotted, "\phi"]\ar[d,dotted, "\pi"']\pbck & E\ar[d, "\rid_{pE}"] \\
+B'' \pbck \ar[r] & pE \ar[d, "\rho_0"]\\
+B' \ar[r, "f"'] & B \\
+\end{tikzcd}\]
+and ask the fibration oracle for a cartesian $\phi$;
+\[\begin{tikzcd}
+E' \ar[r, "\phi"]\ar[d, "\rid_{pE'}"']\pbck & E\ar[d, "\rid_{pE}"] \\
+pE' \ar[d, "\rho_1"'] \pbck \ar[r] & pE \ar[d, "\rho_0"]\\
+B' \ar[r, "f"'] & B \\
+\end{tikzcd}\]
+Then we could use the cartesianness of $\phi$ to verify that the top square {\em is} in fact a pullback,
+and maybe we could at least reason that if $\rho_0$ is an isomorphism, then $\rho_1$ must also be?
+\cqed?
+\end{proof}
+
+Not totally sure if this proof actually works, or if it does, whether it accomplishes what I want. What
+about comparing the requirement that $\Pi p$ has pullbacks to a pseudofunctor $\B^\op \to \rset$?
+
+\subsection*{Pictures of Functions}
+[2019.12.20]
+
+If I had a type $A$ which was, more or less, the walking adjunction, i.e.
+the category with two objects $\C$ and $\D$, and two nontrivial
+morphisms $F : \C \to \D$ and $U : \D \to \C$, and two 2-cells
+$\epsilon : FU \to \rid_\D$ and $\eta : \rid_\C \to UF$, satisfying the
+triangle equalities in some appropriate way, then I reckon that paths
+\[ p, q : \C \le_A \C \]
+would be effectively totally ordered sets, in the sense that a path
+\[ f : p \le_{\C \le_A \C} q \]
+would be an order-preserving map from $p$ to $q$.
+
+For example, a 3-element set would be represented by the path
+\[UFUFUF : \C \le_A \C\]
+and an order-preserving map that collapses two of those elements would be
+\[\rid_U * \epsilon * \rid_{FUF} : UFUFUF \le UFUF\]
+
+Another reasonable goal is expressing ordinary non-ordered sets. I might start
+by trying to assert the existence of (internal to a type $B$)
+\[\hbox{points }\ \C, \D\]
+\[\hbox{paths }\ F : \C \le \D,\quad G: \D \le \C\]
+\[\hbox{2-cells }\ \eta : \rid_\C \le UF,\quad \epsilon': UF \le \rid_\C\]
+\[\hbox{3-cells }\ H : \rid_{\rid_\C} \le \epsilon'  \eta,\quad M: \eta \epsilon' \le \rid_{UF}\]
+and now paths
+\[p : \rid_\C \le_{\C \le_B \C} \rid_\C\]
+are {\em something} like sets, and for every function $p \to q$ there does exist some way of getting
+\[p \le_{\rid_\C \le_{\C \le_B \C} \rid_\C} q\]
+However, there are {\em too many} ways, since topologically we keep track of how such functions are {\em braided}.
+
+A question I lack sufficient intuition to answer even intuitively is: if we hop up {\em just one more dimension},
+do we get actual sets and functions, or is there some breakdown of the correspondence at still higher dimensions?
+
+What does it look like if I go up one more dimension?
+\[\hbox{points }\ P_0, P_1\]
+\[\hbox{paths }\ F_0 : P_0 \to P_1,\quad F_1: P_1 \to P_0\]
+\[\hbox{2-cells }\ \alpha_0 : \rid_{P_0} \to F_1F_0,\quad \alpha_1: F_1F_0 \to \rid_{P_0}\]
+\[\hbox{3-cells }\ m_0 : \rid_{\rid_{P_0}} \to \alpha_1\alpha_0,\quad m_1 : \alpha_1\alpha_0 \to \rid_{\rid_{P_0}} \]
+\[\hbox{4-cells }\ \eta : \rid^3_{P_0} \to m_1m_0,\quad \mu : m_0m_1 \to \rid_{\alpha_1\alpha_0} \]
+Notice how the two $4$-cells we postulate break the pattern of the previous two dimensions; instead of showing
+how a sphere-like shape can appear and disappear, it shows (with $\eta$) how a sphere can {\em appear},
+but (with $\mu$) how a pair of hemispheres can be joined.
+
+Here the things that seem like they might behave like sets are the 3-cells
+\[ p : \rid^2_{P_0} \to \rid^2_{P_0}\]
+We also can say that $\rid^3_{P_0}$ is the empty set, and $m_1 m_0$ is the $1$-element set.
+So $\eta$ is simply the unique map $0 \to 1$. Now $\mu$ is {\em not} quite the unique map $2 \to 1$,
+but that map (which has type $m_1m_0m_1m_0 \to m_1m_0$) can straightforwardly be derived from
+it by precomposition and postcomposition of $m_0$ and $m_1$.
+
+Now what happens if I start with $\rset$ and work backwards? I say
+that I think $\rset$ is equivalent to loops in some type $S$, namely
+\[\rset = (\iota \to_{S} \iota)\]
+For $\iota : S$ that plays the role of $\rid^2_{P_0}$. Here $S$ is like $\rid_{P_0} \to \rid_{P_0}$.
+I notice $\alpha_1\alpha_0 : \rid_{P_0} \to \rid_{P_0}$, so it's also an element of $S$.
+Call it $\upsilon : S$. The 2-cell $\upsilon$ is the `one-element set' of a two-dimensional slice of space.
+I believe in the existence of $m_0 : \iota \to \upsilon$ and $m_1 : \upsilon \to \iota$.
+And $\eta : \rid_\iota \to m_1 m_0$ and $\mu : m_0 m_1 \to \rid_{\upsilon}$.
+
+Now $S$ itself should also be a loop space.
+\[S = (\iota' \to_{S'} \iota')\]
+so the analogy goes
+\[
+\begin{tabular}{l|l}
+$\iota$&$\rid^2_{P_0}$\\
+$\iota'$&$\rid_{P_0}$\\
+$S$&$\rid_{P_0} \to \rid_{P_0}$\\
+$S'$&${P_0} \to {P_0}$\\
+$\upsilon$&$\alpha_1\alpha_0$\\
+\end{tabular}
+\]
+
+Actually, wait, maybe the immediate precursor to $\rset$ has a simple description unto itself.
+Let's still call it $S$. It has elements $\upsilon$ and $\iota$, which are `1-element' and `0-element' sets.
+Can I to hope for the equivalence of types
+\[S = (\iota \to_{S} \iota)\]
+? No, actually probably not, because then I can't believe that $\rset$ satisfies that same property. Let's try to imagine a table
+like so:
+\[ C'' : \iota'' \to \upsilon'',\quad D'': \upsilon'' \to \iota''\]
+\[ C' : \iota' \to \upsilon',\quad D' : \upsilon' \to \iota' \]
+\[ C : \iota \to \upsilon,\quad \mu : C'D' \to \rid_{\upsilon'} \]
+\[\upsilon = D'C'\qquad \iota = \rid_{\iota'}\]
+\[\upsilon' = D''C''\qquad \iota' = \rid_{\iota''}\]
+\[\upsilon'' = D'''C'''\qquad \iota'' = \rid_{\iota'''}\]
+expanding out a bit:
+\[
+\begin{tabular}{ll}
+$ C_2 : \iota_3 \to \upsilon_3$ & $ D_2: \upsilon_3 \to \iota_3 $\\
+$ C_1 : \iota_2 \to \upsilon_2$ & $ D_1: \upsilon_2 \to \iota_2 $\\
+$ C_0 : \iota_1 \to \upsilon_1$ & $ D_0 : \upsilon_1 \to \iota_1 $\\
+$ \eta : \iota_0 \to \upsilon_0$ & $ \mu : C_0D_0 \to \rid_{\upsilon_1} $
+\end{tabular}
+\]
+\[\iota_n = \rid_{\iota_{n+1}} : \iota_{n+1} \to \iota_{n+1}\]
+\[\upsilon_n = D_n C_n : \iota_{n+1} \to \iota_{n+1}\]
+Ok, so $\eta$ actually is a path in $\rset$, i.e. a function from the 0-element set to the 1-element
+set. That means $D_0C_0$ is supposed to be an {\em element} of
+$\rset$, but it looks like a path. So let's say it's a path in $S_0$. So $D_0, C_0$ are paths in $S_0$.
+And $D_i, C_i$ are paths in $S_i$. An object of $\rset$ is a path $1 \to 1$ in $S_0$.
+
+Ok, so that means $\iota_{n+1}, \upsilon_{n+1}$ are supposed to be {\em elements} of $S_n$. And
+\[ S_n = (\iota_{n+2} \to_{S_{n+1}} \iota_{n+2}) \]
+Hm, not sure I like this. Let's try reindexing:
+
+\[
+\begin{tabular}{ll}
+$ C_2 : \iota_2 \to \upsilon_2$ & $ D_2: \upsilon_2 \to \iota_2 $\\
+$ C_1 : \iota_1 \to \upsilon_1$ & $ D_1: \upsilon_1 \to \iota_1 $\\
+$ C_0 : \iota_0 \to \upsilon_0$ & $ D_0 : \upsilon_0 \to \iota_0 $\\
+$ \eta : \rid_{\iota_0} \to D_0C_0$ & $ \mu : C_0D_0 \to \rid_{\upsilon_0} $
+\end{tabular}
+\]
+\[\iota_n = \rid_{\iota_{n+1}} : \iota_{n+1} \to \iota_{n+1}\]
+\[\upsilon_n = D_{n+1} C_{n+1} : \iota_{n+1} \to \iota_{n+1}\]
+Here $\rset = \iota_0 \to \iota_0$ and $S_n = \iota_{n+1} \to \iota_{n+1}$.
+
+\subsubsection*{Starting Fresh}
+Postulate:
+\[
+\begin{tabular}{ll}
+$  \iota_n : S_n $ & $ \upsilon_n : S_n $\\
+$ C_n : \iota_n \le \upsilon_n$ & $ D_n: \upsilon_n \le \iota_n $\\
+$ \eta : \rid_{\iota_0} \le D_0C_0$ & $ \mu : C_0D_0 \le \rid_{\upsilon_0} $
+\end{tabular}
+\]
+Postulate an equivalence $\phi : S_n \to (\iota_{n+1} \le \iota_{n+1})$, then assert
+\[\phi(\iota_n) = \rid_{\iota_{n+1}} : \iota_{n+1} \le \iota_{n+1}\]
+\[\phi(\upsilon_n) = D_{n+1} \o C_{n+1} : \iota_{n+1} \le \iota_{n+1}\]
+
+
+Then I can `read off' $\rset$ as whatever $\iota_0 \le \iota_0$  turns out to be;
+the empty set is $\rid_{\iota_0}$, and the singleton is $D_0C_0$, and union is composition.
+
+\subsubsection*{Delooping}
+What are the sets and morphisms of the deloopings of $\rset$? Naively they look like sets,
+and something like injective relations between sets with some collateral noise $Y:\rset$, i.e. spans
+\[
+\left(
+\begin{tikzcd}
+  &X\ar[dl, >->]\ar[dr, >->]\\
+A && B
+\end{tikzcd}, Y
+\right)
+\]
+where all arms are mono. Actually maybe this is better represented as
+$X_\emptyset, X_{A}, X_{B}, X_{A,B}$, which is a `morphism'
+from $X_A + X_{A, B}$ to $X_B + X_{A, B}$.
+
+Better to say: A morphism from $A$ to $B$ is some sets
+\[(X_\emptyset, X_{A}, X_{B}, X_{A,B})\]
+and some isos $A \cong X_A + X_{A, B}$ and $B \cong X_B + X_{A, B}$.
+Then the composition of $X : A \to B$ and $Y : B \to C$ is
+\[(X_\emptyset + Y_\emptyset + X_B \times_B Y_B, \]
+\[X_A + X_{A, B} \x_B Y_B,\]
+\[ X_B \x_B Y_{B, C} + Y_C,\]
+\[ X_{A,B} \x_B Y_{B,C} ) \]
+
+\subsubsection*{Triangle Equalities}
+
+I was mistaken above thinking just the $DC \leftrightarrow 1$ cells were sufficient.
+For a composition of, e.g. an arbitrary function $1 \to 2$ followed by $!: 2\to 1$
+to behave correctly, we do have to have triangle equalities for the adjunction.
+
+So I start with
+\[\begin{tabular}{lll}
+  {objects}& $z, u $\\
+  {morphisms}& $F : z \to u$& $U : u \to z $\\
+  {2-cells}& $\eta : \rid_z \to UF$& $\epsilon : FU \to \rid_u $\\
+  {3-cells}& $\dash : \rid_{U} \leftrightarrow (\rid_{U} * \epsilon) \o (\eta * \rid_{U})$\\
+  & $\dash : \rid_{F} \leftrightarrow (\epsilon * \rid_{F}) \o (\rid_{F} * \eta)$
+\end{tabular}\]
+
+\subsubsection*{Homotopy Types as Spaces Concretely}
+
+If I have all four of $\eta : 1 \leftrightarrow UF : \eta'$ and $\epsilon : FU \leftrightarrow 1 : \epsilon'$, then I can make
+arbitrary non-simply-connected 2d shapes as well. E.g. here's a circle type:
+\[ \eta' \o (\rid_U * (\epsilon \o \epsilon') * \rid_F) \o \eta\]
+I speculate that some appropriate set
+of higher dimensional cells that is {\em not} the fully ramified tree of equivalence cells
+would express what kind of {\em functions} could be defined, which behave like HoTT functions
+with respect to holes in spaces.
 \end{document}
