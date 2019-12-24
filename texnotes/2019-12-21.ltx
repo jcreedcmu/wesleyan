@@ -40,6 +40,7 @@
 \def\int{\square}
 \def\bd{\partial}
 \def\prov{\vdash}
+\def\pprov{\vdash\!\!\!\vdash}
 \def\prequiv{\dashv\vdash}
 \def\imp{\Rightarrow}
 \def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
@@ -152,10 +153,481 @@ $[x_-, x_+] \x \{y'\}$, for any $y' \in (y_-, y)$.
 \begin{proof}
 By continuity, $f_y > 0$ and $f_{xx} > 0$ at the point $(x,y)$ means we can assume a sufficiently
 small region to ensure that those hold throughout the region.
-
-
-
+\ldots
 \cqed
 \end{proof}
 
+\subsubsection*{Morse Theory Patterns?}
+
+I assert that the 1-critical points are those where $f = 0$. The interesting thing
+about a {\em non}-1-critical point $p$ is that since $f \ne 0$ and $f$ is smooth, then given a sufficiently
+small $\Delta x$, I find that $p + \Delta x$ is also on the same side of zero as $p$.
+
+Similarly, here is my justification that the
+appropriate definition of 2-critical is $f = 0 \land f_x = 0$:
+
+If a point $p\in \R^n$ is 1-critical and not 2-critical, then given $\Delta y$
+I can find a point $p + \Delta x + \Delta y$ that is also 1-critical. Let $\Delta y$ be given.
+I know that approximately
+\[f(p + \Delta x + \Delta y) = f(p) + f_x(p)\Delta x + f_y(p)\Delta y\]
+or more simply
+\[0 = f(p + \Delta p) = f + f_x\Delta x + f_y\Delta y\]
+We can observe that $f = 0$ by assumption, and solve for $\Delta x$ and get
+\[\Delta x = -(f_y/f_x)\Delta y    \]
+So as long as $f_x = 0$ we're fine, and we can `push' the 1-critical
+point forward (or backward) in the $y$ direction.
+
+What does 3-criticality mean, then? Suppose we're given a point $p$ that is 2-critical
+(so $f = 0$ and $f_x = 0$ at $p$) and we're given $\Delta z$ and we want to find
+$\Delta x,\Delta y$ such that the displaced point is 2-critical, i.e.
+\[f(p + \Delta p) = 0
+\qquad
+f_x(p + \Delta p) = 0\]
+we know approximately that
+\[ 0 = f + f_x \Delta_x + f_y \Delta_y + f_z \Delta_z \]
+\[ 0 = f_x + f_{xx} \Delta_x + f_{xy} \Delta_y + f_{xz} \Delta_z \]
+but we know $f, f_x$ are zero, so
+\[ 0 = f_y \Delta_y + f_z \Delta_z \]
+\[ 0 = f_{xx} \Delta_x + f_{xy} \Delta_y + f_{xz} \Delta_z \]
+we can solve for $\Delta_x, \Delta_y$ to get
+\[  \Delta_y = -(f_z/f_y) \Delta_z \]
+\[  \Delta_x  = - (f_{xy} \Delta_y + f_{xz} \Delta_z) / f_{xx} \]
+So if {\em either} $f_y$ and $f_{xx}$ are zero, we have a potential obstacle
+to this lifting. And indeed I can come up with examples that seem appropriately
+critical, that make only one of them zero at a time.
+
+One example is
+
+\[f = x^3 + xz + y\]
+which, if $z$ is negative, looks like the general two-extrema cubic, (and so an example
+of an adjoint zig-zag) and if $z$ is positive, it has no extrema. Another example is
+\[f = x^2 + y^2 + z\]
+which is a circle if $z$ is negative, and empty if $z$ is positive.
+The first function has $f_y > 0$ and $f_{xx} = 0$ at the origin,
+the second function has $f_y = 0$ and $f_{xx} > 0$ at the origin.
+
+I can capture this disjunction by saying that the product is zero. So
+the table I have of conjunctively increasing requirements for criticality
+looks like:
+\[
+\begin{tabular}{l|l}
+  \hline
+1&$f $\\
+2&$f_x $\\
+3&$f_{xx} f_{y} $\\
+\end{tabular}
+\]
+
+Taking the next step seemed a little challenging, though, when I tried to work it out on paper.
+Suppose I have a point $p$ which is 3-critical, for which $f = 0$, and $f_x = 0$, and $f_{xx}f_y = 0$.
+Someone hands me $\Delta w$.
+I want to find $\Delta x, \Delta y, \Delta z$ such that $f(p + \Delta p)$ is also 3-critical. This means
+\[ f(p + \Delta p) = 0\qquad f_x(p + \Delta p) = 0 \qquad f_{xx}(p + \Delta p)f_{y}(p + \Delta p) = 0\]
+so I insert approximations
+\[ 0 = f + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 = (f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w)
+(f_{xx} + f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w) \]
+I can simplify the first two a little knowing what I know about things being zero:
+\[ 0 = f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+Hm, maybe I should multiply the first equation by $f_{xx}$? Then I get
+\[ 0 =  f_{z}f_{xx}\Delta z + f_{w}f_{xx}\Delta w \]
+and
+\[ \Delta z = -(f_{w}f_{xx}  / f_{z}f_{xx})\Delta w\]
+Then I could multiply the second equation by $f_y$ and get
+\[ 0 =  f_{xy}f_{y}\Delta y + f_{xz}f_{y}\Delta z + f_{xw}f_{y}\Delta w \]
+and thus
+\[ \Delta y =  -( f_{xz}f_{y}\Delta z + f_{xw}f_{y}\Delta w)/ f_{xy}f_{y} \]
+Finally I turn my attention back to
+\[ 0 = (f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w)
+(f_{xx} + f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w) \]
+and rewrite everything which has a known value as $K_n$:
+\[ 0 = ( f_{xy}\Delta x + K_1) ( f_{xxx}\Delta x + K_2) \]
+Multiply out, and recklessly assume $\Delta x^2 = 0$?
+\[ 0 = \Delta x(f_{xy} K_2 + f_{xxx} K_1) + K_1 K_2\]
+No, this is a terrible outcome, I can't work very well with this.
+
+\subsubsection*{Dealing Differently with Different Criticalities}
+
+Let's think about the $f_{xx}$ and $f_y$ cases separately, then.
+Suppose I have a point that is $f_{xx}$-critical, for which $f = 0$, and $f_x = 0$, and $f_{xx} = 0$.
+Someone hands me $\Delta w$.
+I want to find $\Delta x, \Delta y, \Delta z$ such that $f(p + \Delta p)$ is also $f_{xx}$-critical. This means
+\[ f(p + \Delta p) = 0\qquad f_x(p + \Delta p) = 0 \qquad f_{xx}(p + \Delta p) = 0\]
+so I insert approximations
+\[ 0 = f + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 = f_{xx} + f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w \]
+Knowing what I know about $p$, I simplify to
+\[ 0 =  f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 =  f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 =  f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w \]
+Now it seems that if $f_y f_{xz} - f_{xy} f_z$ and $f_{xxx}$ are both nonzero, then
+I can solve this for $\Delta x, \Delta y, \Delta z$. The expression
+$f_y f_{xz} - f_{xy} f_z$ I recognize as the determinant
+\[
+\left|\begin{array}{cc}
+f_y & f_{xy}\cr
+f_z & f_{xz}
+\end{array}\right|
+\]
+which is sort of like an outer product $(y, z) \x (\cdot, x)$.
+
+Let's think about the $f_y$ case.
+Suppose I have a point that is $f_{y}$-critical, for which $f = 0$, and $f_x = 0$, and $f_{y} = 0$.
+Someone hands me $\Delta w$.
+I want to find $\Delta x, \Delta y, \Delta z$ such that $f(p + \Delta p)$ is also $f_{y}$-critical. This means
+\[ f(p + \Delta p) = 0\qquad f_x(p + \Delta p) = 0 \qquad f_{y}(p + \Delta p) = 0\]
+so I insert approximations
+\[ 0 = f + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 = f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w \]
+Knowing what I know about $p$, I simplify to
+\[ 0 =  f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 =  f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 =  f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w \]
+To solve this, I need $f_z$ to be nonzero, and for $f_{xx}f_{yy} - f_{xy}^2$ to be nonzero,
+the latter which is essentially the determinant
+\[
+\left|\begin{array}{cc}
+f_{xx} & f_{xy}\cr
+f_{xy} & f_{yy}
+\end{array}\right|
+\]
+which arises as $(x,y) \x (x,y)$.
+So my table is now a branching tree, something like
+\[
+\begin{tabular}{l|l}
+  \hline
+1&$\cdot $\\
+2&$x $\\
+3&$[xx, y] $\\
+4&$[[xxx, (y,z) \x (\cdot, x)], [(x,y) \x (x,y), z  ]] $\\
+\end{tabular}
+\]
+\subsubsection*{Iterating Further}
+As a warm-up, I'm going to try iterating on $xxx$ and $z$. I'm not
+sure if I'm going to be able to understand what happens to the
+determinantal cases easily.
+
+Let's try $z$ first.
+Suppose I have a point that is $f_{z}$-critical, meaning that I know all of
+$f, f_x, f_y, f_z$ are zero. Someone hands me $\Delta v$.
+I want to find $\Delta x, \Delta y, \Delta z, \Delta w$ such that $f(p + \Delta p)$ is also $f_{z}$-critical. This means
+all of $f, f_x, f_y, f_z$ are zero at $p + \Delta p$.
+so I insert approximations
+\[ 0 = f_{} + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 = f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{zy}\Delta z + f_{wy}\Delta w + f_{vy}\Delta v\]
+\[ 0 = f_{z} + f_{xz}\Delta x + f_{yz}\Delta y + f_{zz}\Delta z + f_{wz}\Delta w + f_{vz}\Delta v\]
+
+Knowing what I know about $p$, I simplify to
+\[ 0 =  f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 = f_{xx}\Delta x + f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 = f_{xy}\Delta x + f_{yy}\Delta y + f_{zy}\Delta z + f_{wy}\Delta w + f_{vy}\Delta v\]
+\[ 0 = f_{xz}\Delta x + f_{yz}\Delta y + f_{zz}\Delta z + f_{wz}\Delta w + f_{vz}\Delta v\]
+So this means that I need $f_w$ to be nonzero to solve for $\Delta w$, and also I need
+\[
+\left|\begin{array}{ccc}
+f_{xx} & f_{yx} & f_{zx}\cr
+f_{xy} & f_{yy} & f_{zy}\cr
+f_{xz} & f_{yz} & f_{zz}
+\end{array}\right|
+\]
+to be nonzero. That makes sense. The derivatives that need to be nonzero to preserve
+$f_{z}$ criticality are $w$ and $(x,y,z) \x (x,y,z)$.
+
+Let's try $f_{xxx}$, then.
+Suppose I have a point that is $f_{xxx}$-critical, meaning that I know all of
+$f, f_x, f_{xx}, f_{xxx}$ are zero. Someone hands me $\Delta v$.
+I want to find $\Delta x, \Delta y, \Delta z, \Delta w$ such that $f(p + \Delta p)$ is also $f_{xxx}$-critical. This means
+all of $f, f_x, f_{xx}, f_{xxx}$ are zero at $p + \Delta p$.
+\[ 0 = f_{} + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 = f_{xx} + f_{xxx}\Delta x + f_{yxx}\Delta y + f_{zxx}\Delta z + f_{wxx}\Delta w + f_{vxx}\Delta v\]
+\[ 0 = f_{xxx} + f_{xxxx}\Delta x + f_{yxxx}\Delta y + f_{zxxx}\Delta z + f_{wxxx}\Delta w + f_{vxxx}\Delta v\]
+Knowing what I know about $p$, I simplify to
+\[ 0 =  f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 =  f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 =  f_{yxx}\Delta y + f_{zxx}\Delta z + f_{wxx}\Delta w + f_{vxx}\Delta v\]
+\[ 0 =  f_{xxxx}\Delta x + f_{yxxx}\Delta y + f_{zxxx}\Delta z + f_{wxxx}\Delta w + f_{vxxx}\Delta v\]
+Here I need the nonzeroness of the determinant
+\[
+\left|\begin{array}{ccc}
+f_{y} & f_{z} & f_{w}\cr
+f_{yx} & f_{zx} & f_{wx}\cr
+f_{yxx} & f_{zxx} & f_{wxx}
+\end{array}\right|
+\]
+to solve the first three equations for $\Delta y, \Delta z, \Delta w$, then I can
+rely on the $xxxx$ derivative being nonzero to give me $\Delta x$.
+So to preserve $xxx$-criticality, I need $xxxx$ and $(\cdot, x, xx) \x (y, z, w)$.
+
+\subsubsection*{Diving into the Hard Case}
+Let's suppose I have a $(x,y)\x (x,y)$-critical point.
+This means I know that $f, f_x, f_y, f_{xx}f_{yy} - f_{xy}^2$ are all zero at $p$.
+Someone hands me $\Delta v$.
+I want to find $\Delta x, \Delta y, \Delta z, \Delta w$ such that $f(p + \Delta p)$ is also
+$(x,y)\x (x,y)$-critical.
+This means I know that $f, f_x, f_y, f_{xx}f_{yy} - f_{xy}^2$ are all zero at $p + \Delta p$.
+\[ 0 = f_{} + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 = f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{zy}\Delta z + f_{wy}\Delta w + f_{vy}\Delta v\]
+\[ 0 = (f_{xx} + f_{xxx}\Delta x + f_{yxx}\Delta y + f_{zxx}\Delta z + f_{wxx}\Delta w + f_{vxx}\Delta v)\]
+\[(f_{yy} + f_{xyy}\Delta x + f_{yyy}\Delta y + f_{zyy}\Delta z + f_{wyy}\Delta w + f_{vyy}\Delta v) -{}\]
+\[(f_{xy} + f_{xxy}\Delta x + f_{yxy}\Delta y + f_{zxy}\Delta z + f_{wxy}\Delta w + f_{vxy}\Delta v)^2\]
+Simplifications I know how to do include
+\[ 0 =  f_{z}\Delta z + f_{w}\Delta w + f_{v}\Delta v\]
+\[ 0 =  f_{xx}\Delta x + f_{yx}\Delta y + f_{zx}\Delta z + f_{wx}\Delta w + f_{vx}\Delta v\]
+\[ 0 =  f_{xy}\Delta x + f_{yy}\Delta y + f_{zy}\Delta z + f_{wy}\Delta w + f_{vy}\Delta v\]
+Don't see how to make progress yet. If I assume $\Delta^2 = 0$, I can simplify the last equation from the original
+batch to
+\[ 0 = f_{xx}f_{yy} + f_{yy} ( f_{xxx}\Delta x + f_{yxx}\Delta y + f_{zxx}\Delta z + f_{wxx}\Delta w + f_{vxx}\Delta v)\]
+\[f_{xx} (  f_{xyy}\Delta x + f_{yyy}\Delta y + f_{zyy}\Delta z + f_{wyy}\Delta w + f_{vyy}\Delta v) -{}\]
+\[f_{xy}^2 - 2 f_{xy} ( f_{xxy}\Delta x + f_{yxy}\Delta y + f_{zxy}\Delta z + f_{wxy}\Delta w + f_{vxy}\Delta v)\]
+which is the same as
+\[ 0 =  f_{yy} ( f_{xxx}\Delta x + f_{yxx}\Delta y + f_{zxx}\Delta z + f_{wxx}\Delta w + f_{vxx}\Delta v)\]
+\[f_{xx} (  f_{xyy}\Delta x + f_{yyy}\Delta y + f_{zyy}\Delta z + f_{wyy}\Delta w + f_{vyy}\Delta v) -{}\]
+\[ 2 f_{xy} ( f_{xxy}\Delta x + f_{yxy}\Delta y + f_{zxy}\Delta z + f_{wxy}\Delta w + f_{vxy}\Delta v)\]
+which is at least linear in $\Delta$'s, so it seems like I should get some kind of reasonable determinantal expression
+for what needs to be nonzero.
+
+But I feel sort of stuck as to how to express it.
+
+\subsubsection*{Reexamining the `Terrible Outcome'}
+
+I can consider the knowledge that 3-criticality means $f_{xx} = 0$ or $f_{y} = 0$ as the determinant
+\[
+\left|\begin{array}{ccc}
+f_{x} & f_{y} \cr
+f_{xx} & f_{xy}
+\end{array}\right|
+\]
+being zero. I just happen to know that $f_x = 0$ also.
+
+Suppose I have a point $p$ for which $f, f_x, $ and $f_{xx}f_y$ are all zero.
+Someone hands me $\Delta w$.
+I want to find $p + \Delta_p$ such that $p + \Delta p$ shares this criticality.
+So I look to approximations
+\[ 0 = f + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 = (f_{y} + f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w)\]
+\[(f_{xx} + f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w) \]
+I can simplify by assuming that products of $\Delta$'s are zero:
+\[ 0 = f + f_{x}\Delta x + f_{y}\Delta y + f_{z}\Delta z + f_{w}\Delta w \]
+\[ 0 = f_{x} + f_{xx}\Delta x + f_{xy}\Delta y + f_{xz}\Delta z + f_{xw}\Delta w \]
+\[ 0 = f_{xx} (f_{xy}\Delta x + f_{yy}\Delta y + f_{yz}\Delta z + f_{yw}\Delta w)\]
+\[f_y( f_{xxx}\Delta x + f_{xxy}\Delta y + f_{xxz}\Delta z + f_{xxw}\Delta w) \]
+so the determinant I get is then
+\[
+\left|\begin{array}{ccc}
+f_{x} & f_{y} & f_{z}\cr
+f_{xx} & f_{xy} & f_{xz} \cr
+f_{xx}f_{xy} + f_yf_{xxx} & f_{xx}f_{yy} + f_yf_{xxy} & f_{xx}f_{yz} + f_yf_{xxz} \cr
+\end{array}\right|
+\]
+and I happen to know that $f_x = 0$ so this is really
+\[
+\left|\begin{array}{ccc}
+0 & f_{y} & f_{z}\cr
+f_{xx} & f_{xy} & f_{xz} \cr
+f_{xx}f_{xy} + f_yf_{xxx} & f_{xx}f_{yy} + f_yf_{xxy} & f_{xx}f_{yz} + f_yf_{xxz} \cr
+\end{array}\right|
+\]
+I do see that if $f_{xx} = f_{xxx} = 0$, this determinant is zero.
+Likewise if $f_y = f_z = 0$. Likewise if $f_{xx}$ is zero and the $(y,z)\x(1,\cdot)$ determinant is zero.
+And the bottom row of this is a collection of matrix permanents: I don't know quite how to notate it, but something
+along the lines of
+\[
+\left|\begin{array}{ccc}
+0 & y & z\cr
+xx & xy & xz \cr
+(xx, y) \x (\cdot, x) & (xx, y) \x (\cdot, y) & (xx, y) \x (\cdot, z) \cr
+\end{array}\right|
+\]
+
+\subsubsection*{Trying to Generalize}
+Let's say we have one form of criticality which is captured by a sequence of polynomials in
+derivatives of $f$ being simultaneously zero. Let's use $\sigma$ for multisets of coordinates, the things
+that we differentiate $f$ by. Let's use $\mu$ for multisets {\em of} multisets of coordinates, so
+that $f_\mu$ is a term in one of these polynomials. For example, if $\sigma = \{x, x, y\}$, then
+$f_\sigma = f_{xxy}$. If $\mu = \{\{x, x, y\}, \{x, x, y\}, z\}$, then $f_\mu = f_{xxy}^2f_z$.
+Generally
+\[f_\mu = \prod_{\sigma \in \mu} f_\sigma\]
+\[f_\sigma = \left(\prod_{v \in \sigma} {\partial \over \partial v}\right) f\]
+where the latter product is really operator composition, whereas the former is the ordinary product in $\R$.
+Finally say $\tau$ is a real-coefficient formal sum over $\mu$s, and
+\[f_\tau = \sum_{\mu \in \tau} f_\mu \]
+So like if $\tau = (1/2)\{\{x, x, y\}, \{x, x, y\}, z\} - \{\{w\}\}$, then
+$f_\tau = (1/2)f_{xxy}^2f_z  - f_w$.
+
+Now we suppose we have a notion of criticality that is captured by $f_{\tau_1}, \ldots, f_{\tau_n}$ being zero
+for all $n$. Suppose the arguments to $f$ that matter for criticality are $x_1, \ldots, x_{n}$.
+(Note that we {\em are} reusing $n$, to ensure a square matrix in a moment)
+We want to be able to push critical points along the coordinate $y$.
+
+So we are given $\Delta y$ and we want to find $\Delta x_1, \ldots, \Delta x_n$ such that
+$f(p + \Delta p)$ is also critical. We have $n$ equations
+\[0 = f_{\tau_1}(p + \Delta p) \qquad \cdots\qquad 0 = f_{\tau_n}(p + \Delta p)\]
+in $n$ variables $\Delta x_i$. We just need to expand out the linear approximations
+to $f_{\tau_i}$ as linear functions in $\Delta x_j$, and say that the determinant of the resulting
+matrix is the criticality discriminant.
+
+Let's try to do this from examples starting from the beginning again. The very first
+criticality discriminant is just $f$. Here $n$ is 1. We want to solve for $\Delta x$ given $\Delta y$.
+The linear approximation of $f$ is $f + f_x \Delta x + f_y \Delta y$, and we ignore the $f$
+part because it's zero, and ignore the $f_y\Delta y$ because it's a constant, so our discriminant is just
+$f_x$.
+
+Next our two criticality conditions are $f$ and $f_x$. Here $n = 2$. We want to solve for $\Delta x, \Delta y$
+given $\Delta z$. The linear approximations of $f,f_x$ at a point where both of them are zero is
+\[ f_{x}\Delta x + f_{y}\Delta y + C\]
+\[ f_{xx}\Delta x + f_{xy}\Delta y + C\]
+so the result is the determinant
+\[
+\left|\begin{array}{ccc}
+f_{x} & f_{y} \cr
+f_{xx} & f_{xy}
+\end{array}\right|
+\]
+
+Let's just practice on a generic $f_\sigma f_{\sigma'}$. What is its linear approximation?
+It'll be
+\[ (f_\sigma + f_{\sigma x_1} \Delta x_1 + \cdots + f_{\sigma x_n} \Delta x_n)
+(f_{\sigma'} + f_{{\sigma'} x_1} \Delta x_1 + \cdots + f_{{\sigma'} x_n} \Delta x_n) \]
+\[ =  f_{\sigma'}( f_{\sigma x_1} \Delta x_1 + \cdots + f_{\sigma x_n} \Delta x_n)
++ f_\sigma(  f_{{\sigma'} x_1} \Delta x_1 + \cdots + f_{{\sigma'} x_n} \Delta x_n) \]
+\[ =  \Delta x_1 (f_{\sigma'} f_{\sigma x_1} + f_\sigma f_{{\sigma'} x_1} )
++ \cdots + \Delta x_n (f_{\sigma'} f_{\sigma x_n} + f_\sigma f_{{\sigma'} x_n} )\]
+
+What if we have $\prod_{i = 1}^k f_{\sigma_i}$? That'll be
+\[\prod_{i=1}^k \left(f_{\sigma_i} + \sum_{j = 1}^n f_{\sigma_i x_j} \Delta x_j \right)\]
+\[= \left(\prod_{i=1}^k f_{\sigma_i}\right) + \sum_{i = 1}^k \left(\prod_{i' \ne i} f_{\sigma_{i'}}\right) \sum_{j = 1}^n
+ f_{\sigma_i x_j} \Delta x_j \]
+\[=  \sum_{i = 1}^k \left(\prod_{i' \ne i} f_{\sigma_{i'}}\right) \sum_{j = 1}^n
+ f_{\sigma_i x_j} \Delta x_j \]
+\[= \sum_{j = 1}^n \Delta x_j \sum_{i = 1}^k \left(\prod_{i' \ne i} f_{\sigma_{i'}}\right)  f_{\sigma_i x_j}  \]
+So the $j^{th}$ entry in the row for that criticality condition is
+\[\sum_{i = 1}^k \left(\prod_{i' \ne i} f_{\sigma_{i'}}\right)  f_{\sigma_i x_j}\]
+
+Does this match up with what I had for the $f_{xx}f_y$ case? It predicts:
+
+\[  f_{\sigma_{2}}  f_{\sigma_1 x_j} + f_{\sigma_{1}}  f_{\sigma_2 x_j}\]
+\[  = f_{y}  f_{xx x_j} + f_{xx}  f_{y x_j}\]
+\[  = (f_{y}  f_{xx x} + f_{xx}  f_{y x}, f_{y}  f_{xx y} + f_{xx}  f_{y y}, f_{y}  f_{xx z} + f_{xx}  f_{y z})\]
+so yes!
+
+Another way of phrasing the criticality condition row entry is
+\[C(f_\mu)_j = \sum_{\sigma \in \mu} {f_\mu  f_{\sigma + x_j}\over f_\sigma}\]
+And I think it's linear over linear combinations as well. So if I start with a list of
+criticality conditions $\tau_1, \ldots, \tau_n$, the next one is
+\[|C| = 0\]
+where $C$ is the matrix defined by
+\[C_{ij} = \sum_{\mu\in\tau_i}\sum_{\sigma \in \mu} {f_\mu  f_{\sigma + x_j}\over f_\sigma}\]
+Let's revisit my table in light of that:
+\[
+\begin{tabular}{l|l}
+  \hline
+1&$f $\\
+2&$f_x $\\
+3&$f_{xx}f_y - f_x f_{xy}$\\
+4&$D_4$\\
+\end{tabular}
+\]
+where $D_4$ is
+\[\left|\begin{array}{ccc}
+f_x & f_{y} & f_{z}\cr
+f_{xx} & f_{xy} & f_{xz} \cr
+f_{xx}f_{xy} + f_yf_{xxx}\atop - f_{xx}f_{xy} - f_x f_{xxy} & \cdots & \cdots \cr
+\end{array}\right|\]
+Wait, there's a big simplification staring me right in the face here. This mucking around
+with multisets is just taking derivatives.
+I want to define the functions $D_i$ inductively. We say $D_1 = f$. We say
+\[ D_{n+1} = \det_{1\le i,j \le n} {\partial D_i \over \partial x_j}  \]
+A point is $n$-critical if $D_1 = \cdots = D_n = 0$. That's it! So nice and simple.
+
+\subsubsection*{Finishing the Computation of $D_4$}
+Using $f_x = 0$ we know that $D_4=$
+\[\left|\begin{array}{ccc}
+0 & f_{y} & f_{z}\cr
+f_{xx} & f_{xy} & f_{xz} \cr
+ f_{xxx}f_y + f_{xx}f_{yx}
+& f_{xxy}f_y + f_{xx}f_{yy}
+& f_{xxz}f_y + f_{xx}f_{yz}
+\end{array}\right|\]
+which is
+\[- f_y f_{xx} (f_{xxz}f_y + f_{xx}f_{yz}) +  f_y f_{xz} (f_{xxx}f_y + f_{xx}f_{yx})\]
+\[- f_z f_{xy} (f_{xxx}f_y + f_{xx}f_{yx}) +  f_z f_{xx} (f_{xxy}f_y + f_{xx}f_{yy})\]
+which simplifies under the assumption that $f_{xx} f_y = 0$ to
+\[  f_y f_{xz} f_{xxx}f_y - f_z f_{xy} f_{xxx}f_y - f_z f_{xy} f_{xx}f_{yx} +  f_z f_{xx}  f_{xx}f_{yy}\]
+\[ =  f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) \]
+
+\subsubsection*{Thinking of this as a proof system}
+
+Here are some examples:
+\[ \prov f \]
+\[ x \prov f_x  \]
+\[ x, y\prov f_{xx}f_y  \]
+\[ x, y \prov^- f_{xy} f_{x}  \]
+\[
+\erule
+{
+\[
+\justifies
+x, y \prov f_{xx} f_y
+\]
+\[
+\justifies
+ x \prov f_{x}
+\]
+\[
+\justifies
+  \prov f
+\]
+}
+{x, y, z\prov f_{xxx}f_y f_{xz} f_y  }
+\]
+Here are some putative rules:
+\[
+\erule
+{\Gamma ; \sigma  \pprov e}
+{\Gamma \prov^{|\sigma|} e}
+\]
+\[
+\erule
+{\Gamma \prov e \qquad {\partial \over \partial y} e  \mapsto e_1 \qquad \Gamma ; \sigma \pprov e_2}
+{\Gamma, x; \sigma, y \pprov e_1 e_2}
+\]
+\[
+\erule
+{}
+{\pprov f}
+\]
+But the context discipline doesn't really work that well. Let me just say contexts are numbers,
+and permutations $\sigma$ are really permutations. The symbol $S$ is a multiset of numbers.
+The symbol $e$ is a multiset of multisets of numbers. Write $\cup$ for multiset union.
+The symbol $|\sigma|$ is the sign of a permutation. The judgment $n ; \sigma \pprov e$ requires
+that $\sigma$ is a permutation with at least $n$ entries, but it may have more. The variables $i, j$ are
+in $\{-1,1\}$. The relation $e + n \maps e_1$ holds if there is some way of adding $n$ to one of the multisets in $e$.
+\[
+\erule
+{n ; \sigma  \pprov e}
+{n \prov^{|\sigma|} e}
+\]
+\[
+\erule
+{n \prov^i e \qquad  e + \sigma(n) \mapsto e_1 \qquad n ; \sigma \pprov^j e_2}
+{n + 1; \sigma \pprov^{ij} e_1 \cup e_2}
+\]
+\[
+\erule
+{}
+{0 ; \sigma\pprov^1 \emptyset}
+\]
+\[
+\erule
+{}
+{(e \cup  \{S\}) + n \mapsto e \cup \{S \cup \{n\}\}}
+\]
 \end{document}
