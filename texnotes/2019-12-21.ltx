@@ -605,19 +605,20 @@ Here are some putative rules:
 {\pprov f}
 \]
 But the context discipline doesn't really work that well. Let me just say contexts are numbers,
-and permutations $\sigma$ are really permutations. The symbol $S$ is a multiset of numbers.
+and permutations $\sigma$ are really permutations of numbers. Say $\sigma : n$ when it's a permutation of
+$0..n-1$. The symbol $S$ is a multiset of numbers.
 The symbol $e$ is a multiset of multisets of numbers. Write $\cup$ for multiset union.
 The symbol $|\sigma|$ is the sign of a permutation. The judgment $n ; \sigma \pprov e$ requires
-that $\sigma$ is a permutation with at least $n$ entries, but it may have more. The variables $i, j$ are
-in $\{-1,1\}$. The relation $e + n \maps e_1$ holds if there is some way of adding $n$ to one of the multisets in $e$.
+that $\sigma$ is a list of numbers with $n$ entries. The variables $i, j$ are
+in $\{-1,1\}$. The relation $e + n \mapsto e_1$ holds if there is some way of adding $n$ to one of the multisets in $e$.
 \[
 \erule
-{n ; \sigma  \pprov e}
-{n \prov^{|\sigma|} e}
+{n ; \sigma  \pprov^i e \qquad \sigma :n \qquad |\sigma| = j}
+{n \prov^{ij} e}
 \]
 \[
 \erule
-{n \prov^i e \qquad  e + \sigma(n) \mapsto e_1 \qquad n ; \sigma \pprov^j e_2}
+{n \prov^i e \qquad  e + \sigma(n) \mapsto e_1 \qquad n ; \sigma \pprov^j e_2 }
 {n + 1; \sigma \pprov^{ij} e_1 \cup e_2}
 \]
 \[
@@ -630,4 +631,541 @@ in $\{-1,1\}$. The relation $e + n \maps e_1$ holds if there is some way of addi
 {}
 {(e \cup  \{S\}) + n \mapsto e \cup \{S \cup \{n\}\}}
 \]
+
+\subsubsection*{Revision}
+The above version is broken in various ways. Let's start over with better notation.
+
+We previously required that $\sigma$ in $n;\sigma$ has {\em at least} $n$ entries, I think I can do it with exactly $n$.
+Repurpose the notation $|\sigma|$ for the {\em length} of a list of variables $\sigma$.
+Write $n \prov^j \sigma : \pi$ to mean $\sigma$ is a permutation of $x_0,\ldots, x_{n-1}$ with sign $j$,
+and only holds when $n > 0$.
+The judgment $e' \in D_x e$ is supposed to mean that $e'$ is one of the terms appearing in the $x$-derivative of $e$.
+We write $\prov^-$ for $\prov^{-1}$ and $\prov$ for $\prov^+$.
+\[
+\erule
+{}
+{0 \prov f}
+\qquad
+\erule
+{ n \prov^i \sigma :\pi \qquad \sigma  \pprov^j e    }
+{n \prov^{ij} e}
+\]
+\[
+\erule
+{}
+{\cdot \pprov 1}
+\qquad
+\erule
+{|\sigma| \prov^i e \qquad  e_1 \in D_x e   \qquad  \sigma \pprov^j e_2 }
+{x, \sigma \pprov^{ij} e_1  e_2}
+\]
+\[
+\erule
+{}
+{f_{\rho x} \in D_x (f_{\rho}e) }
+\qquad
+\erule
+{e' \in D_x e }
+{e' \in D_x (f_{\rho}e) }
+\]
+With these I can prove
+
+\[
+\erule
+{
+\[
+\justifies
+1 \prov x : \pi
+\]
+\[
+\[
+\justifies
+0 \prov f
+\]
+\quad
+f_x \in D_xf
+\quad
+\[
+\justifies
+\cdot \pprov 1
+\]
+\justifies
+x \pprov f_x
+\]
+}
+{1\prov f_x}
+\]
+
+\[
+\erule
+{
+\[
+\justifies
+2 \prov x,y : \pi
+\]
+\[
+\[
+\justifies
+1 \prov f_x
+\]
+\quad
+f_{xx} \in D_xf_x
+\quad
+\[
+\[
+\justifies
+0 \prov f
+\]
+\quad
+f_{y} \in D_yf
+\quad
+\[
+\justifies
+\cdot \pprov 1
+\]
+\justifies
+y \pprov f_y
+\]
+\justifies
+x,y \pprov f_{xx}f_y
+\]
+}
+{2\prov f_{xx}f_y}
+\]
+
+\[
+\erule
+{
+\[
+\justifies
+2 \prov^- y,x : \pi
+\]
+\[
+\[
+\justifies
+1 \prov f_x
+\]
+\quad
+f_{xy} \in D_yf_x
+\quad
+\[
+\[
+\justifies
+0 \prov f
+\]
+\quad
+f_{x} \in D_xf
+\quad
+\[
+\justifies
+\cdot \pprov 1
+\]
+\justifies
+x \pprov f_x
+\]
+\justifies
+y,x \pprov f_{xy}f_x
+\]
+}
+{2\prov^- f_{xy}f_x}
+\]
+
+\subsubsection*{Notions of Criticality Bifurcate?}
+
+Suppose I have a $3$-critical point where $f, f_x, f_y = 0$ but $f_{xx} \ne 0$.
+This for example would be something like $f = x^2 + y^2 + z$.
+
+If I'm trying to push this forward in the $w$ direction, the 4-criticality discriminant
+\[  f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) \]
+simplifies, knowing what I know, to
+\[  f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) \]
+Is this right? The discriminant of the derivatives of $f, f_x, f_y$ is
+\[\left|\begin{array}{ccc}
+0 & 0 & f_{z}\cr
+f_{xx} & f_{xy} & f_{xz}\cr
+f_{xy} & f_{yy} & f_{yz}
+\end{array}\right|\]
+so yeah, it checks out.
+\subsubsection*{Manually computing the 5-criticality discriminant}
+So we have
+\[f, f_x, f_{xx}f_y, f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} )\]
+The big discriminant is going to start out
+\[\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx}f_{y} + f_{xx}f_{xy}& f_{xxy} f_y + f_{xx}f_{yy} &
+f_{xxz}f_{y} + f_{xx}f_{yz}& f_{xxw} f_y + f_{xx}f_{yw} \cr
+\cdots
+\end{array}\right|\]
+which we can simplify a tiny bit to
+\[\left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx}f_{y} + f_{xx}f_{xy}& f_{xxy} f_y + f_{xx}f_{yy} &
+f_{xxz}f_{y} + f_{xx}f_{yz}& f_{xxw} f_y + f_{xx}f_{yw} \cr
+\cdots
+\end{array}\right|\]
+And the last row is
+\[ Z_R = f_{xxxR}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xxR}f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) +\]
+\[ f_{xxx}f_{yR} ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_{zR} ( f_{xx}  f_{yy} -  f^2_{xy} ) + \]
+\[f_{xxx}f_y ( f_{xzR} f_y + f_{xz} f_{Ry} - f_{zR} f_{xy} - f_{z} f_{xyR}) +  \]
+\[  f_{xx}f_z ( f_{xxR} f_{yy} + f_{xx} f_{yyR} -  2f_{xy}f_{xyR} ) \]
+For $R  \in\{x, y, z, w\}$.
+
+Oof, not sure I can do this by hand. Let's see if I can complete the tree a bit, though.
+
+Starting from $f,f_x,f_{xx},f_{xxx}$ I get
+\[\left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w} \cr
+0 & f_{xy} & f_{xz} & f_{xw} \cr
+0 & f_{xxy}  &  f_{xxz} &  f_{xxw} \cr
+f_{xxxx} & f_{xxxy} &  f_{xxxz} &  f_{xxxw}
+\end{array}\right|\]
+Which I could notate as $f_{xxxx}(R.(f_R, f_{xR}, f_{xxR}))$
+Then $f_{},f_{x},f_{y},f_{z}$ gives me
+\[\left|\begin{array}{cccc}
+0 & 0 & 0 & f_{w}\cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw}\cr
+f_{yx} & f_{yy} & f_{yz} & f_{yw}\cr
+f_{zx} & f_{zy} & f_{zz} & f_{zw}\cr
+\end{array}\right|\]
+So this is  $f_w (R. (f_{xR}, f_{yR}, f_{zR}))$.
+
+Ok, let's examine the path $f, f_x, f_{xx}, (f, f_{x})_{yz}$. We get the determinant
+
+
+\[\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+f_{yx} f_{xz} - f_{xyx} f_{z}  + {} &
+f_{yy} f_{xz} - f_{xyy} f_{z}  + {} &
+f_{yz} f_{xz} - f_{xyz} f_{z}  + {} &
+f_{yw} f_{xz} - f_{xyw} f_{z}  + {}
+\cr
+f_{y} f_{xzx} - f_{xy} f_{zx} &
+f_{y} f_{xzy} - f_{xy} f_{zy} &
+f_{y} f_{xzz} - f_{xy} f_{zz} &
+f_{y} f_{xzw} - f_{xy} f_{zw}
+\end{array}\right|\]
+which simplifies to
+\[\left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w} \cr
+0 & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+f_{yx} f_{xz} - f_{xyx} f_{z}  + {} &
+f_{yy} f_{xz} - f_{xyy} f_{z}  + {} &
+f_{yz} f_{xz} - f_{xyz} f_{z}  + {} &
+f_{yw} f_{xz} - f_{xyw} f_{z}  + {}
+\cr
+f_{y} f_{xzx} - f_{xy} f_{zx} &
+f_{y} f_{xzy} - f_{xy} f_{zy} &
+f_{y} f_{xzz} - f_{xy} f_{zz} &
+f_{y} f_{xzw} - f_{xy} f_{zw}
+\end{array}\right|\]
+and I don't have to consider any paths that go through the $(f_y, f_z ; f_{xy} , f_{xz})$ block.
+So this is something like (though I may have got some signs wrong)
+\[(f_{yx} f_{xz} - f_{xyx} f_{z} + f_{y} f_{xzx} - f_{xy} f_{zx}) (f_{}, f_{x}, f_{xx})_{yzw}\]
+\[{} - (f_{yy} f_{xz} - f_{xyy} f_{z} + f_{y} f_{xzy} - f_{xy} f_{zy}) f_{xxx} (f_{}, f_{x})_{zw}\]
+\[{} + (f_{yz} f_{xz} - f_{xyz} f_{z} + f_{y} f_{xzz} - f_{xy} f_{zz}) f_{xxx} (f_{}, f_{x})_{yw}\]
+\[
+\begin{tikzcd}
+&&&& {xxxx}\\
+&&&& (1, {x}, {xx} / y,z,w)\\
+&&& {xxx}\ar[ruu]\ar[ru]\\
+  1 \ar[r]& x \ar[r]\ar[rd]& {xx}\ar[r]\ar[ru] & (1,x / y,z)\\
+&& y \ar[r]\ar[rd] & ({x}, {y} / x, y) \\
+&&&{z}\ar[rdd]\ar[rd]\\
+&&&& ({x}, {y}, {z}/ x,y,z)\\
+&&&& {w}
+\end{tikzcd}
+\]
+Is there an easier way to express ${\partial\over\partial z}(f_{}, g)_{xy}?$
+It should be $(f_{z}, g)_{xy} + (f_{}, g_{z})_{xy}$, shouldn't it?
+Let me abbreviate that as $(f_{}, g)_{xy(z)}$.
+So I might as well have written
+\[\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+(f_{ }, f_{x})_{yz(x)} &
+(f_{ }, f_{x})_{yz(y)} &
+(f_{ }, f_{x})_{yz(z)} &
+(f_{ }, f_{x})_{yz(w)} \cr
+\end{array}\right|\]
+which does simplify to
+\[\left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w} \cr
+0 & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+(f_{y }, f_{xx})_{yz} &
+(f_{y }, f_{x})_{yz(y)} &
+(f_{z }, f_{x})_{yz(z)} &
+(f_{w }, f_{x})_{yz(w)}
+\end{array}\right|\]
+which should be... oof, still hard.
+Let me try the more symmetric case.
+
+\subsubsection*{The $1, x, y, (x, y / x,y)$ path}
+\[\left|\begin{array}{cccc}
+0 & 0 & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{yx} & f_{yy} & f_{yz} & f_{yw} \cr
+(f_{x}, f_{y})_{xy(x)} &
+(f_{x}, f_{y})_{xy(y)} &
+(f_{x}, f_{y})_{xy(z)} &
+(f_{x}, f_{y})_{xy(w)} \cr
+\end{array}\right|\]
+Here maybe I can enumerate the paths:
+\[f_z
+\left|\begin{array}{cccc}
+f_{xx} & f_{xy}  & f_{xw} \cr
+f_{yx} & f_{yy}  & f_{yw} \cr
+(f_{x}, f_{y})_{xy(x)} &
+(f_{x}, f_{y})_{xy(y)} &
+(f_{x}, f_{y})_{xy(w)} \cr
+\end{array}\right|
+\]
+\[
+{} - f_w \left|\begin{array}{cccc}
+f_{xx} & f_{xy} & f_{xz} \cr
+f_{yx} & f_{yy} & f_{yz}  \cr
+(f_{x}, f_{y})_{xy(x)} &
+(f_{x}, f_{y})_{xy(y)} &
+(f_{x}, f_{y})_{xy(z)} \cr
+\end{array}\right|\]
+\[ = f_z f_{xw} (f_{xy} (f_x,f_y)_{xy(y)} - f_{yy} (f_x, f_y)_{xy(x)}) \]
+\[ - f_z f_{yw} (f_{xx} (f_x,f_y)_{xy(y)} - f_{xy} (f_x, f_y)_{xy(x)}) \]
+\[ - f_w f_{xz} (f_{xy} (f_x,f_y)_{xy(y)} - f_{yy} (f_x, f_y)_{xy(x)}) \]
+\[ + f_w f_{yz} (f_{xx} (f_x,f_y)_{xy(y)} - f_{xy} (f_x, f_y)_{xy(x)}) \]
+\[ = (f, f_{x})_{zw} (f_{xy} (f_x,f_y)_{xy(y)} - f_{yy} (f_x, f_y)_{xy(x)}) \]
+\[ + (f, f_y)_{wz} (f_{xx} (f_x,f_y)_{xy(y)} - f_{xy} (f_x, f_y)_{xy(x)}) \]
+\[ = [zw/c][xy/b][xy/a]((f_c, f_{ac}) (f_{b\bar a} (f_x,f_y)_{xy(\bar b)})???\]
+
+Ok, new notation. Let $[xy/a]e(a, \bar a)$ stand for $e(x,y) - e(y,x)$.
+In this case, the $(1,x/y,z)$ derivative of $f$ could be represented as $[yz/a] f_a f_{x\bar a}$
+or equivalently $[1x/a]f_{ya}f_{z\bar a}$.
+
+So
+\[   (f, f_{x})_{zw} (f_{xy} (f_x,f_y)_{xy(y)} - f_{yy} (f_x, f_y)_{xy(x)}) \]
+\[ + (f, f_y)_{wz} (f_{xx} (f_x,f_y)_{xy(y)} - f_{xy} (f_x, f_y)_{xy(x)}) \]
+\[ = (f, f_{x})_{zw} (f_{xy} (f_x,f_y)_{xy(y)} - f_{yy} (f_x, f_y)_{xy(x)}) \]
+\[ - (f, f_y)_{zw} (f_{xx} (f_x,f_y)_{xy(y)} - f_{xy} (f_x, f_y)_{xy(x)}) \]
+\[ = [xy/a](f, f_{a})_{zw} (f_{x\bar a} (f_x,f_y)_{xy(y)} - f_{\bar a y} (f_x, f_y)_{xy(x)}) \]
+\[ = [zw/b][xy/a] f_b f_{a\bar b} (f_{x\bar a} (f_x,f_y)_{xy(y)} - f_{\bar a y} (f_x, f_y)_{xy(x)}) \]
+\[ = [xy/c][zw/b][xy/a] f_b f_{a\bar b} (f_{c\bar a} (f_x,f_y)_{xy(\bar c)} ) \]
+\[ = [xy/c][zw/b][xy/a] f_b f_{a\bar b} f_{c\bar a} D_{\bar c} (f_x,f_y)_{xy}  \]
+\[ = [xy/d][xy/c][zw/b][xy/a] f_b f_{a\bar b} f_{c\bar a} D_{\bar c} (f_{xd},f_{y\bar d})  \]
+\[ = [xy/d][xy/c][zw/b][xy/a] f_b f_{a\bar b} f_{c\bar a}  (f_{xd\bar c}f_{y\bar d} + f_{xd}f_{y\bar d\bar c})  \]
+
+\subsubsection*{Figuring out notation clearly}
+
+Generally I want to say that $[x_1,\ldots,x_n/a]e$ means
+\[\sum_\sigma (-1)^{|\sigma|}[x_{\sigma 1}/a_1]\cdots [x_{\sigma n}/a_n] e \]
+so specifically $[xy/a]e(a_1, a_2) = e(x,y) - e(y,x)$. And maybe I'll write $a, \bar a$ for $a_1,a_2$
+in the special case of $n=2$.
+
+Let's also have $(x_1,\ldots,x_n/a)$ mean the same thing but not alternating:
+\[\sum_\sigma [x_{\sigma 1}/a_1]\cdots [x_{\sigma n}/a_n] e \]
+
+Let's try the path $f, f_x, f_{xx}, [yz/a] f_a f_{x\bar a}$ again.
+The determinant can be expressed as
+\[[xyzw/b] f_{b_1} f_{xb_2} f_{xxb_3} D_{b_4}( [yz/a] f_a f_{x\bar a})\]
+\[ = [xyzw/b] [yz/a] f_{b_1} f_{xb_2} f_{xxb_3} D_{b_4}(  f_a f_{x\bar a})\]
+\[ = [xyzw/b] [yz/a] (b_4 1 / c) f_{b_1} f_{xb_2} f_{xxb_3}   f_{ac} f_{x\bar a\bar c}\]
+
+which is
+\[ [yz/a] \left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} & f_{w} \cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+D_x f_a f_{x\bar a}&
+D_y f_a f_{x\bar a}&
+D_z f_a f_{x\bar a}&
+D_w f_a f_{x\bar a}
+\end{array}\right|\]
+\[= [yz/a] \left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w} \cr
+0 & f_{xy} & f_{xz} & f_{xw} \cr
+f_{xxx} & f_{xxy} & f_{xxz} & f_{xxw} \cr
+f_a f_{xx\bar a}&
+D_y f_a f_{x\bar a}&
+D_z f_a f_{x\bar a}&
+D_w f_a f_{x\bar a}
+\end{array}\right|\]
+\[= [yz/a] \left( f_w \left|\begin{array}{cccc}
+0 & f_{xy} & f_{xz}  \cr
+f_{xxx} & f_{xxy} & f_{xxz}  \cr
+f_a f_{xx\bar a}&
+D_y f_a f_{x\bar a}&
+D_z f_a f_{x\bar a}
+\end{array}\right|\right.\]
+\[- \left. f_{xw} \left|\begin{array}{cccc}
+0 & f_{y} & f_{z}  \cr
+f_{xxx} & f_{xxy} & f_{xxz}  \cr
+f_a f_{xx\bar a}&
+D_y f_a f_{x\bar a}&
+D_z f_a f_{x\bar a}
+\end{array}\right|\right)\]
+\[= [yz/a] [1x/b] f_{bw} \left|\begin{array}{cccc}
+0 & f_{\bar b y} & f_{\bar b z}  \cr
+f_{xxx} & f_{xxy} & f_{xxz}  \cr
+f_a f_{xx\bar a}&
+D_y f_a f_{x\bar a}&
+D_z f_a f_{x\bar a}
+\end{array}\right| \]
+\[= [yz/a] [1x/b] f_{bw} \left( f_{\bar b y}\left|\begin{array}{cccc}
+f_{xxx}  & f_{xxz}  \cr
+f_a f_{xx\bar a}&
+D_z f_a f_{x\bar a}
+\end{array}\right| \right. \]
+\[- f_{\bar b z} \left. \left|\begin{array}{cccc}
+f_{xxx} & f_{xxy}  \cr
+f_a f_{xx\bar a}&
+D_y f_a f_{x\bar a}
+\end{array}\right| \right)\]
+\[= [yz/a] [1x/b] [yz/c] f_{bw}  f_{\bar b c}\left|\begin{array}{cccc}
+f_{xxx}  & f_{xx \bar c}  \cr
+f_a f_{xx\bar a}&
+D_{\bar c} f_a f_{x\bar a}
+\end{array}\right|  \]
+\[= [yz/a] [1x/b] [yz/c] f_{bw}  f_{\bar b c}\left|\begin{array}{cccc}
+f_{xxx}  & f_{xx \bar c}  \cr
+D_x f_a f_{x\bar a}&
+D_{\bar c} f_a f_{x\bar a}
+\end{array}\right|  \]
+\[= [yz/a] [1x/b] [yz/c] [x\bar c / d] f_{bw}  f_{\bar b c} f_{xxd} D_{\bar d} f_a f_{x\bar a} \]
+\[= [yz/a] [1x/b] [yz/c] [x\bar c / d] (1\bar d / e) f_{bw}  f_{\bar b c} f_{xxd}  f_{a e} f_{x\bar a \bar e} \]
+Hm, this still feels like a mess.
+
+\subsubsection*{Shorter unified path}
+
+What if I go back and try to deal with $f_{xx} f_y$ as a single thing.
+Does anything interesting pop out there with new notation?
+My path is $f, f_x, f_{xx}f_y$.
+\[\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} \cr
+f_{xx} & f_{xy} & f_{xz} \cr
+D_x f_{xx} f_y & D_y f_{xx} f_y & D_z f_{xx} f_y
+\end{array}\right|  \]
+\[= \left|\begin{array}{cccc}
+0 & f_{y} & f_{z} \cr
+f_{xx} & f_{xy} & f_{xz} \cr
+D_x f_{xx} f_y & D_y f_{xx} f_y & D_z f_{xx} f_y
+\end{array}\right|  \]
+\[= f_y \left|\begin{array}{cccc}
+f_{xx}  & f_{xz} \cr
+D_x f_{xx} f_y &  D_z f_{xx} f_y
+\end{array}\right|  -
+f_z \left|\begin{array}{cccc}
+f_{xx} & f_{xy}  \cr
+D_x f_{xx} f_y & D_y f_{xx} f_y
+\end{array}\right|
+\]
+\[= [yz/a] f_a \left|\begin{array}{cccc}
+f_{xx}  & f_{x\bar a} \cr
+D_x f_{xx} f_y &  D_{\bar a} f_{xx} f_y
+\end{array}\right|
+\]
+\[= [yz/a][x\bar a / b] f_a f_{x b} (f_{xx} f_y)_{\bar b}\]
+and indeed as I expect from before this is also
+\[= f_y (f_{x x} (f_{xx} f_y)_z - f_{x z} (f_{xx} f_y)_{x})
+- f_z (f_{x x} (f_{xx} f_y)_{y} - f_{x y} (f_{xx} f_y)_{x})\]
+\[= f_y ( - f_{x z} (f_{xxx} f_y))
+- f_z (f_{x x} (f_{xx} f_{yy}) - f_{x y} (f_{xx} f_{xy} + f_{xxx} f_y))\]
+\[ =  f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) \]
+But I can't figure out how to simplify this any further.
+
+\subsubsection*{Guessing Wildly}
+
+Let \[D^4 = [yz/a][x\bar a / b] f_a f_{x b} (f_{xx} f_y)_{\bar b}\]
+I might imagine that an expression for the next dimension up might be
+\[ D^5 = [zw/a][y\bar a/b][x\bar b / c] f_a f_{x b} (f_{xx} f_y)_{c} D^4_{\bar c}\]
+Let me work this pattern back up one: then I'd have
+\[D^3 = [xy/a] f_a f_{x \bar a} \]
+which actually is right! So I'm conjecturing
+\[ D^5 = [zw/a][y\bar a/b][x\bar b / c] D^1_a D^2_{b} D^3_{c} D^4_{\bar c}\]
+
+Ok, let me do the determinant calculation with $f, f_x, D^3, D^4$.
+\[
+\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} & f_{w}\cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw}\cr
+D^3_x & D^3_y & D^3_z & D^3_w \cr
+D^4_x & D^4_y & D^4_z & D^4_w \cr
+\end{array}\right|
+=
+\left|\begin{array}{cccc}
+0 & f_{y} & f_{z} & f_{w}\cr
+f_{xx} & f_{xy} & f_{xz} & f_{xw}\cr
+D^3_x & D^3_y & D^3_z & D^3_w \cr
+D^4_x & D^4_y & D^4_z & D^4_w \cr
+\end{array}\right|
+\]
+\[ = [yzw/a] f_{a_1} \left|\begin{array}{cccc}
+f_{xx} & f_{xa_2} & f_{xa_3} \cr
+D^3_x & D^3_{a_2} & D^3_{a_3} \cr
+D^4_x & D^4_{a_2} & D^4_{a_3}
+\end{array}\right|
+\]
+\[ = [yzw/a] [xa_2a_3 / b] f_{a_1} f_{x b_1} \left|\begin{array}{cccc}
+D^3_{b_2} & D^3_{b_3} \cr
+D^4_{b_2} & D^4_{b_2}
+\end{array}\right|
+\]
+\[ = [yzw/a] [xa_2a_3 / b] [b_2b_3 / c] f_{a_1} f_{x b_1}D^3_{c} D^4_{\bar c}\]
+
+Now is it at all possible that $[yzw/a][xa_2a_3 / b] [b_2b_3 / c]e(a_1, b_1, c, \bar c)$
+could be the same as $[zw/a][y\bar a/ b] [x\bar b / c]e(a, b, c, \bar c)$?
+
+\subsubsection*{Another Unified Path Expansion}
+Here $f = g = h = k$, I'm just giving them different names to track provenance of expressions.
+\[\left|\begin{array}{cccc}
+f_{x} & f_{y} & f_{z} \cr
+g_{xx} & g_{xy} & g_{xz} \cr
+D_x h_{xx} k_y & D_y h_{xx} k_y & D_z h_{xx} k_y
+\end{array}\right|  \]
+\[= \left|\begin{array}{cccc}
+0 & f_{y} & f_{z} \cr
+g_{xx} & g_{xy} & g_{xz} \cr
+D_x h_{xx} k_y & D_y h_{xx} h_y & D_z h_{xx} k_y
+\end{array}\right|  \]
+\[= f_y \left|\begin{array}{cccc}
+g_{xx}  & g_{xz} \cr
+D_x h_{xx} k_y &  D_z h_{xx} k_y
+\end{array}\right|  -
+f_z \left|\begin{array}{cccc}
+g_{xx} & g_{xy}  \cr
+D_x h_{xx} k_y & D_y h_{xx} k_y
+\end{array}\right|
+\]
+\[= f_y \left|\begin{array}{cccc}
+0  & g_{xz} \cr
+ h_{xxx} k_y &  D_z h_{xx} k_y
+\end{array}\right|  -
+f_z \left|\begin{array}{cccc}
+g_{xx} & g_{xy}  \cr
+D_x h_{xx} k_y &  h_{xx} k_{yy}
+\end{array}\right|
+\]
+\[ = -f_y g_{xz} h_{xxx} k_y - f_z g_{xx} h_{xx} k_{yy} + f_z g_{xy}(h_{xx}k_y)_x \]
+\[ = -f_y g_{xz} h_{xxx} k_y - f_z g_{xx} h_{xx} k_{yy} + f_z g_{xy}h_{xxx}k_y + f_z g_{xy}h_{xx}k_{xy} \]
+\[ = k_y h_{xxx} (f_z g_{xy} - g_{xz}  f_y) + h_{xx}f_z( g_{xy}k_{xy} - g_{xx}  k_{yy}  )  \]
+
+
+So the patterns are
+\[ \left[\begin{array}{cc}1 & -1 \cr -1 & 1 \end{array}\right]
+\qquad
+D\left[\begin{array}{cc}z & y \cr z & z \end{array}\right] f\]
+\[D \left[\begin{array}{cc}xy & xz \cr xy & xx \end{array}\right]g
+\qquad
+D\left[\begin{array}{cc}xxx & xxx \cr xx & xx \end{array}\right] h
+\qquad
+D\left[\begin{array}{cc}y & y \cr xy & yy \end{array}\right] k
+\]
+
+
+
+
+
 \end{document}

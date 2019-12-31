@@ -1,0 +1,966 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\pprov{\vdash\!\!\!\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\R{\mathbb{R}}
+\def\two{\mathbf{2}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+\subsubsection*{General Reasoning about Products of Discriminants}
+Suppose I have a sequence of discriminants ending in a product
+like $D^1, D^2, \ldots, D^n, g h$. Further let me suppose that
+the next item in sequence after $D^1, D^2, \ldots, D^n, g$ is $D^g$
+and after $D^1, D^2, \ldots, D^n, h$ is $D^h$.
+Do I know that the next discriminant after $gh$ is $g D^h + h D^g$?
+
+\[ D^g = \left| \begin{array}{ccc}
+D^1_{x_1}& \cdots & D^1_{x_{n+1}}\cr
+\vdots & \ddots & \vdots\cr
+D^n_{x_1}& \cdots & D^n_{x_{n+1}}\cr
+g_{x_1}& \cdots & g_{x_n}\cr
+\end{array} \right| \]
+\[ D^h = \left| \begin{array}{ccc}
+D^1_{x_1}& \cdots & D^1_{x_{n+1}}\cr
+\vdots & \ddots & \vdots\cr
+D^n_{x_1}& \cdots & D^n_{x_{n+1}}\cr
+h_{x_1}& \cdots & h_{x_n}\cr
+\end{array} \right| \]
+\[ D^{gh} = \left| \begin{array}{ccc}
+D^1_{x_1}& \cdots & D^1_{x_{n+1}}\cr
+\vdots & \ddots & \vdots\cr
+D^n_{x_1}& \cdots & D^n_{x_{n+1}}\cr
+g h_{x_1} + g_{x_1} h& \cdots & g h_{x_n} + g_{x_n} h\cr
+\end{array} \right| \]
+Yeah, this works just fine! This explains exactly the shape of
+\[D^4 = f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} )\]
+given that $D^3 = f_{xx}f_y$.
+
+Which maybe means that I actually should investigate
+individual terms of $D^4$ since I can add them.
+
+Ok, notation time. Let $\sigma$ be a sequence of functions.
+The `derivative' of $\sigma$ is defined by
+\[ \sigma' = \det_{ij} {\partial \sigma_i \over \partial x_j}\]
+allowing for the assumption that all the entries in $\sigma$ are zero
+except for the last.
+
+I think I claim that
+\[(\sigma, gh)'  = (\sigma, g)'h + g(\sigma, h)'\]
+\[(\sigma, kg)'  = k(\sigma, g)' \qquad\hbox{($k$ a constant)}\]
+\[(\sigma, g + h)'  = (\sigma, g)' + (\sigma, h)'\]
+
+I am indeed defining $D^1 = f$ and $D^{n+1} = (D^1, \ldots, D^n)'$,
+but I think I want to think in terms of paths through these
+expressions --- to somehow find notation for them.
+There are two paths in $D_3$, just $f_{xx}$ and $f_y$.
+There are 16 paths in $D_4$, organized as 4 choices of term,
+and 4 choices of factor for each term. Perhaps even fewer
+choices if we committed to things being {\em non}zero in $D_3$.
+
+For example, if we choose $f_{xx}$ to be zero, and committed
+to the fact that $f_y$ isn't zero, then
+\[(f, f_x, f_{xx})' = f_{xxx} ( f_{xz} f_y - f_z f_{xy})\]
+and we just need to compute
+\[(f, f_x, f_{xx}, f_{xxx})' \]
+\[(f, f_x, f_{xx}, f_{xz})' \]
+\[(f, f_x, f_{xx}, f_{z})' \]
+\[(f, f_x, f_{xx}, f_{xy})' \]
+Hm, this doesn't seem to actually make anything easier in any
+way I can see.
+
+\subsection{Specific Critical Point Distributions}
+
+Let me try to go back to proving lemmas that go from
+knowledge about derivatives to specifically where critical points
+must be.
+
+Obvious stuff first:
+\begin{lemma}
+If $f = 0$ and $f_x > 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $x > 0 \imp f > 0$
+\item  $x < 0 \imp f < 0$
+\end{itemize}
+\end{lemma}
+
+\begin{lemma}
+If $f = 0$ and $f_x < 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $x > 0 \imp f < 0$
+\item  $x < 0 \imp f > 0$
+\end{itemize}
+\end{lemma}
+
+The above two lemmas completely characterize the points that are $1$-critical and not $2$-critical.
+If $[x] = 1$ means $x > 0$ and $[x] = -1$ means $x < 0$, then we can summarize these as
+
+\begin{lemma}
+If $f = 0$ and $[f_x] = s$, then there is some interval around 0 such that
+$[x] = s$ implies $[f] = ss'$.
+\end{lemma}
+
+Next let's try to characterize the points that are $2$-critical and not $3$-critical.
+\begin{lemma}
+\label{first.quadratic}
+If $f = f_x = 0$ and $f_{xx} > 0$ and $f_{y} > 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $y > 0 \imp f > 0$
+\item  If $y < 0 \land x < 0$ then there is exactly one critical point of the type $f_x < 0$
+\item  If $y < 0 \land x > 0$ then there is exactly one critical point of the type $f_x > 0$
+\end{itemize}
+\end{lemma}
+
+\begin{lemma}
+If $f = f_x = 0$ and $f_{xx} > 0$ and $f_{y} < 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $y < 0 \imp f > 0$
+\item  If $y > 0 \land x < 0$ then there is exactly one critical point of the type $f_x < 0$
+\item  If $y > 0 \land x > 0$ then there is exactly one critical point of the type $f_x > 0$
+\end{itemize}
+\end{lemma}
+
+\begin{lemma}
+If $f = f_x = 0$ and $f_{xx} < 0$ and $f_{y} > 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $y < 0 \imp f < 0$
+\item  If $y > 0 \land x < 0$ then there is exactly one critical point of the type $f_x > 0$
+\item  If $y > 0 \land x > 0$ then there is exactly one critical point of the type $f_x < 0$
+\end{itemize}
+\end{lemma}
+
+\begin{lemma}
+If $f = f_x = 0$ and $f_{xx} < 0$ and $f_{y} < 0$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $y > 0 \imp f < 0$
+\item  If $y < 0 \land x < 0$ then there is exactly one critical point of the type $f_x > 0$
+\item  If $y < 0 \land x > 0$ then there is exactly one critical point of the type $f_x < 0$
+\end{itemize}
+\end{lemma}
+
+We can summarize these by saying
+\begin{lemma}
+If $f = f_x = 0$ and $[f_{xx}] = s_{xx} $ and $[f_{y}] = s_y$, then there is some interval around 0 such that
+\begin{itemize}
+\item  $[y] = -s_y \imp [f] = s_{xx}$
+\item  $[y] = s_y \land [x] = s_x$ imply one critical point of the type $[f_x] = s_x s_{xx}$
+\end{itemize}
+\end{lemma}
+
+As a warmup let's try to prove Lemma~\ref{first.quadratic}:
+
+\begin{proof}
+Suppose $f = f_x = 0$ and $f_{xx} > 0$ and $f_{y} > 0$ at the origin.
+We first need to show there's some interval in which  $y > 0 \imp f > 0$.
+
+Find a neighborhood around the origin where $f_{xx} > 0$.
+Along the line $y = 0$, knowing that $f_x = 0$, we see that $[f_x] = [x]$, so $f \ge 0$ throughout.
+By continuity we can find an interval where $f_y > 0$ as well. So by extrapolating in the positive $y$ direction from this
+$y = 0$ line, if $y > 0$, then $f > 0$.
+
+Now we need to show that if $y < 0 \land x < 0$ then there is exactly one critical point of the type $f_x < 0$.
+Return to considering the $y = 0$ line. At both its endpoints we know $f > 0$. This is still true if we push
+a {\em small} enough amount $\Delta y$ in the $y < 0$ direction, even though $f_y > 0$. So $f(-\Delta x, -\Delta y) > 0$
+and $f(\Delta x, -\Delta y) > 0$ but $f(0, -\Delta y) < 0$. So by intermediate value theorem we get a couple of roots,
+and it's intuitively clear that since $f_{xx} > 0$ throughout, the first one has to be descending and the second one has to be ascending.
+\cqed
+\end{proof}
+\subsection{Collecting Examples}
+Some relatively canonical-feeling examples of polynomials that I can
+think of that illustrate 3-criticality are
+\[ x^3 + xy + z \]
+\[ x^3 + xz + y \]
+\[ z + x^2 + y^2 \]
+\[ z + x^2 - y^2 \]
+I think the loci of 2-critical points in all of these are parabolas of some sort. Is that right?
+When is $f$ and $\partial/\partial x$ for all of these zero?
+\[ y = -3x^2, z = 2x^3 \]
+\[ z = -3x^2, y = 2x^3  \]
+\[ x = 0, z = -y^2 \]
+\[ x = 0, z = y^2 \]
+What about the behavior of
+\[ x^4 + x^2y + xz + w \]
+? Hm, doesn't seem to be particularly nice.
+\subsection{Freshman Calculus}
+
+I think $f = f_x = f_y = 0$ and $f_{xx}f_{yy} - f_{xy}^2 > 0$ and $f_{xx} > 0$ (all at the origin)
+should imply that $f$ is nonnegative around the origin.
+
+Why? Taylor series approximation says that $f$ must look like
+$(f_{xx} x^2 + 2f_{xy}xy + f_{yy} y^2 )/ 2$
+ up to cubic terms in $x,y$. Every
+directional first derivative of that function is zero, naturally. But
+what about directional second derivatives? Let $D = a D_x + b D_y$.
+Then $D^2 = a^2 D_{xx} + 2ab D_{xy} + b^2 D_{yy}$. Applying this to $f$ (or its Taylor series approximation) at the origin
+gives us $a^2 f_{xx} + 2ab f_{xy} + b^2 f_{yy}$.
+Actually let $a = \sin\theta$ and $b = \cos \theta$. This is then
+\[f_{xx} \cos^2 \theta  + 2 f_{xy} \sin\theta\cos \theta  + f_{yy} \sin^2 \theta \]
+Ok, where can that be biggest or smallest? Set $\partial / \partial \theta = 0$.
+\[2f_{xx} \sin 2\theta  + 4 f_{xy} \cos 2\theta  - 2f_{yy} \sin 2\theta = 0\]
+\[(f_{xx} - f_{yy}) \sin 2\theta  +  f_{xy} \cos 2\theta   = 0\]
+\[(f_{xx} - f_{yy}) \tan 2\theta  +  f_{xy}    = 0\]
+\[\theta     = {1\over 2}\tan^{-1} {f_{xy}\over f_{yy} - f_{xx}} \]
+Hm, this isn't helping me a lot.
+
+Let's try to use Lagrange multipliers instead, to simply ask the
+question: what is the biggest or smallest directional second
+derivative we might find in $f$ at the origin. The constraint is $a^2 + b^2 = 1$
+and we with the maximize or minimize $a^2f_{xx} + 2abf_{xy} + b^2f_{yy}$.
+So we try to solve
+\[ \mathcal L = a^2(f_{xx} + \lambda) + 2abf_{xy} + b^2(f_{yy} + \lambda) - \lambda\]
+\[\partial \mathcal L / \partial a = 0 \qquad \partial \mathcal L / \partial b = 0 \qquad
+\partial \mathcal L / \partial \lambda = 0\]
+hence
+\[
+a(f_{xx} + \lambda) + bf_{xy} = 0 \qquad
+b(f_{yy} + \lambda) + af_{xy} = 0 \qquad
+a^2 + b^2 = 1\]
+\[ \lambda = -(b/a)f_{xy} - f_{xx} \]
+\[ \lambda = -(a/b)f_{xy} - f_{yy} \]
+
+\[ (f_{xx} + \lambda)(f_{yy} + \lambda)  = f_{xy}^2\]
+
+
+Let $r = a/b$
+\[r^2f_{xy} - rf_{yy} = f_{xy} - rf_{xx}\]
+\[r^2f_{xy} - r(f_{yy} - f_{xx}) - f_{xy} = 0\]
+\[r = {f_{xx} - f_{yy} \pm \sqrt{ (f_{xx} - f_{yy})^2 + 4f_{xy}^2}\over 2 f_{xy}}\]
+
+so
+
+\[\lambda = {-f_{yy} - f_{xx} \pm \sqrt{ (f_{xx} - f_{yy})^2 + 4f_{xy}^2}\over 2}\]
+grr
+
+\subsubsection*{Invariance Maybe?}
+Here's a guess: Is $f_{xx}f_{yy} - f^2_{xy}$ rotation-invariant, maybe?
+Let $p = (x, y)$ and $q = (c x + s y, c y - s x)$
+\[g(p) = f(q)\]
+for $c = \cos \theta$ and $s = \sin \theta$. Then
+\[g_{x}(p) = c f_x(q) - s f_y(q)\]
+\[g_{y}(p) = s f_x(q) + c f_y(q)\]
+\[g_{xx} = c^2 f_{xx} - 2cs f_{xy} + s^2 f_{yy}\]
+\[g_{yy} = s^2 f_{xx} + 2cs f_{xy} + c^2 f_{yy}\]
+\[g_{xy} = sc (f_{xx} - f_{yy}) + f_{xy} ( c^2 - s^2)\]
+\[g_{xx}g_{yy} =
+\begin{array}{ccc}
+s^2c^2 f^2_{xx} &- 2cs^3 f_{xy}f_{xx}& + s^4 f_{xx}f_{yy}\cr
+2 sc^3 f_{xy} f_{xx}  &- 4c^2s^2 f^2_{xy}& + 2 c s^3 f_{xy} f_{yy}\cr
+c^4 f_{xx}f_{yy} &- 2c^3s f_{xy} f_{yy}& + c^2s^2 f^2_{yy}\cr
+\end{array}\]
+\[g_{xy}^2 =
+\begin{array}{ccc}
+s^2 c^2 f^2_{xx} & + sc(c^2 - s^2)f_{xy}f_{xx} & - s^2c^2 f_{xx} f_{yy}\cr
+s c(c^2 - s^2)f_{xy} f_{xx} & + (c^2 - s^2)^2f^2_{xy} & - sc (c^2 - s^2)f_{xy} f_{yy}\cr
+-s^2 c^2 f_{xx} f_{yy} & - sc (c^2 - s^2)f_{xy}f_{yy} &  s^2c^2 f^2_{yy}\cr
+\end{array}\]
+
+\[g_{xx}g_{yy}  - g_{xy}^2 = f_{xx}f_{yy} -f_{xy}^2 \]
+So yeah I think it is rotation invariant! Slightly surprising and useful!
+There might have been an easier way to see it by differential rotations or something.
+Like: $q = (x + h y, y - h x)$ for small $h$. Then I want to set $g(p) = f(q)$ still.
+Then $g_x = f_x - hf_y$ and $g_y = f_y + hf_x$. And
+\[g_{xx} = f_{xx} - 2hf_{xy} + h^2 f_{yy}\]
+\[g_{yy} = f_{yy} + 2hf_{xy} + h^2 f_{xx}\]
+\[g_{xy} = f_{xy} - hf_{yy} + hf_{xx} - h^2f_{xy} \]
+maybe we even get to ignore quadratic $h$ terms?
+\[g_{xx} = f_{xx} - 2hf_{xy} \]
+\[g_{yy} = f_{yy} + 2hf_{xy} \]
+\[g_{xy} = f_{xy} + h(f_{xx} - f_{yy}) \]
+So what is $(d/dh) (g_{xx}g_{yy} - g_{xy}^2)$? It should be
+\[ g_{xxh}g_{yy} + g_{yyh}g_{xx} - 2 g_{xyh}g_{xy}\]
+\[g_{xxh} =  -2f_{xy} \]
+\[g_{yyh} = 2f_{xy} \]
+\[g_{xyh} = f_{xx} - f_{yy} \]
+\[ -2f_{xy}g_{yy} + 2f_{xy}g_{xx} - 2 (f_{xx} - f_{yy})g_{xy}\]
+which at small $h$ is
+\[ -2f_{xy}f_{yy} + 2f_{xy}f_{xx} - 2 (f_{xx} - f_{yy})f_{xy}\]
+which is zero!
+
+\subsubsection*{Simpler observation}
+The directional second derivative is $a^2 f_{xx} + 2ab f_{xy} + b^2 f_{yy}$.
+This can be zero iff $r^2 f_{xx} + 2r f_{xy} + f_{yy}$ for $r = a / b$.
+ Trying to solve this for $r$ gives us a discriminant in the
+quadratic formula of $4f_{xy}^2 - 4f_{xx}f_{yy}$. So it is able to be
+zero --- and to change sign as we rotate around --- only if it's {\em
+  not} the case that $f_{xx}f_{yy} - f_{xy}^2 > 0$.
+\subsubsection*{Transcribing Old Journals}
+Back in TL41p18 I see a branching diagram with the following annotations.
+$p_{\vec u}$ and $q_{\vec u}$ for vectors $\vec u$ of numbers appear to be polynomials;
+or, more to the point, conventionally ordered sums of monomials, where this order seems
+to matter for how they're recursively constructed.
+There seems to be a constraint that the $n^{th}$ component of $u$ must be less than $n$;
+e.g., the first element of the vector must be $0$, the next must be $0$ or $1$, etc.
+The variables are $v_0 = x, v_1 = y, v_2 = z, v_3 = w,$ etc.
+
+I see the definitions
+\[ p_{\vec u i / j} = \cases{
+  v_j \cdot p_{\vec u / j}& if $i = j$;\cr
+p_{\vec u / i} & if $j = |\vec u| + 1$;\cr
+p_{\vec u / j}& otherwise.
+}\]
+\[p_{\epsilon / 0} = 1\]
+\[q_{\vec u / j} = v_j \cdot p_{\vec u / j}\]
+and many examples worked out:
+\[
+\begin{tabular}{ll}
+$q_{012/0} = x^2$ & $p_{012/0} = x$\\
+$q_{012/1} = y^2$ & $p_{012/1} = y$\\
+$q_{012/2} = z^2$ & $p_{012/2} = z$\\
+$q_{012/3} = w$ & $p_{012/3} = 1$\\
+\end{tabular}
+\]
+\[
+\begin{tabular}{ll}
+  $p_\epsilon = 1$ & $q_\epsilon = x$\\
+  $p_0 = x+1$ & $q_0 = x^2 + y$\\
+  $p_{00} = x^2+1+x$ & $q_{00} = x^3 + y + xz$\\
+  $p_{01} = x+y+1$ & $q_{01} = x^2+y^2+z$\\
+  $p_{000} = x^3 + 1 + x + x^2$ & $q_{000} = x^4 + y + xz + x^2 w$\\
+  $p_{001} = x^2 + y + x + 1$ & $q_{001} = x^3 + y^2 + xz + w$\\
+  $p_{002} = x^2 + 1 + xz + x$ & $q_{002} = x^3 + y + xz^2 + xw$\\
+  $p_{010} = x^2 + y + 1 + x$ & $q_{010} = x^3 + y^2 + z + xw$\\
+  $p_{011} = x + y^2 + 1 + y$ & $q_{011} = x^2 + y^3 + z + yw$\\
+  $p_{012} = x + y + z + 1$ & $q_{012} = x^2 + y^2 + z^2 + w$\\
+\end{tabular}
+\]
+And I see that there's a numeric sequence $2^1 0! , 2^2 1!, 2^3 2!, 2^4 3!, 2^5 4!$ associated
+with this branching tree, which I think suggests that each of the terms in the $q$-polynomials
+are means to be $\pm$. For example, there are $3!$ polynomials of vector length 3 ($q_{000}, q_{001}, q_{002}, q_{010}, q_{011}, q_{012}$)
+and each one has 4 terms that can be plus or minus, so $2^4 3!$.
+
+On TL41p3 I see the claim:
+\begin{quote}
+  note that some derivatives never show up, e.g.
+\[xy \quad x^2 z \quad yz \quad zw \quad x^3 w\]
+taking $n$ derivatives of $x_i$ rules out taking derivatives of the next $n$ variables
+$\cdots$ anything that doesn't violate that is possible.
+\end{quote}
+
+On TL41p3 I see the crucial observation that I didn't understand well at the time:
+\begin{quote}
+  Turns out $f_{xx} > 0$ and $f_{yy} > 0$ don't imply that $f$ ``looks like'' $x^2+y^2$ necessarily $\cdots$
+ for consider $f = x^2 - 100xy + y^2$. Anyhow, I tried forging ahead, considering all
+``forbidden'' polynomials to not occur. I suppose maybe every polynomial is suitably equivalent to such? Dunno.
+\end{quote}
+Then it has
+
+\begin{quote}
+here is the projection lemma that seems to be useful:
+\begin{lemma}
+[``project $f$ to $g$ along $z$'']
+Suppose $g^\pm_z$. If $f_z^0$ or $g_y^0$ then ${\partial \over \partial y} f(y, z^*(y)) = f_y$
+where $z^* (y) = z \st g(y, z) = 0$.
+\end{lemma}
+
+\begin{proof}
+\[{\partial \over \partial y} f(y, z^*(y)) = f_y - f_z {g_y \over g_z}\]
+\cqed
+\end{proof}
+\end{quote}
+I'm not yet sure what this lemma is saying. I think $f_z^0$ is just funny notation for $f_z = 0$ and $g_z^\pm$ for $g_z \ne 0$.
+
+\subsubsection*{What I've Gotten From This}
+
+I think it is promising to attempt to `fix' functions that have nonzero values for the `forbidden' derivatives like $xy$ (and presumably
+also any derivatives strictly higher than it, e.g. $x^2y, xy^2, xyz$, etc.) $x^2z, yz$, etc.
+
+One thing I notice is that if you have
+\[ ax^2 + bxy + cy^2 \]
+and substitute $x - by/2a$ for $x$, you get
+\[ ax^2 - bxy + b^2y^2/4a + bxy - b^2y^2 / 2a + cy^2 \]
+\[ =  ax^2 + y^2(b^2 / 4a - b^2 / 2a + c) \]
+\[ =  ax^2 + y^2(c - b^2 / 4a ) \]
+which no longer has any $xy$ in it!
+
+In general, start with $f(x,y)$ and pass to $g(x, y) = f(x - f_{xy}(0,0)y/f_{xx}(0,0), y)$.
+This is just a sideways skew of each $x$-slice by a $y$-varying amount. This matches up with my
+previous intuitions about $\I_1 \x \I_2 \to \I_1 \x \I_2$ maps. Then let's compute the $g_{xy}$ at the origin:
+\[ g = f(x - yf_{xy}(0) / f_{xx}(0), y) \]
+\[ g_{y} = -f_xf_{xy}(0) + f_y \]
+\[ g_{xy} = -f_{xx}f_{xy}(0)/f_{xx}(0) + f_{xy} \]
+\[ g_{xy}(0) = -f_{xx}(0)f_{xy}(0)/f_{xx}(0) + f_{xy}(0) \]
+\[  = -f_{xy}(0) + f_{xy}(0) = 0\]
+Let's say I wanted to eliminate $x^2 y$ and $xy$ at the same time. If I set
+\[g(x,y) = f(x + ay + by^2, y)\]
+then
+\[g_y(x,y) = f_x(a + 2by) + f_y\]
+\[g_{xy}(x,y) = f_{xx}(a + 2by) + f_{xy}\]
+\[g_{xxy}(x,y) = f_{xxx}(a + 2by) + f_{xxy}\]
+so if I set both those to zero I get
+\[0 = g_{xy}(0) = f_{xx}a + f_{xy}\]
+\[0 =g_{xxy}(0) = f_{xxx}a + f_{xxy}\]
+and I get contradictory answers for what $a$ is. Hm. I should allow I think
+\[g(x,y) = f(x(1 + by^2) + cy, y)\]
+as long as $a$ and $b$ are positive? Will that help?
+\[g_y(x,y) = f_x (2ybx + c) + f_y \]
+\[g_{yx}(x,y) = 2yb f_x + (2ybx + c)(1+by^2) f_{xx} + (1+by^2) f_{yx} \]
+\[g_{xxy}(x,y) = 2yb(1+by^2) f_{xx} + 2ybx (1+by^2)^2 f_{xxx} + 2yb (1+by^2) f_{xx}\]
+\[ + c(1+by^2)^2 f_{xxx} + (1+by^2)^2 f_{yxx} \]
+\[g_{yx}(0) =  c f_{xx} + f_{xy} \]
+\[g_{xxy}(0) = c f_{xxx} +  f_{xxy} \]
+No help!
+
+Let's try a more multivariable instance instead. Let's try to
+simultaneously get rid of $xy$ and $x^2z$ and $yz$. Set
+\[g(x,y,z) = f(x + ay + bz, y + cz, z)\]
+Then
+\[g_{z} = f_x b + f_y c + f_z \]
+\[g_{zy} = f_{xx} ab + f_{xy} (ac + b) + a f_{xz}  + f_{yy} c + f_{yz}\]
+\[g_{xxz} = f_{xxx} b + f_{xxy} c + f_{xxz} \]
+\[g_{y} = f_x a + f_y \]
+\[g_{xy} = f_{xx} a + f_{xy} \]
+so
+\[ 0 = f_{xx} ab + f_{xy} (ac + b) + a f_{xz}  + f_{yy} c + f_{yz}\]
+\[ 0 = f_{xxx} b + f_{xxy} c + f_{xxz} \]
+\[ 0 = f_{xx} a + f_{xy} \]
+and then what I have is
+\[ a = -f_{xy} / f_{xx}\]
+\[ 0 = -f_{xy} b + f_{xy} (  b - f_{xy} c / f_{xx}) - f_{xz}f_{xy} / f_{xx}  + f_{yy} c + f_{yz}\]
+\[ f_{xz}f_{xy} / f_{xx} - f_{yz} =  - f^2_{xy} c / f_{xx}   + f_{yy} c \]
+\[ f_{xz}f_{xy}  - f_{yz}f_{xx} =  (f_{xx} f_{yy}- f^2_{xy}) c    \]
+\[ c =  {f_{xz}f_{xy}  - f_{yz}f_{xx}\over f_{xx} f_{yy}- f^2_{xy}}   \]
+
+And then I can determine $b$ by
+\[ b = - (f_{xxz}- f_{xxy} c)/f_{xxx}   \]
+
+\subsubsection*{Reconstructing the Projection Lemma}
+
+\begin{lemma}
+Let $f(y,z)$ and $g(y,z)$ be given. At the origin, assume:
+\[g_z \ne 0 \land g = 0 \land (f_z = 0 \lor g_y = 0)\]
+Because $g_z$ is nonzero, we can at least locally find an `inverse' $z^* (y)$ such that
+$g(y, z^*(y)) = 0$ in an open interval near the origin.
+
+Then ${\partial \over \partial y} f(y, z^*(y)) = f_y$ at the origin.
+\end{lemma}
+
+\begin{proof}
+We know $g(y, z^*(y)) = 0$ so $g_y + z^*_y g_z = 0$, so $z^*_y = -g_y / g_z$.
+Hence ${\partial \over \partial y} f(y, z^*(y)) = f_y + f_z z^*_y = f_y - g_y f_z / g_z$.
+So if either $f_z =0$ or $g_y = 0$, this is just $f_y$, as required.
+\cqed
+\end{proof}
+
+I'm trying to figure out how I imagined using this lemma. If I have a polynomial like
+$f = x^2 + y$.
+
+\subsubsection*{Small Proofs}
+
+There are no 3-critical points in $x^2+y^2+z^2+w$ when $w > 0$. This
+is because I have a sum of one positive and 3 non-negative things, so it can't be that $f = 0$.
+
+There are no 3-critical points in $x^2+y^3+z+yw$ when $w > 0$. This is
+because $f_{xx}$ is never zero, so $f_y$ must be zero. This means $3y^2 + w = 0$,
+which can't be solved if $w > 0$.
+
+There are no 3-critical points in $x^3 + y^2 + z + xw$ if $w > 0$. This is because
+we need $f_x = 0$, so we must have $3x^2 + w$ zero, which requires $w \le 0$.
+
+There are no 3-critical points in $x^3 + y + xz^2 + xw$ if $w > 0$. For $f_x = 0$
+we need $3x^2 + z^2 + w = 0$
+
+There are no 3-critical points in $x^4+y+xz+x^2w$ if $w > 0$. For $f_y$ is always $1$,
+and $f_{xx}$ is $12x^2 + 2w$ so that's always positive if $w$ is.
+
+However, no amount of knowledge of the sign of $w$ prevents 3-critical points in
+$x^3 + y^2 + xz + w$! It has one on either $w$-side.
+
+What explains this asymmetry? Should I be looking to other discriminating factors other than $w$?
+
+\[\begin{tabular}{lllll}
+  $f$&$f_x$&$f_{xx}f_{y}$&sufficient\\
+$x^4 + y + xz + x^2 w$&
+$4x^3 + z + 2xw$&
+$12x^2 + 2w$&
+$w^+$\\
+$x^3 + y^2 + xz + w$&
+$3x^2 + z$&
+$12xy $&
+$z^+$\\
+$x^3 + y + xz^2 + xw$&
+$3x^2 + z^2 + w$&
+$6x$&
+$x^\pm, w^+$\\
+$x^3 + y^2 + z + xw$&
+$3x^2 + w$&
+$12xy$&
+$w^+$\\
+$x^2 + y^3 + z + yw$&
+$2x$&
+$6y^2 + w$&
+$x^\pm, w^+$\\
+$x^2 + y^2 + z^2 + w$&
+$2x$&
+$4y$&
+$x^\pm, y^\pm, w^+$\\
+\end{tabular}\]
+The `sufficient' column is sufficent conditions for there being no 3-critical points.
+
+I'm still curious about what happens with $x^3 + y - xz^2 + xw$. Its $f_x$ is $3x^2 - z^2 + w$,
+so if $x$ is zero... ah, then $x^2$ is also then zero, and one of $w^+$ or $w^-$ guarantees 3-critical-freeness.
+
+\subsubsection*{Attempting Some Formality}
+Let's assume I have some variables $x_0, x_1, x_2, \ldots$.
+Sequences are $\vec u = u_0u_1\cdots u_{n-1}$ with $|\vec u| = n$.
+Write $\epsilon$ for the empty sequence.
+
+If $\vec u$ is a sequence of numbers with $\vec u_n \le n$ and $|\vec u| = n$, then
+$p(\vec u)$ is a sequence of monomials, with $|p(\vec u)| = n+1$, and so is $q(\vec u)$,
+and $Q(\vec u)$ is a polynomial.
+\[ p(\vec u i )_{ j} = \cases{
+  v_j \cdot p(\vec u )_{ j}& if $i = j$;\cr
+p(\vec u )_{ i} & if $j = |\vec u| + 1$;\cr
+p(\vec u )_{ j}& otherwise.
+}\]
+\[p(\epsilon )_{ 0} = 1\]
+\[q(\vec u )_{ j} = v_j \cdot p(\vec u )_{ j}\]
+\[Q(\vec u) = \sum_j q(\vec u)_j\]
+Examples:
+\[
+\begin{tabular}{ll}
+$Q(\epsilon) = x$\\
+$Q(0) = x^2 + y$\\
+$Q({00}) = x^3 + y + xz$\\
+$Q({01}) = x^2+y^2+z$\\
+$Q({000}) = x^4 + y + xz + x^2 w$\\
+$Q({001}) = x^3 + y^2 + xz + w$\\
+$Q({002}) = x^3 + y + xz^2 + xw$\\
+$Q({010}) = x^3 + y^2 + z + xw$\\
+$Q({011}) = x^2 + y^3 + z + yw$\\
+$Q({012}) = x^2 + y^2 + z^2 + w$\\
+\end{tabular}
+\]
+
+Let an $f$ be given and define recursively
+\[D^1 = f \qquad  D^{n+1} = \det_{1 \le i,j \le n} {\partial D^i\over \partial x_j}\]
+We say a point is weakly $n$-critical if $D^n = 0$ there. A point is $n$-critical if it
+is weakly $m$-critical for any $m \in 1,\ldots, n$.
+
+\begin{lemma}
+Let suitable $\vec u$ be given. Then $Q(\vec u)$ is $|\vec u| + 1$-critical at the origin and nowhere else.
+\end{lemma}
+
+\begin{proof}
+For $\vec u = \epsilon$, we must show that $f = x$ has $f = 0$ at the origin and nowhere else. This is trivially so.
+
+As a warm-up, let's keep thinking about some specific cases. For $\vec u = 0$, we must show that $x^2 + y$ has $f = 0$ and $f_x = 0$
+only at the origin. This requires $x^2 + y = 0$ and $2x = 0$. From the latter, we find out $x = 0$, then $y = 0$ from the former.
+
+For $\vec u = 00$, we must show that $x^3 + y + xz$ has $0 = f = f_x = f_{xx}f_{y}$.
+This means $0 = x^3 + y + xz = 3x^2 + z = 6x$. Working from back to front, we get $x = 0$, $z = 0$, then $y = 0$.
+
+For $\vec u = 01$, we must show that $x^2 + y^2 + z$ has $0 = f = f_x = f_{xx}f_{y}$.
+This means $0 = x^2 + y^2 + z = 2x = 4y$. Working from back to front, we get $y = 0$ and $x = 0$ independently, then $z = 0$.
+
+Going to postpone the rest of this proof now.
+%% Otherwise, the sequence looks like $\vec u i$ with $i \le |\vec u|$. We assume $Q(\vec u)$ is $|\vec u| + 1$-critical
+%% just at the origin, and must show $Q(\vec u i)$ is $|\vec u|+2$-critical just at the origin.
+%% \cqed
+\end{proof}
+
+I notice that if $f_{xy} = 0$ (as it will for all these polynomials) the $D^4$ discriminant
+\[  f_{xxx}f_y ( f_{xz} f_y - f_z f_{xy})  +  f_{xx}f_z ( f_{xx}  f_{yy} -  f^2_{xy} ) \]
+becomes
+\[  f_{xxx}  f_{xz} f_y^2   +  f_z   f_{yy}f_{xx}^2  \]
+
+I can then revisit that earlier table and add a column for $D^4$
+\[\begin{tabular}{llllll}
+  $f$&$f_x$&$f_{xx}f_{y}$&$D^4$&$\pi?$\\
+$x^4 + y + xz + x^2 w$&
+$4x^3 + z + 2xw$&
+$12x^2 + 2w$&
+$24x$&
+$yzwx$\\
+$x^3 + y^2 + xz + w$&
+$3x^2 + z$&
+$12xy $&
+$4y^2 + 72x^2 $&
+$wz(yx) $\\
+$x^3 + y + xz^2 + xw$&
+$3x^2 + z^2 + w$&
+$6x$&
+$12z $&
+$ywxz $\\
+$x^3 + y^2 + z + xw$&
+$3x^2 + w$&
+$12xy$&
+$72x^2$&
+$zw(yx)$\\
+$x^2 + y^3 + z + yw$&
+$2x$&
+$6y^2 + w$&
+$24y$&
+$zxwy$\\
+$x^2 + y^2 + z^2 + w$&
+$2x$&
+$4y$&
+$16z$&
+$wxyz$\\
+\end{tabular}\]
+This is problematic for $x^3 + y^2 + z + xw$. It doesn't follow from $y^2 + z = 0$ that $y = 0$ and $z = 0$!
+Indeed if I set $w = 0$ and $x = 0$ I get a whole line of degenerately 4-critical points as I vary over negative $z$.
+
+Also it's sort of `too easy' for $x^3 + x^2 + xz + w$. I immediately have $x = y = 0$ from $D^4 = 0$, where
+I somehow expect to get one variable from each discriminant.
+
+Did 2008 me have slightly the wrong collection of polynomials? This
+determinant definition of discriminant seems too lovely (and geometrically motivated) to be wrong. I
+also feel pretty good about $f_{xy}$ in isolation being eliminable.
+
+\subsubsection*{Retreating Back a Dimension or Two}
+1-critical points are when $f = 0$. If you're not 1-critical, you're positive or negative. You're a 0-cell.
+Move a small distance $\pm x$, you're still positive or negative.
+That's all the behaviors available.
+
+2-critical points are when also $f_x = 0$. If you're not 2-critical but you are 1-critical, you're a 1-cell.
+Move a little bit away in the $\pm y$ direction, you're still a 1-cell. This is because of non-2-criticality.
+We can transport the $f = 0$. Knowing whether $f_x^\pm$ tells the whole story of what's happening $\pm x$.
+
+3-critical points are when also $f_{xx}f_y = 0$. If you're not 3-critical, but you are 2-critical, you're a 2-cell.
+Move a little bit away in the $\pm z$ direction, you're still that same 2-cell. This is because of non-3-criticality.
+We can transport the $f = 0$ and $f_x = 0$. Knowing whether $f_{xx}^\pm, f_y^\pm$ tells the whole story
+of what's happening $\pm x, \pm y$.
+
+Now 4-critical points are when also
+\[0=\left|\begin{array}{ccc}
+f_{x}&f_{y}&f_{z}\cr
+f_{xx}&f_{xy}&f_{xz}\cr
+f_{xxx}f_{y}+f_{xx}f_{xy}&
+f_{xxy}f_{y}+f_{xx}f_{yy}&
+f_{xxz}f_{y}+f_{xx}f_{yz}\cr
+\end{array}\right|\]
+If I recklessly assume $f_{xy} = 0$, then this is
+\[0=\left|\begin{array}{ccc}
+0&f_{y}&f_{z}\cr
+f_{xx}&0&f_{xz}\cr
+f_{xxx}f_{y}&
+f_{xxy}f_{y}+f_{xx}f_{yy}&
+f_{xxz}f_{y}+f_{xx}f_{yz}\cr
+\end{array}\right|\]
+which seems to be
+\[ f_{xxx}f_y f_{xz} f_y + f_{xx}f_{yy}f_{xx} f_z\]
+which is what I had before.
+
+Another way of discussing this allows for $3a$-critical points, for
+which $(f,f_x,f_{xx})^0$, and $3b$-critical points, for which
+$(f,f_x,f_y)^0$. If you're a $2$-critical point that's not either sort of $3$-critical, then $f_{xx}f_y$ is nonzero,
+which is the determinant for $(f, f_x)$, and you're $z$-transportable.
+
+Ok but now what determinant allows transport of $(f, f_x, f_{xx})^0$? It's
+\[\left|\begin{array}{ccc}
+0&f_{y}&f_{z}\cr
+0&0&f_{xz}\cr
+f_{xxx}&
+f_{xxy}&
+f_{xxz}\cr
+\end{array}\right| = f_{xxx} f_{y} f_{xz}\]
+and $(f,f_x,f_y)$ requires
+\[\left|\begin{array}{ccc}
+0&0&f_{z}\cr
+f_{xx}&0&f_{xz}\cr
+0&
+f_{yy}&
+f_{yz}\cr
+\end{array}\right| = f_{xx} f_{yy} f_{z}\]
+Now I reckon there should be a variety of 4-critical points, such as
+\[
+\begin{tabular}{ll}
+$4aa$ & $f,f_x,f_{xx},f_{xxx}$ \\
+$4ab$ & $f,f_x,f_{xx},f_{y}$ \\
+$4ac$ & $f,f_x,f_{xx},f_{xz}$ \\
+$4ba$ & $f,f_x,f_{y},f_{xx}$ \\
+$4bb$ & $f,f_x,f_{y},f_{yy}$ \\
+$4bc$ & $f,f_x,f_{y},f_{z}$ \\
+\end{tabular}
+\]
+and if I try to compute some of these determinants (assuming I can zero out anything containing $xy$, $xxz$, $yz$) I get
+\[
+(4aa) \qquad
+ \left|\begin{array}{cccc}
+0&f_{y}&f_{z}&f_{w}\cr
+0&0&f_{xz}&f_{xw}\cr
+0&0&0&f_{xxw}\cr
+f_{xxxx}&f_{xxxy}&f_{xxxz}&f_{xxxw}\cr
+\end{array}\right| = f_{x^4}f_y f_{xz}f_{x^2w}\]
+
+\[
+(4ab, 4ba) \qquad
+\left|\begin{array}{cccc}
+0&0&f_{z}&f_{w}\cr
+0&0&f_{xz}&f_{xw}\cr
+f_{xxx}&0&f_{xxz}&f_{xxw}\cr
+0&f_{yy}&f_{yz}&f_{yw}\cr
+\end{array}\right| = f_{x^3}f_{y^2} (f_{xz}f_w - f_z f_{xw})\]
+
+\[
+(4ac)\qquad
+\left|\begin{array}{cccc}
+0&f_{y}&f_{z}&f_{w}\cr
+0&0&0&f_{xw}\cr
+f_{xxx}&f_{xxy}&0&f_{xxw}\cr
+0&0&f_{xzz}&f_{xzw}\cr
+\end{array}\right| = {f_{x^3}f_yf_{xz^2}f_w}\]
+
+\[
+(4bb)\qquad
+\left|\begin{array}{cccc}
+0&0&f_{z}&f_{w}\cr
+f_{xx}&0&f_{xz}&f_{xw}\cr
+0&0&0&f_{yw}\cr
+0&f_{yyy}&f_{yyz}&f_{yyw}\cr
+\end{array}\right| = {f_{x^2}f_{y^3}f_{z}f_{yw}}\]
+
+\[
+(4bc)\qquad
+\left|\begin{array}{cccc}
+0&0&0&f_{w}\cr
+f_{xx}&0&f_{xz}&f_{xw}\cr
+0&f_{yy}&0&f_{yw}\cr
+f_{zx}&f_{zy}&f_{zz}&f_{zw}\cr
+\end{array}\right| = {f_{xx}f_{yy}f_{zz}f_w - f_{xz}^2 f_{yy} f_w}\]
+
+That last one was unexpected! Can I somehow say that $f_{xz}$ is tacitly forbidden for those functions
+that are already in the $4b$ section? This would mean that $4ba$ would have to be just $f_{x^3}f_{y^2}f_z f_{xw}$,
+so maybe there's an additional prohibition in $4a$ that rules out either $f_z$ or $f_{xw}$. But both those seem
+unfortunately essential for $4aa$ and $4ac$.
+
+\subsubsection*{Create/Destroy}
+
+I've seen some of these polynomials' behavior seem summarizable as ---
+if you set the sign of the highest available time coordinate, and vary the sign of the second-highest --- creating and
+destroying a pair of criticals point of simpler polynomials. How can I understand this relationship?
+
+An example is the polynomial $x^{3} + y + xz^{2} + xw$. If we set $w$ negative, and vary $z$, we see an adjoint
+pair of critical points appear then disappear. I notice this polynomial arises as the substitution
+$[z^2 + w / z] (x^3 + y + xz)$. All of the spherical polynomials arise like this:
+\[ x^2 + y^2 + z^2 + w = [z^2 + w / z](x^2 + y^2 + z)\]
+\[ = [z^2 + w / z][y^2 + z / y](x^2 + y)\]
+\[ = [z^2 + w / z][y^2 + z / y][x^2 + y / x]x\]
+
+Can I explain any of these others?
+\[\begin{tabular}{ll}
+$f$\\
+$x^4 + y + xz + x^2 w$
+\\
+$x^3 + y^2 + xz + w$&
+$ [y^2+ w/y](x^3 + y + xz) $
+\\
+$x^3 + y + xz^2 + xw$&
+$[z^2+w/z](x^3 + y + xz) $
+\\
+$x^3 + y^2 + z + xw$&
+$[y^2+ z/y](x^3 + y + xw)  $
+\\
+$x^2 + y^3 + z + yw$&
+$[y^3+ z + yw/y](x^2 + y) $
+\\
+$x^2 + y^2 + z^2 + w$&
+$[z^2+w/z](x^2 + y^2 + z) $
+\\
+\end{tabular}\]
+What about $[x^2+w / x] (x^3 + y + xz) = x^3 + y + x^2z + zw$? Seems weird and ill-behaved.
+
+How about substituting into a nonlinear term? $[x^2 + z/x]x^2 + y = x^4 + 2z + z^2 + y$.
+No, doesn't look good.
+
+\subsubsection{Anti-spherical polynomials}
+
+I'm calling $x^2 + y$, $x^2 + y^2 + z$, $x^2 + y^2 + z^2 + w$
+spherical polynomials for hopefully obvious reasons. What about the `anti-spherical' sequence
+\[ x^2 + y \qquad x^3 + y + xz \qquad x^4 + y + xz + x^2 w \]
+\[ \qquad \cdots \qquad x^n + x_1 + x^1 x_2 + \cdots x^{n-2} x_{n-1} \]
+
+I know that $x^2 + y$ is a 2-cell with 1-cells located for each negative $y$ at $(\pm\sqrt{-y}, y)$.
+
+I also know that $x^3 + y + xz$ is a 3-cell. Its 2-cells are located where $f_x = 0$.
+This means $3x^2 + z = 0$. So we assume $z$ is known, and $x = \sqrt{-z/3}$, therefore
+for each negative z we have $y = - x^3 -xz = \pm (2/3)z\sqrt{-z/3}$. So the $2$-cells occur
+at points
+\[\left(\pm \sqrt{-\frac{z}{3}},\mp\frac{2z}{3}\sqrt{-\frac{z}{3}}\right)\]
+or if we observe/define that $x = \pm\sqrt{-z/3}$, then
+\[( x,2x^3)\]
+
+I also know that $x^4 + y + xz + x^2w$ should be a 4-cell. Its 3-cells
+are located where $f$ and $f_{x}$ and $f_{xx}f_y = 0$.
+This means
+\[x^4 + y + xz + x^2w = 0\]
+\[4x^3 + z + 2xw = 0\]
+\[12x^2 + 2w = 0\]
+So
+\[ x = \pm\sqrt{-w / 6} \qquad w = - 6x^2\]
+\[ z = -4x^3 - 2xw = -4x^3 + 12x^3 = 8x^3\]
+\[ y = -x^4 - xz - x^2 w = -x^4 - 8x^4 + 6x^4 = -3x^4\]
+so
+\[(x, -3x^4, 8x^3)\]
+considered as a function of $w$ where $x = \pm \sqrt{-w/6}$.
+
+I also know that $x^5 + y + xz + x^2 w + x^3 t$ should be a 5-cell.
+Its 4-cells are located where
+\[ f \qquad f_x \qquad f_{xx}f_y \qquad f_{xxx}f_y^2 f_{xz} + f^2_{xx}f_{yy}f_z \]
+is zero. But here only the first term of that sum can be nonzero; $f_{yy}$ is zero. It's really
+\[ f \qquad f_x \qquad f_{xx}f_y \qquad f_{xxx}f_y f_{xz}\]
+that I care about. Ah, ok, this pattern can be extracted from the anti-spherical polynomials themselves.
+The `spherical part' becomes zero. Great. So let's compute those derivatives and set them to zero.
+
+\[0 = f = x^5 + y + xz + x^2 w + x^3 t\]
+\[0 = f_{x} = 5x^4 + z + 2xw + 3x^2 t\]
+\[0 = f_{xx}f_{y} = 20x^3 + 2w + 6x t\]
+\[0 = f_{xxx}f_{y}f_{xz} = 60x^2 +  6 t\]
+In fact the subsequent derivatives $f_{y}, f_{xz}, f_{xxw}$ will only be factorial constants:
+$f_{y} = 0!, f_{xz} = 1!, f_{xxw} = 2!, f_{xxxt} = 3!$.
+So I get
+\[ t = -10x^2 \]
+\[ w = -10x^3 - 3xt = -10x^3 + 30x^3 = 20x^3\]
+\[ z = - 5x^4 - 2xw - 3x^2 t = - 5x^4 - 40x^4 + 30x^4 = -15 x^4\]
+\[ y = - x^5 - xz - x^2 w - x^3 t \]
+\[ - x^5 + 15x^5 - 20x^5 + 10x^5  = 4x^5\]
+
+so
+\[ (x, 4x^5,-15 x^4,20x^3)\]
+with $x$ considered a function of $t$ via $x = \pm\sqrt{-t/10}$.
+
+\subsubsection{Finding these Coefficients}
+
+So really all I'm doing is setting the iterated $x$ derivatives to zero.
+I start with $x^5 + y + xz + x^2 w + x^3 t$ and set $0 = f = f_x = f_{xx} = f_{xxx}$.
+I get
+\[0 = f = x^5 + y + xz + x^2 w + x^3 t\]
+\[0 = f_{x} = 5x^4 + z + 2xw + 3x^2 t\]
+\[0 = f_{xx} = (5\cdot 4)x^3 + (2 \cdot 1)w + (3 \cdot 2)x t\]
+\[0 = f_{xxx} = (5\cdot 4 \cdot 3)x^2 +  (3\cdot 2 \cdot 1) t\]
+\[t = -{5\choose 3}x^2\]
+\[w  = -(5\cdot 4)x^3/(2 \cdot 1) -  (3 \cdot 2)x t/(2 \cdot 1) \]
+\[  = (-(5\cdot 4)/(2 \cdot 1) +  {5\choose 3} (3 \cdot 2)/(2 \cdot 1))x^3 \]
+\[  = (-{5\choose 2} +  {5\choose 3} {3\choose 2})x^3 \]
+Hmm. Let me increase $n$ a bit in generality.
+
+I start with $x^{n+2} + y_0 + xy_1 + x^2y_2 + \cdots x^ny_n$. I set $0 = f_{x^k}$ for every $k \in [0,\ldots,n]$.
+I get
+\[0 = f = x^{n+2} + \sum_{i=0}^n x^i y_i\]
+\[0 = f_{x^k} = {n+2 \choose k } x^{n+2-k} + \sum_{i=0}^n {i\choose k} x^{i-k} y_i\]
+in particular
+\[0 = f_{x^n} = {n+2 \choose n } x^{2} + \sum_{i=0}^n {i\choose n} x^{i-n} y_i = {n + 2 \choose 2} x^2 + y_n\]
+So we do know $y_n = -{n + 2 \choose n} x^2 = -{n + 2 \choose 2} x^2$. Then
+\[0 = f_{x^{n-1}} = {n+2 \choose n-1 } x^{3} + \sum_{i=0}^n {i\choose n-1} x^{i-n+1} y_i \]
+\[ = {n+2 \choose n-1 } x^{3} +  y_{n-1} +  {n\choose n-1} x y_n \]
+so
+\[ y_{n-1} = -{n+2 \choose n-1 } x^{3} -  {n\choose n-1} x y_n \]
+\[ y_{n-1} = \left(-{n+2 \choose n-1 }  + n  {n+2\choose n}\right)x^3 \]
+\[ = \left(-{(n+2)! \over (n-1)! 3! }  + n  {(n+2)! \over n! 2!}\right)x^3 \]
+\[ = \left(-{(n+2)! \over (n-1)! 3! }  +   {(n+2)! \over (n-1)! 2!}\right)x^3 \]
+\[ = \left(-{(n+2)! \over (n-1)! 3! }  +   {3(n+2)! \over (n-1)! 3!}\right)x^3 \]
+\[ = \left(  {2(n+2)! \over (n-1)! 3!}\right)x^3 \]
+\[ = 2  {n+2 \choose 3}x^3 \]
+
+Next we have setting $k = n-2$.
+\[0 = f_{x^{n-2}} = {n+2 \choose n-2 } x^{4} + \sum_{i=0}^n {i\choose n-2} x^{i-n+2} y_i\]
+\[ = {n+2 \choose 4 } x^{4} +    y_{n-2} + (n-1) x^{1} y_{n-1} + {n\choose 2} x^{2} y_n\]
+\[ -y_{n-2}/x^4 = {n+2 \choose 4 }   + (n-1)  2  {n+2 \choose 3} - {n\choose 2} {n + 2 \choose 2}\]
+\[  = {n+2 \choose 4 }   + (n-1)  2  {n+2 \choose 3} - {n(n+1)\over 2} {(n + 2)! \over n! 2}\]
+\[  = {n+2 \choose 4 }   + (n-1)  2  {(n+2)! \over 3! (n-1)!} -  {(n + 2)! \over (n-2)! 4}\]
+\[  = {n+2 \choose 4 }   +  {(n+2)! \over 3 (n-2)!} -  {(n + 2)! \over (n-2)! 4}\]
+\[  = {(n+2)! \over 4! (n-2)! }   +  {(n+2)! \over 3 (n-2)!} -  {(n + 2)! \over (n-2)! 4}\]
+\[  = {(n+2)! \over 4! (n-2)! }   +  {8(n+2)! \over 4! (n-2)!} -  {6(n + 2)! \over (n-2)! 4!}\]
+\[ y_{n-2} = -3{n+2 \choose 4} x^4\]
+\subsubsection*{Summarizing}
+
+Suppose I have an antispherical polynomial, for example $x^5 + y + xz + x^2 + x^3 t$, generally
+(for the preceding example being $n = 3$)
+\[x^{n+2} + \sum_{i=0}^n x^i y_i\]
+
+Suppose someone hands us a value for $t$ (generally, a value for $y_n$).
+Then there are exactly two critical points one dimension down.
+They occur when $0 = f = f_{x} = f_{xx} = f_{xxx} = 0$, generally when $f_{x^k}$ for every $k \in [0,\ldots,n]$.
+This happens when
+\[ t = - 10 x^{2} \]
+\[ w =  20 x^{3} \]
+\[ z = - 15x^{4} \]
+\[ y =   4x^{5} \]
+generally when
+\[ y_{n-i} = (-1)^{i+1} (i+1){n+2 \choose i + 2} x^{i+2} \]
+and so we can solve for $x$ knowing $t$, and get $x = \pm \sqrt{-t / 10}$ and see
+\[ (y,z,w) =  \pm (4(-t/10)^{5/2}, 15t^2/100, 20 (-t/10)^{3/2}) \]
+Generally, since
+\[ y_{n} = - {n+2 \choose  2} x^{2} \qquad \imp  \qquad x = \sqrt{-y_{n} \over {n+2 \choose  2}} \]
+we get
+\[ y_{n-i} = (-1)^{i+1} (i+1){n+2 \choose i + 2} \left(-y_{n} \over {n+2 \choose  2}\right)^{(i+2)/2} \]
+
+\end{document}
