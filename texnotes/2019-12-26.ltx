@@ -963,4 +963,45 @@ Generally, since
 we get
 \[ y_{n-i} = (-1)^{i+1} (i+1){n+2 \choose i + 2} \left(-y_{n} \over {n+2 \choose  2}\right)^{(i+2)/2} \]
 
+\subsubsection*{Composition}
+
+If I have the thins that stands for the functor $F$ --- that is, $f = x$ --- and the thing that stands for the functor $U$
+--- that is, $f = -x$ --- how do i `compose' them?
+
+I might try displacing one in one direction and the other in the other, and multiplying them.
+So let's take $f = (x - a)(-x - a)$ and get $f = -x^2 + a^2$.
+Even though it's actually
+\[x^2 - a^2 \over 2a\]
+that resembles $x - a$ at $x = a$ and $-x-a$ at $x = -a$.
+
+Then I could substitute $\sqrt y / a$ and ignore the constant multiplier $1/2\sqrt{y}$ and get the polynomial $x^2 - y$ that I expect.
+
+\subsubsection*{Substitution}
+
+I can substitute $[e^x/x]$ to get a similar function graph but with only the positive values of $x$.
+I can substitute $[-e^{-x}/x]$ to get a similar function graph but with only the negative values of $x$.
+
+Consider $x^3 + y + xz$. I want to look at positive $x$, negative $y$, and show there are no $2$-critical points there.
+So I get $e^{3x} - e^{-y} + e^x z = 0$. I take the $x$ derivative and get $3e^{3x} + e^x z = 0$. So I learn
+$z = -3e^{2x}$ and $e^{3x} - e^{-y} - 3e^{3x} = 0$ so $-2 e^{3x} - e^{-y} = 0$. A contradiction, because exponentials are positive.
+What if I say positive $x,y$ and negative $z$? I get
+\[ e^{3x} + e^y - e^{x}e^{-z} = 0\]
+\[ 3e^{3x} - e^{x}e^{-z} = 0\]
+\[ e^{-z} = 3e^{2x} \]
+\[ -z = \ln 3 + 2x \]
+\[ y  = \ln 2 + 3x\]
+Hm, what if I have $s, t, u$ for the signs of $x, y, z$?
+\[ se^{3sx} + te^{ty} + su e^{sx}e^{uz} = 0\]
+\[ 3s^2e^{3sx} + s^2u e^{sx}e^{uz} = 0\]
+
+\[  e^{uz} = -3e^{2sx} / u\]
+\[  uz = \ln (-3/u ) + 2sx \]
+\[  te^{ty} -2 s e^{3sx} = 0\]
+\[  te^{ty}  = 2 s e^{3sx}\]
+\[  ty  = \ln (2 s / t) + 3sx\]
+so:
+
+\[  z = u\ln (-3u ) + 2sux \]
+\[  y  = y\ln (2 s t) + 3stx\]
+
 \end{document}

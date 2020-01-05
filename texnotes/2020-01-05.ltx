@@ -1,0 +1,237 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\pprov{\vdash\!\!\!\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\R{\mathbb{R}}
+\def\two{\mathbf{2}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+Let's recall some definitions. Assume all functions we talk about are defined by
+polynomials in $\R[x_1, \ldots, x_n]$. Assume $x$ is a synonym for $x_1$, $y$ for $x_2$, $z$ for $x_3$, $w$ for $x_4$.
+Let $[n]$ be the set $\{1,\ldots,n\}$. For $f(x_1, \ldots, x_n): \R^n \to \R$ and $k \in [n]$ we define $D^k(f)$
+by saying
+
+\[ D^1(f) = f \qquad  D^{k+1}(f) = \det_{i,j\in[k]} {\partial D^i(f)\over\partial x_j}\]
+A point in a function $f$'s domain is {\em $k$-critical} if $D^\ell(f) = 0$ there for all $\ell \in [k]$.
+A function is {\em $k$-stable} over a subset  $U \subseteq \R^n$ (assumed to be all of $\R^n$ if not specified)
+if it has no $(k+1)$-critical points in $U$.
+
+Define $\alpha[x, y]$ to be the linear interpolation $(1-\alpha) x + \alpha y$.
+
+\subsubsection*{Interpolating between 1-cells}
+
+We want to regard two $n$-stable functions $f, g : \R^n \to \R$ as representing the same underlying $n$-cell
+when there's a `homotopy between them', i.e. an $n$-stable map $h : \R^{n+1} \to \R$ with $h(p, 0) = f(p)$ and $h(p, 1) = g$.
+
+I can with some manual effort characterize some homotopies between 1-cells.
+\begin{lemma}
+Suppose $f_0(x)$ and $f_1(x)$ are 1-stable maps $\R \to \R$, with $m$ roots each. So we can write them as
+\[f_0 = p_0 \prod_{i = 1}^m (x-r_{0i})\qquad f_1 = p_1 \prod_{i = 1}^m (x-r_{1i})\]
+For some polynomials $p_0, p_1 : \R^{n-m} \to \R$ with no roots, and $r_{01} < \cdots < r_{0m}$ and
+$r_{11} < \cdots < r_{1m}$. (There are no repeated roots, because of 1-stability)
+Suppose that the sign of $p_0$ is the same as that of $p_1$.
+
+Then there is $g(x, y) : \R^{2} \to \R$ such that $g(x, 0) = f_0(x)$ and $g(x, 1) = f_1(x)$
+and $g$ is 1-stable in $\R \x [0,1]$.
+\end{lemma}
+
+\begin{proof}
+Define
+\[ g(x, y) = y[p_0, p_1] \prod_{i = 1}^m (x - y[r_{0i}, r_{1i}]) \]
+The boundary conditions are easy to check. Let's check that $g$ is 1-stable.
+Suppose towards a contradiction that it has a 2-critical point $(x,y)$ in $\R \x [0,1]$.
+The fact that $g(x,y) = 0$ means
+\[0 = \prod_{i = 1}^m (x - y[r_{0i}, r_{1i}])\]
+so for some particular $I \in [m]$, we have
+\[0 = x - y[r_{0I}, r_{1I}]\]
+Now we set the $x$-derivative of $g$ to zero:
+\[ 0 = g_x(x, y) \]
+\[ = y[(p_0)_x, (p_1)_x] \prod_{i = 1}^m (x - y[r_{0i}, r_{1i}]) + y[p_0, p_1] \sum_{i = 1}^m \prod_{j \in [m] \setminus i} (x - y[r_{0j}, r_{1j}]) \]
+Notice that any product that includes $x - y[r_{0I}, r_{1I}]$ turns to zero. So this is
+\[0 = y[p_0, p_1]  \prod_{j \in [m] \setminus I} (x - y[r_{0j}, r_{1j}]) \]
+\[0 =  \prod_{j \in [m] \setminus I} (x - y[r_{0j}, r_{1j}]) \]
+So there must be {\em another} root index, call it $J$, distinct from $I$, such that also
+\[0 = x - y[r_{0J}, r_{1J}]\]
+Therefore
+\[ y[r_{0I}, r_{1I}] = y[r_{0J}, r_{1J}]\]
+\[ y[(r_{0I} - r_{0J}), (r_{1I} - r_{1J})] = 0\]
+But if $I > J$, (resp. $J > I$) we have the interpolation of two positive (resp. negative) values yielding zero, a contradiction.
+\cqed
+\end{proof}
+
+\subsubsection*{Kan fillings of 1-stable polynomials}
+
+
+\begin{lemma}
+Suppose we have $f(x): \R \to \R$ is 1-stable over $[0,1]$, and $z_0(y), z_1 (y) : \R \to \R$ which are 0-stable over $[0,1]$.
+Assume $f(0) = z_0(0)$ and $f(1) = z_1(0)$.
+Then there is an extension $g(x,y) : \R^2 \to \R$ satisfying boundary conditions
+\[g(x,0) = f(x) \qquad g(0,y) = z_0(y) \qquad g(1,y) = z_1(y)\]
+with $g$ being 1-stable over $[0,1]^2$.
+\end{lemma}
+
+\begin{proof}
+From the 0-stability of $z_0$ and $z_1$, we know
+\[  {z_0(y)\over f(0)} > 0 \qquad {z_1(y)\over f(1)} > 0 \]
+for any $y \in [0,1]$. Therefore we define
+\[ g(x, y) =  x\left[ {z_0(y)\over f(0)},{z_1(y)\over f(1)} \right] f(x) \]
+The boundary conditions are easy to check. Suppose towards a contradiction $g$ has a 2-critical point $(x,y) \in [0,1]^2$.
+
+We know then that $g(x,y) = 0$ and $g_x(x,y) = 0$. The former means $f(x) = 0$,
+because $x\left[ {z_0(y)\over f(0)},{z_1(y)\over f(1)} \right] > 0$, being the
+the interpolation of two positive numbers.
+
+Let's compute the $x$ derivative of $g$ now:
+\[ 0 = g_x(x, y) =  {\partial \over \partial x}\left( x\left[ {z_0(y)\over f(0)},{z_1(y)\over f(1)} \right] f(x) \right)\]
+\[  =   \left( {-z_0(y)\over f(0)} + {  z_1(y)\over f(1)} \right) f(x) + x\left[ {z_0(y)\over f(0)},{z_1(y)\over f(1)} \right] f_x(x)  \]
+\[  =  x\left[ {z_0(y)\over f(0)},{z_1(y)\over f(1)} \right] f_x(x)  \]
+\[ 0  =   f_x(x)  \]
+So $f(x) = f_x(x) = 0$, which contradicts our assumption that $f$ was 1-stable.
+\cqed
+\end{proof}
+
+\subsubsection*{Kan fillings of 2-stable polynomials}
+
+We could say something like assume we have
+\[
+\begin{tabular}{ll}
+$f(x,y): \R^2 \to \R$ &  2-stable over $[0,1]^2$\\
+$t_0(x,z), t_1 (x,z) : \R^2 \to \R$ & 1-stable over $[0,1]^2$\\
+$b_0(y,z), b_1(y, z) : \R^2 \to \R$ & 0-stable over $[0,1]^2$\\
+\end{tabular}
+\]
+and assume boundary conditions
+\[
+\begin{tabular}{ll}
+$t_0(x,0) = f(x,0)$&$t_1 (x,0) = f(x,1)$\\
+$b_0(y,0) = f(0,y)$&$b_1 (y,0) = f(1,y)$\\
+\end{tabular}
+\]
+But I'd rather say something more uniform and cofibration-y. Making up some notation, I might try to assert
+\begin{lemma}
+Suppose we have $f$ such that
+\[
+\begin{tabular}{c}
+$x \in \tw \lor y \in \tw \lor z = 0 \prov f(x,y,z) : \R$\\
+$x \in \tw, y: \I, z: \I \prov f : S_0$\\
+$x : \I, y \in \tw, z: \I \prov f : S_1$\\
+$x : \I, y : \I, z = 0 \prov f : S_2$
+\end{tabular}
+\]
+Then there is an extension $g(x,y,z) : \R^3 \to \R$ such that
+\[
+\begin{tabular}{c}
+$x \in \tw \lor y \in \tw \lor z = 0 \prov f \equiv g : \R$\\
+$x: \I, y: \I, z: \I \prov g : S_2$
+\end{tabular}
+\]
+\end{lemma}
+where $S_n$ means `$n$-stable' and $\I$ is the unit interval $[0,1]$ and $\tw = \{0,1\}$.
+But I don't know how to prove this! I suspect as a warm-up that the following should
+still be true and easier to show:
+\begin{lemma}
+Suppose we have $f$ such that
+\[
+\begin{tabular}{c}
+$ y \in \tw \lor z = 0 \prov f(x,y,z) : \R$\\
+$x \in \tw, y \in \tw \lor z = 0  \prov f : S_0$\\
+$x : \I, y \in \tw, z: \I \prov f : S_1$\\
+$x : \I, y : \I, z = 0 \prov f : S_2$
+\end{tabular}
+\]
+Then there is an extension $g(x,y,z) : \R^3 \to \R$ such that
+\[
+\begin{tabular}{c}
+$ y \in \tw \lor z = 0 \prov f \equiv g : \R$\\
+$x \in \tw, y : \I, z : \I  \prov g : S_0$\\
+$x : \I, y \in \tw, z: \I \prov g : S_1$\\
+$x : \I, y : \I, z:\I \prov g : S_2$
+\end{tabular}
+\]
+\end{lemma}
+
+Here's a thought about how to go about proving this. 1-stability
+of $y\in \tw \prov f$ is the ability to take the line $f(\dash, 0, 0)$
+and follow its critical points down to $f(\dash, 1, 0)$. It's $f_x \ne 0$ that lets
+me move zeroes down. Can I interpolate the $f_x$s somehow and move $f(\dash, y, 0)$
+down to $f(\dash, y, 1)$ for other values of $y$?
+\end{document}
