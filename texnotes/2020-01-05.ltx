@@ -12,10 +12,11 @@
 \definecolor{morange}{rgb}{1,0.56,0}
 \definecolor{lorange}{rgb}{1,0.95,0.8}
 \definecolor{mgreen}{rgb}{0,0.56,0}
-\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lgreen}{rgb}{0.75,1,0.6}
 \definecolor{mblue2}{rgb}{0,0.2,1.0}
 \definecolor{lblue}{rgb}{0.8,0.95,1}
-\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{lred}{rgb}{0.9,0.5,0.5}
+\definecolor{mred}{rgb}{0.9,0.25,0.25}
 \definecolor{mgreen}{rgb}{0.1,0.5,0.1}
 \definecolor{mblue}{rgb}{0.3,0.3,0.9}
 \def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
@@ -31,7 +32,8 @@
 \def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
 \def\ups{{\uparrow}}
 \def\dns{{\downarrow}}
-\def\adjust{\big|}
+\def\Adjust{\Bigg|}
+\def\adjust{\Big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
 \def\ridp{\mathsf{idp}}
@@ -234,4 +236,753 @@ of $y\in \tw \prov f$ is the ability to take the line $f(\dash, 0, 0)$
 and follow its critical points down to $f(\dash, 1, 0)$. It's $f_x \ne 0$ that lets
 me move zeroes down. Can I interpolate the $f_x$s somehow and move $f(\dash, y, 0)$
 down to $f(\dash, y, 1)$ for other values of $y$?
+
+\subsubsection*{Division by Roots}
+
+One thing I notice about the condition of 1-stability is that it seems
+to allow dividing roots out.
+
+For suppose I have $f(x,z)$ which is 1-stable on $[0,1]^2$ and $0$-stable on $x \in \tw$.
+Fix a $z$. For every $x \in [0,1]$, there is an open set around $x$ in which there's at most one root;
+if $f \ne 0$, then there's an open set with no roots at all by continuity, and if $f = 0$, then $f_x \ne 0$, and there
+is a neighborhood with no further roots. So by compactness there are finitely many roots $r_1 < \ldots < r_m$.
+Pick one root in particular: we can infer what $f / (x-r_1)$ should be, by L'H\^opital. At $x = r_1$, it is just $f_x(r_1, z)$.
+So $f/(x-r_1)$ exists and isn't zero at $r_1$. By induction we get
+\[f = p \prod_{i \in [m]} (x-r_i)\]
+for some $p$ without any roots, even without the assumption that $f$ was a polynomial.
+
+\subsubsection*{Interpolating position}
+
+Can I find a polynomial substitution that drags around certain points? Let's say I have $f(x) : \R \to \R$
+and want to move $r_i$ to $s_i$ for $i \in [m]$. That is, I want to find $g(x,t) : \R^2 \to \R$ such
+that $g(x,0) = f(x)$ and $g(s_i, 1) = f(r_i)$.
+
+Let's try $m = 1$. I think we'll want a simple translation. Guess that
+\[g(x,t) = f(x + kt)\]
+and then $g(s, 1) = f(r)$ becomes $f(s + k) = f(r)$ so $s + k = r$ so $k = r-s$. The answer is
+\[g(x,t) = f(x + (r-s)t) = f(t[x, x + r-s ])\]
+
+Let's try $m= 2$. I'm going to guess that it's an interpolation between
+$x$ and some quadratic function of $x$:
+\[g(x,t) = f(t[x, ax^2 + bx + c]) = f(x - tx + ax^2t + bxt + ct)\]
+our constraints are
+\[f(x) = g(x,0) = f(x - 0x + ax^20 + bx0 + c0)\]
+\[f(r_1) = g(s_1,1) = f(as_1^2 + bs_1 + c) \]
+\[f(r_2) = g(s_2,1) = f(as_2^2 + bs_2 + c) \]
+Hm, but this seems underconstrained. I think I'm missing the
+constraint that the time reparameterization probably needs to be
+monotone increasing.
+
+Suppose I just have the interpolation problem
+\[a s_1^2 + bs_1 + c = r_1\]
+\[a s_2^2 + bs_2 + c = r_2\]
+and I treat $a$ as known and $b,c$ as unknown. Then I get
+\[ bs_1 + c = r_1 - a s_1^2\]
+\[ bs_2 + c = r_2 - a s_2^2\]
+
+\[ b(s_1 - s_2) = r_1 -r_2 - a (s_1^2 - s_2^2)\]
+\[ b  = { r_1 -r_2 \over s_1 - s_2} - a (s_1 +  s_2)\]
+
+\[  c = r_1 - a s_1^2 - s_1\left({ r_1 -r_2 \over s_1 - s_2} - a (s_1 +  s_2)\right) \]
+\[  = r_1 - s_1\left({ r_1 -r_2 \over s_1 - s_2} - a  s_2\right) \]
+\[  = { r_1(s_1 - s_2) - s_1(r_1 -r_2) \over s_1 - s_2} + a s_1 s_2 \]
+\[  = {  r_2 s_1 - r_1 s_2 \over s_1 - s_2} + a s_1 s_2 \]
+\[  = {  \left|\begin{array}{cc} s_1 & s_2 \\ r_1 & r_2 \end{array} \right| \over s_1 - s_2} + a s_1 s_2 \]
+
+Actually playing around with this, I think I do just want to set $a = 0$
+ and do linear interpolation. The next most interesting case is quadratic interpolation for three roots.
+
+We guess
+\[g(x,t) = f(t[x, ax^2 + bx + c]) = f(x - tx + ax^2t + bxt + ct)\]
+and we're constrained by
+\[f(x) = g(x,0) = f(x - 0x + ax^20 + bx0 + c0)\]
+\[f(r_1) = g(s_1,1) = f(as_1^2 + bs_1 + c) \]
+\[f(r_2) = g(s_2,1) = f(as_2^2 + bs_2 + c) \]
+\[f(r_3) = g(s_3,1) = f(as_2^2 + bs_2 + c) \]
+so we decide
+\[r_1 = as_1^2 + bs_1 + c \]
+\[r_2 = as_2^2 + bs_2 + c \]
+\[r_3 = as_2^2 + bs_2 + c \]
+which means
+\[
+\left[\begin{array}{ccc} s_1^2 & s_1 & 1 \\ s_2^2 & s_2 & 1 \\ s_3^2 & s_3 & 1 \end{array}\right]
+\left[\begin{array}{c} a \\ b \\ c \end{array}\right]
+=
+\left[\begin{array}{c} r_1 \\ r_2 \\ r_3 \end{array}\right]
+\]
+so obviously
+\[
+\left[\begin{array}{c} a \\ b \\ c \end{array}\right]
+=
+\left[\begin{array}{ccc} s_1^2 & s_1 & 1 \\ s_2^2 & s_2 & 1 \\ s_3^2 & s_3 & 1 \end{array}\right]^{-1}
+\left[\begin{array}{c} r_1 \\ r_2 \\ r_3 \end{array}\right]
+\]
+and plugging in we get
+\[g(x,t) = f\left(t\left[x, [x^2\ x\ 1]
+\left[\begin{array}{ccc} s_1^2 & s_1 & 1 \\ s_2^2 & s_2 & 1 \\ s_3^2 & s_3 & 1 \end{array}\right]^{-1}
+\left[\begin{array}{c} r_1 \\ r_2 \\ r_3 \end{array}\right]
+ \right]\right) \]
+
+\subsubsection*{Assuming Interpolant}
+
+I'm having a hard time bounding the degree of a polynomial that is a sufficiently {\em monotone} interpolant
+of $s_i \mapsto r_i$. So let me see where I get assuming such a thing exists. Let's call it $\zeta(x) : [0,1] \to [0,1]$. We
+know $\zeta(s_i) = r_i$ and $\zeta(0) = 0$ and $\zeta(1) = 1$ and $\zeta_x > 0$ on $[0,1]$.
+Given a 1-stable $f(x) : \R \to \R$ with roots $r_i$ we define $g(x)$ as $f(\zeta(x))$. We want to see that
+$g(x)$ is also 1-stable. If $g(x) = 0$ and $g_x(x)$, then $f(\zeta(x)) = 0$ and $\zeta_x(x) f_x(\zeta(x)) = 0$
+so $f_x(\zeta(x)) = 0$, and $f$ has a 2-critical point at $\zeta(x)$, a contradiction. So indeed $g(x)$ is 1-stable.
+What about the larger picture where we interpolate like
+\[ g(x,t) = f(t[x, \zeta(x)])\]
+In this case we assume
+\[ 0 =  g(x,t) = f(t[x, \zeta(x)])\]
+\[ 0 =  g_x(x,t) = t[1, \zeta_x(x)] f_x(t[x, \zeta(x)])\]
+hence since $t[1, \zeta_x(x)]$ is always strictly positive, we have
+\[ 0 =  f_x(t[x, \zeta(x)])\]
+so now $t[x,\zeta(x)]$ is a 2-critical point of $f$, a contradiction.
+
+So what if we have $f(x,y,z=0)$ which is 2-stable, and $t(x, y\in \tw, z)$ which is 1-stable, and $b(x\in\tw, y, z)$ which is 0-stable.
+I have $\zeta(x, y \in \tw, z)$ which says how to remap $x$ values at a particular $y,z$, based on what $t$ looks like.
+I have $m(y \in \tw, z)$ roots at a particular $y,z$ on the $t$-faces, called $r^{y,z}_i$. This reparameterization gets
+stronger as $z$ gets bigger. This means I can define the three-arg $\zeta$ in terms of a two-arg $\zeta$:
+\[\zeta(x,y\in \tw, z) = z[x, \zeta(x, y\in \tw)]\]
+I expect
+\[ \zeta(r^{y,z}_i, y \in \tw, 1) = r^{y,0}_i \]
+which means
+\[ \zeta(r^{y,1}_i, y\in \tw) = r^{y,0}_i \]
+and I think I $y$-interpolate between these two remapping functions:
+\[g(x,y,z) = f(y[\zeta(x,0),\zeta(x,1)], y, 0)\]
+Going to ignore the $b$s right now and check boundary conditions for $t$. At $y=0$ I have
+\[g(x,0,z) = f(\zeta(x,0), 0, 0)\]
+Hm, this doesn't seem right at all.
+
+\subsubsection*{Assuming Mapping Functions}
+Assume again $f(x,y,z=0)$ which is 2-stable, and $t(x, y\in \tw, z)$ which is 1-stable.
+We have $y\in \tw \prov f(x, y, 0) = t(x,y,0)$.
+Suppose we have $\zeta(x,y\in\tw, z)$ such that
+\[ t(x,y\in \tw, z) = t(\zeta(x,y,z), y, 0) = f(\zeta(x,y,z), y, 0)\]
+\[ \zeta(x,y\in \tw, 0) = x\]
+then we try to define
+\[ g(x,y,z) = f(y[\zeta(x,0,z), \zeta(x,1,z) ],y,0) \]
+checking that
+\[ g(x,y,0) = f(y[\zeta(x,0,0), \zeta(x,1,0) ],y,0) = f(x,y,0)\]
+\[ g(x,y\in \tw,z) = f(\zeta(x,y,z),y,0) = t(\zeta(x,y,z),y,0) = t(x,y,z)\]
+What about 2-stability? I want that not $g = g_x = g_{xx}g_{y} = 0$. I have
+not $f = f_x = f_{xx}f_{y} = 0$ and not $t = t_x = 0$.
+
+So suppose $g = g_x = g_{xx}g_y = 0$. Let $y \in \tw$ occurring in the middle argument of $\zeta$ (or $\zeta_x$) mean interpolation.
+This means
+\[ 0 =  g = f \]
+\[ 0 =  g_x = \zeta_x f_x \]
+\[  g_y =  f_y + (\zeta_{y=1} - \zeta_{y=0})f_x  \]
+\[  g_{xx} = \zeta_{xx} f_x + \zeta_x^2 f_{xx} \]
+
+Now {\em if} I knew $\zeta_x$ was never zero, I think I could prove $f = f_x = f_y f_{xx} = 0$ and I'm done.
+But I think I need to require something subtler.
+\subsubsection*{Arbitrary Monotone Reparam}
+
+Wait, if $\zeta$ is a monotone function $[0,1]\to[0,1]$ just adjusting
+$x$ coordinates, shouldn't that preserve 2-stability? Or indeed
+arbitrary stability? Let's say I have $f(x,y)$ which is 2-stable,
+and $\zeta(x,y) : [0,1]^2 \to [0,1]^2$ which is strictly monotone in $x$ for every particular $y$.
+I set
+\[ g(x, y) = f(\zeta(x, y), y)\]
+I have not $f=f_x=f_{xx}f_y=0$ and I want
+not $g=g_x=g_{xx}g_y=0$. I compute
+\[ 0 =  g= f \]
+\[ 0 =  g_x = \zeta_xf_x\]
+\[ 0=  g_{xx}g_y = (\zeta_{xx}f_x + \zeta^2_x f_{xx})f_y\]
+I can immediately see that if $g=g_x=g_{xx}g_y=0$ at $(x,y)$ then $f=f_x=f_{xx}f_y=0$ at $(\zeta(x,y),y)$, as required, by
+dividing by $\zeta_x$ in various places.
+
+\subsubsection*{Third Dimension}
+
+Let's say I have a function $f(x,y,z) : \R^n \to \R$ which is $3$-stable.
+I suppose I have $\chi(x,y,z) : \R^3 \to \R$ which is meant to reparameterize $x$,
+and $\gamma(y,z) : \R^2 \to \R$ which is meant to reparameterize $y$, and
+ $\zeta(z) : \R \to \R$ which is meant to reparameterize $z$.
+I define
+\[g(x,y,z) = f(\chi(x,y,z),\gamma(y,z),\zeta(x))\]
+I recall
+\[D^4 = f_{xxx} f_{y} (f_{xz} f_{y} - f_{z} f_{xy} ) + f_{xx} f_{z} (f_{xx} f_{yy} - f_{xy})\]
+so I compute
+\[g_x = \chi_x f_x\]
+\[g_y = \chi_y f_x + \gamma_y f_y\]
+\[g_{yy} = \chi^2_y f_{xx} + 2\chi_y\gamma_y f_{xy} + \gamma_y^2 f_{yy} + \chi_{yy}f_x + \gamma_{yy} f_y\]
+\[g_z = \chi_z f_x + \gamma_z f_y + \zeta_z f_z\]
+\[g_{xz} = \chi_x(\chi_z  f_{xx} + \gamma_z f_{xy} + \zeta_z f_{xz})\]
+\[g_{xy} = \chi_x(\chi_y f_{xx} + \gamma_y f_{xy})\]
+\[g_{xx} = \chi_{xx} f_x + \chi_x^2 f_{xx}\]
+\[g_{xxx} = \chi_{xxx} f_x  + 3\chi_x\chi_{xx}f_{xx} + \chi_x^3 f_{xxx}\]
+so
+\[ 0 = D^1 = g = f \]
+\[ 0 = D^2 = g_x = \chi_x f_x \]
+\[ 0 = D^3 = g_{xx}g_y = (\chi_{xx} f_x + \chi_x^2 f_{xx})(\chi_y f_x + \gamma_y f_y) \]
+\[  =  \chi_x^2 \gamma_y f_{xx} f_y \]
+\[ 0 = D^4 = g_{xxx} g_{y} (g_{xz} g_{y} - g_{z} g_{xy} ) + g_{xx} g_{z} (g_{xx} g_{yy} - g_{xy}^2)\]
+For the sequel let me consider the $f_{xx} = 0$ and $f_{y} = 0$ cases separately for ease of algebra.
+First $f_{xx} = 0$.
+\[ D^4 = \chi_x^3 f_{xxx} \gamma_y f_y \]
+\[ (\chi_x(\gamma_z f_{xy} + \zeta_z f_{xz}) \gamma_y f_y - (\gamma_z f_y + \zeta_z f_z) \chi_x \gamma_y f_{xy})  \]
+Assuming $\chi_x, \gamma_y, \zeta_z > 0$, this is the same as
+\[ 0 = f_{xxx}  f_y ((\gamma_z f_{xy} + \zeta_z f_{xz}) \gamma_y f_y - (\gamma_z f_y + \zeta_z f_z)  \gamma_y f_{xy})  \]
+\[ 0 = f_{xxx}  f_y (\zeta_z f_{xz} \gamma_y f_y -  \zeta_z f_z  \gamma_y f_{xy})  \]
+\[ 0 = f_{xxx}  f_y ( f_{xz}  f_y -   f_z   f_{xy})  \]
+So $f$ is not 3-stable, a contradiction. Let's consider the case $f_y = 0$. Then
+\[ D^4 = \chi_x^2 f_{xx} \zeta_z f_z \]
+\[( \chi_x^2 f_{xx}(\chi^2_y f_{xx} + 2\chi_y\gamma_y f_{xy} + \gamma_y^2 f_{yy}) - \]
+\[(\chi_x(\chi_y f_{xx} + \gamma_y f_{xy}))^2)\]
+\[ = \chi_x^2 f_{xx} \zeta_z f_z \]
+\[( \chi_x^2 \chi^2_y f_{xx}^2 + 2\chi_x^2\chi_y\gamma_y f_{xy}f_{xx} + \chi_x^2 \gamma_y^2 f_{xx}f_{yy} - \]
+\[\chi_x^2\chi^2_y f^2_{xx} + 2\chi_x^2 \chi_y f_{xx} \gamma_y f_{xy} + \chi_x^2 \gamma^2_y f^2_{xy})\]
+\[ = \chi_x^4  \gamma^2_y \zeta_z f_{xx}  f_z (f_{xx}f_{yy} - f_{xy}^2)\]
+So $f$ is not 3-stable, a contradiction again!
+\subsubsection*{General Case}
+\def\zt#1{\zeta^{\bullet #1}}
+Suppose I have $f : \R^n \to \R$ and for each $k \in [n]$ I have $\zt k : \R^{n-k+1} \to \R$.
+Suppose the $k^{th}$ derivative of $\zt k$ is positive:
+\[ {\partial \zt k \over \partial x_k} > 0 \]
+This is always the derivative with respect to the positionally first argument of $\zt k$.
+Let's define a map $\zeta : \R^n \to \R^n$ by
+\[\zeta(p) = (\zt 1(p_{\ge 1}), \ldots, \zt n(p_{\ge n}))\]
+where if $p \in \R^n$, I'm defining $p_{\ge k} : \R^{n-k+1}$ to be the $k^{th}$ slice of $p$,
+\[ p_{\ge k} = (p_k, p_{k+1}, \ldots, p_n)\]
+Then we can define
+\[ g(p) = f(\zeta(p)) \]
+$\ldots$ wait, maybe there's an easier way to do this.
+\subsubsection*{Less Slicing}
+Suppose we have $f : \R^n \to \R$ and $\zeta : \R^n \to \R^n$.
+Assume for all $k$ that
+\[{\partial \zeta_k \over \partial x_k} > 0 \]
+and all $\ell > k$ that
+\[{\partial \zeta_\ell \over \partial x_k} = 0 \]
+So for example $\zeta_n$ is effectively a monotone function $\R \to \R$.
+We assume $f$ is $n$-stable and wish to show that $g = f \o \zeta$ is $n$-stable.
+This is the same as showing, for every $n_0 \le n$, that
+\[ \forall m \in [n_0] . D^m(f \o \zeta) \adjust_p = 0\]
+implies
+\[ \forall m \in [n_0] . D^m(f)\adjust_{\zeta(p)} = 0\]
+Let's try to show this inductively. When $n_0 = 1$, we need to show
+\[ (f \o \zeta) \adjust_p = 0 \qquad \imp \qquad f\adjust_{\zeta(p)} = 0\]
+Trivially true!
+
+In the induction step we get to assume
+\begin{tabbing}
+$\displaystyle\forall m \in [n_0] . D^m(f \o \zeta) \adjust_p = 0$\`(1a)\\
+$\displaystyle\det_{i,j \in [n_0]} {\partial D^i(f \o \zeta) \over \partial x_j }\Adjust_{p} = 0$\`(1b)\\
+\end{tabbing}
+and we want to show
+\begin{tabbing}
+$\displaystyle\forall m \in [n_0] . D^m(f) \adjust_{\zeta(p)} = 0$\`(2a)\\
+$\displaystyle\det_{i,j \in [n_0]} {\partial D^i(f) \over \partial x_j }\Adjust_{\zeta(p)} = 0$\`(2b)
+\end{tabbing}
+
+Getting from (1a) to (2a) is the induction hypothesis. Let's try to compute the derivatives in (1b) a bit.
+I hope I'm not too reckless in thinking I can pass the differential operator inside the $D^i$. This gives me
+
+\[0 = \det_{i,j \in [n_0]} {\partial D^i(f \o \zeta) \over \partial x_j }\Adjust_{p} \]
+\[ = \det_{i,j \in [n_0]} { D^i\left({\partial (f \o \zeta) \over \partial x_j}\right)  }\Adjust_{p} \]
+\[ = \det_{i,j \in [n_0]} { D^i\left(\sum_{k\in [n]} {\partial \zeta_k \over \partial x_j} \left({\partial f \over \partial x_k} \o \zeta\right) \right)  }\Adjust_{p} \]
+\[ = \det_{i,j \in [n_0]} \sum_{k\in [n]} { D^i\left( {\partial \zeta_k \over \partial x_j} \left({\partial f \over \partial x_k} \o \zeta\right) \right)  }\Adjust_{p} \]
+\[ = \det_{i,j \in [n_0]} \sum_{k\in [j]} { D^i\left( {\partial \zeta_k \over \partial x_j} \left({\partial f \over \partial x_k} \o \zeta\right) \right)  }\Adjust_{p} \]
+
+\[ = \det_{i,j \in [n_0]} \sum_{k \le j} { D^i(  \zeta_{k;j} f_k)  }\Adjust_{p} \]
+
+\subsubsection*{Running Out of Steam}
+
+This is still a bit too much generality for my brain to handle. Need to go back to more concrete numbers.
+Let's try to do the 3-dimensional case but with this $\zeta : \R^n \to \R^n$ arrangement.
+
+We have $f : \R^3 \to \R$. We have $\zeta : \R^3 \to \R^3$. I'll write the differential operators as $\partial_1, \partial_2, \partial_3$.
+I know $\partial_k \zeta_k > 0$, and $\partial_k \zeta_\ell = 0$ when $\ell > k$. I define $g = f \o \zeta$.
+I suppose $D^1 g = D^2 g = D^3 g = D^4 g = 0$ at some point $p : \R^3$, and I try to show $D^1 f = D^2 f = D^3 f = D^4 f 0$
+at $\zeta(p)$. Now $D^1 g$ is just $g$. I know $f(\zeta(p)) = 0$, and I must show $f(\zeta(p)) = 0$, done.
+For $D^2$, I also know $\partial_1 g = 0$, and I try to show $\partial_1  f = 0$.
+Well,
+\[0 = \partial_1 g = \partial_1 (f \o \zeta)\]
+\[= \partial_1 \zeta_1 \partial_1 f + \partial_1 \zeta_2 \partial_2 f + \partial_1 \zeta_3 \partial_3 f \]
+\[0 = \partial_1 \zeta_1 \partial_1 f  \]
+\[0 =  \partial_1 f  \]
+That last step is valid because $\partial_1\zeta_1 > 0$. Ok, that's good progress. Let's try $D^3$.
+We gain the additional knowledge that
+\[
+0 = \left|\begin{array}{cc}
+  \partial_1 g & \partial_2 g\\
+  \partial^2_1 g & \partial_1 \partial_2 g
+\end{array}\right|
+\]
+and we must show
+\[
+0 = \left|\begin{array}{cc}
+  \partial_1 f & \partial_2 f\\
+  \partial^2_1 f & \partial_1 \partial_2 f
+\end{array}\right|
+\]
+Let's try to compute the full determinant, and postpone using the fact that we know $\partial_1 g = 0$.
+\[
+0 = \left|\begin{array}{cc}
+  \partial_1 (f \o \zeta) & \partial_2 (f \o \zeta)\\
+  \partial^2_1 (f \o \zeta) & \partial_1 \partial_2 (f \o \zeta)
+\end{array}\right|
+\]
+\[
+ = \left|\begin{array}{cc}
+ \sum_i \partial_1 \zeta_i \cdot \partial_i f &  \sum_i \partial_2 \zeta_i  \cdot \partial_i f\\
+  \partial^2_1 (f \o \zeta) & \partial_1 \partial_2 (f \o \zeta)
+\end{array}\right|
+\]
+\[
+ = \left|\begin{array}{cc}
+ \sum_i \partial_1 \zeta_i \cdot \partial_i f
+&  \sum_i \partial_2 \zeta_i  \cdot \partial_i f
+\\
+ \sum_i \partial^2_1 \zeta_i \cdot \partial_i f
+  &
+\sum_i \partial_1\partial_2 \zeta_i  \cdot \partial_i f
+\\
+ + \partial_1\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f
+&
+ + \partial_2\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f
+\end{array}\right|
+\]
+\[ = ( \sum_k \partial_1 \zeta_k \cdot \partial_k f )(\sum_i \partial_1\partial_2 \zeta_i  \cdot \partial_i f
+ + \partial_2\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f)\]
+\[ - (\sum_k \partial_2 \zeta_k  \cdot \partial_k f)( \sum_i \partial^2_1 \zeta_i \cdot \partial_i f
+ + \partial_1\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f ) \]
+
+\[ =  \sum_{i,k} \partial_1 \zeta_k \cdot \partial_k f \cdot ( \partial_1\partial_2 \zeta_i  \cdot \partial_i f
+ + \partial_2\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f)\]
+\[ - \sum_{i,k} \partial_2 \zeta_k  \cdot \partial_k f \cdot ( \partial^2_1 \zeta_i \cdot \partial_i f
+ + \partial_1\zeta_i \sum_j\partial_1 \zeta_j \cdot \partial_i\partial_j f ) \]
+
+\[ =  \sum_{i} \partial_1 \zeta_1 \cdot \partial_1 f \cdot ( \partial_1\partial_2 \zeta_i  \cdot \partial_i f
+ + \partial_2\zeta_i \cdot \partial_1 \zeta_1 \cdot \partial_i\partial_1 f)\]
+\[ - \sum_{k} \partial_2 \zeta_k  \cdot \partial_k f \cdot ( \partial^2_1 \zeta_1 \cdot \partial_1 f
+ + \partial_1\zeta_1 \cdot \partial_1 \zeta_1 \cdot \partial_1\partial_1 f ) \]
+
+
+\[ =   \partial_1 \zeta_1 \cdot \partial_1 f \cdot ( \partial_1\partial_2 \zeta_1  \cdot \partial_1 f
+ + \partial_2\zeta_1 \cdot \partial_1 \zeta_1 \cdot \partial_1\partial_1 f)\]
+\[    \partial_1 \zeta_1 \cdot \partial_1 f \cdot ( \partial_1\partial_2 \zeta_2  \cdot \partial_2 f
+ + \partial_2\zeta_2 \cdot \partial_1 \zeta_1 \cdot \partial_2\partial_1 f)\]
+\[ - \partial_2 \zeta_1  \cdot \partial_1 f \cdot ( \partial^2_1 \zeta_1 \cdot \partial_1 f
+ + \partial_1\zeta_1 \cdot \partial_1 \zeta_1 \cdot \partial_1\partial_1 f ) \]
+\[ - \partial_2 \zeta_2  \cdot \partial_2 f \cdot ( \partial^2_1 \zeta_1 \cdot \partial_1 f
+ + \partial_1\zeta_1 \cdot \partial_1 \zeta_1 \cdot \partial_1\partial_1 f ) \]
+Ugh this is a mess.
+
+Let's try saying that I know
+\[
+0 = \left|\begin{array}{cc}
+   g_x &  g_y\\
+   g_{xx} &  g_{xy}
+\end{array}\right|
+\]
+and we must show
+\[
+0 = \left|\begin{array}{cc}
+   f_x &  f_y\\
+   f_{xx} &  f_{xy}
+\end{array}\right|
+\]
+I do still know $g = g_x = 0$. I know that $\zeta_{1;x} > 0$ and $\zeta_{2;y} > 0$ and $\zeta_{3;z} > 0$
+and I know $\zeta_{2;x} = 0$ and $\zeta_{3;x} = 0$ and $\zeta_{3;y} = 0$.
+
+I compute
+\[ g_{x} = \zeta_{1;x}f_x + \zeta_{2;x}f_y + \zeta_{3;x} f_z = \zeta_{1;x} f_x\]
+\[ g_{y} = \zeta_{1;y}f_x + \zeta_{2;y}f_y + \zeta_{3;x} f_z = \zeta_{1;y} f_x + \zeta_{2;y} f_y\]
+
+\[ g_{xx} = \zeta_{1;xx} f_x + \zeta_{1;x}^2 f_{xx}\]
+\[ g_{xy} = \zeta_{1;xy} f_x + \zeta_{1;x} ( \zeta_{1;y} f_{xx} + \zeta_{2;y} f_{xy} ) \]
+
+\[ g_x g_{xy} - g_{y} g_{xx} = \zeta_{1;x} f_x (\zeta_{1;xy} f_x + \zeta_{1;x} ( \zeta_{1;y} f_{xx} + \zeta_{2;y} f_{xy} ))\]
+\[ - (\zeta_{1;y} f_x + \zeta_{2;y} f_y)(\zeta_{1;xx} f_x + \zeta_{1;x}^2 f_{xx}) \]
+
+\[ = \zeta_{1;x} f^2_x \zeta_{1;xy}  + \zeta^2_{1;x} f_x   \zeta_{1;y} f_{xx} + \zeta_{1;x}^2 f_x \zeta_{2;y} f_{xy} \]
+\[ - \zeta_{1;xx} f_x \zeta_{1;y} f_x -  \zeta_{1;xx} f_x\zeta_{2;y} f_y - \zeta_{1;x}^2 f_{xx}\zeta_{1;y} f_x - \zeta_{1;x}^2 f_{xx}\zeta_{2;y} f_y \]
+
+\[ = \zeta_{1;x} f^2_x \zeta_{1;xy}   + \zeta_{1;x}^2 f_x \zeta_{2;y} f_{xy} \]
+\[ - \zeta_{1;xx} f_x \zeta_{1;y} f_x -  \zeta_{1;xx} f_x\zeta_{2;y} f_y  - \zeta_{1;x}^2 f_{xx}\zeta_{2;y} f_y \]
+
+\[ = \zeta^2_{1;x}\zeta_{2;y} \left|
+\begin{array}{cc}
+  f_x & f_{xy} \\ f_{xx} & f_{xy}
+\end{array}\right| + f_x(\cdots)
+\]
+\subsubsection*{Carving Out Tractable Subsets}
+I'm still getting bogged down by notation.
+Let's take $f : \R^n \to \R$ and $\zeta : \R^n \to \R^n$ and try to sneak up on the problem
+by showing that $f$ is $m$-stable implies $f \o \zeta$ is $m$-stable, for small $m$.
+Say $\rho_{x_i} = {\partial \zeta_i \over\partial x_i} = \zeta_{i;x_i}$. We know all $\rho_{x_i} > 0$.
+We know $\zeta_{i;x_j} = 0$ when $i > j$.
+
+We definitely have $0$-stable implies $0$-stable. If $f \o \zeta$ has a $1$-critical point
+at $p$, then $f(\zeta(p)) =0$, so $f$ has a 1-critical point at $\zeta(p)$.
+
+$1$-stability transfers: If $g = f \o \zeta$ has a $2$-critical point at $p$, then
+$g_x = 0$. This means $0 = \sum_{i} \zeta_{i;x} f_{x_i} = \rho_{x} f_x$ and dividing by $\rho_x > 0$ gives the desired result.
+
+$2$-stability transfers: we know $g = g_x = g_{xx}g_y = 0$ at $p$.
+
+\[ g_x = \sum_{i} \zeta_{i;x} f_{x_i} = \rho_x f_x \]
+\[ g_{xx} = \sum_{i} \zeta_{i;x} f_{x_i} = \rho_{x;x} f_x + \rho_x^2 f_{xx}  \]
+\[ g_y = \sum_{i} \zeta_{i;y} f_{x_i} = \zeta_{x;y} f_x + \rho_y f_y \]
+So $g_{xx}g_y = \rho_x^2 \rho_y f_{xx} f_y$, and we are done.
+
+$3$-stability transfers: we know $g = g_x = g_{xx}g_y = $
+\[g_{xxx} g_{y} (g_{xz} g_{y} - g_{z} g_{xy} ) + g_{xx} g_{z} (g_{xx} g_{yy} - g_{xy}^2) = 0\] at $p$.
+This is the determinant
+\[
+\left|\begin{array}{ccc}
+g_{x} & g_{y} & g_{z} \\ g_{xx} & g_{xy} & g_{xz} \\
+(g_{xx}g_{y})_x & (g_{xx}g_{y})_z & (g_{xx}g_{y})_z
+\end{array}\right|
+\]
+which we can expand a bit to
+\[
+\left|\begin{array}{ccc}
+0 & \sum_{x < v \le y} \zeta_{v;y}f_{v} & \sum_{x < v \le z} \zeta_{v;z}f_{v}
+ \\ g_{xx} & g_{xy} & g_{xz} \\
+(g_{xx}g_{y})_x & (g_{xx}g_{y})_z & (g_{xx}g_{y})_z
+\end{array}\right|
+\]
+What can I figure out about derivatives of $g_x = \zeta_{x;x} f_x$?
+I get
+\[g_{xv} = \zeta_{x;xv} f_x + \zeta_{x;x} \sum_{w\le v} \zeta_{w;v}f_{xw} = \zeta_{x;x} \sum_{w\le v} \zeta_{w;v}f_{xw}\]
+so I can expand more to
+\[
+\left|\begin{array}{ccc}
+0 &  \rho_y f_{y} &  \zeta_{y;z}f_{y}+ \rho_{z}f_{z} \\
+\rho_x^2 f_{xx} & \rho_x(\sum_{w \le y} \zeta_{w;y}f_{xw}) & \rho_x(\sum_{w \le z} \zeta_{w;z}f_{xw}) \\
+(g_{xx}g_{y})_x & (g_{xx}g_{y})_z & (g_{xx}g_{y})_z
+\end{array}\right|
+\]
+=
+\[
+\rho_x
+\left|\begin{array}{ccc}
+0 &  \rho_y f_{y} &  \zeta_{y;z}f_{y}+ \rho_{z}f_{z} \\
+\rho_x f_{xx} &  \zeta_{x;y}f_{xx}  +  \rho_yf_{xy} & \sum_{w \le z} \zeta_{w;z}f_{xw} \\
+(g_{xx}g_{y})_x & (g_{xx}g_{y})_y & (g_{xx}g_{y})_z
+\end{array}\right|
+\]
+Even at this stage I'm starting to be able to see the terms that I expect to cancel from the determinant; basically
+everything that {\em doesn't} involve one $\rho_v$ for each $v$-derivative taken.
+
+Let's try to compute some more derivatives.
+\[ g_x  = \rho_x f_x \]
+\[ g_y  = \zeta_{x;y}f_x + \rho_y f_y \]
+\[ g_{xy}  = \zeta_{x;xy}f_x + \zeta_{x;y}\rho_x f_{xx} + \rho_x\rho_y f_{xy} \]
+\[ g_{xx}  = \rho_{x;x} f_x + \rho_x^2 f_{xx}  \]
+\[ g_{xxx}  = \rho_{x;xx} f_x + 3\rho_x\rho_{x;x} f_{xx}  + \rho_x^3 f_{xxx}  \]
+\[ g_{xxy}  = \rho_{x;xy}f_x + 2\rho_{x;y}\rho_x f_{xx} + \rho_{x;x}\rho_y f_{xy} \]
+\[ + \zeta_{x;y}\rho_{x;x} f_{xx}+ \zeta_{x;y}\rho^2_x f_{xxx} + \rho^2_x\rho_y f_{xxy} \]
+No, this is still too much of a mess to see what's going on clearly.
+
+\subsubsection*{Simply Counting the Terms in $D^n$}
+There is one term in $D^1$: it's $f$.
+
+\noindent
+There is one term in $D^2$: it's $f_x$.
+
+\noindent
+There are two terms in $D^3$, they're $f_{x}f_{xy} - f_{xx}f_{y}$. They both have 2 factors.
+
+\noindent
+There are $24 =(2!2)3!$ terms in $D^4$. We have to choose a permutation of 3 things for the $3\x 3$ determinant.
+We have to choose one of the $2$ terms in the $D^3$ row. We have to choose one of the $2$ factors to take a derivative of.
+
+Each of these terms has 4 factors.
+
+\noindent
+There are $(2!2)^2 (3!4) 4!$ terms in $D^5$. We have to choose a permutation of 4 things for the $4\x 4$ determinant.
+We have to choose among $(2!2)(3!4)$ terms-and-factors in $D^4$ and $2!2$ terms-and-factors in $D^3$.
+
+Each of these terms has 8 factors
+
+\noindent
+There are $(2!2)^4 (3!4)^2 (4!8)^1 5!$ terms in $D^6$. We have to choose a permutation of 5 things for the $5\x 5$ determinant.
+Then we pick up $(2!2)^2(3!4)(4!8)$ from $D^4$ and $(2!2)(3!4)$ from $D^3$ and $(2!2)$ from $D^2$.
+
+$D^7$ has $(2!2)^8 (3!4)^4 (4!8)^2 (5!16)^1 6!$.
+$D^n$ has
+\[(n-1)! \prod_{i = 1}^{n-2} (i!2^{i-1} )^{2^{n-2-i}}\]
+
+Let's look at $D^7 / D^6 = (2!2)^8 (3!4)^4 (4!8)^2 (5!16)^1 6! / (2!2)^4 (3!4)^2 (4!8)^1 5!$
+\[ =  (2!2)^4(3!4)^2  (4!8)^1 (5!16)^1 6\]
+How about $D^7 / (D^6)^2$:
+\[ =  16 \cdot 6\]
+Ok, that's a fairly easy to express recurrence! $D^{n+1} = 2^{n-2} n ( D^n)^2$.
+For
+\[2 = D^3 = 2 (D^2)^2 = 2\cdot 1^2\]
+\[24 = D^4 = 2 \cdot 3 \cdot 2^2 \]
+\[9216 = D^5 = 4 \cdot 4 \cdot (24)^2 \]
+\[3397386240 = D^6 = 8 \cdot 5 \cdot (9216)^2 \]
+
+My previous intuition was
+
+\[ E^{1} = D^1 \]
+\[ E^{n+1} = 2^{n-1}D^{n+1} \]
+\[ D^{1} = 1\]
+\[ D^{n+1} = n! \prod_{i = 1}^n E^i \]
+So if I define
+\[D^1 = D^2 = 1\]
+\[D^{n+2} = 2^{n-1} (n+1) (D^{n+1})^2\]
+then I could try proving
+
+\begin{lemma}
+$ D^{n+1} = n! \prod_{i = 0}^{n-2} 2^{i}D^{i+2}$ for $n \ge 1$
+\end{lemma}
+
+\begin{proof}
+$n = 1$ case checks out ok.
+If $n=2$, then we're checking $D^3 = 2 = 2! ( 2^0 D^2) = 2$.
+For big $n$, we suppose
+\[ D^{n+1} = n! \prod_{i = 0}^{n-2} 2^{i}D^{i+2}\]
+and we want to show
+\[ D^{n+2} = (n+1)! \prod_{i = 0}^{n-1} 2^{i}D^{i+2}\]
+The rhs is the same thing as
+\[  (n+1) 2^{n-1}D^{n+1} \left(n! \prod_{i = 0}^{n-2} 2^{i}D^{i+2}\right)\]
+and by the i.h. this is
+\[  (n+1)  2^{n-1}(D^{n+1})^2\]
+as required.
+\cqed
+\end{proof}
+
+\subsubsection*{One Dependency At a Time?}
+What if $\zeta_{v;w}$ is almost always zero, except $\rho_v = \zeta_{v;v}$ can be positive, for any $v$.
+ Then the $D^4$ determinant I was trying to compute looks like
+\[
+\left|\begin{array}{ccc}
+0 &  \rho_y f_{y} &   \rho_{z}f_{z} \\
+\rho_x^2 f_{xx} & \rho_x\rho_yf_{xy} & \rho_x\rho_z f_{xz}\\
+(g_{xx}g_{y})_x & (g_{xx}g_{y})_z & (g_{xx}g_{y})_z
+\end{array}\right|
+\]
+Here it smells like the determinant is going to come out $\rho_x^4\rho_y^2\rho_z D^4(f)$.
+What if {\em just} $\zeta_{x;y}$ (in addition to $\rho_v > 0$) can be nonzero. Not even larger derivatives like $\zeta_{x;yy}$.
+Also assume things like $\rho_{x;x} = 0$. The dependence of each variable on itself is linear, and the dependence of $x$ on $y$ is linear.
+\[ g_x = \rho_x f_x\]
+\[ g_y = \zeta_{x;y} f_x + \rho_y f_y\]
+\[ g_z = \rho_z f_z\]
+\[ g_{xx} = \rho^2_x f_x\]
+\[ g_{xy} = \zeta_{x;y} \rho_x f_{xx} + \rho_x \rho_y f_{xy}\]
+\[ g_{xz} = \rho_x\rho_z f_{xz}\]
+
+\subsubsection*{Composition}
+
+I'm going to step back away from this and assume that the reparameterization theorem is probably true. Let's think about about composition means.
+
+An $n$-cell is a function $x_1 : \I, \ldots, x_n : \I \prov f : \R$ such that
+$f$ is $n$-stable, and $[b/x_m]f$ is $(m-1)$-stable for $b\in \tw$.
+
+It's a {\em trivial} $n$-cell if it's also $(n-1)$-stable. In this case we think of it
+as a proof that the $(n-1)$-cells $[0/x_n]f$ and $[1/x_n]f$ are equivalent. We write in this case
+\[[0/x_n]f \approx_{n-1} [1/x_n]f\]
+In general
+\[ f \approx_n g \]
+means there is a trivial $(n+1)$-cell $h$ (i.e. $h$ is $n$-stable)
+such that $[0/x_{n+1}]h = f$ and $[1/x_{n+1}]h = g$.
+
+Fix $\Gamma = x_1 : \I, \ldots, x_n: \I$. Suppose we have $\Gamma \prov f,g,h : \R$, all $n$-cells.
+We say $h$ is the $m$-composite of $f$,$g$ if
+\[[0/x_m]h = [0/x_m]f \qquad [1/x_m]h = [1/x_m]g \]
+\[ [\dns x_m / x_m]h \approx_n f \qquad [\ups x_m / x_m] h \approx_n g\]
+
+Can I prove anything about this?
+
+\begin{lemma}
+Suppose $f\approx_n g$ and $m < n$. If $f$ is $m$-stable then $g$ is $m$-stable.
+\end{lemma}
+
+\begin{proof}
+By doing some actual calculus. If $g$ isn't $m$-stable, it has an $(m+1)$-critical point.
+The $n$-stability of the cell $h : f \approx_n g$ means that we can transport this up to $f$, a contradiction.
+\cqed
+\end{proof}
+
+\begin{corollary}
+If $f \approx_n g$ and $f$ is trivial, then $g$ is trivial.
+\end{corollary}
+
+
+\begin{lemma}
+Any composite of trivial cells is trivial.
+\end{lemma}
+
+\begin{proof}
+Suppose $f,g,h$ are $n$-cells and $m\le n$ and $f \o_m g = h$.
+If $h$ had an $n$-critical point $p$, then either
+$p = \dns_m p_f = [\dns x_m/x_m]p_f$ or $p = \ups_m p_g = [\ups x_m/x_m]p_g$.
+In the first case, $p_f$ would be an $n$-critical point of $h\dns_m$, which means $f \approx h\dns_m$
+would have an $n$-critical point, a contradiction.  The other case is symmetric.
+\cqed
+\end{proof}
+
+I'd like to prove that any composite with a trivial cells is equivalent to the original cell,
+but constructing that equivalence takes me outside the region apparently defined by composition!
+
+Let's define a new notion of composition to account for this.
+We say $h$ an $(n+1)$-cell is the {\em composition witness} of $n$-cells $f$ and $g$, written $h = f \o_m g$,
+when
+\[ h[0/x_m] = f[0/x_m] \qquad h[1/x_m] = g[1/x_m] \]
+\[h : S_n \qquad h[\hf/x_{m}] : S_{m-1}\]
+\[ h\dns_m[0/x_{n+1}] = f \qquad h \ups_m [1/x_{n+1}] = g\]
+
+Then the composite cell of $f$ and $g$ is actually $h[\hf/x_{n+1}]$.
+
+We can see that any nontrivialities in $f$ and $g$ can be transported down there,
+so the previous lemma stays true.
+
+\begin{lemma}
+If $g$ is trivial, then $f \o_m g \approx_n f$.
+\end{lemma}
+
+\begin{proof}
+Let $x_1, \ldots, x_{n+1} \prov h : \R$ be the witness that $f \o_m g$ succeeds.
+In point of fact $[\hf/x_m] h = f\o_m g$.
+Let's define the equivalence cell $x_1, \ldots, x_{n+1} \prov k : \R$.
+When $x_{n+1}$ is zero, we want to emit $f$, i.e. $\dns_m [0/x_{n+1}]h$.
+When $x_{n+1}$ is one, we want to emit $[\hf/x_{n+1}] h$.
+So we set
+\[ k = [x_{n+1}[\dns x_m, x_m]/x_m ][\dns x_{n+1}/x_{n+1}] h\]
+We're allowed to have higher dimensions affect lower dimensions arbitrarily, and dimensions
+can affect themselves monotonically, so this checks out syntactically.
+
+But we also need to check that $k$ really is a {\em cell}. The interesting face of it that isn't already
+a face of something else is $[1/x_m]k$. this is
+\[[x_{n+1}[\hf, 1]/x_m ][\dns x_{n+1}/x_{n+1}] h = [\ups x_{n+1}/x_m ][\dns x_{n+1}/x_{n+1}] h\]
+Hm... not sure what I need to proceed here.
+\end{proof}
+
+\subsubsection*{On the definition of Stability}
+
+I think which level of stability I want to require for the various points in
+Kan cofibrations and for the filled cell can be predicted entirely from their shapes in $\R^n$.
+
+If I have an empty square
+\[\begin{tikzpicture}
+\draw (0,0)--(0,2)--(2,2)--(2,0);
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x$};
+\node (y) at (0,-.5)[below] {$y$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+I know the top should be $1$-stable and the two sides should be $0$-stable.
+Why don't I require that the sides are merely 1-stable? Because 1-stability requires
+prohibiting 2-critical points, which require talking about $x$-derivatives, and all the points
+on the sides of the square are infinitely thin in the $x$ direction!
+
+Another way of thinking of this is to treat the $f_x$ derivative being {\em undefined} as
+similar to it being zero. This means that if $f$ ever had a $1$-critical point (i.e. a root) when $x \in \tw$,
+then that point would also be 2-critical (since `$f_x = 0$' holds up to conflating 0 and undefinedness)
+and 3-critical (since $f_{xx}$ would also be undefined). So just assuming that the whole diagram is 2-stable
+means that the sides of the diagram must be 0-stable, and the top must be 1-stable (since for it $f_{y}$ is undefined,
+and a 2-critical point there would immediately escalate to a 3-critical point).
+
+For a filled in diagram, the stability requirements follow naturally:
+\[\begin{tikzpicture}
+\fill[lred] (0,0)--(0,2)--(2,2)--(2,0)--cycle;
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\node at (0,1)[left, mblue] {$0$};
+\node at (2,1)[right, mblue] {$0$};
+
+\draw[line width=2pt, mgreen] (0,0)--(2,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (1,0)[below, mgreen] {$1$};
+\node at (1,2)[above, mgreen] {$1$};
+\node at (1,1)[white] {$2$};
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x$};
+\node (y) at (0,-.5)[below] {$y$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+
+\subsubsection*{Composition as Filling}
+
+I think I can get a reasonable stab at composition of morphisms by filling a snake-like deformation retract of a cube.
+If we have $n$-cells $f,g$ that we want to compose along the $x_m$-dimension, we ask for a filler of the following diagram:
+
+\[\begin{tikzpicture}
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\draw[line width=2pt, mblue] (4,0)--(4,2);
+
+
+\draw[line width=2pt, mgreen] (2,0)--(4,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (3,0)[below, mgreen] {$g$};
+\node at (1,2)[above, mgreen] {$f$};
+
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_m$};
+\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+\[\dns\]
+\[\begin{tikzpicture}
+ \fill[lblue] (0,0)--(0,2)--(4,2)--(4,0)--cycle;
+
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\draw[line width=2pt, mblue] (4,0)--(4,2);
+
+
+\draw[line width=2pt, mgreen] (2,0)--(4,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (3,0)[below, mgreen] {$g$};
+\node at (1,2)[above, mgreen] {$f$};
+
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_m$};
+\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+
+\end{scope}
+\draw[line width=2pt, mred, dashed] (0,1)--(4,1);
+\node at (4,1)[right, mred] {$f \o_m g$};
+\end{tikzpicture}\]
+
+\noindent This presumes that we {\em can} find a trivial cell to mediate between $f$'s codomain and $g$'s codomain,
+and allows us to be clever and choose the outer cells to be exactly $[0/x_m]f$ and $[1/x_m]g$ and be irrelevant in $x_{n+1}$.
+This means that
+\[[0/x_m](f \o_m g) = [0/x_m]f \qquad [1/x_m](f \o_m g) = [1/x_m]g\]
+ on the nose.
+
+I think the general Kan filling principle smells like: suppose $X$ is a deformation retract of $Y$. Any stable
+function $f$ on $X$ extends to a stable function $f^*$ on $Y$, and if $f$ was globally $n$-stable, then $f^*$ is $n$-stable too.
+This means that even though the shape of the composition filler would permit mere $n+1$-stability,
+as long as $f$ and $g$ were $n$-stable to start with, we promise not to introduce new $(n+1)$-critical points in the course of filling.
+
+\subsubsection*{Consequences of Inferring Stability from Geometry of Domain}
+
+If I have a curvy line for the domain of some putative cell, rather than boxes and cubes,
+it seems like I'd be allowed to relax to $1$ stability at its extrema:
+
+\[
+\begin{tikzpicture}
+\draw[line width=2,mblue] (0,0) .. controls (0.5,0.1) and (0.5,1) .. (1,1)
+    .. controls (1.5,1) and (1.2,-1) .. (2,-1)
+    .. controls (2.1,-1) and (2.9,-0.75) .. (3,-0.5);
+ \node[mblue] at (0,0)[left] {$0$};
+ \node[mblue] at (3,-0.5)[above right] {$0$};
+ \fill[mgreen] (1,1) circle (2pt) node[above] {$1$};
+ \fill[mgreen] (2,-1) circle (2pt) node[below] {$1$};
+\end{tikzpicture}
+\]
+So those are the places I'd be {\em permitted} to let $f =0$, and I'd be forbidden from allowing $f_x = 0$ there, which is a meaningful
+thing to ask for since the path itself looks horizontal enough to ask about $f_x$.
+
+In fact, the integral of the function itself (if mapped to the $y$ coordinate) would produce such a curve!
+And as long as the original function was 1-stable, the remapped one would be also.
 \end{document}
