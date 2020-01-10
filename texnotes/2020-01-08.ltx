@@ -1,0 +1,506 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.75,1,0.6}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.6,0.75,1}
+\definecolor{lred}{rgb}{0.9,0.5,0.5}
+\definecolor{mred}{rgb}{0.9,0.25,0.25}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\Adjust{\Bigg|}
+\def\adjust{\Big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\pprov{\vdash\!\!\!\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\R{\mathbb{R}}
+\def\two{\mathbf{2}}
+\def\thr{\mathbf{3}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+\subsubsection*{Interpolating Kan Boxes Again}
+One thing I could try to shoot for is finding {\em any} interpolant at
+all of empty Kan boxes, and then try to manipulate any rogue
+$n$-critical points out of it by adding terms in the ideal over the
+(extended) sides of the box.
+
+If I have $f$ defined on $x \in \tw, y = 0$, then I could naively start with
+\[ g = f(x,0) + x[f(0,y), f(1,y)] \]
+but this has
+\[ g(x,0) = f(x,0) + f(0,0)\]
+\[ g(0,y) = f(0,0) + f(0,y)\]
+\[ g(1,y) = f(1,0) + f(1,y)\]
+If I could zero $f(0,0)$ and $f(1,0)$ I'd be done.
+So let $p(x) = x[f(0,0), f(1,0)]$ and $h = f - p(x)$, and
+observe $h(0,0) = h(1,0) = 0$.
+Set instead
+\[ g = h(x,0) + x[h(0,y), h(1,y)] + p(x) \]
+and compute
+\[ g(x,0) = f(x,0)\]
+\[ g(0,y) = f(0,y)\]
+\[ g(1,y) = f(1,y)\]
+I can also do this for an $f$ defined on $x\in\tw, y\in\tw$.
+I define the correction term
+\[p(x,y) = f(\bar x,\bar y) = x[f(0,\bar y),f(1,\bar y)] = x[y[f(0,0),f(0,1)],y[f(1,0),f(1,1)]] \]
+and then
+\[h = f - p\]
+and then
+\[ g = h(\bar x,y) + h(x, \bar y) + p \]
+so this expands to
+\[ g = f(\bar x, y) - f(\bar x, \bar y) + f(x, \bar y) - f(\bar x, \bar y)  + f(\bar x, \bar y) \]
+\[ = f(\bar x, y) + f(x, \bar y) - f(\bar x, \bar y) \]
+We can check
+\[ g(x,0) =  f(x, 0)  \]
+\[ g(x,1) =  f(x, 1)  \]
+\[ g(0,y) = f(0, y)\]
+\[ g(1,y) =  f(1, y) \]
+Ok, then I think I see a way forward for higher dimensions. This notation of $\bar x$ for
+`interpolate the containing term between $x=0$ and $x=1$'
+is very nice and compact.
+
+Suppose I have a function $f$ defined on $x,y,z \in \tw$. I want to define $g(x,y,z)$ on the whole box.
+I say by inclusion-exclusion
+\[g(x,y,z) = f(\bar x,y,z) + f(x,\bar y, z) + f(x,y,\bar z) \]
+\[{} - f(x,\bar y,\bar z) - f(\bar x, y,\bar z) -f(\bar x,\bar y, z) + f(\bar x,\bar y,\bar z)  \]
+I can then see for example if I set any particular variable to something in $\tw$, I get $g$ agreeing with $f$:
+\[g(0,y,z) = f(0,y,z) + f(0,\bar y, z) + f(0,y,\bar z) \]
+\[{} - f(0,\bar y,\bar z) - f(0, y,\bar z) -f(0,\bar y, z) + f(0,\bar y,\bar z)  \]
+\[ = f(0,y,z) + f(0,\bar y, z) + f(0,y,\bar z) \]
+\[{}  - f(0, y,\bar z) -f(0,\bar y, z)   \]
+\[ = f(0,y,z)  + f(0,y,\bar z)   - f(0, y,\bar z)    \]
+\[ = f(0,y,z)    \]
+
+Ok, so definitely an interpolant for the empty-interior box exists. What is it for empty-interior-missing-face?
+For 2d it was
+\[ g = h(x,0) + h(\bar x, y) + p(x)\]
+\[ = h(x,0) + h(\bar x, y) + f(\bar x, 0)\]
+\[ = f(x,0) - f(\bar x, 0) + f(\bar x, y) - f(\bar x, 0) + f(\bar x, 0)\]
+\[ = f(x,0)  + f(\bar x, y) - f(\bar x, 0)\]
+So it looks like I take the expression for the empty-interior box and
+replace all $\bar y$ (but not $y$) with 0. So maybe the missing-face
+3d box interpolant is
+\[g(x,y,z) = f(\bar x,y,z) + f(x,\bar y, z) + f(x,y,0) \]
+\[{} - f(x,\bar y,0) - f(\bar x, y,0) -f(\bar x,\bar y, z) + f(\bar x,\bar y,0)  \]
+Yeah, that seems to check out.
+
+\subsubsection*{An example where interpolation has spurious critical points}
+
+I want my interpolant to look like
+\[g(x,y) = 64x^{3}-96x^{2}+44x-6 + y\]
+How can I get $f(x,0) + f(\bar x,y) + f(\bar x, 0)$ to look like this?
+We can just set $f = g$ here: at least in this case, restriction to the empty box followed by interpolation yields
+the same function back. Surely this doesn't work in general, because I'll lose information exactly on polynomial terms
+in the ideal generated by $x(1-x)y$. Interpolating $x(1-x)y$ itself gives me
+\[ x(1-x)0 + x[0(1-0)y, 1(1-1)y] - x[0(1-0)0, 1(1-1)0] = 0\]
+
+And indeed adding $\lambda x (1-x)y$ to that $g$ seems to have the ability to drive the 2-critical point away if I choose the right $\lambda$.
+Can I find where the 2-critical points are? I know
+\[64x^{3}-96x^{2}+44x-6 + y + \lambda x(1-x) y = 0\]
+\[192x^2-192x +44 + y(\lambda - 2 \lambda x) = 0\]
+\[  y = {192x^2-192x +44\over \lambda (2 x - 1)}\]
+So maybe I want $x = {1\over 2}$ for this to blow up.
+\[64/8-96/4+44/2-6 + y + \lambda (1/4) y = 0\]
+\[8-24+22-6 + y + \lambda (1/4) y = 0\]
+\[1 + \lambda (1/4)  = 0\]
+\[\lambda = -4\]
+Seems to check out in this case, just eyeballing desmos graphs.
+
+Does this mean that for every stable function defined on an empty box,
+there's a sufficiently stable filler for {\em all of $\R^n$}? It
+really seems like the ideal generated by $x(1-x)y$ gives me a lot of
+wiggle room --- maybe enough to evict all critical points out to infinity.
+
+\subsubsection*{Evicting Critical Points}
+
+Let's say I have an arbitrary function $f : \R^2 \to \R$. It might have lots of 2-critical points.
+Places where $f = 0$ and $f_x = 0$. I want to pick a polynomial $p$ such that the 2-critical points
+of
+\[f + px(1-x)y\]
+are at $y = \infty$. The equations for a 2-critical point are
+\[ f + px(1-x)y = 0\]
+\[ f_x + p_xx(1-x)y + p(1-x)y - pxy = 0\]
+so
+\[ y = {-f_x \over p_x x (1-x) + p(1-x) - px} = {-f \over p x(1-x) }\]
+So maybe I want to drive $p_xx(1-x) + p(1-x) - px$ to zero? That's the same as
+\[ 0 = p_xx(1-x) + p(1-x) - px = xp_x - x^2 p_x + p-px - px\]
+\[ = x^2(-p_x) + x( p_x - 2p) + p\]
+so
+\[ x = {2p - p_x \pm \sqrt{p_x^2 + 4p^2  } \over -2p_x}\]
+so $y$ will blow up if $px(1-x)$ is zero. This'll be
+\[ p \left({p_x - 2p   \pm \sqrt{p_x^2 + 4p^2  } \over 2p_x}\right)\left({p_x + 2p   \mp \sqrt{p_x^2 + 4p^2  } \over 2p_x}\right)\]
+Hm, don't know what to do with this.
+
+\subsubsection*{Evicting Critical Points from a Cubic}
+
+Let's say $g(x,y) = Ax^3 + Bx^2 + Cx + D + y + px(1-x)y$. The 2-critical points of $g$ are where
+
+\[0 = Ax^3 + Bx^2 + Cx + D + y + px(1-x)y\]
+\[0 = 3Ax^2 + 2Bx + C + p_x(1-x)y + p(1-x)y - pxy\]
+so
+\[y = - {3Ax^2 + 2Bx + C \over p_xx(1-x) + p(1-x) - px }\]
+whose denominator we want to drive to zero so
+\[ 0 = p_xx(1-x) + p(1-x) - px \]
+\[ 0 = p_x x - p_x x^2  + p-2px\]
+so again we find
+\[ x = {2p - p_x \pm \sqrt{p_x^2 + 4p^2  } \over -2p_x}\]
+but now we think
+\[y =  { -(Ax^3 + Bx^2 + Cx + D)\over 1 + px(1-x) } \]
+so we want to set $p$ to be such that $px(1-x) = -1$.
+So I guess
+
+\[ p \left({p_x - 2p   \pm \sqrt{p_x^2 + 4p^2  } \over 2p_x}\right)\left({p_x + 2p   \mp \sqrt{p_x^2 + 4p^2  } \over 2p_x}\right) = -1\]
+\[ p \left({p_x - 2p   \pm \sqrt{p_x^2 + 4p^2  } }\right)\left({p_x + 2p   \mp \sqrt{p_x^2 + 4p^2  } }\right) = -4p_x^2\]
+\[ p \left({p^2_x - (2p   \pm \sqrt{p_x^2 + 4p^2  })^2 }\right) = -4p_x^2\]
+\[  {p^2_x - (2p   \pm \sqrt{p_x^2 + 4p^2  })^2 } = -4p_x^2/p\]
+\[  p^2_x - 4p^2 \pm 4p  \sqrt{p_x^2 + 4p^2  } + p_x^2 + 4p^2  = -4p_x^2/p\]
+\[  2p^2_x  \pm 4p  \sqrt{p_x^2 + 4p^2  }  = -4p_x^2/p\]
+\[  2p^2_x + 4p_x^2/p   = \pm 4p  \sqrt{p_x^2 + 4p^2  } \]
+\[  p^2_x p + 2p_x^2   = \pm 2p^2  \sqrt{p_x^2 + 4p^2  } \]
+\[  p^4_x (p^2 + 4  p + 4)   = 4p^4  (p_x^2 + 4p^2  ) \]
+
+\subsubsection*{Changing Goal}
+Actually, should I just be looking for 3-critical points?
+\[g(x,y) = 64x^{3}-96x^{2}+44x-6 + y + \lambda x(1-x)y\]
+\[g(x,y) = 6\cdot 64x- 2 \cdot 96 - 2 \lambda y = 0\]
+\[ \lambda = (3 \cdot 64x-  96) / y \]
+That doesn't really help much does it?
+
+\subsubsection*{Cranking Up The Volume on $f$}
+
+Here's an idea. Let's do it at dimension 2 for starters.
+We have some function on the empty square $x \in \tw \lor y = 0 \prov f : \R$.
+The function $g = f(\bar x, y) + f(x, \bar y) - f(\bar x, \bar y)$ agrees
+with $f$ on the empty square, but it might have some 2-critical points in its interior.
+I conjecture
+\begin{conjecture}
+Let smooth $g$ be given with $b:\tw \prov[b/x]g : S_0$ and $[0/y]g : S_1$.
+ For sufficiently big $\lambda$,
+\[h = g + \lambda x (1-x) y g(x, 0)\]
+is 1-stable on $[0,1]^2$.
+\end{conjecture}
+
+What I'm doing is trying to drown out --- but via a function that is
+smooth and zero on the empty box --- whatever's going on in the
+interior of that square with $g(x,0)$, which is assumed 1-stable.
+
+How could I go about proving this? By compactness if nothing else, I
+know that $g$ only has finitely many 2-critical points, don't I? Maybe
+I have to demand that it's at least 3-stable? Whatever, let me start
+trying to look for them. I know $h = h_x = 0$.
+
+\[0 = g + \lambda x (1-x) y g(x, 0)\]
+\[0 = g_x + \lambda y ( (1-x) g(x, 0) - x g(x, 0) + x (1-x) g_x(x, 0))\]
+
+\[y = {-g_x(x,y) / \lambda \over  (1-x) g(x, 0) - x g(x, 0) + x (1-x) g_x(x, 0) }  \]
+\[ = {g_x(x,y) / \lambda \over  x g(x, 0) - (1-x) g(x, 0) - x (1-x) g_x(x, 0) }  \]
+\[ = {g_x(x,y) / \lambda \over  x g(x, 0) - (1-x) (g(x, 0) + x g_x(x, 0)) }  \]
+
+Hm, no progress yet.
+
+\subsubsection*{An Example of Why This Is Hard}
+
+Consider interpolating on the empty box
+\[f(0,y) = z_{0}(y)\ =1-y+0.4y^{2}\]
+\[f(1,y) = z_{1}(y)\ =-0.1-y+0.4y^{2}\]
+\[f(x,0) = b(x)=1-1.1x\]
+\[g(x,y) = f(x, 0) + f(\bar x, y) - f(\bar x, 0) = (1-x)z_{0}(y)+xz_{1}(y)\]
+If I play around with tweaking $\lambda$ in
+\[(1-x)z_{0}(y)+xz_{1}(y)+\lambda x(1-x)yb(x)\ge0\]
+I see that although asymptotically all the 2-critical points in the strip $x \in [0,1], y > 0$
+fly off to $\infty$ with big $\lambda$, their intermediate behavior is not at all obvious! Some
+pop into or out of existence, and others move nonmonotonically before they fly off.
+
+\subsubsection*{Solving for $y$ elsewhere?}
+\[0 = g + \lambda x (1-x) y g(x, 0)\]
+tells me what $y$ must be: $-g / x (1-x) \lambda g(x, 0)$. What if I plug this into the other expression.
+
+\[ {-g \over x (1-x) \lambda g(x, 0) }= {g_x(x,y) / \lambda \over  x g(x, 0) - (1-x) (g(x, 0) + x g_x(x, 0)) }  \]
+
+\[ {-g \over x (1-x) g(x, 0) }= {g_x(x,y)  \over  x g(x, 0) - (1-x) (g(x, 0) + x g_x(x, 0)) }  \]
+
+\[ {g ((1-x) (g(x, 0) + x g_x(x, 0)) - x g(x, 0) ) }= g_x(x,y)x (1-x) g(x, 0)       \]
+
+\[ {g (1-2x) g(x, 0) }= x (1-x)( g_x(x,y) g(x, 0) - g_x(x,0)g(x,y))       \]
+\[ 1-2x= x (1-x)\left( {g_x(x,y) \over g(x,y)} - {g_x(x,0) \over g(x, 0)}\right)       \]
+Although when I graph that, it does appear to track where extrema can
+exist, I don't know what to do with it analytically.
+
+\subsection*{Bounds}
+
+Can I at least see that the $x$-derivative of
+\[h = g + \lambda x (1-x) y g(x, 0)\]
+starts looking like $g_x(x,0)$ if $\lambda$ is big enough? I have
+\[h_x = g_x + \lambda y ( (1-x) g(x, 0) - x g(x, 0) + x (1-x) g_x(x, 0))\]
+Ok, let's pick modest subrectangle of $[0,1]^2$. Say $[t, (1-t)] \x [t, 1]$.
+So I know $x \ge t$ and $x \le 1- t$ so $1 - x \ge t$ and $1-x \le 1 - t$, and $y \ge t$ and $y \le 1$.
+Ok, so for $[0,1]^2$ I could find the maximum value that $g_x(x,y)$ attains. Hm.
+If it is the case that
+\[| g + \lambda x (1-x) y g(x, 0)| < \epsilon\]
+can I learn that $g(x,0)$ is close to zero?
+\[  \lambda x (1-x) y g(x, 0) = -g + E \qquad |E| < \epsilon\]
+\[  g(x, 0) = {-g + E \over  \lambda x (1-x) y}\]
+If in fact
+\[ g + \lambda x (1-x) y g(x, 0) = 0\]
+then
+\[  g(x, 0) = {-g \over  \lambda x (1-x) y}\]
+which for big $\lambda$ is close to zero. What can I learn from the derivative?
+If
+\[0 = g_x + \lambda y ( (1-x) g(x, 0) - x g(x, 0) + x (1-x) g_x(x, 0))\]
+then
+\[g_x(x, 0) = {{-g_x\over \lambda y}  - (1-2x) g(x, 0)\over x(1-x)} \]
+\[ = {{-g_x\over \lambda y}  - (1-2x) {-g  \over  \lambda x (1-x) y} \over x(1-x)} \]
+\[ = {{-g_x}  - (1-2x) {-g  \over   x (1-x) } \over \lambda xy (1-x)} \]
+\[ = {(1-2x) g-g_x x (1-x)       \over \lambda x^2y (1-x)^2} \]
+
+So as long as $x, (1-x), y$ aren't too small, or $g, g_x$ aren't too big, I can find a $\lambda$
+big enough to drive $g(x,0)$ and $g_x(x,0)$ very small, contradicting $g(x,0)$'s 1-stability.
+
+For very small $x$ or $1-x$, note that $g(x,0)$ is going to be of the same sign as $g(x,y)$. I'll
+just end up adding like to like sign in $h$, and it won't be zero.
+
+I think for small $y$ I can find a neighborhood of $y=0$ throughout which {\em at least one of}
+$f$ or $f_x$ have the same sign as at $y=0$. Thus adding more $g(x,0)$ to it can never produce a 2-critical point.
+
+\subsubsection*{Defining Box Interpolation}
+
+Here's the general way of interpolating from a $\exists i . x_i \in \tw \prov f : \R$.
+We define $\forall i . x_i \in \R \prov E_n f : \R$.
+
+\[E_1 f(x) = f(\bar x)\]
+\[(E_{n+1} f)(x, \vec y) = f(\bar x, \vec y) + E_nf(x, \dash)(\vec y) - E_nf(\bar x, \dash)(\vec y)\]
+\[= x[f(0, \vec y) - E_nf(0, \dash)(\vec y),f(1, \vec y) - E_nf(1, \dash)(\vec y)] + E_nf(x, \dash)(\vec y) \]
+
+\begin{lemma}
+  If $\exists i . x_i \tw$, then $E_{n}f(\vec x) = f(\vec x)$.
+\end{lemma}
+
+\begin{proof}
+ The base case  is easy.
+Consider $(E_{n+1} f)(x, \vec y)$. If there's a $\tw$ in $\vec y$, then by the induction hypothesis
+\[ f(\bar x, \vec y) + E_nf(x, \dash)(\vec y) - E_nf(\bar x, \dash)(\vec y)\]
+\[ = f(\bar x, \vec y) + f(x, \vec y) - f(\bar x, \vec y) = f(x,\vec y)\]
+as required. Otherwise $x \in \tw$, and
+\[ f(\bar x, \vec y) + E_nf(x, \dash)(\vec y) - E_nf(\bar x, \dash)(\vec y)\]
+\[ = f( x, \vec y) + E_nf(x, \dash)(\vec y) - E_nf( x, \dash)(\vec y) = f(x,\vec y)\]
+as required.
+\cqed
+\end{proof}
+
+If we have a box missing one face and the interior, we can interpolate from it by first interpolating the
+$x_n = 1$ face from the $\exists i < n . x_i \in \tw$ data.
+
+\subsubsection*{Evicting Critical Points from Arbitrary Cube}
+
+Suppose we have a function $f : \R^n \to \R$ such that $x_i \in \tw \prov f : S_{i-1}$ for all $i < n$,
+and $x_n = 0 \prov f : S_{n-1}$. This is the stable empty box.
+Let
+\[P = x_n \prod_{i < n} x_i (1-x_i)\]
+Then we want to find a $\lambda$ such that
+\[ \forall i . x_i \in \I \prov f + \lambda P (f[0/x_n]): S_{n-1}\]
+
+\subsubsection*{Composition}
+
+The plan is to fill a diagram like
+\[\begin{tikzpicture}[every path/.style = {line cap=round}]
+\fill[lblue] (2,1.5)--(2,2)--(4,2)--(4,1.5);
+\fill[lblue] (0,0.5)--(0,0)--(2,0)--(2,0.5);
+
+\draw[gray] (-0.5,2)--(4.5,2);
+\draw[gray] (-0.5,0)--(4.5,0);
+\draw[dotted] (-0.5,1)--(4.5,1);
+
+\begin{scope}[every path/.style = {gray}]
+\draw (0,-0.5)--(0,2.5);
+\draw (2,-0.5)--(2,2.5);
+\draw (4,-0.5)--(4,2.5);
+\end{scope}
+
+\begin{scope}[every path/.style = {line width=1pt}]
+\draw (0,0)--(0,2);
+\draw (2,0)--(2,2);
+\draw (4,0)--(4,2);
+\end{scope}
+
+\draw[line width=1pt] (2,0)--(4,0);
+\draw[line width=1pt] (0,2)--(2,2);
+\node at (3,0)[below] {$g$};
+\node at (1,2)[above] {$f$};
+
+
+\begin{scope}[shift={(-1.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_m$};
+\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+
+\end{tikzpicture}\]
+and then try to push all critical points into the filled regions.
+
+
+A function $c : [0,1]\to \R$ is an $(\epsilon,k)$-conditional if
+\[ x  \ge 1/2 + k \qquad \imp\qquad |c(x) - 1| \le \epsilon\]
+\[ x  \le 1/2 - k \qquad \imp\qquad |c(x) - 0| \le \epsilon\]
+
+
+\begin{conjecture}[Claim]
+Polynomial $(\epsilon,k)$-conditional functions
+exist for arbitrarily small positive $\epsilon,k$.
+\end{conjecture}
+
+Define $\thr = \{0,\hf,1\}$.
+\begin{conjecture}[Claim]
+If $x  \in \thr, y \in \tw \prov b : \R$, then there exists $x, y: \R \prov h : \R$ that agrees with $f$ on its domain.
+\end{conjecture}
+
+Let's try the 2-dimensional case of ordinary morphism composition first.
+
+The claim is:
+\begin{conjecture}
+Suppose we have $x, y: \R \prov h : \R$ such that $[0,\hf] \x 0$  and $[\hf,1] \x 1$
+are 1-stable, and $x \x [0,1]$ is 0-stable for any $x \in \thr$. Then there is some function $\ell$ that agrees with $h$
+on $x\in \thr \lor y \in \tw$, which is 1-stable on $[0,\hf]^2$ and $[\hf,1]^2$.
+\end{conjecture}
+Define $f(x) = h(\dns x, 0)$ and $g(x) = h(\ups x, 1)$. Define $s_x(y) = h(x,y)$ for $x\in\thr$.
+
+We're going to need to ask for a $(\epsilon, k)$-conditional function $c(x)$, but we bide our time and don't specify what $\epsilon$ and
+$k$ are yet, knowing we can make them as small as we like. We also leave free a parameter $\lambda$ that we might need to make very big.
+
+We define
+\[ \ell = h + \lambda c[f,g]P \]
+where
+\[ P = (x-\hf)^2x(1-x)y(1-y)\]
+which should be zero on all the boundaries and positive on the inside.
+
+What we want to do is assume we find a $2$-critical point somewhere in $\ell$,
+and redirect that to a critical point in $f$, $g$, or some $s_x$.
+Critical points in $h$ are when
+
+\[0 = h + \lambda c[f,g] P\]
+\[0 = h_x + \lambda (c_x (g - f)P + c[f_x, g_x]P + c[f,g]P_x)\]
+
+Define
+\[f^* = \max_{x\in [0,1]} |f(x)| \qquad g^* = \max_{x\in [0,1]} |g(x)|\]
+\[h^* = \max_{x,y\in [0,1]} |h(x,y)| \qquad h_x^* = \max_{x,y\in [0,1]} |h_x(x,y)|\]
+
+For the part of the case analysis that ends up showing that there's a critical point in $f$,
+because we're in the interior of the left square, we assume $k$ is given to us as an input.
+
+Let's say we want to find a place where $|f| \le \eta$. Require $\epsilon \le \eta / 4g^*$.
+Also require $\epsilon \le 1/2$. Assume $x \in [k, \hf - k]$. Assume $y \in [k, 1 - k]$. Notice that $P \ge k^5$.
+Also notice that $c \le \epsilon$, since $x \le \hf - k$.
+Consequently ${1 \over 1 - c } \le {1 \over 1 - \epsilon } \le 2$.
+
+
+Set $\lambda = 4h^* / k^5\eta$.
+
+\[0 = h + \lambda ((1-c)f + cg) P\]
+\[f = {{-h \over \lambda P} - cg \over 1-c}  \]
+
+\[ \left|{h\over \lambda P}\right| \le   {|h| k^5\eta \over 4h^* k^5}  \le \eta/4 \]
+\[ |cg| \le \epsilon |g| \le \eta|g| / 4g* \le \eta/4 \]
+\[ \left|{-h\over \lambda P} - cg\right|  \le \eta/2 \]
+\[ {\left|{-h\over \lambda P} - cg \over 1 - c \right| } \le \eta \]
+
+
+%% \subsubsection*{Failed Attempt To Find an Easy Conditional}
+%% Empirically,
+%% \[\tau(x) = \prod_{n=1}^{K^2}\left(\left(Kx \over n\right)^{2}-1\right)^{2}\]
+%% for large enough $K$ (like, 10) looks like it has a nice peak near zero
+%% and fades to close to 0 around $\pm 1$. So its integral would be a
+%% nice trade-off function between $f$ and $g$ in the $x_m$ direction.
+
+%% \begin{lemma}
+%% If $|x | \le 1 / K$ then $\tau(x) \in [0,1] $.
+%% \end{lemma}
+%% \begin{proof}
+%% We show that if $|x| \le 1 / K$ then
+%% \[\left(\left(Kx \over n\right)^{2}-1\right)^{2} \in [0,1]\]
+%% for every $n \ge 1$. Reason as follows:
+%% \[x \in [-1/K, 1/K]\]
+%% \[x \in [-n/K, n/K]\]
+%% \[Kx \in [-n, n]\]
+%% \[{Kx \over n} \in [-1,1]\]
+%% \[\left(Kx \over n\right)^{2} \in [0,1]\]
+%% \[\left(Kx \over n\right)^{2}-1 \in [-1,0]\]
+%% \[\left(\left(Kx \over n\right)^{2}-1\right)^{2} \in [0,1]\]
+%% \cqed
+%% \end{proof}
+
+%% I had some difficulty showing that things get small when $|x| \in [1/K,1]$.
+
+%% Actually playing around with this some more in a graphing calculator,
+%% I'm not sure it goes asymptotically to zero fast enough away from $0$.
+%% I suspect taking taylor approximations of narrowly-peaked normal
+%% distributions and integrating them might work.
+
+\end{document}
