@@ -1,0 +1,607 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+\subsection{Restating Assumptions}
+
+Let $\S_n$ be some nice class of functions in $\R^n \to \R$.
+At least smooth, maybe even polynomial.
+
+If $f : \S_n$ then its {\em $n$-discriminant} $D^n f$, also a function $\S_n$, is defined by
+\[D^1 f = f \qquad D^{n+1} = \det_{i,j \in [n]} {\bd D^i f \over \bd x_j}\]
+We just write $D^n$ sometimes when the $f$ is clear from context.
+
+$[n]$ means $1,\ldots,n$. Let $t$ be an alias for $x_{n+1}$.
+
+A point in the domain of a function is {\em $n$-critical} if $\forall i \in [n] . D^n = 0$ there.
+
+A point is {\em $n$-stable} if it's not $n$-critical. (this is off-by-one from my previous definitions)
+
+A function is {\em $n$-stable} on a subset of its domain if every point in that subset is $n$-stable.
+We write this as $C \prov f : S_n$ for $C$ being some cofibrationy expression that describes the subset
+in question. Spelling it out, this means
+\[\forall \bx . C(\bx) \imp \exists i \in [n] . D^n f (\bx)\ne 0\]
+We'll say $\tw$ is $\{0,1\}$ and $\I$ is the interval $[0,1]$. We write $\hf$ for $1/2$.
+
+
+A function $\R^n\to \R$ is an {\em $n$-cell} if we have
+\[\bx \in \I^n \prov f : S_{n+1}\]
+and for every $i \in [n]$ we have
+\[\bx \in \I^n, x_i \in \tw \prov f : S_i\]
+We say an $n$-cell is {\em trivial} if in fact
+\[\bx \in \I^n \prov f : S_{n}\]
+
+If $m\in [n]$, and $h : \R\to\R$, we write $[h(x_1, \ldots, x_n)/x_m]$ for the evident function $\R^n\to\R^n$
+that outputs $h(x_1, \ldots, x_n)$ on the $m$th coordinate, and is the identity on all other coordinates.
+We also write $f[h(x_1, \ldots, x_n)/x_m]$ for the composite $f \o [h(x_1, \ldots, x_n)/x_m]$.
+
+Two $n$-cells $f,g$ are {\em equivalent},
+written $f \equiv_n g$,
+if there exists a trivial $(n+1)$-cell $h : \R^{n+1} \to \R^n$ such that
+\[h[0/t] = f \qquad h[1/t] = g\]
+
+We write $\dns, \ups$ for two particular functions $\R \to \R$:
+\[ \dns(x) = x/2 \qquad \ups (x) = (x+1)/2\]
+and their inverses
+\[ \ddns(x) = 2x \qquad \uups (x) = 2x-1\]
+and $\dns_m, \ups_m$ for $[\dns(x_m)/x_m],[\ups(x_m)/x_m]$
+and $\ddns_m, \uups_m$ for $[\ddns(x_m)/x_m],[\uups(x_m)/x_m]$.
+
+We write $\lerp t a b$ for linear interpolation $(1-t)a + tb$.
+
+\subsection{Conditional Functions}
+An $\ep$-conditional function is a monotone function $c : \R \to \R$ such that
+\[\phantom{1-{}}x \in [0,\hf - \ep] \imp \phantom{1-{}} c(x) \in [0, \ep]\]
+\[1-x \in [0, \hf - \ep] \imp 1-c(x) \in [0, \ep]\]
+
+An $n$-smooth $\ep$-conditional function is a function $c$ such that $c,c',c^{(2)}, \ldots,c^{(n)}$
+are all $\ep$-conditional functions.
+
+\begin{conjecture}[Claim]
+For any $\ep > 0$, and $n \ge 0$, there exists a polynomial in $\R[x]$
+that is an $n$-smooth $\ep$-conditional function.
+\end{conjecture}
+
+\subsection{Composition}
+An $n$-cell $h$ is {\em an $m$-composition of $g$ and $f$} (written
+$h = g \o_m f$) if
+\[h \dns_m \equiv_n f \qquad h \ups_m \equiv_n g \]
+
+The {\em magnitude} of a function $f : \S_n$ over a compact set $C$ is defined by
+\[|f|^n_C = \max_{i\in [n]} \max_{\bx \in C} |D^i f(\bx)|\]
+
+The {\em gap} of a function $f : \S_n$ at a point $\bx$ is defined by
+\[\gamma^1_\bx f = |f(\bx)|
+\qquad
+\gamma^{n+1}_\bx f = \cases{ \gamma^n_\bx f & if $\gamma^n_\bx f \ne 0$;\cr
+|D^{n+1} f(\bx)| & otherwise. } \]
+
+We could have said the {\em cell dimension} of a function $f \in \S_n$ at a point $\bx$ is
+\[d_\bx(f) = \mathrm{argmin_i}( D^i f(\bx) \ne 0) - 1\]
+and then
+\[\gamma_\bx f = \left|D^{d_\bx(f)+1}f(\bx)\right|\]
+The {\em gap} of a function $f : \S_n$ over a compact set $C$ is defined by
+\[\gamma^n_C f = \min_{\bx \in C} \gamma^n_\bx f\]
+
+\begin{lemma}
+Suppose $f,g$ are  $n$-cells $f,g$ and $m\in[n]$ and
+\[f[x_m/1] = g[x_m/0]\]
+Then there exists $h$ such that
+$h = g \o_m f$.
+\end{lemma}
+
+\begin{proof}
+We're going to define
+\[h(\bx) = \lerp{c(x_m)}{f(\bx)}{g(\bx)}\]
+for some $\ep$-conditional function $c$, but we need to figure out how small $\ep$
+needs to be for it to work.
+
+Let $\by = \bx \setminus x_m$. We want to think about $f$ on the region
+\[ \bd_f = \{\bx \st \by \in \I^{n-1}, x_m \in [0,2]\} = \{\bx \st \dns_m \bx \in \I^n \}\]
+and $g$ in
+\[ \bd_g = \{\bx \st \by \in \I^{n-1}, x_m \in [-1,1]\} = \{\bx \st \ups_m \bx \in \I^n \}\]
+
+$\cdots$
+Proof not finished.
+\end{proof}
+
+
+\subsection{The Transitional Region}
+I have realized that there are three paradigms of behavior in composing $f$ and $g$.
+
+One, there's the region where we have $(1-\ep)f + \ep g$, where things
+look overwhelmingly like $f$. We should be able to reason that there
+are no critical points because there are no critical points in $f$
+itself, and the influence of $g$ is not big enough to create any.
+
+Two, there's the region where we have $\ep f + (1-\ep)g$, where
+conversely things look overwhelmingly like $g$.
+
+Three, there's the transitional region where we have $(\hf \pm \ep)f + (\hf \mp \ep) g$,
+ where things look like the common
+boundary of $f$ and $g$, so there are no critical points because the
+boundary of $f$ and $g$ lacks critical points. The obstacle
+to completing this portion of the proof is that $D^n$ for large $n$ aren't actually {\em linear},
+but they should be {\em continuous}, and therefore {\em uniformly continuous} on an appropriately
+chosen compact set.
+
+\subsection{Linearity}
+It's interesting that I do know the differential operators that
+underlie the computation of $D^n$ {\em are} linear, however.
+
+I could define $\Lambda_n$ to be a set of linear operators
+$\S_n \to \S_n$.
+\[ \Lambda_1 = \{\rid\} \qquad \Lambda_{n+1} = \bigcup_{i \in [n]} \left\{ \ell \o {\partial \over \partial x_i} \,\middle|\, \ell \in \Lambda_n \right\} \]
+
+I'd want some lemma that says if $\ell (f)$ doesn't change too much for
+any $\ell \in \Lambda_i$ for any $i$, then $D^i f$ doesn't change too much for any $i$.
+
+Actually I could redefine $D^n$ a bit, to be a somewhat more `pure' function of the derivative data coming into it.
+So let's actually define $V_n$ a set of multisets over $\N^+$.
+\[ V_1 = \{\nope\} \qquad
+ V_{n+1} = V_n \cup \bigcup_{i \in [n]} \left\{ v \uplus \{i\} \,\middle|\, v \in V_n \right\} \]
+For example, \(V_2 =
+\{\nope,
+1\}\) and \(V_3 =
+\{\nope,
+1,
+2,
+11,
+12\}\) and
+\[V_4 =
+\{\nope,
+1,
+2,
+3,
+11,
+1 2,
+1 3,
+22,
+2 3,
+111,
+112,
+113,
+122,
+123
+\}\]
+These sure look like the Catalan numbers!
+In fact the size of the groups by length are I think the Fuss-Catalan numbers with $p=2$.
+
+
+\begin{lemma}
+For any $i,j\ge 1$, if $v \in V_i$, then $v\uplus\{j\} \in V_{\max(i+1,j+1)}$.
+\end{lemma}
+
+\begin{proof}
+By induction on $i$.
+
+Suppose $i = 1$. Then $v = \nope$. We must show $\{ j \} \in V_{j + 1}$, but this is easily seen to be the case.
+
+Suppose $i = i_0 + 1$.
+We want to show that if $v \in V_{i_0 + 1}$, then $v\uplus\{j\} \in V_{\max(i_0+2,j+1)}$.
+Let $m = \max(i_0 + 1, j)$. Since the $V$ are cumulative, the fact that
+$v \in V_{i_0+1}$ means also $v \in V_m$. We observe that our goal is
+\[ v \uplus \{j\} \in V_{m+1}\]
+and expanding that definition we get the goal
+\[ v \uplus \{j\} \in V_{m} \cup \bigcup_{i \in [{m}]} \left\{ v \uplus \{i\} \,\middle|\, v \in V_{m} \right\}\]
+which is witnessed by the branch of the big union where $i = j \le m$.
+\cqed
+\end{proof}
+
+Now we can confidently define the `partial derivative'
+\[\partial_j : (V_{\max(i+1,j+1)} \to \R) \to (V_{i} \to \R)\]
+\[\partial_j(f)(v) = f(v \uplus \{j\})\]
+for $i, j \in [n]$, and define $D^n$ to be a function $(V_n \to \R) \to \R$.
+\[ D^1(f) = f(\nope) \]
+\[ D^{n+1}(f) = \det_{i,j\in [n]} D_i(\partial_j f) \]
+Where I'm silently taking advantage of a little bit of subtyping $V_i \subseteq V_j$ when $i \le j$.
+
+\subsection{Combinatorics of Variable Sets}
+Let's try to explore the combinatorics of $V_n$ a bit more. I want to understand why it's Catalan numbers.
+I see wikipedia defining
+\[A_m(p, r) =  r{\Gamma(mp+r) \over \Gamma(1+m)\Gamma(m(p-1)+r+1)}\]
+\[ =  r{(mp+r-1)! \over m!(m(p-1)+r)!}\]
+which for $p = 2$ is
+\[A_m(2,r) =  r{(2m+r-1)! \over m!(m+r)!}\]
+So the quantity I'm interested in is $q(n,k)$,
+the number of multisets $v$ belonging to $V_n$ that have size $k$.
+I know for example
+\[ q(n,0) = 1\]
+\[ q(n,1) = n-1\]
+\[ (q(n,2) \st n = 1,2,\ldots) = 0, 0, 2, 5, \ldots\]
+Ah, yeah, this is the Catalan triangle \texttt{http://oeis.org/A009766}.
+So the formula in my case is
+\[q(n,k) = {n-1+k \choose n-1}(n-k)/n = {n + k - 1\choose n - 1} - {n + k - 1 \choose n}\]
+if $0 \le k \le n$.
+
+\subsection{Back to the Proof}
+
+\begin{lemma}
+Suppose $f,g$ are  $n$-cells $f,g$ and $m\in[n]$ and
+\[f[x_m/1] = g[x_m/0]\]
+Then there exists $h$ such that
+$h = g \o_m f$.
+\end{lemma}
+
+\begin{proof}
+We're going to define
+\[h(\bx) = \lerp{c(x_m)}{f(\ddns_m\bx )}{g(\uups_m \bx )}\]
+for some $\ep$-conditional function $c$, but we need to figure out how small $\ep$
+needs to be for it to work.
+
+Let $\by = \bx \setminus x_m$. We want to think about $f$ on the region
+\[ \bd_f = \{\bx \st \by \in \I^{n-1}, x_m \in [0,2]\} = \{\ddns_m\bx \st  \bx \in \I^n \}\]
+and $g$ in
+\[ \bd_g = \{\bx \st \by \in \I^{n-1}, x_m \in [-1,1]\} = \{\uups_m\bx \st  \bx \in \I^n \}\]
+
+We want to establish as a warm-up that $h$ itself lacks any $(n+1)$-critical points.
+What we actually need to show is a little stronger, that the interpolation back to $f$ and $g$ individually
+also lacks critical points, but this should follow naturally from the earlier reasoning.
+
+There are three regions. When $x_m \le \hf - \ep$, we'll know that $c(x_m) \le \ep$.
+We claim that if $\ep < \gamma^n_{\bd_f}f / |g|^n_{\bd_g}$ and $x_m \le \hf - \ep$,
+ there are no $(n+1)$-critical points in $h$.
+
+Oh no I'm encountering nonlinearity of $D^n$ already!
+\end{proof}
+
+\subsection{Uniform Continuity}
+
+Let's consider the maximum extent to which every of the finitely many
+relevant derivatives varies over a compact set, call it
+\[ \Delta_C(f) = \max_{\ell\in \Lambda_n} \max_{\bx \in C} \max(|\ell f(\bx)|)\]
+
+In particular we know that all the derivatives that will ever wind up being
+used for a computation of some $D^n$ will be no more than
+\[ \max(\Delta_{\bd_f}(f), \Delta_{\bd_g}(g))\]
+for all the other ones will be linear interpolations of those.
+
+So {\em over} that range of inputs, we know that the computation of $D^n$ is uniformly continuous.
+For any $\ep$, if we want $D^n$ to vary no more than $\ep$, we need only ask that the underlying derivatives
+vary no more than some $\delta$.
+
+Let's try to actually talk about derivatives of $h$. For a variable $v \ne x_m$, we have
+\[h_{v} = \lerp{c(x_m)}{f_v(\ddns_m\bx )}{g_v(\uups_m \bx )}\]
+so things are probably easier there. It just looks like an interpolation of the same derivative of
+$f$ and $g$.
+
+For $x_m$ we have
+\[h_{x_m} = c'(x_m)(g_{x_m}(\uups_m \bx ) - f_{x_m}(\ddns_m\bx ))\]
+\[+ 2\lerp{c(x_m)}{f_{x_m}(\ddns_m\bx )}{g_{x_m}(\uups_m \bx )}\]
+Hmm, I will have to consider iterated derivatives as well. I think I want to contain
+the influence of that factor of $2$.
+
+\subsection*{Adjusting the Definition of Composition}
+
+I want to have a definition of composition such that the interpolant is simply
+\[h(\bx) = \lerp{c(x_m)}{f(\bx )}{g(\bx )}\]
+This is not a fundamental change, just a convenience; it's just a
+matter of pushing the speedup-slowdown functions $\ups/\dns/\uups/\ddns$ elsewhere.
+I believe that if I can show $h$ is $n$-stable, then it should be relatively simple to show that the homotopies
+back to $f$ and $g$ are also. What I want to show is a bit stronger than just {\em being} stable. I'm really
+going to show that when $x_m = \dns s$, then $h$ very much resembles $f$, and when $x_m = \ups s$, then
+$h$ very much resembles $g$, and when $x_m \approx \hf$, then $h$ very much resembles the common boundary
+of $f$ and $g$. But all of these things that $h$ resembles {\em are} stable, so it should be, too.
+
+I want a measure of how much two functions differ. Once I fix the dimension I'm working in, the set
+of all derivatives (i.e. differential operators) I care about, call it $\Lambda$, is determined. So define
+\[f\# g = \max_{\ell \in \Lambda} |\ell (f -  g)|\]
+This is still a function $\R^n \to \R$. It's not necessarily smooth.
+
+Let $b$ be $f[1/x_m] = g[0/x_m]$. It's constant on $x_m$.
+Assuming $\bx \in \I^n$.
+I want to be able to choose an $\eta$ such that I have all of
+\begin{center}
+If $x_m \in [0,\hf-\eta]$, then $h\# f < \delta$\\
+If $x_m \in [\hf+\eta, 1]$, then $h\# g < \delta$\\
+If $x_m \in [\hf-\eta, \hf+\eta]$, then $h\# b < \delta$
+\end{center}
+For the $\delta$ that is small enough to make $D^n$ not vary too much.
+The lemma I should be able to get out of uniform continuity is:
+\begin{center}
+For all $\ep > 0$, there exists a $\delta > 0$ such that if $h \# f < \delta$
+at some point, then $|D^i h - D^i f| < \ep$ at that point.
+\end{center}
+
+So let's return to trying to compute derivatives of $h$.
+\[h_{x_m}(\bx) = (\lerp{c(x_m)}{f(\bx )}{g(\bx )})_{x_m}\]
+\[= ((1-c(x_m))f(\bx ) + c(x_m)g(\bx ))_{x_m}\]
+\[= \lerp{c }{f_{x_m}}{g_{x_m}} + c_{x_m}(g - f)\]
+\[h' = \lerp{c }{f'}{g'} + c'(g - f)\]
+\[h'' = \lerp{c }{f''}{g''} + 2c'(g' - f') +  c''(g - f)\]
+\[h^{(3)} = \lerp{c }{f'''}{g'''} + 3c'(g''-f'') + 3c''(g' - f') +  c'''(g - f)\]
+(I'm writing
+\[\dash^{(n)} = \left({\partial \over \partial x_m}\right)^n\]
+here)
+So in general I think I conclude Lemma~\ref{deriv.h}.
+
+
+\subsection*{Clean Lemmas}
+
+So $\Lambda_n$ is the {\em set} of differential operators available at dimension $n$,
+those required to compute $D^n$. So $\Lambda_1 = \{\rid\}$, $\Lambda_2 = \{\rid, \bd_ x\}$.
+ $\Lambda_3 = \{\rid, \bd_x, \bd_{xx}, \bd_{xy}\}$, etc.
+Let $\hat f$ be the big simultaneous application of all those differential operators
+\[
+\erule
+{\prov f : \R^n \to \R}
+{\prov \hat f : \R^n \to \R^{\Lambda_n}}
+\]
+Then $D^n :  \R^{\Lambda_n} \to \R$ and $D^n \o \hat f : \R^n \to \R$.
+
+Let's define $D^{[n]} : \R^{\Lambda_n} \to \R^n$ to be all of $D^1, \ldots, D^n$ tupled together.
+
+For $f \in \S_n$, let
+\[ M_f = \max_{\ell \in \Lambda_n} \max_{\bx \in \I^n} |\ell f(\bx)| \]
+be the maximum value or derivative that arises in $f$. We write
+\[ M_{fg} = \max(M_f, M_g)\]
+for multiple functions.
+
+Set $\kappa_{fg} = [-M_{fg},M_{fg}]^{\Lambda_n}$. Observe that $\kappa$ is a compact set --- it contains
+all values and derivatives of any function we will consider during these lemmas.
+We'll write just $M$ or $\kappa$ when the subscripts are clear.
+
+\begin{lemma}
+\label{product.deriv.interchange}
+Suppose $c$ and $k$ are smooth functions $\R \to \R$. Suppose
+\[|c^{(i)}| \le {  2^{-n}\ep \over    |k^{(n-i)}|}\] for
+all $1\le i \le n$. Then $|(kc)^{(n)} - k^{(n)} c| \le \ep$.
+\end{lemma}
+
+\begin{proof}
+Observe that
+\[ (kc)^{(n)} = \sum_{i = 0}^n {n\choose i} k^{(n-i)} c^{(i)} \]
+so
+\[ |(kc)^{(n)} - k^{(n)} c| = \left|\sum_{i = 1}^n {n\choose i} k^{(n-i)} c^{(i)}\right| \]
+\[\le \left|\sum_{i = 1}^n {n\choose i} k^{(n-i)} {  2^{-n}\ep \over    |k^{(n-i)}|}\right| \]
+\[\le \left|\sum_{i = 1}^n {n\choose i}   2^{-n}\ep  \right| \]
+\[\le  2^{-n} \ep \left|\sum_{i = 1}^n {n\choose i}     \right| \]
+\[\le  2^{-n} \ep \left|\sum_{i = 0}^n {n\choose i}     \right| \]
+\[=  2^{-n} \ep 2^n \]
+\[\le \ep \ \cqed \]
+
+\end{proof}
+
+\begin{lemma}
+\label{interp.bound}
+Suppose $c, f,g : \R \to \R$ and $h = \lerp cfg$. Then
+\[h^{(n)}  - \lerp{c }{f^{(n)}}{g^{(n)}} =   (c(g-f))^{(n)}  - c(g^{(n)} - f^{(n)})\]
+\label{deriv.h}
+\end{lemma}
+
+\begin{proof}
+By induction.
+The $n=0$ case is immediate. Otherwise we compute
+\[h^{(n+1)} =  \left(\lerp{c }{f^{(n)}}{g^{(n)}} + (c(g-f))^{(n)}  - c(g^{(n)} - f^{(n)})\right)'\]
+\[=  \lerp{c }{f^{(n+1)}}{g^{(n+1)}} + c'(g^{(n)} - f^{(n)}) + (c(g-f))^{(n+1)}  \]
+\[{}- c'(g^{(n)} - f^{(n)}) - c(g^{(n+1)} - f^{(n+1)})\]
+from which we immediately see
+\[h^{(n+1)} - \lerp{c }{f^{(n+1)}}{g^{(n+1)}} =  (c(g-f))^{(n+1)}  - c(g^{(n+1)} - f^{(n+1)}) \]
+as required.
+\cqed
+\end{proof}
+
+\begin{lemma}
+\label{est.deriv}
+Suppose $c : \R \to \R$ and $ f,g : \R^n \to \R$ and $h = \lerp {c(x_m)}fg$.
+Then
+\[\ell h  - \lerp{c(x_m) }{\ell f}{\ell g} =   \ell (c(x_m)(g-f))  - c(x_m) \cdot \ell (g - f)\]
+for any differential operator $\ell \in \Lambda_n$.
+\end{lemma}
+\begin{proof}
+The differential operator $\ell$ decomposes as $\ell_0 \mu$ for
+some $\ell_0 \in \Lambda_{n\setminus m}$
+and \[\mu = \left(\bd\over\bd x_m\right)^k \]
+for some $k \ge 0$. We have
+\[\mu h - \lerp{c(x_m) }{\mu f}{\mu g} =   \mu (c(x_m)(g-f))  - c(x_m) \cdot \mu (g - f)\]
+by Lemma~\ref{interp.bound}, and we can reason that
+\[ \ell h - \lerp{c(x_m) }{\ell f}{\ell g}
+= \ell_0 \mu h - \lerp{c(x_m) }{\ell_0 \mu f}{\ell_0 \mu g}\]
+\[= \ell_0(\mu h - \lerp{c(x_m) }{\mu f}{\mu g})\]
+\[ = \ell_0(  \mu (c(x_m)(g-f))  - c(x_m) \cdot \mu (g - f))\]
+\[ = \ell_0  \mu (c(x_m)(g-f))  - c(x_m) \cdot \ell_0  \mu (g - f)\]
+\[ = \ell (c(x_m)(g-f))  - c(x_m) \cdot \ell (g - f)\]
+precisely because $\ell_0$ doesn't mention $x_m$.
+\cqed
+\end{proof}
+
+\begin{lemma}
+\label{combine}
+Suppose $c : \R \to \R$ and $ f,g : \R^n \to \R$ and $h = \lerp {c(x_m)}fg$.
+Let $\ell \in \Lambda_n$ be given, and let $n'$ be how many copies of
+$\partial\over\partial x_m$ are in $\ell$.
+Suppose
+\[|c^{(i)}| \le {  2^{-n'}\ep \over \left|\left(\partial\over\partial x_m\right)^{n'-i}(g-f)\right|}\] for
+all $1\le i \le n'$. Then
+\[|\ell h  - \lerp{c(x_m) }{\ell f}{\ell g}| \le \ep\]
+\end{lemma}
+
+\begin{proof}
+By combining Lemmas~\ref{product.deriv.interchange} and~\ref{est.deriv}.
+\cqed
+\end{proof}
+
+\begin{lemma}
+\label{abstract}
+Let $f, g : \S_n$ be given. For any $\ep$, there exists a $\delta$ such that if
+$c$ is an $n$-smooth $\delta$-conditional function, then
+\[ |\ell h(\bx) - \ell f(\bx)| \le \ep \]
+\end{lemma}
+where  $h = \lerp {c(x_m)}fg$, for any $\bx$ such that $x_m \in [0,\hf - \delta]$.
+\begin{proof}
+Let
+\[ \delta_1 = {2^{-n}(\ep/2) \over M_{g-f}}\]
+If $c$ is $n$-smooth $\delta_1$-conditional, then by Lemma~\ref{combine}, we have
+\[|\ell h  - \lerp{c(x_m) }{\ell f}{\ell g}| \le \ep / 2\]
+when $x_m\in [0,\hf - \delta_1]$. Moreover,
+\[|\ell f - \lerp{c(x_m) }{\ell f}{\ell g}| = |\ell f - (1-c(x_m))\ell f + c(x_m)\ell g|\]
+\[ = |-c(x_m)\ell f + c(x_m)\ell g|\]
+\[ \le c(x_m)(|\ell f|+|\ell g|)\]
+\[ \le c(x_m)(M_f + M_g)\]
+So let $\delta_2 = \ep / 2(M_f + M_g)$ and observe that if $c$ is $n$-smooth $\delta_2$-conditional,
+then
+\[|\ell f - \lerp{c(x_m) }{\ell f}{\ell g}| \le \ep / 2\]
+ when $x_m\in [0,\hf - \delta_2]$.
+So if we set
+\[ \delta = \min(\delta_1,\delta_2) = (\ep /2) \min\left({2^{-n} \over M_{g-f}},  {1\over M_f + M_g}\right)\]
+then $c$ being $n$-smooth $\delta$-conditional implies
+\[ |\ell h(\bx) - \ell f(\bx)| \le |\ell h(\bx) - \lerp{c(x_m) }{\ell f}{\ell g}| + |\ell f(\bx) - \lerp{c(x_m) }{\ell f}{\ell g}| \]
+\[ \le \ep/2 + \ep/2 = \ep \]
+when $x_m\in [0,\hf - \delta]$, as required.
+\cqed
+\end{proof}
+
+
+
+\begin{lemma}
+\label{meat.1}
+Suppose $f, g \in \S_n$. For all $\delta$, there exists an $\eta^+$ such that for all $\eta \in (0,\eta^+)$, and
+any $\eta$-conditional function $c$, if we define
+$h = \lerp{c(x_m)}fg$, and if $x_m \in [0,\hf - \eta]$, then
+\[\forall \ell \in \Lambda_n . |\ell f(\bx) - \ell h(\bx) | < \delta\]
+\end{lemma}
+
+\begin{proof}
+
+
+By Lemma~\ref{combine}, we have
+\[|\ell h  - \lerp{c(x_m) }{\ell f}{\ell g}| \le \epsilon\]
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+If $\forall k \in [n] . | D^k f(\bx) - D^k h(\bx) | < \ep$, and $\gamma^n_\bx(f) \ge \ep$,
+then $\gamma^n_\bx(h) > 0$.
+\end{lemma}
+
+\begin{proof}
+Straightforward induction on the definition of $\gamma^n_\bx(f)$.
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+Suppose $f, g \in \S_n$ with $f[1/x_m] = g[0/x_m]$ for some $m \in [n]$.
+Let $b : \R^{n-1} \to \R = f[1/x_m]$.
+There exists an $\eta^+$, such that for any $0 < \eta < \eta^+$, and any $\eta$-conditional function $c$, if we define
+$h = \lerp{c(x_m)}fg$, then for all $\bx \in \I^n$,
+\begin{enumerate}
+\item If $f(\bx)$ is $n$-stable, and $x_m \in [0, \hf -\eta]$, then $h(\bx)$ is $n$-stable.
+\item If $b(\bx)$ is $m$-stable, and $x_m \in [\hf -\eta, \hf+\eta]$, then $h(\bx)$ is $m$-stable.
+\item If $g(\bx)$ is $n$-stable, and $x_m \in [\hf + \eta, 1]$, then $h(\bx)$ is $n$-stable.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+If $f(\bx)$ is $n$-stable, then it has a positive gap: $\gamma^n_\bx(f) > 0$.
+We'd like to show that $h$ is so close to $f$, that also $\gamma^n_\bx(h) > 0$.
+
+Observe that $D^{[n]} : \R^{\Lambda_n} \to \R^n$ is a continuous function, and therefore
+uniformly continuous on $\kappa$.
+
+That is, for every $\ep > 0$, there exists a $\delta > 0$ such that if $t_1,t_2 \in \kappa$
+with $|t_1 - t_2|_1 < \delta$, then $|D^{[n]}t_1 - D^{[n]}t_2|_1 < \ep$.
+
+So if in particular we have that if $\forall \ell \in \Lambda_n . |\ell f(\bx) - \ell h(\bx) | < \delta$,
+then $\forall k \in [n] . |D^kf(\bx) - D^kh(\bx)| \le \ep$.
+
+So all I need to do is appeal to Lemma~\ref{meat.1}.
+\cqed
+\end{proof}
+
+\begin{theorem}
+If $f, g \in \S_n$, and $m\in [n]$, then an $m$-composition of $f$ and $g$ exists.
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\end{document}

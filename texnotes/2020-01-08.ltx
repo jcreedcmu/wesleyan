@@ -39,7 +39,6 @@
 \def\ridp{\mathsf{idp}}
 \def\rcoe{\mathsf{coe}}
 \def\rtype{\mathsf{type}}
-\def\int{\square}
 \def\bd{\partial}
 \def\prov{\vdash}
 \def\pprov{\vdash\!\!\!\vdash}
@@ -470,6 +469,321 @@ Set $\lambda = 4h^* / k^5\eta$.
 \[ |cg| \le \epsilon |g| \le \eta|g| / 4g* \le \eta/4 \]
 \[ \left|{-h\over \lambda P} - cg\right|  \le \eta/2 \]
 \[ {\left|{-h\over \lambda P} - cg \over 1 - c \right| } \le \eta \]
+
+
+\subsubsection*{Uniform Stability}
+
+
+Here's a definition and lemma that I think modularizes some common reasoning I'll need to do.
+
+Say $f$ is {\em uniformly $n$-stable} in $U \x [a,b]$ if for every $u \in U$ there is an $i \in 1,\ldots,n$ such that for all $x\in [a,b]$ we
+have $D^i(u,x) \ne 0$.
+
+\begin{lemma}
+Suppose $U$ is compact. If $f$ is $n$-stable on $U \x 0$, then there's some $k > 0$ such that it's uniformly $n$-stable on $U \x [0,k]$.
+\end{lemma}
+
+\begin{proof}
+Let
+\[ \epsilon = \min_{u\in U} \max_{i \in [n+1]} D^i(u,0) \]
+We know that $\epsilon > 0$, because if $\epsilon = 0$, then there would exist $u$ such that for all $i\in[n+1]$ we'd have $D^i(u,0) = 0$, and
+then $U\x 0$ wouldn't have been $n$-stable.
+
+All of $D^1, \ldots, D^{n+1}$ are uniformly continuous on $U \x [0,1]$, so let $\delta$ be such that $D^i(u,x)$ never varies by more
+than $\epsilon$ if you go no more than $\delta$ distance away from $(u,x)$. Let $k = \delta / 2$.
+
+Let $u \in U$ be given. Set $i = \mathrm{argmax}_{i\in[n+1]} D^i(u,0)$. Let $x \in [0,k]$ be given.
+Suppose $D^i(u,x) = 0$. Observe that then we'd have
+\[|D^i(u,x) - D^i(u,0)| = | D^i(u,0)|\]
+\[ = \max_{i\in[n+1]} | D^i(u,0)|\]
+\[ > \min_{u\in U} \max_{i\in[n+1]} | D^i(u,0)|\]
+\[ = \epsilon\]
+despite
+\[|(u,x) - (u,0)| \le k < \delta\]
+violating the uniform continuity of $D^i$.
+So we conclude that $\forall u \in U . \exists i . \forall x \in [0,k] . D^i(u,x) \ne 0$, as required.
+\cqed
+\end{proof}
+
+\subsubsection*{Kan Filling At Higher Dimensions}
+Upping the dimension on composition seems like it'll get a bit fiddly.
+Let me try to practice on mere Kan filling.
+
+In the two dimensional case we have a function $h$ such that $x \in \tw \prov h : S_0$ and $y = 0 \prov h : S_1$.
+Define $f(x) = h(x,0)$.
+We want to pick $\lambda$ such that
+\[ \ell = h + \lambda f P \]
+is 1-stable throughout $[0,1]^2$, where $P = x(1-x)y$.
+
+When I look at the boundaries, I know there's a $k$ such that
+$[0,k]\x[0,1]$ and $[1-k,1]\x[0,1]$ are uniformly 0-stable along $x$,
+and $[0,1] \x [0,k]$ is uniformly 1-stable along $y$. (Each one of
+those comes with a separate existential witness, and I can take the
+minimum of the three)
+
+What do I know about these border regions? That they are 1-stable in
+$\ell$ for {\em any} $\lambda$. Wait, I've got the direction of
+uniform stability wrong for the sides of the boundary. I think I need
+it to be $y$ for all of them, don't I?
+
+The theorem I want for the side boundary is that there exists a $k$
+such that for every $x \in [0,k]$ there exists an $i$ such that for
+every $y\in [0,1]$ it is the case that $D^i(x,y) \ne 0$.
+
+Suppose this weren't true; for all $k$, there exists an $x \in [0,k]$ such that
+for all $i$ there exists a $y\in[0,1]$ such that $D^i(x,y) =0$. Ok, for each
+$i$, and each $n \in 1,2,\ldots$, let $k = 1/n$, and find $x\in[0,1/n]$ and $y\in[0,1]$ such that
+$D^i(x,y) = 0$. This is an infinite sequence in the bounded set $[0,1]^2$, so it has a convergent subsequence.
+Hmm. That doesn't seem enough.
+
+\subsubsection*{Genuinely a bit Worried}
+
+Ok, a scenario that should tease this out is the three-dimensional case. We have $x \in \tw\lor y \in \tw\lor z = 0 \prov h : S_2$,
+and $x \in \tw \prov h : S_0$, and $y \in \tw \prov h : S_1$.  Why is it the case that
+\[ \ell = h + \lambda h(x,y,0) x(1-x)y(1-y)z \]
+lacks 3-critical points for sufficiently large $\lambda$ very near $y \in \tw$?
+A 3-critical point has $D^1 = D^2 = D^3 = 0$. Ok, first of all, is there a $k$ such
+that $y\in [0,k]$ implies there aren't 3-critical points when $\lambda = 0$? Yeah, that's easy. If there was
+an infinite sequence of 3-critical points approaching $y = 0$, then there'd be a convergent subsequence of them
+giving me an actual 3-critical point where $y=0$. But what I want to do is for each $(x,\Delta y,z)$ on the side look at
+$h(x,\Delta y,0)$ coming from the top, and reason that adding $\lambda h(x,\Delta y,0)$ can't create any new 3-critical point.
+
+Hm, don't see how, yet.
+
+\subsubsection*{Is More Eviction Always Better?}
+
+Suppose I have a function $h(x,y)$ which is already 1-stable, and when $x\in\tw$ it's 0-stable. Is
+\[ \ell = h + \lambda h(x,0) x(1-x)y \]
+again 1-stable, for any positive $\lambda$?
+
+\subsubsection{Integrating}
+
+Let's say I'm in the 3d case again, $x \in \tw\lor y \in \tw\lor z = 0 \prov h : S_2$,
+and $x \in \tw \prov h : S_0$, and $y \in \tw \prov h : S_1$.  Here's a different parameterized
+solution that tries to let $h(x,y,0)$ be the dominant voice, with some adjustment around the edges.
+We pick some large integer $N$ and say
+\[\delta(x) = 4x(1-x) \qquad \Delta(x,y) = \delta(x)\delta(y) \qquad \Xi = 1 -\Delta\]
+and notice $\Xi$ is 1 on the $x\in\tw\lor y\in\tw$ boundary, and small in the interior.
+Let's say by convention that
+\[h(\tilde x, \tilde y, z) = h(\bar x, y, z) + h(x, \bar y, z) - h(\bar x, \bar y, z)\]
+Let's take $d(x,y,z)$ a function defined only on $x\in\tw\lor y\in\tw$, defined
+We define
+\[ \ell = h(x,y,0) + \Xi^N\int_0^z h_z(\tilde x,\tilde y,z) dz\]
+Suppose for example $x = 0$. Then
+\[ \ell(x=0) = h(0,y,0) + \int_0^z h_z(0, y,z) dz\]
+\[= h(0,y,0) + h(0, y,z) - (0,y,0)\]
+\[= h(0,y,z)\]
+I want to start investigating where critical points might exist, but
+already I'm scared off by the complexity of the 3d case a bit. Retreat
+back to 2d case.
+\[ \ell = h(x,0) + (1-4x(1-x))^N\int_0^y (1-x)h_y(0,y) + xh_y(1,y) dy\]
+\[ \ell_x = h_x(x,0) + 4N(2x-1)(1-4x(1-x))^{N-1}\int_0^y (1-x)h_y(0,y) + xh_y(1,y) dy\]
+\[+ (1-4x(1-x))^N\int_0^y h_y(1,y) - h_y(0,y)  dy\]
+Wait, are these integrals pointless?
+
+\[\int_0^z h_z(\tilde x,\tilde y,z)\,dz  = \int_0^z h_z(\bar x, y, z) + h_z(x, \bar y, z) - h_z(\bar x, \bar y, z) \,dz\]
+\[ = h(\tilde x, \tilde y, z) - h(\tilde x, \tilde y, 0) \]
+Okay, yeah, so it's just giving me the formula for interpolating with $n$ pairs of planes and one lone plane.
+But leaving the integrals aside, I'm still potentially interested in
+\[ \ell = h(x,y,0) + \Xi^N (h(\tilde x, \tilde y, z) - h(\tilde x, \tilde y, 0))\]
+or in the 2d case
+\[ \ell = h(x,0) + (1-4x(1-x))^N (h(\bar x, y) - h(\bar x, 0))\]
+and I can reason that
+\[{\partial\over\partial x}( h(\bar x, y) - h(\bar x, 0)) \]
+\[ = {\partial\over\partial x}( (1-x)h(0, y) + xh(1, y) - (1-x)h(0, 0) - xh(1, 0)) \]
+\[ =  h(1, y) - h(0, y) + h(0, 0) - h(1, 0) =: \eta_1(y) \]
+and let
+\[\zeta_1(x,y) = h(\bar x, y) - h(\bar x, 0)\]
+I don't know much about $\eta$ and $\zeta$ but I know they're bounded.
+so
+\[ \ell_x = h_x(x,0) + 4N(2x-1)(1-4x(1-x))^{N-1} \zeta_1(x,y) + (1-4x(1-x))^N \eta_1(y)\]
+\[  = h_x(x,0) + (1-4x(1-x))^{N-1} (4N(2x-1) \zeta_1(x,y) +  (1-4x(1-x))\eta_1(y))\]
+actually let's set $\zeta_2 = 4(2x-1)\zeta_1$ and $\eta_2 = (1-4x(1-x))\eta_1$.
+
+If we really have a 1-critical point in $\ell$, what we know is
+\[  0=\ell = h(x,0) + (1-4x(1-x))^{N} (h(\bar x, y) - h(\bar x, 0))\]
+\[ 0=\ell_x = h_x(x,0) + (1-4x(1-x))^{N-1} (N \zeta_2 + \eta_2)\]
+The general strategy here should be: if $x$ is far from a boundary, ($\Xi^N$ close to 0) then we should find a 2-critical point in $h(x,0)$,
+and if $x$ is near a boundary, ($\Xi^N$ close to 1) then we should find a 1-critical point in $h(0,y)$ or $h(1,y)$.
+
+Let's try the latter reasoning first. Maybe we only need to depend on the 1-criticality of the point in $\ell$.
+Let's assume $x \le k \le 1/2$. We know
+\[  0 = h(x,0) + (1-4x(1-x))^{N} ((1-x)h(0, y) - (1-x)h(0, 0) + xh(1, y) - xh(1, 0))\]
+so we solve for $h(0,y)$.
+\[  {-h(x,0)\over (1-4x(1-x))^{N}} = (1-x)h(0, y) - (1-x)h(0, 0) + xh(1, y) - xh(1, 0)\]
+\[  {-h(x,0)\over (1-4x(1-x))^{N}} + (1-x)h(0, 0) - xh(1, y) + xh(1, 0)  = (1-x)h(0, y) \]
+\[ h(0,y) = {{-h(x,0)\over (1-4x(1-x))^{N}} + (1-x)h(0, 0) - xh(1, y) + xh(1, 0) \over 1-x}   \]
+I need to know that $h(x,0)$ is close to $h(0,0)$ when $x$ is small, but given that, this should drive $h(0,y)$ close to zero.
+
+\subsubsection*{Experimenting with non-Smooth functions}
+
+What derivatives need to exist to pose well-formed questions about critical points?
+To ask whether a point is $0$-critical, we don't need anything. To ask whether a point
+is $1$-critical, we need $f_x$ to exist everywhere. To ask whether a point is $2$-critical,
+the easiest thing to ask for is $f_{xx},f_{xy},f_x,f_y$ to exist, even if $f_x$ being zero means
+that really only $f_{xx}$ and $f_y$ matter. For 3-criticality, we need
+\[ f_x, f_y, f_z \]
+\[ f_{xx}, f_{xy}, f_{xz} \]
+\[ f_{xxx}, f_{xxy}, f_{xx}, f_{xy} \]
+\[ f_{xxy}, f_{xyy}, f_{xy}, f_{yy} \]
+\[ f_{xxz}, f_{xyz}, f_{xz}, f_{yz} \]
+Ok, so the pattern is, you have to have $f_{x_1x_2\cdots x_n}$ plus any derivative that results from
+replacing variables with earlier variables, or with nothing.
+
+So let's imagine a world where we only ever ask about 1-stability. We need to at least ask about 2-critical points, then.
+So all of our functions have $f_{xx},f_{xy},f_x, f_y$ everywhere.
+
+Can I compose two 1-cells? I notice about $\iota(x) = 3x^2 - 2x^3$ that $\iota(0) = \iota_x(0) = \iota_x(1) = 0$,
+and $\iota(1) = 1$. So if I have a 1-cell $f(x)$ and I remap it to $g = f(\iota(x))$, then $g_x = \iota_x f_x$, so
+$g_x(0) = g_x(1) = 0$.
+
+Looking at oeis A327809, I infer that there's a broader family of interpolation functions that have several derivatives zero
+at their endpoints.
+
+\[ x^{1}\]
+\[ -2 x^{3} + 3 x^{2}\]
+\[ 6 x^{5} -15 x^{4} + 10 x^{3}\]
+\[ -20 x^{7} + 70 x^{6} -84 x^{5} + 35 x^{4}\]
+\[ 70 x^{9} -315 x^{8} + 540 x^{7} -420 x^{6} + 126 x^{5}\]
+\[ -252 x^{11} + 1386 x^{10} -3080 x^{9} + 3465 x^{8} -1980 x^{7} + 462 x^{6}\]
+\[ 924 x^{13} -6006 x^{12} + 16380 x^{11} -24024 x^{10} + 20020 x^{9} -9009 x^{8} + 1716 x^{7}\]
+
+
+\[ p_n =  (2n+1){2n \choose n} \sum_{i=0}^{n} (-1)^{n+i} {x^{2n+1-i}\over 2n+1-i} {n\choose i} \]
+Just from the fact that the minimum degree monomial in this is $x^n+1$ we know the first $n$ derivatives at zero are zero.
+The first derivative of this is
+\[ (p_n)_x =  (2n+1){2n \choose n} \sum_{i=0}^{n} (-1)^{n+i} x^{2n-i} {n\choose i} \]
+Binomial theorem says
+\[ (a+b)^n = \sum_{i=0}^n {n\choose i} a^i b^{n-i}\]
+so
+\[ (p_n)_x =  (2n+1){2n \choose n} \sum_{i=0}^{n} (-x)^{n-i} x^n {n\choose i} \]
+so this is proportional to $x^n(1-x)^n$, so we're pretty much done. Right?
+Couldn't I have invented this function this way? I start off knowing
+that
+\[\theta(x) = \delta(x)^n = (x(1-x))^n\]
+and I can see that it has $n$ derivatives zero at $0$ and $1$.
+It's
+\[\theta(x) = \sum_{i=0}^n x^n (-x)^{n-i} {n\choose i}\]
+\[ = \sum_{i=0}^n (-1)^{n-i}x^{2n-i} {n\choose i}\]
+and I just integrate it to get
+\[\int \theta \,dx = \sum_{i=0}^n (-1)^{n-i}{x^{2n-i+1}\over {2n-i+1}} {n\choose i}\]
+and the other constant factors are just to get its value to be 1 at $x=1$.
+And manifestly it's monotone increasing, because $(x(1-x))^n$ is always nonnegative, great.
+
+Actually, here's an even simpler function that I think has the right properties:
+\[1-(1-x^{n})^{n}\]
+
+For consider this. Suppose $f(x)$ is analytic. Then $g = f(x^{n+1})$ should have
+its first $n$ derivatives zero at zero, just by considering the Taylor series.
+
+\subsubsection*{Continuing with Gluing Along Boundaries}
+
+$x_1, \ldots, x_n : \I \prov f : \R$ is a proper $n$-cell if $x_i\in \tw \prov f : S_{i-1}$ for every $i$.
+If we have two such cells $f$ and $g$, such that $f[1/x_m] = g[0/x_m]$, then we can form a composite by saying
+\[(g \o_m f)(x_1, \ldots, x_n) = \cases{
+f[1-(1-t)^d/x_m]&if $x_m = \dns t$;\cr
+g[t^d/x_m]&if $x_m = \ups t$.
+}\]
+for some large enough $d$ that determines how many derivatives we expect to keep.
+
+We can see for example that $g$ is equivalent to $(g \o_m f) [\ups x_m / x_m] = g[x_m^d/x_m]$
+because we can just form the equivalence cell
+\[h(x_1,\ldots,x_m,t) = g[x_m^{t[1,d]}/x_m]\]
+and this is just the horizontal reparameterization of a trivial cell, so it's also trivial.
+
+This definition has the advantage that it commutes with substitutions
+for variables other than $x_m$: so the boundaries of the composite are compositions of boundaries.
+
+Let's look at how derivatives behave on the 1-d case:
+\[(g \o_m f)(x) = \cases{
+f(1-(1-2x)^d)&if $x \le \hf$;\cr
+g((2x-1)^d)&if $x \ge \hf$.
+}\]
+Now how does $g((2x-1)^d$ behave for $x = \hf + \epsilon/2$? That'll
+be $g(\epsilon^d)$, so its first $d-1$ derivatives are zero.
+How does $f(1-(1-2x)^d)$ behave for $x = \hf - \epsilon/2$? That'll be
+$f(1- \epsilon^d)$, and I could define $k(x) = f(1-x)$ and see that it has a
+power series that has the first $d-1$ derivatives zero.
+
+\subsubsection*{Still Finding This Unsatisfying For Some Reason}
+
+Suppose I had a theorem that said I could do Kan filling of {\em
+  varieties} (restricted to cubes) instead of particular elements of
+their ideals. Could I get from that to a theorem about functions?
+I would start with my $z = 0 \prov b: \R$ on the base and $x\in\tw \lor y \in \tw \prov t$ on the tube, and the variety
+lemma would tell me that there was some suitable variety that filled out the whole cube.
+
+There is the intersection of the variety of $b$ and $z = 0$.
+
+\subsubsection*{New Hope For Eviction Proof}
+
+Let's go back to the starting point of
+ $(\exists i \in [n] . x_i \in \tw) \lor x_{n+1} = 0 \prov f: \R$
+and $x_i \in \tw \prov f : S_{i-1}$ as usual. From this we interpolate
+some $g : [0,1]^n \to \R$ which still has $x_i \in \tw \prov g : S_{i-1}$
+for any $i \in [n]$, and $x_{n+1} =0 \prov S_{n}$. We want to clear
+out the interior of $g$ so that it's $n$-stable. Define
+\[g_0 = g[0/x_{n+1}]\]
+We want to accomplish the eviction with some
+\[h_\lambda = g + \lambda g_0 x_{n+1} \prod_{i\in [n]} x_i(1-x_i)\]
+So right away we see
+\[(\exists i \in [n] . x_i \in \tw) \lor x_{n+1} = 0 \prov h = g\]
+Now suppose towards a contradiction that for every $\lambda \ge 0$ there exists
+an $n$-critical point in $h_\lambda$ somewhere in $[0,1]^{n+1}$. If we just
+consider integer $\lambda$, this gives us a sequence that lives entirely
+in the compact set $[0,1]^{n+1}$, so it must have a convergent subsequence,
+say $(\lambda_i, p_i)$ where $i\in \N$, and $p_i \in [0,1]^{n-1}$ are all $n$-critical,
+and $\lambda_j > \lambda_i$ whenever $j > i$, which converges to some $p \in [0,1]^{n+1}$.
+
+Now, first of all, let's convince ourselves that $p$ is not in the empty box boundary
+\[(\exists i \in [n] . x_i \in \tw) \lor x_{n+1} = 0\]
+Every such point is {\em not} $n$-critical, so there exists some $k \le n$ such that $D^k \ne 0$ there.
+So $\lambda$ has to be set to exactly counterbalance that. Let's say $x_m = 0$ is the boundary we're getting close to,
+with $K \gg 0$ being the product of all the other boundary expressions.
+
+\[0 = D^k g_{\bd} + \lambda K D^k g_0  x_i\]
+\[\lambda =  {- D^k g_{\bd}\over  K D^k g_0  x_i} \]
+
+Upsettingly, that seems like a mechanism by which you could have
+critical points just squeezed closer and closer to the boundary as you
+increase $\lambda$.
+
+\subsubsection*{Kan Filling By Composition?}
+
+Suppose we had a composition operator that was the identity on
+pairs of cells that were already subsets of a single cell, and which commuted with taking faces.
+
+\[\begin{tikzpicture}[every path/.style = {line cap=round}]
+\draw[red] plot [smooth, tension=0.8] coordinates {(2,3.5) (1.2, 3.3) (1.5,3.0) };
+\draw[red, dotted] plot [smooth, tension=0.8] coordinates {(2,3.5) (2.25, 2) (1.5,1.5) };
+\draw[red, dotted] plot [smooth, tension=0.8] coordinates {(1.5,3.0) (1.6,2.0) (0.9,1.0) (1.7, 0.0)};
+
+
+\draw (0,0)--(3,0)--(3,3)--(0,3)--cycle;
+\draw (0,3)--(0.5,3.5)--(2.5,3.5)--(3,3);
+\draw[dotted] (0.5,3.5)--(0.5,1.5)--(2.5,1.5)--(2.5,3.5);
+%% \draw[dotted] (0,0)--(0.5,1.5);
+%% \draw[dotted] (2.5,1.5)--(3,0);
+
+
+\begin{scope}[shift={(-1.5,3.5)}]
+\node (x) at (.5,0)[right] {$x$};
+\node (y) at (-0.6,-.3)[below] {$y$};
+\node (z) at (0,-.5)[below] {$z$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\draw[->] (0,0)--(z);
+\end{scope}
+
+\end{tikzpicture}\]
+
+Here's a sort of warm-up problem: Suppose we're given just the $z = 0$ and $y \in \tw$ faces, and we're asked to fill.
+This seems like this should be doable by invoking composition. To get the layer at $z$, we take a little $z$-sized slice off the top of $f(x,0,z)$,
+and all of $f(x,y,0)$, and a little $z$-sized slice of $f(x,1,z)$, and compose them together.
+
+If we want to do an ordinary 3-dimensional filling problem, then we prepare by slicing off bits near $x=0$ and $x=1$, doing this
+composition on the middle segment, which gives us $x=k$ and $x=1-k$ faces to do a simpler filling problem in, adn the remaining
+task is to fill a cube that is 0-stable everywhere, I think?
 
 
 %% \subsubsection*{Failed Attempt To Find an Easy Conditional}
