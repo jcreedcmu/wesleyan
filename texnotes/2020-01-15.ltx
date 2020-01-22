@@ -403,6 +403,9 @@ So in general I think I conclude Lemma~\ref{deriv.h}.
 
 \subsection*{Clean Lemmas}
 
+When $m \in [n]$, we say
+two functions $f,g\in\S_n$ are an {\em $m$-composable pair} if $f[1/x_m] = g[0/x_m]$.
+
 So $\Lambda_n$ is the {\em set} of differential operators available at dimension $n$,
 those required to compute $D^n$. So $\Lambda_1 = \{\rid\}$, $\Lambda_2 = \{\rid, \bd_ x\}$.
  $\Lambda_3 = \{\rid, \bd_x, \bd_{xx}, \bd_{xy}\}$, etc.
@@ -508,7 +511,7 @@ By combining Lemmas~\ref{product.deriv.interchange} and~\ref{est.deriv}.
 
 \begin{lemma}
 \label{abstract}
-Let $f, g : \S_n$ be given. For any $\ep$, there exists a $\delta$ such that if
+Let $f, g : \S_n$ be given. For any $\ep$, there exists a $\delta^+$ such that for any $\delta \in (0,\delta^+)$, if
 $c$ is an $n$-smooth $\delta$-conditional function, then
 \[ |\ell h(\bx) - \ell f(\bx)| \le \ep \]
 \end{lemma}
@@ -528,34 +531,18 @@ then
 \[|\ell f - \lerp{c(x_m) }{\ell f}{\ell g}| \le \ep / 2\]
  when $x_m\in [0,\hf - \delta_2]$.
 So if we set
-\[ \delta = \min(\delta_1,\delta_2) = (\ep /2) \min\left({2^{-n} \over M_{g-f}},  {1\over M_f + M_g}\right)\]
-then $c$ being $n$-smooth $\delta$-conditional implies
+\[ \delta^+ = \min(\delta_1,\delta_2) = (\ep /2) \min\left({2^{-n} \over M_{g-f}},  {1\over M_f + M_g}\right)\]
+then $c$ being $n$-smooth $\delta$-conditional for any $\delta < \delta^+$ implies
+that it's  both $\delta_1$-conditional and $\delta_2$-conditional,
+which implies
 \[ |\ell h(\bx) - \ell f(\bx)| \le |\ell h(\bx) - \lerp{c(x_m) }{\ell f}{\ell g}| + |\ell f(\bx) - \lerp{c(x_m) }{\ell f}{\ell g}| \]
 \[ \le \ep/2 + \ep/2 = \ep \]
 when $x_m\in [0,\hf - \delta]$, as required.
 \cqed
 \end{proof}
 
-
-
 \begin{lemma}
-\label{meat.1}
-Suppose $f, g \in \S_n$. For all $\delta$, there exists an $\eta^+$ such that for all $\eta \in (0,\eta^+)$, and
-any $\eta$-conditional function $c$, if we define
-$h = \lerp{c(x_m)}fg$, and if $x_m \in [0,\hf - \eta]$, then
-\[\forall \ell \in \Lambda_n . |\ell f(\bx) - \ell h(\bx) | < \delta\]
-\end{lemma}
-
-\begin{proof}
-
-
-By Lemma~\ref{combine}, we have
-\[|\ell h  - \lerp{c(x_m) }{\ell f}{\ell g}| \le \epsilon\]
-\cqed
-\end{proof}
-
-
-\begin{lemma}
+\label{gap.bound}
 If $\forall k \in [n] . | D^k f(\bx) - D^k h(\bx) | < \ep$, and $\gamma^n_\bx(f) \ge \ep$,
 then $\gamma^n_\bx(h) > 0$.
 \end{lemma}
@@ -565,33 +552,70 @@ Straightforward induction on the definition of $\gamma^n_\bx(f)$.
 \cqed
 \end{proof}
 
-
-\begin{lemma}
-Suppose $f, g \in \S_n$ with $f[1/x_m] = g[0/x_m]$ for some $m \in [n]$.
-Let $b : \R^{n-1} \to \R = f[1/x_m]$.
-There exists an $\eta^+$, such that for any $0 < \eta < \eta^+$, and any $\eta$-conditional function $c$, if we define
-$h = \lerp{c(x_m)}fg$, then for all $\bx \in \I^n$,
+Suppose $f,g\in \S_n$ are an $m$-composiable pair.
+Let $b : \R^{n-1} \to \R$ be the boundary function that is $f[1/x_m] = g[0/x_m]$.
+Given a function $c : \R \to \R$, we say {\em $c$ is an $fgm\eta$-interpolator} if
+for all $\bx \in \I^n$ we have
 \begin{enumerate}
 \item If $f(\bx)$ is $n$-stable, and $x_m \in [0, \hf -\eta]$, then $h(\bx)$ is $n$-stable.
 \item If $b(\bx)$ is $m$-stable, and $x_m \in [\hf -\eta, \hf+\eta]$, then $h(\bx)$ is $m$-stable.
 \item If $g(\bx)$ is $n$-stable, and $x_m \in [\hf + \eta, 1]$, then $h(\bx)$ is $n$-stable.
 \end{enumerate}
+where $h = \lerp{c(x_m)}fg$.
+
+\begin{lemma}
+Suppose $f, g \in \S_n$ are an $m$-composable pair.
+There exists an $\eta^+$, such that for any $\eta \in (0,\eta^+)$, and $c : \R \to \R$,
+if $c$ is $n$-smooth $\eta$-conditional, then $c$ is an $fgm\eta$-interpolator.
 \end{lemma}
 
 \begin{proof}
-If $f(\bx)$ is $n$-stable, then it has a positive gap: $\gamma^n_\bx(f) > 0$.
-We'd like to show that $h$ is so close to $f$, that also $\gamma^n_\bx(h) > 0$.
+The proof proceeds in three parts according to the definition of $fgm\eta$-interpolators.
+
+\begin{enumerate}
+\item If $f(\bx)$ is $n$-stable, then it has a positive gap: $\gamma^n_\bx(f) > 0$.
+We need to show $\gamma^n_\bx(h) > 0$. By Lemma~\ref{gap.bound},
+it suffices to show that
+\[\forall k \in [n] . | D^{k} f(\bx) - D^{k}h(\bx)|_\infty < |\gamma^n_{\bx}(f)|\]
+whenever $x_m \in [0,\hf - \eta]$, and therefore it also suffices to show
+\[| D^{[n]} f(\bx) - D^{[n]}h(\bx)|_\infty < |\gamma^n_{\I^n}(f)|\]
 
 Observe that $D^{[n]} : \R^{\Lambda_n} \to \R^n$ is a continuous function, and therefore
-uniformly continuous on $\kappa$.
-
-That is, for every $\ep > 0$, there exists a $\delta > 0$ such that if $t_1,t_2 \in \kappa$
-with $|t_1 - t_2|_1 < \delta$, then $|D^{[n]}t_1 - D^{[n]}t_2|_1 < \ep$.
-
-So if in particular we have that if $\forall \ell \in \Lambda_n . |\ell f(\bx) - \ell h(\bx) | < \delta$,
-then $\forall k \in [n] . |D^kf(\bx) - D^kh(\bx)| \le \ep$.
-
-So all I need to do is appeal to Lemma~\ref{meat.1}.
+uniformly continuous on the compact set $\kappa$.
+So for any $\ep> 0$ there exists a $\delta > 0$ such that if $t_1,t_2 \in \kappa$
+with $|t_1 - t_2|_\infty < \delta$, then $|D^{[n]}t_1 - D^{[n]}t_2|_\infty < \ep$.
+In particular, we can take $\ep = |\gamma^n_{\I^n}(f)|$, and observe that there exists a $\delta$ such that
+if
+\[\forall \ell \in \Lambda_n . |\ell f(\bx) - \ell h(\bx) | < \delta\]
+then
+\[| D^{[n]} f(\bx) - D^{[n]}h(\bx)|_\infty < |\gamma^n_{\I^n}(f)|\]
+as required. We can appeal to Lemma~\ref{abstract} to find how small $\eta^+$ must be to ensure this holds.
+%
+\item
+%
+Let $C$ be the compact set that is $\I^{n-1} \x [\hf - \eta, \hf + \eta]$ arising from
+requiring that $x_m \in [\hf - \eta, \hf + \eta]$.
+If $b(\bx)$ is $m$-stable, then it has a positive gap: $\gamma^m_\bx(b) > 0$. We need
+to show $\gamma^m_\bx(h) > 0$. By Lemma~\ref{gap.bound}, it suffices to show that
+\[\forall k \in [m] . | D^{k} b(\bx) - D^{k}h(\bx)|_\infty < |\gamma^m_{\bx}(b)|\]
+whenever $\bx \in C$, and therefore it also suffices to show
+\[| D^{[m]} b(\bx) - D^{[m]}h(\bx)|_\infty < |\gamma^m_{C}(m)|\]
+Because $D^{[m]}$ is uniformly continuous on $\kappa$, there exists a $\delta$ such that
+it also suffices to show
+\[\forall \bx \in C . \forall \ell \in \Lambda_m . |\ell b(\bx) - \ell h(\bx) | < \delta\]
+Since we are only quantifying over differential operators in $\Lambda_m$, none of them
+involve $x_m$, so we know that
+\[\ell h(\bx) = \ell \lerp{c(x_m)}fg
+= \lerp{c(x_m)}{\ell f}{\ell g}   \]
+Note that $f$ and $g$ themselves are uniformly continuous on $C$. So there does exist an $\eta^+$
+such that $|x_m - \hf| \le \eta^+$ implies both
+\[\forall \bx \in C . \forall \ell \in \Lambda_m . |\ell f(\bx) - \ell b(\bx) | < \delta\]
+\[\forall \bx \in C . \forall \ell \in \Lambda_m . |\ell g(\bx) - \ell b(\bx) | < \delta\]
+Then we may observe that since $\ell h$ is a convex combination of $\ell f$ and $\ell g$, we also have
+\[\forall \bx \in C . \forall \ell \in \Lambda_m . |\ell b(\bx) - \ell h(\bx) | < \delta\]
+as required.
+\item The reasoning in this part is symmetric to that in part 1.
+\end{enumerate}
 \cqed
 \end{proof}
 
