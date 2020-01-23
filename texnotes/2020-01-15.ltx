@@ -628,4 +628,106 @@ If $f, g \in \S_n$, and $m\in [n]$, then an $m$-composition of $f$ and $g$ exist
 \cqed
 \end{proof}
 
+\section{$\R^p$ in the Codomain}
+
+What if I am to think about functions $f : \R^n \to \R^p$ for $p > 1$?
+What are critical points then? One thing that immediately seems clear
+is that if $f_1 = 0$ and $f_2 = 0$ at the same point, that should
+could as a 2-critical point, the same as if we had $f_1 = 0 \land f_{1,x} = 0$
+or $f_2 = 0 \land f_{2,x} = 0$. Any of those circumstances
+is a case where ``what's going on'' seems to change as we increase the
+$y$-coordinate.
+
+A nondegeneracy condition I'd need to impose --- which is to say, a
+condition for being a 3-critical-point --- is that {\em when} I have
+$f_1 = f_2 = 0$, the procession of the respective $x$-coordinates of
+where I have $f_1 = 0$ and $f_2 = 0$ should move past each other
+cleanly.
+
+What is the `$x$-velocity' of such a root as I increase $y$? Imagine that I know $\Delta y$,
+and I want to find a $\Delta x$ such that $f_1(x + \Delta x, y + \Delta y) = 0$, knowing
+that $f_1(x,y) = 0$ already. The approximation is
+\[0 = f_1(x + \Delta x, y + \Delta y)  \]
+\[ = f_1 + \Delta x f_{1,x} + \Delta y f_{1,y} \]
+\[ = \Delta x f_{1,x} + \Delta y f_{1,y} \]
+\[{ - f_{1,y}\over f_{1,x}} = {\Delta x \over \Delta y}   \]
+So I reckon it would be a kind of 3-critical point to have
+\[f_1 = f_2 = 0 \quad \land \quad{  f_{1,y}\over f_{1,x}} = {  f_{2,y}\over f_{2,x}}  \]
+
+Here's a guess: the set I'm looking for is the same as the set of
+critical points on the {\em product} $f_1f_2$. For what are its 1-critical points? They're
+places where $f_1f_2 = 0$ and $(f_1f_2)_x = 0$, which is to say
+\[(f_1 = 0 \lor f_2 = 0) \land (f_{1,x}f_2 + f_1f_{2,x} = 0)\]
+and this is logically equivalent to
+\[(f_1 = 0 \land f_2 = 0) \lor (f_1 = 0 \land f_{1,x} = 0) \lor (f_2 = 0 \land f_{2,x} = 0)\]
+And if I compute $(f_1f_2)_y$ I get
+\[f_{1,y}f_2 + f_1f_{2,y}\]
+so... Hm, that seems too harsh. It seems like any point that has $f_1 = f_2 = 0$
+would be an $\omega$-critical point, because all single derivatives at such a point vanish.
+
+Unless there are more functions hanging around, maybe? What if I have $f_1,f_2,f_3$, and only two of them
+happen to intersect? Does the product $f_1f_2f_3$ have only a 2-critical point there?
+For $(f_1f_2f_3)_x = 0$ I'd need
+\[(f_1 = 0 \lor f_2 = 0 \lor f_3 = 0) \]
+\[{}\land (f_{1,x}f_2f_3 + f_1f_{2,x}f_3 + f_1f_{2}f_{3,x} = 0)\]
+which is equivalent to
+\[(f_1 =  f_2 = 0) \lor (f_2 =f_3 = 0) \lor (f_1 = f_3 = 0)\]
+\[{}\lor (f_1 = 0 \land f_{1,x} = 0) \lor (f_2 = 0 \land f_{2,x} = 0) \lor (f_3 = 0 \land f_{3,x} = 0)\]
+Ah, but again the $y$-derivative (or $z$-derivative, or $\ldots$) will look about the same. So
+again, if $f_1 = f_2 = 0$, then all discriminants go to zero, and you have an $\omega$-critical point,
+which seems undesirable.
+
+So maybe analyzing the product is wrong.
+
+However, I notice that the condition
+\[{  f_{1,y}\over f_{1,x}} = {  f_{2,y}\over f_{2,x}}  \]
+is exactly the same as the condition
+\[
+\left|\begin{array}{cc} f_{1,x} & f_{1,y} \\ f_{2,x} & f_{2,y} \end{array}\right|
+= 0
+\]
+which seems extremely familiar and therefore promising.
+
+Wait a second... Do I actually need to consider the determinant
+\[
+D^3 (f_1f_2) =
+\left|\begin{array}{cc}
+(f_1f_2)_x & (f_1f_2)_y
+ \\
+(f_1f_2)_{xx} & (f_1f_2)_{xy}
+\end{array}\right|
+\]
+?
+Let's say I know $f_1f_2 = 0$ and $(f_1f_2)_x = 0$, which so far means
+\[(f_1 = 0 \land f_2 = 0) \lor (f_1 = 0 \land f_{1,x} = 0) \lor (f_2 = 0 \land f_{2,x} = 0)\]
+but suppose also I want to think about the case where $D^3 (f_1f_2) = 0$. Does $f_1 = f_2 = 0$ guarantee
+$D^3 (f_1f_2) = 0$? Hm, yeah, it actually does, because it drives both $(f_1f_2)_x$ and $(f_1f_2)_y$. So
+forget that for now.
+
+I think that if $f_1 = f_2 = 0$ counts as a 2-critical point, $f_1 = f_2 = f_3 = 0$ should
+count as a 3-critical point, and $f_1 = \cdots = f_n = 0$ should generally count as an $n$-critical point.
+
+\subsection{Some More Critical Points}
+
+Here are some plausible-seeming inference rules for establishing
+criticality that I think subsume everything I said above. We write
+$\Gamma \prov \#$ to mean that if $g = 0$ at a point for every $g \in \Gamma$,
+then the point is $|\Gamma|$-critical.
+
+\[\delta (g_1, \ldots, g_n) = \det_{i,j\in[n]}{\bd g_i \over \bd x_j} \]
+then
+\[
+\erule
+{}
+{f_i \prov \#}
+\qquad
+\erule
+{\Gamma \prov \#}
+{\Gamma, \delta \Gamma \prov \#}
+\qquad
+\erule
+{\Gamma_1 \prov \# \qquad \Gamma_2 \prov \# \qquad \Gamma_1 \cap \Gamma_2 = \nope}
+{\Gamma_1, \Gamma_2 \prov \#}
+\]
+I still don't know if this can be rephrased with one induction-step rule, instead of these two.
 \end{document}
