@@ -730,4 +730,206 @@ then
 {\Gamma_1, \Gamma_2 \prov \#}
 \]
 I still don't know if this can be rephrased with one induction-step rule, instead of these two.
+
+So for some examples
+\[ f_1 \prov \# \qquad  f_2 \prov \# \qquad  f_1, f_2 \prov \#\]
+\[ f_1, f_{1,x} \prov \# \qquad  f_2, f_{2,x} \prov \#\]
+\[ f_1, f_{1,x},  f_2, f_{2,x} \prov \#\]
+\[ f_1, f_2, f_{1,x} \prov \# \qquad  f_1, f_2, f_{2,x} \prov \#\]
+\[ f_1, f_2, \delta(f_1,f_2) \prov \#\]
+Here's a question, though: should it be the case that maybe
+\[ f_1, f_2, \delta(f_1,f_2), f_{1,x} \prov \#\]
+? This isn't provable with the disjointness condition above, but would be provable without it.
+
+But wait a minute, $\delta(f_1,f_2)$ is $f_{1,x}f_{2,y} - f_{1,y}f_{2,x}$. If also $f_{1,x} = 0$, then
+it's insisting that $f_{1,y}f_{2,x} = 0$. If it were the case that $f_{2,x}$ were zero, we'd already have
+a 4-critical point by
+\[ f_1, f_{1,x},  f_2, f_{2,x} \prov \#\]
+So the interesting novel case is whether we should have a 4-critical point when all of
+$ f_1, f_{1,x},  f_2, f_{1,y} $ are zero. Oh, but indeed we already do;
+$ f_1, f_{1,x},  f_{1,y} $ is enough to make a 3-critical point, and the 1-critical point arising from $f_2=0$ is disjoint from them.
+So I actually conclude that
+\[ f_1, f_2, \delta(f_1,f_2), f_{1,x} \prov \#\]
+{\em is} an admissible consequence of even the rules that require disjointness.
+I'm not sure if I'm brave enough to conjecture
+\begin{conjecture}
+If something is an $n$-critical point under the rules that don't require disjointness, it's
+also an $n$-critical point under the rules that require disjointness.
+\end{conjecture}
+quite yet. Let's try another example. Here's something I can prove
+without the disjointness requirement:
+\[ \]
+\[
+\erule
+{
+f_1, f_2, \delta(f_1,f_2) \prov \#
+\qquad
+f_2, f_3, \delta(f_2,f_3) \prov \#
+}
+{f_1, f_2, f_3, \delta(f_1,f_2), \delta(f_2,f_3) \prov \#}
+\]
+and I know $\delta(f_1, f_2) = f_{1,x}f_{2,y} - f_{1,y}f_{2,x}$
+and
+$\delta(f_2, f_3) = f_{2,x}f_{3,y} - f_{2,y}f_{3,x}$.
+
+Let me try to do some case analysis on $f_{1,x}$ and $f_{2,x}$. If they were both zero,
+then we'd already have a 5-critical point. If $f_{2,x}$ were zero and $f_{1,x} \ne 0$,
+then we'd have $f_{2,y} = 0$, which means we'd have a 5-critical point via
+\[{f_1, f_2, f_3, f_{2,x} f_{2,y} \prov \#}\]
+If $f_{1,x} = 0$ and $f_{2,x} \ne 0$, then we'd have $f_{1,y} = 0$, and a 5-critical point via
+\[{f_1, f_2, f_3, f_{1,x} f_{1,y} \prov \#}\]
+So we conclude that the only case remaining worth considering is $f_{1,x} \ne 0$ and $f_{2,x} \ne 0$.
+If $f_{3,x} = 0$, we'd have $f_{3,y} = 0$, which would mean a 5-critical point via
+\[{f_1, f_2, f_3, f_{3,x} f_{3,y} \prov \#}\]
+Ok, so now the only case I have to consider is where all $f_{i,x}$ for $i \in [3]$ are nonzero.
+
+By the way, is it the case that $\delta(f_1,f_2) = 0$ and $\delta(f_2, f_3) = 0$ imply $\delta(f_1, f_3) = 0$?
+Yes, by transitivity of equality:
+\[{f_{1,x}\over f_{1,y}} = {f_{2,x}\over f_{2,y}} = {f_{3,x}\over f_{3,y}}\]
+And intuitively this makes me fairly well convinced that such a situation {\em should} be `extra critical',
+if we indeed have three overlapping roots with aligned derivatives.
+
+Two intersecting roots is a 2-critical situation ($f_1, f_2 \prov \#$) and two intersecting
+roots with common derivative is a 3-critical situation ($f_1, f_2, \delta(f_1, f_2) \prov \#$)
+and if we add one more root, that is 4-critical ($f_1, f_2, \delta(f_1, f_2), f_3 \prov \#$)
+and if we add one more derivative coincidence, that seems like it should be {\em at least} 5-critical.
+
+So should this actually be a 6-critical situation since essentially we have a sort of equivalence of contexts
+\[f_1, f_2, f_3, \delta(f_1, f_2), \delta(f_2, f_3)\dashv\vdash f_1, f_2, f_3, \delta(f_1, f_2), \delta(f_2, f_3), \delta(f_1, f_3)\]
+?
+
+\subsection{Reasoning about Propagation}
+The underlying thing that I want to do is propagate $n$-critical points across dimension $n+1$ without any collisions
+or `reversals'. As a base case, $f_i = 0$ are 1-critical points. Obstacles to 1-critical point propagation are
+$f_x = f_{i,x} = 0$ or $f_i = f_j = 0$. These are 2-critical points. All of the ways you can be 2-critical are:
+\[ f_i, f_{i,x}\qquad f_i, f_{j} \]
+Among the obstacles to 2-critical point propagation are the
+simultaneous satisfaction of two {\em distinct} 2-critical point conditions, because then they could propagate in different
+directions. Plus we get determinantal constraints from $f_i$. So I think all the ways you can be 3-critical are
+\[ f_i, f_{i,x}, \delta(f_i, f_{i,x}) \]
+\[ f_i, f_j, \delta(f_i, f_j) \]
+\[ f_i, f_j, f_k \]
+\[ f_i, f_{i,x}, f_j \]
+Some ways that you can be 4-critical, though I'm less sure I'm being exhaustive, are
+\[\begin{tabular}{ll}
+$ f_i, f_{i,x}, \delta(f_i, f_{i,x}), \delta(f_i, f_{i,x}, \delta(f_i, f_{i,x})) $&
+$f_i, f_{i,x}, \delta(f_i, f_{i,x}), f_j$
+\\
+$ f_i, f_j, \delta(f_i, f_j), \delta(f_i, f_j, \delta(f_i, f_j)) $&
+$f_i, f_j, \delta(f_i, f_j), f_k$
+\\
+$ f_i, f_j, f_k, \delta(f_i, f_j, f_k) $&
+$f_i, f_j, f_k, f_\ell$
+\\
+$ f_i, f_{i,x}, f_j, \delta(f_i, f_{i,x}, f_j) $&
+$f_i, f_{i,x}, f_j, f_k$
+\end{tabular}\]
+actually let me write $f_i,f_j,f_k,\ldots$ as $a,b,c,\ldots$. Then I get
+
+\[\begin{tabular}{ll}
+$ a, a_{x}, \delta(a, a_{x}), \delta(a, a_{x}, \delta(a, a_{x})) $&
+$a, a_{x}, \delta(a, a_{x}), b$
+\\
+$ a, b, \delta(a, b), \delta(a, b, \delta(a, b)) $&
+$a, b, \delta(a, b), c$
+\\
+$ a, b, c, \delta(a, b, c) $&
+$a, b, c, d$
+\\
+$ a, a_{x}, b, \delta(a, a_{x}, b) $&
+$a, a_{x}, b, c$
+\end{tabular}\]
+Perhaps any time a critical point during propagation encounters another critical point with a {\em non-identical} set of zeroes,
+(rather than {\em disjoint}) this should count as bumping the criticality level.
+
+\subsection{Powers of $\R$ Suffice}
+
+I had a thought that I wanted to generalize beyond the codomain just
+being copies of $\R$ with their origins axiomatically declared as
+1-critical. But I think now that if I allow taking subsets of these structures,
+that it suffices for the generalization I had in mind.
+
+The generalization went something like this: I should be able to declare, for example,
+that if my codomain consists of points $(u,v) \in \R^2$, I should be able to make
+a category whose objects are squares in the evident infinite grid on $\R^2$.
+This would be tantamount to saying that either $u \in \Z$ or $v \in \Z$ would suffice
+for 1-criticality, and I tentatively expect that lattice points where
+ $u \in \Z \land v \in \Z$ would have to be be 2-critical.
+
+In more generality, I could imagine that I have an underlying $f$ that
+goes $\R^n \to \R^p$, which directly realizes paths (and 2-paths, and
+3-paths, etc.) and then some further collection of mappings
+$Q = \{q : \R^p \to \R, \ldots \}$ whose varieties serve as axiomatic
+declarations that certain sets are supposed to be considered
+1-critical. For example, we could take $p$ to be 2, and
+\[ Q = \{ \lambda (x,y) . x - n  \st n \in \Z\} \cup \{ \lambda (x,y) . y - n  \st n \in \Z\} \]
+and this would give us the 2-d grid alluded to above. Setting aside issues of finiteness,
+we can observe that this collection of maps is essentially just a single map
+\[ \beta : \R^p \to \R^{|Q|} \]
+and we can compose $f$ with this map to get
+\[ \beta \o f : \R^n \to \R^{|Q|} \]
+so that the paths we're interested in are actually the subset of paths in $\R^n \to \R^{|Q|}$
+that happen to factor through $\beta$.
+
+For example, if I consider the 1-dimensional subspace of $\R^2$ (where both $u = 0$ and $v = 0$ are considered
+1-critical) indicated by the dashed line
+\[\begin{tikzpicture}
+\draw[red, dashed] (-1,2)--(2,-2);
+\node (u) at (2,0)[right] {$u$};
+\node (v) at (0,2)[above] {$v$};
+\draw[->] (-2,0)--(u);
+\draw[->] (0,-2)--(v);
+\end{tikzpicture}\]
+then I get a space with two critical points.
+
+\subsection{Criticality Via Dimension}
+
+I think it is decisive that the definition of $n$-criticality involves the intersection
+of $n$ varieties of codimension 1. The 1-critical points form a surface of codimension 1, because we have
+required just that $f_1 = 0$, or $f_2 = 0$, etc. The 2-critical points form a surface of codimension 2,
+because we require $f_1 = 0$ and $f_{1,x} = 0$, or $f_1 = 0$ and $f_2 = 0$, or the like.
+
+This leads me to believe that in all likelihood the simultaneous zeroing of
+\[f_1,f_2,f_3,\delta(f_1,f_2),\delta(f_2,f_3)\]
+means you're looking at a 5-critical --- and not necessarily 6-critical --- point.
+
+\subsection{Criticality Via Local Uniqueness}
+
+Here's something even more promising as a simple definition that
+should determine what the differential definition of criticality in
+the multivariate case {\em must} be.
+
+If a point $\bx = (x,y,z,\ldots)$ in the domain of $f : \R^n \to \R$ is exactly
+1-critical (i.e. 1-critical but not 2-critical) in the differential sense that
+$f(\bx) = 0$ and $f_x(\bx) = 0$, then there exists a
+neighborhood of it in which for every
+$(y_0,z_0,\ldots) \in \R^{n-1}$, there exists {\em exactly one} $x_0$ such that
+$f(x_0, y_0, z_0, \ldots) = 0$. Let's say {\em is locally $n$-like} to mean something like
+the `there exists a neighborhood in which...' condition. So I mean to say that
+a point that is exactly 1-critical is locally 1-like: there's a neighborhood around it with exactly
+one 1-critical point per slice where we fix every variable that {\em isn't} $x$.
+
+The converse --- every locally 1-like point is exactly 1-critical --- is not directly true.
+The function $f = x^3 - y$ is a counterexample. The origin is locally 1-like: for every $y$ there is
+exactly one $x$, namely $x = \root 3 \of y$, which makes $f = 0$. But the origin is definitely 3-critical,
+since $f_{xx} = 0$ there.
+
+However, if I consider extending the function to a third variable as $f = x^3 - y + xz$
+ I note that even if I require $x,y,z \in [-\ep, \ep]$, I can still find
+a $y,z$ such that multiple $x$ are solutions, namely setting $z = -\ep^2$ and $y = 0$ and $x \in \{ 0, \pm \ep\}$.
+
+Likewise I could note that on a 1-d function $\R \to \R$ like $f = x^2$, the origin is locally
+1-like, (in that it is an isolated 1-critical point) but differentially I know it's 2-critical, because $f_x = 0$.
+But if I consider an extension to $f = x^2 - y$, I can see that it fails the exactly-1-$x$-per-$y$ test.
+So my intuitive definition is:
+
+\begin{conjecture}
+An $i$-critical point $\bx \in \R^n$ in the domain of a function
+$f : \R^n \to \R$ is $(i+1)$-stable (i.e. ``is exactly $i$-critical'') iff
+for all functions $g$ such that $g[0/x_m] = f$, there exists a
+neighborhood around $[0/x_m]\bx$ such that for every $\by : \R^{n-i}$
+there exists exactly one $\bx_0 : \R^i$ such that $(\bx_0, \by)$ is
+$i$-critical in $g$.
+\end{conjecture}
+
 \end{document}

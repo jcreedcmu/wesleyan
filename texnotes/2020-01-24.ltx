@@ -1,0 +1,204 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bz{\mathbf{0}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+I want to see how far I can get proving some lemmas relating the two
+approaches to criticality that I think should coincide.
+
+Let $X,Y$ be sets of variables. Suppose $g : \R^{X + Y} \to \R$ and $f : \R^X \to \R$.
+We say $g$ {\em extends} $f$, written $g \succ f$, if $f = g[0/Y]$.
+If $\bx \in \R^X$ then we write $\bx^{+}$ for the evident point of $\R^{X + Y}$ that assigns 0 to every $y\in Y$.
+
+
+Let $P$ be some predicate on points in the domain of $g: \R^{X+ Y} \to \R$.
+We say say of some point $\bx$ in the domain of $g$ that it {\em essentially has the property $P$} if
+there exists a neighborhood $U_x \x U_y \subseteq \R^X \x \R^Y$ of $\bx$ such that
+for any $\by \in U_y$, there exists exactly one $\bx \in U_x$ such that $(\bx, \by) : \R^{X+Y}$
+has the property $P$.
+
+Say a point is an $n$-cell if it's $n$-critical but $(n+1)$-stable.
+
+\begin{conjecture} Let $X$ be given and set $i = |X|$.
+Suppose we have $f: \R^X \to \R$ and an $i$-critical point $\bx$ of $f$.
+Then the following
+conditions are equivalent:
+\begin{enumerate}
+\item $\bx$ is an $i$-cell.
+\item for all $g \succ f$, the point $\bx^+$ is essentially $i$-critical in $g$.
+\end{enumerate}
+\end{conjecture}
+
+This conjecture makes sense because for the single-copy-of-$\R$
+codomain I'm moderately confident I know what the definition of
+`$n$-stable' is: it's $D^n$ being nonzero. I don't yet know what the definition is
+for multiple copies of $\R$ in the codomain, but I could call this a constraint on
+any putative definition of stability for that situation.
+
+\begin{conjecture}[Constraint] Let $X$ be given and set $i = |X|$.
+Suppose we have $f: \R^X \to \R^C$ and an $i$-critical point $\bx$ of $f$.
+Then the following
+conditions are equivalent:
+\begin{enumerate}
+\item $\bx$ is an $i$-cell.
+\item for all $g \succ f$, the point $\bx^+$ is essentially $i$-critical in $g$.
+\end{enumerate}
+\end{conjecture}
+
+Let's just warm up by proving the above {\em conjecture} holds in the
+way I expect it to for small values of $i$. Here's how the $i=1$ case goes.
+First a very general lemma I probably should have already proven:
+\begin{lemma}
+\label{cell}
+Around any point in the domain of a smooth $f: \R^n \to \R$ we can find a neighborhood which is an $n$-cell cube.
+(By which I mean the usual set of stability requirements on its faces)
+\end{lemma}
+
+\begin{proof}
+If the point $\bx$ has $f(\bx) \ne 0$, then by continuity we can find a 0-cell neighborhood throughout which $f \ne 0$.
+If we have $f = 0$ but $f_x \ne 0$, then wlog $f_x > 0$, and we can find an interval $[x_-, x_+]$ such that
+$f[x_-/x]\bx < 0$  and $f[x_+/x]\bx> 0$ and then by continuity, we can find a cube small
+enough such that those are true of the whole face. Probably I can inductively continue this kind of reasoning.
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+Suppose we have $f(x): \R \to \R$ and an $x$ where $f(x) = 0$.
+
+Then the following
+conditions are equivalent:
+\begin{enumerate}
+\item $f_x(x) \ne 0$.
+\item for all $g : \R \x \R^Y \to \R$ such that $g(x,\bz) = f(x)$, the point $(x, \by)$ is essentially 1-critical in $g$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+$\imp$: suppose $f_x(x) \ne 0$. We must show that there is some neighborhood
+around $(x,\bz)$ within which we can
+  say that for all $\by \in  \R^Y$,
+ there exists a unique $x_0$ such that $g(x_0,\by) = 0$.
+%
+We first of all observe that $g_x(x,\bz) = f_x(x) \ne 0$. The
+  derivative must exist since we assume $g$ to be smooth, and it can't
+  have any other value than that of $f_x$, since it's constrained to
+  agree with $f_x$ when $\by = 0$.
+
+Also since $g$ is smooth, its $x$-derivative is continuous, so we can
+find a neighborhood $U = U_x \x U_y \subseteq \R \x \R^Y$ containing $(x, \bz)$, such that $g_x \ne 0$ throughout $U$.
+Assume wlog that $g_x > 0$.
+Furthermore find a neighborhood within that that is a $n$-cell cube $[x_0,x_1] \x U_y$.
+
+This will be the neighborhood we exhibit for the purpose of showing
+that $(x,\bz)$ is essentially 1-stable. So let some $\by \in U_y$ be given.
+We know along the line from $(x_0, \bz)$ to $(x_1, \bz)$ that $g_x > 0$, and
+$g_x = 0$ at $(x,\bz)$. So $g(x_0, \bz) < 0$ and $g(x_1, \bz) > 0$. Because $[x_0,x_1] \x U_y$ is an $n$-cell cube,
+we know that fixing $x = x_0$ or $x = x_1$ gives us a 1-stable face, so $g(x_0, \by) < 0$ and $g(x_1, \by) > 0$
+for all $\by \in U_y$. Therefore by intermediate value theorem, there {\em exists} an $x$ yielding a zero at $(x, \by)$
+for every $\by$. If there were more than one such value, this would contradict $g_x > 0$.
+
+$\Leftarrow$: suppose we have a $x_c$ such that $f(x_c) = 0$ and $f_x(x_c) = 0$.
+Define $g(x,y) : \R^2 \to \R = f(x) + (x - x_c) y$. Plainly
+this reduces to $f(x)$ when $y = 0$. We must show that $(x_c,0)$ is not essentially 1-critical.
+So let some neighborhood $[x_0, x_1] \x [y_0, y_1] \ni (x_c, 0)$ be given.
+
+We want to show that for very small $\Delta y$, we have at least two candidates for $x$ that
+will make $g$ zero. One is setting $x = x_c$. For the other, observe first that we can't have $f$ being the zero function,
+for then there would be lots of solutions at $y = 0$. Otherwise $f$, assuming it's a polynomial or analytic or something,
+is wlog of the form $f(x) = (x-x_c) f_0(x)$. When $y$ is small enough, we can try setting $x = x_c+h$
+where $h = f_0^{-1}(-y) - x_c$.
+In this case we can compute
+\[g(x,y) = g(x_c+h,y)\]
+\[ = f(x_c+h) + ((x_c + h) - x_c)y\]
+\[ = f(x_c+h) + hy\]
+\[ = hf_0(x_c+h) + hy\]
+Observe that $f_0(x_c + h) = -y$ and we are done.\cqed
+\end{proof}
+
+\end{document}
