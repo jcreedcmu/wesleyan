@@ -23,6 +23,8 @@
 \def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
 \def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
 \def\ep{\varepsilon}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
 \def\binj{\mathbf{inj}}
 \def\blet{\mathrel\mathbf{let}}
 \def\bin{\mathrel\mathbf{in}}
@@ -31,6 +33,7 @@
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\ups{{\uparrow}}
 \def\dns{{\downarrow}}
+\def\grad{\nabla}
 \def\uups{{\Uparrow}}
 \def\ddns{{\Downarrow}}
 \def\adjust{\big|}
@@ -52,6 +55,9 @@
 \def\R{\mathbb{R}}
 \def\bx{\mathbf{x}}
 \def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bp{\mathbf{p}}
 \def\bz{\mathbf{0}}
 \def\S{\mathfrak{S}}
 \def\M{\mathbb{M}}
@@ -87,7 +93,7 @@
    diagrams={>=stealth}}
 
 \section{Main}
-
+\subsection{Criticality}
 I want to see how far I can get proving some lemmas relating the two
 approaches to criticality that I think should coincide.
 
@@ -149,10 +155,10 @@ enough such that those are true of the whole face. Probably I can inductively co
 
 
 \begin{lemma}
+\label{equivalence.1d}
 Suppose we have $f(x): \R \to \R$ and an $x$ where $f(x) = 0$.
 
-Then the following
-conditions are equivalent:
+Then the following conditions are equivalent:
 \begin{enumerate}
 \item $f_x(x) \ne 0$.
 \item for all $g : \R \x \R^Y \to \R$ such that $g(x,\bz) = f(x)$, the point $(x, \by)$ is essentially 1-critical in $g$.
@@ -176,7 +182,7 @@ Assume wlog that $g_x > 0$.
 Furthermore find a neighborhood within that that is a $n$-cell cube $[x_0,x_1] \x U_y$.
 
 This will be the neighborhood we exhibit for the purpose of showing
-that $(x,\bz)$ is essentially 1-stable. So let some $\by \in U_y$ be given.
+that $(x,\bz)$ is essentially 1-critical. So let some $\by \in U_y$ be given.
 We know along the line from $(x_0, \bz)$ to $(x_1, \bz)$ that $g_x > 0$, and
 $g_x = 0$ at $(x,\bz)$. So $g(x_0, \bz) < 0$ and $g(x_1, \bz) > 0$. Because $[x_0,x_1] \x U_y$ is an $n$-cell cube,
 we know that fixing $x = x_0$ or $x = x_1$ gives us a 1-stable face, so $g(x_0, \by) < 0$ and $g(x_1, \by) > 0$
@@ -201,4 +207,653 @@ In this case we can compute
 Observe that $f_0(x_c + h) = -y$ and we are done.\cqed
 \end{proof}
 
+\subsection{Higher-Level Considerations}
+\subsubsection{Judgmental Thoughts}
+I expect/intend that any predicates I want to define on functions
+defined on cubes should be completely isovariant or equivalent or
+indifferent or whatever with respect to equivalence as defined by the
+existence of higher-dimensional cells traversing between the two cells
+in question. So these should be equalities in the HoTT sense --- every
+predicate, which is to say every type, should admit transport across
+them.
+
+I might view a 3-cell, for example, as an expression
+\[x,y,z \prov e : \R \]
+How do I think about stability? The context of variables which $e$ is stable with respect to is ordered,
+because the boundary conditions care about which dimension's boundary I take. So maybe I should have two contexts?
+The judgment is something like
+\[\Omega; \Gamma \prov e \]
+to mean $e$ actually is a $|\Omega|$-cell, that it's $|\Omega|+1$-stable everywhere. Let's think about
+how substitutions of constants for variables works.
+If I have
+\[x, \Omega; \cdot \prov e\]
+then I should get
+\[; \Omega \prov [b/x]e\]
+for any $b\in \tw$, because the $x \in \{0,1\}$ boundary should be 1-stable. If I have
+\[x,y,z; \cdot \prov e\]
+then
+\[x;z  \prov [b/y]e\]
+because the $y\in \{0,1\}$ boundary should be 2-stable --- we should
+be able to know that the derivative {\em with respect to $x$}, which
+is still in $\Omega$, is not zero.
+So I think the general pattern is like
+\[
+\erule
+{\Omega, v, \Omega'; \Gamma \prov e}
+{\Omega; \Omega', \Gamma \prov [b /v]e}
+\]
+Let's test this out on what I think of as an equivalence cell between two 2-cells. It would be
+\[x,y; z \prov e \]
+which is an equivalence
+\[x,y ; \cdot \prov [0/z]e \equiv [1/z]e \]
+Everything in sight is 3-stable, since there are only two items in the $\Omega$ context.
+So I think everything in the $\Gamma$ context represents equivalences.
+
+What is the substitution principle that arises from the ability to reparameterize earlier
+variables dependent on later ones? Substitution judgment like
+\[ \Omega' \prov \theta : \Omega\]
+and the substitution principle like
+
+\[
+\erule
+{ \Omega'[;\Gamma] \prov \theta : \Omega \qquad \Omega ; \Gamma \prov e }
+{\Omega'; \Gamma \prov \theta e}
+\]
+Not sure whether I get the $\Gamma$ in the substitution principle yet.
+
+\[
+\erule
+{x, \Omega' \prov e \qquad \Omega' \prov \theta : \Omega}
+{x, \Omega' \prov (\theta, [e/x]) : x, \Omega}
+\]
+Hm, this seems ugly. Can I do any better with single substitutions? Something like
+\[
+\erule
+{\Omega' \prov e' \qquad \Omega,v, \Omega' \prov e}
+{\Omega,  \Omega' \prov [e'/v]e}
+\]
+Do I have weakening in $\Omega$ contexts? That would give this an appropriate amount of expressivity, as
+then
+\[
+\erule
+{w, \Omega' \prov e' \qquad \Omega,v, \Omega' \prov e}
+{\Omega,  w, \Omega' \prov [e'/v]e}
+\]
+would be admissible, because $\Omega,v,\Omega' \prov e$ would imply $\Omega, v,w,\Omega'\prov e$.
+
+Let's think about $x,y \prov e$ in that case. We know that $[b/x]e$ is
+1-stable, and $[b/y]e$ is 2-stable, and $e$ itself is 3-stable.
+Weakening would tell us that $x,v,y \prov e$. We need to show that
+$[b/x]e$ is 1-stable, $[b/v]e$ is 2-stable, and $[b/y]$ is 3-stable,
+and $e$ itself is 4-stable. The problematic case is we don't actually
+know that $[b/v]e$ --- which is just $e$ --- is 2-stable. So no, I don't think weakening in $\Omega$ works.
+
+Probably the substitution principle of bits for single variables should be embodiable as a real first-class substitution,
+so that in some sense
+\[ \Omega \prov [b/v] : \Omega, v, \Omega' \]
+But what happened to the $\Gamma$ stuff? Maybe I really should be thinking of $\Gamma$ as stronger than $\Omega$,
+and writing $\Gamma;\Omega$ rather than $\Omega;\Gamma$,
+and having instead
+\[ \Gamma, \Omega'; \Omega \prov \rid_\Omega[b/v]\rid_{\Omega'} : \Omega, v, \Omega' \]
+and
+\[ \Gamma, \Gamma' \prov \mathsf {w} : \Gamma' \]
+because weakening for $\Gamma$-style contexts {\em should} be admissible?
+
+\subsubsection{Composition}
+Refer back to \texttt{2019-12-04} page 3 for some similar thoughts.
+
+If I have $\Gamma; \Omega,v, \Omega' \prov e_1$ and $\Gamma ; \Omega, v, \Omega' \prov e_2$,
+then I have $\Gamma;\Omega,v,\Omega'\prov e_1 *_{|\Omega|} e_2$.
+
+I should have definitional equalities like
+\[[\dns v / v](e_1 *_{|\Omega|} e_2) \equiv e_1\]
+\[[\ups v / v](e_1 *_{|\Omega|} e_2) \equiv e_2\]
+and I guess more generally this would be like
+\[[\dns e / v](e_1 *_{|\Omega|} e_2) \equiv [e/v]e_1\]
+\[[\ups e / v](e_1 *_{|\Omega|} e_2) \equiv [e/v]e_2\]
+Maybe I should think of composition as a case statement
+\[
+\erule
+{\Gamma; \Omega,v, \Omega' \prov e_1 \qquad \Gamma ; \Omega, v, \Omega' \prov e_2}
+{\Gamma; \Omega,w,\Omega' \prov \bcase w \bof \dns v \imp e_1 \celse \ups v \imp e_2}
+\]
+I expect an $\eta$-principle like
+\[e = ([\dns v / v]e) *_{|\Omega|} ([\ups v / v]e)\]
+
+\subsubsection{Associativity}
+
+How would I express associativity? Let's just do the 1-d case at first.
+I have $x \prov f,g,h$, and I can form $x \prov (f * g) * h$ and
+$x \prov f * (g * h)$. The equality cell wants to be an expression
+$y ; x \prov e$ such that $x \prov [1/y]e \equiv (f * g) * h$ and
+$x \prov [0/y]e \equiv f * (g * h)$. I think it's something like a substitution
+of an interpolation:
+\[\iota(x,y) = y[x, ((\dns * \ups\dns) * \ups \ups)x]\]
+\[ [\iota(x,y) / x]f * (g * h) \]
+because I should get some kind of principle that
+\[ [v_1 * v_2 / x]e \equiv [v_1/x]e * [v_2/x]e \]
+so that when $y = 0$, of course $[x/x]$ does nothing and we get back  $f * (g * h)$, as required.
+And when $y = 1$, we have
+\[[((\dns * \ups\dns) * \ups \ups)x/x](f * (g * h))\]
+\[ = [(\dns * \ups\dns)x/x](f * (g * h)) * [\ups \ups x/x](f * (g * h))\]
+\[ = ([\dns x/x] (f * (g * h)) * [\ups\dns x/x] (f * (g * h))) * h\]
+\[ = (f * g) * h\]
+
+\subsection{Revisiting The Proof of Lemma~\ref{equivalence.1d}}
+
+I felt like I was a little bit sloppy reasoning about local inverses
+in Lemma~\ref{equivalence.1d}. Suppose we have an $x_c$ such that $f(x) = 0$ and $f_x(x_c) = 0$.
+Set $g(x,y) : \R^2 \to \R = f(x_c) + (x - x_c) y$. We want to show that $(x_c,0)$ is not essentially
+1-critical. So let some neighborhood $[x_0, x_1] \x [y_0, y_1] \ni (x_c, 0)$ be given.
+We want to show that there exists a $\Delta y$ such that there exists multiple $x$ such that
+$g(x,\Delta y) = 0$. One will always be $x = x_c$. The other nearby zero I expect to
+exist for some small $\Delta x$ is $g(x_c + \Delta x, -f(x_c + \Delta x)/\Delta x)$ because
+\[g(x_c + \Delta x, f(x_c + \Delta x)/\Delta x) \]
+\[= f(x_c + \Delta x) - \Delta x f(x_c + \Delta x) / \Delta x\]
+\[ = 0\]
+But I want to solve for $\Delta x$ given $\Delta y$, not the other way around.
+But I see that $\Delta y \approx f_x(x_c)$ but that's known to be zero. So should I go
+out to 2nd order? $\Delta y \approx f_{xx}(x_c) \Delta x$? then $\Delta x = \Delta y / f_{xx}$?
+That'll fail if $f_{xx} = 0$, though.
+
+Ah, I see that things are complicated by the fact that I {\em can't} always pick $\Delta y$
+to be small positive or always negative. Depending on the structure of the function $f(x)$
+I might be forced to pick one or the other.
+
+But wait, I'm the one picking $\Delta y$! I should be ok with picking $\Delta x$ first, then figuring
+out what $\Delta y$ must be. So I want $f(x - x_c) / (x - x_c)$ to exist and be continuous around $x_c$
+by virtue of $f(x_c) = 0$. If $f$ were a polynomial, I would know this. This seems like a basic analysis fact.
+
+\begin{lemma}
+Suppose $f$ is a smooth function $\R \to \R$. If $f(0) = 0$,
+then there exists a smooth function $g : \R \to \R$ such that $xg = f$.
+\end{lemma}
+
+\begin{proof}
+We set $g(x) = f(x) / x$ and set $g(0) = f'(0)$. $\cdots$
+\end{proof}
+
+Oh yeah, I see this in \texttt{https://math.stackexchange.com/questions/541046/quotient-of-two-smooth-functions-is-smooth}
+and \texttt{https://math.stackexchange.com/questions/524276/zeros-of-c-infty-functions}. Proved with Taylor series.
+
+Ok, so this means that $f^\div = f(x) / (x - x_c)$ is a legitimate smooth function, and I know $f^\div(x_c) = 0$
+because $f_x(x_c) = 0$. So by continuity we can assume without loss that we've already chosen a subinterval
+of $[x_0,x_1]$ such that $-f^\div$ never escapes $[y_0,y_1]$. Pick any $x_0 \ne x_c$ in that interval at all, and
+let $y_0 = -f^\div(x_0) = -f(x_0) / (x_0 - x_c)$, and then we have
+\[g(x_0, y_0) = f(x_0) + (x_0-x_c)(-f(x_0) / (x_0 - x_c)) = 0\]
+
+\subsection{Criticality Correspondence Conjecture at Higher Dimensions}
+I think I mostly actually see the shape of the proof of the $\imp$ direction of the main conjecture,
+for the general $n$-dimensional case. The key lemma is a slight strengthening of the inverse function theorem:
+\begin{lemma}[Inversion]
+Suppose we have $f : \R^X \to \R^X$ and a point $\bx \in \R^X$ such that $f(\bx) = \bz$.
+Suppose
+\[ \det_{i,j \in X} {\bd f^i\over\bd x_j} \ne 0\]
+Let $g : \R^X \x \R^T \to \R^X$ by given such that $g(\bx, \bz) = f(\bx)$.
+Then the point $(\bx, \bz)$ is essentially a root of $g$.
+
+That is, there exists a neighborhood
+$U_x \x U_t \subseteq \R^X \subseteq \R^T$ of $(\bx, \bz)$ such that for all $\bt \in U_t$, there
+exists a unique $\bx \in U_x$ such that $g(\bx, \bt) = \bz$.
+\end{lemma}
+
+\begin{proof}
+All of the partial derivatives of components of $f$ are continuous, so find a neighborhood
+$U = U_x \x U_t \subseteq \R^X \subseteq \R^T$ of $(\bx, \bz)$ where
+\[ \det_{i,j \in X} {\bd f^i\over\bd x_j} \ne 0\]
+throughout $U$.
+
+Then for a particular $\bt$, we have that $g_\bt(\dash) := g(\dash, \bt) : \R^X \to \R^X$ is a smooth
+function with nonzero Jacobian determinant at $(\bx, \bt)$, so it locally has an inverse, call it $g^{-1}_\bt$.
+So the unique $\bx$ we're after is $g^{-1}_\bt(\bz)$. The problem is that the inverse function theorem
+as normally stated gives us some arbitrary neighborhood around $\bz$ and around $\bx$, but only get back one
+such neighborhood individually for each $\bt$, and naturally we can't take the intersection of arbitrarily
+many open sets.
+However I suspect the local compactness of $\R^n$ lets us find a single neighborhood that works for all $\bt$ uniformly.
+\cqed
+\end{proof}
+
+\begin{lemma}[Main Conjecture, $\imp$]
+\label{main.forward}
+Suppose we have $f: \R^X \to \R$ and an $i$-critical point $\bx$ of $f$, for  $i = |X|$.
+If $\bx$ is an $i$-cell, then for all $g \succ f$, the point $\bx^+$ is essentially $i$-critical in $g$.
+\end{lemma}
+
+\begin{proof}
+We know
+\begin{enumerate}
+\item $D^j f (\bx) = 0$ for all $j \in [i]$
+\item $D^{i+1}f(\bx) \ne 0$
+\end{enumerate}
+The function $\R^X \to \R^X$ we want to plug into
+the inversion lemma is the tuple $ (D^1 f, D^2 f, \ldots, D^i f)$.
+The premises of the inversion lemma are then precisely assumptions 1 and 2 above.
+The conclusion of the inversion lemma is precisely the conclusion we need, for
+being a root of the tuple of functions above is the same as being $i$-critical.
+\cqed
+\end{proof}
+
+I'm going to try to warm up to the $n$-dimensional case of $\Leftarrow$ for the main conjecture by attempting this:
+\begin{lemma}
+Suppose we have $f: \R^n \to \R^n$ such that $f(\bz) = \bz$ and
+\[|J f(\bz)| = \det_{i,j \in [n]}{\bd f^i \over \bd x_j}(\bz) = \bz\]
+Then there exists some
+\[\hat f(x_1,\ldots, x_n,\hat x_1, \ldots, \hat x_n) : \R^n \x \R^n \to \R^n\] which extends $f$,
+(i.e.  $\hat f(\bx,\bz) = f(\bx)$)
+such that the point $(\bz, \bz)$ is ``not essentially critical'' in $\hat f$.
+
+By this I mean that for any small neighborhood around $(\bz,\bz)$, there exists a $\hat\bx_0$ in it, and
+$\bx_0 \ne \bx_1$ such that $\hat f(\bx_0,\hat\bx_0) = 0$ and $\hat f(\bx_1,\hat\bx_0) = 0$.
+\end{lemma}
+
+\begin{proof}
+I set for each $i\in [n]$
+\[\hat f^i(\bx, \hat \bx) = f^i(\bx) + \sum_{j \in [n]}\hat x^j {\bd f^i\over \bd x_j}(\bx)  \]
+\[ = f^i(\bx) + (J f(\bx))^i_j \hat \bx^j\]
+
+I'm going to let $\bx_0$ just be $\bz$. Since the Jacobian at $\bz$ is singular... no, that's not enough.
+\end{proof}
+
+\subsection{How Products Don't Work}
+I at least have some insight now as to why taking a product of the multiple components of
+a multi-output function doesn't behave quite the same with respect to Jacobian determinant reasoning.
+
+For consider $f(x,y) = x^2 - y^2$. Its roots form a nice $\x$ shape. At the origin, we have $f = 0$
+and $f_x = 0$ and $f_y = 0$, so it's 3-critical. This is in contrast to the function $g : \R^2 \to \R^2$
+that we might imagine which is $g(x,y) = (x - y, x + y)$, even though we note that $f = g_1 g_2$.
+For the origin at $g$ surely ought to be 2-critical, because it's at the intersection
+of a 1-critical point of $g_1$, and a 1-critical point of $g_2$, but there seems to be no reason
+to think that it should be 3-critical. At the origin we can compute the determinant
+\[
+\left|
+\begin{array}{cc}
+  g_{1;x} &   g_{1;y}\cr
+  g_{2;x} &   g_{2;y}
+\end{array}
+\right|
+=
+\left|
+\begin{array}{cc}
+  1 &   -1\cr
+  1 &   1
+\end{array}
+\right| = 2\ne0
+\]
+Now it is the case that $f$ extends to a higher-dimensional function which has multiple 2-critical points
+very near the origin, namely $\hat f(x,y,z) = x^2 - y^2 + z$,
+and for small positive $\Delta z$ we can set $x = 0$ and $y = \pm\sqrt{\Delta z}$,
+and observe that $(0,\pm\sqrt{\Delta z}, \Delta z)$ is 2-critical:
+\[f(0,\pm\sqrt{\Delta z}, \Delta z) = 0 = f_x(0,\pm\sqrt{\Delta z}, \Delta z)\]
+But there's no way that I can see (and indeed a generalization of
+Lemma~\ref{main.forward} ought to show that this {\em can't} happen)
+to think of $\hat f(x,y,z)$ as a product of two functions that
+coincide with $g_1$ and $g_2$ when $z$ happens to be zero.
+
+So the criticality conditions for a function $f : \R^n \to \R^p$ can't be merely the criticality
+conditions for the function $\R^n \to \R$ that is $\prod_{i\in [p]} f_i$.
+
+\subsection{Paging Back in the Implicit Function Theorem}
+
+Suppose I have a function $f : \R^n \to \R$, and $f(\bx_c) = 0$. I have
+some $\bp$ such that $\grad f(\bx) \cdot \bp = 0$. Assume $\grad f \ne 0$ if necessary.
+I want to estimate, near the line $\{\bx +  t\bp \st t \in \R \}$, where the zeroes of $f$.
+So let's define
+ \[ \bx(t) = \bx_c + t \bp + \ell(t)\grad f(\bx_c) \qquad  g(t) = f(\bx(t)) \]
+ and then we want to find I think an $\ell(t) : \R \to \R$ such that
+ \[ g(t) = 0\]
+for any $t \in \R$. So any $t$-derivatives should identically be zero as well. Let's try to compute
+derivatives
+ \[ {\bd \over \bd t}g(t) = {\bd \over \bd t} f(\bx_c + t \bp + \ell(t)\grad f(\bx_c)) \]
+ \[ = \sum_{i\in [n]} \left( {\bd \over \bd t}\left(\bx_c + t \bp_i + \ell(t)(\grad f(\bx_c))_i\right) \right)
+f_{x_i} (\bx_c + t \bp + \ell(t)\grad f(\bx_c)) \]
+ \[ = \sum_{i\in [n]} \left(  \bp_i + \ell'(t)(\grad f(\bx_c))_i \right)f_{x_i} (\bx + t \bp + \ell(t)\grad f(\bx_c)) \]
+ \[ = (\bp + \ell' \grad f(\bx_c)) \cdot \grad f(\bx(t))\]
+ \[  \ell' = -{\bp \cdot \grad f(\bx(t))\over \grad f(\bx_c) \cdot \grad f(\bx(t))}\]
+\def\gg{\mathfrak{g}}
+If we let $\gg$ be $\grad f(\bx_c)$, and supposing other uses of $f$ and its derivatives
+are computed at $\bx + t \bp + \ell\gg$, what we've learned is
+\[ 0 = (\bp + \ell' \gg) \cdot \grad f\]
+and therefore
+ \[  \ell' = -{\bp \cdot \grad f \over \gg \cdot \grad f  }\]
+
+What about $\ell''$?
+ \[ 0 = {\bd \over \bd t} \sum_{i\in [n]} ( \bp_i + \ell'\gg_i ) f_{x_i}  \]
+ \[ 0 =  \sum_{i\in [n]}  \ell''\gg_i  f_{x_i}  + (\bp_i + \ell'\gg_i) {\bd \over \bd t}f_{x_i} \]
+ \[ 0 =  \ell'' \gg \cdot \grad f +  \sum_{i\in [n]}   (\bp_i + \ell'\gg_i) {\bd \over \bd t}f_{x_i} \]
+ \[ 0 =  \ell'' \gg \cdot \grad f +  \sum_{i\in [n]}   (\bp_i + \ell'\gg_i) \sum_{j\in [n]} (\bp_j + \ell'\gg_j) f_{x_ix_j} \]
+Hm, I guess I could define the tensors
+\[L^{i_1i_2 \cdots i_N} = \prod_{j\in [N]} \bp_{i_j} + \ell' \gg_{i_j}
+\qquad
+d^N f_{i_1i_2 \cdots i_N} = {\bd \over \bd x_{i_1}}\cdots {\bd \over \bd x_{i_N}} f
+\]
+and then
+\[ 0 = \ell''\gg \cdot \grad f + L^{ij} d^2 f_{ij}\]
+so
+\[  \ell'' = - { L^{ij} d^2 f_{ij} \over \gg \cdot \grad f}\]
+Can I get a third derivative?
+ \[ 0 = {\bd\over\bd t}\left( \ell'' \gg^i  df_i +     (\bp^i + \ell'\gg^i)  (\bp^j + \ell'\gg^j) d^2 f_{ij} \right)\]
+ \[  =  \ell''' \gg^i  df_i + \ell'' L^idf_i + {\bd \over \bd x_k}      (\bp^i + \ell'\gg^i)  (\bp^j + \ell'\gg^j) d^2 f_{ij} \]
+Arg, no, now I'm making mistakes.
+
+Let's start with
+\[\gg = \grad f(\bx_c)\]
+\[\bv(t) = t\bp + \ell \gg\]
+\[\bx(t) = \bx_c + \bv(t)\]
+\[0 = f(\bx(t))\]
+And just write $f_i$ instead of $f_{x_i}$, and really embrace upstairs-downstairs summation notation. Then I get
+\[0 = {\bd\over\bd t} f\]
+\[ =  \bv' \cdot \grad f\]
+\[ =  \bv_t^i  f_{i}\]
+\[0 = {\bd \over \bd t} (\bv_t^i  f_{i})\]
+\[ = \bv_{tt}^i  f_{i} + \bv_{t}^i\bv_t^j  f_{ij}\]
+\[0 = {\bd \over \bd t} (\bv_{tt}^i  f_{i} + \bv_{t}^i\bv_t^j  f_{ij})\]
+\[ =  \bv_{ttt}^i  f_{i} + 3\bv_{tt}^i\bv_t^j  f_{ij} + \bv_{t}^i\bv_t^j\bv_{t}^k  f_{ijk}\]
+\[0 =  \bv_{tttt}^i  f_{i} + 4\bv_{ttt}^i\bv_t^j  f_{ij} + 6\bv_{tt}^i\bv_t^j\bv_{t}^k  f_{ijk}+  3\bv_{tt}^i\bv_{tt}^j  f_{ij} + \bv_{t}^i\bv_t^j\bv_{t}^k\bv_{t}^\ell  f_{ijk\ell}\]
+Ok, this is making a lot more sense now. Write these as partitions, i.e.
+\[[a_1, \ldots, a_n] = f_{i_1\cdots i_n}\prod_{j\in [n]} \bv^{i_j}_{t^{a_j}} \]
+\[ = \sum_{i_1} \cdots \sum_{i_n} \left( {\bd \over \bd {x_{i_1}}}\cdots {\bd \over \bd_{x_{i_n}}}
+ f\right) \prod_{j\in [n]} \left(\bd \over \bd t\right)^{a_j} \bv^{i_j} \]
+ I get
+\[ 0 = [1]\]
+\[ 0 = [2] + [1,1]\]
+\[ 0 = [3] + 3[2,1] + [1,1,1]\]
+\[ 0 = [4] + 4[3,1] + 6[2,1,1] + 3[2,2] + [1,1,1,1] \]
+\[ 0 = [5] + 5[4,1] + 10[3,2] + 4[3,1,1] + 6[3,1,1] + 15[2,2,1] \]
+\[+ 10[2,1,1,1] + [1,1,1,1,1] \]
+
+because
+\[ {\bd\over \bd t} [a_1, \ldots, a_n] = \bigg([a_1 + 1, \ldots, a_n] + \cdots + [a_1, \ldots, a_n + 1] \bigg) + [a_1, \ldots, a_n, 1]\]
+Yeah, this is definitely \texttt{oeis A000110}.
+
+So does this help me compute $\ell$?
+I know $\bv_t = \bp + \ell_t \gg$ and $0 = [1]$, therefore
+\[0 = \bv_t^i f_i\]
+\[ = (\bp + \ell_t \gg)^i f_i\]
+\[ \ell_t = -{\bp^i f_i \over  \gg^i f_i}\]
+as I had before. Subsequently I know $\bv_{tt} =  \ell_{tt} \gg$ and $0 = [2] + [1,1]$, therefore
+\[0 = \bv_{tt}^i f_i + \bv_t^i\bv_t^j f_{ij}\]
+\[0 = \ell_{tt} \gg^i f_i + \bv_t^i\bv_t^j f_{ij}\]
+\[ \ell_{tt} =  -{ \bv_t^i\bv_t^j f_{ij} \over \gg^i f_i}\]
+\[ =  -{ (\bp + \ell_t\gg)^i(\bp + \ell_t\gg)^j  f_{ij} \over \gg^i f_i}\]
+\[ =  -{ (\bp^i\bp^j + 2\bp^i\ell_t\gg^j + \ell_t\gg^i\ell_t\gg^j)    f_{ij} \over \gg^i f_i}\]
+\def\GG{\mathfrak{G}}
+let's define $\GG = \gg^i f_i$, and then
+\[ =  -{ (\bp^i\bp^j + 2\bp^i\ell_t\gg^j + \ell_t\gg^i\ell_t\gg^j)    f_{ij} \over \GG}\]
+\[ =  -{ (\bp^i\bp^j \GG^2 + 2\bp^i\ell_t\gg^j \GG^2 + \ell_t\gg^i\ell_t\gg^j \GG^2)    f_{ij} \over \GG^3}\]
+\[ =  -{ (\bp^i\bp^j \GG^2 - 2(\bp^kf_k)\bp^i\gg^j \GG + (\bp^kf_k)^2\gg^i\gg^j )    f_{ij} \over \GG^3}\]
+\[ =  -{ (\bp^i\bp^j \gg^kf_k\gg^\ell f_\ell - 2(\bp^kf_k)\bp^i\gg^j\gg^\ell f_\ell + (\bp^kf_k)(\bp^\ell f_\ell)\gg^i\gg^j )    f_{ij} \over \GG^3}\]
+\[ =  -{ (\bp^i\bp^j \gg^k\gg^\ell - 2\bp^i\gg^j\bp^k\gg^\ell  + \bp^k\bp^\ell\gg^i\gg^j ) f_kf_\ell   f_{ij} \over \GG^3}\]
+\[ =  -{ (\bp^i \gg^k - \bp^k \gg^i) (\bp^j \gg^\ell - \bp^\ell \gg^j ) f_kf_\ell   f_{ij} \over \GG^3}\]
+And then I know $\bv_{ttt} = \ell_{ttt} \gg$ and $0 = [3] + 3[2,1] + [1,1,1]$, therefore
+\[ 0 = \bv_{ttt}^i f_i + \bv_{tt}^i \bv_t^j f_{ij} +  \bv_{t}^i \bv_t^j\bv_t^k f_{ijk} \]
+\[ 0 =\ell_{ttt} \gg^i f_i + \bv_{tt}^i \bv_t^j f_{ij} +  \bv_{t}^i \bv_t^j\bv_t^k f_{ijk} \]
+\[ \ell_{ttt} = - { \bv_{tt}^i \bv_t^j f_{ij} +  \bv_{t}^i \bv_t^j\bv_t^k f_{ijk} \over \GG} \]
+
+Actually since I know that $\bp^k f_k$ at $\bx_c$ is zero, maybe I can simplify that $\ell_{tt}$ expression to
+\[ =  -{ \bp^i \bp^j \gg^k   \gg^\ell f_kf_\ell   f_{ij} \over \GG^3}
+ =  -{ \bp^i \bp^j   f_{ij} \over \gg^if_i}
+ =  -{ \bp^i \bp^j   f_{ij} \over f^if_i} \]
+That's not so bad at all!
+
+Do I dare attempt to expand the $\ell_{ttt}$ expression? Well,
+\[\bv^i_{tt} \bv^j_t f_{ij} \GG^4 = \ell_{tt} \gg^i (\bp^j + \ell_t\gg^j) f_{ij} \GG^4\]
+\[ = (\GG^3\ell_{tt}) \gg^i (\bp^j \GG + \ell_t \GG \gg^j) f_{ij} \]
+\[ = (\GG^3\ell_{tt}) \gg^i (\bp^j \GG - \bp^k f_k \gg^j) f_{ij} \]
+\[ = -((\bp^i \gg^k - \bp^k \gg^i) (\bp^j \gg^\ell - \bp^\ell \gg^j ) f_kf_\ell   f_{ij}) \gg^o (\bp^m \GG - \bp^n f_n \gg^m) f_{o m} \]
+\[ = -((\bp^i \gg^k - \bp^k \gg^i) (\bp^j \gg^\ell - \bp^\ell \gg^j ) f_kf_\ell   f_{ij}) \gg^o (\bp^m \gg^n f_n - \bp^n f_n \gg^m) f_{o m} \]
+and at $\bx_c$ I could find that this is
+\[ = -((\bp^i \gg^k ) (\bp^j \gg^\ell  ) f_kf_\ell   f_{ij}) \gg^o (\bp^m \gg^n f_n) f_{o m} \]
+\[ = - \GG^3 \bp^i \bp^j   f_{ij} \gg^o \bp^m  f_{o m} \]
+And then I could try to compute
+\[ \GG^3 \bv_{t}^i \bv_t^j\bv_t^k f_{ijk} =   \GG^3 (\bp + \ell_t\gg)^i (\bp + \ell_t\gg)^j(\bp + \ell_t\gg)^k f_{ijk}   \]
+\[ =    (\GG\bp - \bp^{i'}f_{i'}\gg)^i
+(\GG\bp - \bp^{j'}f_{j'}\gg)^j
+(\GG\bp - \bp^{k'}f_{k'}\gg)^k f_{ijk}   \]
+and I can use the fact that at $\bx_c$ we have $\bp \cdot f = 0$ early, and say this is
+\[ =   \GG^3\bp^i\bp^j\bp^k f_{ijk} \]
+Ack, I think I made a mistake somewhere.
+
+At $\bx_c$, we have $\ell_t = 0$. We know $\bv_t = \bp + \ell_t\gg$, so $\bv_t = \bp$ at $\bx_c$.
+So because
+\[ \ell_{tt} = - {\bv^i_t \bv^j_t f_{ij} \over \GG}\]
+we know
+\[ \ell_{tt} = - {\bp^i \bp^j f_{ij} \over \GG}\]
+at $\bx_c$. Because I know
+\[ \bv_{tt} = \ell_{tt} \gg \]
+I can infer
+\[ \bv_{tt} = - {\bp^i \bp^j f_{ij} \over \GG} \gg\]
+Because
+\[ \ell_{ttt} = - { 3\bv_{tt}^i \bv_t^j f_{ij} +  \bv_{t}^i \bv_t^j\bv_t^k f_{ijk} \over \GG} \]
+I can get
+\[ \ell_{ttt} = - { -3{\bp^k_t \bp^\ell_t f_{k\ell} \over \GG} \gg^i \bp^j f_{ij} +  \bp^i \bp^j\bp^k f_{ijk} \over \GG} \]
+\[ = - { -3\bp^k_t \bp^\ell_t  \gg^i \bp^j f_{ij}f_{k\ell}  +  \bp^i \bp^j\bp^k f_{ijk}\GG \over \GG^2} \]
+\[ = - { -3 \bp^k_t \bp^\ell_t  \bp^j \gg^i  f_{ij}f_{k\ell}  +  \bp^i \bp^j\bp^k \gg^\ell f_{ijk}f_\ell \over \GG^2} \]
+
+Ok, armed with this, let's try the next bigger case. We have
+\[ 0 = [4] + 4[3,1] + 6[2,1,1] + 3[2,2] + [1,1,1,1] \]
+so
+\[ 0 =  \bv_{tttt}^i  f_{i} + 4\bv_{ttt}^i\bv_t^j  f_{ij} + 6\bv_{tt}^i\bv_t^j\bv_{t}^k  f_{ijk} \]
+\[+ 3\bv_{tt}^i\bv_{tt}^j  f_{ij} + \bv_{t}^i\bv_t^j\bv_{t}^k\bv_{t}^\ell  f_{ijk\ell}\]
+\[ 0 =  \ell_{tttt}\gg^i  f_{i} + 4\ell_{ttt}\gg^i\bp^j  f_{ij} + 6\ell_{tt}\gg^i\bp^j\bp^k  f_{ijk} \]
+\[+ 3\ell_{tt}\gg^i\ell_{tt}\gg^j  f_{ij} + \bp^i\bp^j\bp^k\bp^\ell  f_{ijk\ell}\]
+\[ \ell_{tttt} =  - { 4\ell_{ttt}\gg^i\bp^j  f_{ij} + 6\ell_{tt}\gg^i\bp^j\bp^k  f_{ijk}
++ 3\ell_{tt}\gg^i\ell_{tt}\gg^j  f_{ij} + \bp^i\bp^j\bp^k\bp^\ell  f_{ijk\ell} \over  \GG}\]
+I think very tentatively this is something like
+\[-{
+[pppp][g][g] + 3[pp][pp][gg] - 6[ppg][pp][g] + 12 [gp][gp][pp] - 4[ppp][g][gp]
+\over \GG^3}
+\]
+where I define
+\[[p^n g^m] = \bp^{i_1}\cdots \bp^{i_n}\gg^{j_1}\cdots \gg^{j_m} f_{i_1\cdots i_n j_1 \cdots j_m}\]
+I may have gotten a sign wrong somewhere, but I think it's going to be an answer in terms of certain partitions of $p$ and $g$.
+
+\subsection{Linear Counterexamples}
+
+I'm having difficulty adapting the preceding reasoning into a counterexample that works specifically
+with the tuple of functions $(D^1 f, D^2 f, D^3 f, \ldots)$.
+
+I had a thought that maybe it's the case I can restrict my attention to adjusting the original function by
+some linear map. As in: we have $f : \R^n \to \R$, we know that $f$ is $(n+1)$-critical at the origin, and we are trying
+to find some extension of $f$ to $g : \R^{n+1} \to \R$ such that there are lots of $n$-critical points arbitrarily
+near the origin, more than one per value of $x_{n+1}$. Let $t$ be a synonym for $x_{n+1}$.
+
+First imagine the extension of $f$ to
+\[ h(\bx,t) = f(\bx) + t \]
+and then imagine swinging some hyperplane through the origin around as $t$ varies --- this amounts to picking a
+vector $\bp$ and setting
+\[ g(\bx, t) = h(\bx, (\bp \cdot \bx)t) = f(\bx) + (\bp \cdot \bx)t \]
+
+\subsection{Type Theory Thoughts}
+
+The `abstraction bottleneck' I want to exist is like so: there should
+be a very strong, propositional-equality-level, $J$-rule obeying
+invariance of predicates on properly formed {\em cells}, with respect to the notion
+of equivalence that comes with higher-dimensional cells joining them which are as stable
+as the lower dimensional cells.
+
+This means that although the `implementation language' might know about actual concrete functions
+$\R^n \to \R$ and be able to talk about compositions with $\ups$ and $\dns$, above this abstraction
+boundary those kinds of compositions don't make sense. I can't ask what {\em the} first half of a cell
+looks like, when I only have been given the cell up to reparameterization in the first place.
+
+\subsection{Higher-Order Categories}
+
+Resummarizing what consequences all the above has on how I
+conceptualize $\omega$-categories: A category is a space that tells us
+which paths (2-paths, 3-paths, etc.) exist, which is something like a
+presheaf category over the ways that (higher) paths can be
+reparameterized, plus some sheaf-like condition to require
+composition. But I'm less certain what that sheaf-like condition is,
+now, since smoothness doesn't compose as easily as continuity.
+
+The essential information about what (higher) paths the category allows or not seems like it can be captured
+by asking for a smooth map from some underlying manifold into $\R^n = \{ (p^1, \ldots, p^n) \st p^i \in \R \}$,
+and then talking about when you're allowed
+to make some $p^i = 0$ --- e.g., the constraint
+\[(p^3 = 0) \imp  (p^3_x > 0)\]
+would effectively create a one-directional 1-cell, and
+\[(p^4 = 0 \land p^4_{x} = 0 ) \imp (p^4_{xx} > 0 \land p^4_y < 0)\]
+would create a 2-cell. Saying `create' is sort of backwards, though --- what's actually happening when we make one
+of these constraints is actually {\em deleting} cells that would otherwise be able to exist.
+So both of these above examples are turning what would otherwise begin life as 1- and 2-dimensional equivalences
+{\em into} mere directed cells by forbidding some of the cells that participate in those equivalences.
+
+I think I want to impose some kind of restrictions on which restrictions make sense, however. I have
+an intuition that, for example, making demands about the $x$-derivative of $p^i$ only makes sense if I've
+already required that $p^i = 0$. Likewise, making $< 0$ or $> 0 $ or $= 0$ demands about $p^i_{xx}$ or $p^i_{y}$ should
+only happen if I've already said $p^i_x = 0$.
+
+Is it as simple as the following?
+\begin{quote}
+  If I assert anything about $p^i_V$, and $W \prec V$, then I should have already asserted $p^i_W$.
+\end{quote}
+where $W \prec V$ is defined by
+\[
+\erule
+{\forall k \in [n] . i_k \le j_k }
+{x_{i_1}\cdots x_{i_n} \preceq x_{j_1}\cdots x_{j_n} V}
+\]
+so basically anything that resutls from dropping variables or
+reducing the indices of variables should have already been zero.
+
+I note that
+\[(p^4 = 0 \land p^4_{x} = 0 ) \imp (p^4_{xx} > 0 \land p^4_y < 0)\]
+is logically equivalent to
+\[(p^4 = 0 \land p^4_{x} = 0 \land \lnot(p^4_{xx} > 0 \land p^4_y < 0)) \imp \bot\]
+and therefore to
+\[(p^4 = 0 \land p^4_{x} = 0 \land (p^4_{xx} \le 0 \lor p^4_y \le 0)) \imp \bot\]
+which is logically equivalent to the conjunction of the two constraints
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{xx} \le 0)  \imp \bot\]
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{y} \le 0 ) \imp \bot\]
+or if I really want to expand out the $\le$s, I could say the four constraints
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{xx} = 0)  \imp \bot\]
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{y} = 0 ) \imp \bot\]
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{xx} < 0)  \imp \bot\]
+\[(p^4 = 0 \land p^4_{x} = 0 \land p^4_{y} < 0 ) \imp \bot\]
+
+So I like to think that all (finite?) higher-dimensional categories can be described by a list
+of constraints like this, each one the negation of some conjunction of value/derivative constraints.
+
+How does this work for multi-$p$-variable arrangements? Suppose I abbreviate $p = p^1$ and $q = p^2$.
+I suppose $p = 0$ and $q = 0$, and subsequently I should be able to say something about what kinds
+of 2-cells are allowed to traverse this intersection. Let's see... the intersection itself would be governed by
+something like
+\[ (p =0, p_x < 0, q = 0, q_x > 0) \imp \bot\]
+where I'm picking the $<,>$ arbitrarily; there are 4 such examples.
+What kind of situation has two 2-cells, both of which are $p/q$ intersections?
+Hmm, I'm finding that there might be {\em two} points (labelled $\bx_1, \bx_2$ below), {\em both} with
+\[ p =0, p_x < 0, q = 0, q_x > 0 \]
+\[\begin{tikzpicture}
+
+\node (x) at (1.5,0)[right] {$x$};
+\node (y) at (0,-0.9)[below] {$y$};
+\draw[->, opacity=0.25] (-1.5,0)--(x);
+\draw[->, opacity=0.25] (0,0.9)--(y);
+
+\node[label={left,red}:{$p>0$}] (p) at (-3,0) {};
+\node[label={right,blue}:{$q>0$}] (q) at (3,0) {};
+\node[label={above}:{$\bx_1$}] (x1) at (0,1.73205) {};
+\node[label={below}:{$\bx_2$}] (x2) at (0,-1.73205) {};
+
+\fill[red, opacity=0.25] (-1,0) circle (2);
+\fill[blue, opacity=0.25] (1,0) circle (2);
+\draw[red, line width=1] (-1,0) circle (2);
+\draw[blue, line width=1] (1,0) circle (2);
+\fill (x1) circle (2pt);
+\fill (x2) circle (2pt);
+\end{tikzpicture}\]
+and the only obvious thing that distinguishes them is either of $p_y$ or $q_y$, which in this particular example
+are jointly positive for $\bx_1$, and negative for $\bx_2$. Can I picture the various 2-cells that could exist
+for the full matrix of $p_x \lessgtr 0, q_x \lessgtr 0, p_y \lessgtr 0, q_y \lessgtr 0$?
+I probably can assume that $p_x q_y - p_y q_x$ isn't zero, and that I know its sign. Actually wait a minute, maybe
+the $y$-derivatives themselves aren't the important part. I can picture a situation like
+\[\begin{tikzpicture}
+\begin{scope}[shift={(0,0)}]
+\node (x) at (2,0)[right] {$x$};
+\node (y) at (0,-0.9)[below] {$y$};
+\draw[->, opacity=0.25] (-2,0)--(x);
+\draw[->, opacity=0.25] (0,2)--(y);
+\end{scope}
+\node[label={left,red}:{$p>0$},label={below left, red}:{$p = -x  +y + 1.5$}] (p) at (-2,1) {};
+\node[label={right,blue}:{$q>0$},label={below right, blue}:{$q = 4x - y - 3$}] (q) at (3,1) {};
+\node[label={right}:{$\bx_3$}] (x1) at (0.5,1) {};
+
+\node  at (1.5,2) {$\bx_3 = ( )$};
+\fill[red, opacity=0.25] (-1.5,3)--(2,-0.5)--(-2,-0.5)--(-2.25,3);
+\fill[blue, opacity=0.25] (0,3)--(1,-1)--(3,-1)--(3,3);
+\draw[red, line width=1] (-1.5,3)--(2,-0.5); % -x + y + 1.5 < 0
+\draw[blue, line width=1] (0,3)--(1,-1); % 4x - y - 3 > 0
+\fill (x1) circle (2pt);
+\end{tikzpicture}\]
+and I see that $p_y > 0$ and $q_y < 0$. But by invariance under the kind of
+reparameterizations I intuitively think {\em should} leave everything important invariant, namely in this case
+moving things around monotonically in the $x$ direction parameterized arbitrarily by the $y$ coordinate ---
+this means $\bx_3$ really ought to be the ``same'' 2-cell cell as $\bx_1$. So what matters here is $p_x < 0$,
+and $q_x > 0$, and... perhaps the sign of $p_x q_y - q_x p_y $? In this case I compute $-1 \cdot -1 - 4 \cdot 1.5 = -5 < 0$.
+And likewise in the previous case with the circles, where $\textcolor{red}{p = 4 - (x+1)^2 - y^2}$ and
+$\textcolor{blue}{q = 4 - (x-1)^2 - y^2}$, and $\bx_1 = (0, -\sqrt{3})$, I compute
+\[p_x(\bx_1) = -2\qquad p_y(\bx_1)= 2\sqrt{3}\]
+\[q_x(\bx_1) = 2\qquad q_y(\bx_1)= 2\sqrt{3}\]
+and I get $p_x q_y - p_y q_x = -4 \sqrt{3} - 4\sqrt{3} = -8\sqrt{3} < 0$.
+
+\subsubsection{Invariance}
+Can I quick convince myself that this determinant can't flip sign under the kinds of transforms I'm thinking of?
+I start out with $p(x,y), q(x,y) : \R^2 \to \R$. I want to adjust the $x$ by something $y$-dependent,
+so I want to adjust this to $\hat p = p(h(x,y),y)$ and $\hat q = q(h(x,y), y)$. But I assume $h$ is monotone in $x$,
+so always $h_x(x,y) > 0$.
+
+The determinant I start out with is
+\[\Delta := \left|\begin{array}{cc} p_x & p_y \cr q_x & q_y\end{array}\right| =  p_xq_y - q_x p_y\]
+and I want to investigate
+\[\hat \Delta := \left|\begin{array}{cc} \hat p_x & \hat p_y \cr \hat q_x & \hat q_y\end{array}\right| =  \hat p_x\hat q_y - \hat q_x \hat p_y\]
+So I reckon
+\[ \hat p_x = p_xh_x \qquad \hat q_x = q_xh_x \]
+\[ \hat p_y = p_y + p_xh_y \qquad \hat q_y = q_y + q_xh_y \]
+so
+\[ \hat \Delta = \hat p_x\hat q_y - \hat q_x \hat p_y \]
+\[ = p_xh_x(q_y + q_xh_y) - q_xh_x(p_y + p_xh_y)\]
+\[ = h_x \Delta + p_x q_x h_y - q_x p_x h_y \]
+\[ = h_x \Delta \]
+which has the same sign as $\Delta$ because I assumed $h_x > 0$ everywhere!
+
+Can I do the same thing in 3 dimensions?
+Let
+\[ \hat p^i = p^i(h(x,y,z),k(y,z),\ell(z)) \]
+and assume $h_x,k_y, \ell_z > 0$. Then use determinant column-scaling-and-adding invariants
+to reason that
+\[ \hat \Delta :=
+\left|\begin{array}{ccc}
+ p^i_x h_x
+&  p^i_x h_y + p^i_y k_y
+&  p^i_x h_z + p^i_y k_z + p^i_z \ell_z
+\end{array}\right|
+\]
+\[ =
+\left|\begin{array}{ccc}
+ p^i_x h_x
+&  p^i_y k_y
+&  p^i_y k_z + p^i_z \ell_z
+\end{array}\right|
+\]
+\[ =
+\left|\begin{array}{ccc}
+ p^i_x h_x
+&  p^i_y k_y
+&   p^i_z \ell_z
+\end{array}\right|
+\]
+\[ = h_xk_y\ell_z \Delta \]
+
+\subsection{Allowed Constraints}
+
+Now I'm starting to think this is the rule: if I've assumed $p^1 = 0, \ldots, p^n = 0$, then I'm allowed
+to make a constraint on
+\[ \det_{ij} {\bd p^i \over \bd x_j}\]
+Which means in particular that if I have $p = 0$, I'm allowed to make assertions about $p_x$.
+And even more concretely, if I have $f = 0, f_x = 0$, I'm allowed both to demand the sign of
+$f_{xx}$ (because $f_x = 0$) and, indirectly the sign of $f_y$! For I can directly demand the sign
+of $f_{xx} f_y - f_{xy} f_x$, and I know $f_x = 0$ so this is the same as demanding the sign of $f_{xx} f_y$.
+And $f_y > 0$ is basically the same thing as
+\[(f_{xx} f_y > 0 \land f_{xx} > 0) \lor (f_{xx} f_y < 0 \land f_{xx} < 0)\]
+I'm ignoring the case of $f_{xx} = 0$ but I think that's ok, as that would be a different criticality level anyhow.
 \end{document}
