@@ -856,4 +856,332 @@ of $f_{xx} f_y - f_{xy} f_x$, and I know $f_x = 0$ so this is the same as demand
 And $f_y > 0$ is basically the same thing as
 \[(f_{xx} f_y > 0 \land f_{xx} > 0) \lor (f_{xx} f_y < 0 \land f_{xx} < 0)\]
 I'm ignoring the case of $f_{xx} = 0$ but I think that's ok, as that would be a different criticality level anyhow.
+
+\subsection{Redundant Constraints}
+
+The story is still somewhat subtle, though. Let's define $[p,q] = p_x q_y - q_x p_y$.
+Let's say I know $p = q = r = 0$.  I'm allowed to make assertions about $[p,q],[q,r],[p,r]$.
+If I say $[p,q] > 0$ and $[q,r] > 0$, then those together imply that $[p,r] > 0$,
+for
+\[ [p,q] > 0 \iff {p_x \over p_y} > {q_x \over q_y} \]
+\[ [q,r] > 0 \iff {q_x \over q_y} > {r_x \over r_y} \]
+\[ [p,r] > 0 \iff {p_x \over p_y} > {r_x \over r_y} \]
+so for instance the `constraint'
+\[ (p = 0, q = 0, r = 0, [p,r] > 0, [p, q] > 0, [p, r] < 0)\imp \bot \]
+is already automatically satisfied by every function.
+
+Similarly, we have implications such as
+$[p,q] = 0$ and $[q,r] > 0$ implies $[p,r] > 0$, and
+$[p,q] = 0$ and $[q,r] = 0$ implies $[p,r] = 0$.
+
+\subsection{Classification}
+
+Suppose I do know that $f = 0, f_x = 0, f_{xx} > 0, f_y > 0$ at $\bx$,
+which is the same thing as
+\[f = 0, f_x = 0, f_{xx} > 0, f_xf_{xy} - f_yf_{xx}  < 0\]
+which I might notate as $f^0, [f]^0, [[f]]^+, [f,[f]]^-$.
+Does this actually {\em characterize} a local neighborhood of $\bx$, up to equivalence?
+
+Actually, on the face of it, equivalence (by critical-point-free
+cells) is stronger than just monotone reparameterization. Do I know
+that equivalence respects the signs of all these determinants? Maybe
+it does automatically since the point of interest changing
+sign of some determinant would automatically {\em be} a critical point
+by definition.
+
+So maybe I should ask: is there a package of derivative signs that
+characterise a neighborhood of a point up to reparameterization?
+Or maybe at least the set of roots in the neighborhood? Warming up with the easiest examples,
+if I have a point for which $p^i \ne 0$ for all $i$, there is a neighborhood around it with
+no roots, merely by continuity --- so all such points are equivalent under monotone reparameterization.
+If I have two functions $p^1,p^2$ for which $p^i = 0$ and $p^i_x > 0$, then I do think that I can find a monotone
+reparameterization that maps the roots of the one to the other. Can I be more explicit about how I construct it?
+
+The implicit function theorem I think tells me that there exist functions $r^1,r^2:\R \to \R$ such that
+locally
+\[ p^1(x,y) = 0 \iff r^1(y) = x \]
+\[ p^2(x,y) = 0 \iff r^2(y) = x \]
+and I want to find an $h(x,y)$ with $h_x > 0$ such that
+locally
+\[ p^1(h(x,y),y) = 0 \iff p^2(x,y) = 0 \]
+so I try to set
+\[ h(x,y) = x + r^1(y) - r^2(y) \] and reason
+\[ p^1(h(x,y),y) = 0 \iff p^1(x + r^1(y) - r^2(y),y) = 0 \]
+\[\iff p^1(x + r^1(y) - r^2(y),y) = 0 \]
+\[\iff r^1(y) = x + r^1(y) - r^2(y)  \]
+\[\iff r^2(y) = x   \]
+\[\iff p^2(x,y) = 0 \]
+
+Wait, is this the wrong calculation? Let's take just $p^1(x)$ and $p^2(x)$ and assume $p^i = 0$ and $p^i_x > 0$.
+I think I ought to be able to get them to be exactly the same. I want to find an $h$ with $h_x > 0$
+such that locally $p^1(h(x)) = p^2$. Easy, just appeal to the inverse function theorem
+and set $h(x) = (p^{1})^{-1} \o p^2$.
+
+Next step is the set of constraints from the beginning of the section. Suppose $p^1,p^2$ with
+\[p^i = 0, p^i_x = 0, p^i_{xx} > 0, p^i_y > 0\]
+at $\bz$. Can I find $h,k$ with $h_x > 0$ and $k_y > 0$ at $\bz$, such that near the origin
+\[ p^1(h(x,y),k(y)) = p^2(x,y) \]
+?
+\subsubsection{Easier To Compare Against a Canonical Function}
+For the 1-critical case, I could have fixed $p^2$ as $f = x$. In other
+words, give me a $p$, assert $p = 0$ and $p_x > 0$, show me that
+there's a monotone reparameterization that equates $p$ with just $f =
+x$. This is just $p^{-1}$ if I put the reparameterization burden
+inside $p$'s arguments, but if I put it inside the $x$, it's even
+easier: just find a $h$ with $h_x > 0$ such that $p = h$. Well, $p$ itself
+will do just fine!
+
+For the 2-critical case, I can try to relate an arbitrary $p$ to $x^2 + y$.
+As in, give me a $p$, assert $p = 0, p_x = 0, p_{xx} > 0, p_y > 0$,
+the task is to find $h(x,y)$ and $k(y)$ with $h(0,0)=0$ and $k(0)=0$ and $h_x > 0$ and $k_y > 0$ such that locally
+\[p(x,y) = h(x,y)^2 + k(y) \]
+well I can observe that necessarily
+\[ h(x,y) = \sqrt{p(x,y) - k(y)}   \]
+so I mainly just need to ensure that $p(x,y) - k(y)$ is positive.
+Can I set something like $k(y) = p(0,y)$? Let's think about that:
+\[ k(y) = p(0,y) \qquad h(x,y) = \sqrt{p(x,y) - k(y)}\]
+One piece of good news is that I can immediately see that $k_y > 0$.
+Can I see that $h_x > 0$? The square root is annoying.
+\[h_x(x,y) = {p_x(x,y)\over 2\sqrt{p(x,y) - k(y)}}\]
+so at $(0,0)$, this is a $0/0$. Can we L'H\^opital it?
+\[h_x(0,0) = {p_{xx}\over p_x/\sqrt{p - k}}\]
+Can I solve this recursion? If I define
+\[ \delta = {p_x\over 2\sqrt{p - k}}\]
+then what I have is
+\[\delta = p_{xx} / 2\delta\]
+\[\delta^2 = p_{xx} / 2\]
+\[\delta = \sqrt{p_{xx} / 2}\]
+So indeed $h_x > 0$! Is this my solution, then?
+
+\subsubsection{Is the square root legitimate?}
+Here's an example function:
+\[ p(x,y) = e^x  + y - 1 - x + xy\]
+we can compute
+\[ p_x = e^x  -1  + y \qquad  p_{xx} = e^x \qquad p_y = 1 + x\]
+and see that at zero we have $p=0$ and $p_x = 0$ and $p_{xx} > 0$ and $p_y >0$ as required.
+But if I take
+\[ p(x,y) - p(0,y) \]
+It's not clear to me that this is positive in a neighborhood of $\bz$.
+\subsubsection{Tracking the local minimum instead}
+Maybe the problem is that $p(0,y)$ doesn't necessarily find the real minimum of the function.
+I should be looking, for each $y$, for where $p_x = 0$. The fact that $p_{xx} \ne 0$ means
+that (locally) for all $y$ there exists a unique $x$ such that $p_x(x,y) =0$. Call this
+function $r(y)$. Let $k(y) = p(r(y), y)$, and again $h(x,y) = \sqrt{p(x,y) - k(y)}$. I think
+we still have $h_x > 0$ by previous reasoning, but I have to convince myself that
+$k_y > 0$. I know
+\[ k_y = p_x r_y + p_y \]
+Ah, but $p_x = 0$ at $\bz$! So this falls back to $p_y$ of which I know $p_y > 0$ at $\bz$. Done.
+The proof that $p(x,y) > k(y)$, i.e. $p(x,y) > p(r(y),y)$ locally holds should follow from the fact that $p_{xx} > 0$ locally,
+and $p_x(r(y), y) = 0$. Let's confirm it for the example above: we set
+\[ 0 = p_x = e^x - 1 + y \]
+so solving for $x$, we find
+\[ x = \ln (1 - y) \]
+and graphing this out, this seems to work great.
+\subsubsection{Interection of two functions}
+Let's say I have $p = 0, q = 0, p_x > 0, q_x > 0, [p,q] > 0$. I think the functions I want to compare these to
+are
+\[\hat p (x,y) = x - y \]
+\[\hat q (x,y) = x + y \]
+\[ \]
+I might then try to find $h(x,y)$ with $h_x > 0$
+and $k(y)$ with $k_y > 0$ such that simultaneously
+\[ p = h(x,y) - k(y)\]
+\[ q = h(x,y) + k(y)\]
+so I'm forced to conclude that
+\[h = {p + q \over 2}\]
+and
+\[ k(y) = q(x,y) - h(x,y) = {q(x,y) - p(x,y) \over 2}\]
+which is a big problem wince I haven't eliminated the $x$ dependency!
+
+\subsection{Varieties}
+
+Consider a variety of codimension 1, a single polynomial $p: \R^n \to \R$.
+Where does it have 2-critical points? Where $p = 0$ and $p_x = 0$. This is
+still a variety, of codimension 2.
+
+If I have a finite collection of polynomials $p^1,\ldots,p^N : \R^n \to \R$,
+and consider their product $p^1\cdots p^N$, the places where that has a 2-critical point
+according to the same definition is where
+\[p^1\cdots p^N = 0\]
+\[\sum_{i \in [N]} p^i_x{p^1\cdots p^N\over p^i} = 0\]
+whereas what I'd expect more directly from thinking about variety that arises from the
+disjunction
+\[p^1 = 0 \lor \cdots \lor p^N = 0\]
+is that you'd have to satisfy
+\[J := \bigvee_{i,j \in [N] \atop i \ne j} (p^i = 0 \land p^j = 0) \lor \bigvee_{i\in [N]}(p^i = 0 \land p^i_x = 0)\]
+In the $N = 2$ case this is
+\[(p = 0 \land q = 0) \lor (p = 0 \land p_x = 0) \lor (q =0 \land q_x = 0)\]
+which we can abbreviate as
+\[(p \land q ) \lor (p \land p_x ) \lor (q \land q_x )\]
+which is the same as
+\[(p \lor q) \land (p \lor q_x) \land (p_x \lor q)\]
+Hm, abbreviating zero-equalities away from $J$ gives
+\[J := \bigvee_{i,j \in [N] \atop i \ne j} (p^i \land   p^j)  \lor \bigvee_{i\in [N]} (p^i \land   p^i_x) \]
+
+What about the $N = 3$ case? If I write
+ $\land$ as $+$ and $\lor$ is juxtaposition, $J$ becomes
+\[(p  +q)  (q+r)  (p+r )  (p+p_x )  (q+q_x)  (r+r_x) \]
+\[ = (pq + pr + q + qr) (p+r)  (p+p_x )  (q+q_x)  (r+r_x) \]
+\[ = (pr + q)(p+r)   (p+p_x )  (q+q_x)  (r+r_x) \]
+\[ = (pr + qp+ qr)   (p+p_x )  (q+q_x)  (r+r_x) \]
+\[ = (pr + pq + pqr + pp_xr + pp_xq+ p_xqr)  (q+q_x)  (r+r_x) \]
+\[ = (pr + pq  + p_xqr)  (q+q_x)  (r+r_x) \]
+\[ = (pqr + pq  + p_xqr + prq_x + pqq_x  + p_xqq_xr)   (r+r_x) \]
+\[ = ( pq  + p_xqr + pq_xr )   (r+r_x) \]
+\[ =  pqr  + p_xqr + pq_xr   + pqr_x  + p_xqrr_x + pq_xrr_x     \]
+\[ =  pqr  + p_xqr + pq_xr   + pqr_x   \]
+Ok, that's enough of a pattern for me to conjecture that $J \prequiv K$ when
+\[ K :=  \bigvee_{i\in [N]}p^i \land \bigwedge_{i \in [N]}\left(p^i_x \lor \bigvee_{j\ne i} p^j\right)\]
+
+Ok, let's just write $p_x$ as $q$, and write this out more like ordinary first-order logic:
+\[ J := (\exists i, j. i\ne j \land p(i) \land p(j)) \lor (\exists i . p(i) \land q(i))\]
+\[ K := (\exists i. p(i)) \land \forall i . (q(i) \lor \exists j . i\ne j \land p(j))\]
+
+Let's try to prove $J \prov K$. By inversion, there are four cases.
+These two are easy:
+\[
+\erule
+{}
+{ i\ne j , p(i) , p(j)  \prov \exists i. p(i) }
+\]
+
+\[
+\erule
+{}
+{   p(i) , q(i) \prov \exists i. p(i) }
+\]
+For this one, regardless of what $k$ is, there's a distinct index for which $p(j)$,
+since we have two distinct ones:
+\[
+\erule
+{}
+{  i\ne j , p(i) , p(j)  \prov  q(k) \lor \exists j . k\ne j \land p(j)}
+\]
+
+For this one we can condition on whether $i = k$ or not:
+\[
+\erule
+{}
+{  p(i) , q(i) \prov   q(k) \lor \exists j . k\ne j \land p(j)}
+\]
+if they are equal, then we can use the $q(i)$. If they aren't, we can show
+there is a $j$ distinct from $k$ (namely $i$) for which $p(i)$.
+
+Let's try to prove $K \prov J$.
+\[
+\erule
+{}
+{ p(i), \forall i . (q(i) \lor \exists j . i\ne j \land p(j)) \prov (\exists i, j. i\ne j \land p(i) \land p(j)) \lor (\exists i . p(i) \land q(i))}
+\]
+Hm, let's try to $\forall L$ at the parameter $i$, I guess. We then have two subgoals:
+\[
+\erule
+{}
+{ p(i),  q(i)  \prov (\exists i, j. i\ne j \land p(i) \land p(j)) \lor (\exists i . p(i) \land q(i))}
+\]
+\[
+\erule
+{}
+{ i\ne j, p(i), p(j) \prov (\exists i, j. i\ne j \land p(i) \land p(j)) \lor (\exists i . p(i) \land q(i))}
+\]
+Great! Both of these are trivial.
+
+Ok so in that case, the thing I'm calling $K$ here looks an awful lot like the derivative-of-product expression, call the latter $L$:
+\[ K = \prod_i p^i = 0 \land \bigwedge_i  \left(p^i_x \cdot \prod_{j \ne i}  p^j\right) = 0\]
+\[ L = \prod_i p^i = 0 \land \sum_i \left(p^i_x \cdot \prod_{j \ne i}  p^j\right) = 0\]
+Can I find an example that distinguishes these two cases?
+
+Trying some random examples, I haven't been able to so far. Is it the case that $L \prov K$ after all?
+
+Let's focus on the $N = 2$ case. We suppose that we have a point where $p = 0$ or $q = 0$,
+and where
+\[ p_x q + p q_x = 0\]
+Ah, this concrete example makes it much more apparent what's going on. If $p = 0$, then $p q_x = 0$.
+If $q = 0$, then $q p_x = 0$.
+
+What about $N= 3$? We have $p = 0 \lor q = 0 \lor r = 0$. We know
+\[ p_x q r + p q_x r + pqr_x = 0\]
+we want to show
+\[ p_x q r = 0 \lor p q_x r = 0 \lor pqr_x = 0\]
+But all we have to do is split cases and we're done. We do have $K \prequiv L$ after all.
+
+\subsubsection{3-criticality}
+When I'm looking for 2-criticality I'm computing something like
+\[ \prod_{p\ne q} (p + q) \cdot \prod_{p} (p + [p])   \]
+So when I'm looking for 3-criticality I probably want
+\[ \prod_{p\ne q\ne r} (p + q + r) \cdot \prod_{p\ne q} (p + q + [p]) \cdot \prod_{p\ne q} (p + q + [p,q]) \cdot \prod_{p} (p + [p] + [p,[p]])   \]
+In both of these cases $[p,q,\cdots]$ is notation for the jacobian determinant.
+
+In isolation, what is $\prod_{p\ne q} p + q$? In the four-variable case I have
+\[(p +q )(p+r)(p+s)(q+r)(q+s)(r+s)\]
+\[ = (p +qr )(p+s)(q+r)(q+s)(r+s)\]
+\[ = (p +qrs )(q+r)(q+s)(r+s)\]
+\[ = (pq + pr +qrs )(q+s)(r+s)\]
+\[ = (pq + prs +qrs )(r+s)\]
+\[ = pqr  + pqs + prs +qrs \]
+\[ = \sum_{p} \prod_{q\ne p} q\]
+
+The first-order logic equivalence looks like
+
+\[ \exists p, q. p \ne q \land z(p) \land z(q) \prequiv \forall p . \exists q . p \ne q \land z(q) \]
+This makes intuitive sense; if there are two distinct zeros, then for every zero, there's one that isn't it.
+So I can guess what
+\[ \prod_{p\ne q\ne r} (p + q + r)\]
+normalizes to, namely
+\[ \sum_{p \ne q} \prod_{r \not\in \{p,q\}} r\]
+(it doesn't matter up to equivalence whether I sum over $p,q$ or $p,q$ with $p\ne q$, but including
+the $\ne$ gives a smaller sum)
+
+\subsubsection{Concretely}
+
+\[ (p+q+r+s)  (p + [p] + q)  (p + [p] + r)  (p + [p] + s)\]
+\[ = (p + [p](r+s) + q)   (p + [p] + r)  (p + [p] + s)\]
+\[ = (p  +  [p](r+s)  + pr  + qr)    (p + [p] + s)\]
+\[ = p  +  [p](r+s)   + qrs\]
+\[ ( p  +  [p](r+s)   + qrs)(q + [q] + p)  (q + [q] + r)(q + [q] + s) \]
+\[ ( p  +  [p](r+s)   + qrs)(q + [q] + prs)  \]
+\[  pq  +  [p]q(r+s)   + qrs +  p[q]  +  [p][q](r+s)   +  prs    \]
+\[  (pq  +  [p]q(r+s)   + qrs +  p[q]  +  [p][q](r+s)   +  prs)(r + [r] + pqs)    \]
+\[  (pq  +  [p]q(r+s)   + qrs +  p[q]  +  [p][q](r+s)   +  prs)(r + [r] + pqs)    \]
+\[ =  pqr  +  [p]qr   + qrs +  p[q]r  +  [p][q]r   +  prs + pq[r]  +  [p]q[r]s    +  p[q][r]  +  [p][q][r]s + pqs   \]
+\[ (  pqr  +  [p]qr   + qrs +  p[q]r  +  [p][q]r   +  prs + pq[r]  +  [p]q[r]s    +  p[q][r]  +  [p][q][r]s + pqs )(s + [s] + pqr)  \]
+\[ =
+    qrs +  [p][q]rs   +  prs   +  [p]q[r]s  +  p[q][r]s  +  [p][q][r]s + pqs +\]
+\[  pqr[s]  +  [p]qr[s]   +  p[q]r[s]  +  [p][q]r[s]    + pq[r][s]      +  p[q][r][s]   +   pqr \]
+I don't think this calculation is actually helping me understand what's going on.
+
+\subsection{A guess}
+Let $\exists \#(p,q,r,\ldots)$ mean
+that $p,q,r,\ldots$ are all distinct.
+Write a unary predicate as overline.
+My guess for the meaning of 3-criticality is
+\def\hh#1{\overline {#1}}
+\[ C := C_1 \lor C_2 \lor C_3 \lor C_4 \]
+\[C_1 := \exists \#(p,q,r).\hh p\land \hh q \land \hh r\]
+\[C_2 := \exists \#(p,q).\hh p\land \hh q \land \hh{[p]} \]
+\[C_3 := \exists \#(p,q).\hh p\land \hh q \land \hh {[p,q]}\]
+\[C_4 := \exists p.\hh p\land \hh {[p]} \land \hh {[p,[p]]}  \]
+and a guess for a related predicate is
+\[ B := B_1 \land B_2 \land B_3 \land B_4 \]
+\[B_1 := \exists p . \hh p\]
+\[B_2 := \forall p . \hh{[p]} \lor  \exists q \ne p . \hh q\]
+\[B_3 := \forall \#(p,q) . \hh{[p]} \lor \hh{[q]} \lor \hh{[p,q]} \lor  \exists r \not\in\{ p,q\} . \hh r\]
+\[B_4 := \forall p . \hh{[p,[p]]} \lor  \exists q \ne p . \hh q\]
+I think if I didn't slip up I can see a proof of $B \prequiv C$.
+
+So if I read overline as `equals zero', then I know that
+\[B_1 \iff \exists i . \hh{p^i} \iff \hh{\prod_i p^i}\]
+and I think I can reason that
+\[ B_1 \land B_2 \iff \hh{\prod_i p^i} \land (\forall i . \hh{p^i_x} \lor \exists j\ne i . \hh{p^j} )\]
+\[ \iff \hh{\prod_i p^i} \land \left(\forall i . \hh{p^i_x \cdot \prod_{j\ne i}  {p^j}} \right)\]
+\[ \iff \hh{\prod_i p^i} \land \hh{\sum_i  p^i_x \cdot \prod_{j\ne i}  {p^j}} \]
+\[ \iff \hh{\prod_i p^i} \land \hh{{\bd \over \bd x} \prod_i p^i} \]
+Ok, now to try to massage $B_3$ and $B_4$ into something sensible.
+
+Note that
+\[\left(\bd \over \bd x\right)^2 \prod_i p^i =
+\sum_{i} p^i_{xx}\prod_{j\ne i} p^j + \sum_{\#(i,j)} p_x^ip_x^j\prod_{k\not\in\{i,j\}} p^k\]
+\[{\bd \over \bd y }\prod_i p^i =
+\sum_{i} p^i_{y}\prod_{j\ne i} p^j \]
+
 \end{document}
