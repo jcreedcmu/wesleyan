@@ -1,0 +1,466 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bu{\mathbf{u}}
+\def\bp{\mathbf{p}}
+\def\bz{\mathbf{0}}
+\def\bzee{\mathbf{z}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+\subsection{Multiple Functions}
+Let me restate an important example: the criticality behavior of $x^2 - y^2$ is properly different from the
+criticality behavior of the two functions $(x-y, x+y)$. We can say that the origin is 3-critical in $f = x^2 - y^2$ because
+$f =0 $ and $f_x = 0$ and $f_{xx}f_y = 0$, but more to the point it does have an extension to $\hat f = x^2 - y^2 + z$
+which has, for $|z|$ arbitrarily small, multiple 2-critical points per constant-$z$ plane. Namely $(0, \pm \sqrt{\delta},  \delta)$
+for small positive $\delta$. And these {\em are} definitely 2-critical points because there are multiple 1-critical values of
+$x$ for a $y$ arbitrarily close to $\pm \delta$. Namely, near $(0,\sqrt{\delta}, \delta)$ there is
+\[(\pm\sqrt{2\ep\sqrt{\delta} + \ep^2}, \sqrt{\delta} + \ep, \delta)\]
+for arbitrarily small $\ep > 0$ and near $(0,-\sqrt{\delta}, \delta)$ there is
+\[(\pm\sqrt{2\ep\sqrt{\delta} + \ep^2}, -\sqrt{\delta} - \ep, \delta)\]
+
+However, I think the origin at the functions $(x-y,x+y)$ should be considered 3-stable. Why is this?
+Well, in general suppose we have $(f,g) : \R^{2+n} \to \R^2$ such that $f = 0$ and $g = 0$ but $[f,g] = f_xg_y - f_y g_x\ne 0$. We want
+to show there is a neighborhood of the origin we can restrict our attention to such that
+for any $\bp \in \R^n$ there is exactly one $(x,y)$ such that $(x,y,\bp)$ is a 2-critical point.
+
+Well, the implicit function theorem guarantees that there exists an open set $U \subseteq \R^n$ containing the origin
+such that there is a unique smooth function $h : U \to \R^2$ such that
+\[ h(\bz) = (0,0)\]
+and
+\[f(h(\bx), \bx) = 0\]
+\[g(h(\bx), \bx) = 0\]
+Ok, this seems like exactly what I need.
+
+\subsection{Restating What I Know}
+\begin{lemma}[Implicit Function Theorem]
+If $f : \R^{m+n} \to \R^m$, and $f(\bz) = \bz$, and the jacobian of $f$ with respect to the first $m$ variables is nonsingular,
+then there exists a neighborhood $U \subseteq \R^n$ of the origin, and a unique function $g : U \to \R^m$,
+with $g(\bz) = \bz$ and
+\[f(g(\bx), \bx) = \bz\]
+for all $\bx \in U$.
+\end{lemma}
+
+
+Suppose I have some $p^1,\ldots,p^m : \R^n \to \R$.
+
+If I know
+\[S_1(\bx_0) := \forall i . p^i(\bx_0) \ne 0\]
+ then there is a neighborhood
+$U$ around $\bx_0$ such that $\forall \bx\in U. \forall i . p^i(\bx_0) \ne 0$.
+This is just because of continuity. This is called 1-stability.
+So 1-criticality is
+\[C_1(\bx_0) := \exists i . p^i(\bx_0) = 0\]
+
+If I have a $\bx_0 = (x_0, \by_0)$ (where $x_0\in \R$ and $\by_0 \in \R^{n-1}$) and I know that  there exists an $i$ such that
+
+\[s_2(\bx_0) = \exists i . (\forall j\ne i . p^j(\bx_0) \ne 0) \land (p^i(\bx_0) = 0) \land (p^i_x(\bx_0) \ne 0) \]
+then by the implicit function theorem for $n = n-1$ and $m=1$, there
+is a neighborhood $U\subseteq \R^{n-1}$ around $\by_0$ such that for
+every $\by \in U$ there exists exactly one $x \in \R$ such that
+$p^i(x,\by) = 0$. Because we also assumed $(\forall j\ne i . p^j(\bx_0) \ne 0)$, this means that we can say more strongly that:
+\[\exists (U\ni \by_0) \subseteq \R^{n-1}. \forall \by \in U . \exists !x \in \R . \exists i . p^i(x,\by) = 0\]
+which is what we can call
+\[S_2(x_0,\by_0) := \exists (U\ni \by_0) \subseteq \R^{n-1}. \forall \by \in U . \exists !x \in \R . C_1(x, \by)\]
+so I can see that $s_2(\bx_0) \prov S_2(\bx_0)$.
+
+If I take the negation of $s_2$, I get
+\[c_2(\bx_0) = \forall i . (\exists j\ne i . p^j(\bx_0) = 0) \lor (p^i(\bx_0) \ne 0) \lor (p^i_x(\bx_0) = 0) \]
+Now at the next dimension up, there are two distinct types of 2-critical points. One where two functions cross,
+and one where a single function has a turnaround. Before I do that...
+
+\subsection{Starting Over}
+(2020.03.05)
+
+Given a function $f : \R^n \to \R^m$, I want to compute a number $\dim f : \N$ which is
+the `dimension' of the origin in the graph of $f$. We write $\hat f : \R^n \to \N$
+for
+\[\hat f(\bx) = \dim (\lambda \by . f(\bx + \by))\]
+the dimension of the function `at' the point $\bx$.
+
+ Let $\Pi : \R^m \to \R$ be defined by
+\[\Pi(x_1, \ldots, x_m) = \prod_{i = 1}^m x_i\]
+One thing I know should be true is that
+\[ \dim f = 0 \qquad\iff\qquad \Pi  f(\bz) \ne 0\]
+
+
+If $f : \R^{n+m} \to X$, then $f\adjust_n : \R^n \to X$ is defined by
+$f\adjust_n(\bx) = f(\bx, \bz)$. We say $f \sim_n g$ if $f\adjust_n =
+g\adjust_n$.
+
+We say a predicate $P \subseteq \R^{n}\x\R^{m}$ is {\em
+  $n$-locally} true if there exists neighborhoods
+$U_x \subset\R^n, U_y \subset\R^m$ of $\bz$ such that
+\[\forall \by\in U_y. \exists ! \bx \in U_x . P(x,y)\]
+
+We say $\dim f = 1$ when $\dim f \ne 0$, and also for any $g : \R^{1+p} \to \R^m$ with
+$g \sim_1 f$, it's 1-locally
+true of any point $(x,\by)$ in $g$'s domain that $\hat g(x,\by) > 0$.
+
+\subsubsection{Booleans Only}
+Given a function $f : \R^n \to \R^m$, I want to characterize merely
+whether it is `stable' at its origin or not. For $n=0$, I simply have
+a value in $\R^m$. I say it's stable if no coordinate is zero.
+
+Otherwise, I have a function $\R^{n+1} \to \R^m$. It is stable at $n+1$ if
+for every extension of $f$ to $g : \R^{n+1+t} \to \R^m$, there exist neighborhoods of the origin
+$ U \subseteq \R^t$ and $V \subseteq \R^{n+1}$ such that
+for every $\bt \in U$, there exists a unique $(\bx,y) \in V$ such that the function
+\[ \lambda \bx_0.f(\bx+\bx_0, y, \bt) : \R^n \to \R^m\]
+is salient at $n$.
+
+A function is salient at 0 if it's not stable at 0...
+
+\subsubsection{Thinking more Categorically}
+Suppose I have a category $\C$ of sets and functions. If not sets and functions, I think
+I at least need finite products and zero morphisms $0: 1 \to X$. But I'm going to proceed
+as if it were a concrete category. This could consist of
+objects $\R^n$ and polynomial functions between them.
+
+Suppose I have a set $C \in \C$ and a notion of which points $c\in C$ are 0-stable.
+For example, $C$ might be $\R$, and all nonzero points are stable. Consider a
+function $f : \R \to C$. On the one hand  $f(0)$ could be 0-stable.
+Or it could be 1-like. This holds if for every extension of $f$ to
+$g : \R \x D \to C$, we can find neighborhoods $U_d \subseteq D$ and $U_r \subseteq \R$
+such that for all $d\in U_d$ there exists a unique $x\in U_r$ such that $g(x,d)$ is not 0-stable.
+We can call this being 1-stable.
+
+Consider a function $f : \R^2 \to C$. Any one of the following (but at most one, assuming continuity)
+might be true:
+\begin{enumerate}
+\item $f\adjust_{x=0,y=0}$ is 0-stable.
+\item $f\adjust_{y=0}$ is 1-stable.
+\item For any extension of $f$ to $g: \R^2 \x D \to C$, we can find neighborhoods $U_d \subseteq D$
+and $U_r\subseteq \R^2$ such that for any $d \in U_d$ there exists a unique $(x,y) \in U_r$ such
+that $\lambda x_0 . f(x + x_0, y, d)$ is not 0-stable or 1-stable.
+\end{enumerate}
+
+\subsubsection{Booleans Only, Again}
+Suppose $f : \R^{n+m} \to C$. We define $f\adjust_n : \R^n \to C$ by
+\[f\adjust_n(\bx) = f(\bx, \bz)\]
+A function $f : \R^n \to \R^m$ may or may not be {\em stable}, defined inductively on $n$.
+
+For $n=0$, the function $f$ is simply a value in $\R^m$. We say it's stable if no coordinate is zero.
+
+Otherwise, I have a function $\R^{n+1} \to \R^m$. It considered stable if
+\begin{tabbing}
+For any $u \in \N$\\
+For any polynomial $g : \R^{n+1+u} \to \R^m$ such that $g\adjust_{n+1} = f$\\
+There exists a neighborhood $U \subseteq \R^u$ of $\bz$ and\\
+There exists a neighborhood $V \subseteq \R^{n+1}$ of $\bz$ such that\\
+For any $\bu \in U$\\
+There exists a unique $(\bx_0,y_0)\in V$ such that\\
+For any $k \in [0,n]$\\
+The function $(\lambda \bx.g(\bx+\bx_0, y_0, \bu))\adjust_k : \R^k \to \R^m$ is not stable.
+\end{tabbing}
+
+\subsubsection{Generically, Again}
+
+We have some kind of set $C$ and a notion of which points $c\in C$ are stable,
+and which functions $\R^n\to C$ are `allowed'.
+
+We aim to define which functions $f : \R^n \to C$ are stable.
+For $n=0$, the function $f$ is simply a value in $C$, so we inherit the provided definition.
+
+Otherwise, we have a function $\R^{n+1} \to C$. It considered stable if
+\begin{tabbing}
+For any $u \in \N$\\
+For any allowable path $g : \R^{n+1+u} \to C$ such that $g\adjust_{n+1} = f$\\
+There exists a neighborhood $U \subseteq \R^u$ of $\bz$ and\\
+There exists a neighborhood $V \subseteq \R^{n+1}$ of $\bz$ such that\\
+For any $\bu \in U$\\
+There exists a unique $(\bx_0,y_0)\in V$ such that\\
+For any $k \in [0,n]$\\
+The function $(\lambda \bx.g(\bx+\bx_0, y_0, \bu))\adjust_k : \R^k \to C$ is not stable.
+\end{tabbing}
+
+\subsubsection{With Dimensions, Again}
+
+A {\em bundle} is a
+\begin{enumerate}
+\item A set $C$
+\item A predicate $\chi \subseteq C $
+\item A notion $\alpha \subseteq \R^n \to C$ of which functions $\R^n \to C$ are `allowed'.
+\end{enumerate}
+
+We want to lift one bundle $(C, \chi, \alpha)$ to another one $(C', \chi', \alpha')$
+ whose carrier is $C' = \R \to C$.
+
+Given $f : \R \to C$, we say $f$ is critical $(\in \chi')$ if $f(0) \in \chi$ and not
+\begin{tabbing}
+For any $u \in \N$\\
+For any allowable function $g : \R \x \R^u \to C$ such that $g\adjust_{1} = f$\\
+There exists a neighborhood $U \subseteq \R^u$ of $\bz$ and\\
+There exists a neighborhood $V \subseteq \R$ of $\bz$ such that\\
+For any $\bu \in U$\\
+There exists a unique $v \in V$ such that\\
+$g(v, \bu) \in \chi$.
+\end{tabbing}
+
+Start with $C = \R$ and $\chi = \{0\}$. What is $(C,\chi)'$?
+The set $C'$ is $\R \to \R$. What is $\chi'$? We require of any $f \in \chi'$ that $f(0) = 0$.
+But also that it's not the case that any extension has the property that there's locally
+one zero.
+
+This doesn't seem right, though; I'm not quantifying unique existence over a growing $\R^n$.
+
+\subsubsection{Capturing the Domain Correctly?}
+Forget for the moment about $\alpha$.
+
+A {\em bundle} is a
+\begin{enumerate}
+\item A vector space $D$
+\item A set $C$
+\item A predicate $\chi \subseteq D \to C $ that says which diagrams are `critical'.
+\end{enumerate}
+What's the induction step? We pass from $(D, C, \chi)$ to $(D \x \R, C, \chi')$.
+Some $f : D \x \R \to C$ is going to be in $\chi'$ if, first of all, $f(\dash, 0) \in \chi$,
+and secondly, it's {\em not} the case that it's stable --- where $f$ is stable iff
+\begin{tabbing}
+For any appropriate vector space $\mathfrak U$\\
+For any allowable function $g : D \x \R \x {\mathfrak U} \to C$ such that $g(\dash,\dash,\bz) = f$\\
+There exists a neighborhood $U \subseteq {\mathfrak U}$ of $\bz$ and\\
+There exists a neighborhood $V \subseteq D\x \R$ of $\bz$ such that\\
+For any $\bu \in U$\\
+There exists a unique $(d, v) \in V$ such that\\
+$g(d + \dash, v, \bu) \in \chi$.
+\end{tabbing}
+
+\section{A Digression}
+
+bblum mentioned the idea of bisecting a commit history to find the commit that first introduces
+a flaky test failure. The continuous version of the problem seems easier to manage. Suppose
+we have a random variable $\phi$ that lives the interval $[0,1]$. This is where the test
+first fails. If we probe the system at some $t \ge \phi$, then there is a probability $p$
+of detecting a failure. If we probe the system at $t < \phi$, then there is probability 0
+of failure.
+\[ P[F_t \st \phi=\phi ] = \cases{p & $t \ge \phi$  \cr 0 & $ t < \phi$ }\]
+So we're interested in the Bayesian update when we pick a $t$ to probe at, and see a failure
+or not. Suppose we have a prior distribution $f(\phi)$ on $\phi$.
+\[ P[\phi = \phi \st F_t] = {P[ F_t \st \phi=\phi ]  \over P[F_t]} P[\phi=\phi]\]
+\[  = {P[ F_t \st \phi=\phi ]  \over P[F_t]} f(\phi)\]
+\[  = {P[ F_t \st \phi=\phi ]f(\phi)  \over {\int_0^1 P[ F_t \st \phi=\phi ]f(\phi) d\phi  } } \]
+Let that normalizing constant be $K = \int_0^1 P[ F_t \st \phi=\phi ]f(\phi) d\phi$. Then
+\[ P[\phi = \phi \st F_t] =
+\cases{
+pf(\phi)/K & $\phi \le t$  \cr 0 & $ \phi > t$
+}
+\]
+So in this case the $p$ gets absorbed into the normalizing constant; it's just
+\[ P[\phi = \phi \st F_t] =
+\cases{
+f(\phi)/\int_0^t f(\phi) & $\phi \le t$  \cr 0 & $ \phi > t$
+}
+\]
+Ok, great, what about when the test seems to pass? $P[\phi = \phi | \lnot F_t]$?
+That's going to be
+\[   {P[ \lnot F_t \st \phi=\phi ]f(\phi)  \over K } \]
+so
+\[ P[\phi = \phi \st \lnot F_t] =
+\cases{
+(1-p)f(\phi)/K & $\phi \le t$  \cr f(\phi)/K & $ \phi > t$
+}
+\]
+and here
+\[K = (1-p)\int_0^{t} f(\phi) d\phi + \int_t^1 f(\phi) d\phi\]
+\[K = 1 -p\int_0^{t} f(\phi) d\phi \]
+
+\subsection{Entropy Calculations}
+Let's say I have a nonnormalized distribution $f(\phi)$. So the real distribution
+is $F(\phi) = f(\phi) /  \int_0^1 f(\phi)d\phi$. What is its entropy?
+Let's suppose we can get away with differential entropy
+\[ - \int_0^1 F(\phi) \ln F(\phi) d\phi \]
+\[ =  {- \int_0^1 f(\phi) \ln F(\phi) d\phi \over \int_0^1 f(\phi)d\phi}\]
+\[ =  {- \int_0^1 f(\phi) \ln \left( f(\phi) /  \int_0^1 f(\phi)d\phi \right) d\phi \over \int_0^1 f(\phi)d\phi}\]
+\[ =  {- \int_0^1 f(\phi) \left( \ln ( f(\phi)) - \ln ( \int_0^1 f(\phi)d\phi) \right) d\phi \over \int_0^1 f(\phi)d\phi}\]
+\[ =  {
+- \int_0^1 f(\phi)  \ln ( f(\phi))   d\phi
++ \int_0^1 f(\phi)   \ln ( \int_0^1 f(\phi)d\phi)  d\phi
+ \over \int_0^1 f(\phi)d\phi}\]
+\[ =  {
+- \int_0^1 f(\phi)  \ln ( f(\phi))   d\phi
+ \over \int_0^1 f(\phi)d\phi}
++  \ln \left( \int_0^1 f(\phi)d\phi\right)  \]
+Ok, so if we say $Z_f =  \int_0^1 f(\phi)d\phi$ and $H_F$ is the entropy of $F$, then
+\[ H_F = H_f / Z_f + \ln (Z_f)\]
+
+\subsection{Trying to work out the first choice}
+
+Let's start with the uniform distribution. If I test at $t$, the probability of being after
+the bad commit is $t$, and so the probability of seeing a failure is $pt$. So with probability
+$pt$, I get the distribution
+\[ P[\phi = \phi \st F_t] =
+\cases{
+f(\phi)/\int_0^t f(\phi) & $\phi \le t$  \cr 0 & $ \phi > t$
+}
+\]
+\[ =
+\cases{
+1/t & $\phi \le t$  \cr 0 & $ \phi > t$
+}
+\]
+which has entropy
+\[ -\int_0^t 1/t \ln(1/t) d\phi = \ln(t)\]
+and with probability $1-pt$ I get the distribution
+\[ P[\phi = \phi \st \lnot F_t] =
+\cases{
+(1-p)f(\phi)/K & $\phi \le t$  \cr f(\phi)/K & $ \phi > t$
+}
+\]
+\[  =
+\cases{
+(1-p)/K & $\phi \le t$  \cr 1/K & $ \phi > t$
+}
+\]
+\[  =
+\cases{
+(1-p)/(1-pt) & $\phi \le t$  \cr 1/(1-pt) & $ \phi > t$
+}
+\]
+which has entropy
+\[ -\int_0^t {1-p \over 1-pt} \ln\left({1-p \over 1-pt}\right) d\phi
+ -\int_t^1 {1 \over 1-pt} \ln\left({1 \over 1-pt}\right) d\phi \]
+\[ =  - {t-pt \over 1-pt} \ln\left({1-p \over 1-pt}\right)
+- {1-t \over 1-pt} \ln\left({1 \over 1-pt}\right)  \]
+\[ =   {t-pt \over 1-pt} \ln\left({ 1-pt\over 1 -p }\right)
++ {1-t \over 1-pt} \ln\left( 1-pt \right)  \]
+\[ = \left(1\over 1 - pt\right)\left(  (t-pt) \ln\left({ 1-pt\over 1 -p }\right)
++ (1-t) \ln\left( 1-pt \right) \right) \]
+\[ = \left(1\over 1 - pt\right)\left(
+ (t-pt) \ln\left({ 1-pt }\right)
+- (t-pt) \ln\left({ 1 -p }\right)
++ (1-t) \ln\left( 1-pt \right) \right) \]
+\[ = \left(1\over 1 - pt\right)\left(
+- (t-pt) \ln\left({ 1 -p }\right)
++ (1-pt) \ln\left( 1-pt \right) \right) \]
+\[ =
+- t{1-p \over 1 - pt} \ln\left({ 1 -p }\right)
++  \ln\left( 1-pt \right)  \]
+
+So my expected entropy overall is
+
+\[ H = pt \ln(t) + (1-pt) \ln (1 - pt) - t(1-p) \ln (t-p) \]
+and if I want to minimize this, I want to set the $t$ derivative to zero, so
+\[ H_t = p \ln(t) -p \ln (1 - pt) - (1-p) \ln (t-p) + \]
+\[ p + {{1-pt \over -p} \over 1 - pt} - {t(1-p) \over t-p} \]
+which looks like a giant mess that does not admit an analytic solution for $t$.
+
+\section{Back to Analytic Category Theory}
+
+Here's a weak definition of stability for a point in the domain of a function $f : \R^n \to \R^p$.
+
+\begin{itemize}
+\item
+  say $\bx \in \R^n$ is 0-stable if $f(\bx)$ has no 0-coordinates.
+\item If $q > 0$, say a point is $q$-stable if there is a neighborhood $X \x Y \subseteq \R^q \x \R^{n-q}$
+around it such that for every $\by \in Y$ there exists at most one $\bx \in X$ such that $(\bx,\by)$ isn't
+$(q-1)$-stable.
+\end{itemize}
+
+I think it's a lemma that if you're $q$-stable, you're $(q+1)$-stable,
+because every $q$-stable point has a neighborhood that is entirely
+$q$-stable.
+
+Can I compact the statement of the implicit function theorem fruitfully?
+
+\subsection{Directed Space}
+
+I want to say a directed space is a choice of $p \in \N$ together with, for every $n \in \N$, a semialgebraic set over the
+formal derivatives and projections of functions $f : \R^n \to \R^p$.
+
+For example, I might want to impose, for $n = 2$, that $\lnot(f^1 = 0 \lor f^2 = 0)$.
+
+This is going to get infinite pretty fast. How can I make it more finite? If I want to deal only in 1-categorical behavior,
+I can limit to first derivatives. Consider $\R^3$ for example, and the constraints I can make are logical formulae involving
+$f : \R \to \R^3$ and $f_x : \R \to \R^3$. I could require that $f^1 = 0 \imp f^1_x > 0$.
+
+
+\end{document}
