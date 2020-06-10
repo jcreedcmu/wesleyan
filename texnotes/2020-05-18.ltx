@@ -354,4 +354,194 @@ Now let's try to define star-insertion inductively from the right.
 \[S(x \s) = (S x)\s \]
 \[S(x b) = x b \s + (S x) \bar b \]
 \[S\epsilon = \s \]
+
+\subsection{Realizing a Big Dumb Mistake}
+
+I'm not keeping track of signs correctly when I compute $\partial^k$. I actually get
+$\partial^2 = 0$ as I should have expected. However, I can give a name to the domains and codomains
+at each dimension and assert a recurrence relation among them.
+
+Let's define $C^n_m, D^n_m \subseteq P^n_m$. I think it's just going to be as simple as
+\[C^n_m = S^m (1^{n-m}) \qquad D^n_m = S^m (0^{n-m}) \]
+So for example $D^n_0 = 0^n$ and $C^n_0 = 1^n$ as expected. At the other extreme I have the possibly
+slightly weird $D^n_n = C^n_n = \s^n$. Stepping back one step, I have
+\[C^n_{n-1} = (1\s\cdots\s) + (\s 0\s\cdots\s) + (\s\cdots \s \pi_{n}) \]
+\[D^n_{n-1} = (0\s\cdots\s) + (\s1\s\cdots\s) + (\s\cdots \s \bar \pi_{n}) \]
+where $\pi_m$ is the parity of $m$. I think that this satisfies the globular conditions
+\[ \partial C^n_m = \partial D^n_m = C^n_{m-1} - D^n_{m-1} \]
+for $0 < m \le n$. Let's see which if these I can prove. Let's try $m = 1$. then I'm claiming
+\[ \partial C^n_1 = \partial D^n_1 = C^n_{0} - D^n_{0} = 1^n - 0^n \]
+
+Let's try to prove this.
+\begin{lemma}
+$\partial S(1^{n-1}) = 1^n - 0^n$.
+\end{lemma}
+
+\begin{proof}
+We know that $S(1^{n-1})$ is equal to
+\[\sum_{i = 0}^{n-1} 1^i \cdot \s \cdot 0^{n-1-i}\]
+so $\partial S(1^{n-1})$ is
+\[\repl 1 0 (\sum_{i = 0}^{n-1} 1^i \cdot \s \cdot 0^{n-1-i}) - \repl 0 0 (\sum_{i = 0}^{n-1} 1^i \cdot \s \cdot 0^{n-1-i})\]
+\[=  (\sum_{i = 0}^{n-1} 1^i \cdot 1 \cdot 0^{n-1-i}) -  (\sum_{i = 0}^{n-1} 1^i \cdot 0 \cdot 0^{n-1-i})\]
+\[=  (\sum_{i = 0}^{n-1} 1^{i+1}  \cdot 0^{n-1-i}) -  (\sum_{i = 0}^{n-1} 1^i  \cdot 0^{n-i})\]
+\[=  (\sum_{i = 1}^{n} 1^{i}  \cdot 0^{n-i}) -  (\sum_{i = 0}^{n-1} 1^i  \cdot 0^{n-i})\]
+\[=  1^n + (\sum_{i = 1}^{n-1} 1^{i}  \cdot 0^{n-i}) -  (\sum_{i = 1}^{n-1} 1^i  \cdot 0^{n-i}) - 0^n\]
+\[= 1^n - 0^n\]
+\cqed
+\end{proof}
+
+\begin{lemma}
+$\partial S(0^{n-1}) = 1^n - 0^n$.
+\end{lemma}
+
+\begin{proof}
+We know that $S(0^{n-1})$ is equal to
+\[\sum_{i = 0}^{n-1} 0^i \cdot \s \cdot 1^{n-1-i}\]
+so $\partial S(0^{n-1})$ is
+\[\repl 1 0 (\sum_{i = 0}^{n-1} 0^i \cdot \s \cdot 1^{n-1-i}) - \repl 0 0 (\sum_{i = 0}^{n-1} 0^i \cdot \s \cdot 1^{n-1-i})\]
+\[=  (\sum_{i = 0}^{n-1} 0^i \cdot 1 \cdot 1^{n-1-i}) -  (\sum_{i = 0}^{n-1} 0^i \cdot 0 \cdot 1^{n-1-i})\]
+\[=  (\sum_{i = 0}^{n-1} 0^{i}  \cdot 1^{n-i}) -  (\sum_{i = 0}^{n-1} 0^{i+1}  \cdot 1^{n-1-i})\]
+\[=  (\sum_{i = 0}^{n-1} 0^{i}  \cdot 1^{n-i}) -  (\sum_{i = 1}^{n} 0^{i}  \cdot 1^{n-i})\]
+\[=  1^n + (\sum_{i = 1}^{n-1} 0^{i}  \cdot 1^{n-i}) -  (\sum_{i = 1}^{n-1} 0^{i}  \cdot 1^{n-i}) - 0^n\]
+\[= 1^n - 0^n\]
+\cqed
+\end{proof}
+
+Ok, let's now try to think through how we'd prove
+\[ \partial C^n_{m+1} = \partial D^n_{m+1} = C^n_m - D^n_m \]
+for $0 < m < n$, assuming some reasonable induction hypothesis.
+This is the same as showing
+\[ \partial S^{m+1} 1^{n-m-1} = \partial S^{m+1} 0^{n-m-1} = S^m 1^{n-m} - S^m 0^{n-m} \]
+and we do already know
+\[ \partial S^{m} 1^{n-m} = \partial S^{m} 0^{n-m} = S^{m-1} 1^{n-m+1} - S^{m-1} 0^{n-m+1} \]
+So let's try to compute
+\[\partial S^{m+1} 1^{n-m-1} = \partial S^{m} S 1^{n-m-1}\]
+\[= \partial S^{m}( S 1^{n-m-1})\]
+\[= \partial S^{m}(  1^{n-m-1}  \s + (S 1^{n-m-2}) 0)\]
+
+and already I'm stuck thinking I need to generalize the i.h. somehow.
+Actually let's just try focusing on the i.h. as
+\[ \partial S^{m} 1^{k} = \partial S^{m} 0^{k} = S^{m-1} 1^{k+1} - S^{m-1} 0^{k+1} \]
+and consider: are there other strings $x$ such that I can say something intelligent about
+\[ \partial S^m x\]
+?
+
+Let me try to find the sequence $\partial S^m 01$, for example. First we find
+\[S(01) = 01\s + 0\s0 + \s10\]
+then
+\[\partial S(01) = 011 + 010 + 110 - (010 + 000 + 010)\]
+\[ = 011  + 110  - (000 + 010)\]
+Hmm, a pattern is not yet evident. How about $\partial S 000111$. First we find
+\[S(000111) = 000111\s + 00011\s0 + 0001\s00 +   {}\]
+\[  000\s000 + 00\s1000 +  0\s11000 +  \s111000 \]
+then
+\[\partial S(000111) = 0001111 + 0001110 + 0001100 +   {}\]
+\[  0001000 + 0011000 +  0111000 +  1111000 \]
+\[ -( 0001110 + 0001100 + 0001000 +   {}\]
+\[  0000000 + 0001000 +  0011000 +  0111000) \]
+
+\[ = 0001111  +   0111000 +  1111000 \]
+\[ -( 0001110 +    0000000 + 0001000    ) \]
+Hmm, not a lot clear there either. Here's a wild conjecture:
+\[ \partial S^{m} x  = S^{m-1} (\partial S x) \]
+For which it would be enough to show
+\[ \partial SS x  = S (\partial S x) \]
+which is not quite as strong as $S$ and $\partial$ commuting, which doesn't even make sense if $x$ has
+no $\s$s in it in the first place.
+
+Let's just see if I can refute or validate this quickly. Let $x$ be the empty string. Then $SSx = \s\s$. The boundary
+of that is $1\s - 0\s - \s1 + \s0$. But also $Sx = \s$. And $\partial S x = 1 - 0$. But then
+\[ S \partial S =  1\s - 0\s - \s1 + \s0\]
+as required. Ok, let $x$ be the string $01$ perhaps. Then $Sx = 01\s + 0\s0 + \s10$, and as we calculated above,
+$\partial S (01) = 011 + 110 - (000 + 010)$. If we insert stars again, we find
+\[ S\partial S (01) =  011\s + 110\s - (000\s + 010\s) + \]
+\[ 01\s0 + 11\s1 - (00\s1 + 01\s1) + \]
+\[ 0\s00 + 1\s01 - (0\s11 + 0\s01) + \]
+\[ \s100 + \s001 - (\s111 + \s101)  \]
+Meanwhile $SSx = 01\s\s + 0\s0\s + \s10\s + 0\s0\s + 0\s\s1 + \s1\s1 + \s10\s + \s1\s1 + \s\s01$, and the boundary of this
+is $\partial SSx = $
+\[ 011\s + 010\s + 110\s + 010\s + 01\s1 + 11\s1 + 110\s + 11\s1 + 1\s01  \]
+\[+  01\s0 + 0\s00 + \s100 + 0\s00 + 0\s01 + \s101 + \s100 + \s101 + \s001  \]
+\[- ( 010\s + 000\s + 010\s + 000\s + 00\s1 + 01\s1 + 010\s + 01\s1 + 0\s01) \]
+\[- ( 01\s1 + 0\s01 + \s101 + 0\s01 + 0\s11 + \s111 + \s101 + \s111 + \s101 ) \]
+and sadly these don't quite look equal. Is this because I messed up some calculation? Let me try on a smaller example.
+
+Consider $x = 0$. Then $Sx = 0 \s + \s 1$. And $SSx = 0\s\s + \s 1 \s + \s 1 \s + \s \s 0 $ and
+$\partial SS x = $
+\[01\s + 1 1 \s + 1 1 \s + 1 \s 0 \]
+\[- (00\s + 0 1 \s + 0 1 \s + 0 \s 0 )\]
+\[+ (0\s0 + \s 1 0 + \s 1 0 + \s 0 0) \]
+\[- (0\s1 + \s 1 1 + \s 1 1 + \s 1 0) \]
+
+\[=  1 1 \s + 1 1 \s + 1 \s 0 + \s 1 0 + \s 0 0\]
+\[- (00\s +  0 1 \s + 0\s1 + \s 1 1 + \s 1 1 )\]
+On the other hand $\partial S x  = 01 + 11 - 00 - 01 = 11 - 00$. And so $S\partial S x$ has only 6 terms, not 10.
+So sadly I think this conjecture that $\partial SS x = S \partial S x$ is just wrong.
+
+But wait --- what's the difference between them? $S \partial S x = $
+\[ 11\s + 1\s 0 + \s 00 - 00 \s - 0\s1 - \s 11\]
+So I see
+\[ (\partial SS - S \partial S)x = 11\s + \s 1 0 - 01 \s - \s 11\]
+Not sure what to do with this.
+
+\subsection{Wait I haven't defined $S^m$ correctly}
+When I say
+\[ \partial S^{m} 1^{k} = \partial S^{m} 0^{k} = S^{m-1} 1^{k+1} - S^{m-1} 0^{k+1} \]
+I actually mean to insert $m$ stars {\em all at once}, not according to the inductive definition I gave above.
+I should have that $S^2 0 = 0\s\s + \s 1 \s + \s\s 0$, not
+$S^2 0 = 0\s\s + \s 1 \s + \s 1 \s + \s\s 0$. Ok, what happens if I actually keep track of ordering of $\s$s no matter
+what, and take a factor of $1\over {m!}$ or something out the very end.
+
+So I define instead $S^n_m : P^n_{m} \to P^{n+1}_{m+1}$ by
+\[S^n_m(x b) = x b \s + (S^{n-1}_{m} x) \cdot \bar b \]
+\[S^n_m(x \s) = x \s \s + (S^{n-1}_{m-1} x) \cdot \s \]
+\[S^0_0\epsilon = \s \]
+
+Now I compute $SS0 = S(0 \s + \s 1) = (0\s\s + 0\s\s + \s 1 \s + \s 1 \s + \s\s0 + \s\s0)$
+So let's say $\sigma^m$ is hitting something $m$ times with with $S$ and then scaling by $1 \over m!$.
+The conjecture I expect to be true then is
+\[ \partial \sigma^{m} 1^{k} = \partial \sigma^{m} 0^{k} = \sigma^{m-1} 1^{k+1} - \sigma^{m-1} 0^{k+1} \]
+
+And now let me reexamine what $\partial \sigma^2 0$ looks like.
+We have already $\sigma^2 0 = 0\s\s + \s 1 \s + \s \s 0 $ so
+$\partial \sigma^2 x = $
+\[01\s + 11\s  + 1\s0\]
+\[- (00\s + 01\s + 0\s0)\]
+\[ + (0\s0 + \s10 + \s00) \]
+\[- (0\s1 + \s11 + \s10) \]
+\[=  11\s  + 1\s0 + \s00- (00\s  + 0\s1 + \s11 ) \]
+which is the same as $\sigma \partial \sigma x$ now!
+
+Ok, now I have a different hunch: that $S \partial = \partial S$ up to a multiplicative factor
+which is the number of stars in the input. Specifically suppose $\partial^n_m : P^n_m \to P^n_{m-1}$
+and $S^n_m : P^n_m \to P^{n+1}_{n+1}$. Then I conjecture
+
+\[m \cdot S^n_{m-1} \o  \partial^n_m =  \partial^{n+1}_{m+1} \o  S^n_m : P^n_m \to P^{n+1}_m\]
+Where I conventionally say that $\partial^n_0$ always returns $\null$. In particular I want to see
+\[ \partial \sigma^2 0 = S \partial S 0\]
+so
+\[ \partial SS 0 / 2 = S \partial S 0\]
+so
+\[ \partial S S0  = 2 \cdot S \partial S 0\]
+Something seems slightly off here. Let's look at $S 0$. It's $0\s + \s1$. Actually let's consider just $\s$ first.
+What's $\partial S \s$? It's $2 (1\s - 0\s - \s1 + \s0)$. What's $S \partial \s$? It's $(1\s - 0\s - \s1 + \s0)$.
+
+Can we do this with a general one-star string? What's $\partial S (x\s y)$? Well,
+\[S(x\s y) = Sx \cdot \s \bar y + x \s \cdot S y\]
+so
+\[\partial S(x\s y) = \partial Sx \cdot \s \bar y + (-1)^{|x|+1}(Sx \cdot 1 \bar y - Sx \cdot 0 \bar y)\]
+\[ + (x 1 \cdot S y -  x 0 \cdot S y)  + (-1)^{|x| + 1} x \s \cdot \partial S y\]
+while
+\[\partial (x \s y) = x 1 y - x 0 y\]
+so
+\[S \partial (x \s y) = x 1 \cdot S y - x 0 \cdot S y\]
+\[{} + S x \cdot 0 \bar y - S x\cdot  1 \bar y\]
+
+Let's try something concrete. What's $S(1\s)$? It's $\s 0 \s + 1\s\s + 1\s\s$.
+What's $\partial S (1 \s)$? It's $1 0 \s - 0 0 \s + \s 0 0 - \s 0 1 + 2(11\s - 10\s + 1\s 0 - 1\s 1)$.
+What's $\partial 1 \s$? It's $11 - 10$. What's $S \partial (1 \s)$? It's
+\[11\s + 1\s0 + \s00 - 10\s - 1\s1 - \s01\]
+What's $(\partial S - S \partial)(1*)$? It's
+\[ 11\s + 1\s 0 - 0 0 \s + 1 0 \s - 1\s 1  - 10\s    \]
+What's $(\partial S - 2 \cdot S \partial)(1*)$? It's... augh, I think I messed up somewhere. I need to mechanize this.
 \end{document}
