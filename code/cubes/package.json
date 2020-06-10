@@ -17,6 +17,7 @@
     "ts-node": "^8.10.2"
   },
   "dependencies": {
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.5"
   }
 }
