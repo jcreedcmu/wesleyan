@@ -88,6 +88,8 @@
 \def\nope{\emptyset}
 \def\ep{\varepsilon}
 \def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
 
 \begin{document}
 \tikzset{>=stealth}
@@ -230,4 +232,126 @@ We assert rules:
 {\s x \sim_{\bar b} \s y}
 \]
 
+\subsection{Categorical Description}
+\vfil\eject
+\def\repl#1#2{[#1/\s_{#2}]}
+Fix an $n$. We describe a higher-dimensional category that takes the shape of the $n$-dimensional cube.
+Its objects will be binary strings that live in $\{0,1\}^n$. To describe the morphisms and higher cells we do the following.
+
+Let $P_m$ be the set of strings over $\{0,1,\s\}^n$ such that exactly $m$ characters
+in the string are $\s$. Obviously this partitions the set of strings of length $n$:
+\[ \bigcup_{0 \le m \le n} P_m = \{0,1,\s\}^n \]
+The set $P_m$ will be the `primitive' cells of dimension $m$, such that all other cells are compositions of them.
+To define which compositions are valid we need to define directed cell boundaries.
+When $b \in \{0,1\}$, and $s \in P_m$, and $0 \le i < m$, let $\repl b i s$ be the result of
+replacing the $i^{th}$ occurrence (counting zero-indexed) of $\s$ in $s$ with the bit $b$.
+
+We can define the {\em boundary} of a cell of dimension $m$,
+which lives in $\Z[P_{m-1}]$.
+If $c \in P_m$, we say
+\[ \partial c = \sum_{i = 0}^m (-1)^i(\repl 1 i c - \repl 0 i c)\]
+For example, $\partial (\s 1 \s) = 11\s - 01\s - \s11 + \s10$. This notion of boundary extends in an evident
+way to subset $X \subseteq P_m$: we say
+\[ \partial X = \sum_{x \in X} \partial x\]
+
+Now we can define $C_m$, the set of cells of dimension $m$. We say $C_0 = P_0 = \{0,1\}^n$.
+For higher dimensions, if $a, b \in C_m$, we say that an element of the homset $C_{m+1}[a, b]$ is
+a subset $c \subseteq P_m$ such that $b - a = \partial c$.
+
+Composition is always given by unions of sets, and identities morphisms are always realized by empty sets.
+This means that associativity, interchange laws, and unit laws, come for free. What we need to verify
+is that compositions even {\em exist} in the right homset,
+which means checking the boundary conditions. But this is fairly easy.
+
+To check vertical composition let two cells $\alpha \in C_m[x, y]$ and $\beta \in C_m[y,z]$ be given.
+We know therefore that $\partial \alpha = y - x$ and $\partial \beta = z - y$. Therefore
+\[\partial(\beta \o \alpha) = \partial(\beta \cup \alpha) = \partial\beta + \partial \alpha = z - y + y - x = z - x\]
+so the composition is indeed a cell in $C_m[x,z]$.
+
+To check horizontal composition let two cells $\alpha \in C_m[x_1, y_1]$ and $\beta \in C_m[x_2,y_2]$ be given,
+so that $x_1,x_2$ are composable and $y_1,y_2$ are composable. We want to check that $\beta * \alpha$ is a cell in
+$ C_m[x_2 \o x_1, y_2 \o y_1]$. So we need
+\[ \partial(\beta * \alpha) = y_2 \o y_1 - x_2 \o x_1 \]
+but
+\[ \partial(\beta * \alpha) = \partial(\beta \cup \alpha) = \partial \beta + \partial \alpha  = y_2 - x_2 + y_1 - x_1\]
+so we're done.
+
+\subsection{Domains and Codomains}
+
+If I take the square $\s\s$ and take the set of all its edges $\{0\s, 1\s, \s0, \s1\}$, and take its boundary,
+I get $2 \cdot (11 - 00)$. In general if I take the boundary of the $n-1$-cells of the $n$-cube, I expect to get
+two times some difference, and I can iterate on taking boundaries of those nonprimitive cells. Let's try to compute
+the boundary of all faces in the cube. I think it is twice
+\[(11\s + 1\s0 + \s00) - (00\s + 0\s1 + \s11) \]
+Because look at $11\s$ in particular, and consider which faces it could have come from, and with which signs.
+We have a positive amplitude $\s 1 \s \to 11 \s$ and positive $1\s1 \to 11\s$, because in both those situations it's
+the $0^{th}$ $\s$ becoming a 1.
+
+What's the boundary of all the volumes in the hypercube? I think it's
+\[(11\s\s + 1\s0\s + 1\s\s1 + \s00\s + \s0\s1 + \s\s11)  -\]
+\[(00\s\s + 0\s1\s + 0\s\s0 + \s11\s + \s1\s0 + \s\s00)  \]
+In general I think it's
+\[ \sum_{i \ne j \atop 0 \le i,j < n} \repl {A_{i}} i \repl {A_{j-i-1}} j \s^n  - \repl {\bar A_{i}} i \repl {\bar A_{j-i-1}} j \s^n\]
+where $A_i = 1$ if $i \equiv 0 \pmod 2$ and $0$ otherwise.
+
+\subsubsection{Second Boundaries}
+
+What's the boundary of $(11\s + 1\s0 + \s00)$? It's $111 - 000$.
+
+What's the boundary of $(11\s\s + 1\s0\s + 1\s\s1 + \s00\s + \s0\s1 + \s\s11)$?
+It's
+\[ (111 \s + 110\s + 11\s1 + 100\s + 10\s1 + 1\s11) \]
+\[ {} - (11\s1 + 1\s01 + 1\s11 + \s001 + \s011 + \s111) \]
+\[ {} - (110\s + 100\s + 10\s1 + 000\s + 00\s1 + 0\s11) \]
+\[ {} + (11\s0 + 1\s00 + 1\s01 + \s000 + \s001 + \s011) \]
+%
+\[  = (111 \s + 11\s0 + 0\s11 + \s000)    -  (000 \s + 00\s1 + 1\s00 + \s111)\]
+
+\subsubsection{Generalizing}
+
+Let's say $P_m^n$ is the set of strings with length $n$ with exactly
+$m$ $\s$s in them. What I'm interested in computing is $\partial^k P^n_{n-1}$.
+I notice a pattern that
+\[\partial P^2_1 = 2 \cdot (11 - 00)\]
+\[\partial^2 P^3_2 = 2^2 \cdot (111 - 000)\]
+\[\partial^3 P^4_3 = 2^3 \cdot (1111 - 0000)\]
+so I conjecture
+\[\partial^m P^{m+1}_m = 2^m \cdot (1^{m+1} - 0^{m+1})\]
+If I write $\npart$ for $\partial/2$ then
+\[\npart^{m-1} P^{m}_{m-1} = 1^{m} - 0^{m}\]
+I think I can define a `star-insertion' operator $S$ such that
+\[ S(b_1\cdots b_n) = (b_1\cdots b_n\s) +( b_1\cdots b_{n-1}\s \bar b_n) + \cdots  + (\s \bar b_1 \cdots \bar b_n) \]
+for example
+\[ S(000) = 000\s + 00\s1 + 0\s 11 + \s 111\]
+In which case I conjecture
+\[\npart^{k-1} P^{m}_{m-1} = S^{m -  k}(1^{k} - 0^{k})\]
+
+
+
+
+
+\subsection{Somewhat more Careful Definitions}
+
+Here's an inductive definition of $\partial$, writing $x$ for an arbitrary ternary string in
+$\{0,1,\s\}^*$, writing
+$b \in \{0,1\}$ and concatenation as $\cdot$ or juxtaposition, and $\epsilon$ for the empty string,
+and $\null$ as the unit of the formal sum in $\Z[P^n_m]$. We can lift concatenation from an operation
+$P^{n_1}_{m_1} \x P^{n_2}_{m_2} \to P^{n_1+n_2}_{m_1+m_2}$ to
+an operation
+\[\Z[P^{n_1}_{m_1}] \x \Z[P^{n_2}_{m_2}] \to \Z[P^{n_1+n_2}_{m_1+m_2}]\]
+ in the evident linear way.
+
+
+\[ \partial (\s  x) = 1x - 0x - \s \cdot \partial x\]
+\[ \partial (b  x) = b \cdot \partial x\]
+\[ \partial \epsilon = \null\]
+
+For example, $\partial 101101 = \null$ and
+\[\partial 101\s0\s = 10110\s - 10100\s - 101\s01 + 101\s00\]
+
+Now let's try to define star-insertion inductively from the right.
+
+\[S(x \s) = (S x)\s \]
+\[S(x b) = x b \s + (S x) \bar b \]
+\[S\epsilon = \s \]
 \end{document}
