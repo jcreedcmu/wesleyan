@@ -50,14 +50,6 @@ function bd(s: string, dc: Dc): string[] {
 // Example: {'*1': 1, '0*': -1}
 type Ring = { [s: string]: number };
 
-// signed boundary, as ring element
-function sbd(s: string): Ring {
-  const rv: Ring = {};
-  bd(s, 'dom').forEach(x => rv[x] = -1);
-  bd(s, 'cod').forEach(x => rv[x] = 1);
-  return rv;
-}
-
 // add m * r into s
 function addTo(m: number, r: Ring, s: Ring): void {
   for (const k of Object.keys(r)) {
@@ -66,20 +58,53 @@ function addTo(m: number, r: Ring, s: Ring): void {
   }
 }
 
-// return signed boundary of ring element r, as a ring element
-export function sbdr(r: Ring): Ring {
-  const rv: Ring = {};
-  for (const k of Object.keys(r)) {
-    addTo(r[k], sbd(k), rv);
+// special case of kleisli lift (A -> Z[B]) -> Z[A] -> Z[B]
+// where A = B = {0,1,2}^*
+function lift(f: (s: string) => Ring): (r: Ring) => Ring {
+  return (r: Ring) => {
+    const rv: Ring = {};
+    for (const k of Object.keys(r)) {
+      addTo(r[k], f(k), rv);
+    }
+    for (const k of Object.keys(rv)) {
+      if (rv[k] == 0)
+        delete rv[k];
+    }
+    return rv;
   }
-  for (const k of Object.keys(rv)) {
-    if (rv[k] == 0)
-      delete rv[k];
+}
+
+// signed boundary, as ring element
+export function sbd(s: string): Ring {
+  const rv: Ring = {};
+  bd(s, 'dom').forEach(x => rv[x] = -1);
+  bd(s, 'cod').forEach(x => rv[x] = 1);
+  return rv;
+}
+
+// return signed boundary of ring element r, as a ring element
+export const sbdr: (r: Ring) => Ring = lift(sbd);
+
+// star-insertion function on s
+// nondeterministically insert a star somewhere in s,
+// flipping all bits to the right of it
+export function sins(s: string): Ring {
+  const rv: Ring = {};
+  for (let i = 0; i <= s.length; i++) {
+    const ns =
+      s.substring(0, i) +
+      '*' +
+      s.substring(i, s.length).replace(/[01]/g, x => x === '0' ? '1' : '0');
+    if (!rv[ns]) rv[ns] = 0;
+    rv[ns] += 1;
   }
   return rv;
 }
 
-//console.log(sbdr({ '*0': 1, '0*': -1 }));
+console.log(sins('*11111'));
+//console.log(sbdr({ '0*': 1, '*0': -1 }));
+
+
 
 type Bound = { cod: string[], dom: string[] };
 
