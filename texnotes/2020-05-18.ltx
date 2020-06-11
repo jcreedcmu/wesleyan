@@ -567,7 +567,7 @@ with the numerically verified lemma above this is the same as
 \[{1\over m!}  m \cdot  S^{m-1} \partial S (1^{n-m}) =  {1\over (m-1)!} \left(S^{m-1}(1^{n-m+1} - 0^{n-m+1})\right)\]
 and then it just remains to check
 \[\partial S (0^{n-m}) = \partial S (1^{n-m}) = 1^{n-m+1} - 0^{n-m+1}\]
-
+which is true, qed, hooray.
 \subsubsection{Another Numerical Question}
 Is there any constant $C$ (well, depending on $m$) that validates
 \[ \partial S^{m} x = C \cdot S^{m-2} \partial S S x\]
@@ -620,4 +620,10 @@ then
 \[ S \partial S x = \sum_{0 \le j \le n+1}  \sum_{0\le i\le n} [*]_j [1 - 0]_{i} x \]
 This gets me closer to the result, although I still don't quite see it all the way through.
 Need to prove some lemmas about insertion.
+
+Just to be clear about my intentions: $[c]_i x$ means `insert
+character $c\in\{0,1,\s\}$ at position $i$ of $x$ and flip all the
+bits to the right of it', so that $S x = \sum_{i = 0}^n [\s]_i x$
+for some $x \in P^n_m$.
+
 \end{document}
