@@ -49,4 +49,44 @@ describe('Cube', () => {
     }
   });
 
+  it('should satisfy a 3/2-version of the conjecture', () => {
+    for (const x of ['10111', '000', '', '0111']) {
+      const y = sing(x);
+      const result = sub(
+        scale(2, bndr(insr(insr(insr(y))))),
+        scale(3, insr(bndr(insr(insr(y))))));
+      expect(result).to.eql({});
+    }
+  });
+
+  it('should satisfy a 4/2-version of the conjecture', () => {
+    for (const x of ['10111', '000', '', '0111']) {
+      const y = sing(x);
+      const result = sub(
+        scale(2, bndr(insr(insr(insr(insr(y)))))),
+        scale(4, insr(insr(bndr(insr(insr(y)))))));
+      expect(result).to.eql({});
+    }
+  });
+
+  it('should satisfy a 5/2-version of the conjecture', () => {
+    for (const x of ['10111', '000', '', '0111']) {
+      const y = sing(x);
+      const result = sub(
+        scale(2, bndr(insr(insr(insr(insr(insr(y))))))),
+        scale(5, insr(insr(insr(bndr(insr(insr(y))))))));
+      expect(result).to.eql({});
+    }
+  });
+
+  it('should satisfy a 5/3-version of the conjecture', () => {
+    for (const x of ['10111', '000', '', '0111']) {
+      const y = sing(x);
+      const result = sub(
+        scale(3, bndr(insr(insr(insr(insr(insr(y))))))),
+        scale(5, insr(insr(bndr(insr(insr(insr(y))))))));
+      expect(result).to.eql({});
+    }
+  });
+
 });
