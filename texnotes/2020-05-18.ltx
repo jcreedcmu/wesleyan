@@ -549,4 +549,75 @@ What's $(\partial S - 2 \cdot S \partial)(1*)$? It's... augh, I think I messed u
 In \texttt{2018-09-23.ltx}. But only the very basics --- I think I'm
 figuring out a few things that are new to me in terms of $\partial$
 and $S$. There was some code in \texttt{code/cube.ts} I'm going to try to modify.
+
+\subsection{Numerically Confirmed Conjecture}
+
+After writing some code, I think I believe that when $x$ is a vertex, i.e. a binary string with no $\s$, we always have
+\[ \partial S^{m} x = m \cdot S^{m-1} \partial S x\]
+
+How does this square with my original definitions? I think I want to say
+
+\[ C^n_m = {1\over m!} S^m(1^{n-m})\qquad
+ D^n_m = {1\over m!} S^m(0^{n-m})
+\]
+and think that $\partial C^n_m = \partial D^n_m = C^n_{m-1} - D^n_{m-1}$. This expands to (in the codomain case)
+
+\[{1\over m!} \partial  S^m(1^{n-m}) =  {1\over (m-1)!} \left(S^{m-1}(1^{n-m+1} - 0^{n-m+1})\right)\]
+with the numerically verified lemma above this is the same as
+\[{1\over m!}  m \cdot  S^{m-1} \partial S (1^{n-m}) =  {1\over (m-1)!} \left(S^{m-1}(1^{n-m+1} - 0^{n-m+1})\right)\]
+and then it just remains to check
+\[\partial S (0^{n-m}) = \partial S (1^{n-m}) = 1^{n-m+1} - 0^{n-m+1}\]
+
+\subsubsection{Another Numerical Question}
+Is there any constant $C$ (well, depending on $m$) that validates
+\[ \partial S^{m} x = C \cdot S^{m-2} \partial S S x\]
+?
+Specifically for $m = 3$?
+\[ \partial S^3 x = C \cdot S \partial S S x\]
+Yeah, I think I have it. If $x$ is a binary string, then
+\[ 2 \cdot \partial S^3 x = 3  \cdot S \partial S S x\]
+and this seems like it's part of a more general pattern that looks like
+\[ m \cdot \partial S^k x = k  \cdot S^{k-m} \partial S^m x\]
+Right! If $m = 0$, then we're taking the $\partial$ of a binary string, and that should be always zero.
+
+Can I do induction on $k$? When $k = m$, I trivially have
+\[ m \cdot \partial S^m x = m  \cdot  \partial S^m x\]
+When $k = m+1$, I need to show
+
+\begin{conjecture}
+Suppose $x$ is a binary string. Then
+\[ m \cdot \partial S^{m+1} x = (m+1)  \cdot S \partial S^m x\]
+\end{conjecture}
+\begin{corollary}
+\[ m \cdot \partial S^{m+k} x = (m+k)  \cdot S^{k} \partial S^m x\]
+\end{corollary}
+
+\begin{proof}
+By iterating the above result.
+\cqed
+\end{proof}
+
+How could I go about proving this conjecture? Let's try $m = 1$.
+\[  \partial S^2 x = 2  \cdot S \partial S x\]
+If $x = b_0\cdots b_{n-1}$ then
+\[ S x = \sum_{i=0}^n b_0 \cdots b_{i-1}\s \bar b_i\cdots  \bar b_{n-1}\]
+\[ S S x = \sum_{i=0}^n\sum_{j=0}^i b_0 \cdots b_{j-1}\s \bar b_j\cdots \bar b_{i-1}\s  b_i\cdots   b_{n-1}\]
+\[ +  \sum_{i=0}^n\sum_{j=i}^n b_0 \cdots b_{i-1}\s \bar b_i\cdots \bar b_{j-1}\s b_j \cdots  b_{n-1}\]
+\[ = 2 \sum_{0 \le i \le j \le n} b_0 \cdots b_{i-1}\s \bar b_i\cdots \bar b_{j-1}\s  b_j\cdots   b_{n-1}\]
+Hm, let's make a notation for star-insertion {\em exactly} at $i,j$. Call it $S_{i,j}$. So
+\[ SSx = S \sum_{i=0}^n S_i x = \sum_{j= 0}^{n+1} S_j S_i x = 2 \sum_{0\le i \le j \le n} S_{i,j} x\]
+Likewise
+\[SSSx = 3! \sum_{0\le i \le j \le k \le n} S_{i,j,k} x\]
+
+Anyway we know that $\partial SSx$ is going to look like
+\[[1\s + \s0 - 0\s - \s1/ \s\s] \left( 2\sum_{0\le i\le j\le n} S_{i,j} x\right)\]
+and
+\[ \partial S x = [1 - 0 / \s] \left( \sum_{0\le i\le n} S_{i} x\right) \]
+Maybe I need a notation for insertion of arbitrary bits, not just stars. Maybe I can write
+\[ \partial SSx =   2\sum_{0\le i\le j\le n} [1\s + \s0 - 0\s - \s1]_{i,j} x\]
+\[ \partial S x =   \sum_{0\le i\le n} [1 - 0]_{i} x \]
+then
+\[ S \partial S x = \sum_{0 \le j \le n+1}  \sum_{0\le i\le n} [*]_j [1 - 0]_{i} x \]
+This gets me closer to the result, although I still don't quite see it all the way through.
+Need to prove some lemmas about insertion.
 \end{document}
