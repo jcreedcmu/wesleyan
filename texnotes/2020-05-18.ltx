@@ -626,4 +626,63 @@ character $c\in\{0,1,\s\}$ at position $i$ of $x$ and flip all the
 bits to the right of it', so that $S x = \sum_{i = 0}^n [\s]_i x$
 for some $x \in P^n_m$.
 
+\section{Simplices}
+
+The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
+(\texttt{http://web.science.mq.edu.au/$\sim$street/aos.pdf})
+
+A cell is a subset of $[0,\ldots,n]$. Singletons are vertices, pairs are edges, etc. The signed boundary operation
+is alternating in which element you remove, so that
+\[ \partial \{ a_0 < a_1 < \cdots < a_m \} = - \{\hat a_0 \} + \{\hat a_1\} - \{\hat a_2\} \cdots \]
+where $\{\hat a_i\}$ means $\{a_0, a_1, \ldots, a_{i-1}, a_{i+1}, \ldots, a_m\}$.
+
+The 0-dimensional boundary is  $0\to n$.
+
+The 1-dimensional boundary is  $\{01, 12, 23, \ldots, (n-1)n\} \to 0n$.
+
+The 2-dimensional boundary is
+\[\{012, 023, 034 \ldots, 0(n-1)n\} \to \{01n, 12n, 23n \ldots, (n-2)(n-1)n\}\]
+
+We can write the above three schematically in terms of `dominoes' of adjacent integers.
+\def\shl{\mathbf{0}}
+\def\shr{\mathbf{n}}
+\[B_0 = \shl\to \shr\]
+\[B_1 = D \to \shl\shr\]
+\[B_2 = \shl D \to D\shr\]
+\[B_3 = DD \to \shl D\shr\]
+The general pattern is:
+\[B_{2n} = \shl D^n \to D^n\shr\]
+\[B_{2n+1} = D^{n+1} \to \shl D^n\shr\]
+\textcolor{gray}{
+Another way of putting this is: every run of numbers not attached to $\shl$ or $\shr$ has to be of even length,
+and the cell is in the codomain if it includes $\shr$.}
+
+\textcolor{gray}{
+So the regexp of the bitstring of a domain cell is
+\[1^*(0^+(11)^+)^*0^+\]
+and a codomain cell is either
+\[1^*((0^+(11)^+)^*0^+1^*)?\]
+Actually that's not quite right. $D$ could have $\shr$ without being codomain. Hmm.
+}
+
+What is the boundary of $B_{2n} = \shl D^n$? We get a domain contributions from:
+\[\null D^n, \shl S \null D^{n-1}, \shl D S \null D^{n-2}, \ldots, \shl D^n S \null\]
+and codomain contributions from
+\[ \shl \null S D^{n-1}, \shl D \null S D^{n-2}, \ldots, \shl D^n \null S \]
+which should balance out to $D^n$ and $\shl D^{n-1} \shr$.
+
+\section{Embedding Simplices into Cubes}
+
+A cubical string is in the image of a simplex $\{a_0 < \ldots < a_m\}$
+if there exists $x_0,\ldots,x_{m-1},y_0,\ldots,y_{m-1} \ge 0$ so that
+it has the form
+\[1^{a_0} (0^{x_0} \s 1^{y_0}) (0^{x_1} \s 1^{y_1}) \cdots (0^{x_{m-1}} \s 1^{y_{m-1}}) 0^{n- a_m}\]
+and $x_i + y_i + 1 = a_{i+1} - a_i$ for all $i$.
+
+\vskip 1em
+A cubical string is in the image of a simplex $\{a_0 < \ldots < a_m\}$
+if there exists $x_0,\ldots,x_{m-1},y_0,\ldots,y_{m-1} \ge 0$ so that
+it has the form
+\[0^{n-a_m} (1^{x_{m-1}} \s 0^{y_{m-1}})(1^{x_{m-2}} \s 0^{y_{m-2}})  \cdots (1^{x_1} \s 0^{y_1}) (1^{x_{0}} \s 0^{y_{0}}) 1^{a_0}\]
+and $x_i + y_i + 1 = a_{i+1} - a_i$ for all $i$.
 \end{document}

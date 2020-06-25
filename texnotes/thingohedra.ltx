@@ -1,0 +1,303 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bu{{\bullet}}
+\def\bp{\mathbf{p}}
+\def\bz{\mathbf{0}}
+\def\bzee{\mathbf{z}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+\def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
+\def\s{{*}}
+
+\title{Notes on various Oriented Polytopes}
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Polytopes}
+
+\subsection{The $n$-Simplex}
+
+The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
+(\texttt{http://web.science.mq.edu.au/$\sim$street/aos.pdf})
+
+
+\subsubsection{Cells}
+
+An $m$-cell of the $n$-simplex is a subset of $[0,n]$ of size $m+1$.
+We may abbreivate a subset $\{ a_0 < a_1 < \cdots a_m \}$ as simply $a_0a_1\cdots a_m$.
+
+There is exactly one $n$-cell in the $n$-simplex, namely $[0,n]$.
+
+\subsubsection{Boundary Operator}
+The signed boundary operation is defined by
+\[ \partial \{ a_0 < a_1 < \cdots < a_m \} =  \hat a_0  - \hat a_1 + \hat a_2 - \cdots + (-1)^{m} \hat a_m\]
+where $\hat a_i$ means $a_0 a_1 \cdots a_{i-1} a_{i+1} \cdots a_m$.
+
+\subsubsection{Characterizing the Global Boundary}
+
+We define
+%Given a list of gaps $g_1, \ldots, g_m \ge 0$ and $x \in \{0,1\}$ we define the set $S_{\vec g}$ as
+%\[S^x_{\vec g} = \left\{ j \,\middle|\, j \in [0,n], k \in [1,m], j - x -  \sum_{i = 1}^k \left( g_i + 2\right) \in \{0,1\} \right\} \]
+
+\[
+\begin{tabular}{ll}
+$D_0 = 0$&$ C_0 = n$ \\
+$D_1 = 01+ 12+ \cdots+ (n-1)n $&$ C_1 = 0n$ \\
+$D_2 = 012+ 023+ \cdots+ 0(n-1)n $&$ C_1 = 01n+\cdots+(n-2)(n-1)n $ \\
+\end{tabular}
+\]
+
+We can write the above three schematically in terms of `dominoes' of adjacent integers.
+\def\shl{\mathbf{0}}
+\def\shr{\mathbf{n}}
+\[B_0 = \shl\to \shr\]
+\[B_1 = D \to \shl\shr\]
+\[B_2 = \shl D \to D\shr\]
+\[B_3 = DD \to \shl D\shr\]
+The general pattern is:
+\[B_{2m} = \shl D^m \to D^m\shr\]
+\[B_{2m+1} = D^{m+1} \to \shl D^m\shr\]
+
+Note that $ C_n = D_n = [0,n]$.
+
+\begin{lemma}
+For all $i \ge 0$,
+$\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\subsection{The $n$-Cube}
+
+\subsubsection{Cells}
+
+If $x$ is a string in $\{0,1,\s\}^n$, write $|x|$ for how many occurrences of $\s$ are in $x$.
+An $m$-cell of the $n$-cube is an element of $\{x \in \{0,1,\s\}^n \st |x| = m\}$.
+We write repetition of characters as an exponent, e.g. $0^3 = 000$.
+
+There is exactly one $n$-cell in the $n$-cube, namely $\s^n$.
+
+\subsubsection{Boundary Operator}
+
+For $b \in \{0,1\}$, let $[b/i]x$ be the result of replacing the $i^{th}$ instance
+of $\s$ in $x$ with $b$.
+
+The signed boundary operation is defined by
+\[ \partial x =  \sum_{i = 1}^{|x|} (-1)^{i} ([0/i]x - [1/i]x)\]
+
+For example, $\partial \s = - 0 + 1$ and $\partial \s\s =  - (0\s + \s1) + (\s 0 + 1\s)$.
+
+\subsubsection{Characterizing the Global Boundary}
+
+We define
+
+\[
+\begin{tabular}{ll}
+$D_0 = 0^n$&$ C_0 = 1^n$ \\
+$D_1 = \{ 0^i \s 1^j \st i + j = n - 1\} $&$ C_1 = \{ 1^i \s 0^j \st i + j = n - 1\}$ \\
+$D_2 = \{ 0^i \s 1^j \s 0^k \st i + j + k = n - 2\} $&$ C_2 = \{ 1^i \s 0^j \s 1^k \st i + j + k = n - 2\}$\\
+$D_m = \{ 0^{i_1} \s 1^{i_2} \s 0^{i_3}\cdots \st \sum_j i_j = n - m\} $&$ C_m = \{ 1^{i_1} \s 0^{i_2} \s 1^{i_3}\cdots \st \sum_j i_j = n - m\}$
+\end{tabular}
+\]
+
+Note that $ C_n = D_n = \s^n$.
+
+\begin{lemma}
+For all $i \ge 0$,
+$\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\subsection{The $n$-Associahedron}
+
+\subsubsection{Cells}
+
+Consider finite trees with only binary or greater nodes.
+\[ \hbox{Tree }\tau \quad::=\quad \bullet \celse (\tau\tau\ell)\]
+\[ \hbox{Tree List }\tau \quad::=\cdot \celse  \tau\ell\]
+For example, $(\bu\bu(\bu\bu)(\bu\bu\bu\bu\bu)\bu)$. For better readability, we may
+give arbitrary letter names to leaves, and omit the outermost pair of parentheses,
+e.g. $ab(cd)(efgh)i$.
+
+The dimension of an internal node is its branching factor minus 2.
+The dimension of a tree is the sum of the dimension of each of its internal nodes.
+Inductively, we define
+\[\dim \bullet = 0\]
+\[\dim (\tau_1\cdots \tau_n) = (n-2) + \dim \tau_1 + \cdots \dim \tau_n \]
+For example, the dimension of $ab(cd)(efgh)i$ is $3 + 0 + 2 = 5$.
+Note that the dimension of every binary tree is $0$.
+
+The size $|\tau|$ of a tree $\tau$ is the number of leaves of $\tau$ minus 2.
+
+An $m$-cell of the $n$-associahedron is a tree of dimension $m$ and size $n$.
+
+There is exactly one $n$-cell in the $n$-associahedron, namely the tree with just
+a root and $n+2$ leaves and no other nodes, $(\bu^{n+2})$.
+
+\subsubsection{Boundary Operator}
+
+\textcolor{red}{Define boundaries in associahedron}
+
+\subsubsection{Characterizing the Global Boundary}
+
+\textcolor{red}{Define $C_n$ and $D_n$ somehow}
+
+Note that $ C_n = D_n = (\bu^{n+2})$.
+
+\begin{lemma}
+For all $i \ge 0$,
+$\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\subsection{The $n$-Permutohedron}
+
+\subsubsection{Cells}
+
+A commutable permutation is a permutation of the numbers $[0,n]$ with some nonnested, nonoverlapping substrings
+enclosed in parentheses, such that all the numbers within one parenthesized group occur in sorted order.
+For example, $12(034)(78)65$.
+
+The dimension of such a string is the sum, for each parenthesized
+group, the length of that group minus one. For example the dimension of
+$12(034)(78)65$ is $(3 -1)+ (2-1) = 3$.
+
+An $m$-cell of the $n$-permutohedron is a commutable permutation of $[0,n]$ with dimension $m$.
+
+There is exactly one $n$-cell in the $n$-permutohedron, namely $(012\cdots n)$.
+
+\subsubsection{Boundary Operator}
+
+We first try to describe what the boundary of $(012\cdots n)$ is and then describe how to extend that to general cells.
+
+If $S\subseteq [0,n]$, then let $P_S$ be the permutation with two parenthesized groups, the first which has
+every element of $S$, and the second which has the complement of $S$.
+
+We  define
+\[ \partial 0 = 0 \]
+\[ \partial(012\cdots n) = \sum_{S \subsetneq [1,n]} (-1)^{{|S| \choose 2}} \left(\prod_{s\in S} (-1)^s\right) (P_{[1,n] \setminus S} - P_{S\cup \{0\}} )\]
+and assert that boundary commutes with monotone renaming, and boundary behaves something like a  derivative with respect to concatenation,
+i.e.
+\[ \partial (\sigma_1 \sigma_2) = (\partial \sigma_1)\sigma_2 - \sigma_1(\partial \sigma_2) \]
+assuming $\sigma_1$ has the least element among $\sigma_1,\sigma_2$? Not sure this part is right.
+This should uniquely determine the boundary for all permutations.
+
+\subsubsection{Characterizing the Global Boundary}
+
+\textcolor{red}{Define $C_n$ and $D_n$ somehow}
+
+Note that $ C_n = D_n = (012\cdots n)$.
+
+\begin{lemma}
+For all $i \ge 0$,
+$\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\end{document}
