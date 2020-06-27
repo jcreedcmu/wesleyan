@@ -91,6 +91,7 @@
 \def\npart{\not\!\partial}
 \def\null{\emptyset}
 \def\s{{*}}
+\def\ii{\mathbb{I}}
 
 \title{Notes on various Oriented Polytopes}
 \begin{document}
@@ -118,6 +119,38 @@ when $x \in X_i$, where conventionally $\bu(\partial x) = \bu$ when $x \in X_0$.
 
 What a nice relationship! It's like creation/annihilation operators anticommutator, more or less saying
 \[ \{\partial, \bu\} = 1\]
+
+\subsection{Ordered Product, Sum}
+
+Suppose I have polytopes $P, Q$. I want to form $P \otimes Q$. I set
+\[ X_k^{P\otimes Q} = \sum_{i+j = k} X_i^P \x X_j^Q\]
+and say
+\[\partial (x,y) = (\partial x, y) - (x, \partial y) \]
+
+What if I say $X_{-1} = \{\star\}$ for every polytope, and I try to come up with $P \oplus Q$ like so?
+\[ X_k^{P\oplus Q} = \sum_{i+j+1 = k} X_i^P \x X_j^Q\]
+and still
+\[\partial (x,y) = (\partial x, y) - (x, \partial y) \]
+This generalizes product {\em and} suspension! For if we have a space with a single 0-dimensional cell
+$v$, whose (-1)-dimensional boundary is $\star$, then the operation $\bu$ is just $(v, \dash)$ and
+$(\star, \dash)$ is just the tagging inclusion of the original space in the one-point suspension. So from
+\[ \partial(v, y) = (\partial v, y) - (v, \partial y)\]
+we recover
+\[ \partial \bu y = (\star, y) - \bu \partial y\]
+or just
+\[ \partial \bu y = y - \bu \partial y\]
+as before! Nice.
+
+The ordered product is then just the dimension-shift of the ordered sum.
+Consider the interval $\ii = 0 \to 1$. What does $\ii \oplus \ii$ look like? It'll
+be a $1+1+1=$ 3-dimensional space. The vertices are
+\[(0,\star),(1,\star),(\star,0),(\star,1)\]
+the edges are
+\[(0,0),(0,1),(1,0),(1,1),(f,\star),(\star,f)\]
+and the 2-cells are
+\[(0,f),(1,f),(f,0),(f,1)\]
+and the 3-cell is
+\[(f,f)\]
 \subsection{The $n$-Simplex}
 
 The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
