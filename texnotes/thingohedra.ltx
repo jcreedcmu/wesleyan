@@ -114,6 +114,29 @@ Suppose I have polytopes $P, Q$. I want to form $P \land Q$. I set
 \[ X_k^{P\land Q} = \sum_{i+j = k} X_i^P \x X_j^Q\]
 and say
 \[\partial (x \land y) = (\partial x \land y) + (-1)^{\dim x }(x \land \partial y) \]
+Right, this is just the standard tensor product of chain complexes.
+
+what happens if I say $\ups P$ is the chain complex such that
+$(\ups P)_0 = \star$ and $(\ups P)_{n+1} = P_n$ and $x \in (\ups P)_1 \imp \partial x = \star$.
+This is kind of weird since I think it doesn't exactly obey $\partial \partial = 0$ the way I think it ought to.
+Say $(\dns P)_n = P_{n+1}$.
+Nonetheless, say 1 is the one-vertex complex, and consider
+\[ \Sigma P = \dns( \ups 1 \otimes \ups P) \]
+where the one element of $1$ is $\bu$.
+This should look like the one-point suspension of $P$. Let's compute:
+\[ (\Sigma P)_0 = (\dns( \ups 1 \otimes \ups P))_0\]
+\[ = ( \ups 1 \otimes \ups P)_1\]
+\[ = ( \ups 1)_0 \x (\ups P)_1 + ( \ups 1)_1 \x (\ups P)_0\]
+\[ = \bu \x \star  + \star \x P  \]
+
+\[ (\Sigma P)_1 = (\dns( \ups 1 \otimes \ups P))_1\]
+\[ = ( \ups 1 \otimes \ups P)_2\]
+\[ = ( \ups 1)_2 \otimes (\ups P)_0 + ( \ups 1)_1 \otimes (\ups P)_1 + ( \ups 1)_0 \otimes (\ups P)_2\]
+\[ =  \bu \x P_0 + \star \x P_1\]
+Now notice that $\bu \in \ups 1$ has dimension $1$ while $\star$ has dimension $0$.
+So $\partial (\star, x) = x$ as we'd expect (partly because $\partial \star = 0$) and
+subsequently $\partial (\bu x) = x - \bu \partial x$.
+
 
 \subsection{The $n$-Simplex}
 
