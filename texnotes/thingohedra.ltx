@@ -102,6 +102,22 @@
 
 \section{Polytopes}
 
+An oriented polytope is chain complex of free abelian groups $X_0, X_1, \ldots$ together with
+a boundary operator $\partial : X_{i+1} \to X_i$. It also comes equipped with a specification
+of the domain and codomain at every dimension, $C_i, D_i \in X_i$. We must have that all the coefficients
+of $C_i$ and $D_i$ are all in $\{0,1\}$ and $\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$.
+
+\subsection{The suspension of a polytope}
+Suppose I have a polytope $X_i, C_i, D_i$. I'm going to build $X'_i, C'_i, D'_i$ out of it.
+I set
+\[X'_0 = X_0 \cup \{\bu\}\]
+\[X'_{i+1} = X_{i+1} \cup \{\bu x \st x \in X_i\}\]
+and I extend $\partial$ by saying
+\[ \partial(\bu x) = x -  \bu(\partial x)  \]
+when $x \in X_i$, where conventionally $\bu(\partial x) = \bu$ when $x \in X_0$.
+
+What a nice relationship! It's like creation/annihilation operators anticommutator, more or less saying
+\[ \{\partial, \bu\} = 1\]
 \subsection{The $n$-Simplex}
 
 The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
@@ -137,23 +153,23 @@ D_{2m} = 0  \Delta^m_{1,n}
  C_{2m} =    \Delta^m_{0,n-1} n
 \]
 \[
-D_{2m+1} =   \Delta^{m+1}_{0,n}
+D_{2m+1} =  0  \Delta^m_{1,n-1} n
 \qquad
- C_{2m+1} =   0  \Delta^m_{1,n-1} n
+ C_{2m+1} =    \Delta^{m+1}_{0,n}
 \]
 
 For example,
 \[
 \begin{tabular}{ll}
 $D_0 = 0$&$ C_0 = n$ \\
-$D_1 = 01+ 12+ \cdots+ (n-1)n $&$ C_1 = 0n$ \\
+$D_1 = 0n$&$ C_1 =01+ 12+ \cdots+ (n-1)n  $ \\
 $D_2 = 012+ 023+ \cdots+ 0(n-1)n $&$ C_2 = 01n+\cdots+(n-2)(n-1)n $ \\
 \end{tabular}
 \]
-\[D_3 = (0123 + 0134 + \cdots+ 01(n-1)n) + (1234+ 1245 + \cdots+ 12(n-1)n)  \]
+\[D_3 = 012n + 023n + \cdots 0(n-2)(n-1)n \]
+\[C_3 = (0123 + 0134 + \cdots+ 01(n-1)n) + (1234+ 1245 + \cdots+ 12(n-1)n)  \]
 \[ + \cdots + ((n-4)(n-3)(n-2)(n-1) + (n-4)(n-3)(n-1)n)\]
 \[ + (n-3)(n-2)(n-1)n \]
-\[C_3 = 012n + 023n + \cdots 0(n-2)(n-1)n \]
 
 Note that $ C_n = D_n = [n]$.
 
