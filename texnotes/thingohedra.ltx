@@ -108,6 +108,18 @@ a boundary operator $\partial : X_{i+1} \to X_i$. It also comes equipped with a 
 of the domain and codomain at every dimension, $C_i, D_i \in X_i$. We must have that all the coefficients
 of $C_i$ and $D_i$ are all in $\{0,1\}$ and $\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$.
 
+\subsection{The suspension of a polytope}
+Suppose I have a polytope $X_i, C_i, D_i$. I'm going to build $X'_i, C'_i, D'_i$ out of it.
+I set
+\[X'_0 = X_0 \cup \{\bu\}\]
+\[X'_{i+1} = X_{i+1} \cup \{\bu x \st x \in X_i\}\]
+and I extend $\partial$ by saying
+\[ \partial(\bu x) = x -  \bu(\partial x)  \]
+when $x \in X_i$, where conventionally $\bu(\partial x) = \bu$ when $x \in X_0$.
+
+What a nice relationship! It's like creation/annihilation operators anticommutator, more or less saying
+\[ \{\partial, \bu\} = 1\]
+
 \subsection{Ordered Product}
 
 Suppose I have polytopes $P, Q$. I want to form $P \land Q$. I set
@@ -138,6 +150,70 @@ So $\partial (\star, x) = x$ as we'd expect (partly because $\partial \star = 0$
 subsequently $\partial (\bu x) = x - \bu \partial x$.
 
 
+\subsection{Domain and Codomain in the Monoidal Product}
+Suppose we have $X_i$ and $Y_i$, equipped with $D^X_i, C^X_i$ and $D^Y_i, C^Y_i$
+such that $\partial(C^X_{i+1}) = C^X_i - D^X_i$ and $C^X_m = D^X_m = x$ and $C^Y_n = D^Y_n = y$.
+
+So we take $(x,y)$ as the maximal element of $X \otimes Y$. Let's assume for the moment that $m$ is even.
+The boundary of $(x,y)$ is
+
+\[\partial (x , y) = (\partial x , y) + (x , \partial y) \]
+\[ = (C^X_{m-1} - D^X_{m-1} , y) + (x , C^Y_{n-1} - D^Y_{n-1}) \]
+\[ = (C^X_{m-1}, y) - (D^X_{m-1} , y) + (x , C^Y_{n-1}) - (x, D^Y_{n-1}) \]
+so we set
+\[ C_{n-1} = (x , C^Y_{n-1}) + (C^X_{m-1}, y) \]
+\[ D_{n-1} = (x , D^Y_{n-1}) + (D^X_{m-1}, y) \]
+Now we iterate. What is the boundary of $C_{n-1}$? It's
+\[ \partial (x , C^Y_{n-1}) + \partial (C^X_{m-1}, y) \]
+\[=  (\partial x , C^Y_{n-1}) + ( x , \partial C^Y_{n-1}) +  (\partial C^X_{m-1}, y) - ( C^X_{m-1}, \partial y) \]
+\[  =(C^X_{m-1} - D^X_{m-1} , C^Y_{n-1}) + ( x , C^Y_{n-2} - D^Y_{n-2}) +  (C^X_{m-2} - D^X_{m-2}, y) - ( C^X_{m-1}, C^Y_{n-1} - D^Y_{n-1}) \]
+\[ = (C^X_{m-1}, C^Y_{n-1}) - (D^X_{m-1} , C^Y_{n-1}) + ( x , C^Y_{n-2}) - ( x , D^Y_{n-2}) +\]
+\[  (C^X_{m-2},y) - (D^X_{m-2}, y) + ( C^X_{m-1}, D^Y_{n-1}) - (C^X_{m-1}, C^Y_{n-1}) \]
+can abbreviate this as
+\[[C1,C1] - [D1,C1] + [0,C2] - [0,D2] + [C2,0] - [D2,0] + [C1,D1] - [C1,C1]\]
+and we wind up with
+\[C_{n-1} = [0,C1] + [C1,0]  \]
+\[D_{n-1} = [0,D1] + [D1,0]  \]
+\[C_{n-2} = [0,C2] + [C1,D1] + [C2,0]  \]
+\[D_{n-2} = [0,D2] + [D1,C1] +[D2,0]  \]
+In general I think I have
+\[ \partial[i,j] = [\partial i, j] + (-1)^i[i,\partial j]\]
+\[ = [C(i+1) - D(i+1), j] + (-1)^i[i, C(j+1) - D(j+1)]\]
+\[ = [C(i+1),j] - [D(i+1),j] + (-1)^i([i, C(j+1)] - [i,D(j+1)])\]
+Ok, so let's try to proceed. $\partial_{n-3}[0,0]  \cdots$
+\[ = \partial([0,C2] + [C1,D1] + [C2,0])\]
+\[ = \partial[0,C2] + \partial [C1,D1] +\partial [C2,0]\]
+\[ =( [C1,C2] - [D1,C2] + [0, C3] - [0,D3]\]
+\[ + [C2,D1] - [D2,D1] - [C1, C2] + [C1,D2]\]
+\[ + [C3,0] - [D3,0] + [C2, C1] - [C2,D1])\]
+\[ =( + [0, C3]  + [C1,D2] + [C2, C1] + [C3,0]  \]
+\[  - [0,D3]- [D1,C2] - [D2,D1]  - [D3,0] )\]
+So:
+\[C_{n-3} = [C0,C3] + [C1,D2] + [C2,C1] + [C3,D0]  \]
+\[D_{n-3} = [C0,D3] + [D1,C2] + [D2,D1] + [D3,C0]  \]
+So it feels like the first coordinate tracks the $\dom$/$\cod$-ness of what we're computing, and the second
+coordinate alternates.
+
+So counting from the bottom I think this looks like:
+\[ C_0 = C_0^X \land C_0^Y \]
+\[ D_0 = D_0^X \land D_0^Y \]
+\[ C_1 = C_0^X \land C_1^Y + C_1^X \land D_0^Y \]
+\[ D_1 = D_0^X \land D_1^Y + D_1^X \land C_0^Y \]
+\[ C_2 = C_0^X \land C_2^Y + C_1^X \land D_1^Y + C_2^X \land C_0^Y\]
+\[ D_2 = D_0^X \land D_2^Y + D_1^X \land C_1^Y + D_2^X \land D_0^Y \]
+So suppose we have $X_n^s$, which means domain if $s = -1$ and codomain if $s = 1$.
+Also $Y_n^s$. And we want to compute $(X \otimes Y)_n^s$. I claim it's
+\[ (X \otimes Y)_n^s = \sum_{i + j = n} X_i^s \land Y_j^{(-1)^is}\]
+Ok, let's try to take the boundary of this. It's
+\[ \partial (X \otimes Y)_n^s = \sum_{i + j = n} \partial (X_i^s \land Y_j^{(-1)^is})\]
+\[  = \sum_{i + j = n}  (\partial X_i^s \land Y_j^{(-1)^is}) + (-1)^i( X_i^s \land \partial Y_j^{(-1)^is})\]
+\[  = \sum_{i + j = n}  ( X_{i-1}^{1} - X_{i-1}^{-1}) \land Y_j^{(-1)^is} + (-1)^i( X_i^s \land \partial Y_j^{(-1)^is})\]
+\[  = \sum_{i + j = n}  ( X_{i-1}^{1} - X_{i-1}^{-1}) \land Y_j^{(-1)^is} + (-1)^i( X_i^s \land ( Y_j^{1} - Y_j^{-1}))\]
+
+\[  = \sum_{i + j = n}   X_{i-1}^{1} \land Y_j^{(-1)^is} - X_{i-1}^{-1} \land Y_j^{(-1)^is} + \]
+\[ (-1)^i( X_i^s \land  Y_j^{1} - X_i^s \land Y_j^{-1})\]
+\textcolor{red}{can't fill this gap}
+\[  = \left(\sum_{i + j = n-1} X_i^{1} \land Y_j^{(-1)^i}\right) - \left(\sum_{i + j = n-1} X_i^{-1} \land Y_j^{(-1)^{i+1}}\right)\]
 \subsection{The $n$-Simplex}
 
 The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
