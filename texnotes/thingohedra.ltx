@@ -210,10 +210,26 @@ Ok, let's try to take the boundary of this. It's
 \[  = \sum_{i + j = n}  ( X_{i-1}^{1} - X_{i-1}^{-1}) \land Y_j^{(-1)^is} + (-1)^i( X_i^s \land \partial Y_j^{(-1)^is})\]
 \[  = \sum_{i + j = n}  ( X_{i-1}^{1} - X_{i-1}^{-1}) \land Y_j^{(-1)^is} + (-1)^i( X_i^s \land ( Y_j^{1} - Y_j^{-1}))\]
 
-\[  = \sum_{i + j = n}   X_{i-1}^{1} \land Y_j^{(-1)^is} - X_{i-1}^{-1} \land Y_j^{(-1)^is} + \]
-\[ (-1)^i( X_i^s \land  Y_j^{1} - X_i^s \land Y_j^{-1})\]
-\textcolor{red}{can't fill this gap}
+\[  = \sum_{i + j = n}   X_{i-1}^{1} \land Y_j^{(-1)^is} - X_{i-1}^{-1} \land Y_j^{(-1)^is} +
+ (-1)^i( X_i^s \land  Y_{j-1}^{1} - X_i^s \land Y_{j-1}^{-1})\]
+Let's try to break symmetry by just choosing $s = 1$. We have
+\[  = \sum_{i + j = n}   C_{i-1} Y_j^{(-1)^i} - D_{i-1}  Y_j^{(-1)^i} +
+ (-1)^i( C_i  C_{j-1} - C_i  D_{j-1})\]
+
+\[  = \sum_{i + j = n}   C_{i-1} Y_j^{(-1)^i} - D_{i-1}  Y_j^{(-1)^i} +
+\sum_{i + j = n} (-1)^i( C_i  C_{j-1} - C_i  D_{j-1})\]
+
+
+\[  = \sum_{2k + j = n}   C_{2k-1} C_j - D_{i-1}  C_j +
+\sum_{2k + j = n}   C_{2k-1}  C_{j} - C_{2k-1}  D_{j}\]
+\[  + \sum_{2k + 1 + j = n}   C_{2k} D_j - D_{2k}  D_j +
+\sum_{2k + 1 + j = n} - C_{2k+1}  C_{j-1} + C_{2k+1}  D_{j-1}\]
+
+\[  = \sum_{2k + j = n}   C_{2k-1} C_j - D_{i-1}  C_j   + \sum_{2k + 1 + j = n}   C_{2k} D_j - D_{2k}  D_j \]
+
 \[  = \left(\sum_{i + j = n-1} X_i^{1} \land Y_j^{(-1)^i}\right) - \left(\sum_{i + j = n-1} X_i^{-1} \land Y_j^{(-1)^{i+1}}\right)\]
+As required, more or less, though I may have made some indexing mistakes. But the main thing is to split up the summation
+into even and odd $i$, I think.
 \subsection{The $n$-Simplex}
 
 The description of the oriented simplex I can look up in Street's ``The Algebra of Oriented Simplexes''.
