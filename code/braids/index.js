@@ -1,3 +1,17 @@
+const canvas = require('canvas');
+const fs = require('fs');
+
+async function getPng(c) {
+  return new Promise((res, rej) => {
+    const stream = c.createPNGStream();
+    const bufs = [];
+    stream.on('data', d => bufs.push(d));
+    stream.on('end', () => {
+      res(Buffer.concat(bufs));
+    });
+  });
+}
+
 function perms(n) {
   if (n == 1) {
 	 return [[0]];
@@ -49,3 +63,16 @@ perms(2 * K).forEach(p => {
 	 console.log(info + '  ' + p.join(''));
   }
 });
+
+const WIDTH = 500;
+const HEIGHT = 500;
+
+async function go() {
+  const c = canvas.createCanvas(WIDTH, HEIGHT);
+  const d = c.getContext('2d');
+  d.fillStyle = 'white';
+  d.fillRect(0, 0, WIDTH, HEIGHT);
+  fs.writeFileSync(`/tmp/a.png`, await getPng(c));
+}
+
+go();
