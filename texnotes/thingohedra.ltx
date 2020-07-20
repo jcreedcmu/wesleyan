@@ -437,5 +437,15 @@ $\partial C_{i+1} = \partial D_{i+1} = C_i - D_i$
 \cqed
 \end{proof}
 
+\section{Characterizing a Sphere}
+
+Here is a possible definition of what a sphere is that is potentially compatible with the undecidability of simplicial spheres:
+
+An $m$-sphere is anything you can obtain by taking an $n$-cube (for $n \ge m$) truncating it up to dimension $m$, and
+then identifying some of its cells with one another other, in a way that is compatible with taking boundaries.
+We can see that this is correct for $m=1$. For in that case a 1-sphere is just two paths of whatever length we want.
+So we take $n$ to be the length of the longer, and collapse some cells so make the shorter path shorter if we need to.
+
+It is less obvious this is sufficiently `complete' for $m=2$ if we want high-in-degree or out-degree 2-cells.
 
 \end{document}
