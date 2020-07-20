@@ -34,6 +34,18 @@ function perms(n: number): number[][] {
   }
 }
 
+function totalPerms(n: number): number[][] {
+  return perms(n - 1).map(p => {
+    const q = [0].concat(p.map(x => x + 1));
+    const r: number[] = [];
+    for (let ix = 0; ix < q.length - 1; ix++) {
+      r[q[ix]] = q[ix + 1];
+    }
+    r[q[q.length - 1]] = 0;
+    return r;
+  });
+}
+
 function range(n: number): number[] {
   return Array.from({ length: n }, (x, i) => i);
 }
@@ -57,11 +69,13 @@ function lineTo(d: Ctx, p: Point): void {
   d.lineTo(p.x, p.y);
 }
 
-const K = 4;
+
 const RADIUS = 2;
 const GRID = 60;
 const SPAN = 20;
 const COLS = 16;
+const ARROW_OFF = 3;
+const ARROW = 1;
 import { Point } from './types';
 import { vplus, vscale, vminus, vnorm } from './util';
 
@@ -98,9 +112,9 @@ function renderp(d: Ctx, perm: number[], at: Point, other: Other) {
       d.translate(pts[perm[i]].x, pts[perm[i]].y);
       d.rotate(Math.atan2(diff.y, diff.x) + 6 * Math.PI / 4);
       d.beginPath();
-      d.moveTo(-2, 6);
-      d.lineTo(0, 3);
-      d.lineTo(2, 6);
+      d.moveTo(-2 * ARROW, 6 * ARROW);
+      d.lineTo(0, ARROW_OFF * ARROW);
+      d.lineTo(2 * ARROW, 6 * ARROW);
       d.stroke();
       d.restore();
     }
@@ -119,7 +133,7 @@ function renderp(d: Ctx, perm: number[], at: Point, other: Other) {
 
 function render(d: Ctx) {
   let ix = 0;
-  perms(2 * K).forEach(p => {
+  totalPerms(2 * K).forEach(p => {
     const r = range(3 * K);
     const lt = apply(apply(apply(r, p, 0), p, K), p, 0).join(',');
     const rt = apply(apply(apply(r, p, K), p, 0), p, K).join(',');
@@ -134,12 +148,19 @@ function render(d: Ctx) {
 
     if (reid3) {
       //	 console.log(info);
-      renderp(d, p, vscale({ x: 1 + ix % COLS, y: 1 + Math.floor(ix / COLS) }, GRID), { selfInverse });
+      const flip = [5, 6, 7, 8, 9, 0, 1, 2, 3, 4];
+      // const flip = [4, 5, 6, 7, 0, 1, 2, 3];
+      //    const rendered = p;
+      //		const rendered = apply(flip, p, 0);
+      const rendered = apply(flip, p, 0);
+      renderp(d, rendered, vscale({ x: 1 + ix % COLS, y: 1 + Math.floor(ix / COLS) }, GRID), { selfInverse });
       ix++;
       console.log(info + '  ' + p.join(''));
     }
   });
 }
+
+const K = 5;
 const WIDTH = 1050;
 const HEIGHT = 1000;
 
