@@ -50,7 +50,12 @@ e1 = [0, 0,  0, 1,  0,  1,  0,  0,  0,  1,  0, 1, -1,  0, -1,  0,  0, 0, -1,  0,
 n2 = [0, 1,  0, 0, -1,  0, -1,  0,  1,  0,  0, 0,  0,  0,  0, -1,  0, 1,  0,  1,  0,  0, -1, 0]
 e2 = [0, 1,  0, 0,  1,  0, -1,  0, -1,  0,  0, 0,  0,  0,  0,  1,  0, 1,  0, -1,  0,  0, -1, 0]
 
+# sqrt(3) eigenvalue
 t0 = [0, 1, -2, -1.732, 1.732, 1, 1, 0, 1.732, 1, -2, -1.732, -1.732, -2, 1, 1.732, 0, 1, 1, 1.732, -1.732, -2, 1, 0]
+
+# 1 + sqrt(2) eigenvalue
+u0 = [0, 0, 1, 1.707, 1, 1.707, -1, -1, -1.414, -1.707, -1.414, -1.707, 0.707, 1.414, -0.707, -1, 1, 0, 0.707, 1.414, -0.707, -1, 1, 0]
+
 # These are all zero; ni are eigenvalue -1 and ei are eigenvalue 1.
 print(add(dot(mat, n0), n0))
 print(add(dot(mat, n1), n1))
@@ -63,5 +68,5 @@ print (t0)
 print (dot(mat, t0))
 
 for i in range(24):
-  if t0[i] != 0:
-    print (f"{t0[i]} * {[Permutation.from_lehmer(i, 4)(j) for j in [1,2,3,4]]}")
+  if u0[i] != 0:
+    print (f"{u0[i]} * {[Permutation.from_lehmer(i, 4)(j) for j in [1,2,3,4]]}")
