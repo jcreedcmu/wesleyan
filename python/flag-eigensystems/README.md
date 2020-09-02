@@ -131,4 +131,30 @@ eigenbasis
 (plus negatives of all the nonzero values)
 = 67 distinct eigenvalues
 
-1 2 4 10 25 67
+5-simplex can't compute the whole spectrum yet, but the top of it
+looks like
+|--------------+------------|
+| multiplicity | eigenvalue |
+|--------------+------------|
+|            1 |    6.00000 |
+|            6 |    5.80193 |
+|           14 |    5.57954 |
+|           14 |    5.32375 |
+|            6 |    5.24697 |
+|           14 |    5.09182 |
+|           15 |    5.04891 |
+|           14 |    4.92432 |
+|          ... |        ... |
+|--------------+------------|
+
+Multiplicity of nth biggest eigenvalue goes
+1 1 1 1 1  1
+  2 3 4 5  6
+    2 5 9  14
+    3 4 5  14
+    3 5 5  6
+      6 9  14
+      5 10 15
+
+Number of distinct eigenvalues goes
+1 2 4 10 25 67 ???
