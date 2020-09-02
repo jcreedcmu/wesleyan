@@ -1,4 +1,4 @@
-from numpy import linalg, dot, transpose
+from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
 
 # a flag is a permutation of 0, 1, 2, 3
@@ -42,3 +42,26 @@ for i in range(24):
 for i in range(24):
     print(f"eigenvalue {x[i]}")
     print(f"eigenvector {y[i] / y[i][1]}")
+
+n0 = [1, 0, -1, 0,  0,  0,  0, -1,  0,  0,  1, 0,  0,  1,  0,  0, -1, 0,  0,  0,  0, -1,  0, 1]
+e0 = [1, 0,  1, 0,  0,  0,  0, -1,  0,  0, -1, 0,  0, -1,  0,  0, -1, 0,  0,  0,  0,  1,  0, 1]
+n1 = [0, 0,  0, 1,  0, -1,  0,  0,  0, -1,  0, 1, -1,  0,  1,  0,  0, 0,  1,  0, -1,  0,  0, 0]
+e1 = [0, 0,  0, 1,  0,  1,  0,  0,  0,  1,  0, 1, -1,  0, -1,  0,  0, 0, -1,  0, -1,  0,  0, 0]
+n2 = [0, 1,  0, 0, -1,  0, -1,  0,  1,  0,  0, 0,  0,  0,  0, -1,  0, 1,  0,  1,  0,  0, -1, 0]
+e2 = [0, 1,  0, 0,  1,  0, -1,  0, -1,  0,  0, 0,  0,  0,  0,  1,  0, 1,  0, -1,  0,  0, -1, 0]
+
+t0 = [0, 1, -2, -1.732, 1.732, 1, 1, 0, 1.732, 1, -2, -1.732, -1.732, -2, 1, 1.732, 0, 1, 1, 1.732, -1.732, -2, 1, 0]
+# These are all zero; ni are eigenvalue -1 and ei are eigenvalue 1.
+print(add(dot(mat, n0), n0))
+print(add(dot(mat, n1), n1))
+print(add(dot(mat, n2), n2))
+print(subtract(dot(mat, e0), e0))
+print(subtract(dot(mat, e1), e1))
+print(subtract(dot(mat, e2), e2))
+print ("---")
+print (t0)
+print (dot(mat, t0))
+
+for i in range(24):
+  if t0[i] != 0:
+    print (f"{t0[i]} * {[Permutation.from_lehmer(i, 4)(j) for j in [1,2,3,4]]}")
