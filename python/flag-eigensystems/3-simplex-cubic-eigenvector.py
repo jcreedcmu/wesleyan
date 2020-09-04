@@ -79,6 +79,12 @@ vecs = [[ i/vecs[0][6] for i in vecs[0] ]]
 # round off
 vecs = [[ round(x, ROUND) for x in vec ] for vec in vecs]
 
+# for vec in vecs:
+#     print(vec)
+#     print("")
+
+print(vecs[0])
+
 s = set(vecs[0])
 
 print(s)
@@ -163,3 +169,5 @@ print(s)
 # 0.083322863
 # 0.4839946569
 # 0.0216099012
+
+# on the other hand I see that 0.8341626054 is 3.0 * 0.2780542018
