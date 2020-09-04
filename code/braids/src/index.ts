@@ -71,11 +71,11 @@ function lineTo(d: Ctx, p: Point): void {
 
 
 const RADIUS = 2;
-const GRID = 60;
-const SPAN = 20;
-const COLS = 16;
-const ARROW_OFF = 3;
-const ARROW = 1;
+const GRID = 70;
+const SPAN = 30;
+const COLS = 15;
+const ARROW_OFF = 4;
+const ARROW = 1.2;
 import { Point } from './types';
 import { vplus, vscale, vminus, vnorm } from './util';
 
@@ -148,8 +148,8 @@ function render(d: Ctx) {
 
     if (reid3) {
       //	 console.log(info);
-      const flip = [5, 6, 7, 8, 9, 0, 1, 2, 3, 4];
-      // const flip = [4, 5, 6, 7, 0, 1, 2, 3];
+      //     const flip = [5, 6, 7, 8, 9, 0, 1, 2, 3, 4];
+      const flip = [4, 5, 6, 7, 0, 1, 2, 3];
       //    const rendered = p;
       //		const rendered = apply(flip, p, 0);
       const rendered = apply(flip, p, 0);
@@ -160,8 +160,8 @@ function render(d: Ctx) {
   });
 }
 
-const K = 5;
-const WIDTH = 1050;
+const K = 4;
+const WIDTH = 1150;
 const HEIGHT = 1000;
 
 async function go() {
