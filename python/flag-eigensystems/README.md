@@ -247,3 +247,19 @@ Multiplicity of nth biggest eigenvalue goes
 
 Number of distinct eigenvalues goes
 1 2 4 10 25 67 ???
+
+---
+
+Characteristic polynomial of the 1-simplex with σ0=a,σ1=b
+
+(x - a - b)
+(x + a + b)
+(x^2 - (a^2 + b^2 - ab))^2
+
+Characteristic polynomial of the 2-simplex:
+
+includes at least
+
+(x - a - b - c)
+(x + a + b + c)
+(x^2 - (a^2 + b^2 + c^2 - ab - cb + 2ac))^2

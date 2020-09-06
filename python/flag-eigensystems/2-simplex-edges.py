@@ -29,20 +29,24 @@ def σ1(x):
 def σ2(x):
     return comp(decomp(x) * Permutation(1, 2, 4, 3))
 
-def entry(i, j):
+def entry(i, j, c1, c2):
   if i in [σ0(j)]:
     return 1
   if i in [σ1(j)]:
-    return 1
+    return c1
   if i in [σ2(j)]:
-    return 8
+    return c2
   else:
     return 0
 
-roots = []
 
-def go():
-  mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
+def p2s(p):
+    c = p.coeffs
+    return " + ".join([f"{round(x,3)} * x^{{{len(c)-ix-1}}}" for (ix,x) in enumerate(c)])
+
+def go(c1, c2):
+  roots = []
+  mat = [[entry(i,j,c1,c2) for i in range(nfac)] for j in range(nfac) ]
   (x,y) = (linalg.eigh(mat))
 
   count = Counter([ round(v, 9) for v in x ])
@@ -51,14 +55,21 @@ def go():
         print(f"eig: {key}")
         roots.append(key)
 
-go()
+  if len(roots) == 6:
+      print( p2s( numpy.poly1d([1, -roots[0]]) * numpy.poly1d([1, -roots[1]]) * numpy.poly1d([1, +roots[2]]) ))
 
-print("constant term:")
-print(round(reduce(lambda x,y:x*y, [root for root in roots if root > 0]), 3))
-print("---")
+for c in range(1,9):
+    go(1, c)
 
-print("linear term:")
-print(round(roots[0]*roots[1] - roots[1]*roots[2] - roots[0]*roots[2], 3))
-print("---")
-if len(roots) == 6:
-    print(reduce(lambda x,y:x*y, [numpy.poly1d([1, -root]) for root in roots]))
+# print("constant term:")
+# print(round(reduce(lambda x,y:x*y, [root for root in roots if root > 0]), 3))
+# print("---")
+
+# print("linear term:")
+# print(round(roots[0]*roots[1] - roots[1]*roots[2] - roots[0]*roots[2], 3))
+# print("---")
+
+# print("quad term:")
+# print(roots[0],roots[1],roots[2])
+# print(round(roots[0] + roots[1] - roots[2], 5))
+# print("---")
