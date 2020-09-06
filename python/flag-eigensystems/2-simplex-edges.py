@@ -27,25 +27,23 @@ def σ1(x):
 def σ2(x):
     return comp(decomp(x) * Permutation(1, 2, 4, 3))
 
-def entry(i, j, c1, c2):
+def entry(i, j):
   if i in [σ0(j)]:
     return 1
   if i in [σ1(j)]:
-    return c1
+    return 1
   if i in [σ2(j)]:
-    return c2
+    return 3
   else:
     return 0
 
-def go(c1, c2):
-  mat = [[entry(i,j,c1,c2) for i in range(nfac)] for j in range(nfac) ]
+def go():
+  mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
   (x,y) = (linalg.eigh(mat))
-  print(c1, c2)
+
   count = Counter([ round(v, 9) for v in x ])
   for key in count.keys():
-    if (count[key] == 2 and key > 0):
-        print(f"eig: {round(key**2, 4)}")
+    if (count[key] == 3 and key > 0):
+        print(f"eig: {key}")
 
-for c1 in range(1,6):
-  for c2 in range(0,5):
-    go(c1, c1+c2)
+go()
