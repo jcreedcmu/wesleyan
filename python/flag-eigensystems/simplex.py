@@ -1,5 +1,9 @@
 from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
+import math
+
+n = 4
+nfac = math.factorial(n)
 
 # a flag is a permutation of 0, 1, 2, 3
 
@@ -27,7 +31,7 @@ def entry(i, j):
       return 1
   else:
       return 0
-mat = [[entry(i,j) for i in range(24)] for j in range(24) ]
+mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
 
 for row in mat:
     print (row)
@@ -36,10 +40,10 @@ for row in mat:
 
 y = transpose(y)
 
-for i in range(24):
+for i in range(nfac):
     print(f"eigenvalue {x[i]}")
 
-for i in range(24):
+for i in range(nfac):
     print(f"eigenvalue {x[i]}")
     print(f"eigenvector {y[i] / y[i][1]}")
 
@@ -67,6 +71,6 @@ print ("---")
 print (t0)
 print (dot(mat, t0))
 
-for i in range(24):
+for i in range(nfac):
   if u0[i] != 0:
     print (f"{u0[i]} * {[Permutation.from_lehmer(i, 4)(j) for j in [1,2,3,4]]}")

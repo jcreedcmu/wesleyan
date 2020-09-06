@@ -74,3 +74,8 @@ factors as
 which is the same thing as
 
 (x - √(s^2-t*s+t^2))^2 * (x + √(s^2-t*s+t^2))^2 * (x-s-t) * (x+s+t)
+
+Q: Can I find out the characteristic equation in terms of x, s, t, u
+for the 2-simplex?
+A: sage chokes on computing the determinant even numerically of
+x=0, s=t=u=1. Maybe have to reason about cycle decompositions.
