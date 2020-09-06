@@ -47,3 +47,30 @@ bacher paper
 "Valeur propre minimale du laplacien de Coxeter pour le group symétrique"
 Bacher
 https://www.sciencedirect.com/science/article/pii/S0021869384711951
+
+=== 2020.09.06
+
+Q: What happens if I take the characteristic polynomial of the 1-simplex,
+hold the coefficient of σ0 constant at 1, and let σ1 vary?
+A:
+If x is the coefficient of σ1, and y is the eigenvalue I'm looking for, I get
+
+y^6 - 3y^4 (x^2+1) + 3y^2(x^4+x^2+1) - (x^3+1)^2
+
+which factors as
+
+(y^2-(x^2-x+1))^2(y-1-x)(y+1+x)
+
+Q: What's the general case?
+A:
+I can confirm in sage that
+
+x^6 - 3*x^4*(s^2 + t^2) + 3*x^2*(s^4 + s^2*t^2 + t^4) - (s^3 + t^3)^2
+
+factors as
+
+(x^2-(s^2-t*s+t^2))^2 * (x-s-t) * (x+s+t)
+
+which is the same thing as
+
+(x - √(s^2-t*s+t^2))^2 * (x + √(s^2-t*s+t^2))^2 * (x-s-t) * (x+s+t)
