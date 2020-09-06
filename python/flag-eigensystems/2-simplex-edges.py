@@ -1,3 +1,5 @@
+import numpy
+from functools import reduce
 from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
 import math
@@ -33,9 +35,11 @@ def entry(i, j):
   if i in [σ1(j)]:
     return 1
   if i in [σ2(j)]:
-    return 3
+    return 8
   else:
     return 0
+
+roots = []
 
 def go():
   mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
@@ -43,7 +47,18 @@ def go():
 
   count = Counter([ round(v, 9) for v in x ])
   for key in count.keys():
-    if (count[key] == 3 and key > 0):
+    if (count[key] == 3 ):
         print(f"eig: {key}")
+        roots.append(key)
 
 go()
+
+print("constant term:")
+print(round(reduce(lambda x,y:x*y, [root for root in roots if root > 0]), 3))
+print("---")
+
+print("linear term:")
+print(round(roots[0]*roots[1] - roots[1]*roots[2] - roots[0]*roots[2], 3))
+print("---")
+if len(roots) == 6:
+    print(reduce(lambda x,y:x*y, [numpy.poly1d([1, -root]) for root in roots]))
