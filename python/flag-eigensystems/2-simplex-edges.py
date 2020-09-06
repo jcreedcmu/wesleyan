@@ -1,3 +1,4 @@
+import re
 import numpy
 from functools import reduce
 from numpy import linalg, dot, transpose, add, subtract
@@ -42,7 +43,7 @@ def entry(i, j, c1, c2):
 
 def p2s(p):
     c = p.coeffs
-    return " + ".join([f"{round(x,3)} * x^{{{len(c)-ix-1}}}" for (ix,x) in enumerate(c)])
+    return " + ".join([f"{round(x,3)} * x^{len(c)-ix-1}" for (ix,x) in enumerate(c)])
 
 def go(c1, c2):
   roots = []
@@ -52,14 +53,22 @@ def go(c1, c2):
   count = Counter([ round(v, 9) for v in x ])
   for key in count.keys():
     if (count[key] == 3 ):
-        print(f"eig: {key}")
+        # print(f"eig: {key}")
         roots.append(key)
 
   if len(roots) == 6:
-      print( p2s( numpy.poly1d([1, -roots[0]]) * numpy.poly1d([1, -roots[1]]) * numpy.poly1d([1, +roots[2]]) ))
+      s = ' ' + p2s( numpy.poly1d([1, -roots[0]]) * numpy.poly1d([1, -roots[1]]) * numpy.poly1d([1, +roots[2]]) )
+      s = re.sub(r'\+ -', '- ',  s)
+      s = re.sub(r' \* x\^0', '',  s)
+      s = re.sub(r'x\^1', 'x',  s)
+      s = re.sub(r'\.0', '',  s)
+      s = re.sub(r' 1 \* ', ' ',  s)
+      s = re.sub(r' \* ', '',  s)
+      print(f"1,{c1},{c2} :{s}" )
+      print([c1+c2+1, c2**2 - (c1 + 2) * c2 + (c1**2 - c1 + 1), c2**3 - c2**2 - c2 + c1**3 + 1])
 
-for c in range(1,9):
-    go(1, c)
+for c in range(3,11):
+    go(9, c)
 
 # print("constant term:")
 # print(round(reduce(lambda x,y:x*y, [root for root in roots if root > 0]), 3))
