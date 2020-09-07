@@ -39,3 +39,10 @@
 |--------------+-------------|
 (plus negatives of all the nonzero values)
 = 67 distinct eigenvalues
+
+
+
+two distinct ways of capturing half of the 18 multiplicity-9 roots with integer
+coefficients are:
+x^9 + 15 x^8 + 84 x^7 + 200 x^6 + 93 x^5 - 421 x^4 - 682 x^3 - 262 x^2 + 68 x + 40
+x^9 + 5 x^8 - 16 x^7 - 96 x^6 + 13 x^5 + 369 x^4 + 106 x^3 - 330 x^2 - 228 x - 40
