@@ -1,13 +1,12 @@
 from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
-
-# a flag is a permutation of 0, 1, 2, 3, 4
-
-# σ0 swaps the first two, σ1 swaps the second 2, σ2 swaps the second-last 2, σ3 swaps the last 2
+import math
+from collections import Counter
 
 n = 6
+nfac = math.factorial(n)
 
-# takes number 0..119, returns permutation
+# takes number in range(nfac), returns permutation
 def decomp(x):
     return Permutation.from_lehmer(x, n)
 
@@ -15,39 +14,42 @@ def decomp(x):
 def comp(x):
     return x.lehmer(n)
 
-def σ0(x):
-    return comp(decomp(x) * Permutation(2, 1, 3, 4, 5))
+def pi(m):
+  def entry(i):
+    if i == m+1:
+      return m+2
+    elif i == m+2:
+      return m+1
+    else:
+      return i
+  return Permutation(*[entry(i) for i in range(1,n+1)])
 
-def σ1(x):
-    return comp(decomp(x) * Permutation(1, 3, 2, 4, 5))
+def σ(m):
+    return (lambda x: comp(decomp(x) * pi(m)))
 
-def σ2(x):
-    return comp(decomp(x) * Permutation(1, 2, 4, 3, 5))
-
-def σ3(x):
-    return comp(decomp(x) * Permutation(1, 2, 3, 5, 4))
-
-def σ4(x):
-    return comp(decomp(x) * Permutation(1, 2, 3, 4, 6, 5))
+σs = [σ(m) for m in range(n-1)]
 
 def entry(i, j):
-    if i in [σ0(j), σ1(j), σ2(j), σ3(j), σ4(j)]:
+    if i in [σ(j) for σ in σs]:
         return 1
     else:
         return 0
-
-nfac = 720
-
-print (decomp(0))
 
 mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
 
 # for row in mat:
 #     print (row)
 
-(x,y) = (linalg.eigh(mat))
+(eigval,y) = (linalg.eigh(mat))
 
-y = transpose(y)
+# y = transpose(y)
 
-for i in range(nfac):
-    print(f"eigenvalue {x[i]}")
+eigval = [round(x, 9) for x in eigval]
+count = Counter(eigval)
+
+print ("""
+|--------------+------------|
+| multiplicity | eigenvalue |
+|--------------+------------|""")
+for i in reversed([i for i in count.keys()]):
+    print(f"| {count[i]} | {i} |")
