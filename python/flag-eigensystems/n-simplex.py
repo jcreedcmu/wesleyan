@@ -7,8 +7,8 @@ import pickle
 import os
 import time
 
-
-n = 5
+# this number below is actually n+2 to get the n-simplex
+n = 6
 nfac = math.factorial(n)
 
 # takes number in range(nfac), returns permutation
@@ -35,7 +35,8 @@ def σ(m, x):
 σs = [[σ(m, x) for m in range(n-1)] for x in range(nfac)]
 
 def coef(dim):
-  return [1,1,1,1.01][dim]
+#  return 1
+  return [1.001,1.0015,1.0001,1.001,1.0012,1.03][dim]
 
 def mkmat():
   mat = np.zeros([nfac, nfac])
