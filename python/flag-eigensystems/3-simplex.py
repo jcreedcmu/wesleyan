@@ -6,7 +6,7 @@ from collections import Counter
 import pickle
 import os
 
-n = 6
+n = 4
 nfac = math.factorial(n)
 
 # takes number in range(nfac), returns permutation
@@ -65,3 +65,4 @@ print ("""
 |--------------+------------|""")
 for i in reversed([i for i in count.keys()]):
     print(f"| {count[i]} | {i} |")
+print("|--------------+------------|")
