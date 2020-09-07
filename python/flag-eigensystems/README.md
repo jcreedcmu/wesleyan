@@ -258,8 +258,8 @@ Characteristic polynomial of the 1-simplex with σ0=a,σ1=b
 
 Characteristic polynomial of the 2-simplex:
 
-includes at least
-
 (x - a - b - c)
 (x + a + b + c)
 (x^2 - (a^2 + b^2 + c^2 - ab - cb + 2ac))^2
+(x^3 + (a + b + c)x^2 - (a^2 + b^2 + c^2 - ab - bc - 2ac)x - (a^3 + b^3 + c^3 - ac^2 - a^2c))^3
+(x^3 - (a + b + c)x^2 - (a^2 + b^2 + c^2 - ab - bc - 2ac)x + (a^3 + b^3 + c^3 - ac^2 - a^2c))^3
