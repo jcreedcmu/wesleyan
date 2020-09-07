@@ -1,3 +1,4 @@
+import re
 import numpy as np
 from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
@@ -8,7 +9,7 @@ import os
 import time
 
 # analyze the flags of the N-simplex
-N = 5
+N = 3
 
 n = N + 2
 nfac = math.factorial(n)
@@ -36,9 +37,10 @@ def σ(m, x):
 
 σs = [[σ(m, x) for m in range(n-1)] for x in range(nfac)]
 
+ccc = [1,1,1,1]
+
 def coef(dim):
-#  return 1
-  return [0.999, 0.99985, 1.01, 1.05, 1.001,1.0012,1.03][dim]
+  return ccc[dim]
 
 def mkmat():
   mat = np.zeros([nfac, nfac])
@@ -47,29 +49,50 @@ def mkmat():
       mat[row][col] = coef(dim)
   return mat
 
-before = time.perf_counter()
-cacheFile = f"/tmp/matrix-{n}.pickle"
-if os.path.exists(cacheFile) and False:
-    with open(cacheFile, 'rb') as cache:
-        mat = pickle.load(cache)
-else:
-    mat = mkmat()
-    with open(cacheFile, 'wb') as cache:
-        pickle.dump(mat, cache)
-print (f"constructing matrix: {time.perf_counter() - before}")
+def p2s(p):
+    c = p.coeffs
+    s = " " + " + ".join([f"{round(x,3)} * x^{len(c)-ix-1}" for (ix,x) in enumerate(c) if round(x,5) != 0])
+    s = re.sub(r'\+ -', '- ',  s)
+    s = re.sub(r' \* x\^0', '',  s)
+    s = re.sub(r'x\^1', 'x',  s)
+    s = re.sub(r'\.0 ', ' ',  s)
+    s = re.sub(r'\.0$', '',  s)
+    s = re.sub(r' 1 \* ', ' ',  s)
+    s = re.sub(r' \* ', '',  s)
+    return s
 
-# for row in mat:
-#     print (row)
+def go():
+  before = time.perf_counter()
+  cacheFile = f"/tmp/matrix-{n}.pickle"
+  if os.path.exists(cacheFile) and False:
+      with open(cacheFile, 'rb') as cache:
+          mat = pickle.load(cache)
+  else:
+      mat = mkmat()
+      with open(cacheFile, 'wb') as cache:
+          pickle.dump(mat, cache)
+  # print (f"constructing matrix: {time.perf_counter() - before}")
 
-before = time.perf_counter()
-(eigval,y) = (linalg.eigh(mat))
-print (f"solving eigensystem: {time.perf_counter() - before}")
+  before = time.perf_counter()
+  (eigval,y) = (linalg.eigh(mat))
+  # print (f"solving eigensystem: {time.perf_counter() - before}")
 
-# y = transpose(y)
+  eigval = [round(x, 11) for x in eigval]
 
-eigval = [round(x, 11) for x in eigval]
-count = Counter(eigval)
+  count = Counter(eigval)
 
+  accum = np.poly1d([1])
+  for i in reversed([i for i in count.keys()]):
+    if (count[i] == 6):
+      accum *= np.poly1d([1,-i])
+  print(p2s(accum))
+
+for d in range(1,30):
+    ccc[3] = d
+    go()
+
+
+exit(0)
 print ("""
 |--------------+------------|
 | multiplicity | eigenvalue |
