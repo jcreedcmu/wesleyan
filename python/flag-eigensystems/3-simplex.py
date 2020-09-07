@@ -1,48 +1,67 @@
+import numpy as np
 from numpy import linalg, dot, transpose, add, subtract
 from permutation import Permutation
+import math
+from collections import Counter
+import pickle
+import os
 
-# a flag is a permutation of 0, 1, 2, 3, 4
+n = 6
+nfac = math.factorial(n)
 
-# σ0 swaps the first two, σ1 swaps the second 2, σ2 swaps the second-last 2, σ3 swaps the last 2
-
-# takes number 0..119, returns permutation
+# takes number in range(nfac), returns permutation
 def decomp(x):
-    return Permutation.from_lehmer(x, 5)
+    return Permutation.from_lehmer(x, n)
 
 # inverse of decomp, takes permutation, returns number
 def comp(x):
-    return x.lehmer(5)
+    return x.lehmer(n)
 
-def σ0(x):
-    return comp(decomp(x) * Permutation(2, 1, 3, 4, 5))
-
-def σ1(x):
-    return comp(decomp(x) * Permutation(1, 3, 2, 4, 5))
-
-def σ2(x):
-    return comp(decomp(x) * Permutation(1, 2, 4, 3, 5))
-
-def σ3(x):
-    return comp(decomp(x) * Permutation(1, 2, 3, 5, 4))
-
-def entry(i, j):
-    if i in [σ0(j), σ1(j), σ2(j), σ3(j)]:
-        return 1
+def pi(m):
+  def entry(i):
+    if i == m+1:
+      return m+2
+    elif i == m+2:
+      return m+1
     else:
-        return 0
+      return i
+  return Permutation(*[entry(i) for i in range(1,n+1)])
 
-nfac = 120
+def σ(m, x):
+    return comp(decomp(x) * pi(m))
 
-print (decomp(0))
+σs = [[σ(m, x) for m in range(n-1)] for x in range(nfac)]
 
-mat = [[entry(i,j) for i in range(nfac)] for j in range(nfac) ]
+def mkmat():
+  mat = np.zeros([nfac, nfac])
+  for (row, vec) in enumerate(σs):
+    for (dim, col) in enumerate(vec):
+      mat[row][col] = 1
+  return mat
+
+cacheFile = f"/tmp/matrix-{n}.pickle"
+if os.path.exists(cacheFile):
+    with open(cacheFile, 'rb') as cache:
+        mat = pickle.load(cache)
+else:
+    mat = mkmat()
+    with open(cacheFile, 'wb') as cache:
+        pickle.dump(mat, cache)
+
 
 # for row in mat:
 #     print (row)
 
-(x,y) = (linalg.eigh(mat))
+(eigval,y) = (linalg.eigh(mat))
 
-y = transpose(y)
+# y = transpose(y)
 
-for i in range(nfac):
-    print(f"eigenvalue {x[i]}")
+eigval = [round(x, 9) for x in eigval]
+count = Counter(eigval)
+
+print ("""
+|--------------+------------|
+| multiplicity | eigenvalue |
+|--------------+------------|""")
+for i in reversed([i for i in count.keys()]):
+    print(f"| {count[i]} | {i} |")
