@@ -7,8 +7,10 @@ import pickle
 import os
 import time
 
-# this number below is actually n+2 to get the n-simplex
-n = 6
+# analyze the flags of the N-simplex
+N = 5
+
+n = N + 2
 nfac = math.factorial(n)
 
 # takes number in range(nfac), returns permutation
@@ -36,7 +38,7 @@ def σ(m, x):
 
 def coef(dim):
 #  return 1
-  return [1.001,1.0015,1.0001,1.001,1.0012,1.03][dim]
+  return [0.999, 0.99985, 1.01, 1.05, 1.001,1.0012,1.03][dim]
 
 def mkmat():
   mat = np.zeros([nfac, nfac])
@@ -75,3 +77,6 @@ print ("""
 for i in reversed([i for i in count.keys()]):
     print(f"| {count[i]} | {i} |")
 print("|--------------+------------|")
+
+keycounts = Counter([count[k] for k in count.keys()])
+print(keycounts)

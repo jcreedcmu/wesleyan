@@ -22,5 +22,7 @@
 Though I think in some sense those 12 copies of 0 are 6 copies of ε
 and 6 copies of -ε. Meaning that
 
+7 = 1 + 2 + 2 + 2
 26 = 6 + 2(5) + 2(4) + 2(1)
 120 = 6² + 2(5²) + 2(4²) + 2(1)
+596 = 6³ + 2(5³) + 2(4³) + 2(1)
