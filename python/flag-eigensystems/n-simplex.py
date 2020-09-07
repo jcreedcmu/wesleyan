@@ -41,7 +41,7 @@ def σ(m, x):
 
 σs = [[σ(m, x) for m in range(n-1)] for x in range(nfac)]
 
-ccc = [1,1,1,1]
+ccc = [1,1,4,1]
 
 def coef(dim):
   return ccc[dim]
@@ -102,7 +102,7 @@ for d in range(2,30):
 for coe in [2,4,6]:
   xs = range(2, 2+DEG+1)
   ys = [ round(polys[x-1].coeffs[coe], 3) for x in xs]
-  print (p2s( lagrange(xs,ys), "d"))
+  print (f"x^{6-coe} ( {p2s( lagrange(xs,ys), 'd')} ) +")
 
 exit(0)
 print ("""
