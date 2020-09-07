@@ -1,6 +1,7 @@
 import re
 import numpy as np
 from numpy import linalg, dot, transpose, add, subtract
+from scipy.interpolate import lagrange
 from permutation import Permutation
 import math
 from collections import Counter
@@ -10,6 +11,9 @@ import time
 
 # analyze the flags of the N-simplex
 N = 3
+
+# degree of polynomial / multiplicity of root
+DEG = 6
 
 n = N + 2
 nfac = math.factorial(n)
@@ -49,7 +53,7 @@ def mkmat():
       mat[row][col] = coef(dim)
   return mat
 
-def p2s(p):
+def p2s(p, v="x"):
     c = p.coeffs
     s = " " + " + ".join([f"{round(x,3)} * x^{len(c)-ix-1}" for (ix,x) in enumerate(c) if round(x,5) != 0])
     s = re.sub(r'\+ -', '- ',  s)
@@ -59,6 +63,8 @@ def p2s(p):
     s = re.sub(r'\.0$', '',  s)
     s = re.sub(r' 1 \* ', ' ',  s)
     s = re.sub(r' \* ', '',  s)
+    s = re.sub(r'-1x', '-x',  s)
+    s = re.sub('x', v, s)
     return s
 
 def go():
@@ -83,14 +89,20 @@ def go():
 
   accum = np.poly1d([1])
   for i in reversed([i for i in count.keys()]):
-    if (count[i] == 6):
+    if (count[i] == DEG):
       accum *= np.poly1d([1,-i])
   print(p2s(accum))
+  return accum
 
-for d in range(1,30):
+polys = []
+for d in range(2,30):
     ccc[3] = d
-    go()
+    polys.append(go())
 
+for coe in [2,4,6]:
+  xs = range(2, 2+DEG+1)
+  ys = [ round(polys[x-1].coeffs[coe], 3) for x in xs]
+  print (p2s( lagrange(xs,ys), "d"))
 
 exit(0)
 print ("""
