@@ -27,4 +27,11 @@ Number of distinct eigenvalues of n-simplex
 0 1 2  3  4  5
 2 4 10 25 67 222
 
----
+Number of distinct eigenvalues of n-simplex
+when I count 0 as two separate eigenvalues:
+
+0 1 2  3  4  5
+2 4 10 26 68 222
+1 2 5  13 34 111
+
+can't find any of these in oeis :(
