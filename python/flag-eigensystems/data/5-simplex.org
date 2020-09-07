@@ -116,3 +116,9 @@
 (plus negatives)
 = 222 distinct eigenvalues
 ~ 30s to compute
+
+But I get some splitting of eigenvalues when I perturb the coefficients slightly:
+
+15 = 1 + 2 + 2 + 2 + 4 + 2 + 2
+232 = 20 + 2(35) + 2(21) + 2(15) + 4(14) + 2(6) + 2(1)
+5040 = 20² + 2(35²) + 2(21²) + 2(15²) + 4(14²) + 2(6²) + 2(1²)

@@ -42,7 +42,7 @@
 
 actually I get 76 distinct eigenvalues if I perturb the coefficients randomly!
 for flip coefficients [1.001,1.0015,1.0001,1.001,1.0012,1.03] I get
-positive eigenvalues
+positive roots
 |  1 |        5.0048 |
 |  5 | 4.73662537647 |
 |  9 |  4.4316180142 |
@@ -82,9 +82,12 @@ positive eigenvalues
 |  5 | 0.12943886992 |
 | 10 | 0.00025777001 |
 
+the 20 and 25 multiplicity nonzero roots break up as 10+10 and
+10+10+5, and the 10-multiplicity 0 root breaks up as 10+10.
 
+11 = 1 + 2 + 2 + 4 + 2
 76 = 16 + 2(10) + 2(9) + 4(5) + 2(1)
-120 = 16² + 2(10²) + 2(9²) + 4(5²) + 2(1²)
+720 = 16² + 2(10²) + 2(9²) + 4(5²) + 2(1²)
 
 
 two distinct ways of capturing half of the 18 multiplicity-9 roots with integer
