@@ -26,3 +26,8 @@ and 6 copies of -ε. Meaning that
 26 = 6 + 2(5) + 2(4) + 2(1)
 120 = 6² + 2(5²) + 2(4²) + 2(1)
 596 = 6³ + 2(5³) + 2(4³) + 2(1)
+
+polynomial of multiplicity-6 roots of
+1,1,1,d is
+
+x^6 - (3d^2 + 2d + 6)x^4 + (3d^4 + 4d^3 + 5d^2 + 2d + 5) + (d^6 + 2d^5 - d^4 - 2d^3 + d^2)
