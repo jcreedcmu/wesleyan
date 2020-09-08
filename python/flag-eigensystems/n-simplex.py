@@ -74,22 +74,25 @@ def getPoly(params, mult, indices=None, debug=False):
     accum *= np.poly1d([1,-eigs[i]])
   return accum
 
-DEG=4
-
 def showPolys(debug=False):
   polys = []
-  for d in range(2,30):
-      poly = getPoly([1,1,1,d], mult=DEG, indices=[0,1,2,4], debug=debug)
-      print(p2s(poly))
-      polys.append(poly)
+  for d in range(1,30):
+      param = [  1.00, 1.000, 0.001, d]
+      DEG = 5
+      indices = [0,1,3,5,7]
+      poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
+      print([d, p2s(poly)])
+      polys.append([d, poly])
 
-  for coe in [0, 1, 2, 3, 4]:
-    xs = range(2, 2+DEG+1)
-    ys = [ round(polys[x-1].coeffs[coe], 3) for x in xs]
+  polys = polys[2:2+DEG+1]
+  for coe in range(DEG+1):
+    xs = [poly[0] for poly in polys]
+    ys = [ round(poly[1].coeffs[coe], 3) for poly in polys]
+
     print (f"x^{DEG-coe} ( {p2s( lagrange(xs,ys), 'd')} ) +")
 
 def showEigs():
-  count = Counter(getEigvals([1,1,1,1.1]))
+  count = Counter(getEigvals([1,0.01,0.01,4]))
   print ("""
 |--------------+------------|
 | multiplicity | eigenvalue |
@@ -101,5 +104,5 @@ def showEigs():
   keycounts = Counter([count[k] for k in count.keys()])
   print(keycounts)
 
-showEigs()
-# showPolys()
+#showEigs()
+showPolys()
