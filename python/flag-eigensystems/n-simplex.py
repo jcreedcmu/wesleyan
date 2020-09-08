@@ -41,16 +41,12 @@ def σ(m, x):
 
 σs = [[σ(m, x) for m in range(n-1)] for x in range(nfac)]
 
-ccc = [1,1,4,1]
 
-def coef(dim):
-  return ccc[dim]
-
-def mkmat():
+def mkmat(params):
   mat = np.zeros([nfac, nfac])
   for (row, vec) in enumerate(σs):
     for (dim, col) in enumerate(vec):
-      mat[row][col] = coef(dim)
+      mat[row][col] = params[dim]
   return mat
 
 def p2s(p, v="x"):
@@ -67,14 +63,14 @@ def p2s(p, v="x"):
     s = re.sub('x', v, s)
     return s
 
-def go():
+def go(params):
   before = time.perf_counter()
   cacheFile = f"/tmp/matrix-{n}.pickle"
   if os.path.exists(cacheFile) and False:
       with open(cacheFile, 'rb') as cache:
           mat = pickle.load(cache)
   else:
-      mat = mkmat()
+      mat = mkmat(params)
       with open(cacheFile, 'wb') as cache:
           pickle.dump(mat, cache)
   # print (f"constructing matrix: {time.perf_counter() - before}")
@@ -96,8 +92,7 @@ def go():
 
 polys = []
 for d in range(2,30):
-    ccc[3] = d
-    polys.append(go())
+    polys.append(go([1,1,3,d]))
 
 for coe in [2,4,6]:
   xs = range(2, 2+DEG+1)

@@ -210,3 +210,10 @@ A:
 I think I substitute xa for x, b/a for b, c/a for c, and then divide the whole polynomial by a^3, to get
 
 x^3 + (a + b + c)x^2 - (a^2 + b^2 + c^2 - ab - bc - 2ac)x - (a^3 + b^3 + c^3 - ac^2 - a^2c)
+
+=== 2020.09.08
+
+Q:  Representation theory notes?
+A:
+http://yufeizhao.com/research/youngtab-hcmr.pdf
+https://groupprops.subwiki.org/w/index.php?title=Linear_representation_theory_of_symmetric_groups&mobileaction=toggle_view_mobile
