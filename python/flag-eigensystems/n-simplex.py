@@ -63,7 +63,7 @@ def p2s(p, v="x"):
     s = re.sub('x', v, s)
     return s
 
-def go(params):
+def getEigvals(params, debug=False):
   before = time.perf_counter()
   cacheFile = f"/tmp/matrix-{n}.pickle"
   if os.path.exists(cacheFile) and False:
@@ -73,26 +73,30 @@ def go(params):
       mat = mkmat(params)
       with open(cacheFile, 'wb') as cache:
           pickle.dump(mat, cache)
-  # print (f"constructing matrix: {time.perf_counter() - before}")
+  if debug:
+    print (f"constructing matrix: {time.perf_counter() - before}")
 
   before = time.perf_counter()
   (eigval,y) = (linalg.eigh(mat))
-  # print (f"solving eigensystem: {time.perf_counter() - before}")
+  if debug:
+    print (f"solving eigensystem: {time.perf_counter() - before}")
 
-  eigval = [round(x, 11) for x in eigval]
+  return [round(x, 11) for x in eigval]
 
-  count = Counter(eigval)
+def getPoly(params, multiplicity, debug=False):
+  count = Counter(getEigvals(params, debug))
 
   accum = np.poly1d([1])
   for i in reversed([i for i in count.keys()]):
-    if (count[i] == DEG):
+    if (count[i] == multiplicity):
       accum *= np.poly1d([1,-i])
-  print(p2s(accum))
   return accum
 
 polys = []
 for d in range(2,30):
-    polys.append(go([1,1,3,d]))
+    poly = getPoly([1,1,2,d], DEG)
+    print(p2s(poly))
+    polys.append(poly)
 
 for coe in [2,4,6]:
   xs = range(2, 2+DEG+1)
