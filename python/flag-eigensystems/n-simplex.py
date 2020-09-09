@@ -77,9 +77,9 @@ def getPoly(params, mult, indices=None, debug=False):
 def showPolys(debug=False):
   polys = []
   for d in range(1,30):
-      param = [  1.00, 1.000, 0.001, d]
-      DEG = 5
-      indices = [0,1,3,5,7]
+      param = [ 1.00, 1.00, 1.00, d]
+      DEG = 4
+      indices = [0,1,2,4]
       poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
       print([d, p2s(poly)])
       polys.append([d, poly])
@@ -105,5 +105,5 @@ def showEigs(params):
   keycounts = Counter([count[k] for k in count.keys()])
   print(keycounts)
 
-showEigs([0.1,0.22,0.35])
+showEigs([0.1,0.22,0.35,0.9])
 # showPolys()
