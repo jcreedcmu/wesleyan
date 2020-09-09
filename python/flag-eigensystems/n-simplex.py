@@ -77,14 +77,15 @@ def getPoly(params, mult, indices=None, debug=False):
 def showPolys(debug=False):
   polys = []
   for d in range(1,15):
-      param = [  4,  3 ,2,   d]
+      param = [    4,2, 3,  d]
       DEG = 5
       indices = [0,1,3,5,7]
       poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
       print([d, p2s(poly)])
       polys.append([d, poly])
 
-  polys = polys[2:2+DEG+1]
+  START=1
+  polys = polys[START:START+DEG+1]
   for coe in range(DEG+1):
     xs = [poly[0] for poly in polys]
     noisyys = [ round(poly[1].coeffs[coe], 3) for poly in polys]
@@ -109,5 +110,5 @@ def showEigs(params):
   keycounts = Counter([count[k] for k in count.keys()])
   print(keycounts)
 
-#showEigs([0.1,0.22,0.35,0.9])
-showPolys()
+showEigs([0.1,0.22,0.35,0.9])
+#showPolys()
