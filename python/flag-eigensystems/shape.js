@@ -30,7 +30,7 @@ function shape_of_mon(mon) {
 
 function mons_by_shape(vars, deg) {
   const rv = {};
-  for(const mon of monomials(vars, deg)) {
+  for (const mon of monomials(vars, deg)) {
 	 const k = shape_of_mon(mon);
 	 if (!rv[k]) rv[k] = [];
 	 rv[k].push(mon);
@@ -38,20 +38,78 @@ function mons_by_shape(vars, deg) {
   return rv;
 }
 
-for (let i = 1; i < 10; i++) {
-  let s = '';
-  for (let j = 1; j < 10; j++) {
-	 s += ' ' + Object.keys(mons_by_shape(i, j)).length;
+function mons_by_shape_below(vars, bdeg) {
+  const rv = {};
+  for (let deg = 1; deg <= bdeg; deg++) {
+	 for (const mon of monomials(vars, deg)) {
+		const k = shape_of_mon(mon);
+		if (!rv[k]) rv[k] = [];
+		rv[k].push(mon);
+	 }
   }
-  console.log(s);
+  return rv;
 }
-// produces:
-// 1 1 1 1 1 1 1 1 1
-// 1 2 2 3 3 4 4 5 5
-// 1 3 4 7 9 13 16 21 25 // A004652?
-// 1 3 5 10 15 25 35 52 69
-// 1 3 6 13 22 41 65 106 158
-// 1 3 6 14 26 53 93 167 274
-// 1 3 6 15 29 63 119 231 411
-// 1 3 6 15 30 68 135 278 530
-// 1 3 6 15 31 71 146 313 627
+
+function sage_of_mon(mon, vars) {
+  const parts = vars.map((x, i) => [i, x]).filter(([i, x]) => mon[i] != 0);
+  return parts.map(([i,x]) => {
+	 if (mon[i] == 1)
+		return x
+	 else
+		return `${x}^${mon[i]}`
+  }).join('*');
+}
+
+const vars = 'a b c d'.split(' ');
+const shape = '2-1 1';
+const deg = shape.split(/ |-/).map(x => parseInt(x)).reduce((x,y) => x+y);
+const cache = mons_by_shape_below(vars.length, deg);
+
+function sage_of_shape(shape) {
+  if (shape == '') return '1';
+  return  cache[shape].map(mon => sage_of_mon(mon, vars)).join(' + ');
+}
+
+
+function sage_of_poly(poly) {
+  function terms(xs) {
+	 return xs.map(x => `${x[0]} * (${sage_of_shape(x[1])})`).join(' + ');
+  }
+  return '(' +  poly.map(seg => `x^(${seg.x}) * (${terms(seg.a)})`).join(' +\n ') + ')';
+}
+console.log(Object.keys(cache));
+console.log(sage_of_poly([
+  {x: 4, a: [ [1, ''] ]},
+  {x: 3, a: [ [2, '1'] ]},
+  {x: 2, a: [ [3, '1-1'], [4, '1 1'] ]},
+  {x: 1, a: [ [-2, '3'],
+				  [2, '2 1'],
+				  [4, '1-1 1'],
+				  [4, '1-1-1'] ]},
+  {x: 0, a: [
+	 [-1, '4'],
+	 [-1, '3-1'],
+	 [1, '2 1-1'],
+	 [1, '2-1-1'],
+	 [3, '1-1-1-1'],
+	 [2, '2 2'],
+  ]},
+]));
+
+
+// console.log(sage_of_poly2(`
+// 1 (4/)
+// 2 (3/1)
+// 3 (2/1-1)
+// 4 (2/1 1)
+// -2 (1/3)
+// 2 (1/2 1)
+// 4 (1/1-1 1)
+// 4 (1/1-1-1)
+// -1 (4)
+// -1 (3-1)
+// 1 (2 1-1)
+// 1 (2-1-1)
+// 3 (1-1-1-1)
+// 2 (2 2)
+// `));
