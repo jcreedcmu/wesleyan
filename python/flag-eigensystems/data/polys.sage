@@ -63,3 +63,42 @@ poly22.subs(c=0) == poly21
 ///
 True
 }}}
+
+{{{id=58|
+p = poly31.polynomial(x).subs(a=0.1,b=0.22,c=0.35,d=0.9)
+///
+}}}
+
+{{{id=62|
+p.coefficients()
+///
+[-0.0387730000000000, -0.0119000000000000, 0.670000000000000, 1.00000000000000]
+}}}
+
+{{{id=64|
+R.<t> = RR['t']; R
+///
+Univariate Polynomial Ring in t over Real Field with 53 bits of precision
+}}}
+
+{{{id=65|
+ps = sum((c.constant_coefficient())*t^j for (j,c) in enumerate(p.coefficients()))
+///
+}}}
+
+{{{id=66|
+ps
+///
+t^3 + 0.670000000000000*t^2 - 0.0119000000000000*t - 0.0387730000000000
+}}}
+
+{{{id=67|
+ps.real_roots()
+///
+[-0.572480334665219, -0.313534476334505, 0.216014810999724]
+}}}
+
+{{{id=68|
+
+///
+}}}
