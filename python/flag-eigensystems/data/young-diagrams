@@ -44,21 +44,21 @@ O
 OOOO
 O
 
+
+python:
 DEG = 4
 indices = [0,1,2,4]
 
-(
-		x^4 +
+(x^4 +
   2 * x^3 * (a+b+c+d) +
 		x^2 * (3*a*b + 3*b*c + 3*c*d + 4*a*c + 4*b*d + 4*a*d) +
 		x * (4 * (a*b*d + a*c*d + a*b*c + b*c*d)
 			  + 2 * (a^2 * c + a * c^2 + b^2 * d + b * d^2 + a^2 * d + a * d^2)
 			  - 2 * (a^3 + b^3 + c^3 + d^3))
   - (a^4 + b^4 + c^4 + d^4)
-  + (a^2 * b * c + a * b * c^2 + b^2 * c * d + b * c * d^2 + a^2 * b * d + a * b * d^2)
+  + (a^2 * b * c + a * b * c^2 + b^2 * c * d + b * c * d^2 + a^2 * c * d + a * b * d^2)
   - (a^3 * b + a * b^3 + b^3 * c + b * c^3 + c^3 * d + c * d^3)
-  - 2 * (a^2 * c^2 + b^2 * d^2 + a^2 * d^2)
-)
+  + 2 * (a^2 * c^2 + b^2 * d^2 + a^2 * d^2))
 
 
 OOO
