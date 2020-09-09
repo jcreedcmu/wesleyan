@@ -28,24 +28,18 @@ function shape_of_mon(mon) {
   return s;
 }
 
-function mons_by_shape(vars, deg) {
-  const rv = {};
+function _accum(vars, deg, rv) {
   for (const mon of monomials(vars, deg)) {
 	 const k = shape_of_mon(mon);
 	 if (!rv[k]) rv[k] = [];
-	 rv[k].push(mon);
+	 rv[k].unshift(mon);
   }
-  return rv;
 }
 
-function mons_by_shape_below(vars, bdeg) {
+function mons_by_shape(vars, bdeg) {
   const rv = {};
   for (let deg = 1; deg <= bdeg; deg++) {
-	 for (const mon of monomials(vars, deg)) {
-		const k = shape_of_mon(mon);
-		if (!rv[k]) rv[k] = [];
-		rv[k].push(mon);
-	 }
+	 _accum(vars, deg, rv);
   }
   return rv;
 }
@@ -60,56 +54,72 @@ function sage_of_mon(mon, vars) {
   }).join('*');
 }
 
-const vars = 'a b c d'.split(' ');
-const shape = '2-1 1';
-const deg = shape.split(/ |-/).map(x => parseInt(x)).reduce((x,y) => x+y);
-const cache = mons_by_shape_below(vars.length, deg);
-
-function sage_of_shape(shape) {
-  if (shape == '') return '1';
-  return  cache[shape].map(mon => sage_of_mon(mon, vars)).join(' + ');
-}
 
 
-function sage_of_poly(poly) {
-  function terms(xs) {
-	 return xs.map(x => `${x[0]} * (${sage_of_shape(x[1])})`).join(' + ');
+function sage_of_poly({v, deg}, poly) {
+  const vars = v.split(' ');
+  const cache = mons_by_shape(vars.length, deg);
+
+  function sage_of_shape(shape) {
+	 if (shape == '') return '1';
+	 const cached = cache[shape];
+	 if (!cached) {
+		throw `Can't find ${shape}`
+	 }
+	 return cached.map(mon => sage_of_mon(mon, vars)).join(' + ');
   }
-  return '(' +  poly.map(seg => `x^(${seg.x}) * (${terms(seg.a)})`).join(' +\n ') + ')';
+
+  return  '(' + poly.split('\n').filter(x => x).map(x => {
+	 const m = x.match(/(.*) \((?:(.*)\/)?(.*)\)/);
+	 const v = m[2] ? (m[2] == 1 ? 'x * ' : `x^${m[2]} * `) : '';
+	 return `${m[1]} * ${v}(${sage_of_shape(m[3])})`;
+  }).join(' +\n ') + ')';
 }
-console.log(Object.keys(cache));
-console.log(sage_of_poly([
-  {x: 4, a: [ [1, ''] ]},
-  {x: 3, a: [ [2, '1'] ]},
-  {x: 2, a: [ [3, '1-1'], [4, '1 1'] ]},
-  {x: 1, a: [ [-2, '3'],
-				  [2, '2 1'],
-				  [4, '1-1 1'],
-				  [4, '1-1-1'] ]},
-  {x: 0, a: [
-	 [-1, '4'],
-	 [-1, '3-1'],
-	 [1, '2 1-1'],
-	 [1, '2-1-1'],
-	 [3, '1-1-1-1'],
-	 [2, '2 2'],
-  ]},
-]));
 
+console.log('poly41 == ' + sage_of_poly({v: 'a b c d', deg: 4}, `
+1 (4/)
+2 (3/1)
+3 (2/1-1)
+4 (2/1 1)
+-2 (1/3)
+2 (1/2 1)
+4 (1/1-1 1)
+4 (1/1-1-1)
+-1 (4)
+-1 (3-1)
+1 (2 1-1)
+1 (2-1-1)
+3 (1-1-1-1)
+2 (2 2)
+`));
 
-// console.log(sage_of_poly2(`
-// 1 (4/)
-// 2 (3/1)
-// 3 (2/1-1)
-// 4 (2/1 1)
-// -2 (1/3)
-// 2 (1/2 1)
-// 4 (1/1-1 1)
-// 4 (1/1-1-1)
-// -1 (4)
-// -1 (3-1)
-// 1 (2 1-1)
-// 1 (2-1-1)
-// 3 (1-1-1-1)
-// 2 (2 2)
-// `));
+console.log('poly32 == ' + sage_of_poly({v: 'a b c d', deg: 5}, `
+-2 (1/2-1-1)
+1 (5/)
+1 (5)
+1 (4/1)
+1 (1/4)
+1 (4 1)
+-2 (3 2)
+-2 (3/2)
+-2 (2/3)
+2 (3 1-1)
+2 (3/1-1)
+-2 (2/2 1)
+-2 (1/2 2)
+2 (2/1-1 1)
+2 (1/2 1-1)
+-2 (3-1 1)
+-2 (1/3-1)
+3 (2-2 1)
+3 (1/2-2)
+2 (1/1-2-1)
+2 (1/1-1-1-1)
+-1 (4-1)
+1 (3-2)
+-1 (2-2-1)
+2 (2-1-2)
+2 (1-3-1)
+-2 (2-1-1-1)
+2 (1-2-1-1)
+`));
