@@ -92,7 +92,7 @@ def showPolys(debug=False):
     print (f"x^{DEG-coe} ( {p2s( lagrange(xs,ys), 'd')} ) +")
 
 def showEigs():
-  count = Counter(getEigvals([1,0.01,0.01,4]))
+  count = Counter(getEigvals([1,0.1,0.01,1]))
   print ("""
 |--------------+------------|
 | multiplicity | eigenvalue |
@@ -104,5 +104,5 @@ def showEigs():
   keycounts = Counter([count[k] for k in count.keys()])
   print(keycounts)
 
-#showEigs()
-showPolys()
+showEigs()
+# showPolys()
