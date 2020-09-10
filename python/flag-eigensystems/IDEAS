@@ -47,6 +47,14 @@ bacher paper
 "Valeur propre minimale du laplacien de Coxeter pour le group symétrique"
 Bacher
 https://www.sciencedirect.com/science/article/pii/S0021869384711951
+also interesting:
+ROLAND BACHER
+YVES COLIN DE VERDIÈRE
+Multiplicités des valeurs propres et transformations
+étoile-triangle des graphes
+http://www.numdam.org/article/BSMF_1995__123_4_517_0.pdf
+more recent thing on spectra of coxeter graphs?
+https://arxiv.org/abs/1106.2509
 
 === 2020.09.06
 
@@ -392,3 +400,12 @@ and poly41 is now something like
 But I'm not 100% sure I got that right.
 
 (better, mechanized notation in shape.js)
+
+=== 2020.09.10
+
+Q: What's some other interesting stuff about algebraic combinatorics?
+A: http://www.math.huji.ac.il/~adiprasito/
+h-vector
+g-conjecture (proven 2018)
+https://en.wikipedia.org/wiki/H-vector
+https://www.youtube.com/watch?v=wZ0LYW-xXNo
