@@ -114,36 +114,36 @@ def showEigs(params):
 def renderEigs():
   for d in range(0,100):
     x =  d / 100
-    print(f"{x-2} {x} 1")
-    print(f"{x-2} {-x} 1")
+    print(f"{x-2} 1 1")
+    print(f"{x-2} -1 1")
   for d in range(0,100):
     x =  d / 100
     param = [1,x]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x-1} {i} {count[i]}")
-  for d in range(0,100):
+      print(f"{x-1} {i/(x+1)} {count[i]}")
+  for d in range(1,100):
     x =  d / 100
     param = [1,1,x]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x} {i} {count[i]}")
+      print(f"{x} {i/(x+2)} {count[i]}")
   for d in range(0,100):
     x =  d / 100
     param = [1,1,1,x]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x+1} {i} {count[i]}")
+      print(f"{x+1} {i/(x+3)} {count[i]}")
   for d in range(0,100):
     x =  d / 100
     param = [1,1,1,1,x]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x+2} {i} {count[i]}")
+      print(f"{x+2} {i/(x+4)} {count[i]}")
 
 #showEigs([1.0, 1.0, 1.0, 3.0])
 #showPolys()
 renderEigs()
 
 # gnuplot:
-# plot '/tmp/data'  using 1:2:3 lc variable  pt 7
+# plot '/tmp/data'  using 1:2:3 lc variable with dots
