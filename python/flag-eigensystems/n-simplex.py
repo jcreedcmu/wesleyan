@@ -123,3 +123,6 @@ def renderEigs():
 #showEigs([1.0, 1.0, 1.0, 3.0])
 #showPolys()
 renderEigs()
+
+# gnuplot:
+# plot '/tmp/data'  using 1:2:3 lc variable  pt 7
