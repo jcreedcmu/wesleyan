@@ -72,7 +72,7 @@ function sage_of_poly({v, deg}, poly) {
 	 return cached.map(mon => sage_of_mon(mon, vars)).join(' + ');
   }
 
-  return  '(' + poly.split('\n').filter(x => x).map(x => {
+  return  '(' + poly.match(/(\S*\[.*?\])/g).map(x => {
 	 const m = x.match(/(.*)\[(.*)\]/);
 	 const [coef, shape] = [m[1],m[2]];
 	 const sdeg = deg - weight_of_shape(shape);
@@ -90,31 +90,21 @@ function nb_of_poly(name, opt, poly) {
   return `{{{id=${id++}|\n${name} = ${sage_of_poly(opt,poly)}\n///\n}}}\n`
 }
 
-console.log(nb_of_poly('poly21', {v: 'a b', deg: 2}, `
+console.log(nb_of_poly('poly21', {v: 'a b', deg: 2}, '[] -[2] [1-1]'));
+console.log(nb_of_poly('poly22', {v: 'a b c', deg: 2}, '1[] -1[2] 1[1-1] -2[1 1]'));
+
+console.log(nb_of_poly('poly31', {v: 'a b c', deg: 3}, `
 []
+-[3]
+[1]
 -[2]
+[2 1]
+2[1 1]
 [1-1]
 `));
 
-console.log(nb_of_poly('poly22', {v: 'a b c', deg: 2}, `
-1[]
--1[2]
-1[1-1]
--2[1 1]
-`));
-
-console.log(nb_of_poly('poly31', {v: 'a b c', deg: 3}, `
-1[]
--1[3]
-1[1]
--1[2]
-1[2 1]
-2[1 1]
-1[1-1]
-`));
-
 console.log(nb_of_poly('poly41', {v: 'a b c d', deg: 4}, `
-1[]
+[]
 2[1]
 3[1-1]
 4[1 1]
@@ -122,41 +112,41 @@ console.log(nb_of_poly('poly41', {v: 'a b c d', deg: 4}, `
 2[2 1]
 4[1-1 1]
 4[1-1-1]
--1[4]
--1[3-1]
-1[2 1-1]
-1[2-1-1]
+-[4]
+-[3-1]
+[2 1-1]
+[2-1-1]
 3[1-1-1-1]
 2[2 2]
 `));
 
 console.log(nb_of_poly('poly32', {v: 'a b c d', deg: 5}, `
--2[2-1-1]
-1[]
-1[5]
-1[1]
-1[4]
-1[4 1]
--2[3 2]
--2[2]
--2[3]
-2[3 1-1]
-2[1-1]
+[]
+[5]
+[4]
+[4 1]
+[3-2]
+[1]
+-[2-2-1]
+-[4-1]
 -2[2 1]
 -2[2 2]
-2[1-1 1]
-2[2 1-1]
+-2[2-1-1-1]
+-2[2-1-1]
+-2[2]
+-2[3 2]
 -2[3-1 1]
 -2[3-1]
+-2[3]
+2[1-1 1]
+2[1-1-1-1]
+2[1-1]
+2[1-2-1-1]
+2[1-2-1]
+2[1-3-1]
+2[2 1-1]
+2[2-1-2]
+2[3 1-1]
 3[2-2 1]
 3[2-2]
-2[1-2-1]
-2[1-1-1-1]
--1[4-1]
-1[3-2]
--1[2-2-1]
-2[2-1-2]
-2[1-3-1]
--2[2-1-1-1]
-2[1-2-1-1]
 `));
