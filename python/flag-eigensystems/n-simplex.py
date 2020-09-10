@@ -77,14 +77,14 @@ def getPoly(params, mult, indices=None, debug=False):
 def showPolys(debug=False):
   polys = []
   for d in range(1,15):
-      param = [    4,2, 3,  d]
-      DEG = 5
-      indices = [0,1,3,5,7]
+      param = [1,1,1,  d]
+      DEG = 4
+      indices = [0,1,2,4]
       poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
       print([d, p2s(poly)])
       polys.append([d, poly])
 
-  START=1
+  START=2
   polys = polys[START:START+DEG+1]
   for coe in range(DEG+1):
     xs = [poly[0] for poly in polys]
@@ -110,5 +110,16 @@ def showEigs(params):
   keycounts = Counter([count[k] for k in count.keys()])
   print(keycounts)
 
-showEigs([0.1,0.22,0.35,0.9])
+
+def renderEigs():
+  for d in range(0,200):
+    x = 0.01 + 3 * d / 200
+    param = [1,1,1,x]
+    count = Counter(getEigvals(param))
+    for i in count.keys():
+      print(f"{x} {i} {count[i]}")
+
+
+#showEigs([1.0, 1.0, 1.0, 3.0])
 #showPolys()
+renderEigs()

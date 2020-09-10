@@ -90,8 +90,8 @@ function nb_of_poly(name, opt, poly) {
   return `{{{id=${id++}|\n${name} = ${sage_of_poly(opt,poly)}\n///\n}}}\n`
 }
 
-console.log(nb_of_poly('poly21', {v: 'a b', deg: 2}, '[] -[2] [1-1]'));
-console.log(nb_of_poly('poly22', {v: 'a b c', deg: 2}, '1[] -1[2] 1[1-1] -2[1 1]'));
+console.log(nb_of_poly('poly21', {v: 'a b', deg: 2},   '[] -[2] [1-1]'));
+console.log(nb_of_poly('poly22', {v: 'a b c', deg: 2}, '[] -[2] [1-1] -2[1 1]'));
 
 console.log(nb_of_poly('poly31', {v: 'a b c', deg: 3}, `
 []
