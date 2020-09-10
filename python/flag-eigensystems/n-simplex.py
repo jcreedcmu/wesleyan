@@ -112,13 +112,34 @@ def showEigs(params):
 
 
 def renderEigs():
-  for d in range(0,200):
-    x = 0.01 + 3 * d / 200
-    param = [1,1,1,x]
+  for d in range(0,100):
+    x =  d / 100
+    print(f"{x-2} {x} 1")
+    print(f"{x-2} {-x} 1")
+  for d in range(0,100):
+    x =  d / 100
+    param = [1,x]
+    count = Counter(getEigvals(param))
+    for i in count.keys():
+      print(f"{x-1} {i} {count[i]}")
+  for d in range(0,100):
+    x =  d / 100
+    param = [1,1,x]
     count = Counter(getEigvals(param))
     for i in count.keys():
       print(f"{x} {i} {count[i]}")
-
+  for d in range(0,100):
+    x =  d / 100
+    param = [1,1,1,x]
+    count = Counter(getEigvals(param))
+    for i in count.keys():
+      print(f"{x+1} {i} {count[i]}")
+  for d in range(0,100):
+    x =  d / 100
+    param = [1,1,1,1,x]
+    count = Counter(getEigvals(param))
+    for i in count.keys():
+      print(f"{x+2} {i} {count[i]}")
 
 #showEigs([1.0, 1.0, 1.0, 3.0])
 #showPolys()
