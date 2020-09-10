@@ -30,12 +30,29 @@ function all_joins(xs) {
 }
 
 
-for (let ix = 1; ix < 9; ix++) {
+for (let ix = 1; ix < 14; ix++) {
   const s = {};
   compos(ix).map(all_joins).flat(1).forEach(shape => {
 	 s[normalize(shape)] = 1;
   });
 
-  console.log(Object.keys(s));
+  // console.log(Object.keys(s));
   console.log(Object.keys(s).length);
 }
+
+// outputs:
+// 1
+// 3
+// 6
+// 15
+// 31
+// 73
+// 156
+// 354
+// 770
+// 1715
+// 3747
+// 8276
+// 18087
+
+// 18087 also appears in A225751?
