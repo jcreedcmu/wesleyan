@@ -149,11 +149,13 @@ def renderEigs():
 # plot '/tmp/data'  using 1:2:3 lc variable pt 7
 
 
+def computePolys():
+  showPolysCustom('e', (lambda e: [1,1,1,1,4+e]), 5, [0,2,3,6,10])
+  showPolysCustom('e', (lambda e: [1,1,1,2,4+e]), 5, [0,2,3,4,10])
+  showPolysCustom('e', (lambda e: None if e == 5 else [1,1,1,3,2+e]), 5, [0,2,3,4,10])
+  showPolysCustom('e', (lambda e: [1,2,1,1,5+e]), 5, [0,2,3,6,10])
+  showPolysCustom('e', (lambda e: [1,3,1,1,6+e]), 5, [0,2,3,6,10])
+
 #showEigs([1,1,1,1,3])
-#showPolysCustom('e', (lambda e: None if e == 4 else [1,1,1,3,3+e]), 5, [0,2,3,4,10])
-showPolysCustom('e', (lambda e: [1,1,1,1,4+e]), 5, [0,2,3,6,10])
-showPolysCustom('e', (lambda e: [1,1,1,2,4+e]), 5, [0,2,3,4,10])
-showPolysCustom('e', (lambda e: None if e == 3 else [1,1,1,3,4+e]), 5, [0,2,3,4,10])
-showPolysCustom('e', (lambda e: [1,2,1,1,5+e]), 5, [0,2,3,6,10])
-showPolysCustom('e', (lambda e: [1,3,1,1,6+e]), 5, [0,2,3,6,10])
+computePolys()
 #renderEigs()
