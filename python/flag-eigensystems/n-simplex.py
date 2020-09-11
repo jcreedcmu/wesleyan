@@ -77,9 +77,9 @@ def getPoly(params, mult, indices=None, debug=False):
 def showPolys(debug=False):
   polys = []
   for d in range(1,15):
-      param = [1,1,1,  d]
-      DEG = 4
-      indices = [0,1,2,4]
+      param = [3,2,5.000001,  d]
+      DEG = 6
+      indices = [0,1,2,3,4,5]
       poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
       print([d, p2s(poly)])
       polys.append([d, poly])
@@ -121,9 +121,10 @@ def renderEigs():
       print(f"{x} {i/(4 * x+6)} {count[i]}")
 
 
-#showEigs([1.0, 1.0, 1.0, 3.0])
+#print(getPoly([1,1,1,1.001], 6, debug=True))
+showEigs([1,1.1,1.3,1.7])
 #showPolys()
-renderEigs()
+#renderEigs()
 
 # gnuplot:
 # plot '/tmp/data'  using 1:2:3 lc variable with dots
