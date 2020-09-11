@@ -17,6 +17,7 @@ poly111 = x - a - b
 
 poly4 = x + a + b + c
 poly1111 = x - a - b - c
+poly11111 = x - a - b - c - d
 poly31 = x^3 + x^2 * (a+b+c) - x * (a^2 + b^2 + c^2 - a*b - b*c - 2*a*c) - (a^3 + b^3 + c^3 - a*c^2 - a^2*c)
 poly211 = -poly31.subs(x=-x)
 poly22 = x^2 - a^2 - b^2 - c^2 + a * b + b * c - 2 * a * c
@@ -75,50 +76,59 @@ poly32 = (-2 * x * (a^2*b*c + a*b*c^2 + b^2*c*d + b*c*d^2) +
 ///
 }}}
 
+{{{id=133|
+poly311 = (-2 * (a^3*b^3 + b^3*c^3 + c^3*d^3) +
+ -2 * (a^4*b*d + a*b^4*d + a*c^4*d + a*c*d^4) +
+ -3 * x^4 * (a^2 + b^2 + c^2 + d^2) +
+ -4 * x^2 * (a^3*c + a^3*d + a*c^3 + a*d^3 + b^3*d + b*d^3) +
+ -1 * (a^6 + b^6 + c^6 + d^6) +
+ 2 * x^4 * (a*c + a*d + b*d) +
+ 2 * x^2 * (a^2*c^2 + a^2*d^2 + b^2*d^2) +
+ 2 * (a^3*b^2*d + a^2*b^3*d + a*c^3*d^2 + a*c^2*d^3) +
+ 2 * (a^5*c + a^5*d + a*c^5 + a*d^5 + b^5*d + b*d^5) +
+ 3 * x^2 * (a^2*b^2 + b^2*c^2 + c^2*d^2) +
+ 3 * x^2 * (a^4 + b^4 + c^4 + d^4) +
+ 1 * (a^4*c^2 + a^4*d^2 + a^2*c^4 + a^2*d^4 + b^4*d^2 + b^2*d^4) +
+ 1 * x^6 * (1) +
+ 4 * x^2 * (a^2*c*d + a*b*d^2) +
+ 4 * (a^3*b*d^2 + a^2*c^3*d + a^2*c*d^3 + a*b^3*d^2) +
+ -3 * (a^2*b^2*d^2 + a^2*c^2*d^2) +
+ -4 * (a^3*c^3 + a^3*d^3 + b^3*d^3) +
+ -4 * (a^4*c*d + a*b*d^4) +
+ -2 * x^2 * (a*b^2*c + b*c^2*d) +
+ 2 * (a^2*b^3*c + a*b^3*c^2 + b^2*c^3*d + b*c^3*d^2) +
+ -2 * x^2 * (a*b*c*d) +
+ 2 * (a^3*b*c*d + a*b*c*d^3) +
+ -4 * (a^2*b*c*d^2) +
+ 2 * (a^2*b*c^2*d + a*b^2*c*d^2) +
+ -2 * (a^2*b^2*c*d + a*b*c^2*d^2) +
+ -2 * (a*b^2*c^2*d) +
+ -2 * (a*b^3*c*d + a*b*c^3*d))
+///
+}}}
+
+{{{id=127|
+poly2111 = poly41.subs(x=-x)
+poly221 = -poly32.subs(x=-x)
+///
+}}}
+
 {{{id=44|
-poly41.subs(d=0) == poly4 * poly31
+([
+ poly5(c=0)    == poly3(x=x+d),
+ poly41(d=0)   == poly4 * poly31,
+ poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
+ poly2111(d=0) == poly1111 * poly211,
+ poly2111(c=0) == poly111(x=x-d) * poly111(x=x+d) * poly21(x=x-d),
+ poly31(c=0)   == poly3 * poly21,
+ poly31(b=0)   == poly2(x=x+c) * poly11(x=x+c) * poly2(x=x-c),
+ poly22(c=0)   == poly21,
+ poly32(d=0)   == poly31 * poly22,
+ poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
+ poly311(d=0)  == poly31 * poly211,
+ poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ ])
 ///
-True
-}}}
-
-{{{id=45|
-poly41.subs(c=0) == poly3.subs(x=x-d) * poly3.subs(x=x+d) * poly21.subs(x=x+d)
-///
-True
-}}}
-
-{{{id=51|
-poly31.subs(c=0) == poly3 * poly21
-///
-True
-}}}
-
-{{{id=52|
-poly31.subs(b=0) == poly2.subs(x=x+c) * poly11.subs(x=x+c) * poly2.subs(x=x-c)
-///
-True
-}}}
-
-{{{id=57|
-poly22.subs(c=0) == poly21
-///
-True
-}}}
-
-{{{id=75|
-poly32.subs(d=0) == poly31 * poly22
-///
-True
-}}}
-
-{{{id=115|
-poly32.subs(c=0) == poly3.subs(x=x+d) * poly21.subs(x=x+d) * poly21.subs(x=x-d)
-///
-True
-}}}
-
-{{{id=121|
-poly22.subs(b=0) == poly2(x=x+c) * poly11(x=x-c)
-///
-True
+[True, True, True, True, True, True, True, True, True, True, True, True, True]
 }}}
