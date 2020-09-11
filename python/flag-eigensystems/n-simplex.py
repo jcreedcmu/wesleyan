@@ -134,15 +134,15 @@ def showEigs(params):
   print(keycounts)
 
 
-def renderEigs():
+def renderEigs(src, dst):
 
-  for d in range(0,500):
+  for d in range(0,400):
     print(d, file=sys.stderr)
-    x =  d / 500
-    param = [1,1,1,1+x, 3]
+    t =  d / 400
+    param = [src[i] * (1-t) + dst[i] * t for i in range(len(src))]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x} {i} {count[i]}")
+      print(f"{t} {i} {count[i]}")
 
 # gnuplot:
 # plot '/tmp/data'  using 1:2:3 lc variable with dots
@@ -155,7 +155,8 @@ def computePolys():
   showPolysCustom('e', (lambda e: None if e == 5 else [1,1,1,3,2+e]), 5, [0,2,3,4,10])
   showPolysCustom('e', (lambda e: [1,2,1,1,5+e]), 5, [0,2,3,6,10])
   showPolysCustom('e', (lambda e: [1,3,1,1,6+e]), 5, [0,2,3,6,10])
+  showPolysCustom('e', (lambda e: [1,1,2,1,5+e]), 5, [0,1,3,6,10])
 
 #showEigs([1,1,1,1,3])
-computePolys()
-#renderEigs()
+#computePolys()
+#renderEigs([1,1,1,1,4],[1,1,2,1,4])
