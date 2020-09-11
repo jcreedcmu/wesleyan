@@ -110,3 +110,9 @@ poly32.subs(d=0) == poly31 * poly22
 ///
 True
 }}}
+
+{{{id=115|
+poly32.subs(c=0) == poly3.subs(x=x+d) * poly21.subs(x=x+d) * poly21.subs(x=x-d)
+///
+True
+}}}
