@@ -78,24 +78,40 @@ def getPoly(params, mult, indices=None, debug=False):
 def showPolys(debug=False):
   polys = []
   for d in range(1,15):
-      param = [3,2,5.000001,  d]
-      DEG = 6
-      indices = [0,1,2,3,4,5]
+      param = [1,1,1,2,2 + d]
+      DEG = 5
+      indices = [0,2,3,4,10]
       poly = getPoly(param, mult=DEG, indices=indices, debug=debug)
       print([d, p2s(poly)])
       polys.append([d, poly])
 
-  START=2
+  START=3
   polys = polys[START:START+DEG+1]
   for coe in range(DEG+1):
     xs = [poly[0] for poly in polys]
     noisyys = [ round(poly[1].coeffs[coe], 3) for poly in polys]
-    print(xs,noisyys)
+    print('noisy', xs,noisyys)
 
   for coe in range(DEG+1):
     xs = [poly[0] for poly in polys]
-    ys = [ round(poly[1].coeffs[coe], 0) for poly in polys]
-    print (f"x^{DEG-coe} ( {p2s( lagrange(xs,ys), 'd')} ) +")
+#    ys = [ round(poly[1].coeffs[coe], 0) for poly in polys]
+    ys = [ poly[1].coeffs[coe] for poly in polys]
+    print (f"x^{DEG-coe} ( {p2s( lagrange(xs,ys), 'e')} ) +")
+
+
+def showPolysCustom(vname, paramf, DEG, indices):
+  polys = []
+  for d in range(0,DEG+1):
+      param = paramf(d)
+      poly = getPoly(param, mult=DEG, indices=indices)
+      print([d, p2s(poly)])
+      polys.append([d, poly])
+
+  for coe in range(DEG+1):
+    xs = [poly[0] for poly in polys]
+    ys = [ poly[1].coeffs[coe] for poly in polys]
+    print (f"x^{DEG-coe} ( {p2s( lagrange(xs,ys), vname)} ) +")
+
 
 # params are coefficients for σ0, σ1, ... σn
 def showEigs(params):
@@ -114,19 +130,19 @@ def showEigs(params):
 
 def renderEigs():
 
-  for d in range(0,300):
+  for d in range(0,500):
     print(d, file=sys.stderr)
-    x =  (d+0.5) / 300
-    param = [1,1,1,3 - 2*x, 3*x]
+    x =  d / 500
+    param = [1,1,1,1+x, 3]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x} {i/(6 + x)} {count[i]}")
+      print(f"{x} {i} {count[i]}")
 
 # gnuplot:
 # plot '/tmp/data'  using 1:2:3 lc variable with dots
 # plot '/tmp/data'  using 1:2:3 lc variable pt 7
 
 
-showEigs([1,1,1,1,3])
-#showPolys()
+#showEigs([1,1,1,1,3])
+showPolysCustom('e', (lambda e: [1,2,1,1,4+e]), 5, [0,2,3,6,10])
 #renderEigs()
