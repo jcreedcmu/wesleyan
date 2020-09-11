@@ -1,3 +1,4 @@
+import sys
 import re
 import numpy as np
 from numpy import linalg, dot, transpose, add, subtract
@@ -114,17 +115,18 @@ def showEigs(params):
 def renderEigs():
 
   for d in range(0,300):
-    x =  d / 300
-    param = [3,2,1,4 * x]
+    print(d, file=sys.stderr)
+    x =  (d+0.5) / 300
+    param = [1,1,1,3 - 2*x, 3*x]
     count = Counter(getEigvals(param))
     for i in count.keys():
-      print(f"{x} {i/(4 * x+6)} {count[i]}")
-
-
-#print(getPoly([1,1,1,1.001], 6, debug=True))
-showEigs([1,1.1,1.3,1.7])
-#showPolys()
-#renderEigs()
+      print(f"{x} {i/(6 + x)} {count[i]}")
 
 # gnuplot:
 # plot '/tmp/data'  using 1:2:3 lc variable with dots
+# plot '/tmp/data'  using 1:2:3 lc variable pt 7
+
+
+showEigs([1,1,1,1,3])
+#showPolys()
+#renderEigs()
