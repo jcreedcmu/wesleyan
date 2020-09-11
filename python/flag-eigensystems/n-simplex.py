@@ -101,11 +101,15 @@ def showPolys(debug=False):
 
 def showPolysCustom(vname, paramf, DEG, indices):
   polys = []
-  for d in range(0,DEG+1):
+  for d in range(0,DEG+DEG):
       param = paramf(d)
+      if param == None:
+        continue
       poly = getPoly(param, mult=DEG, indices=indices)
-      print([d, p2s(poly)])
-      polys.append([d, poly])
+      print([param[-1], p2s(poly)])
+      polys.append([param[-1], poly])
+      if len(polys) == DEG+1:
+        break
 
   for coe in range(DEG+1):
     xs = [poly[0] for poly in polys]
@@ -144,5 +148,6 @@ def renderEigs():
 
 
 #showEigs([1,1,1,1,3])
-showPolysCustom('e', (lambda e: [1,2,1,1,4+e]), 5, [0,2,3,6,10])
+#showPolysCustom('e', (lambda e: None if e == 4 else [1,1,1,3,3+e]), 5, [0,2,3,4,10])
+showPolysCustom('e', (lambda e: None if e == 3 else [1,1,1,3,4+e]), 5, [0,2,3,4,10])
 #renderEigs()
