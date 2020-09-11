@@ -114,7 +114,7 @@ poly221 = -poly32.subs(x=-x)
 }}}
 
 {{{id=44|
-([
+all([
  poly5(c=0)    == poly3(x=x+d),
  poly41(d=0)   == poly4 * poly31,
  poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
@@ -128,7 +128,9 @@ poly221 = -poly32.subs(x=-x)
  poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
  poly311(d=0)  == poly31 * poly211,
  poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ poly41(b=0) == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
+ poly32(b=0) == (poly3(a=c,b=d) + a) * poly21(x=x+a,a=c,b=d) * poly21(x=x-a,a=c,b=d)
  ])
 ///
-[True, True, True, True, True, True, True, True, True, True, True, True, True]
+True
 }}}
