@@ -141,6 +141,8 @@ for
 for
 [1,1,1,2,≥4] I seem to want 0,2,3,4,10 (the 9 and 10 swap places)
 
+* All these are for the {5,1} partition:
+
   showPolysCustom('e', (lambda e: [1,1,1,1,4+e]), 5, [0,2,3,6,10])
 x^5 (  1 ) +
 x^4 (  3e + 12 ) +

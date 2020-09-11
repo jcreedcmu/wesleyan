@@ -148,7 +148,7 @@ def renderEigs(src, dst):
 # plot '/tmp/data'  using 1:2:3 lc variable with dots
 # plot '/tmp/data'  using 1:2:3 lc variable pt 7
 
-
+# All these are for the {5,1} partition:
 def computePolys():
   showPolysCustom('e', (lambda e: [1,1,1,1,4+e]), 5, [0,2,3,6,10])
   showPolysCustom('e', (lambda e: [1,1,1,2,4+e]), 5, [0,2,3,4,10])
