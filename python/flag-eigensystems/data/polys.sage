@@ -82,7 +82,7 @@ True
 }}}
 
 {{{id=45|
-poly41.subs(c=0) == (x + a + b - d) * (x + a + b + d) * poly21.subs(x=x+d)
+poly41.subs(c=0) == poly3.subs(x=x-d) * poly3.subs(x=x+d) * poly21.subs(x=x+d)
 ///
 True
 }}}
@@ -94,7 +94,7 @@ True
 }}}
 
 {{{id=52|
-poly31.subs(b=0) == (x + a + c) * (x - a + c) * (x + a - c)
+poly31.subs(b=0) == poly2.subs(x=x+c) * poly11.subs(x=x+c) * poly2.subs(x=x-c)
 ///
 True
 }}}
@@ -118,13 +118,7 @@ True
 }}}
 
 {{{id=121|
-poly22.subs(b=0) == poly11(a=a+c) * poly2(a=a+c)
-///
-True
-}}}
-
-{{{id=122|
-poly22.subs(b=0) == poly3(b=c) * poly111(b=c)
+poly22.subs(b=0) == poly2(x=x+c) * poly11(x=x-c)
 ///
 True
 }}}
