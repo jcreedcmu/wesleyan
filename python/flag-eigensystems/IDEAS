@@ -409,3 +409,16 @@ h-vector
 g-conjecture (proven 2018)
 https://en.wikipedia.org/wiki/H-vector
 https://www.youtube.com/watch?v=wZ0LYW-xXNo
+
+=== 2020.09.12
+
+Q: How convert sagemath polynomial into a regular form
+I can consume in javascript?
+A: If I have poly, I can do
+
+[[poly.monomial_coefficient(m), list(m.degrees())]
+  for m in poly.monomials()]
+
+which gives a list of pairs, the first of which is the coefficient,
+and the second of which is the degrees of each variable in the
+monomial.
