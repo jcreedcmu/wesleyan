@@ -1,9 +1,9 @@
 
 {{{id=0|
 R.<x,a,b,c,d,e> = ZZ['x,a,b,c,d,e']; R
-Rt.<t> = ZZ['t']; Rt
+R.<t> = RR['t']; R
 ///
-Univariate Polynomial Ring in t over Integer Ring
+Univariate Polynomial Ring in t over Real Field with 53 bits of precision
 }}}
 
 {{{id=50|
@@ -187,12 +187,25 @@ poly51 = (1 * x^5 * (1) +
  -1 * (a^3*b*d + a^3*b*e + a*b^3*d + a*b^3*e + a*c^3*d + a*c*d^3 + a*d^3*e + a*d*e^3 + b^3*c*e + b*c^3*e + b*d^3*e + b*d*e^3) +
  -1 * (a^3*b^2 + a^2*b^3 + b^3*c^2 + b^2*c^3 + c^3*d^2 + c^2*d^3 + d^3*e^2 + d^2*e^3) +
  -1 * (a^4*c + a^4*d + a^4*e + a*c^4 + a*d^4 + a*e^4 + b^4*d + b^4*e + b*d^4 + b*e^4 + c^4*e + c*e^4) +
- -1 * (a^5 + b^5 + c^5 + d^5 + e^5))
+ -1 * (a^5 + b^5 + c^5 + d^5 + e^5) +
+ 6 * (a^2*b*d*e + a*b^2*d*e + a*b*d^2*e + a*b*d*e^2) +
+ 21 * x * (a*b*d*e) +
+ 13 * (a*b*c*d*e))
 ///
 }}}
 
 {{{id=139|
-poly51(a=1,b=1,c=1,d=1).polynomial(x)
+poly51(a=1,b=1,c=2,d=1).polynomial(x)
 ///
-x^5 + (3*e + 12)*x^4 + (2*e^2 + 31*e + 53)*x^3 + (-2*e^3 + 21*e^2 + 111*e + 104)*x^2 + (-3*e^4 - 3*e^3 + 63*e^2 + 137*e + 85)*x - e^5 - 5*e^4 + 5*e^3 + 48*e^2 + 40*e + 20
+x^5 + (3*e + 15)*x^4 + (2*e^2 + 39*e + 81)*x^3 + (-2*e^3 + 27*e^2 + 174*e + 181)*x^2 + (-3*e^4 - 3*e^3 + 105*e^2 + 298*e + 120)*x - e^5 - 6*e^4 + 12*e^3 + 117*e^2 + 138*e - 50
+}}}
+
+{{{id=140|
+poly51(t, 1,1.05,1.1,1.2,0.93).real_roots()
+///
+[-4.98972788986834,
+ -4.24771973028708,
+ -3.26672844031693,
+ -2.14441868401954,
+ -1.19140525550811]
 }}}
