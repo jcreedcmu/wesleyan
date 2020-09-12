@@ -91,3 +91,4 @@ function nb_of_poly(name, opt, poly) {
 }
 
 module.exports.nb_of_poly = nb_of_poly;
+module.exports.shape_of_mon = shape_of_mon;
