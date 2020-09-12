@@ -1,6 +1,6 @@
 
 {{{id=0|
-R.<x,a,b,c,d,e> = ZZ['x,a,b,c,d,e']; R
+R.<x,a,b,c,d,e,f> = ZZ['x,a,b,c,d,e,f']; R
 R.<t> = RR['t']; R
 ///
 Univariate Polynomial Ring in t over Real Field with 53 bits of precision
@@ -24,6 +24,7 @@ poly211 = -poly31.subs(x=-x)
 poly22 = x^2 - a^2 - b^2 - c^2 + a * b + b * c - 2 * a * c
 
 poly5 = x + a + b + c + d
+poly6 = x + a + b + c + d + e
 ///
 }}}
 
@@ -225,6 +226,7 @@ all([
  poly41(d=0)   == poly4 * poly31,
  poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
  poly41(b=0)   == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
+ poly41(b=0)   == poly11(x=poly3(a=c,b=d)) * poly2(x=poly3(a=c,b=d)) * poly21(x=poly2,a=c,b=d),
  #
  poly32(d=0)   == poly31 * poly22,
  poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
@@ -246,4 +248,22 @@ all([
  ])
 ///
 True
+}}}
+
+{{{id=160|
+poly61d0 = poly31(x=poly3(a=e,b=f)) * poly4(x=poly3(a=e,b=f)) * poly21(x=poly4,a=e,b=f)
+poly61e0 = poly41(x=x+f) * poly41(x=x-f) * poly5(x=x+f)
+poly61f0 = poly6 * poly51
+///
+}}}
+
+{{{id=161|
+def dump(poly, file):
+    o = open(file,'w')
+    o.write(str([[poly.monomial_coefficient(m), list(m.degrees())] for m in poly.monomials()]))
+
+dump(poly61d0, '/tmp/poly61d0.json')
+dump(poly61e0, '/tmp/poly61e0.json')
+dump(poly61f0, '/tmp/poly61f0.json')
+///
 }}}

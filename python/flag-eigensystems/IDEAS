@@ -505,3 +505,13 @@ The coefficient of [1-1] and [1 1] goe
 1, 1, 3, 7, ...
    2, 4, 8,...
 but I already figured out these were quadratic back on 2020.09.09 above.
+
+Q: Although I don't know the "zero out third-to-last variable" pattern
+generally, I at least can perceive what's going on for the {n, 1}
+partitions, can't I? Is that enough to give me {6, 1}?
+A:
+Well I see
+poly41(b=0)   == poly11(x=poly3(a=c,b=d)) * poly2(x=poly3(a=c,b=d)) * poly21(x=poly2,a=c,b=d)
+poly51(c=0)   == poly21(x=poly3(a=d,b=e)) * poly3(x=poly3(a=d,b=e)) * poly21(x=poly3,a=d,b=e)
+so I conjecture
+poly61(d=0)   == poly31(x=poly3(a=e,b=f)) * poly4(x=poly3(a=e,b=f)) * poly21(x=poly4,a=e,b=f)
