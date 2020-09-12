@@ -143,6 +143,12 @@ for
 
 * All these are for the {5,1} partition:
 
+current guess for [1,1,1,1,e] gives:
+x^5 + (3*e + 12)*x^4 + (2*e^2 + 31*e + 53)*x^3 + (-2*e^3 + 21*e^2 +
+111*e + 104)*x^2 + (-3*e^4 - 3*e^3 + 55*e^2 + 121*e + 85)*x - e^5 -
+5*e^4 + 5*e^3 + 48*e^2 + 40*e + 20
+
+
   showPolysCustom('e', (lambda e: [1,1,1,1,4+e]), 5, [0,2,3,6,10])
 x^5 (  1 ) +
 x^4 (  3e + 12 ) +
