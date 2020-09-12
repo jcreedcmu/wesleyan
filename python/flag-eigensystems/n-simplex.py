@@ -160,6 +160,8 @@ def computePolys():
   showPolysCustom('e', (lambda e: [3,1,1,1,6+e]), 5, [0,2,4,6,10])
   showPolysCustom('e', (lambda e: [1,1,3,1,6+e]), 5, [0,1,3,6,10])
 
-showEigs([1,1.05,1.1,1.2,0.93])
+#showEigs([1,1.05,1.1,1.2,0.93])
 #computePolys()
 #renderEigs([1,1,1,1,4],[2,1,1,1,4])
+
+showPolysCustom('e', (lambda e: [1,1,1,1,e+3]), 5, [1,5,7,11,15])
