@@ -114,35 +114,6 @@ poly221 = -poly32.subs(x=-x)
 ///
 }}}
 
-{{{id=44|
-all([
- poly21(a=0)   == poly1(x=x+b) * poly1(x=x-b),
- #
- poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
- poly22(c=0)   == poly21,
- poly31(b=0)   == poly2(x=x+c) * poly11(x=x+c) * poly2(x=x-c),
- poly31(c=0)   == poly3 * poly21,
- #
- poly5(c=0)    == poly3(x=x+d),
- #
- poly41(d=0)   == poly4 * poly31,
- poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
- poly41(b=0)   == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
- #
- poly32(d=0)   == poly31 * poly22,
- poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
- poly32(b=0)   == (poly3(a=c,b=d) + a) * poly21(x=x+a,a=c,b=d) * poly21(x=x-a,a=c,b=d),
- #
- poly311(d=0)  == poly31 * poly211,
- poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
- #
- poly2111(d=0) == poly1111 * poly211,
- poly2111(c=0) == poly111(x=x-d) * poly111(x=x+d) * poly21(x=x-d),
- ])
-///
-True
-}}}
-
 {{{id=138|
 poly51 = (1 * x^5 * (1) +
  14 * x^2 * (a*b*c + b*c*d + c*d*e) +
@@ -227,18 +198,37 @@ poly33 = (-1 * (a^2*b^2*c + a*b^2*c^2 + b^2*c^2*d + b*c^2*d^2 + c^2*d^2*e + c*d^
 ///
 }}}
 
-{{{id=148|
-poly33(x, 1, 1, 1, 1, e).polynomial(x)
+{{{id=149|
+all([
+ poly21(a=0)   == poly1(x=x+b) * poly1(x=x-b),
+ #
+ poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
+ poly22(c=0)   == poly21,
+ poly31(b=0)   == poly2(x=x+c) * poly11(x=x+c) * poly2(x=x-c),
+ poly31(c=0)   == poly3 * poly21,
+ #
+ poly5(c=0)    == poly3(x=x+d),
+ #
+ poly41(d=0)   == poly4 * poly31,
+ poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
+ poly41(b=0)   == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
+ #
+ poly32(d=0)   == poly31 * poly22,
+ poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ poly32(b=0)   == (poly3(a=c,b=d) + a) * poly21(x=x+a,a=c,b=d) * poly21(x=x-a,a=c,b=d),
+ #
+ poly311(d=0)  == poly31 * poly211,
+ poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ #
+ poly2111(d=0) == poly1111 * poly211,
+ poly2111(c=0) == poly111(x=x-d) * poly111(x=x+d) * poly21(x=x-d),
+ #
+ poly51(e=0)   == poly5 * poly41,
+ poly51(d=0)   == poly4(x=x-e) * poly4(x=x+e) * poly31(x=x+e),
+ #
+ poly33(e=0)   == poly32,
+ poly33(d=0)   == poly31(x=x+e) * poly22(x=x-e)
+ ])
 ///
-x^5 + (e + 4)*x^4 + (-2*e^2 + 2*e - 2)*x^3 + (-2*e^3 - 6*e^2 - 6*e - 16)*x^2 + (e^4 - 2*e^3 - 9*e^2 - 14*e - 3)*x + e^5 + 2*e^4 - 5*e^3 - 6*e^2 + e + 4
-}}}
-
-{{{id=140|
-poly33(t, 1,1.05,1.1,1.2,0.93).real_roots()
-///
-[-4.25888631847816,
- -2.46514407542655,
- -1.09142932898995,
- 0.0100621727713902,
- 2.52539755012326]
+True
 }}}
