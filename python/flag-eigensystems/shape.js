@@ -1,4 +1,4 @@
-const sl = require('./shapelib');
+const sl = require('./libshape');
 
 const nb_of_poly = sl.nb_of_poly;
 

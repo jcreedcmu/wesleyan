@@ -1,4 +1,4 @@
-const sl = require('./shapelib');
+const sl = require('../libshape');
 
 /* this is the result of setting
 
@@ -122,5 +122,44 @@ const guess =
  [-1, [0, 0, 0, 0, 0, 5]]]
 
 guess.forEach(([coef, mon]) => {
-  console.log(coef, `[${sl.shape_of_mon(mon)}]`);
+  // we do slice(1) because ignore the first variable, which is x.
+  console.log(coef, `[${sl.shape_of_mon(mon.slice(1))}]`);
 });
+
+// we get out from this
+
+// -1 [3-1 1]
+// -1 [3-2]
+// -1 [4 1]
+// -1 [5]
+// -2 [1-3-1]
+// -2 [3]
+// -2 [4-1]
+// -3 [3-1]
+// -3 [4]
+// 1 [2-2-1]
+// 1 [3 1-1]
+// 1 []
+// 14 [1-1-1]
+// 15 [1-1 1]
+// 16 [1 1 1]
+// 2 [2 2 1]
+// 2 [2]
+// 2 [3 2]
+// 20 [1-1-1 1]
+// 3 [1]
+// 3 [2-1 2]
+// 3 [2-1]
+// 4 [1-2-1 1]
+// 4 [1-2-1]
+// 4 [2-1-2]
+// 5 [2-1-1 1]
+// 6 [2 1-1-1]
+// 6 [2 1]
+// 6 [2 2]
+// 6 [2-1 1]
+// 7 [1-1]
+// 7 [2-1-1]
+// 8 [1 1]
+// 8 [2 1 1]
+// 9 [2 1-1]
