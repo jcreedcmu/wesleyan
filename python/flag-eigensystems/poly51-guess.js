@@ -1,3 +1,5 @@
+const sl = require('./shapelib');
+
 /* this is the result of setting
 
 guess = poly4(x=x-e) * poly4(x=x+e) * poly31(x=x+e)
@@ -118,3 +120,7 @@ const guess =
  [-1, [0, 0, 1, 0, 0, 4]],
  [-1, [0, 0, 0, 1, 0, 4]],
  [-1, [0, 0, 0, 0, 0, 5]]]
+
+guess.forEach(([coef, mon]) => {
+  console.log(coef, `[${sl.shape_of_mon(mon)}]`);
+});
