@@ -232,3 +232,25 @@ all([
 ///
 True
 }}}
+
+{{{id=153|
+cands = [p(x=q(a=d,b=e)) for p in [poly21, poly3] for q in [poly3]]
+///
+}}}
+
+{{{id=151|
+[poly33(c=0).quo_rem(cand)[1] == 0 for cand in cands]
+///
+[False, True]
+}}}
+
+{{{id=152|
+[poly51(c=0).quo_rem(cand)[1] == 0 for cand in cands]
+///
+[True, True]
+}}}
+
+{{{id=154|
+
+///
+}}}
