@@ -198,6 +198,19 @@ poly33 = (-1 * (a^2*b^2*c + a*b^2*c^2 + b^2*c^2*d + b*c^2*d^2 + c^2*d^2*e + c*d^
 ///
 }}}
 
+{{{id=157|
+mystery = (1 * x^4 * (1) +
+ 1 * (a^4 + b^4 + c^4 + d^4 + e^4) +
+ 2 * (a^2*c*d + a^2*d*e + a*b*d^2 + a*b*e^2 + b^2*d*e + b*c*e^2) +
+ 2 * x^2 * (a*b + b*c + c*d + d*e) +
+ 3 * (a^2*b^2 + b^2*c^2 + c^2*d^2 + d^2*e^2) +
+ -2 * (a*b*d*e) +
+ -2 * (a^3*b + a*b^3 + b^3*c + b*c^3 + c^3*d + c*d^3 + d^3*e + d*e^3) +
+ -2 * (a^2*c^2 + a^2*d^2 + a^2*e^2 + b^2*d^2 + b^2*e^2 + c^2*e^2) +
+ -2 * x^2 * (a^2 + b^2 + c^2 + d^2 + e^2))
+///
+}}}
+
 {{{id=149|
 all([
  poly21(a=0)   == poly1(x=x+b) * poly1(x=x-b),
@@ -225,32 +238,12 @@ all([
  #
  poly51(e=0)   == poly5 * poly41,
  poly51(d=0)   == poly4(x=x-e) * poly4(x=x+e) * poly31(x=x+e),
+ poly51(c=0)   == poly21(x=poly3(a=d,b=e)) * poly3(x=poly3(a=d,b=e)) * poly21(x=poly3,a=d,b=e),
  #
  poly33(e=0)   == poly32,
- poly33(d=0)   == poly31(x=x+e) * poly22(x=x-e)
+ poly33(d=0)   == poly31(x=x+e) * poly22(x=x-e),
+ poly33(c=0)   == poly3(x=poly3,a=d,b=e) * mystery(c=0),
  ])
 ///
 True
-}}}
-
-{{{id=153|
-cands = [p(x=q(a=d,b=e)) for p in [poly21, poly3] for q in [poly3]]
-///
-}}}
-
-{{{id=151|
-[poly33(c=0).quo_rem(cand)[1] == 0 for cand in cands]
-///
-[False, True]
-}}}
-
-{{{id=152|
-[poly51(c=0).quo_rem(cand)[1] == 0 for cand in cands]
-///
-[True, True]
-}}}
-
-{{{id=154|
-
-///
 }}}
