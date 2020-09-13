@@ -515,3 +515,15 @@ poly41(b=0)   == poly11(x=poly3(a=c,b=d)) * poly2(x=poly3(a=c,b=d)) * poly21(x=p
 poly51(c=0)   == poly21(x=poly3(a=d,b=e)) * poly3(x=poly3(a=d,b=e)) * poly21(x=poly3,a=d,b=e)
 so I conjecture
 poly61(d=0)   == poly31(x=poly3(a=e,b=f)) * poly4(x=poly3(a=e,b=f)) * poly21(x=poly4,a=e,b=f)
+
+Q: Where's some relevant stuff if I want to start attacking the cube, i.e. coxeter B_n=C_n?
+A:
+https://core.ac.uk/download/pdf/82694331.pdf
+says I want "double partitions", which are counted by
+https://oeis.org/A000712
+also useful is
+https://math.stackexchange.com/questions/2692137/irreducible-representations-of-hyperoctahedral-group
+which gives an explicit representation of the group B_n as permutation matrices, except with
+nonzero entries allowed to be ±1 instead of always +1.
+
+=== 2020.09.13

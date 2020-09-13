@@ -212,44 +212,6 @@ mystery = (1 * x^4 * (1) +
 ///
 }}}
 
-{{{id=149|
-all([
- poly21(a=0)   == poly1(x=x+b) * poly1(x=x-b),
- #
- poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
- poly22(c=0)   == poly21,
- poly31(b=0)   == poly2(x=x+c) * poly11(x=x+c) * poly2(x=x-c),
- poly31(c=0)   == poly3 * poly21,
- #
- poly5(c=0)    == poly3(x=x+d),
- #
- poly41(d=0)   == poly4 * poly31,
- poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
- poly41(b=0)   == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
- poly41(b=0)   == poly11(x=poly3(a=c,b=d)) * poly2(x=poly3(a=c,b=d)) * poly21(x=poly2,a=c,b=d),
- #
- poly32(d=0)   == poly31 * poly22,
- poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
- poly32(b=0)   == (poly3(a=c,b=d) + a) * poly21(x=x+a,a=c,b=d) * poly21(x=x-a,a=c,b=d),
- #
- poly311(d=0)  == poly31 * poly211,
- poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
- #
- poly2111(d=0) == poly1111 * poly211,
- poly2111(c=0) == poly111(x=x-d) * poly111(x=x+d) * poly21(x=x-d),
- #
- poly51(e=0)   == poly5 * poly41,
- poly51(d=0)   == poly4(x=x-e) * poly4(x=x+e) * poly31(x=x+e),
- poly51(c=0)   == poly21(x=poly3(a=d,b=e)) * poly3(x=poly3(a=d,b=e)) * poly21(x=poly3,a=d,b=e),
- #
- poly33(e=0)   == poly32,
- poly33(d=0)   == poly31(x=x+e) * poly22(x=x-e),
- poly33(c=0)   == poly3(x=poly3,a=d,b=e) * mystery(c=0),
- ])
-///
-True
-}}}
-
 {{{id=164|
 poly61 = (-1 * (a^4*c*d + a^4*d*e + a^4*e*f + a*b*d^4 + a*b*e^4 + a*b*f^4 + b^4*d*e + b^4*e*f + b*c*e^4 + b*c*f^4 + c^4*e*f + c*d*f^4) +
  -1 * (a^6 + b^6 + c^6 + d^6 + e^6 + f^6) +
@@ -356,20 +318,49 @@ poly61 = (-1 * (a^4*c*d + a^4*d*e + a^4*e*f + a*b*d^4 + a*b*e^4 + a*b*f^4 + b^4*
 }}}
 
 {{{id=160|
-poly61d0 = poly31(x=poly3(a=e,b=f)) * poly4(x=poly3(a=e,b=f)) * poly21(x=poly4,a=e,b=f)
-poly61e0 = poly5(x=x+f) * poly5(x=x-f) * poly41(x=x+f)
-poly61f0 = poly6 * poly51
+all([
+ poly21(a=0)   == poly1(x=x+b) * poly1(x=x-b),
+ #
+ poly22(b=0)   == poly2(x=x+c) * poly11(x=x-c),
+ poly22(c=0)   == poly21,
+ poly31(b=0)   == poly2(x=x+c) * poly11(x=x+c) * poly2(x=x-c),
+ poly31(c=0)   == poly3 * poly21,
+ #
+ poly5(c=0)    == poly3(x=x+d),
+ #
+ poly41(d=0)   == poly4 * poly31,
+ poly41(c=0)   == poly3(x=x-d) * poly3(x=x+d) * poly21(x=x+d),
+ poly41(b=0)   == (poly3(a=c,b=d)-a) * (poly3(a=c,b=d)+a) * poly21(x=x+a,a=c,b=d),
+ poly41(b=0)   == poly11(x=poly3(a=c,b=d)) * poly2(x=poly3(a=c,b=d)) * poly21(x=poly2,a=c,b=d),
+ #
+ poly32(d=0)   == poly31 * poly22,
+ poly32(c=0)   == poly3(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ poly32(b=0)   == (poly3(a=c,b=d) + a) * poly21(x=x+a,a=c,b=d) * poly21(x=x-a,a=c,b=d),
+ #
+ poly311(d=0)  == poly31 * poly211,
+ poly311(c=0)  == poly3(x=x-d) * poly111(x=x+d) * poly21(x=x+d) * poly21(x=x-d),
+ #
+ poly2111(d=0) == poly1111 * poly211,
+ poly2111(c=0) == poly111(x=x-d) * poly111(x=x+d) * poly21(x=x-d),
+ #
+ poly51(e=0)   == poly5 * poly41,
+ poly51(d=0)   == poly4(x=x-e) * poly4(x=x+e) * poly31(x=x+e),
+ poly51(c=0)   == poly21(x=poly3(a=d,b=e)) * poly3(x=poly3(a=d,b=e)) * poly21(x=poly3,a=d,b=e),
+ #
+ poly33(e=0)   == poly32,
+ poly33(d=0)   == poly31(x=x+e) * poly22(x=x-e),
+ poly33(c=0)   == poly3(x=poly3,a=d,b=e) * mystery(c=0),
+ #
+ [p(x,1,1,1,1,1,1) for p in [poly11,poly21,poly31,poly41,poly51,poly61]] == [chebyshev_U(i,(x+i-2)/2) for i in range(1,7)],
+ ])
 ///
+True
 }}}
 
 {{{id=161|
 def dump(poly, file):
     o = open(file,'w')
     o.write(str([[poly.monomial_coefficient(m), list(m.degrees())] for m in poly.monomials()]))
-
-dump(poly61d0, '/tmp/poly61d0.json')
-dump(poly61e0, '/tmp/poly61e0.json')
-dump(poly61f0, '/tmp/poly61f0.json')
 ///
 }}}
 
@@ -422,4 +413,21 @@ poly61(t,1,1.05,1.1,1.2,0.93,0.777).real_roots()
  -3.71948218678709,
  -2.83693338597103,
  -1.94400555360454]
+}}}
+
+{{{id=170|
+prod([t - n(2 * cos(i * pi / 6) - 3) for i in range(1,6)])
+///
+t^5 + 15.0000000000000*t^4 + 86.0000000000000*t^3 + 234.000000000000*t^2 + 300.000000000000*t + 144.000000000000
+}}}
+
+{{{id=171|
+[chebyshev_U(i+2,(x+i)/2) for i in range(-1,5)]
+///
+[x - 1,
+ x^2 - 1,
+ x^3 + 3*x^2 + x - 1,
+ x^4 + 8*x^3 + 21*x^2 + 20*x + 5,
+ x^5 + 15*x^4 + 86*x^3 + 234*x^2 + 300*x + 144,
+ x^6 + 24*x^5 + 235*x^4 + 1200*x^3 + 3366*x^2 + 4912*x + 2911]
 }}}
