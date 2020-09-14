@@ -527,3 +527,126 @@ which gives an explicit representation of the group B_n as permutation matrices,
 nonzero entries allowed to be ±1 instead of always +1.
 
 === 2020.09.13
+
+Q: What did I find out about the mathematical genealogy of combinatoricists?
+A: Richard P Stanley (who among many other things introduced the graph
+chromatic symmetric functions here
+http://www-math.mit.edu/~rstan/pubs/pubfiles/100.pdf) advised Ira
+Gessel, who advised both Jong Hyun Kim and Jordan Tirrell, both of
+whose theses seemed interesting.
+
+Q: Let's say symbols like (1 1 1) mean that I'm not *required* to have
+variables adjacent, but I'm *allowed* to. That is, if there are no
+edges, it is the symmetric monomial. What can I infer about these?
+A:
+all fully connected diagrams are the same whether () or [].
+
+(1 1 1) = [1 1 1] + [1-1 1] + [1-1-1]
+(2 1 1) = [2 1 1] + [2-1 1] + [1-1 2] + [2-1-1] + [1-2-1]
+(3 2 1) = [3 2 1] + [2-1 3] + [3-1 2] + [3-2 1] + [3-2-1] + [3-1-2] + [2-3-1]
+(1-1 1) = [1-1 1] + [1-1-1]
+(2-1 1) = [2-1 1] + [2-1-1] + [1-2-1]
+(2-2 1) = [2-2 1] + [2-2-1]
+(3-2 1) = [3-2 1] + [3-2-1] + [2-3-1]
+(1 1) = [1 1] + [1-1]
+(2 1) = [2 1] + [2-1]
+(1 1 1 1) = [1-1-1-1] + [1-1-1 1] + [1-1 1-1] + [1-1 1 1] + [1 1 1 1]
+(1-1 1 1) = [1-1-1-1] + [1-1-1 1] + [1-1 1-1] + [1-1 1 1]
+(1-1-1 1) = [1-1-1-1] + [1-1-1 1]
+(1-1 1-1) = [1-1-1-1] + [1-1 1-1]
+(1-1-1-1) = [1-1-1-1]
+
+which means
+
+[1 1] = (1 1) - (1-1)
+[2 1] = (2 1) - (2-1)
+[1 1 1] = (1 1 1) - (1-1 1)
+[1-1 1] = (1-1 1) - (1-1-1)
+[1-1 1-1] = (1-1 1-1) - (1-1-1-1)
+[1-1-1 1] = (1-1-1 1) - (1-1-1-1)
+[1-1 1 1] = (1-1 1 1) + (1-1-1-1) - (1-1 1-1) - (1-1-1 1)
+
+Q: What if I impose a^2 = b^2 = c^2 = ... = 0, i.e. all coefficients
+are infinitesimal, and I only consider diagrams with 1s in them? In
+that case they're just indexed by partitions again, effectively.
+A:
+x^2 + 1
+x^3 + x^2 + 3x
+x^4 + 2x^3 + 7x^4 + 8x + 3
+
+I get
+poly21 = [] + [1-1]
+poly31 = [] + [1] + 2[1 1] + [1-1]
+poly41 =
+[]
+2[1]
+3[1-1]
+4[1 1]
+4[1-1 1]
+4[1-1-1]
+3[1-1-1-1]
+
+poly51 =
+13[1-1-1-1-1]
+14[1-1-1]
+15[1-1 1]
+16[1 1 1]
+19[1-1-1-1]
+20[1-1-1 1]
+21[1-1 1-1]
+3[1]
+7[1-1]
+8[1 1]
+[]
+
+poly61=
+[]
+4[1]
+13[1-1]
+14[1 1]
+36[1-1-1]
+38[1-1 1]
+40[1 1 1]
+77[1-1-1-1]
+80[1-1-1 1]
+81[1-1 1-1]
+84[1-1 1 1]
+112[1-1-1-1-1]
+116[1-1-1 1-1]
+116[1-1-1-1 1]
+83[1-1-1-1-1-1]
+
+
+
+which in the other basis is
+poly21 = () + (1-1)
+poly31 = () + (1) + 2(1 1) - (1-1)
+
+poly41 =
+()
+2(1)
+-(1-1)
+4(1 1)
+4(1-1 1)
+3(1-1-1-1)
+
+poly51 =
+13(1-1-1-1-1)
+-1(1-1-1)
+-1(1-1 1)
+16(1 1 1)
+-22(1-1-1-1)
+20(1-1-1 1)
+21(1-1 1-1)
+3(1)
+-(1-1)
+8(1 1)
+()
+
+=== 2020.09.14
+
+Q: How compute eigenstuff of big matrix?
+A: https://scicomp.stackexchange.com/questions/24999/compute-all-eigenvalues-of-a-very-big-and-very-sparse-adjacency-matrix
+
+Q: Book about combinatorics of coxeter groups?
+A: https://sites.math.washington.edu/~billey/classes/coxeter/EntireBook.pdf

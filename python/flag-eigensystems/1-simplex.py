@@ -24,7 +24,7 @@ def σ1(x):
     return comp(decomp(x) * Permutation(1, 3, 2))
 
 b = 4
-a = 3
+a = 1
 
 def entry(i, j):
   if (i == (j + 1) % 6):
@@ -49,7 +49,7 @@ for i in range(nfac):
 
 for i in range(nfac):
     print(f"eigenvalue {x[i]}")
-    print(f"eigenvector {y[i] / y[i][1]}")
+    print(f"eigenvector {y[i] / y[i][0]}")
 
 v1 = y[3]
 v2 = y[4]
