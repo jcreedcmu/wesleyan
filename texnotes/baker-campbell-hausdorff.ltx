@@ -38,6 +38,7 @@
    commutative diagrams/.cd,
    arrow style=tikz,
    diagrams={>=stealth}}
+\section{Categorifying BCH}
 Given a groupoid $G$, its cardinality is defined as
 \[|G| =  \sum_{X \in G/\sim} {1\over |\mathrm{Aut}(X)|}\]
 A span of groupoids
@@ -266,4 +267,139 @@ and then we can expand an $XL$ to $6M + LX$ to get
 and an $LY$ to $6N + YL$ to get
 \[ (X + Y)^3 + 3XL + 3LX + 3LY + 3YL + 6M + 6N\]
 as required.
+
+\[ D^3 e^{qf} = f^3 + 3 ff' + 3f'f + 3f''\]
+
+\[ D^4 e^{qf} = f^4 +  4 f'ff + 4ff'f + 4fff' + 12ff'' + 12f''f + 12f' f' + 4 f''' \]
+
+\subsection{Inventing BCH from scratch}
+
+Suppose we start by just looking at
+\[ D^2(e^{qX}e^{qY}) \stackrel{?}{=} D^2(e^{qX + qY})\]
+This {\em isn't} true, (unless $XY = YX$) but we can identify the extent to which it fails to be true.
+We calculate:
+\[ X^2 + 2XY + Y^2 \stackrel{?}{=} X^2 + XY + YX + Y^2 \]
+So we want to introduce some $\Lambda$ on the right such that
+\[ XY = \Lambda + YX\]
+It's clear that $\Lambda$ is degree two in terms of $X, Y$, so we try putting a $q^2 L$
+term in the BCH expansion:
+\[ D^2(e^{qX}e^{qY}) \stackrel{?}{=} D^2(e^{qX + qY + q^2L})\]
+Then we get
+\[ X^2 + 2XY + Y^2 \stackrel{?}{=} X^2 + XY + YX + Y^2 + 2L \]
+So we assert $\Lambda = 2L$ and so
+\[ XY = 2L + YX\]
+and the $n=2$ case is settled. Now we look at the $n=3$ case, and we that our goal is
+\[X^3 + 3X^2Y + 3XY^2 + Y^3 = (X+Y)^3 + 3(X + Y)L + 3L(X + Y) \]
+As we noted before, we can massage the left side all the way into
+\[ (X + Y)^3 + 2(X + Y)L + 2L(X + Y) + 2XL + 2LY\]
+So we introduce $M = [XL]$ and $N = [LY]$ to swap these excesses around.
+We start from scratch computing
+\[ D^3(e^{qX}e^{qY}) \stackrel{?}{=} D^3(e^{qX + qY + q^2L + q^3[XL] + q^3[LY]})\]
+and find that it suffices  motivates the isomorphisms
+\[6[XL] + LX = XL\]
+\[6[LY] + YL = LY\]
+Let's try the next step.
+\[ D^4(e^{qX}e^{qY}) \stackrel{?}{=} D^4(e^{qX + qY + q^2L + q^3[XL] + q^3[LY] + q^4Z})\]
+on the left gives us
+\[ X^4 + 4X^3Y + 6X^2Y^2 + 4XY^3 + Y^4\]
+and on the right, according to
+\[ D^4 e^{qf} = f^4 +  4 f'ff + 4ff'f + 4fff' + 12ff'' + 12f''f + 12f' f' + 4 f''' \]
+gives us
+\[ (X + Y)^4 + 4L(X+Y)^2 + 4(X+Y)L(X+Y) + 4(X+Y)^2L + \]
+\[24(X+Y)([XL] + [LY]) + 24([XL] + [LY])(X+Y) + 12L^2 + 24Z\]
+Let's make a table of how much extra $L$-factors we incur by sorting various strings:
+(scaled by $1/2$)
+\[
+\begin{array}{ll}
+XXXX & 0\\
+XXXY & 0\\
+XXYX & XXL\\
+XXYY & 0\\
+XYXX & XLX + XXL\\
+XYXY & XLY\\
+XYYX & XYL + XLY\\
+XYYY & 0\\
+YXXX & LXX + XLX + XXL\\
+YXXY & LXY + XLY\\
+YXYX & LYX + XYL + XLY\\
+YXYY & LYY\\
+YYXX & YLX + LXY + YXL + XLY\\
+YYXY & YLY + LYY\\
+YYYX & YYL + YLY + LYY\\
+YYYY & 0\\
+\end{array}
+\]
+So this sums to
+\[2L(XX + 2XY + YX + 3YY) + 4XLX + 10XLY + 2YLX + 4YLY \]
+\[+ 2(3XX + 2XY + YX + YY)L\]
+which seems like kind of a disorganized mess. I don't see a canonical way of fixing it,
+even though there surely is a way.
+
+\subsection{Retreating to the almost-commutative Case}
+Suppose for the time being that $LX = XL$ and $LY = YL$
+and $XY = 2L + YX$.
+
+Let's make up the notation
+\[ (X\oplus Y)^n = \sum_{k=0}^n {n \choose k}X^kY^{n-k} \]
+for the ``ordered binomial''.
+Define a type $D_n$ for $n \ge 1$, by saying $D_1 = 0$ and generally
+%% \[
+%% \begin{array}{ll}
+%% D_1 & 0\\
+%% D_2 & 1\\
+%% D_3 & 3X + 3Y\\
+%% D_4 & 6XX + 9XY + 3YX + 6YY \\
+%% D_5 & 10 XXX + 21 XXY + 3 XYX + 18 XYY + 6 YXX + 9 YXY + 3 YYX + 10 YYY
+%% \end{array}
+%% \]
+%% The recurrence that defines $D_{n+1}$ is:
+\[ D_{n+1} = (X + Y) D_n + n(X\oplus Y)^{n-1}\]
+
+\begin{lemma}
+For any $k \ge 1$,
+\[YX^k +  2kLX^{k-1} =  X^kY\]
+\end{lemma}
+
+\begin{lemma}
+For any $k, n$,
+\[{n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} =  {n\choose k } X^kY^{n-k+1}\]
+\end{lemma}
+\begin{proof}
+Use the fact that $n {n-1\choose k-1} = {n! \over (k-1)! (n-k)!} = k{n \choose k}$.
+\[{n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} \]
+\[= {n\choose k }(YX^k Y^{n-k} +  2kL X^{k-1}Y^{n-k}) \]
+\[= {n\choose k }(X^kY^{n-k+1}) \]
+
+\end{proof}
+
+\begin{lemma}
+\[  (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1} = (X \oplus Y)^{n+1} \]
+\end{lemma}
+
+\begin{proof}
+\[  (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1}\]
+\[ = (X+Y)\sum_{k=0}^n {n\choose k} X^kY^{n-k} + 2nL \sum_{k=0}^{n-1} {n-1\choose k}X^kY^{n-k-1}\]
+\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} YX^kY^{n-k} + 2nL \sum_{k=0}^{n-1} {n-1\choose k}X^kY^{n-k-1}\]
+\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} YX^kY^{n-k} + 2nL \sum_{k=1}^{n} {n-1\choose k-1}X^{k-1}Y^{n-k}\]
+\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n \left( {n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} \right)\]
+\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} X^kY^{n-k+1}\]
+\[ = \sum_{k=0}^{n+1} {n+1\choose k} X^{k}Y^{n-k} \]
+\[ = (X \oplus Y)^{n+1} \]
+as required. \cqed
+\end{proof}
+
+\begin{lemma} For any $n \ge 1$,
+\[ (X + Y)^n + 2LD_n  = (X\oplus Y)^n \]
+\end{lemma}
+\begin{proof}
+By induction. The base case is trivial.
+In the step case, we try to evaluate
+\[  (X + Y)^{n+1} + 2LD_{n+1} \]
+\[ = (X + Y)^{n+1} + 2L(X+Y)D_{n} + 2nL(X\oplus Y)^{n-1} \qquad \hbox{(by def'n of $D_{n+1}$)}\]
+\[ = (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1}\qquad \hbox{(by i.h.)} \]
+\[ = (X \oplus Y)^{n+1} \]
+as required. \cqed
+\end{proof}
+
+
 \end{document}
