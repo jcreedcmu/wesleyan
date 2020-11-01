@@ -402,17 +402,19 @@ In the step case, we try to evaluate
 as required. \cqed
 \end{proof}
 
-\subsection{Using Someone's Notes}
+\section{Using BCH Notes}
 I think I rather like the approach I find in
  \[\texttt{http://webhome.phy.duke.edu/$\sim$mehen/760/ProblemSets/BCH.pdf}\]
+
+\subsection{First Lemma}
 Let $L_n$ stand for $[\overbrace{A,[A,\cdots, [A}^n,B]\cdots]] / n!$.
 We aim to show
-\[ e^A B e^{-A} =e^{\sum_{i = 0}^\infty L_n } = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
+\[ e^A B e^{-A} ={\sum_{i = 0}^\infty L_n } = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
 Combinatorially, let's assume $A$ and $B$ are relations and we have a family of relations $(L_i \st i \in \N)$ satisfying
 \[L_0 = B \qquad (n+1)L_{n+1} + L_n A = A L_n\]
 We should have something like
 \[\left(\partial\over\partial q\right)^n \left(e^{qA} B\right)\adjust_{q=0}  =
- \left(\partial\over\partial q\right)^n  \left((e^{\sum_{i=0}^\infty L_n(qA,B)}) e^{qA}\right)\adjust_{q=0}\]
+ \left(\partial\over\partial q\right)^n  \left(\sum_{i=0}^\infty L_n(qA,B) e^{qA}\right)\adjust_{q=0}\]
 and computing these derivatives gives us the equation
 \[ A^n B = \sum_{m=0}^n   {n! \over (n-m)!} L_{m} A^{n-m}\]
 So this is our goal. Let's define the type
@@ -453,6 +455,151 @@ which follows by above lemma. Otherwise, we compute
 \cqed
 \end{proof}
 
+%% \subsection{Preface to Second Lemma}
+
+%% \[M_0 = B \qquad (n+2)M_{n+1} + M_n A = A M_n\]
+
+%% \[L_n = (n+1) M_n \]
+%% \[ e^{xA} B {d\over dy} e^{-xA+xyB} \adjust_{y=0}={\sum_{i = 0}^\infty x^nM_n } = xB + {x^2\over 2!}[A,B] + {x^3\over 3!}[A,[A,B]] + {x^4\over 4!}[A,[A,[A,B]]] + \cdots\]
+
+\subsection{Second Lemma}
+There's another important one about differentiation. It's
+\[ e^{-A} {d\over dx} e^A = A' + {1\over 2} [A', A] + {1 \over 3!} [[A', A], A] + \cdots\]
+
+\begin{lemma}
+\[ A^a L_n A^b = A^{a+b} L_n + \sum_{q=0}^{b-1} A^{a+q} L_{n+1} A^{b-1-q} \]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+So I'm going to suppose that
+\[A = xA_1 + x^2A_2 + x^3A_3 + \cdots \]
+\[L_n = [[\cdots [A', \overbrace{A],\cdots A],A]}^n / (n+1)!\]
+which is to say
+\[L_0 = A'\]
+\[L_{n+1} = [L_n, A]\]
+which we represent type-theoretically as an isomorphism
+\[L_{n+1} + A L_n \cong L_n A\]
+and try to show
+\[ {d\over dx} e^A = e^A \sum_{k = 0}^\infty  L_k \]
+So we try to compute
+\[ {d\over dx} \sum_{t=1}^\infty {A^t \over t!} = \sum_{t=1}^\infty \sum_{p=0}^{t-1} {A^{t-1-p}L_0A^{p} \over t!} \]
+
+???
+GOAL
+\[= \sum_{t=1}^\infty {A^t \over t!} \sum_{k = 0}^\infty  L_k \]
+
+\vfil\eject
+\subsection{Defining Things Carefully}
+An `exponential power series' is a sequence of groupoids (or groupoid spans) $\{n.A_n\}$.
+The evaluation (at a groupoid), derivative, and product are defined by
+\[\{n.A_n\}(x) = \sum_{n=0}^\infty {x^n\over n!}A_n \]
+\[D \{n. A_n\} = \{n. A_{n+1}\}\]
+\[\{n. A_n\}\{n. B_n\} = \left\{n. \sum_{i=0}^n{n \choose i} A_i B_{n-i}\right\}\]
+
+We should be able to define an `ordinary power series' in terms of this:
+\[ (n.A_n) = \{n.n!A_n\}\]
+and show some isomorphisms
+\[(n.A_n)(x) = \sum_{n=0}^\infty x^nA_n \]
+\[D (n. A_n) = (n. (n+1)A_{n+1})\]
+\[(n. A_n)(n. B_n) = \left(n. \sum_{i=0}^n A_i B_{n-i}\right)\]
+
+Or maybe it's better to treat this as a first-class concept and relate the two?
+
+Compute exponential function of ordinary gf:
+(requires $A_0 = 0$)
+\[ \exp(n.A_n) = \left\{n . \sum_{\lambda_1, \ldots, \lambda_k \prov n}{n!\over k!} \prod_{i=1}^k A_{\lambda_i}\right\}\]
+I could instead define, given an arbitrary ogf $(n.A_n)$ the operation of
+\[ E(n.A_n) = \left\{n . \sum_{\lambda_1, \ldots, \lambda_k \prov n}{n!\over k!} \prod_{i=1}^k A_{\lambda_i-1}\right\}\]
+with the intuition being that $E(A) = e^{xA}$, because
+\[x(n.A_n) = \left( n.\cases{0 & if $n=0$;\cr n-1 & otherwise. }\right)\]
+This simplifies for the singleton sequence
+\[(A) = \left( n.\cases{A & if $n= 1$;\cr 0 & otherwise. }\right)\]
+to
+\[ E(A) = \{n .  A^n \}\]
+
+Then my earlier
+\[ e^A B e^{-A} =\sum_{i = 0}^\infty L_n  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
+becomes
+\[ E(A) B  =\sum_{i = 0}^\infty L_n E(A)\]
+\[ \{n.A^n\} B  =\sum_{i = 0}^\infty L_n \{n.A^n\} \]
+
+\subsection{Polynomials over Many Variables}
+\def\bn{{\bf n}}
+\def\bm{{\bf m}}
+Let $V = \{x,y,\ldots\}$ be a set of variables. An exponential generating function
+is given by a function from $\N^V$ to types that gives all the coefficients.
+We can write this as an abstraction $\{\bn.A_\bn\}$. If $P$ is a proposition, let $[P]$
+be the type that has one point when $P$ is true and is empty otherwise.
+Examples of exponential generating functions in this notation when $V = \{x,y\}$ are
+\[
+\begin{array}{ll}
+  \{\bn.[\bn(x) = 3]\} & x^3/3! (1 + y + y^2/2! + \cdots)\\
+  \{\bn.[\bn(y) = 5 \land \bn(y) = 6 ]\} & x^5y^6/5!6!\\
+  \{\bn.A_\bn\} & \sum_{\bn \in \N^V} A_\bn/ \bn!\\
+\end{array}
+\]
+where we define
+\[\bn! = \prod_{v\in V} \bn(v)! \]
+\[(\bn + x)(v) = \bn(v) + [v=x]\]
+Evaluation, derivative, product are defined by
+\[\{\bn.A_\bn\}(x=X) = \left\{ \bn: \N^{V\setminus x} . \sum_{n=0}^\infty {X^{n}\over n!}A_{\bn[n/x]} \right\} \]
+\[D_\bm \{\bn. A_\bn\} = \{\bn. A_{\bn + \bm}\}\]
+\[\{\bn. A_\bn\}\{\bn. B_\bn\} = \left\{\bn. \sum_{\bn_1 + \bn_2 = \bn}{\bn! \over \bn_1!\bn_2!} A_{\bn_1} B_{\bn_2}\right\}\]
+
+\subsection{...}
+
+\begin{tabular}{|l|l|}
+ \bf Analysis & \bf Type Theory\\
+Numbers & Types/Sets \\
+Operators/Matrices & Relations/Spans \\
+Equalities & Isomorphisms \\
+\end{tabular}
+\[\begin{tikzcd}
+& A\ar[dl]\ar[dr]\\
+n && n
+\end{tikzcd}\]
+\[ e^A e^B = e^{A + B + [A,B]/2 + [A,[A,B]]/12 + \cdots} \]
+\[ F = C_0 + xC_1 + x^2C_2/2! + x^3C_3/3! + \cdots \]
+\[ (d/dx)^n F \adjust_{x=0} = C_n\]
+
+
+\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
+\[ e^A B  = \left( B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\right) e^{A} \]
+\[ e^{qA} B  = \left( B + [qA,B] + [qA,[qA,B]]/2 + [qA,[qA,[qA,B]]]/3! + \cdots\right) e^{qA} \]
+\[ \left(\partial\over\partial q\right)^n e^{qA} B \adjust_{q=0}  = \left(\partial\over\partial q\right)^n \left( B + [qA,B] + [qA,[qA,B]]/2 + [qA,[qA,[qA,B]]]/3! + \cdots\right) e^{qA} \adjust_{q=0}\]
+
+\[ \left(\partial\over\partial q\right)^n e^{qA} B \adjust_{q=0}  = \left(\partial\over\partial q\right)^n \left( B + q[A,B] + q^2[A,[A,B]]/2 + q^3[A,[A,[A,B]]]/3! + \cdots\right) e^{qA} \adjust_{q=0}\]
+
+
+\[ L_m =  [\overbrace{A,[A}^m\cdots, B]]\]
+
+\begin{theorem}
+Suppose
+\[\begin{tikzcd}
+& A\ar[dl]\ar[dr]\\
+X && X
+\end{tikzcd} \qquad
+\begin{tikzcd}
+& B\ar[dl]\ar[dr]\\
+X && X
+\end{tikzcd}\]
+Suppose I have a family of relations/spans $(L_m \st m \ge 0)$ such that
+\[ L_0 = B\]
+\[ \forall m \ge 0 . L_m A + L_{m+1} = A L_{m} \]
+Then
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_m A^{n-m}\]
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\[ e^{qA}B = B + qAB + (q^2/2)A^2B + (q^3/3!)A^3B + \cdots\]
 
 
 \end{document}
