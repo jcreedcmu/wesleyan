@@ -407,51 +407,55 @@ I think I rather like the approach I find in
  \[\texttt{http://webhome.phy.duke.edu/$\sim$mehen/760/ProblemSets/BCH.pdf}\]
 
 \subsection{First Lemma}
-Let $L_n$ stand for $[\overbrace{A,[A,\cdots, [A}^n,B]\cdots]] / n!$.
-We aim to show
-\[ e^A B e^{-A} ={\sum_{i = 0}^\infty L_n } = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
-Combinatorially, let's assume $A$ and $B$ are relations and we have a family of relations $(L_i \st i \in \N)$ satisfying
-\[L_0 = B \qquad (n+1)L_{n+1} + L_n A = A L_n\]
-We should have something like
-\[\left(\partial\over\partial q\right)^n \left(e^{qA} B\right)\adjust_{q=0}  =
- \left(\partial\over\partial q\right)^n  \left(\sum_{i=0}^\infty L_n(qA,B) e^{qA}\right)\adjust_{q=0}\]
+We aim to show a type-theoretic analogue of
+\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots \]
+First let's generalize this by replacing $A$ with $xA$. We get
+\[ e^{xA} B e^{-xA}  = B + [xA,B] + [xA,[xA,B]]/2 + [xA,[xA,[xA,B]]]/3! + \cdots \]
+which by bilinearity of Lie bracket is
+\[ e^{xA} B e^{-xA}  = B + x[A,B] + x^2[A,[A,B]]/2 + x^3[A,[A,[A,B]]]/3! + \cdots \]
+If we define
+\[L_0 = B \qquad L_{m+1} + L_m A = A L_m\]
+(which means $L_m = [\overbrace{A,[A,\cdots, [A}^m,B]\cdots]]$)
+then our equation becomes
+\[ e^{xA} B e^{-xA}  = \sum_m {x^m \over m!} L_m \]
+or equivalently, by moving the $e^{-xA}$ over to the right as $e^{xA}$,
+\[ e^{xA} B   = \left( \sum_m {x^m \over m!} L_m \right) e^{xA}\]
+We can pull out the coefficients of these exponential generating functions by
+taking iterated derivatives:
+\[ \left(\partial\over\partial x\right)^n \left. \left(e^{xA} B  \right)\right|_{x=0} =
+ \left(\partial\over\partial x\right)^n \left.\left(\left(\sum_m {x^m \over m!} L_m \right) e^{xA} \right)\right|_{x=0} \]
 and computing these derivatives gives us the equation
-\[ A^n B = \sum_{m=0}^n   {n! \over (n-m)!} L_{m} A^{n-m}\]
-So this is our goal. Let's define the type
-\[ E(n, m) = (m+1)! \sum_{k = 0}^{n- m- 1} {k+m \choose m } A^{n-m-1-k} L_{m+1} A^k\]
-\[E(n,-1) =  A^n B \]
-and notice that
-\[E(n,n) = 0\]
-So that it suffices to telescope lemma~\ref{main} below.
-
-\begin{lemma} For any $m \ge 0$,
-\[A^n L_{m} =  L_{m}A^{n} +  (m+1) \sum_{k = 0}^{n- 1}  A^{n-1-k} L_{m+1} A^k\]
-\end{lemma}
-
-\begin{proof}
-Straightforward.
-\cqed
-\end{proof}
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
 
 
-
+Therefore, our goal is to show the theorem
 \begin{lemma}
-\label{main}
-\[E(n,m-1) =  {n!\over (n-m)!}L_m A^{n-m} + E(n, m)\]
+Suppose $A$ and $B$ are binary relations on some set $X$.
+Suppose for every $m \ge 0$ that $L_m$ is a binary relation on $X$,
+together satisfying the isomorphisms
+\[L_0 = B \qquad A L_m =  L_{m+1} + L_m A \]
+Then there is an isomorphism
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
 \end{lemma}
-\begin{proof}
-When $m=0$, we have to show
-\[A^n B =  BA^{n} +   \sum_{k = 0}^{n- 1}  A^{n-1-k} L_{1} A^k\]
-which follows by above lemma. Otherwise, we compute
-\[E(n, m-1) = m! \sum_{k = 0}^{n- m} {k+m-1 \choose m-1 } A^{n-m-k} L_{m} A^k\]
-\[= m! \sum_{k = 0}^{n- m} {k+m-1 \choose m-1 } \left( A^{n-m-k} L_{m}\right) A^k\]
-\[= m! \sum_{k = 0}^{n- m} {k+m-1 \choose m-1 } \left( L_m A^{n-m-k} + (m+1) \sum_{p = 0}^{n-m-k-1} A^{n-m-k-1-p} L_{m+1} A^p \right) A^k\]
-\[= {n! \over (n-m)!} L_m A^{n-m} + m! \sum_{k = 0}^{n- m} {k+m-1 \choose m-1 } \left( (m+1) \sum_{p = 0}^{n-m-k-1} A^{n-m-k-1-p} L_{m+1} A^{p+k} \right)\]
-\[= {n! \over (n-m)!} L_m A^{n-m} + (m+1)! \sum_{k = 0}^{n- m} {k+m-1 \choose m-1 } \left( \sum_{p = 0}^{n-m-k-1} A^{n-m-k-1-p} L_{m+1} A^{p+k} \right)\]
-\[= {n! \over (n-m)!} L_m A^{n-m} + (m+1)! \sum_{k = 0}^{n- m}   \sum_{p = 0}^{n-m-k-1} {k+m-1 \choose m-1 } A^{n-m-1-(p+k)} L_{m+1} A^{p+k} \]
 
-\[  = {n! \over (n-m)!} L_m A^{n-m} + (m+1)! \sum_{k = 0}^{n- m- 1} {k+m \choose m } A^{n-m-1-k} L_{m+1} A^k\]
-\[  = {n! \over (n-m)!} L_m A^{n-m} + E(n,m)\]
+\begin{proof}
+By induction on $n$. If $n=0$, then we are to show $B=L_0$, which is by definition.
+Otherwise, we know
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+and we must show
+\[ A^{n+1} B = \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
+By induction hypothesis, it would suffice to show
+\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
+ \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
+Let's work on the left side of this equation:
+\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
+\left(\sum_{m=0}^n   {n \choose m} A L_{m} A^{n-m}\right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} (L_{m+1} + L_mA) A^{n-m}\right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} L_{m+1} A^{n-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
+\[= \left(\sum_{m=1}^{n+1}   {n \choose m-1} L_{m} A^{n+1-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
+\[= \sum_{m=0}^{n+1}   \left({n \choose m-1} + {n \choose m}\right) L_{m} A^{n+1-m} \]
+\[= \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m} \]
+as required.
 \cqed
 \end{proof}
 
