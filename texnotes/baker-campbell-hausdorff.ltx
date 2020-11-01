@@ -470,31 +470,41 @@ as required.
 There's another important one about differentiation. It's
 \[ e^{-A} {d\over dx} e^A = A' + {1\over 2} [A', A] + {1 \over 3!} [[A', A], A] + \cdots\]
 
+I'm going to generalize to
+\[ e^{-yA} {d\over dx} e^{yA} = yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\]
+and rearrange
+\[  {d\over dx} e^{yA} = e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\]
+and try to pull out the iterated $y$-derivatives. If
+\[ A =  xA_1 + x^2 A_2 + \cdots \]
+then
+\[e^{yA} = y(  xA_1 + x^2 A_2 + \cdots ) + {y^2\over 2!}( xA_1 + x^2 A_2 + \cdots)^2 + \cdots\]
+\[ = \sum_{n = 0}^\infty \sum_{\lambda_1,\ldots,\lambda_k \prov n} {y^k\over k!} \prod_{i = 1}^k x^{\lambda_i}A_{\lambda_i}\]
+\[ = \sum_{n = 0}^\infty x^n \sum_{\lambda_1,\ldots,\lambda_k \prov n} {y^k\over k!} \prod_{i = 1}^k A_{\lambda_i}\]
+therefore
+\[ \left(\partial\over\partial y\right)^k_{y=0} \left(\partial\over\partial x\right) e^{yA} =
+\sum_{n = 1}^\infty nx^{n-1} \sum_{\lambda_1,\ldots,\lambda_k \prov n}  \prod_{i = 1}^k A_{\lambda_i} \]
+Whereas on the right I require
+\[ M_1 = A' \qquad M_{m+1} + AM_m = M_mA \]
+and then find that
+\[ \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\right)\]
+\[ =  \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \sum_{m = 1}^\infty {y^m  \over m!}M_m\right)\]
+\[ =  \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \sum_{m = 1}^\infty {y^m  \over m!}M_m\right)\]
+\[ =  \sum_{i = 0}^{k-1} { k \choose i} A^i M_{k-i} \]
+So I think the goal is to show
 \begin{lemma}
-\[ A^a L_n A^b = A^{a+b} L_n + \sum_{q=0}^{b-1} A^{a+q} L_{n+1} A^{b-1-q} \]
+\[\sum_{n = 1}^\infty nx^{n-1} \sum_{\lambda_1,\ldots,\lambda_k \prov n}  \prod_{i = 1}^k A_{\lambda_i} =
+ \sum_{i = 0}^{k-1} { k \choose i} A^i M_{k-i}\]
 \end{lemma}
 
 \begin{proof}
+By induction on $k$. For the base case of $k=1$, we need to show
+\[\sum_{n = 1}^\infty nx^{n-1}   A_{n} =  M_{1}\]
+But this is $A'$, the definition of $M_1$.
 
+The step case doesn't make sense though.
 \cqed
 \end{proof}
 
-So I'm going to suppose that
-\[A = xA_1 + x^2A_2 + x^3A_3 + \cdots \]
-\[L_n = [[\cdots [A', \overbrace{A],\cdots A],A]}^n / (n+1)!\]
-which is to say
-\[L_0 = A'\]
-\[L_{n+1} = [L_n, A]\]
-which we represent type-theoretically as an isomorphism
-\[L_{n+1} + A L_n \cong L_n A\]
-and try to show
-\[ {d\over dx} e^A = e^A \sum_{k = 0}^\infty  L_k \]
-So we try to compute
-\[ {d\over dx} \sum_{t=1}^\infty {A^t \over t!} = \sum_{t=1}^\infty \sum_{p=0}^{t-1} {A^{t-1-p}L_0A^{p} \over t!} \]
-
-???
-GOAL
-\[= \sum_{t=1}^\infty {A^t \over t!} \sum_{k = 0}^\infty  L_k \]
 
 \vfil\eject
 \subsection{Defining Things Carefully}
