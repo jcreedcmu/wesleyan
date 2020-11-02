@@ -459,12 +459,48 @@ as required.
 \cqed
 \end{proof}
 
-%% \subsection{Preface to Second Lemma}
+\subsection{Preface to Second Lemma}
 
-%% \[M_0 = B \qquad (n+2)M_{n+1} + M_n A = A M_n\]
+Let $Q = xA + yB$.
+I'm going to try to prove something like
+\[ e^{-zQ} {d\over dy} e^{zQ} = zB + {z^2\over 2!}[B,Q] + {z^3\over 3!}[[B, Q], Q]]  + \cdots\]
+So let me define $M_m$ by
+\[M_1 = B \qquad M_{m+1} = [M_m, Q]\]
+which could also be phrased
+\[M_{m+1} = M_m Q - Q M_m\]
+or
+ \[M_{m+1} +  x A M_m + yB M_m = xM_m A + yM_m B \]
 
-%% \[L_n = (n+1) M_n \]
-%% \[ e^{xA} B {d\over dy} e^{-xA+xyB} \adjust_{y=0}={\sum_{i = 0}^\infty x^nM_n } = xB + {x^2\over 2!}[A,B] + {x^3\over 3!}[A,[A,B]] + {x^4\over 4!}[A,[A,[A,B]]] + \cdots\]
+Then our goal is
+\[ e^{-zQ} {d\over dy} e^{zQ} = \sum_{m=1}^\infty {z^m\over m!} M_m \]
+this
+\[  {d\over dy} e^{zQ} = e^{zQ} \left(\sum_{m=1}^\infty {z^m\over m!} M_m \right)\]
+Then I can pull $z$-egf coefficients out and get
+\[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
+
+Let's try this for low $n$. For $n=1$ I get
+\[ {d\over dy} (xA + yB) = M_1 \]
+which is correct. For $n=2$ I get
+\[ {d\over dy} (x^2A^2 + xy(AB + BA) + y^2B^2) = 2QM_1 + M_2 \]
+\[ x(AB + BA) + 2yB^2 = 2xAB + 2yB^2 + 2M_2 \]
+and
+ \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
+so yes, this checks out also. Let's try $n=3$.
+\[ {d\over dy} (x^3A^3 + x^2y(AAB + ABA + BAA) + xy^2(BBA + BAB + ABB) + y^3B^3) =\]
+\[ 3Q^2M_1 + 3QM_2 + M_3 \]
+The lhs is
+\[  x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
+The rhs is
+\[ 3(x^2A^2 + xy(AB + BA) + y^2B^2)B + 3(xA + yB)M_2 + M_3 \]
+\[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 3(xA + yB)M_2 + M_3 \]
+what we know about $M_2, M_3$ is
+ \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
+ \[M_{3} +  x AM_2 + yBM_2 = xM_2A + y M_2B \]
+so the rhs becomes
+\[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 2(xA + yB)M_2 + xM_2A + y M_2B\]
+which after some tedious algebra becomes
+\[ = x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
+as required.
 
 \subsection{Second Lemma}
 There's another important one about differentiation. It's
