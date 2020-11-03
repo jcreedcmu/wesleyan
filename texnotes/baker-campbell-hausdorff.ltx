@@ -402,147 +402,6 @@ In the step case, we try to evaluate
 as required. \cqed
 \end{proof}
 
-\section{Using BCH Notes}
-I think I rather like the approach I find in
- \[\texttt{http://webhome.phy.duke.edu/$\sim$mehen/760/ProblemSets/BCH.pdf}\]
-
-\subsection{First Lemma}
-We aim to show a type-theoretic analogue of
-\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots \]
-First let's generalize this by replacing $A$ with $xA$. We get
-\[ e^{xA} B e^{-xA}  = B + [xA,B] + [xA,[xA,B]]/2 + [xA,[xA,[xA,B]]]/3! + \cdots \]
-which by bilinearity of Lie bracket is
-\[ e^{xA} B e^{-xA}  = B + x[A,B] + x^2[A,[A,B]]/2 + x^3[A,[A,[A,B]]]/3! + \cdots \]
-If we define
-\[L_0 = B \qquad L_{m+1} + L_m A = A L_m\]
-(which means $L_m = [\overbrace{A,[A,\cdots, [A}^m,B]\cdots]]$)
-then our equation becomes
-\[ e^{xA} B e^{-xA}  = \sum_m {x^m \over m!} L_m \]
-or equivalently, by moving the $e^{-xA}$ over to the right as $e^{xA}$,
-\[ e^{xA} B   = \left( \sum_m {x^m \over m!} L_m \right) e^{xA}\]
-We can pull out the coefficients of these exponential generating functions by
-taking iterated derivatives:
-\[ \left(\partial\over\partial x\right)^n \left. \left(e^{xA} B  \right)\right|_{x=0} =
- \left(\partial\over\partial x\right)^n \left.\left(\left(\sum_m {x^m \over m!} L_m \right) e^{xA} \right)\right|_{x=0} \]
-and computing these derivatives gives us the equation
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
-
-
-Therefore, our goal is to show the theorem
-\begin{lemma}
-Suppose $A$ and $B$ are binary relations on some set $X$.
-Suppose for every $m \ge 0$ that $L_m$ is a binary relation on $X$,
-together satisfying the isomorphisms
-\[L_0 = B \qquad A L_m =  L_{m+1} + L_m A \]
-Then there is an isomorphism
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
-\end{lemma}
-
-\begin{proof}
-By induction on $n$. If $n=0$, then we are to show $B=L_0$, which is by definition.
-Otherwise, we know
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
-and we must show
-\[ A^{n+1} B = \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
-By induction hypothesis, it would suffice to show
-\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
- \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
-Let's work on the left side of this equation:
-\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
-\left(\sum_{m=0}^n   {n \choose m} A L_{m} A^{n-m}\right) \]
-\[= \left(\sum_{m=0}^n   {n \choose m} (L_{m+1} + L_mA) A^{n-m}\right) \]
-\[= \left(\sum_{m=0}^n   {n \choose m} L_{m+1} A^{n-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
-\[= \left(\sum_{m=1}^{n+1}   {n \choose m-1} L_{m} A^{n+1-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
-\[= \sum_{m=0}^{n+1}   \left({n \choose m-1} + {n \choose m}\right) L_{m} A^{n+1-m} \]
-\[= \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m} \]
-as required.
-\cqed
-\end{proof}
-
-\subsection{Preface to Second Lemma}
-
-Let $Q = xA + yB$.
-I'm going to try to prove something like
-\[ e^{-zQ} {d\over dy} e^{zQ} = zB + {z^2\over 2!}[B,Q] + {z^3\over 3!}[[B, Q], Q]]  + \cdots\]
-So let me define $M_m$ by
-\[M_1 = B \qquad M_{m+1} = [M_m, Q]\]
-which could also be phrased
-\[M_{m+1} = M_m Q - Q M_m\]
-or
- \[M_{m+1} +  x A M_m + yB M_m = xM_m A + yM_m B \]
-
-Then our goal is
-\[ e^{-zQ} {d\over dy} e^{zQ} = \sum_{m=1}^\infty {z^m\over m!} M_m \]
-this
-\[  {d\over dy} e^{zQ} = e^{zQ} \left(\sum_{m=1}^\infty {z^m\over m!} M_m \right)\]
-Then I can pull $z$-egf coefficients out and get
-\[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
-
-Let's try this for low $n$. For $n=1$ I get
-\[ {d\over dy} (xA + yB) = M_1 \]
-which is correct. For $n=2$ I get
-\[ {d\over dy} (x^2A^2 + xy(AB + BA) + y^2B^2) = 2QM_1 + M_2 \]
-\[ x(AB + BA) + 2yB^2 = 2xAB + 2yB^2 + 2M_2 \]
-and
- \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
-so yes, this checks out also. Let's try $n=3$.
-\[ {d\over dy} (x^3A^3 + x^2y(AAB + ABA + BAA) + xy^2(BBA + BAB + ABB) + y^3B^3) =\]
-\[ 3Q^2M_1 + 3QM_2 + M_3 \]
-The lhs is
-\[  x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
-The rhs is
-\[ 3(x^2A^2 + xy(AB + BA) + y^2B^2)B + 3(xA + yB)M_2 + M_3 \]
-\[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 3(xA + yB)M_2 + M_3 \]
-what we know about $M_2, M_3$ is
- \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
- \[M_{3} +  x AM_2 + yBM_2 = xM_2A + y M_2B \]
-so the rhs becomes
-\[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 2(xA + yB)M_2 + xM_2A + y M_2B\]
-which after some tedious algebra becomes
-\[ = x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
-as required.
-
-\subsection{Second Lemma}
-There's another important one about differentiation. It's
-\[ e^{-A} {d\over dx} e^A = A' + {1\over 2} [A', A] + {1 \over 3!} [[A', A], A] + \cdots\]
-
-I'm going to generalize to
-\[ e^{-yA} {d\over dx} e^{yA} = yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\]
-and rearrange
-\[  {d\over dx} e^{yA} = e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\]
-and try to pull out the iterated $y$-derivatives. If
-\[ A =  xA_1 + x^2 A_2 + \cdots \]
-then
-\[e^{yA} = y(  xA_1 + x^2 A_2 + \cdots ) + {y^2\over 2!}( xA_1 + x^2 A_2 + \cdots)^2 + \cdots\]
-\[ = \sum_{n = 0}^\infty \sum_{\lambda_1,\ldots,\lambda_k \prov n} {y^k\over k!} \prod_{i = 1}^k x^{\lambda_i}A_{\lambda_i}\]
-\[ = \sum_{n = 0}^\infty x^n \sum_{\lambda_1,\ldots,\lambda_k \prov n} {y^k\over k!} \prod_{i = 1}^k A_{\lambda_i}\]
-therefore
-\[ \left(\partial\over\partial y\right)^k_{y=0} \left(\partial\over\partial x\right) e^{yA} =
-\sum_{n = 1}^\infty nx^{n-1} \sum_{\lambda_1,\ldots,\lambda_k \prov n}  \prod_{i = 1}^k A_{\lambda_i} \]
-Whereas on the right I require
-\[ M_1 = A' \qquad M_{m+1} + AM_m = M_mA \]
-and then find that
-\[ \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\right)\]
-\[ =  \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \sum_{m = 1}^\infty {y^m  \over m!}M_m\right)\]
-\[ =  \left(\partial\over\partial y\right)^k_{y=0}\left( e^{yA} \sum_{m = 1}^\infty {y^m  \over m!}M_m\right)\]
-\[ =  \sum_{i = 0}^{k-1} { k \choose i} A^i M_{k-i} \]
-So I think the goal is to show
-\begin{lemma}
-\[\sum_{n = 1}^\infty nx^{n-1} \sum_{\lambda_1,\ldots,\lambda_k \prov n}  \prod_{i = 1}^k A_{\lambda_i} =
- \sum_{i = 0}^{k-1} { k \choose i} A^i M_{k-i}\]
-\end{lemma}
-
-\begin{proof}
-By induction on $k$. For the base case of $k=1$, we need to show
-\[\sum_{n = 1}^\infty nx^{n-1}   A_{n} =  M_{1}\]
-But this is $A'$, the definition of $M_1$.
-
-The step case doesn't make sense though.
-\cqed
-\end{proof}
-
-
-\vfil\eject
 \subsection{Defining Things Carefully}
 An `exponential power series' is a sequence of groupoids (or groupoid spans) $\{n.A_n\}$.
 The evaluation (at a groupoid), derivative, and product are defined by
@@ -651,5 +510,199 @@ Then
 
 \[ e^{qA}B = B + qAB + (q^2/2)A^2B + (q^3/3!)A^3B + \cdots\]
 
+\section{Using BCH Notes}
+I think I rather like the approach I find in
+ \[\texttt{http://webhome.phy.duke.edu/$\sim$mehen/760/ProblemSets/BCH.pdf}\]
+
+\subsection{First Lemma}
+We aim to show a type-theoretic analogue of
+\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots \]
+First let's generalize this by replacing $A$ with $xA$. We get
+\[ e^{xA} B e^{-xA}  = B + [xA,B] + [xA,[xA,B]]/2 + [xA,[xA,[xA,B]]]/3! + \cdots \]
+which by bilinearity of Lie bracket is
+\[ e^{xA} B e^{-xA}  = B + x[A,B] + x^2[A,[A,B]]/2 + x^3[A,[A,[A,B]]]/3! + \cdots \]
+If we define
+\[L_0 = B \qquad L_{m+1} + L_m A = A L_m\]
+(which means $L_m = [\overbrace{A,[A,\cdots, [A}^m,B]\cdots]]$)
+then our equation becomes
+\[ e^{xA} B e^{-xA}  = \sum_m {x^m \over m!} L_m \]
+or equivalently, by moving the $e^{-xA}$ over to the right as $e^{xA}$,
+\[ e^{xA} B   = \left( \sum_m {x^m \over m!} L_m \right) e^{xA}\]
+We can pull out the coefficients of these exponential generating functions by
+taking iterated derivatives:
+\[ \left(\partial\over\partial x\right)^n \left. \left(e^{xA} B  \right)\right|_{x=0} =
+ \left(\partial\over\partial x\right)^n \left.\left(\left(\sum_m {x^m \over m!} L_m \right) e^{xA} \right)\right|_{x=0} \]
+and computing these derivatives gives us the equation
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+
+
+Therefore, our goal is to show the theorem
+\begin{lemma}
+Suppose $A$ and $B$ are binary relations on some set $X$.
+Suppose for every $m \ge 0$ that $L_m$ is a binary relation on $X$,
+together satisfying the isomorphisms
+\[L_0 = B \qquad A L_m =  L_{m+1} + L_m A \]
+Then there is an isomorphism
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+\end{lemma}
+
+\begin{proof}
+By induction on $n$. If $n=0$, then we are to show $B=L_0$, which is by definition.
+Otherwise, we know
+\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+and we must show
+\[ A^{n+1} B = \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
+By induction hypothesis, it would suffice to show
+\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
+ \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
+Let's work on the left side of this equation:
+\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
+\left(\sum_{m=0}^n   {n \choose m} A L_{m} A^{n-m}\right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} (L_{m+1} + L_mA) A^{n-m}\right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} L_{m+1} A^{n-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
+\[= \left(\sum_{m=1}^{n+1}   {n \choose m-1} L_{m} A^{n+1-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
+\[= \sum_{m=0}^{n+1}   \left({n \choose m-1} + {n \choose m}\right) L_{m} A^{n+1-m} \]
+\[= \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m} \]
+as required.
+\cqed
+\end{proof}
+
+%% \subsection{Preface to Second Lemma}
+
+%% Let $Q = xA + yB$.
+%% I'm going to try to prove something like
+%% \[ e^{-zQ} {d\over dy} e^{zQ} = zB + {z^2\over 2!}[B,Q] + {z^3\over 3!}[[B, Q], Q]]  + \cdots\]
+%% So let me define $M_m$ by
+%% \[M_1 = B \qquad M_{m+1} = [M_m, Q]\]
+%% which could also be phrased
+%% \[M_{m+1} = M_m Q - Q M_m\]
+%% or
+%%  \[M_{m+1} +  x A M_m + yB M_m = xM_m A + yM_m B \]
+
+%% Then our goal is
+%% \[ e^{-zQ} {d\over dy} e^{zQ} = \sum_{m=1}^\infty {z^m\over m!} M_m \]
+%% this
+%% \[  {d\over dy} e^{zQ} = e^{zQ} \left(\sum_{m=1}^\infty {z^m\over m!} M_m \right)\]
+%% Then I can pull $z$-egf coefficients out and get
+%% \[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
+
+%% Let's try this for low $n$. For $n=1$ I get
+%% \[ {d\over dy} (xA + yB) = M_1 \]
+%% which is correct. For $n=2$ I get
+%% \[ {d\over dy} (x^2A^2 + xy(AB + BA) + y^2B^2) = 2QM_1 + M_2 \]
+%% \[ x(AB + BA) + 2yB^2 = 2xAB + 2yB^2 + 2M_2 \]
+%% and
+%%  \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
+%% so yes, this checks out also. Let's try $n=3$.
+%% \[ {d\over dy} (x^3A^3 + x^2y(AAB + ABA + BAA) + xy^2(BBA + BAB + ABB) + y^3B^3) =\]
+%% \[ 3Q^2M_1 + 3QM_2 + M_3 \]
+%% The lhs is
+%% \[  x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
+%% The rhs is
+%% \[ 3(x^2A^2 + xy(AB + BA) + y^2B^2)B + 3(xA + yB)M_2 + M_3 \]
+%% \[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 3(xA + yB)M_2 + M_3 \]
+%% what we know about $M_2, M_3$ is
+%%  \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
+%%  \[M_{3} +  x AM_2 + yBM_2 = xM_2A + y M_2B \]
+%% so the rhs becomes
+%% \[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 2(xA + yB)M_2 + xM_2A + y M_2B\]
+%% which after some tedious algebra becomes
+%% \[ = x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
+%% as required.
+
+%% \subsubsection{Trying To Prove It}
+
+%% Say $\beta$ is a bitstring, $b_1, \ldots, b_n$. We define
+%% $A_0 = A$ and $A_1 = B$ and $x_0 = x$ and $x_1 = y$.
+%% Then $Q = \sum_{b \in \{0,1\}} x_b A_b$. We still want to show
+%% \[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
+%% Let $k_b(\beta)$ be the number times the bit $b$ occurs in $\beta$.
+%% We can see that
+%% \[  Q^n = \sum_{\beta \in 2^n} x_\beta A_\beta\]
+%% \[  Q^n = \sum_{\beta \in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta\]
+%% \[  {\partial\over\partial x_1} Q^n = \sum_{\beta \in 2^n} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta\]
+%% We can see the rhs of our goal is equal to
+%% \[\sum_{k = 0}^{n-1} {n \choose k} \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\]
+%% so our goal is to prove
+%% \[\sum_{\beta \in 2^n} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta =
+%% \sum_{k = 0}^{n-1} {n \choose k} \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\]
+%% The base case of this, $n = 1$, is still the trivial goal of $B = M_1$.
+%% For the step case, we start with
+%% \[\sum_{\beta \in 2^{n+1}} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta \]
+%% and we can rewrite this in terms of smaller bitstrings: either I want to use
+%% \[\sum_{\beta \in 2^{n}} k_1(\beta)x_0^{k_0(\beta)+1}x_1^{k_1(\beta)-1} AA_\beta   +
+%% (k_1(\beta) + 1)x_0^{k_0(\beta)}x_1^{k_1(\beta)} BA_\beta  \]
+%% or
+%% \[\sum_{\beta \in 2^{n}} k_1(\beta)x_0^{k_0(\beta)+1}x_1^{k_1(\beta)-1} A_\beta A  +
+%% (k_1(\beta) + 1)x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta B  \]
+%% which based on i.h. goes to
+%% \[(x_0A + x_1B)\left(\sum_{k = 0}^{n-1} {n \choose k}  \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\right)
+%% + \sum_{\beta\in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} BA_\beta   \]
+%% or
+%% \[\left(\sum_{k = 0}^{n-1} {n \choose k}  \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\right) (x_0A + x_1B)
+%% + \sum_{\beta\in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta B  \]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Second Lemma}
+There's another important one about differentiation. It's
+\[ e^{-A} {d\over dx} e^A = A' + {1\over 2} [A', A] + {1 \over 3!} [[A', A], A] + \cdots\]
+
+I'm going to generalize to
+\[ e^{-yA} {d\over dx} e^{yA} = yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\]
+and rearrange
+\[  {d\over dx} e^{yA} = e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\]
+and just give the name $D = A'$ to be more visually clear, so this is
+\[  {d\over dx} e^{yA} = e^{yA} \left(yD + {y^2\over 2} [D, A] + {y^3 \over 3!} [[D, A], A] + \cdots\right)\]
+and make the definitions
+\[ M_1 = D \qquad M_{m+1} = [M_m, A]\]
+or equivalently require (in a more type-theory compatible fashion) that
+\[ M_0 = 0 \qquad M_1 = D \qquad M_{m+1} + A M_m = M_m A\]
+so that this is
+\[  {d\over dx} e^{yA} = e^{yA} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right)\]
+
+Now let's also define $S_m$ to be the $m$-term sum of $m-1$ iterates
+of $A$ with a $D$ somewhere in the middle.
+\[ (DA\cdots A) + (AD\cdots A) + \cdots + (A\cdots DA) + (A\cdots AD)\]
+So that
+\[ {d\over dx}e^{yA} = {d\over dx}\left(yA + {y^2\over 2!}A^2 + {y^3\over 3!}A^3 + \cdots\right)\]
+\[= \left(yD + {y^2\over 2!}(DA + AD) + {y^3\over 3!}(DAA + ADA + AAD) + \cdots\right)\]
+\[= \left(yS_1 + {y^2\over 2!}S_2 + {y^3\over 3!}S_3 + \cdots\right)\]
+\[= \sum_{m=0}^\infty {y^m\over m!}S_m \]
+So what we want to show is
+
+\[ \sum_{m=0}^\infty {y^m\over m!}S_m = e^{yA} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right) \]
+and it would suffice to show
+\[ S_n = \sum_{k = 0}^n {n \choose k} A^k M_{n-k} \]
+for every $n$.
+
+\begin{lemma}
+Suppose $A$ is a relation and
+\[  M_1 = D \qquad M_{n+1} + A M_n = M_n A\]
+\[  S_1 = D \qquad S_{n+1} = A^n D + S_n A \]
+then for every $n \ge 0$ we have
+\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \]
+\end{lemma}
+
+\begin{proof}
+The base case is $n=1$. We must show $S_1 = M_1$, but this is true by definition.
+Otherwise, we know
+\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \]
+and try to show
+\[ S_{n+1} = \sum_{k = 0}^{n} {{n+1} \choose k} A^k M_{{n+1}-k} \]
+We show this as follows:
+\[ S_{n+1} = A^n D + S_n A   \]
+\[ = A^n D + \left(\sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \right)A \]
+\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} A \]
+\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k (M_{n+1-k} + A M_{n-k})  \]
+\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n+1-k} + \sum_{k = 0}^{n-1} {n \choose k} A^{k+1} M_{n-k}  \]
+\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n+1-k} + \sum_{k = 1}^{n} {n \choose k - 1} A^{k} M_{n+1-k}  \]
+\[ = A^n D + \left(M_{n+1} +  \sum_{k = 1}^{n-1} {n \choose k} A^k M_{n+1-k}\right)
+ +\left(nA^nD + \sum_{k = 1}^{n-1} {n \choose k - 1} A^{k} M_{n+1-k} \right) \]
+\[ = A^n D + M_{n+1} + nA^nD + \sum_{k = 1}^{n-1} \left({n \choose k}+{n \choose k - 1}\right) A^k M_{n+1-k}\]
+\[ = A^n D + M_{n+1} + nA^nD + \sum_{k = 1}^{n-1} {n+1 \choose k} A^k M_{n+1-k} \]
+\[ = (n+1)A^nD + \sum_{k = 0}^{n-1} {n+1 \choose k} A^k M_{n+1-k} \]
+\[ = \sum_{k = 0}^{n} {n+1 \choose k} A^k M_{n+1-k} \]
+as required. \cqed
+\end{proof}
 
 \end{document}
