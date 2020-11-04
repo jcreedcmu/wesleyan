@@ -803,6 +803,7 @@ and this follows by i.h. multiplied on the right by $H$
 \end{proof}
 
 
+
 \subsection{Computations}
 Assume
 \[ G_1 = A + B\]
@@ -846,5 +847,38 @@ we need
 \[ {2}[[G_2,G_1],G_1] + [[G_1, G_2],G_1] + 9[G_3,G_1] \]
 \[ + [[G_1,G_1],G_2] + 6[G_2,G_2] + 3[G_1, G_3] + 24G_4 \]
 
+The expansion lemma tells us
+\[XYZ = YXZ + Z[X,Y] + [[X,Y],Z]\]
+So let's do this to the rhs:
+\[ 2G_2G_1G_1 \mapsto 2(G_1G_2G_1 + G_1[G_2,G_1] + [[G_2,G_1],G_1])\]
+\[ G_1G_2G_1 \mapsto G_2G_1G_1 + G_1[G_1,G_2] + [[G_1,G_2],G_1]\]
+\[ G_1G_1G_2 \mapsto G_1G_1G_2 + G_2[G_1,G_1] + [[G_1,G_1],G_2]\]
+\[ 9G_3G_1 \mapsto 9(G_1G_3 + [G_3,G_1]) \]
+\[ 3G_1G_3 \mapsto 3(G_3G_1 + [G_1,G_3]) \]
+\[ 6G_2G_2 \mapsto 6(G_2G_2 + [G_2,G_2]) \]
+and after doing that I have $R = $
+\[ G_1^4 + 3G_2G^2_1 + 5G_1G_2G_1 + 4G_1^2G_2 + 6G_3G_1  + 12G_2G_2 + 18G_1G_3 \]
+\[ + 2G_1[G_2,G_1] + G_1[G_1,G_2] + G_2[G_1,G_1] + [[[A,B],B],B]\]
+To eliminate a $G_3$ I need to use
+\[ 2[G_2,G_1] + [G_1, G_2] + 6G_3 = [[A,B],B] \]
+Thankfully all my $G_3$s come in batches of 6. I wish to execute
+\[ 2[G_2,G_1]G_1 + [G_1, G_2]G_1 + 6G_3G_1 = [[A,B],B]G_1 \]
+\[ 6G_1[G_2,G_1] + 3G_1[G_1, G_2] + 18G_1G_3 = 3G_1[[A,B],B] \]
+For this plan I still need to come up with
+\[ 2[G_2,G_1]G_1 + [G_1, G_2]G_1 \]
+\[ 4G_1[G_2,G_1] + 2G_1[G_1, G_2] \]
 
+so I execute
+\[2G_2G_1G_1 \mapsto 2([G_2,G_1]G_1 + G_1G_2G_1) \]
+\[G_1G_2G_1 \mapsto [G_1,G_2]G_1 + G_2G_1G_1 \]
+\[4G_1G_2G_1  \mapsto 4(G_1[G_2,G_1] + G_1G_1G_2)\]
+\[ 2G_1G_1G_2 \mapsto 2(G_1[G_1, G_2] + G_1G_2G_1) \]
+Yielding $R = $
+\[ G_1^4 + 2G_2G^2_1 + 4G_1G_2G_1 + 6G_1^2G_2 + 12G_2G_2  \]
+\[ + [[A,B],B]G_1  + 3G_1[[A,B],B] + [[[A,B],B],B]\]
+And now all the $G_2$ coefficients are even, and I can convert them:
+\[ R = G_1^4 + [A,B]G_1G_1 + 2G_1[A,B]G_1 + 3G_1G_1[A,B] + 3[A,B][A,B]  \]
+\[ + [[A,B],B]G_1  + 3G_1[[A,B],B] + [[[A,B],B],B]\]
+and if we grind out all the Lie brackets and $G_1$s this does become
+$(A \oplus B)^4$.
 \end{document}
