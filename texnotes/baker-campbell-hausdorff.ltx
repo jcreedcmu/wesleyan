@@ -783,33 +783,22 @@ then
 \[e^{xA} e^{xB} = e^{xG_1 + x^2 G_2 + \cdots} \]
 
 \section{Sandbox}
-\subsection{Lemmas}
-\subsubsection{}
-If I need to obtain $[X,Y]$ from non-Lie-bracket material, I consume $XY$:
-\[[X,Y] + YX = XY\]
-\subsubsection{}
-If we need to obtain $[[X,Y],Z]$ from non-Lie-bracket material, I want to consume $[X,Y]Z$, by
-\[[[X,Y],Z] + Z[X,Y] = [X,Y]Z\]
-But for that we first need an $[X,Y]Z$, so we consume $XYZ$. Therefore
-\[[[X,Y],Z] + Z[X,Y] + YXZ = [X,Y]Z + YXZ = XYZ\]
-\subsubsection{}
-If we need to obtain $[[[X,Y],Z],W]$ from non-Lie-bracket material, I want to consume $[[X,Y],Z]W$, by
-\[[[[X,Y],Z],W] + W[[X,Y],Z] = [[X,Y],Z]W\]
-But for that we need to produce $[[X,Y],Z]W$. We use
-\[[[X,Y],Z]W + Z[X,Y]W + YXZW = XYZW\]
-Therefore
-\[[[[X,Y],Z],W] + W[[X,Y],Z] + Z[X,Y]W + YXZW = XYZW\]
-\subsubsection{}
+\subsection{Expansion}
 Define $[\vec G]$ by
-\[ [G] = G \qquad [\vec G G] = [\vec G]G - G[\vec G] \]
+\[ [H] = H \qquad [\vec G H] = [\vec G]H - H[\vec G] \]
 Define $E(\vec G)$ by
-\[ E(G) = 0 \qquad  E(\vec GG) = E(\vec G)G + G[\vec G]\]
+\[ E(H) = 0 \qquad  E(\vec GH) = E(\vec G)H + H[\vec G]\]
 
 \begin{lemma}
 \[[\vec G] + E(\vec G)  = \prod \vec G\]
 \end{lemma}
 \begin{proof}
-By induction.
+By induction. Base case is $H = H$.
+For the step case, we want to verify
+\[[\vec G H] + E(\vec G H)  = \left(\prod \vec G\right)H\]
+This is the same as
+\[[\vec G]H - H[\vec G] + E(\vec G) H + H[\vec G]  = \left(\prod \vec G\right)H\]
+and this follows by i.h. multiplied on the right by $H$
 \cqed
 \end{proof}
 
