@@ -781,4 +781,81 @@ and generally something like
   {\lambda_1 n! \over k!}  [[G_{\lambda_1}, G_{\lambda_2} ]\cdots  G_{\lambda_k}] \]
 then
 \[e^{xA} e^{xB} = e^{xG_1 + x^2 G_2 + \cdots} \]
+
+\section{Sandbox}
+\subsection{Lemmas}
+\subsubsection{}
+If I need to obtain $[X,Y]$ from non-Lie-bracket material, I consume $XY$:
+\[[X,Y] + YX = XY\]
+\subsubsection{}
+If we need to obtain $[[X,Y],Z]$ from non-Lie-bracket material, I want to consume $[X,Y]Z$, by
+\[[[X,Y],Z] + Z[X,Y] = [X,Y]Z\]
+But for that we first need an $[X,Y]Z$, so we consume $XYZ$. Therefore
+\[[[X,Y],Z] + Z[X,Y] + YXZ = [X,Y]Z + YXZ = XYZ\]
+\subsubsection{}
+If we need to obtain $[[[X,Y],Z],W]$ from non-Lie-bracket material, I want to consume $[[X,Y],Z]W$, by
+\[[[[X,Y],Z],W] + W[[X,Y],Z] = [[X,Y],Z]W\]
+But for that we need to produce $[[X,Y],Z]W$. We use
+\[[[X,Y],Z]W + Z[X,Y]W + YXZW = XYZW\]
+Therefore
+\[[[[X,Y],Z],W] + W[[X,Y],Z] + Z[X,Y]W + YXZW = XYZW\]
+\subsubsection{}
+Define $[\vec G]$ by
+\[ [G] = G \qquad [\vec G G] = [\vec G]G - G[\vec G] \]
+Define $E(\vec G)$ by
+\[ E(G) = 0 \qquad  E(\vec GG) = E(\vec G)G + G[\vec G]\]
+
+\begin{lemma}
+\[[\vec G] + E(\vec G)  = \prod \vec G\]
+\end{lemma}
+\begin{proof}
+By induction.
+\cqed
+\end{proof}
+
+
+\subsection{Computations}
+Assume
+\[ G_1 = A + B\]
+\[  2G_2 = [A,B] \]
+\[ 2[G_2,G_1] + [G_1, G_2] + 6G_3 = [[A,B],B] \]
+\[ {2}[[G_2,G_1],G_1] + [[G_1, G_2],G_1] + 9[G_3,G_1] \]
+\[ + [[G_1,G_1],G_2] + 6[G_2,G_2] + 3[G_1, G_3] + 24G_4 \]
+\[= [[[A,B],B],B] \]
+And assume Lie bracket is defined by $[X,Y] + YX = XY$ for
+every $X,Y$ that actually occurs.
+Try to show
+\[ \sum_{k = 0}^n {n \choose k} A^k B^{n-k} = \sum_{\lambda_1,\ldots,\lambda_k\prov n} {n!\over k!} \prod_{i=1}^k  {G_{\lambda_i}}\]
+\subsubsection{$n=1$}
+ \[A + B = G_1\]
+True by definition.
+\subsubsection{$n=2$}
+\[A^2 + 2AB + B^2 = G_1^2 + 2G_2\]
+Which I can show.
+\subsubsection{$n=3$}
+\[A^3 + 3A^2B + 3AB^2 + B^3 = G_1^3 + 3G_2G_1 + 3G_1G_2 + 6G_3\]
+Here I have to think more carefully. I need to eliminate the $G_3$. Let's try that first.
+For that I need $2[G_2,G_1]$ and $[G_1,G_2]$. I can get those by reasoning that
+\[ G_2G_1 = [G_2,G_1] + G_1G_2\]
+\[ G_1G_2 = [G_1,G_2] + G_2G_1\]
+so name the rhs $R$ and compute
+\[ R = G_1^3 + 3G_2G_1 + 3G_1G_2 + 6G_3 \]
+\[ = G_1^3 + 2G_2G_1 + 4G_1G_2 + 6G_3 + 2[G_2,G_1] + [G_1,G_2]\]
+\[ = G_1^3 + 2G_2G_1 + 4G_1G_2 + [[A,B],B]\]
+Now we want to start processing away the remaining $G_2$'s.
+\[ R = G_1^3 + [A,B]G_1 + 2G_1[A,B] + [[A,B],B]\]
+Now we want to focus on processing away the $[[A,B],B]$, so we have to at least
+expand the $G_1$'s adjacent to copies of $[A,B]$.
+\[ R = G_1^3 + [A,B]A + [A,B]B + 2A[A,B] + 2B[A,B] + [[A,B],B]\]
+\[  = G_1^3 + [A,B]A + 2[A,B]B + 2A[A,B] + B[A,B] \]
+and if I grind this out I get $(A \oplus B)^3$ as I expect.
+\subsubsection{$n=4$}
+\[(A \oplus B)^4 = \]
+\[ G_1^4 + 4G_2G^2_1 + 4G_1G_2G_1 + 4G_1^2G_2 + 12G_3G_1  + 12G_2G_2 + 12G_1G_3 + 24G_4\]
+Let's get rid of the $G_4$ first. What do we need for that? To get to $[[[A,B],B],B]$
+we need
+\[ {2}[[G_2,G_1],G_1] + [[G_1, G_2],G_1] + 9[G_3,G_1] \]
+\[ + [[G_1,G_1],G_2] + 6[G_2,G_2] + 3[G_1, G_3] + 24G_4 \]
+
+
 \end{document}
