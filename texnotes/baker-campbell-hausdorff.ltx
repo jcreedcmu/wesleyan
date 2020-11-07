@@ -1,4 +1,6 @@
 \documentclass{article}
+
+
 \usepackage{amssymb}
 \input{theorem}
 
@@ -31,6 +33,9 @@
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\sub{\subseteq}
+
+
+
 
 \title{Categorifying the BCH Formula}
 \begin{document}
@@ -982,5 +987,87 @@ Here are the possible transitions:
 \[ X \mapsto X^-\here 1 \]
 
 \subsection{Some More Conjectures}
+
+\subsubsection{Complicated}
+Let $A_0, \ldots, A_n$ be given. Associate a constant $a_i$ with each $A_i$.
+Let
+\[[A] = [A_0, \ldots, A_n] = [\cdots[[A_0, A_1], A_2]\cdots, A_n]\]
+\[[A]' = a_0[A_0, \ldots, A_n] \]
+For $\pi\in S_{n+1}$, let $\pi (A_1, \ldots, A_n) = A_{\pi 1}, \ldots, A_{\pi n}$.
+I want to conjecture that
+
+\[ \sum_{\pi \in S_{n+1}} [\pi A]' = \sum_{\pi \in S_{n+1}} \left(\sum_{k = 0}^n  (-1)^k {n\choose k} a_{\pi k}\right) \prod_{i = 0}^n A_{\pi i}\]
+
+\subsubsection{Simple}
+
+I think I directly see the pattern in how the Lie brackets of many $G$s resolve into simple product of $G$s.
+If $\lambda_0,\ldots,\lambda_k$ is a composition of $n$, then the coefficient of $G_{\lambda_0,\ldots,\lambda_k}$ in
+\[  \sum_{k = 1}^{n}\sum_{\lambda : k, n+1} {\lambda_1 n! \over k!}  G_{[\lambda]} \]
+is
+\[ \sum_{i=0}^k (-1)^i{k \choose i}\lambda_i \]
+So what I'm saying I think is
+\[  \sum_{k = 1}^{n}\sum_{\lambda : k, n+1} {\lambda_1 n! \over k!}  G_{[\lambda]}
+= \sum_{\lambda : k+1, n} G_\lambda { n! \over k!} \sum_{i=0}^k (-1)^i{k \choose i}\lambda_i\]
+But maybe this has some off-by-one errors. Let's be careful.
+
+The parameter $n$ should be at least $2$. When $n=2$, I want to be talking about 2$G_2$ on both sides.
+But it looks like actually $n=1$ is what gives me that on the left. So let's revise to
+
+\[  \sum_{k = 1}^{n-1}\sum_{\lambda : k, n} {\lambda_1 (n-1)! \over k!}  G_{[\lambda]}
+= \sum_{\lambda : k+1, n} G_\lambda { n! \over k!} \sum_{i=0}^k (-1)^i{k \choose i}\lambda_i\]
+
+Let's make sure I'm consistently using $0$-indexed compositions on both sides as well:
+\[  \sum_{k = 1}^{n-1}\sum_{\lambda : k, n} {\lambda_0 (n-1)! \over k!}  G_{[\lambda]}
+ = \sum_{\lambda : k+1, n} G_\lambda { n! \over k!} \sum_{i=0}^k (-1)^i{k \choose i}\lambda_i\]
+I think it's still ok to say $\lambda : k,n$ to say that composition $\lambda$ has $k$ parts
+(numbered $0\ldots (k-1)$) and sums to $n$. Let's fill in the missing sum on the right:
+\[  \sum_{k = 1}^{n-1}\sum_{\lambda : k, n} {\lambda_0 (n-1)! \over k!}  G_{[\lambda]}
+ = \sum_{k = 1}^{n-1} \sum_{\lambda : k, n} G_\lambda { n! \over (k-1)!} \sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+This is a bit of a mess. Let me just unpack the expression on the left first.
+\[\begin{array}{ll}
+  n & L(n)\\
+\hline
+2 & 2G_{2} \\
+3 & 6G_{3} + 2[G_2,G_1] + [G_1,G_2] \\
+4 & 24G_{4} + 9[G_3,G_1] + 3[G_1,G_3] + 6[G_2,G_2]  \\
+& + [[G_1,G_1],G_2] + [[G_1,G_2],G_1] + 2[[G_2,G_1],G_1]\\
+\end{array}\]
+And on the right I hope to end up with
+\[\begin{array}{ll}
+  n & R(n)\\
+\hline
+2 & 2G_2 \\
+3 & 6G_3 + G_2G_1 - G_1G_2 \\
+4 & 24G_4 + 6G_3G_1 - 6G_1G_3   \\
+&  + G_1G_1G_2  - 2 G_1G_2G_1 + G_2G_1G_1\\
+\end{array}\]
+So I think I need to adjust to
+\[  \sum_{k = 1}^{n-1}\sum_{\lambda : k, n} { (n-1)! \over k!}G_{[\lambda]}\lambda_0
+  = \sum_{k = 1}^{n-1} \sum_{\lambda : k, n}  { (n-1)! \over k!} G_\lambda\sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+and I think I can strengthen this claim to saying that for {\bf all} $k \in [1,n-1]$, we have
+\[  \sum_{\lambda : k, n} G_{[\lambda]}\lambda_0
+  = \sum_{\lambda : k, n}   G_\lambda\sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+
+
+I think this is immediately true for $k=1$ and $n\ge 2$. Let's see how it works for $k = 2$.
+
+\[  \sum_{p = 1}^{n-1}  p [G_p, G_{n-p} ]
+  = \sum_{p =1}^{n-1}    G_p G_{n-p} (2p - n)\]
+Let's see what happens for $n=5$.
+
+\[    [G_1, G_4] + 2[G_2,G_3] + 3[G_3,G_2] + 4[G_4,G_1]\]
+\[  =   -3 G_1 G_4 -  G_2 G_3 + G_3 G_2 + 3 G_4 G_1\]
+Checks out so far!
+
+I think this is a good target lemma to prove:
+\begin{lemma}
+\[  \sum_{\lambda : k, n} G_{[\lambda]}\lambda_0
+  = \sum_{\lambda : k, n}   G_\lambda\sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+\end{lemma}
+
+\begin{proof}
+?
+\cqed
+\end{proof}
 
 \end{document}
