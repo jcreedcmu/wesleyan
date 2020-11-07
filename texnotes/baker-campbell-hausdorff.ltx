@@ -881,4 +881,106 @@ And now all the $G_2$ coefficients are even, and I can convert them:
 \[ + [[A,B],B]G_1  + 3G_1[[A,B],B] + [[[A,B],B],B]\]
 and if we grind out all the Lie brackets and $G_1$s this does become
 $(A \oplus B)^4$.
+\subsection{The Lemma}
+We use $\lambda$ to stand for a composition $\lambda_1,\ldots,\lambda_k$ with $k$ parts.
+When $\lambda$ has $k$ parts and sums to $n$ we write $\lambda : k,n$.
+Let \[G_{[\lambda_1,\ldots, \lambda_k]} = [[G_{\lambda_1}, G_{\lambda_2} ]\cdots  G_{\lambda_k}]\]
+ \[G_{\lambda_1,\ldots, \lambda_k} = G_{\lambda_1} G_{\lambda_2} \cdots  G_{\lambda_k}\]
+\begin{lemma}
+Suppose for every $n$ that
+\[ [[A,\overbrace{B],\cdots,B}^{n}] = \sum_{k = 1}^{n}\sum_{\lambda : k, n+1}
+  {\lambda_1 n! \over k!}  G_{[\lambda]} \]
+and all relevant Lie brackets exist and have the property that
+\[ [X,Y] + YX = XY \]
+Then
+\[ \sum_{k = 0}^n {n \choose k} A^k B^{n-k} = \sum_{\lambda : k,n} {n!\over k!}  G_\lambda\]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\subsection{An Alternate Characterization of $G$s}
+We start with
+\[ G_1 = A + B\]
+\[  2G_2 = [A,B] \]
+\[ 2[G_2,G_1] + [G_1, G_2] + 6G_3 = [[A,B],B] \]
+\[ {2}[[G_2,G_1],G_1] + [[G_1, G_2],G_1] + 9[G_3,G_1] \]
+\[ + [[G_1,G_1],G_2] + 6[G_2,G_2] + 3[G_1, G_3] + 24G_4 \]
+\[= [[[A,B],B],B] \]
+and try to move things to one side, and expand out the Lie brackets. We get
+\[ G_1 = A + B\]
+\[ 2G_2 = AB - BA\]
+\[ 6G_3 + G_{21} + 2BAB = G_{12} + ABB + BBA \]
+\[ 24G_4 + G_{211} + G_{112} + 6G_{31} + 3BABB + BBBA = 2G_{121} + ABBB + 3BBAB \]
+
+The computations for the 1 and 2 case are obvious. For 3,
+I try starting with
+\[ G_1^3 + 3G_{12}  + 3G_{21} + 6G_3\]
+and I note I {\em cannot} immediately consume $2BAB$. So maybe I want to postpone the $A,B$ commutators.
+Let's just say $L_n = [[A,\overbrace{B],\cdots,B}^{n}]$ and
+\[ G_1 = A + B\]
+\[ 2G_2 = L_1 \]
+\[ 6G_3 + G_{21} = G_{12} + L_2 \]
+\[ 24G_4 + G_{211} + G_{112} + 6G_{31} = 2G_{121} + 6G_{13} + L_3 \]
+
+Then I'd get
+\subsubsection{3}
+Start with
+\[ G_1^3 + 3G_{12}  + 3G_{21} + 6G_3\]
+and move to
+\[ G_1^3 + 4G_{12}  + 2G_{21} + L_2\]
+and from there
+\[ G_1^3 + 2G_{1}L_1  + L_1G_{1} + L_2\]
+and I think I can resolve that.
+\subsubsection{4}
+\[ 6G_3 + G_{21} = G_{12} + L_2 \]
+\[ 24G_4 + G_{211} + G_{112} + 6G_{31} = 2G_{121} + 6G_{13} + L_3 \]
+
+{\hrule}
+
+Start with
+\[ G_1^4 + 4G_{121}  + 4G_{211} + 12G_{31}
+ + 4G_{112} + 12G_{13}  + 12G_{22} + 24G_4\]
+and go (processing $G_4$) to
+\[ G_1^4 + 6G_{121}  + 3G_{211} + 6G_{31}  + 3G_{112} + 18G_{13}  + 12G_{22} + L_3\]
+and go (processing $G_3$) to
+\[ G_1^4 + 4G_{121}  + 2G_{211} + L_2G_1  + 6G_{112} + 3G_1L_2 + 12G_{22} + L_3\]
+and go (processing $G_2$) to
+\[ G_1^4 + 2G_{1}L_1G_1  + L_1G_{11} + L_2G_1  + 3G_{11}L_1 + 3G_1L_2 + 3L_1L_1 + L_3\]
+
+\subsubsection{Generalizing}
+\begin{lemma}
+\[[[A,\overbrace{B],\cdots,B}^{n}] = \sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n-k}\]
+\end{lemma}
+\begin{proof}
+By induction. Step case looks like
+\[ \left[\sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n-k},B\right] \]
+\[= \left(\sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n-k}\right)B - B\left(\sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n-k}\right)\]
+\[=  \left(\sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n+1-k}\right) - \left(\sum_{k = 0}^n {n \choose k}(-1)^k B^{k+1} A B^{n-k}\right)\]
+\[=  \left(\sum_{k = 0}^n {n \choose k}(-1)^k B^k A B^{n+1-k}\right) + \left(\sum_{k = 1}^{n-1} {n \choose k-1}(-1)^k B^{k} A B^{n+1-k}\right)\]
+\[=  \left(\sum_{k = 0}^{n+1} \left({n \choose k}+{n \choose k-1}\right)(-1)^k B^k A B^{n+1-k}\right)\]
+\[=  \left(\sum_{k = 0}^{n+1} {n+1 \choose k}(-1)^k B^k A B^{n+1-k}\right)\]
+\cqed
+\end{proof}
+
+For example,
+\[ [[[[A, B], B], B], B] = AB^4 - 4BAB^3 + 6B^2AB^2 - 4B^3AB + B^4A\]
+
+\subsection{Trying To Come up with a Recurrence}
+
+There are three kinds of states. $S$ is a list of positive integers.
+\def\here#1{\underline{#1}}
+\[\pm \here n\]
+\[ \pm S  \here n\]
+\[\pm  \here n S\]
+Here are the possible transitions:
+\[ C[\here n]  \mapsto C[\here{n+1}] \]
+\[ X \mapsto -\here 1 X^- \]
+\[ X \mapsto X^-\here 1 \]
+
+\subsection{Some More Conjectures}
+
 \end{document}
