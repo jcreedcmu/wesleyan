@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bu{\mathbf{u}}
+\def\bp{\mathbf{p}}
+\def\bz{\mathbf{0}}
+\def\bzee{\mathbf{z}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+\def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+I want to describe a sheaf category whose objects are a
+certain notion of directed space. The directedness of the space takes
+place at different dimensions. There will be a ``1-texture'' (which
+imposes constraints on where 1-cells exist) and a ``2-texture'' (which
+imposes constraints on where 2-cells exist) and so on.
+
+\subsection{The Presheaf Base Category}
+Let $(J, \le)$ be some partial order.
+
+Let $\I$ be the open interval $(0,1)\subseteq \R$.
+Equip the product $\I^J$ with the product topology.
+Let $\C$ be a category with one object, thought of as being this space $\I^J$,
+with morphisms being continuous maps $\I^J \to \I^J$ that are `good' in the following sense.
+
+For any $n\in J$, define
+\[
+J_{n} = \{x \in J \st x \ge n\}
+\]
+ and let $\iota_{n} : J_{n} \to J$ be the obvious inclusion.
+If $v,w \in \I^{J_n}$, we say $v < w$ if for all $x \in J_n$, either
+\begin{itemize}
+\item $x \ne n$ and $v(x) = w(x)$, or
+\item  $x = n$ and $v(x) < w(x)$.
+\end{itemize}
+
+A map $f : \I^J \to \I^J$ is {\em good} if there is a family $(f_n : \I^{J_n} \to \I \st n \in J)$ of maps such that
+\par {\bf (Screening Axiom)}
+\[\begin{tikzcd}
+  \I^J \ar[r, "f"] \ar[d, "\I^{\iota_{n}}"'] & \I^J \ar[d, "\pi_n"]\\
+  \I^{J_{n}}  \ar[r, "f_n"'] & \I \\
+\end{tikzcd}\]
+\par {\bf (Monotonicity Axiom)}
+for any $v, w \in \I^{J_{n}}$, if $v < w$ then $f_n(v) < f_n(w)$.
+
+\subsection{Generalizing This a Little}
+
+Suppose we already have a category $\C$ which supports arbitrary
+products (think: $\mathbf{Top}$) and we have our partial order $(J, \le)$.
+Suppose also we have some black boxes on morphisms, which will tell us if
+a morphism $k : C \to C^{J_n}$ is a `good injection', (playing the role of $v < w$) and when a map
+$\ell : C \to D$ is a `good composite' (playing the role of $f_n(v) < f_n(w)$).
+
+and want to come up with a kind of variation on $\C^J$, call it
+$\C^{*J}$. The objects of $\C^{*J}$ are going to be the $J$-indexed product objects $C^J$
+that live in $\C$, and the morphisms will be a subset of the $\C$-homsets $\C[C^J, D^J]$.
+
+To be included in the $\C^{*J}$ homset, a map $f :C^J \to D^J$ needs to come equipped with a family of morphisms
+$(f_n : C^{J_n} \to D \st n \in J)$ that satisfy
+\[\begin{tikzcd}
+  &C^J \ar[r, "f"] \ar[d, "C^{\iota_{n}}"'] & D^J \ar[d, "\pi_n"]\\
+  C \ar[r, "k"']&C^{J_{n}}  \ar[r, "f_n"'] & D \\
+\end{tikzcd}\]
+Also, whenever $k : C \to C^{J_n}$ is a `good injection' we require that $f_n \o k$ is a `good composite'.
+\end{document}
