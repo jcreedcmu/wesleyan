@@ -886,9 +886,23 @@ And now all the $G_2$ coefficients are even, and I can convert them:
 \[ + [[A,B],B]G_1  + 3G_1[[A,B],B] + [[[A,B],B],B]\]
 and if we grind out all the Lie brackets and $G_1$s this does become
 $(A \oplus B)^4$.
+\vfil\eject
 \subsection{The Lemma}
+
+\[ G(x) = xG_1 + x^2G_2 + x^3G_3 + \cdots\]
+\[ e^{xA}e^{xB} = e^{G(x)}\]
+If
+\[[A,B] = 2G_2 \]
+then
+\[AA + 2AB + BB = (A + B)^2 + 2G_2\]
+\[AA + 2AB + BB = AA + AB + BA + BB + 2G_2\]
+
+\[AAA + 3AAB + 3ABB + BBB = (A + B)^3 + 3G_1G_2 + 3G_2G_1 + 6G_3\]
+
+
 We use $\lambda$ to stand for a composition $\lambda_1,\ldots,\lambda_k$ with $k$ parts.
 When $\lambda$ has $k$ parts and sums to $n$ we write $\lambda : k,n$.
+\[e^{-xB}e^{-xA}(d/dx) e^{xA}e^{xB} =e^{-G(x)}(d/dx) e^{G(x)}\]
 Let \[G_{[\lambda_1,\ldots, \lambda_k]} = [[G_{\lambda_1}, G_{\lambda_2} ]\cdots  G_{\lambda_k}]\]
  \[G_{\lambda_1,\ldots, \lambda_k} = G_{\lambda_1} G_{\lambda_2} \cdots  G_{\lambda_k}\]
 \begin{lemma}
@@ -899,10 +913,14 @@ and all relevant Lie brackets exist and have the property that
 \[ [X,Y] + YX = XY \]
 Then
 \[ \sum_{k = 0}^n {n \choose k} A^k B^{n-k} = \sum_{\lambda : k,n} {n!\over k!}  G_\lambda\]
+\[ e^{xA}e^{xB} = e^{G(x)}\]
 \end{lemma}
 
 \begin{proof}
-
+\[e^{(xG_1+x^2G_2 + x^3G_3 + \cdots)}\]
+\[ 1 + (xG_1+x^2G_2 + x^3G_3 + \cdots) + (xG_1+x^2G_2 + x^3G_3 + \cdots)^2{1\over 2}\]
+\[+ (xG_1+x^2G_2 + x^3G_3 + \cdots)^3{1\over 6}\]
+\[ {x^{14}\over 14!}G_3 G_9 G_2 {14!\over 3!} \]
 \cqed
 \end{proof}
 
@@ -1076,6 +1094,36 @@ I think this is a good target lemma to prove:
 \end{corollary}
 
 Note that either side of the equation in the corollary is what we want to set equal to
-\[[[A,\overbrace{B],\cdots,B}^{n-1}] \]
+\[L_n = [[A,\overbrace{B],\cdots,B}^{n-1}] \]
+We could also interpret the minus signs across the equation.
 
+\subsection{The Lemma, Take 2}
+We use $\lambda$ to stand for a composition $\lambda_1,\ldots,\lambda_k$ with $k$ parts.
+When $\lambda$ has $k$ parts and sums to $n$ we write $\lambda : k,n$.
+Let \[G_{[\lambda_1,\ldots, \lambda_k]} = [[G_{\lambda_1}, G_{\lambda_2} ]\cdots  G_{\lambda_k}]\]
+ \[G_{\lambda_1,\ldots, \lambda_k} = G_{\lambda_1} G_{\lambda_2} \cdots  G_{\lambda_k}\]
+Let
+\[T_n(r) = \sum_{k = 1}^{n-1} \sum_{\lambda : k, n}  { (n-1)! \over k!} G_\lambda\sum_{i=0}^{k-1} [i \in \N_r] {k-1 \choose i}\lambda_i\]
+where $r\in\{0,1\}$ and $\N_0$ is the even numbers and $\N_1$ is the odd numbers.
+
+\begin{lemma}
+If
+\[ L_n + T_n(1) = T_n(0)\]
+and
+\[ L_0 = A \qquad L_{n+1} + BL_n = L_nB\]
+Then
+\[ \sum_{k = 0}^n {n \choose k} A^k B^{n-k} = \sum_{\lambda : k,n} {n!\over k!}  G_\lambda\]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\section{Reducing $G$ to $AB$}
+
+I know
+\[ G_1 = A + B\]
+\[ 2G_2 = [A,B] \]
+\[ 6G_3 = [A,G_2] + [G_2, B]\]
 \end{document}
