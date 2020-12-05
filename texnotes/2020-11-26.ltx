@@ -52,6 +52,8 @@
 \def\lx{\bigcirc}
 \def\B{\mathbb{B}}
 \def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
 \def\R{\mathbb{R}}
 \def\bx{\mathbf{x}}
 \def\by{\mathbf{y}}
@@ -153,4 +155,172 @@ $(f_n : C^{J_n} \to D \st n \in J)$ that satisfy
   C \ar[r, "k"']&C^{J_{n}}  \ar[r, "f_n"'] & D \\
 \end{tikzcd}\]
 Also, whenever $k : C \to C^{J_n}$ is a `good injection' we require that $f_n \o k$ is a `good composite'.
+
+\subsection{Generalizing Differently}
+Hm, not sure I like the above. Let's try:
+\[\begin{tikzcd}
+  &C&&D\\
+ X\ar[ur, "f_1"]\ar[r, "f_2"]\ar[ddr, "f_n"'] &C & \to & D\\
+&\vdots\\
+  &C&& D\\
+\end{tikzcd}\]
+Suppose we have $f, f' : X \to C^J$. We write $f_n$ for $\pi_n \o f$.
+These two morphisms are $m$-similar, $f \equiv_m f'$, if for all $n \ge m$ we have $f_n = f'_n$.
+A morphism $g : C^J \to D^J$ is {\em screened} if for all $m$ we have $f \equiv_m f'$ implies $ g_m f = g_m f' : X \to D$.
+
+Suppose we have $f : X \to C^J$. We have some notion of whether
+a given morphism $k : X\to C$ is `monotone'. A morphism $g : C^J \to D^J$ is monotone
+if for all $m$ we have $f_m$ monotone implies $ g_m f : X \to D$ is
+monotone.
+
+\begin{lemma}
+If $n \ge m$ and $f \equiv_m f'$, then $f\equiv_n f'$.
+\end{lemma}
+\begin{proof}
+By transitivity of $\le$.  \cqed
+\end{proof}
+
+\begin{lemma}
+If $g : C^J \to D^J$ is screened, and $f \equiv_m f'$, then $gf \equiv_m gf'$.
+\end{lemma}
+
+\begin{proof}
+Let $n \ge m$ be given. By previous lemma, $f \equiv_n f'$. By screenedness of $g$, we have $g_n f = g_n f'$.
+\cqed
+\end{proof}
+
+\begin{lemma}[Composition preserves screenedness] If
+$g : C^J \to D^J$ is screened, and $h : D^J \to E^J$ is screened, then
+$h\o g : C^J \to E^J$ is screened.
+\end{lemma}
+
+
+\begin{proof}
+Suppose $f \equiv_m f'$. By previous lemma, $g f \equiv_m g f'$.
+By the screenedness of $h$, we have $h_m g f = h_m g f'$, as required.
+\cqed
+\end{proof}
+
+\begin{lemma}[Composition preserves monotonicity]
+If
+$g : C^J \to D^J$ is monotone, and $h : D^J \to E^J$ is monotone, then
+$h\o g : C^J \to E^J$ is monotone.
+\end{lemma}
+
+\begin{proof}
+Let $m$ and $f$ with $f_m$ monotone be given. Then $g_m f$ is monotone. Then $h_m g f$ is monotone.
+\cqed
+\end{proof}
+
+\subsection{Slight modification}
+We could just concern ourselves with vectors into $C^J$ and relations between them.
+\[\begin{tikzcd}
+  &C&&D\\
+ 1\ar[ur, "v_1"]\ar[r, "v_2"]\ar[ddr, "v_n"'] &C & \to & D\\
+&\vdots\\
+  &C&& D\\
+\end{tikzcd}\]
+We identify $C^J$ with morphisms $1 \to C^J$.
+Suppose for each $C \in C^J$ there's a binary relation $R_C \subseteq C^J \x C^J$.
+We say $g : C^J \to D^J$ preserves $R$ if $v R_C w$ implies $g(v) R_D g(w)$.
+
+I think screenedness of $g$ is just the requirement that $g$ preserves
+the relation $\equiv_m$ for every $m$. Monotonicity is the requirement that $g$ preserves
+a relation $v <_m w$ for every $m$, defined by requiring $v_m < w_m$ and, for every $n > m$, also $v_n = v_m$.
+
+\subsection{Some Example Objects}
+
+I want to set $C = (0,1)$ with the usual order, and $J = \N$. I'd like
+to think about $J = \Z$, but I'm less confident than I used to be that
+that's equivalent to the $J = \N$ case.
+
+The presheaf base category has one object, $B = (0,1)^\N$, and the morphisms are continuous maps
+$B \to B$ that preserve all the relations $\equiv_m, <_m \subseteq B \x B$.
+Again, $v \equiv_m w$ means that $\forall n \ge m . v_n = w_n$ and $v <_m w$ means that
+$v \equiv_{m+1} w$ and $v_m < w_m$. A sieve $S \subseteq \hom(B, B)$ is covering iff
+\[\bigcup_{f \in S} \rng f \supseteq B\]
+
+I claim the following object, $\I_1$ is a sheaf. We say $\I_1(U)$ is the set of functions
+$g : B \to (0,1)$ such that $v <_0 w$ implies $g(v) < g(w)$. Restriction along a function $f : B \to B \in \hom(B,B)$
+is composition: $g \cdot f = g \o f$.
+
+This might be an instance of a general pattern: if $\iota : \C \to \D$ is some inclusion, and $D \in \D$, then we can find
+a representative of $D$ even in $\hat\C$. Namely $D^* = yD \o \iota$. Expanding, $D^*(C) = \hom_\D(\iota C, D)$. But I'm actually
+not quite sure what the $\D$ is that I want.
+
+Is this really a sheaf?
+
+\section{Totally Unrelated Topic}
+
+\def\ep{\varepsilon}
+Can we think of $\ep$ and $\omega$ as just vectors in some graded vector space?
+Consider vectors in $\R^\Z$. So we allow $\ep + \ep^2 + \ep^3 + \cdots$
+and So we allow $\omega + \omega^2 + \omega^3 + \cdots$. We say $v(0)$ is the `standard part' of $v$,
+and $v(n)$ is the `$\omega^n$ part' and $v(-n)$ is the `$\ep^n$ part'. Addition is componentwise.
+Multiplication is convolution.
+
+So when are there multiplicative inverses? It seems like I should be able to say
+
+\[ {1\over \omega + 1} = \ep - \ep^2 + \ep^3 - \ep^4 + \cdots\]
+because
+\[ ( \omega + 1) \ep  = 1 + \ep \]
+\[ ( \omega + 1) (\ep - \ep^2)  = 1 - \ep^2 \]
+\[ ( \omega + 1) (\ep - \ep^2 + \ep^3)  = 1 + \ep^3 \]
+etc.
+
+and more generally
+\[ (a\omega + b)(\ep/a) = 1 + b\ep / a \]
+\[ (a\omega + b)(\ep/a -  b(\ep/a)^2) = 1 - (b\ep/a)^2\]
+\[ (a\omega + b)(\ep/a -  b(\ep/a)^2 + b^2(\ep/a)^3 = 1 + (b\ep/a)^3\]
+so
+\[ {1\over a\omega + b} = (1/b) (\ep b/a - (\ep b/a)^2 + (\ep b/a)^3 - (\ep b/a)^4 + \cdots)\]
+\[ = {1/b \over (a/b)\omega + 1} \]
+
+Right this is just an ordinary geometric series that does actually converge near the origin.
+
+\[ \sum_{n = 0}^\infty \ep^n  = {1 \over 1-\ep}\]
+\[ \sum_{n = 0}^\infty (-\ep)^n  = {1 \over 1+\ep}\]
+\[ 1 - \sum_{n = 0}^\infty (-\ep)^n  = 1 - {1 \over 1+\ep}\]
+\[ =  {\ep \over 1+\ep}\]
+\[ =  {1 \over \omega +1}\]
+
+But then what's $1\over 1 + \ep$? What's $1 \over (1 + \omega)^2$?
+That latter one doesn't seem to have a well-defined convolution, for
+each component of the vector is itself an infinite sum.
+
+I think I want to say that
+\[{1\over 1 + \ep} = 1 - \ep + \ep^2 - \ep^3 + \cdots \]
+which is resolving the finite convolution in the opposite direction to the one we'd expect from symmetry with
+$1\over 1 + \omega$. But it's the `same' direction, in the direction of $\ep^\infty$. It seems wrong to say
+\[{1\over 1 + \ep} = \omega - \omega^2 + \omega^3 - \omega^4 + \cdots\]
+\[{1\over 1 + \omega} = 1 - \omega + \omega^2 - \omega^3 + \cdots \]
+even though these convolutions play out fine formally.
+
+What I want is that if a vector has a definite upper bound, its
+reciprocal should have the opposite upper bound: a standard number's
+reciprocal should be standard, a once-infinite number's reciprocal
+should be once-infinitesimal, etc.
+
+Ok, so I only really need to define the reciprocal for
+\[ {1\over a_0 + a_1\ep + a_2\ep^2 + \cdots } = {1 \over \sum_n {a_n \ep^n}} \]
+for $a_n$ standard reals.
+I know
+\[ (a_0 + a_1\ep + a_2\ep^2  + \cdots)(1/a_0) = 1 + (a_1/a_0)\ep + (a_2/a_0)\ep^2 + \cdots\]
+\[ (a_0 + a_1\ep + a_2\ep^2  + \cdots)(1/a_0 - (a_1/a_0^2) \ep) = \]
+\[ (1 + (a_1/a_0)\ep + (a_2/a_0)\ep^2 + \cdots)\]
+\[ -(a_1/a_0)\ep - (a_1/a_0)^2\ep^2 - (a_1a_2/a_0^2)\ep^3 + \cdots)\]
+Oof that looks messy.
+
+But wait, convolution of two bounded above sequences should be ok I think.
+
+Ok, so $\R_n$ for every $n\in \Z$ is the set of hyperreals that have exactly degree $n$.
+The set $\R_0$ is the standard-class reals, which is still bigger than the actual standard
+reals. We still have $1 + 17\ep + 5\ep^2 \in \R_0$ but not in $\R$.
+
+A number is a pair of a degree $k \in \Z$ and a sequence of standard reals $(a_n)_{n\in \N}$. This is supposed
+to represent
+\[\ep^{-k} (a_0 + a_1\ep + a_2\ep^2  + \cdots)\]
+Addition is componentwise up to shifts induced by $\ep^k$.
+
+
 \end{document}
