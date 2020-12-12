@@ -23,6 +23,7 @@
 \def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
 \def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
 \def\ep{\varepsilon}
+\def\Top{\mathbf{Top}}
 \def\bcase{\mathop\mathbf{case}}
 \def\bof{\mathop\mathbf{of}}
 \def\binj{\mathbf{inj}}
@@ -322,5 +323,116 @@ to represent
 \[\ep^{-k} (a_0 + a_1\ep + a_2\ep^2  + \cdots)\]
 Addition is componentwise up to shifts induced by $\ep^k$.
 
+$\cdots$
 
+I looked up the ultrapower construction of the nonstandard reals, and
+that is definitely an important generalization of this --- what I did
+above is essentially a reinvention of interpreting Laurent series as
+infinitesimals/transfinite reals, and although that works, they aren't
+a real closed field. I can do field operations, but I can't find
+square roots or all roots of odd polynomials.
+
+\section{Back to Spaces}
+
+Let $\pi, \sigma : X \to [0,1]$ be some maps in $\Top$, and
+let $S$ be some closed subspace of $X$, the `singular points of $X$'.
+If these data satisfy the following constraints, we say that
+$(X, S, \pi, \sigma)$ is a {\em confluent} space.
+
+For any $x\in X$, there exists a unique lifting map $h$
+satisfying
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[d, "\pi(x)"'] & X \ar[d, "\pi"] \\
+{[\sigma(x),1]} \ar[r, hookrightarrow] \ar[ur, dashed, "h" description] & {[0,1]}
+\end{tikzcd}\]
+
+For every $x$ we require that $\sigma(x) \le \pi(x)$.
+If $x$ is {\em  regular}, i.e. if $x\not\in S$, then we require
+in fact that $\sigma(x) < \pi(x)$.
+
+\subsection{Attempt 2}
+
+Let $\rho, \phi : X \to [0,1]$ be some maps in $\Top$.
+If these data satisfy the following constraints, we say that
+$(X, \rho, \phi)$ is a {\em confluent} space.
+
+We write $\rho * \phi$ for $\lambda t . 1 - (1 -\rho(t))(1 - \phi(t))$.
+For any $f : Y \to X$, there exists a unique lifting map $h$
+satisfying
+
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[d, "\phi(x)"'] & X \ar[d, "\pi"] \\
+{[0,1]} \ar[r, "\rho(x) * \dash"'] \ar[ur, dashed, "h" description] & {[0,1]}
+\end{tikzcd}\]
+
+\[\begin{tikzcd}
+Y \ar[r, "f"] \ar[d, "p \o f"'] & X \ar[d, "\rho * \phi"] \\
+{Y \x [0,1]} \ar[r, hookrightarrow] \ar[ur, dashed, "h" description] & {[0,1]}
+\end{tikzcd}\]
+
+If $x \not\in S$, then $\rho$.
+
+Hmm. This doesn't seem right.
+
+\subsection{Attempt 3}
+
+Given a map $\beta : X \to [0,1]$, we can define the type
+\[G_{\beta} = (x : X) \x (i : [0,1]) \x \beta(x) \le i \]
+
+Now let a $p : X \to G_\beta$ be given such that $\pi_1 \o p = \rid$.
+Suppose we have $f : Y \to X$.
+There's a canonical way to get from $G_{\beta f}$ to $G_\beta$. We
+define
+\[G_{\star f} : ((y : Y) \x (i : [0,1]) \x \beta(f(y)) \le i) \to \]
+\[((x : X) \x (i : [0,1]) \x \beta(x) \le i) \]
+\[ G_{\star f}(y, i, \theta) = (f(y), i, \theta) \]
+\def\uu{{\underline\ }}
+There's also a canonical way to get from
+$Y$ to $G_{\beta f}$. We define
+\[ 0 : Y \to G_{\beta f} \]
+\[ 0(y) = (y, 0, \uu ) \]
+The picture of the lifting diagram I want is the following:
+\[\begin{tikzcd}
+Y \ar[r, "f"] \ar[d, "0"'] & X \ar[d, "p"] \\
+G_{\beta  f} \ar[r, "G_{\star f}"'] \ar[ur, dashed, "h" description] & {G_\beta}
+\end{tikzcd}\]
+Is the outer square commutative? I'd need
+\[ G_{\star f}(0(y)) = p(f(y)) \]
+which requires
+\[ G_{\star f}(y, 0, \uu)  = p(f(y))\]
+\[ (f(y), 0, \uu)  = p(f(y))\]
+
+This doesn't seem right.
+
+\subsection{Attempt 4}
+The map $ \beta : X \to [0,1] $ says how much `slack' we have at each point in $X$.
+The map $p : X \to G_\beta$ says how much of that slack we actually use.
+The points in $\{x \st \pi_i(p(x)) = \beta(x)\}$ are where we use up all the slack
+and we might actually be singular.
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[dd, "p(x)"'] & X \ar[d, "p"] \ar[dr, double, -]\\
+& \sum\limits_{x:X} \I_{\beta(x)} \ar[d, "\pi_2"]  \ar[r, "\pi_1"'] & X \\
+{\I_{\beta(x)}} \ar[r, "\iota"'] \ar[uur, dashed, "h" description] & {[0,1]}
+\end{tikzcd}\]
+
+\subsection{Attempt 5}
+In ordinary dependent-type terms, let's define $\I_t = [t,1]$. There is a canonical
+map $\iota : \{t : \I\} \to \I_t \to \I$.
+
+\[ \beta : X \to \I \]
+\[ p : (x : X) \to \I_{\beta(x)} \]
+and then I require for every $x : X$ that there exists a unique $h : \I_{\beta(x)} \to X$
+with the property that $h(p(x)) = x$, and also for any point $z \in \I_{\beta(x)}$,
+we get $\iota(p(h(z))) = \iota(z)$.
+
+So I can think of $h$ as a globally existing map
+\[ h : (x : X) \to \I_{\beta(x)} \to X \]
+And we postulate
+\[  (x : X) \to h(x, p(x)) = x \]
+\[  (x : X) (z : \I_{\beta(x)}) \to \iota(p(h(x, z))) = \iota(z) \]
+Furthermore, (to capture uniqueness) if we had an $x$, and a $k : \I_{\beta(x)} \to X$
+such that $k$ acted like $h\ x$, i.e.
+\[  k(p(x)) = x \]
+\[  (z : \I_{\beta(x)}) \to \iota(p(k(z))) = \iota(z) \]
+then in fact $k = h\ x$.
 \end{document}
