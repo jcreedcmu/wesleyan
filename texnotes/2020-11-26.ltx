@@ -435,4 +435,64 @@ such that $k$ acted like $h\ x$, i.e.
 \[  k(p(x)) = x \]
 \[  (z : \I_{\beta(x)}) \to \iota(p(k(z))) = \iota(z) \]
 then in fact $k = h\ x$.
+
+\subsection{Attempt 6}
+
+If we have a space $X$ and a projection map $p : X \to (0,1)$, we say $X$ is {\em confluent}
+if for any $x\in X$ and strictly monotone $k : [0,1] \to (0,1)$ such that the outer
+square commutes, we have a unique lift $h$ in
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[d, "0"'] & X \ar[d, "p"] \\
+{[0,1]} \ar[r, "k"'] \ar[ur, dashed, "h" description] & {(0,1)}
+\end{tikzcd}\]
+Note that $X$ is a covering space if the monotonicity requirement is dropped.
+
+We can imagine one such space being a subspace of another, when the following diagram
+commutes, and $\iota$ is strictly monotone:
+\[\begin{tikzcd}
+Y \ar[r] \ar[d, "q"'] & X \ar[d, "p"] \\
+{(0,1)} \ar[r, "\iota"']  & {(0,1)}
+\end{tikzcd}\]
+
+So the necessarily singular points of $X$ are those in the complement of all open
+subsets of $X$ that arise as an inclusion of a covering space.
+
+Defining a space in this way --- requiring that the set of singular
+points coinductively also is confluent in another time dimension ---
+unfortunately doesn't rule out some pathological cases that I think
+should be ruled out.
+
+The one I have in mind is a time-extended function where a new point
+in the growing codomain comes into being, but where the time it comes
+into being only exists `openly' not `closedly' --- where there is no
+singular point to mark where it comes into existence. I'm not sure how
+best to rule this out.
+
+It seems almost necessary to require the evolving set to actually
+exist in an ambient space. (or else require compactness of $X$, maybe)
+
+\subsection{Attempt 7}
+
+If we have a space $\pi : X \to [0,1]$ over the interval, then we can
+make some definitions about points in $X$. Suppose we have a point $x\in X$
+and subsets $U\subseteq X$ and $Y \subseteq [0,1]$ such that
+$x\in U$ and  $U \subseteq \pi^{-1}(Y)$.
+
+
+We say $x$ is {\em locally trivial for $U,Y$} when
+there exists a unique $h : Y \to U$ such that
+$h(\pi(x)) = x$ and $\forall y \in Y . \pi(h(y)) = y$.
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[d, "\pi(x)"'] & U \ar[d, "\pi"]\ar[r, hookrightarrow] & X  \ar[d, "\pi"]\\
+{Y} \ar[r, double, -] \ar[ur, dashed, "h" description] & {Y}\ar[r, hookrightarrow] & {[0,1]}
+\end{tikzcd}\]
+
+A point $x$ is {\em locally trivial} if there exists a subset $U\subseteq X$
+containing $x$ upstairs, and an open interval $(a,b) \ni \pi(x)$ downstairs such that
+$x$ is locally trivial for $U,(a,b)$.
+
+A point $x$ is {\em locally directed} if there exists a subset $U\subseteq X$
+containing $x$ upstairs, and $b > \pi(x)$ downstairs such that
+$x$ is locally trivial for $U,[\pi(x),b)$.
+
 \end{document}
