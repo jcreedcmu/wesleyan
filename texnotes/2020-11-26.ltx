@@ -71,6 +71,7 @@
 \def\x{\times}
 \def\st{\mathrel|}
 \def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
 \def\rcat{\mathbf{Cat}}
 \def\op{\mathsf{op}}
 \def\P{\mathbb{P}}
@@ -494,5 +495,215 @@ $x$ is locally trivial for $U,(a,b)$.
 A point $x$ is {\em locally directed} if there exists a subset $U\subseteq X$
 containing $x$ upstairs, and $b > \pi(x)$ downstairs such that
 $x$ is locally trivial for $U,[\pi(x),b)$.
+
+\subsection{Attempt 8}
+
+The main thing I want to capture is:
+\begin{itemize}
+\item The 0-cells of this extended notion of $\rset$ are sets,
+the 1-cells are {\em something like} functions,
+the 2-cells, are {\em something like} functions between functions.
+\item A 1-cell has a set of {\em singular points} which is a 0-cell.
+\item A 2-cell's singular points form a 1-cell.
+\item In general, an $(n+1)$-cell's singular points form an $n$-cell.
+\end{itemize}
+I might also think of operating in an extended version of $\rrel$, and pick out
+the relations that happen to be functional. A relation between one set and another
+looks like some space extended between the one set and another.
+For example, here's a 1-cell where the domain is $\{a_1, a_2, a_3\}$ and the
+codomain is $\{b_1, b_2, b_3\}$, and the interior singular points are
+$\{c_1, c_2, c_3, c_4\}$.
+
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+\coordinate (a1) at (0,2);
+\coordinate (a2) at (0,4);
+\coordinate (a3) at (0,5);
+
+\coordinate (b1) at (5,1.5);
+\coordinate (b2) at (5,2);
+\coordinate (b3) at (5,5);
+
+\coordinate (c1) at (2.5,2.5);
+\coordinate (c2) at (2.5,4);
+\coordinate (c3) at (1.75,3);
+\coordinate (c4) at (4,4.5);
+
+\draw  (a1)
+  .. controls ++(0,0) and ++(-1,0) .. (c1)
+  .. controls ++(1,0) and ++(0,0) .. (b1);
+
+\draw  (a3)
+  .. controls ++(0,0) and ++(-1,0) .. (c3)
+  .. controls ++(0.5,0) and ++(-0.5,0) .. (c1);
+
+\draw  (c2)
+  .. controls ++(1,0) and ++(-0.25,0) .. (c4)
+  .. controls ++(0.25,0) and ++(0,0) .. (b3);
+
+\draw (a2) .. controls ++(0,0) and ++(-1,0) .. (c3);
+\draw (c1) .. controls ++(1,0) and ++(0,0) .. (b2);
+
+\fill[black] (a1) circle (2pt) node[left] {$a_1$};
+\fill[black] (a2) circle (2pt) node[left] {$a_2$};
+\fill[black] (a3) circle (2pt) node[left] {$a_3$};
+
+\fill[black] (b1) circle (2pt) node[right] {$b_1$};
+\fill[black] (b2) circle (2pt) node[right] {$b_2$};
+\fill[black] (b3) circle (2pt) node[right] {$b_3$};
+
+\fill[black] (c1) circle (2pt) node[above] {$c_1$};
+\fill[black] (c2) circle (2pt) node[above] {$c_2$};
+\fill[black] (c3) circle (2pt) node[above] {$c_3$};
+\fill[black] (c4) circle (2pt) node[above] {$c_4$};
+
+\end{tikzpicture}\]
+
+One could imagine a 2-cell from this to
+
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+\coordinate (a1) at (0,2);
+\coordinate (a2) at (0,4);
+\coordinate (a3) at (0,5);
+
+\coordinate (b1) at (5,1.5);
+\coordinate (b2) at (5,2);
+\coordinate (b3) at (5,5);
+
+\coordinate (c1) at (2.5,2.5);
+\coordinate (c2) at (2.5,4);
+
+\coordinate (c4) at (4,4.5);
+
+\draw  (a1)
+  .. controls ++(0,0) and ++(-1,0) .. (c1)
+  .. controls ++(1,0) and ++(0,0) .. (b1);
+
+\draw  (a3)
+  .. controls ++(0,0) and ++(-1,0) .. (c1);
+
+\draw  (c2)
+  .. controls ++(1,0) and ++(-0.25,0) .. (c4)
+  .. controls ++(0.25,0) and ++(0,0) .. (b3);
+
+\draw (a2) .. controls ++(0,0) and ++(-1,0) .. (c1);
+\draw (c1) .. controls ++(1,0) and ++(0,0) .. (b2);
+
+\fill[black] (a1) circle (2pt) node[left] {$a_1$};
+\fill[black] (a2) circle (2pt) node[left] {$a_2$};
+\fill[black] (a3) circle (2pt) node[left] {$a_3$};
+
+\fill[black] (b1) circle (2pt) node[right] {$b_1$};
+\fill[black] (b2) circle (2pt) node[right] {$b_2$};
+\fill[black] (b3) circle (2pt) node[right] {$b_3$};
+
+\fill[black] (c1) circle (2pt) node[above] {$d_1$};
+\fill[black] (c2) circle (2pt) node[above] {$d_2$};
+\fill[black] (c4) circle (2pt) node[above] {$d_4$};
+
+\end{tikzpicture}\]
+
+Where we map $c_3$ and $c_1$ onto $d_1$, and $c_2$ and $c_4$ onto $d_2$,
+and nothing maps onto $d_4$. This is an example of a directed $2$-cell between
+undirected $1$-cells --- or to be a little more accurate, the {\em functional} summary
+of a diagram that we could realize in various different ways.
+
+What is required of the singular points? Because any point along a
+path plausibly {\em could} be declared singular, I'm not going to hope
+for a {\em characterization} of singular points given a space. I'm
+going to ask that the declared singular points are {\em supplied} as
+part of the data of the higher-dimensional space.
+
+But the central requirement that I want to impose on the supplied
+singular points is that their {\em complement} is somehow simple.
+
+Recall the lifting diagram
+\[\begin{tikzcd}
+\{*\} \ar[r, "x"] \ar[d, "\pi(x)"'] & U \ar[d, "\pi"]\ar[r, hookrightarrow] & X  \ar[d, "\pi"]\\
+{Y} \ar[r, double, -] \ar[ur, dashed, "h" description] & {Y}\ar[r, hookrightarrow] & {[0,1]}
+\end{tikzcd}\]
+The rightmost square is justified so long as $\pi^>(U) \subseteq Y$.
+If the lifting is possible, then $Y \subseteq \pi^>(U)$, for the function $h$
+is a witness to that. So really for an open set $U \subseteq Y$ to be sufficiently
+`simple', we want to require the unique lifting
+\[\begin{tikzcd}
+\{*\} \ar[r, "u"] \ar[d, "\pi(u)"'] & U \ar[d, "\pi"]\\
+{\pi^>(U)} \ar[r, double, -] \ar[ur, dashed, "h" description] & {\pi^>(U)}
+\end{tikzcd}\]
+for any $u \in U$. We just want to require that $\pi$ is an isomorphism between
+$U$ and $\pi^>(U)$.
+
+So a point is simple/regular/nice iff it has a neighborhood with this property, I guess?
+Is the set of simple points necessarily open in $X$?
+
+To rule out weird edge cases where we have an `openly' nascent element
+of a set that has no singular point justifying it, maybe we can require
+that the inclusion of the open interval in the closed interval is a cofibration:
+for any strict monotone $g$ we require a unique lift:
+\[\begin{tikzcd}
+{(0,1)} \ar[r, "f"] \ar[d, hookrightarrow] & X \ar[d, "\pi"]\\
+{[0,1]} \ar[r, "g"'] \ar[ur, dashed, "h" description] & {[0,1]}
+\end{tikzcd}\]
+
+\subsubsection{Some other thoughts about this}
+
+We can think of the line segments to the left and right of each
+singular point as living over it. This is sort of like having
+half-edges or flags or something. We have our set $S$ of singular points,
+and some fibered sets $L \to S$ and $R \to S$. The domain of the 1-cell
+is something like $L \setminus R$ and the codomain something like $R \setminus L$.
+A relation is functional when the map $R \to S$ is an isomorphism. Actually, maybe
+we have a diagram like
+
+\[\begin{tikzcd}
+A\ar[dr] &&C\ar[dl]\ar[dr]&& B\ar[dl]\\
+& L \ar[d] && R\ar[d]\\
+& S&&S
+\end{tikzcd}\]
+where $A$ is the domain, $B$ is the codomain, and $C$ the remaining
+set of intervals. The four arrows in the top row are all mono.
+
+\subsection{Attempt 9}
+
+What is a type theoretic account of functional morphisms?
+Let me try to make a datatype that is indexed by two sets, $\tau(A, B)$.
+The canonical way to construct a $\tau(A, B)$ is to build a tree for each point in the
+codomain, and this `consumes' the portion of the domain $A_x$
+\[
+\erule
+{\forall  x \cn B . e_x : \tau(A_x) \qquad A = \bigoplus_{x\in B} A_x}
+{(e_x \to x \st x \in B) : \tau\left(A, B\right)}
+\]
+One way to build a $\tau_A$ is to consume the whole domain:
+\[
+\erule
+{}
+{\bullet_A : \tau(A)}
+\]
+But another way is to split $C$ ways:
+\[
+\erule
+{e  : \tau(A, C)}
+{[e]_C : \tau(A)}
+\]
+Let's try to do this more sequent-like.
+\[
+\erule
+{\Delta_{1} \prov e_1 : * \qquad \cdots \qquad \Delta_{|B|} \prov e_{|B|} : *}
+{\Delta_1, \ldots, \Delta_{|B|} \prov (e_1, \ldots, e_{|B|}) : B}
+\]
+\[
+\erule
+{}
+{x \prov x : *}
+\qquad
+\erule
+{\Delta \prov e : B}
+{\Delta \prov [e] : *}
+\]
+
 
 \end{document}
