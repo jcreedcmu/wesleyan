@@ -19,35 +19,41 @@ data Unit : Set where
    ⋆ : Unit
 
 
-module Tree1 where
-  data Tree : Set1 where
-     var : Tree
-     node : {A : Set} → (A → Tree) → Tree
+data Rep : Set where
+  rUnit : Rep
 
-  mutual
-    domain_t : Tree → Set
-    domain_t var = Unit
-    domain_t (node forest) = domain_f forest
+elm : Rep → Set
+elm rUnit = Unit
 
-    domain_f : {X : Set} → (X → Tree) → Set
-    domain_f {X} forest = Σ[ x ∈ X ] domain_t (forest x)
+rΣ : ∀ {a} (ρ : Rep) → (elm ρ → Set a) → Set a
+rΣ rUnit body = (body ⋆)
 
-module Tree1Intrinsic where
-  data Tree : Set → Set1 where
-     var : Tree Unit
-     node : {A : Set} {B : A → Set} → ((a : A) → Tree (B a)) → Tree (Σ A B)
+-- module Tree1Intrinsic where
+--   data Tree : Set → Set1 where
+--      var : Tree Unit
+--      node : {A : Set} {B : A → Set} → ((a : A) → Tree (B a)) → Tree (Σ A B)
+
+mutual
+  {- Forest T S A
+  is some structure whose inputs look like S, and whose outputs look like A. We
+  carve up inputs S into chunks, and pass each one to T to tell us what kind of
+  node goes there. -}
+  data Forest1 (T : Set → Set1) : Set → Set → Set1 where
+    forest1 : {A : Set} {B : A → Set} → ((a : A) → T (B a)) → Forest1 T (Σ A B) A
+
+  data Tree1 : Set → Set1 where
+    var1 : Tree1 Unit
+    node1 : {A S : Set} → Forest1 Tree1 S A → Tree1 S
 
 
-module Tree2Intrinsic (Tree : Set → Set1) where
+just : Set → Set
+just A = Σ Unit (λ _ → A)
 
-  ComposableForest : {A : Set} (t : Tree A) → Set1
-  ComposableForest = {!!}
+one-node : (A : Set) → Tree1 (just A)
+one-node A = node1 {Unit} {just A} (forest1  (λ _ → node1 {!forest1 ?!}))
 
-  compose : {A : Set} (t : Tree A) → ComposableForest t → Tree A
-  compose = {!!}
-
-  data Tree2 : {A : Set} → Tree A → Set1 where
-     var : {A : Set} (t : Tree A) → Tree2 t
-     node : {A : Set} (t : Tree A) (B : ComposableForest t)
-       -- replacement of every node A in t with a Tree2
-       → Tree2 (compose t B)
+mutual
+  {- the two arguments to Tree2 are the set of 1-d inputs, and the tree of 2-d inputs.
+  the 2-d output is uniquely given as the single-node tree with 1-d domain A  -}
+  data Tree2 : {A : Set} (T : Tree1 A) → Set1 where
+    var2 : {A : Set} → Tree2 (one-node A)
