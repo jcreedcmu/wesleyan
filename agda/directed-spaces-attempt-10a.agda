@@ -1,4 +1,4 @@
-module directed-spaces-attempt-9 where
+module directed-spaces-attempt-10a where
 
 open import Agda.Primitive
 
