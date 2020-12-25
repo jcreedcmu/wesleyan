@@ -44,7 +44,7 @@ module Tree1Simple where
    node : {A : Set} → Forest A → Tree
 
 
-module Tree where
+module Tree1 where
  record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
    constructor siz
    field
@@ -68,6 +68,25 @@ module Tree where
  treeSiz {a} zero = siz (Set a) (λ x → x)
  treeSiz {a} (succ n) = siz (Tree (treeSiz n)) (λ t → spanOfTree (treeSiz n) t)
 
+
+module Other where
+ mutual
+  data Tree : (n : Nat) → Set1 where
+   var : {n : Nat} → Tree n
+   node : {n : Nat} (branches : Tree n) → (size branches → Tree (succ n)) → Tree (succ n)
+
+  size : ∀ {n : Nat} → Tree n → Set
+  size var = Unit
+  size (node t f) = Σ (size t) (λ b → size (f b))
+
+
+module OtherInt where
+  data Tree : (n : Nat) (size : Set) → Set1 where
+   var : {n : Nat} → Tree n Unit
+   node : {n : Nat} {B : Set} {S : B → Set}
+             → Tree n B
+             → ((b : B) → Tree (succ n) (S b))
+             → Tree (succ n) (Σ B S)
 
 
  -- treeSiz0 : ∀ {a} → Siz {lsuc a} {a}
