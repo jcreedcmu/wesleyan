@@ -18,6 +18,9 @@ syntax Σ A (λ x → B) = Σ[ x ∈ A ] B
 data Unit {a} : Set a where
    ⋆ : Unit
 
+data Nat : Set where
+  zero : Nat
+  succ : Nat → Nat
 
 data Rep : Set1 where
   rUnit : Rep
@@ -41,51 +44,37 @@ module Tree1Simple where
    node : {A : Set} → Forest A → Tree
 
 
-l3 : Level
-l3 = lsuc (lsuc (lsuc (lzero)))
-
-module Tree0 where
- record Siz {a} : Set (lsuc a) where
+module Tree where
+ record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
    constructor siz
    field
      carrier : Set a
-     span : carrier → Set
+     span : carrier → Set b
 
  open Siz
  mutual
-  data Forest {a}  (S : Siz {a} ) (c : S .carrier) : Set (lsuc lzero ⊔ a) where
-   forest : (S .span c → Tree {a}  S) → Forest {a}  S c
+  data Forest {a} {b} (S : Siz {a} {b}) (c : S .carrier) : Set (lsuc b ⊔ a) where
+   forest : (S .span c → Tree {a} {b} S) → Forest {a} {b} S c
 
-  data Tree {a}  (S : Siz {a} ) : Set (lsuc lzero ⊔ a) where
-   var : Tree {a}  S
-   node : (c : S .carrier) → Forest {a}  S c → Tree {a}  S
+  data Tree {a} {b} (S : Siz {a} {b}) : Set (lsuc b ⊔ a) where
+   var : Tree {a} {b} S
+   node : (c : S .carrier) → Forest {a} {b} S c → Tree {a} {b} S
 
+ spanOfTree : ∀ {a b} (S : Siz {a} {b}) → Tree {a} {b} S → Set b
+ spanOfTree {a} {b} S var = Unit
+ spanOfTree {a} {b} S (node c (forest branches)) = Σ (S .span c) (λ elt → spanOfTree S (branches elt))
 
--- module Tree1 where
---  record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
---    constructor siz
---    field
---      carrier : Set a
---      span : carrier → Set b
-
---  open Siz
---  mutual
---   data Forest {a} {b} (S : Siz {a} {b}) (c : S .carrier) : Set (b ⊔ lsuc lzero) where
---    forest : (S .span c → Tree {a} {b} S) → Forest {a} {b} S c
-
---   data Tree {a} {b} (S : Siz {a} {b}) : Set (b ⊔ lsuc lzero) where
---    var : Tree {a} {b} S
---    node : (c : S .carrier) → Forest {a} {b} S c → Tree {a} {b} S
-
---  -- spanOfTree : ∀ {a b} (S : Siz {a} {b}) → Tree {a} {b} S → Set (b ⊔ lsuc lzero)
---  -- spanOfTree {a} {b} S var = Unit {lsuc lzero ⊔ b}
---  -- spanOfTree {a} {b} S (node c (forest branches)) = Σ {b} {lsuc lzero ⊔ b} (S .span c) (λ elt → spanOfTree S (branches elt))
+ treeSiz : ∀ {a} (n : Nat) → Siz {lsuc a} {a}
+ treeSiz {a} zero = siz (Set a) (λ x → x)
+ treeSiz {a} (succ n) = siz (Tree (treeSiz n)) (λ t → spanOfTree (treeSiz n) t)
 
 
 
+ -- treeSiz0 : ∀ {a} → Siz {lsuc a} {a}
+ -- treeSiz0 {a} = siz (Set a) (λ x → x)
 
--- mutual
---   {- the two arguments to Tree2 are the set of 1-d inputs, and the tree of 2-d inputs.
---   the 2-d output is uniquely given as the single-node tree with 1-d domain A  -}
---   data Tree2 : {A : Set} (T : Tree1 A) → Set1 where
---     var2 : {A : Set} → Tree2 (one-node A)
+ -- treeSiz1 : ∀ {a} → Siz {lsuc a} {a}
+ -- treeSiz1 {a} = siz (Tree treeSiz0) (λ t → spanOfTree treeSiz0 t)
+
+ -- treeSiz2 : ∀ {a} → Siz {lsuc a} {a}
+ -- treeSiz2 {a} = siz (Tree treeSiz1) (λ t → spanOfTree treeSiz1 t)
