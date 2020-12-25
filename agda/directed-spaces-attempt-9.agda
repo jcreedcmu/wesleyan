@@ -15,7 +15,7 @@ infixr 4 _,_
 
 syntax Σ A (λ x → B) = Σ[ x ∈ A ] B
 
-data Unit : Set where
+data Unit {a} : Set a where
    ⋆ : Unit
 
 
@@ -31,26 +31,36 @@ rΣ : (ρ : Rep) → (elm ρ → Set) → Set
 rΣ rUnit B = (B ⋆)
 rΣ (rOther A) B = Σ A B
 
--- module Tree1Intrinsic where
---   data Tree : Set → Set1 where
---      var : Tree Unit
---      node : {A : Set} {B : A → Set} → ((a : A) → Tree (B a)) → Tree (Σ A B)
+module Tree1Simple where
+ mutual
+  Forest : Set → Set1
+  Forest A = (a : A) → Tree
 
-mutual
-  {- Forest T S A
-  is some structure whose inputs look like S, and whose outputs look like A. We
-  carve up inputs S into chunks, and pass each one to T to tell us what kind of
-  node goes there. -}
-  data Forest1 : Set → Rep → Set1 where
-    forest1 : {A : Rep} {B : elm A → Set} → ((a : elm A) → Tree1 (B a)) → Forest1 (rΣ A B) A
-
-  data Tree1 : Set → Set1 where
-    var1 : Tree1 Unit
-    node1 : {B : Set} {A : Rep} → Forest1 B A → Tree1 B
+  data Tree : Set1 where
+   var : Tree
+   node : {A : Set} → Forest A → Tree
 
 
-just : Set → Set
-just A = Σ Unit (λ _ → A)
+module Tree1 where
+ record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
+   constructor siz
+   field
+     carrier : Set a
+     span : carrier → Set b
+
+ open Siz
+ mutual
+  data Forest {a} {b} (S : Siz {a} {b}) (c : S .carrier) : Set (b ⊔ lsuc lzero) where
+   forest : (S .span c → Tree S) → Forest S c
+
+  data Tree {a} {b} (S : Siz {a} {b}) : Set (b ⊔ lsuc lzero) where
+   var : Tree S
+   node : (c : S .carrier) → Forest S c → Tree S
+
+ spanOfTree : ∀ {a b} (S : Siz {a} {b}) → Tree {a} {b} S → Set b
+ spanOfTree S var = Unit
+ spanOfTree S (node c x) = {!!}
+
 
 
 
