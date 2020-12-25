@@ -3,7 +3,7 @@ module directed-spaces-attempt-9 where
 open import Agda.Primitive
 
 
-record Σ {a b} (A : Set a) (B : A → Set a) : Set (a ⊔ b) where
+record Σ {a b} (A : Set a) (B : A → Set b) : Set (a ⊔ b) where
   constructor _,_
   field
     fst : A
@@ -41,25 +41,45 @@ module Tree1Simple where
    node : {A : Set} → Forest A → Tree
 
 
-module Tree1 where
- record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
+l3 : Level
+l3 = lsuc (lsuc (lsuc (lzero)))
+
+module Tree0 where
+ record Siz {a} : Set (lsuc a) where
    constructor siz
    field
      carrier : Set a
-     span : carrier → Set b
+     span : carrier → Set
 
  open Siz
  mutual
-  data Forest {a} {b} (S : Siz {a} {b}) (c : S .carrier) : Set (b ⊔ lsuc lzero) where
-   forest : (S .span c → Tree S) → Forest S c
+  data Forest {a}  (S : Siz {a} ) (c : S .carrier) : Set (lsuc lzero ⊔ a) where
+   forest : (S .span c → Tree {a}  S) → Forest {a}  S c
 
-  data Tree {a} {b} (S : Siz {a} {b}) : Set (b ⊔ lsuc lzero) where
-   var : Tree S
-   node : (c : S .carrier) → Forest S c → Tree S
+  data Tree {a}  (S : Siz {a} ) : Set (lsuc lzero ⊔ a) where
+   var : Tree {a}  S
+   node : (c : S .carrier) → Forest {a}  S c → Tree {a}  S
 
- spanOfTree : ∀ {a b} (S : Siz {a} {b}) → Tree {a} {b} S → Set b
- spanOfTree S var = Unit
- spanOfTree S (node c x) = {!!}
+
+-- module Tree1 where
+--  record Siz {a} {b} : Set (lsuc a ⊔ lsuc b) where
+--    constructor siz
+--    field
+--      carrier : Set a
+--      span : carrier → Set b
+
+--  open Siz
+--  mutual
+--   data Forest {a} {b} (S : Siz {a} {b}) (c : S .carrier) : Set (b ⊔ lsuc lzero) where
+--    forest : (S .span c → Tree {a} {b} S) → Forest {a} {b} S c
+
+--   data Tree {a} {b} (S : Siz {a} {b}) : Set (b ⊔ lsuc lzero) where
+--    var : Tree {a} {b} S
+--    node : (c : S .carrier) → Forest {a} {b} S c → Tree {a} {b} S
+
+--  -- spanOfTree : ∀ {a b} (S : Siz {a} {b}) → Tree {a} {b} S → Set (b ⊔ lsuc lzero)
+--  -- spanOfTree {a} {b} S var = Unit {lsuc lzero ⊔ b}
+--  -- spanOfTree {a} {b} S (node c (forest branches)) = Σ {b} {lsuc lzero ⊔ b} (S .span c) (λ elt → spanOfTree S (branches elt))
 
 
 
