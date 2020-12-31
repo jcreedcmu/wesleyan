@@ -706,4 +706,37 @@ Let's try to do this more sequent-like.
 \]
 
 
+\subsection{Attempt 10}
+
+[ Mostly just agda thinking about defining the datatype of trees directly ]
+
+\subsection{Attempt 11}
+
+I want to define a nice property about diagrams like the following in $\Top$:
+\[\begin{tikzcd}
+A\ar[d, "p"']& U\ar[l, >->]\\
+\I\x X
+\end{tikzcd}\]
+
+The space $A$ lives over the product $\I \x X$. The $\I$ is the `currently relevant' dimension, and
+$X$ is actually probably a big product of copies of $\I$, but I shouldn't need to know that to make the current definition.
+$U$ is an open subset of $A$. I can also view this diagram like
+\[\begin{tikzcd}
+A\ar[d, "\pi_1 p "']\ar[dr, "\pi_2 p" description]& U\ar[l, >->]\\
+\I& X
+\end{tikzcd}\]
+What are the nice properties I expect of this?
+
+For one thing, for any point $u \in U$ that lives in the `uniform' part of $A$, I think that there
+should exist a neighborhood $V_u$ of $u$ such that and injective maps such that
+
+\[\begin{tikzcd}
+&U \ar[r, >->]& A\ar[d, "p"]\\
+1\ar[ur, "u"]\ar[r, "v"']&V_u\ar[u, >->]\ar[r, >->]  &\I\x X
+\end{tikzcd}\]
+
+Hm, maybe this isn't right. I'm not capturing that $V_u$'s image in $\I \x X$ is open.
+
+Furthermore I need to capture what happens in the {\em complement} of $U$ in $A$, that
+some directed stuff is going on.
 \end{document}
