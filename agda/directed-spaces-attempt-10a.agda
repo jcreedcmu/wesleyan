@@ -144,11 +144,11 @@ module IntRec where
 -- but by indexing on *the kind of data* that belongs at the leaves,
 -- rather than indexing the leaf-sets themselves
 module LabelledLeaves where
-  data Tr (A : Set1) : (n : ℕ) → Set1 where
+  data Tr {a b} (A : Set a) : (n : ℕ) → Set (a ⊔ lsuc b) where
     obj :  (B : Set) → (B → A) → Tr A zero
     lf :  {n : ℕ} → A → Tr A (succ n)
     nd : {n : ℕ}
-              → Tr (Tr A (succ n)) n
+              → Tr {b = b} (Tr {b = b} A (succ n)) n
               → Tr A (succ n)
 
 -- By Grothendieck construction this would be essentially the same,
