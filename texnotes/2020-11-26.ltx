@@ -739,4 +739,33 @@ Hm, maybe this isn't right. I'm not capturing that $V_u$'s image in $\I \x X$ is
 
 Furthermore I need to capture what happens in the {\em complement} of $U$ in $A$, that
 some directed stuff is going on.
+
+\subsection{Attempt 12}
+
+A tree is a 1-tree. Its ``codomain'' is a single point, and its ``domain'' is a set.
+Every stage in the 1-stree is the collaps of some sets into single points.
+
+This makes me think that a set is a 0-tree, and its domain is a single point.
+
+The domain of a 2-tree is a 1-tree. Is the codomain of a 2-tree also a
+1-tree? Perhaps a trivial 1-tree? For every 0-tree, there is a
+canonical 1-tree whose domain is that 0-tree. If $x$ is a 0-tree, then $t_x$ is
+the canonical 1-tree whose domain is $x$. If $y$ is a 1-tree, then $t_y$ is
+the canonical 2-tree whose domain is $y$. It collapses the whole tree $y$ into
+a single node in one step.
+
+What can a 1-tree be? It is either a leaf or a node. If it is a leaf,
+it is a tree with domain $\{*\}$. If it is a node, we have a choice of
+set $B$ (a choice of 0-tree) plus a {\em mapping from $B$ to 1-trees}.
+The italicized phrase is one crucial thing that requires
+generalization.
+
+What can a 2-tree be? It is either a leaf or a node. If it is a leaf,
+it is a 2-tree with domain and codomain being equal 1-trees. If it is
+a node, we have a choice of a 1-tree $B$, and some kind of mapping
+from $B$ to 2-trees. The definition of mapping from $B$ to 2-trees
+could be accomplished inductively. For every node of $B$, we want to
+assign to it a 2-tree of the appropriate shape.
+
+
 \end{document}
