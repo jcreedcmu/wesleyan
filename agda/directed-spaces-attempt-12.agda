@@ -57,3 +57,27 @@ module Int where
      lf : (dom1 : Set) → Tr2 dom1 (canonical dom1) (canonical dom1)
      nd : (dom1 : Set) (dom2 : Tr1 dom1) → (t : Tr1 dom1) →
        (bs : mapping2 t) → Tr2 dom1 dom2 t
+
+
+{-
+  What if I try indexing types by what data is supposed to go at the nodes,
+  but it's not necessarily a type but a type operator taking shape arguments?
+-}
+
+module NodeIndexed where
+
+  data Tr1 (A : Set → Set) : Set1 where
+    lf1 : Tr1 A
+    nd1 : (B : Set) (Bs : B → Tr1 A) (nodeData : A B) → Tr1 A
+
+  data Tr2 (A : Set → Set) : Set1 where
+    lf2 : Tr2 A
+    nd2 : (B : Tr1 A) (Bs : B → Tr1 A) (nodeData : A B) → Tr1 A
+
+
+{-
+data Tr (A : Set) where
+obj : A → Tr A 0
+lf : {n : N} → Tr A (suc n)
+nd : {n : N} → A → Tr (Tr A (suc n)) n → Tr A (suc n)
+-}
