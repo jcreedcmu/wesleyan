@@ -13,6 +13,7 @@
 \definecolor{lorange}{rgb}{1,0.95,0.8}
 \definecolor{mgreen}{rgb}{0,0.56,0}
 \definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lgray}{rgb}{0.95,0.95,1.0}
 \definecolor{mblue2}{rgb}{0,0.2,1.0}
 \definecolor{lblue}{rgb}{0.8,0.95,1}
 \definecolor{mred}{rgb}{0.9,0.1,0.1}
@@ -768,4 +769,163 @@ could be accomplished inductively. For every node of $B$, we want to
 assign to it a 2-tree of the appropriate shape.
 
 
+\section{Geometry}
+
+What happens if I think again about `geometric realizations of string diagrams', structures that are maps
+\[ f: \I^n \to \N \]
+which assign every point of the $n$-cube a dimension.
+
+For example, here is the sort of diagram I have in mind:
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+
+\fill [lgray] (0,0.5) rectangle (5,5.5);
+
+\coordinate (a1) at (0,2);
+\coordinate (a2) at (0,4);
+\coordinate (a3) at (0,5);
+
+\coordinate (b1) at (5,1.5);
+\coordinate (b2) at (5,2);
+\coordinate (b3) at (5,5);
+
+\coordinate (c1) at (2.5,2.5);
+\coordinate (c2) at (2.5,4);
+\coordinate (c3) at (1.75,3);
+\coordinate (c4) at (4,4.5);
+
+\draw[red]  (a1)
+  .. controls ++(0,0) and ++(-1,0) .. (c1)
+  .. controls ++(1,0) and ++(0,0) .. (b1);
+
+\draw[red]  (a3)
+  .. controls ++(0,0) and ++(-1,0) .. (c3)
+  .. controls ++(0.5,0) and ++(-0.5,0) .. (c1);
+
+\draw[red]  (c2)
+  .. controls ++(1,0) and ++(-0.25,0) .. (c4)
+  .. controls ++(0.25,0) and ++(0,0) .. (b3);
+
+\draw[red] (a2) .. controls ++(0,0) and ++(-1,0) .. (c3);
+
+
+\fill[black] (c1) circle (2pt) node[above] {};
+\fill[black] (c2) circle (2pt) node[above] {};
+\fill[black] (c3) circle (2pt) node[above] {};
+\fill[black] (c4) circle (2pt) node[above] {};
+\node at (-0.5,3){$x_1 \dns$};
+\node at (2.5,5.75){$x_2 \to$};
+\end{tikzpicture}\]
+Here $n=2$, and the light gray fill indicates where $f = 0$
+the red lines indicate where $f = 1$, and the black dots where $f = 2$.
+
+I may also want to consider $k$-tuply degenerate $n$-dimensional diagrams. Here is a once-degenerate 2-d diagram:
+\[\begin{tikzpicture}[
+every node/.style={color=black,}
+]
+
+\fill [lgray] (0,0.5) rectangle (5,5.5);
+
+\fill[black] (c1) circle (2pt) node[above] {};
+\fill[black] (c2) circle (2pt) node[above] {};
+\fill[black] (c3) circle (2pt) node[above] {};
+\fill[black] (c4) circle (2pt) node[above] {};
+\node at (-0.5,3){$x_1 \dns$};
+\node at (2.5,5.75){$x_2 \to$};
+\end{tikzpicture}\]
+I would start having one-dimensional strings if I considered 1-degenerate 3-dimensional pictures.
+I think degenerate diagrams are indeed special cases of nondegenerate diagrams, as we'd expect;
+they just have the property that $f$ doesn't attain cerain positive values (here $f$ never has the value 1)
+To be $k$-degenerate is to require $f$ not to have any of the values $1,2,\ldots k$.
+
+Maybe by having only one object I'm already starting out `once
+degenerate', I don't know.
+\subsubsection{Conditions}
+
+What kind of conditions do I want to impose on $f$ to ensure that it actually
+feels like a string diagram?
+
+Whenever $f(x) = 0$, I definitely want to require that there is an open set $U \ni x$
+such that $\forall u \in U . f(u) = 0$. In other words, $f^{-1}(0)$ is an open subset of $\I^n$.
+Likewise I guess $f^{-1}(\{0,1\})$ and $f^{-1}(\{0,1,2\})$ and so on are also open.
+So at the very least I can throw a topology on the natural numbers where every down-closed set is open,
+and say that $f$ must be continuous.
+
+But I probably want more than just that. Let's look at points $x$
+where $f(x) = 1$. This should feel like a set of codimension 1
+relative to $\I^n$. Let's label the dimensions $n$ in 1-indexed
+fashion, i.e. $\I^n = \I^{\{1, 2, \ldots, n\}}$. Then we want to say
+that as we wiggle the $x_1$ coordinate, we actually pass {\em through}
+the codim-1 `sheet' that we're sitting on (i.e. 1-time advances and we
+transition from one 0-cell to another) and as we wiggle any other
+coordinate $x_i$ for $i > 1$, we stay on the `sheet'.
+
+\subsection{Attempt 13}
+
+Suppose I have a {\em not} necessarily embedded in $\R^n$ set $X$. I get
+ map $d : X \to \N$ that assigns `dimensions' to points
+(which is continuous if I give $\N$ the down-closed-sets-are-open topology)
+and I get some projections $\pi_1, \pi_2, \ldots : X \to \I$ which tell me how
+$X$ lives over the cube.
+
+What are some properties I feel fairly confident about them holding?
+\[\begin{tikzcd}
+D \ar[r, "x"] \ar[d, >->, "\iota"'] & X \ar[d, "\pi"] \\
+Y \ar[r, >->, "y"']\ar[ur, dashed] & {\I^n}
+\end{tikzcd}\]
+I think if $D \subseteq Y \subseteq \I^n$ and $\overline D = Y$, then I get a unique lift?
+
+If $f(x) = 0$, then there exists an open neighborhood $U\ni x$ and an open neighborhood of
+$V \ni \pi (x)$ such that $\pi$ restricts to an isomorphism $U \cong V$.
+
+If $f(x) = 1$, then there exists an open neighborhood $U \ni x$ which can be partitioned as
+\[\bigcup_{i\in I} L_i \cup C \cup R\]
+and $\ell, r \in [0,1]$ with  $\ell < \pi(x) < r$, such that $\pi$ restricts to isomorphisms
+\[ [\ell, \pi(x)] \cong L_i \cup C \]
+\[ [\pi(x), r] \cong R \cup C \]
+and $C$
+
+\subsection{Attempt 14}
+
+Maybe I need fewer axioms than I thought to guarantee trees at dimension 1 at least.
+Let's say a {\em geometric tree} is a map $\pi : X \to \I$, and a map $d : X \to \{0,1\}$, such that:
+\begin{enumerate}
+\item  We have unique lifts
+\[\begin{tikzcd}
+\{0\} \ar[r] \ar[d, hookrightarrow] & X \ar[d, "\pi"] \\
+\I \ar[r, >->, "m"']\ar[ur, dashed] & {\I}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+{(0,1]} \ar[r] \ar[d, hookrightarrow] & X \ar[d, "\pi"] \\
+\I \ar[r, >->, "m"']\ar[ur, dashed] & {\I}
+\end{tikzcd}\]
+when $m$ is strictly monotone, for the `cofibration' being either the inclusion
+of the left endpoint in the interval, {\em or} the complement of the left endpoint.
+\item If $d(x) = 0$, then there exists an open subset $U\ni x$ of $X$ and open interval $V \ni \pi(x)$
+ such that $\pi$ restricts to an isomorphism $U \cong V$.
+\item If $d(x) = 1$, then $\pi(x) \not\in\{0,1\}$ and there exists an
+  open subset $U\ni x$ of $X$ such that $x$ is the {\em only} point of
+  $U$ that $d$ maps to 1.
+\end{enumerate}
+
+\def\gto{\rightsquigarrow}
+\def\gto{\preceq}
+Let $\phi_{t_1,t_2} : \pi^{-1}(t_1) \to \pi^{-1}(t_2)$ be the evident `pushforward' map from
+fiber at time $t_1$ to time $t_2$ that arises from the unique lifting property on the inclusion
+of the left endpoint. Define $y \gto x$ by
+\[ y \gto x \quad \iff \quad \phi_{\pi(y)\pi(x)}(y) = x  \]
+
+\begin{lemma}
+If $X$ is a geometric tree, and $x\in X$ with $d(x) = 0$, then $x$ has a predecessor
+$y \gto x$ such that either $\pi(y) = 0$ or $d(y) = 1$.
+\end{lemma}
+
+\begin{proof}
+Consider the set of $\{ y \st y \gto x\}$, ordered by $\gto$. Every
+chain in it has a lower bound, because of the lifting property of
+$(0,1]$. Therefore by Zorn's lemma it has a minimal element. A point $y$
+  with $d(y) = 0$ can't be minimal unless it has $\pi(x) = 0$. \cqed
+\end{proof}
 \end{document}
