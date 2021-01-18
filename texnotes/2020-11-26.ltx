@@ -25,6 +25,7 @@
 \def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
 \def\ep{\varepsilon}
 \def\Top{\mathbf{Top}}
+\def\TopR{\mathbf{TopR}}
 \def\bcase{\mathop\mathbf{case}}
 \def\bof{\mathop\mathbf{of}}
 \def\binj{\mathbf{inj}}
@@ -928,4 +929,64 @@ chain in it has a lower bound, because of the lifting property of
 $(0,1]$. Therefore by Zorn's lemma it has a minimal element. A point $y$
   with $d(y) = 0$ can't be minimal unless it has $\pi(x) = 0$. \cqed
 \end{proof}
+
+\subsection{Digression about Morphisms among Cubes}
+
+In Section 1.4 above I was thinking about something that I believe amounts to considering
+a category similar to $\Top$ but with a little extra data that must be preserved by spaces,
+equipping them with some relations/posets.
+
+Here's a variant of that idea that is `more $\le$ than $<$':
+
+Say an object of $\TopR$ is a topological space $X$ together with a family of
+binary relations ${\le_n} \subseteq X \x X$ all $n \ge 1$. Maybe require $\le_i$ implies $\le_{i+1}$ for all
+$i$.
+A map in $\TopR$ is simply a continuous map between spaces that preserves all these relations.
+
+The example objects I want to focus on are the $n$-cubes $C_n = [0,1]^n$ for some $n \ge 1$.
+How do we define relations for them? We define $\le_m$  by saying
+\[x \le_m y \quad \iff   \quad (x_m \le y_m) \land (\forall i > m . x_i = y_i)\]
+where taking the $i^{th}$ component $x_i$ of a vector $x \in [0,1]^n$ is understood as 1-indexed (that is,
+if $n = 3$, the three components of $x$ are $x_1,x_2,x_3$) and
+conventionally we take $x_i = 0$ if $i > n$. This means that trivially $x \le_i y$ for $i > n$.
+
+This specifically enables a map $C_2 \to C_1$ which realizes arbitrary
+continuous reparameterizations as 2-cells.
+
+\subsection{Attempt 15}
+
+Suppose we have a topological space $X$ living over $C_n$ via a projection $\pi$, and
+a dimension map $d : X \to [0,n]$. We want to describe
+some conditions that make this a fibration. There are going to be essentially 4 requirements: push forward,
+fill back, local isomorphism, and successor requirements.
+
+{\bf Push forward} says whenever we have a $\TopR$ map $f : C_n \to C_n$
+and a map $g$ that makes the outer square commute in
+\[\begin{tikzcd}
+{C_{n-1}} \ar[r, "g"] \ar[d, hookrightarrow, "{x_1 = 0}"'] & X \ar[d, "\pi"] \\
+C_n \ar[r,  "f"']\ar[ur, dashed] & {C_n}
+\end{tikzcd}\]
+then there is a unique filler.
+
+{\bf Fill back} says whenever we have a $\TopR$ map $f : C_n \to C_n$
+and a map $g$ that makes the outer square commute in
+\[\begin{tikzcd}
+{C_n \setminus C_{n-1}} \ar[r, "g"] \ar[d, hookrightarrow, "{x_1 \ne 0}"'] & X \ar[d, "\pi"] \\
+C_n \ar[r,  "f"']\ar[ur, dashed] & {C_n}
+\end{tikzcd}\]
+then there is a unique filler.
+
+{\bf Local isomorphism} says that for any point $x \in X$ with $d(x) = 0$, there is an open neighborhood
+$U \subseteq X$ of $x$ and an open neighborhood
+$V\subseteq C_n$ of $\pi(x)$ such that $\pi$ restricts to an isomorphism $U \cong V$.
+
+The {\bf successor} requirement says that the truncation of the space is also a fibration
+(or else it is allowed to be empty).
+By truncation we mean taking the subspace
+\[(X', \pi' : X' \to C_{n-1}, d' : X' \to [0,n-1])\]
+deifned by
+\[ X' = \{ x \in X \st d(x) > 0 \} \]
+\[ \pi'(x) = \pi(x)_{2, \ldots, n} \]
+\[ d'(x) = d(x) - 1\]
+
 \end{document}
