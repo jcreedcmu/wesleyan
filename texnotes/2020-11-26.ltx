@@ -6,6 +6,7 @@
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\pair#1#2{\langle #1 , #2 \rangle}
 
+\usepackage{float}
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{calc}
@@ -988,5 +989,80 @@ deifned by
 \[ X' = \{ x \in X \st d(x) > 0 \} \]
 \[ \pi'(x) = \pi(x)_{2, \ldots, n} \]
 \[ d'(x) = d(x) - 1\]
+
+\subsection{Attempt 16}
+
+I'm going to go back to the `extrinsic', `embedded' point of view and
+just accept that it can't handle arbitrary branching.
+
+The data of a $(n,m)$-treelike-space is just the `dimension map' of a raw cube, a map
+$d : \I^n \to [-1,m]$, (where $[-1, m] = \{-1, 0, 1, 2, \ldots, m\}$) subject to some conditions.
+
+Let's deal with some easy cases first. In any case this is supposed to be a continuous map when $[-1,m]$ is given a downset-open topology.
+So in particular $\{-1\}$ is an open set, which meants its preimage is open. If you have a point $x$ with $d(x) = -1$, then there's
+an open neighborhood $U \ni x$ that is all dimension $-1$.
+
+If $m = 0$, I know that I want to say that all of the points of dimension $0$ are isolated from one another.
+If $m = 0$ and $d(x) = 0$ for some $x\in \I^n$, there exists an open rectangle $\prod_i (a_i, b_i) \subseteq \I^n$ with
+$a_i < x_i < b_i$ such that $x$ is the only point in $U$ with $d(x) = 0$ --- every other point has $d(y) = -1$.
+
+Let's try to deal with the case of $m=1$. Now points can have $d(x) = -1, 0, 1$.
+Write $U(c)$ for an open subset of the interval $[0,1]$ that contains a coordinate $c$, and $V(c)$ for an open subset of the interval
+that does not contain either endpoint of the interval, and contains $c$.
+
+We write $R(c)$ for some interval $[c, y]$ for which $c$ is the left
+endpoint, and the interval extends to the right.
+
+The condition for $n = 2$ and $m=1$ and $d(x) = -1$ is: there has to be a box $U(x_0) \x U(x_1)$ that is all -1.
+
+The condition for $n = 2$ and $m=1$ and $d(x) = 0$ is: there has to be a box $V(x_0) \x U(x_1)$ and a unique map from $U(x_1)$ to that box that
+explains all the $d(0)$ points. In other words, there is a map  $U(x_1) \to V(x_0)$ whose graph gives all the $0$-d points.
+
+One condition for $n = 2$ and $m=1$ and $d(x) = 1$ is: the point is
+isolated from other 1-d points. There's a box $V(x_0) \x V(x_1)$ such
+that it's the only 1-d point in that box.
+
+Another condition for $n = 2$ and $m=1$ and $d(x) = 1$ is: the point has a unique 1-time downstream.
+isolated. There's a box $V(x_0) \x R(x_1)$ and a function $R(x_1) \to V(x_0)$ that explains
+all the dimension 0,1 points in the box.
+
+The condition for $n = 3$ and $m=1$ and $d(x) = -1$ is: there has to be a box $U(x_0) \x U(x_1) \x U(x_2)$ that is all -1.
+
+The condition for $n = 3$ and $m=1$ and $d(x) = 0$ is: there has to be a box $V(x_0) \x V(x_1) \x U(x_2)$ and
+a map  $U(x_2) \to V(x_0) \x V(x_1)$ whose graph gives all the $0$-d points.
+
+One condition for $n = 3$ and $m=1$ and $d(x) = 1$ is: the point is
+isolated. There's a box $V(x_0) \x V(x_1) \x V(x_2)$ such that it's the only 1-d
+point in that box.
+
+Another condition for $n = 3$ and $m=1$ and $d(x) = 1$ is: the point has a unique 2-time downstream.
+isolated. There's a box $V(x_0) \x V(x_1) \x R(x_2)$ and a function $R(x_2) \to V(x_0) \x V(x_1)$
+that explains all the dimension $0,1$ points.
+
+The condition for $n = 3$ and $m = 2$ and $d(x) = -1$ is: there has to be a box $U(x_0) \x U(x_1) \x U(x_2)$ that is all -1.
+
+The condition for $n = 3$ and $m = 2$ and $d(x) = 0$ is: there has to be a box $V(x_0) \x U(x_1) \x U(x_2)$
+and a map $U(x_1) \x U(x_2) \to V(x_0)$ that explains where all the $0$-dimension points are.
+
+One condition for $n = 3$ and $m = 2$ and $d(x) = 1$ is: it has to be locally unique. It's going to
+look a lot like the $(n=3,m=1,d(x)=0)$ case. There has to be a box $V(x_0) \x V(x_1) \x U(x_2)$ and
+a map  $U(x_2) \to V(x_0) \x V(x_1)$ whose graph gives all the $1$-d points.
+
+But another condition for $(n=3,m=2,d(x)=1)$ is that we can uniquely push it forward in 1-time.
+There's a box $V(x_0) \x R(x_1) \x U(x_2)$ and a function $R(x_1) \x U(x_2) \to V(x_0)$ that
+shows where all the 0-d and 1-d points are.
+
+Actually, this isn't quite right. The `box' here needn't be box-shaped: the $R(x_1)$ is actually a dependent
+on the function that tells us where the $1$-d points are.
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/tree-cubes.png}
+\end{figure}
+
+What can I salvage from this situation? The `isolation' function goes from the $m-d$ highest dimensions to the $n-(m-d)$ lowest dimensions.
+that's how many of the lower dimensions act as outputs.
+
+
 
 \end{document}
