@@ -1063,6 +1063,85 @@ on the function that tells us where the $1$-d points are.
 What can I salvage from this situation? The `isolation' function goes from the $m-d$ highest dimensions to the $n-(m-d)$ lowest dimensions.
 that's how many of the lower dimensions act as outputs.
 
+\subsection{Attempt 17}
 
+I'm tempted to go back to an general shape of idea I had a long time ago that I think
+I'm better equipped to express now.
+
+\subsubsection{Cell Boundary Constraints}
+We're defining something like an $\omega$-category.
+We have a set $C$ of cells, and a dimension map $d : C \to \N$.
+Write $C_n$ for the set of $n$-cells $\{ c \in C \st d(c) = n \}$.
+
+Let $\I$ be the real interval $[-1,1]$, and say the components $(x_0,\ldots, x_{n-1})$ of the vector $x\in \I^n$ are zero-indexed.
+Say $\partial \I^n$ is the boundary of the cube $\I^n$ --- in Riehl-Shulman-esque notation, it's
+\[\partial \I^n = (x_0 : \I, \ldots, x_{n-1} : \I \st |x_0| = 1 \lor \cdots \lor |x_{n-1}| = 1)\]
+
+Say an {\em $n$-boundary} is a map $ P : \partial \I^n \to C$
+such that
+\[|x_i|  = 1 \imp d(P(x)) \le i\]
+% \[ x_{n-1}  = 0  \imp d(P(x)) < n-1\]
+
+We require an assigment $\partial : C_n \to (\partial \I_n \to C)$
+ of an $n$-boundary to every $n$-cell in $C_n$ for every $n \ge 1$.
+\subsubsection{Picture Boundary Constraints}
+An $n$-picture is a map $P : \I^n \to C$. We define what it means to be a valid $n$-picture,
+so that we can require that every face of every $n$-boundary is a valid $n$-picture.
+
+Suppose we have a picture $P : \I^n \to C$ and a point $x \in \I^n$ with $d(P(x)) = m$, and an open
+neighborhood $U \ni x$. Then there should be an open box around $x$ that fits inside $U$ such that
+we can construct some valid pictures to mediate between on the one hand the restriction of $P$ to that open box,
+and on the other hand the advertised boundary $\partial x$.
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/boundary-condition.png}
+\end{figure}
+
+\subsubsection{Continuity Constraints}
+Suppose we have a picture $P : \I^n \to C$ and a point $x \in \I^n$ with $d(P(x)) = m$, and an open
+neighborhood $U \ni x$. Then there should be an open box around $x$ that fits inside $U$ such that
+there's a map...
+
+\subsection{Attempt 18}
+
+Wait I realize that demanding --- as I was planning to --- the mere existence of mediating data between the declared
+boundary of a cell and the empirical boundary that occurs near it in its use is {\bf not enough}! The {\em choice} of
+which mediating data is used absolutely matters in sufficiently high-dimensional cases. This is the same reason
+that strict high-dimensional categories are undesirable.
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/ambiguity.png}
+\end{figure}
+
+Imagine we postulate a 0-cell $C$, and the 2-cell $\alpha : \rid_C \to \rid_C $ and define a 3-cell
+$k : \alpha \o \alpha \to  \alpha \o \alpha $. I think it would be wrong to {\em identify} the two digrams above.
+We want $k$ to still be able to distinguish its two inputs if it wants; it's not necessarily the case that
+$k$ composed with an interchange of the $\alpha$s is equal to $k$. Namely $k$ could be an identity cell, and the interchange
+of the $\alpha$s is not equal to the identity itself!
+
+So how do I recover? I think paradoxically I want to be {\em more} strict about boundary matching.
+For every $c \in C_n$, we have $\partial c : \partial \I^n \to C$ with
+\[|x_i|  = 1 \imp d(P(x)) \le i\]
+as before. This is the `declaration' of
+the boundary of $c$. When $c$ is used --- including in the boundaries of other cells ---
+there exists a neighborhood of $c$ where $\partial c$ is `the only thing going on' in that neighborhood.
+
+Specifically: Suppose we have a `picture' $P : \I^n \to C$, and a chosen point $x \in \I^n$.
+Let $c = P(x)$. Suppose $d(c) = m$. Then there
+exists a pure scaling transformation $s : \R^m \to \R^m$
+such that for any $\lambda \in (0,1]$ and any point $y \in \partial \I^m$, we have
+\[ P( x + \lambda s (y )) = \partial c (y) \]
+where we tacitly include $\R^m$ into $\R^n$ by occupying the lowest dimensions.
+\subsubsection{Another Way to think about Boundaries}
+
+Can I think in terms of limits? If I have a path approaching a point, can I just look at
+its derivative near that point to decide where in the boundary it's supposed to correspond?
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/derivative.png}
+\end{figure}
 
 \end{document}
