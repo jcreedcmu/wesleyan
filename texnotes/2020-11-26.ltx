@@ -97,6 +97,8 @@
 \def\rng{\mathop\mathrm{rng}}
 \def\npart{\not\!\partial}
 \def\null{\emptyset}
+\def\xx{{\bf x}}
+\def\yy{{\bf y}}
 
 \begin{document}
 \tikzset{>=stealth}
@@ -1143,5 +1145,98 @@ its derivative near that point to decide where in the boundary it's supposed to 
 \centering
   \includegraphics[scale=0.35]{images/derivative.png}
 \end{figure}
+
+\section{Uncolored Diagrams}
+
+By `colored' diagrams I mean those where we distinguish various objects, morphisms, 2-cells from one another, even those
+with the same boundary. By `uncolored' diagrams I mean a situation where we identify all cells that have the same boundary.
+However! Possibly the concept of having the {\em same} boundary has to be treated in a sufficiently nuanced (homotopical)
+ way.
+
+In any case the concrete realization of an `uncolored' diagram is just a dimension map $d : \I^n \to \N$
+subject to some conditions.
+\subsection{The Condition}
+
+An uncolored diagram that is {\em not} required to be functional I
+think needs only to satisfy one continuity/local uniqueness condition. Let me try to
+set it up.
+
+\def\U{{\mathcal U}}
+\def\V{{\mathcal V}}
+\def\uu{{\bf U}}
+\def\vv{{\bf V}}
+\def\ps{{\mathcal P}}
+If we have a point $x\in \I^n$ and a sequence $U \in \ps(\I)^n$ of $n$ subsets of $\I$ and $m \ge 1$, we
+say {\em $U$ is an $m$-neighborhood of $x$} if every $U_i$ is an open neighborhood of $x$ in $\I$, and
+for any $i < m$ we have $U_i \cap \{0,1\} = \emptyset$.
+
+Let some $x\in \I^n$ be given and assume $m = d(x)$. Then we require there exists an $m$-neighborhood $U$ of $x$ and a continuous map
+\[\gamma : \U \to \V \]
+where
+\[ \U = \prod_{i = m}^{n-1} U_i \qquad \V = \prod_{i = 0}^{m-1} U_i\]
+such that for any $(u,v) \in \U \x \V$ we have
+\[ d(u,v) = m \quad\iff\quad \gamma(u) = v\]
+
+Let's consider the extreme cases. If $m = 0$, then we're talking about a map
+\[ \prod_{i= 0}^{n-1} U_i \to 1 \]
+where always $\gamma(u) = *$, so it must always be that $d(u) = 0$. Perfect! Just what I wanted to require.
+
+If $m = n$, then we're talking about a map
+\[ 1 \to \prod_{i= 0}^{n-1} U_i \]
+So we must have $d(v) = m$ only when $\gamma(*) = v$, so points of dimension $n$ must be isolated, just
+what we want.
+
+\subsection{Some Thoughts on Products}
+Here's a notion of product on of spaces that are defined by dimension maps $d : \I^n \to \N$ from a cube.
+(Here $\I = [0,1]$)
+At least products of equal-dimension spaces. Maybe there's a generalization beyond that if I can think of it.
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/crossings.png}
+\end{figure}
+% Let $\ups x = (1 + x) / 2$ and $\dns x = x / 2$.
+Say $C_n = \I^n \to \N$. We'll define a product
+\[ {\otimes} : C_n \x C_n \to C_{2n} \]
+Maybe there's a generalization to
+\[ {\otimes} : C_n \x C_m \to C_{n + m} \]
+but I want to deal with the easy case first. Let $d, e : \I^n \to \N$ be given.
+Assume that we can implicitly extend $d, e$ to be $\R^n \to \N$ by letting them return 0 everywhere outside
+the cube. Then if $n = 1$ I know I want to say
+\[ (d \otimes e)(x, 0) = d(2x) + e(2x - 1)\]
+\[ (d \otimes e)(x, 1) = e(2x) + d(2x - 1)\]
+and linearly interpolate between those, so
+\[ (d \otimes e)(x, y) = d(2x - y) + e(2x - 1 + y)\]
+And when $n = 2$ I think I want to say
+\[ (d \otimes e)(x_1, x_2, 0, 0) = d(2x_1, 2x_2) + e(2x_1 - 1, 2x_2 - 1)\]
+\[ (d \otimes e)(x_1, x_2, 0, 1) = d(2x_1, 2x_2 - 1) + e(2x_1 - 1, 2x_2)\]
+\[ (d \otimes e)(x_1, x_2, 1, 0) = d(2x_1 - 1, 2x_2) + e(2x_1, 2x_2 - 1)\]
+\[ (d \otimes e)(x_1, x_2, 1, 1) = d(2x_1 - 1, 2x_2 - 1) + e(2x_1, 2x_2)\]
+so
+\[ (d \otimes e)(x_1, x_2, y_1, y_2) = d(2x_1 - y_1, 2x_2 - y_2) + e(2x_1 - 1 + y_1, 2x_2 - 1 + y_2)\]
+and so generally
+\[ (d \otimes e)(\xx, \yy) = d(2\xx - \yy) + e(2\xx - 1 + \yy)\]
+
+If I have a point $z$ such that $d(z) = 1$, where is the `image' of that in the product $d \otimes e$?
+It's every $(x,y)$ such that $z = 2x - y$. And if $e(w) = 1$, then it's $w = 2x - 1 + y$ that represent its
+image. So if we know $z$ and $w$, does that tell us what $x,y$ are uniquely? Yeah, we're just trying to solve
+\[
+ \left(\begin{array}{ccc}2 & -1 & 0 \\ 2 & 1 & -1  \\ 0 & 0 & 1 \end{array}\right)
+\left( \begin{array}{c} x \\ y \\ 1 \end{array}\right)
+=
+\left( \begin{array}{c} z \\ w \\ 1 \end{array}\right)
+\]
+and we find
+\[
+\left( \begin{array}{c} x \\ y \\ 1 \end{array}\right)
+=
+ \left(\begin{array}{ccc}1/4 & 1/4 & 1/4 \\ -1/2 & 1/2 &  1/2 \\ 0 & 0 & 1 \end{array}\right)
+\left( \begin{array}{c} z \\ w \\ 1 \end{array}\right)
+\]
+And this generalizes trivially to higher dimensions, i.e.
+\[
+\left( \begin{array}{c} \xx \\ \yy \\ 1 \end{array}\right)
+=
+ \left(\begin{array}{ccc}1/4 & 1/4 & 1/4 \\ -1/2 & 1/2 &  1/2 \\ 0 & 0 & 1 \end{array}\right)
+\left( \begin{array}{c} {\bf z} \\ {\bf w} \\ 1 \end{array}\right)\]
 
 \end{document}
