@@ -1239,4 +1239,15 @@ And this generalizes trivially to higher dimensions, i.e.
  \left(\begin{array}{ccc}1/4 & 1/4 & 1/4 \\ -1/2 & 1/2 &  1/2 \\ 0 & 0 & 1 \end{array}\right)
 \left( \begin{array}{c} {\bf z} \\ {\bf w} \\ 1 \end{array}\right)\]
 
+\subsection{A Better Condition}
+
+Suppose I have a pair of spaces $X$ and $Y$, and a subset $G \subseteq Y \x X$.
+We say $G$ is {\em locally the graph of a function $X \to Y$} if for every point $g \in G$ there
+is an open neighborhood $U$ of $g$ in $Y \x X$ and a map $f : X \to Y$ such that
+for every $(x,y) \in U$ we have
+\[(x,y) \in G \quad \iff \qquad f(x) = y \]
+
+The property I want to demand of a picture $d : \I^n \to \N$ is that for each $m \in \{0,\ldots,n\}$, the
+preimage $d^{-1}(m)$ is a subset of  $\square \I^m \x \I^{n-m}$, and is in fact locally a function
+ $\I^{n-m} \to \square \I^m$, where $\square$ is the topological interior operator.
 \end{document}
