@@ -1239,15 +1239,51 @@ And this generalizes trivially to higher dimensions, i.e.
  \left(\begin{array}{ccc}1/4 & 1/4 & 1/4 \\ -1/2 & 1/2 &  1/2 \\ 0 & 0 & 1 \end{array}\right)
 \left( \begin{array}{c} {\bf z} \\ {\bf w} \\ 1 \end{array}\right)\]
 
-\subsection{A Better Condition}
+\subsection{Attempt 19}
 
-Suppose I have a pair of spaces $X$ and $Y$, and a subset $G \subseteq Y \x X$.
-We say $G$ is {\em locally the graph of a function $X \to Y$} if for every point $g \in G$ there
-is an open neighborhood $U$ of $g$ in $Y \x X$ and a map $f : X \to Y$ such that
-for every $(x,y) \in U$ we have
+Suppose we have a pair of topological spaces $X$ and $Y$, and a subset $G \subseteq Y \x X$.
+We say $G$ is {\em locally a map $X \to Y$} if for every point $g \in G$ there
+is an open neighborhood $U$ of $g$ in $Y \x X$ and a continuous map $f : \{x\in X \st \exists y. (x,y)\in U\} \to Y$ such that
+for every $(x,y)\in U$ we have
 \[(x,y) \in G \quad \iff \qquad f(x) = y \]
 
-The property I want to demand of a picture $d : \I^n \to \N$ is that for each $m \in \{0,\ldots,n\}$, the
-preimage $d^{-1}(m)$ is a subset of  $\square \I^m \x \I^{n-m}$, and is in fact locally a function
- $\I^{n-m} \to \square \I^m$, where $\square$ is the topological interior operator.
+A map  $d : \I^n \to \N$ is a {\em valid string diagram} if
+\begin{itemize}
+\item  $d^{-1}(m) \subseteq \I^n \cong \I^m \x \I^{n-m}$ is locally a map $\I^{n-m} \to \I^m$
+\item for all $i\in\{0,\ldots,n-1\}$, if $x_i \in \{0,1\}$ then $d(x) \le i$.
+\end{itemize}
+
+\def\im{\mathrm{im}}
+\subsection{Attempt 20}
+The data we want to start with is a projection $\pi : X \to Y$ and a dimension map $d : X \to \N$.
+Let $m \in \N$ be given. Define $M$ as the pullback $M = \{x \in X \st d(x) = m\}$.
+Let a particular $x \in M$ be given. Then we require that there exist $U$ and $u$ and $\iota$, such
+that if we let $V = \mathrm{im}(\pi \iota)$ be the middle of the image factorization of $\pi \iota$
+\[\begin{tikzcd}
+d^{-1}(m) \cap U \ar[d] \pbck \ar[r] & d^{-1}(m) \ar[d, hookrightarrow]\pbck\ar[r, "!"] & 1\ar[d, "m"]\\
+U \ar[d, ->>] \ar[r, hookrightarrow] & X \ar[r, "d"] \ar[d, "\pi" ]& \N\\
+\pi^>(U) \ar[r, >->] & Y
+\end{tikzcd}\]
+
+Suppose we have some morphisms $z : Z \to X$ and $p : X \to Y$ in a regular category.
+We say $u : U \to X$ splits $z, \pi$
+if the map $e \o \pi_1 $ in the following diagram is an isomorphism:
+\[\begin{tikzcd}
+U \x_X Z \ar[d, "\pi_1"']  \pbck \ar[r] & Z \ar[d, "z"]\\
+U \ar[d, ->>, "e"'] \ar[r, "u"] & X \ar[d, "p" ]\\
+\im(pu) \ar[r, >->] & Y
+\end{tikzcd}\]
+
+Except $\Top$ isn't regular so I don't know if I can do this.
+
+What I really care about is: for any $x \in \I^n$, with $m = d(x)$, there exists an open neighborhood $U$ of $x$ in $X$
+such that the composite on the left of the rectangle is an iso:
+
+\[\begin{tikzcd}
+U \cap d^{-1}(m) \ar[d] \ar[dd, bend right, equal, -] \pbck \ar[r] & d^{-1}(m) \ar[d, hookrightarrow]\\
+U \ar[d, ->>] \ar[r, "u", hookrightarrow] & \I^n \ar[d, "\pi" ]\\
+\im(\pi u) \ar[r, >->] & \I^{n-m}
+\end{tikzcd}\]
+
+
 \end{document}
