@@ -1,0 +1,150 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lgray}{rgb}{0.95,0.95,1.0}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\Top{\mathbf{Top}}
+\def\TopR{\mathbf{TopR}}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bu{\mathbf{u}}
+\def\bp{\mathbf{p}}
+\def\bz{\mathbf{0}}
+\def\bzee{\mathbf{z}}
+\def\S{\mathfrak{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+\def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
+\def\xx{{\bf x}}
+\def\yy{{\bf y}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+Still trying to formulate a good topological definition of higher-dimensional trees.
+\subsection{Attempt 21}
+
+Fix an $n\in \N$. Take countably many copies of the unit interval $\I = [0,1]$ and name them $\I_0, \I_1, \ldots $.
+Define
+\[ L_m = \prod_{i = 0}^{m-1} \I_i \qquad R_m = \prod_{i = m}^{n-1} \I_i \]
+so that canonically $\I^n \cong L_m \x R_m$.
+We write $\pi_m : \I^n \to \I_m$ and $\pi_{\ge m} : \I^n \to R_m$ for the evident projections.
+We say $\pi_i x = 0$ in the `out of bounds' case when $x \in \I^n$ and $i \ge n$.
+
+If $p :X \to Y$ and $g,h : W \to X$ are morphisms in $\Top$ we write $g =_p h$ (`$p$ equalizes $g,h$') if $p y = p z$.
+
+Given maps $p : X \to Y$ and $f : X \to X$ we say {\em $f$ flattens $p$} if
+\begin{itemize}
+\item $p  = p  f$
+\item For any $g,h$, we have $ g =_p h \imp g =_f h$
+\end{itemize}
+
+A map $d : \I^n \to \N$, is a {\em string diagram} if
+
+\begin{itemize}
+\item[1.] For any $i \in \N$, if $\pi_i x \in \{0,1\}$, then $d(x) \le i$.
+\item[2.] For every $x\in \I^n$ with $d(x) = m$, there exists an open neighborhood $U_x$ of $x$ in $\I^n$
+and a map $f_x : U_x \to U_x$ such that $f_x$ flattens $\pi_{\ge m}\adjust_{U_x} : U_x \to R_{m}$,
+and
+\[ \forall y \in U_x . (f_x y = y) \iff (d(y) = m)\]
+\end{itemize}
+
+A string diagram is a {\em tree diagram} if we also have
+
+\begin{itemize}
+\item[3.] For every $x \in \I^n$ with $d(x) = m + 1$, there exists a map $g_x : V_x \to V_x$, where
+$V_x = \{ y \in U_x \st \pi_m y \ge \pi_m f_x y \}$, such that $g_x$ flattens $\pi_{\ge m} \adjust_{V_x} : V_x \to R_m$,
+and
+\[ \forall y \in V_x . (g_x y = y) \iff (f_x y = y \lor d(y) = m)\]
+
+\end{itemize}
+
+\end{document}
