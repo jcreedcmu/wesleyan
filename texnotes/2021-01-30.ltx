@@ -147,4 +147,30 @@ and
 
 \end{itemize}
 
+\subsection{Attempt 22}
+
+Reading Eric Finster's thoughts on surface diagrams, I think the above
+is still vulnerable to the `Reidemeister I equivalence' problem.
+Here's an attempt to dodge it.
+
+Let $V, X$ be topological spaces, let $C$ be a set, and
+assume $V$ has a commutative group structure $(+,0,-)$.
+A map $P : V \x X \to C$ is called
+{\em flat} at the point $(v,x) \in V\x X$ if there
+exists
+\begin{itemize}
+\item  an open neighborhood $U_V \x U_X \subseteq V \x X$ containing $(v,x)$
+\item  a continuous map $f : U_X \to U_V$
+\end{itemize}
+such that
+\begin{itemize}
+\item $f(x) = v$
+\item $\forall (w, y) \in U_V \x U_X. P(f(y) + w - v, y) = P( w, x)$
+\end{itemize}
+
+Let $[n] = \{0,\ldots, n\}$ and $\I = [0,1]$. We say {\em surface diagram} of dimension $n$
+is a map $P : \I^n \to [n]$ that is flat at every $x\in \I^n$ when considered as a map
+ $P : \I^{d(x)} \x \I^{n-d(x)} \to [n]$.
+
+
 \end{document}
