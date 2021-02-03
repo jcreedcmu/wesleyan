@@ -258,18 +258,35 @@ topological space?)
 \subsection{Attempt 26}
 
 A {\em topological $\omega$-category} on a category $\D$ is a set $C$
-and a map $R : C \to \D$ and a functor $F : \D \to \Top_0$ and for each object $C \in \D$
-and for each $c \in C$ a map $\partial_c : FRc \to C $, such that for every $c \in C$,
-for every $x \in FRc$, if we let $c' = \partial_c x$, we have either
+and a map $\Delta  : C \to \D$ and a functor $F : \D \to \Top_0$ and for each
+$c \in C$ a map $\partial_c : F\Delta c \to C $, such that for every $c \in C$,
+for every $x \in F\Delta c$, if we let $c' = \partial_c x$, we have either
 \begin{itemize}
 \item $x = {\bf 0}$ and $c' = c$; or
-\item There is a morphism $\pi : Rc \to Rc' \in \D$ such that
-$\partial_c$ and $ \partial_{c'} \o F\pi $ agree on an open neighborhood of $x$.
+\item There is a morphism $\pi : \Delta c \to \Delta c' \in \D$ such that
+$\partial_c$ and $ \partial_{c'} \o F\pi $ agree on an open neighborhood $U$ of $x$.
 \end{itemize}
 \[\begin{tikzcd}
- FRc \ar[r, "\partial_c"] \ar[d, "F\pi"']& C\ar[d, equal]\\
- FRc' \ar[r, "\partial_{c'}"'] & C \\
+&U\ar[dl, hookrightarrow]\ar[dr, hookrightarrow]\\
+ F\Delta c  \ar[d, "F\pi"']&& F\Delta c\ar[d, "\partial_c"]\\
+ F\Delta c' \ar[rr, "\partial_{c'}"'] && C \\
 \end{tikzcd}\]
+
+%% \subsection{Attempt 26b}
+
+%% A {\em topological $\omega$-category} on a category $\D$ is a set $C$
+%% and a map $\Delta  : C \to \D$ and for each $c \in C$ a map $\partial_c : \Delta c \to C $, such that for every $c \in C$,
+%% for every $x \in \Delta c$, if we let $c' = \partial_c x$, we have either
+%% \begin{itemize}
+%% \item $x = {\bf 0}$ and $c' = c$; or
+%% \item There is a morphism $\pi : \Delta c \to \Delta c' \in \D$ such that
+%% $\partial_c$ and $ \partial_{c'} \o \pi $ agree on an open neighborhood $U$ of $x$.
+%% \end{itemize}
+%% \[\begin{tikzcd}
+%% &U\ar[dl, hookrightarrow]\ar[dr, hookrightarrow]\\
+%%  \Delta c  \ar[d, "\pi"']&& \Delta c\ar[d, "\partial_c"]\\
+%%  \Delta c' \ar[rr, "\partial_{c'}"'] && C \\
+%% \end{tikzcd}\]
 
 
 \end{document}
