@@ -56,6 +56,8 @@
 \def\lx{\bigcirc}
 \def\B{\mathbb{B}}
 \def\C{\mathbf{C}}
+\def\T{\mathbf{T}}
+\def\Set{\mathbf{Set}}
 \def\D{\mathbf{D}}
 \def\J{\mathbf{J}}
 \def\R{\mathbb{R}}
@@ -74,6 +76,7 @@
 \def\x{\times}
 \def\st{\mathrel|}
 \def\rset{\mathbf{Set}}
+\def\rvec{\mathbf{Vec}}
 \def\rrel{\mathbf{Rel}}
 \def\rcat{\mathbf{Cat}}
 \def\op{\mathsf{op}}
@@ -171,6 +174,102 @@ such that
 Let $[n] = \{0,\ldots, n\}$ and $\I = [0,1]$. We say {\em surface diagram} of dimension $n$
 is a map $P : \I^n \to [n]$ that is flat at every $x\in \I^n$ when considered as a map
  $P : \I^{d(x)} \x \I^{n-d(x)} \to [n]$.
+
+\subsection{Attempt 23}
+
+I think the above is still kind of wrong. Let me try to do the full $n$-categories version.
+
+We ask for a collection $C$ of cells and a map $d : C \to \N$ that gives their dimension.
+For each $c \in C$ we have a map $\partial_c : \R^{d(c)} \to C$ that gives its `boundary picture'.
+
+Suppose $c \in C$ and $n = d(c)$ and $x \in \R^{n}$ and $c' = \partial_c x$ and $m = d(c')$.
+If $x = {\bf 0}$ then we require $c' = c$. Otherwise, we require $m < n$, and that there
+exists open neighborhoods of the origin
+\[
+{\bf 0} \in U_1 \subseteq \R^{n - m}
+\qquad
+{\bf 0} \in U_2 \subseteq \R^{m }\]
+and a function $f : U_1 \to \R^m$, such that
+\[ f({\bf 0}) = {\bf 0} \]
+\[ \forall (\Delta_1, \Delta_2) \in U_1 \x U_2. \partial_c(x_1 + \Delta_1, x_2 + \Delta_2 + f(\Delta_1) ) = \partial_{c'}(\Delta_2)\]
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=0.35]{images/cell-pictures.png}
+\end{figure}
+
+\subsection{Attempt 23b}
+
+This is essentially the same definition, I'm just trying to compress it.
+
+If $C$ is a set and $V, V'$ are topological vector spaces, and we have maps $g : V \x V' \to C$ and $h : V' \to C$,
+we say a point $(a,a') \in V \x V'$ is {\em flat} for $g$ and $h$ if there exists an open
+neighborhood $U \x U' \subseteq V \x V'$ containing the origin and a continuous function $f : U \to V'$
+preserving the origin such that
+\[ \forall (\delta, \delta') \in U \x U' . g(a + \delta, a' + \delta' + f(\delta))  = h(\delta') \]
+
+A {\em topological $\omega$-category} is $(C : \Set) \x (d : C \to \N) \x (\partial_c : \R^{d(c)} \to C)$
+such that for every $c \in C$, for every $x \in \R^{d(c)}$, if we let $c' = \partial_c x$, we have either
+\begin{itemize}
+\item $x = {\bf 0}$ and $c' = c$; or
+\item $d(c') < d(c)$ and $x$ is flat for $\partial_c$ and $\partial_{c'}$
+\end{itemize}
+
+
+
+\subsection{Attempt 24}
+
+I notice that the above attempts are about baking in demanding local {\em translations} of the
+(germ of the) declared boundary of a cell. But I think I should allow more general transformations,
+along the lines of the $\I_n \to \I_m$ maps I've thought about before.
+
+
+Let me punt on defining `good' maps $\R^{m} \x \R^{n-m} \to \R^m$ for
+the moment, and assume that I know what I mean. It's allowed to (and in fact required to) `compress away'
+the last $n-m$ coordinates, and may not compress any of the other coordinates.
+
+A {\em topological $\omega$-category} is a set $C$, a map $d : C \to \N$, and for every $c\in C$ a map
+ $\partial_c : \R^{d(c)} \to C$,
+such that for every $c \in C$, for every $x \in \R^{d(c)}$, if we let $c' = \partial_c x$, we have either
+\begin{itemize}
+\item $x = {\bf 0}$ and $c' = c$; or
+\item $d(c') < d(c)$ and there is some `good' map $\pi : \R^{d(c)} \to \R^{d(c')}$ such that
+$\partial_c$ and $ \partial_{c'} \o \pi$ agree on an open neighborhood of $x$.
+\end{itemize}
+\subsection{Attempt 25}
+
+Maybe instead of giving a `dimension' to points, I just give the whole space $\R^n$ that they correspond to.
+
+Suppose $\T$ is a subcategory of the category of pointed topological spaces.
+A {\em topological $\omega$-category} for $\T$ is a set $C$, a map $D : C \to \T$, and for every $c\in C$ a map
+ $\partial_c : D(c) \to C$,
+such that for every $c \in C$, for every $x \in D(c)$, if we let $c' = \partial_c x$, we have either
+\begin{itemize}
+\item $x = {\bf 0}$ and $c' = c$; or
+\item There is a morphism $\pi : D(c) \to D(c') \in \T$ such that
+$\partial_c$ and $ \partial_{c'} \o \pi $ agree on an open neighborhood of $x$.
+\end{itemize}
+
+
+(Does $\partial$ become a natural transformation $D \to \Delta
+C$, if I regard $C$ as a discrete category, and also as an indiscrete
+topological space?)
+
+\subsection{Attempt 26}
+
+A {\em topological $\omega$-category} on a category $\D$ is a set $C$
+and a map $R : C \to \D$ and a functor $F : \D \to \Top_0$ and for each object $C \in \D$
+and for each $c \in C$ a map $\partial_c : FRc \to C $, such that for every $c \in C$,
+for every $x \in FRc$, if we let $c' = \partial_c x$, we have either
+\begin{itemize}
+\item $x = {\bf 0}$ and $c' = c$; or
+\item There is a morphism $\pi : Rc \to Rc' \in \D$ such that
+$\partial_c$ and $ \partial_{c'} \o F\pi $ agree on an open neighborhood of $x$.
+\end{itemize}
+\[\begin{tikzcd}
+ FRc \ar[r, "\partial_c"] \ar[d, "F\pi"']& C\ar[d, equal]\\
+ FRc' \ar[r, "\partial_{c'}"'] & C \\
+\end{tikzcd}\]
 
 
 \end{document}
