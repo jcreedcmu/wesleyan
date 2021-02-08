@@ -288,5 +288,72 @@ $\partial_c$ and $ \partial_{c'} \o F\pi $ agree on an open neighborhood $U$ of 
 %%  \Delta c' \ar[rr, "\partial_{c'}"'] && C \\
 %% \end{tikzcd}\]
 
+\subsection{Attempt 27}
+
+I blogged about this definition.
+
+An {\em orderly space} is a topological space $X$ together with
+countably many binary relations $<_0, <_1, <_2, \ldots$ on $X$. An
+{\em orderly map} is a continuous map between orderly spaces that
+preserves all the relations.
+
+Any subset of an orderly space inherits an orderly space structure in
+the evident way, by taking the subspace topology and restricting the
+orders to the subset.
+
+For each $n$ we equip $\R^n$ with an orderly space structure, by saying that
+for $x = (x_0, \ldots, x_{n-1}) \in \R^n$ and $y = (y_0, \ldots, y_{n-1}) \in \R^n$
+the orders $<_m$ are given by
+\[ x <_m y \iff (m \ge n) \lor (x_m < y_m \land \forall i \ge m . x_i = y_i )\]
+
+
+ A {\em prespace} is a set $C$ and a map $d : C \to \N$ and for each $c \in C$ a map
+$\partial_c : \R^n \to C$. A {\em picture} in a prespace is a map $\R^n \to C$. A picture $P$ is {\em good
+at a point} $x \in \R^n$, written $P[x]$, if there exists an open neighborhood $U\subseteq \R^n $ of $x$ and an orderly
+map $\pi : U \to \R^{d(P(x))}$ such that
+\[\pi(x) = 0 \land \forall y \in U . P(x) = \partial_{P(x)}(\pi(y))\]
+
+A {\em space} is a prespace $(C, d, \partial)$ such that for every $c \in C$ and every $x \in \R^{d(c)}$,
+we have
+
+\[ (x = 0\land \partial_c(x) = c) \lor \partial_c[x] \]
+
+\subsubsection{Results}
+If $x \in \R^n$ and $y \in \R_{> 0}^n$, define the closed box of radius $y$ around $x$
+\[B(x \pm y) = \prod_{i = 0}^{n-1} [x_i-y_i, x_i+y_i] \]
+and the $m^{th}$-dimensional extrema of this box by
+\[B(x \pm y; m) = \{z \in B(x\pm y) \st z_m \in  \{x_m-y_m, x_m+y_m\}\} \]
+
+Let $[y]_m$ be the first $m$ coordinates of $y$, replacing the rest with zeroes:
+\[ [y]_m = (y_0, \ldots, y_{m-1}, 0,  \ldots, 0)\]
+I want to try to prove the following lemmas:
+
+\begin{lemma}
+Suppose we have a picture $P : \R^n \to C$ that's good at a point $x \in \R^n$.
+Then there exists $y\in \R_{> 0}^n$ such that for all $m \in 1,\ldots, n$, we have
+ $\forall z \in B(x\pm [y]_m) . z\ne x \imp  d(P(z )) < m$
+\end{lemma}
+
+\begin{proof}
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+Suppose we have a picture $P : \R^n \to C$ that's good at a point $x \in \R^n$.
+Then there exists $y\in \R_{> 0}^n$ such that for all $m \in 0,\ldots, n-1$, we have
+ $\forall z \in B(x\pm y; m) . d(P(z)) \le m$
+\end{lemma}
+
+\begin{proof}
+For $n = 0$ there is nothing to prove.
+
+For $n = 1$, we have a picture $P : \R \to C$  that's good at $x \in \R$.
+We must find $y \in \R_{> 0}$ such that $\forall z \in \{x-y, x+y\}. d(P(z)) = 0$.
+
+For $n = 2$, we have a picture $P : \R^2 \to C$ that's good at $(x_0,x_1) \in \R^2$.
+That means we can find a box $B(x \pm y)$ that resembles $\partial_{P(x)}$.
+\cqed
+\end{proof}
 
 \end{document}
