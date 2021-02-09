@@ -102,6 +102,7 @@
 \def\null{\emptyset}
 \def\xx{{\bf x}}
 \def\yy{{\bf y}}
+\def\ps{\wp}
 
 \begin{document}
 \tikzset{>=stealth}
@@ -353,6 +354,127 @@ We must find $y \in \R_{> 0}$ such that $\forall z \in \{x-y, x+y\}. d(P(z)) = 0
 
 For $n = 2$, we have a picture $P : \R^2 \to C$ that's good at $(x_0,x_1) \in \R^2$.
 That means we can find a box $B(x \pm y)$ that resembles $\partial_{P(x)}$.
+\cqed
+\end{proof}
+
+\section{Bitopologies Again}
+
+A bitopological space is a set $X$ equipped with two topologies, call them $L, R \subseteq \ps(X)$.
+Maps between bitopologies are continuous if they're continuous according to both $L$ and $R$.
+
+The directed real line $\R$ is the set of reals $\R$
+ equipped with the bitopology where bases for the $L$- and $R$-topologies can
+be given by
+\[ L \supseteq \{ [a,b) \st a,b\in [0,1], a < b \} \qquad R \supseteq \{ (a,b] \st a, b, \in [0,1], a < b \} \]
+The directed interval $\I$ has the subspace bitopology for the subset $[0,1]$.
+
+
+
+\begin{lemma}
+A subset of $\R$ is open (in the usual topology) iff it is $L$-open and $R$-open.
+\end{lemma}
+
+\begin{proof}
+Suppose $U$ is open. Let $x$ be given. We want to find an $L$-interval around $x$ that lies
+in $U$. Since $U$ is open, we can find $a,b$ such that $x \in (a, b) \subseteq U$. In that case,
+$x \in [x,b)\subseteq U$. Reason symmetrically for $R$.
+
+Suppose in the other direction $U$ is $L$-open and $R$-open. Let $x$ be given. We want to find an open
+neighborhood of $x$. By $L$-openness, we find $x \in [a_\ell, b_\ell) \subseteq U$, and by $R$-openness, we
+find $x \in (a_r, b_r] \subseteq U$. In that case $x \in (a_r, b_\ell) \subseteq U$.
+\cqed
+\end{proof}
+
+\begin{lemma}
+A function $\R \to \R$ is continuous (as a map between bitopological spaces) if and only if it's
+continuous (as an ordinary map between topological spaces) and monotone, i.e. $x \le y$ implies $f(x) \le f(y)$.
+\end{lemma}
+
+\begin{proof}
+$\imp$: Suppose $f^{-1}$ takes $L$-open to $L$-open sets, and $R$-open to $R$-open sets.
+Then $f^{-1}$ takes open sets to open sets by the previous lemma, and $f$ is at least continuous.
+
+For any $t$, consider the set of points
+\[ \{ \phi \st \phi \ge f(t) \}  = [f(t), \infty) \]
+It is clearly an $L$-open set. So its inverse image under $f$
+\[ \{ u \st f(u) \ge f(t) \}   \]
+should also be $L$-open. Surely $t$ itself belongs to this set. So there exists an $L$-open interval
+$[t, b)$ such that $\forall u . u \in [t, b) \imp f(u) \ge f(t)$. Symmetrically, using $R$-continuity,
+we get an interval $(a, t]$ such that $\forall s . s \in (a, t] \imp f(s) \le f(t)$.
+Putting these together we have an interval $(a, b)$ containing $t$ such that everything left of $t$
+has a smaller $f$-value, and everything to the right of it has a bigger $f$ value. Since the closed
+interval $[x,y]$ is compact, we can find a finite subcover of these `locally monotone' patches, and
+conclude that $f(x) \le f(y)$.
+
+$\Leftarrow$:
+Suppose $f$ is continuous in the ordinary sense, and monotone. Then note that the inverse image of any point
+must be closed, and convex, so it must be a closed interval (including the possibility that it's a point).
+Let some $L$-open interval $[a,b)$ be given.
+We need to show that its inverse image
+\[ f^{-1}([a,b)) = \{ x \st a \le f(x) < b \} \]
+is $L$-open. Let some particular $x \in f^{-1}([a,b))$, be given. Now
+if $x > a$, we're basically already done. There's an open
+neighborhood around $x$ in the codomain, and so $f$'s ordinary
+continuity takes it back to an open neighborhood of $x$. Let's think about the remaining case.
+Given an $x$ and a $b > f(x)$, we need to show there's a $c > x$ such that the image
+of $[x, c)$ lies entirely in $[f(x), b)$. But this is easy: set $c$ to be the left endpoint of the closed
+interval that is the inverse image of $b$. Reason symmetrically to show $R$-continuity.
+\cqed
+\end{proof}
+
+\subsection{Higher Dimensions}
+Here's how I deal with $n$ dimensions. Say a {\em polytopology} is a set equipped
+with countably many pairs of topologies, call them $L_i, R_i \subseteq \ps(X)$ for $i \in \N$.
+Say a function is polycontinuous if it is continuous according to all topologies.
+
+Recall that we have relations $<_m$ defined in the `orderly' structure on $\R^n$.
+\[ x <_m y \iff (m \ge n) \lor (x_m < y_m \land \forall i \ge m . x_i = y_i )\]
+
+Define
+\[ [a, b)_i = \{z \st a \le_i z <_i b \} \]
+\[ (a, b]_i = \{z \st a <_i z \le_i b \} \]
+We can then define bases $\hat L_i, \hat R_i$ for topologies $L_i, R_i$ on $\R^n$ by saying
+\[ \hat L_i = \{ U \cap [a, b)_i \st a <_i b \in \R^n, U \in \O(\R^n)\} \]
+\[ \hat R_i = \{ U \cap (a, b]_i \st a <_i b \in \R^n, U \in \O(\R^n)\} \]
+
+Then we should find
+\begin{lemma}
+A subset of $\R^n$ is open in the usual sense if it is open with respect to all $L_i, R_i$.
+\end{lemma}
+
+\begin{proof}
+For $i \ge m$ we have that $L_i$ and $R_i$ coincide with the usual topology $\O$ on $\R^n$.
+So we need only show that $U \subseteq \R^n$ is open in $\O$ iff it is open with respect to all
+the topologies in
+\[ \{L_i, R_i \st 0 \le i < n\} \]
+$\imp$: Suppose $U$ really is open in $\O$. We must show that it's open in $L_i$. Pick a point
+$x \in U$, and we can easily find a $b$ also in $U$ such that $x <_i b$, and then $U \cap [x, b)_i$
+is a basic open set in $L_i$ contained in $U$ and containing $x$. Reason symmetrically about $R_i$.
+
+$\Leftarrow$: Suppose $U$ is open in all $L_i, R_i$. Let some $x$ be given. We must have witnesses
+$U^L_i, a^L_i, b^L_i, U^R_i, a^R_i, b^R_i$ such that
+\[ x \in  U^L_i \cap [a^L_i, b^L_i)_i \subseteq U\]
+\[ x \in  U^R_i \cap (a^R_i, b^R_i]_i \subseteq U \]
+then also we can see
+\[ x \in  U^L_i \cap [x, b^L_i)_i \subseteq U\]
+\[ x \in  U^R_i \cap (a^R_i, x]_i \subseteq U \]
+and consequently
+\[ x \in  U^L_i \cap U^R_i \cap (a^R_i, b^L_i)_i \subseteq U\]
+So we claim (and XXX is this a bit of a hole in the proof at the moment) that
+\[ x \in  \left(\bigcap_i U^L_i \cap U^R_i\right) \cap \left(\prod_i (a^R_i, b^L_i)\right) \subseteq U\]
+
+
+\cqed
+\end{proof}
+\begin{lemma}
+A map $f : \R^n \to \R^m$ is polycontinuous iff it is continuous and weakly orderly, that is, $x \le_i y$ implies
+$f(x) \le_i f(y)$ for all $i$.
+\end{lemma}
+
+\begin{proof}
+$\imp$: Suppose $f$ is continuous with respect to all $L_i, R_i$. It is continuous by previous lemma.
+
+$\Leftarrow$:
 \cqed
 \end{proof}
 
