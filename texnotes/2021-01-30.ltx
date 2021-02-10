@@ -458,12 +458,16 @@ $U^L_i, a^L_i, b^L_i, U^R_i, a^R_i, b^R_i$ such that
 then also we can see
 \[ x \in  U^L_i \cap [x, b^L_i)_i \subseteq U\]
 \[ x \in  U^R_i \cap (a^R_i, x]_i \subseteq U \]
-and consequently
-\[ x \in  U^L_i \cap U^R_i \cap (a^R_i, b^L_i)_i \subseteq U\]
-So we claim (and XXX is this a bit of a hole in the proof at the moment) that
-\[ x \in  \left(\bigcap_i U^L_i \cap U^R_i\right) \cap \left(\prod_i (a^R_i, b^L_i)\right) \subseteq U\]
+and so
+\[ x \in  U^L_i \cap U^R_i \cap (a^R_i, b^L_i)^{x}_i \subseteq U\]
+if we write $(a^R_i, b^L_i)^{x}_i = (a^R_i,x]_i \cup [x, b^L_i)_i $.
 
-
+Now $\bigcap_i U^L_i \cap U^R_i$ is open, so contains some finite box $V = \prod_i (c_i, d_i)$ around $x$.
+So we know
+\[ x \in  V \cap (a^R_i, b^L_i)^x_i \subseteq U\]
+But now observe that
+\[\bigcup_i (a^R_i, b^L_i)^x_i \supseteq \prod_i (a^R_{ii}, b^L_{ii})\]
+so we have an open box around $x$ contained in $U$, as required.
 \cqed
 \end{proof}
 \begin{lemma}
