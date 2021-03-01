@@ -56,6 +56,8 @@
 \def\lx{\bigcirc}
 \def\B{\mathbb{B}}
 \def\C{\mathbf{C}}
+\def\K{\mathbf{K}}
+\def\M{\mathbf{M}}
 \def\T{\mathbf{T}}
 \def\Set{\mathbf{Set}}
 \def\D{\mathbf{D}}
@@ -70,7 +72,6 @@
 \def\bz{\mathbf{0}}
 \def\bzee{\mathbf{z}}
 \def\S{\mathfrak{S}}
-\def\M{\mathbb{M}}
 \def\X{\mathbf{X}}
 \def\Y{\mathcal{Y}}
 \def\x{\times}
@@ -87,6 +88,7 @@
 \def\Z{\mathbb{Z}}
 \def\tw{\mathbf{2}}
 \def\dash{\hbox{---}}
+\def\span{\mathop{\mathrm{span}}}
 \def\dom{\mathop{\mathrm{dom}}}
 \def\cod{\mathop{\mathrm{cod}}}
 \def\celse{\mathrel{|}}
@@ -365,7 +367,7 @@ Maps between bitopologies are continuous if they're continuous according to both
 The directed real line $\R$ is the set of reals $\R$
  equipped with the bitopology where bases for the $L$- and $R$-topologies can
 be given by
-\[ L \supseteq \{ [a,b) \st a,b\in [0,1], a < b \} \qquad R \supseteq \{ (a,b] \st a, b, \in [0,1], a < b \} \]
+\[ L \supseteq \{ [a,b) \st a,b\in \R \} \qquad R \supseteq \{ (a,b] \st a, b \in \R \} \]
 The directed interval $\I$ has the subspace bitopology for the subset $[0,1]$.
 
 
@@ -478,8 +480,778 @@ $f(x) \le_i f(y)$ for all $i$.
 \begin{proof}
 $\imp$: Suppose $f$ is continuous with respect to all $L_i, R_i$. It is continuous by previous lemma.
 
-$\Leftarrow$:
+$\Leftarrow$: ???
 \cqed
 \end{proof}
+
+\subsection{Higher Dimensions, Attempt 2}
+
+Here's a different attempt at describing a polytopology for $\R^n$.
+
+A set is a basic open set of $L_m$ if it is a product of intervals $I_0 \x \cdots I_{n-1}$
+of the form
+\[I_i =
+\cases{
+  (a_i, b_i) & if $i < m$\cr
+  [a_i, b_i) & if $i = m$\cr
+  [a_i, b_i] & if $i > m$\cr
+}
+\]
+And $R_m$ has as opens products of intervals of the form
+\[I_i =
+\cases{
+  (a_i, b_i) & if $i < m$\cr
+  (a_i, b_i] & if $i = m$\cr
+  [a_i, b_i] & if $i > m$\cr
+}
+\]
+No, that's not right.
+
+\subsection{An Exercise}
+
+Consider the two topologies on $\R$ that are just open upsets and downsets. Do we get order
+and continuity if we demand both of these simultaneously?
+
+Suppose $f : \R \to \R$ is continuous and monotone. Let $(a, \infty)$ be some upset.
+What's $f^{-1}(a, \infty)$? It's $\{ x \st f(x) > a\}$. It could be that that's the whole
+set or the empty set. Either of those are fine. Otherwise, there exist $x, y$ such that $f(x) \le a$
+and $f(y) > a$. If $y \le x$ then $f(y) \le f(x) \le a$, a contradiction. So $x < y$.
+That is, all elements of $f^{-1}(a, \infty)$ are greater than all elements of its complement.
+But also $(a, \infty)$ is an open set, so its inverse image is open. So $f$ is $R$-continuous.
+Symmetrically it's $L$-continuous.
+
+Suppose $f$ is $L$- and $R$-continuous. Consider an open interval $(a, b)$.
+The inverse image $f^{-1}(a, \infty)$
+is  $(a', \infty)$ for some $\ell(a) \in \R \cup \{-\infty, \infty\}$.
+ The inverse image $f^{-1}(\infty, b)$ is $(\infty, b')$ for some $r(b) \in \R \cup \{-\infty, \infty\}$.
+
+\[ f^{-1}(a, \infty) = \{ x \st f(x) > a \} = (\ell(a), \infty) = \{x \st x > \ell(a)\} \]
+\[ f^{-1}( \infty, b) = \{ x \st f(x) < b \} = (\infty, r(b)) = \{x \st x < r(b)\}\]
+
+\[ a < f(x) \iff   \ell(a) < x \]
+\[ f(x) < b  \iff  x < r(b) \]
+(huh, so these are adjunctions $\ell \dashv f \dashv r$!)
+
+\[ f(x) \in (a, b) \iff x \in (\ell(a), r(b)) \]
+So definitely $f$ is continuous.
+
+\subsection{Higher Dimensions, Attempt 3}
+
+Does the following work for 2 dimensions?
+Say $\R^+ = \R\cup\{-\infty, \infty\}$.
+I say $U \subseteq \R^2$ is $R_1$-continuous if
+\[ \exists a \in \R^+. U = \{ (x,y) \in \R^2 \st y > a \} \]
+i.e.
+\[ \exists a \in \R^+. U = \R \x (a, \infty) \]
+and it's $L_1$-continuous if it's a lower set in the sense of
+\[ \exists a \in \R^+. U = \{ (x,y) \in \R^2 \st y < a \} \]
+i.e.
+\[ \exists a \in \R^+. U = \R \x (-\infty, a) \]
+Then I think I want to say that $U$ is an $L_0$-continuous set if
+\[ \exists f : \R \to \R^+ . U = \{(x,y) \st x > f(y) \} \]
+where $f$ is required to be continuous. And $U$ is $R_0$-continuous if
+\[ \exists f : \R \to \R^+ . U = \{(x,y) \st x > f(y) \} \]
+
+Suppose that $g$ is $L_0, R_0, L_1, R_0$-continuous function. I want to try to show that
+$g$ is continuous as a function $\R^2 \to \R^2$ in the usual sense, and is weakly orderly,
+i.e. it preserves $\le_0$ and $\le_1$ on $\R$, i.e. concretely
+\[
+\erule
+{x_0 \le y_0 \land x_1 =  y_1}
+{g(x)_0 \le g(y)_0 \land g(x)_1 =  g(y)_1}
+\qquad
+\erule
+{x_1 \le  y_1}
+{g(x)_1 \le  g(y)_1}
+\]
+So first of all let's give names to all the open sets.
+\[ L_0^f = \{(x,y) \st x < f(y) \}  \qquad  R_0^f = \{(x,y) \st x > f(y) \} \]
+\[ L_1^a = \{(x,y) \st y < a \}  \qquad  R_1^a = \{(x,y) \st y > a \} \]
+I think these are actually {\em the} open sets of all the relevant topologies, not just the basic ones.
+Except, hm, no are continuous functions aren't closed under $\max/\min$.
+
+\subsection{Higher Dimensions, Attempt 4}
+
+Here's what I want to demand: I think: Let $\R_R$ be $\R$ with the topology given by
+{\em lower} sets $(-\infty, a)$ and $\R_L$ be $\R$ with the topology with
+{\em upper} sets $(a, \infty)$.
+
+
+
+We want to equip $\R^n$ with many topologies. We define
+
+\[ L^f_m = \{x \in \R^n \st x_m < f(x_{m+1}, \ldots, x_{n-1}) \} \qquad
+ R^f_m = \{x \in \R^n \st x_m > f(x_{m+1}, \ldots, x_{n-1}) \}\]
+\[ L_m = \{ L^f_m \st f : \R^{n-m-1} \to \R_L \} \qquad
+ R_m = \{ R^f_m \st f : \R^{n-m-1} \to \R_R \}\]
+
+\begin{lemma} Suppose $(f_i)_{i \in I}$ is a family of functions.
+  \begin{itemize}
+  \item If $\forall i . f_i : X \to \R_L$, then $\max_i f_i : X \to \R_L$.
+  \item If $\forall i . f_i : X \to \R_R$, then $\min_i f_i : X \to \R_R$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+Let an open set $(a, \infty) \in \R_L$ be given. We know
+\[ \bigcup_i f_i^{-1}(a, \infty) \in \O(X) \]
+by  from the continuity of $f_i$ and the closure
+of open sets in $X$ under arbitrary union, and
+\[\bigcup_i f_i^{-1}(a, \infty) = \bigcup_i \{ x \st  f_i(x) > a \} \]
+\[ = \{ x \st \bigvee_i f_i(x) > a \} \]
+\[ = \{ x \st \max_i f_i(x) > a \}  \]
+\[ = (\max_i f_i)^{-1} (a, \infty) \]
+so we are done. The $\R_R$ case is symmetric.
+\cqed
+\end{proof}
+
+\begin{corollary}
+  $L_i$ and $R_i$ are closed under arbitrary unions.
+\end{corollary}
+
+\begin{proof}
+Suppose we have $(f_i)_{i \in I} : \R^{n-m-1} \to \R_L$. We want to show
+\[\bigcup_{i} L_m^{f_i} \in L_i \]
+but
+\[\bigcup_{i} L_m^{f_i} = \bigcup_{i} \{ x \in \R^n \st x_m < f_i(x_{m+1}, \ldots, x_{n-1}) \}\]
+\[   = \{ x \in \R^n \st x_m < \max_i f_i(x_{m+1}, \ldots, x_{n-1}) \}   \]
+\[ =  L_m^{\max_i f_i}  \in L_i \]
+\cqed
+\end{proof}
+\subsection{Higher Dimensions, Attempt 5}
+
+I think the approach where intervals are huge is unsatisfactory;
+consider the directed circle. I {\em have} to think in terms of
+half-open intervals to give it an orientation, because there's no
+global order. So I might as well give $\R$ that topology to make it
+locally isomorphic to the directed circle.
+
+However, I think it might be easier to define topologies in terms of
+closure.
+
+Define
+\[x\in \R^n \prov E_m(x)  = \{y \in \R^n \st \forall i > m . x_i = y_i \} \subseteq \R^n\]
+\[X \subseteq \R^n \prov \pi_m(X) = \{x_m \st x \in X \} \subseteq \R\]
+
+Say a subset $X \subseteq \R^n$  $m$-converges up to $x \not\in X$
+\[ \pi_m(X \cap E_m)  \cap (-\infty, x) \]
+contains points arbitrarily close to $x$ in $\R$. Say $X$  $m$-converges down to $x$ if
+\[ \pi_m(X \cap E_m)  \cap (x, \infty) \]
+does. Say $X$  $m$-converges to $x$ if
+\[ \pi_m(X \cap E_m)   \setminus \{x\} \]
+does.
+The closure operation $L_m : \ps(\R^n) \to \ps(\R^n)$ is given by taking a set $X$ and including
+any point $x$ such that either
+\begin{itemize}
+\item  $X$  $i$-converges to $x$ for some $i < m$, or
+\item  $X$  $m$-converges up to $x$
+\end{itemize}
+The operation $R_m$ is the same with `up' replaced by `down'. The
+operation $U_m$ is the same with the word `up' removed. We have subset relations:
+\[\begin{tikzcd}
+ L_0(X)\ar[dr]&[-3em]&[-3em] L_1(X)\ar[dr]&[-3em]&[-3em] L_2(X)\ar[dr]\\
+&  U_0(X)\ar[ur]\ar[dr]&&  U_1(X)\ar[ur]\ar[dr]&&[-2.2em] \cdots\\
+ R_0(X)\ar[ur]&& R_1(X)\ar[ur]&& R_2(X)\ar[ur]\\
+\end{tikzcd}\]
+
+\subsection{Higher Dimensions, Attempt 6}
+
+I'm not sure I need to do this careful telescoping. Write $C$ for the usual closure
+operation in $\R$. Maybe just
+\[ E^x_m(X) = \{ y_m \st y \in X, \forall i > m . x_i = y_i \} \subseteq \R \]
+\[ L_m(X) = \{ x \st  x_m \in C(E^x_m(X)  \cap (-\infty, x]) \} \]
+\[ R_m(X) = \{ x \st  x_m \in C(E^x_m(X)  \cap [x, \infty)) \} \]
+\[ U_m(X) = \{ x \st  x_m \in C(E^x_m(X)) \} \]
+
+works? The containment of $L_m(X) \subseteq U_m(X)$ is easy. How about
+\begin{lemma}
+$U_m(X) \subseteq L_{m+1}(X)$
+\end{lemma}
+
+\begin{proof}
+Write $ L(X) =  C(X \cap (-\infty, x])$.
+ Want to show $x_m \in C(E^x_m(X))$ implies
+$x_{m+1} \in L(E^x_{m+1}(X))$ for any $x \in \R^n$. That is, we have
+\[x_m \in C(\{ y_m \st y \in X, \forall i > m . x_i = y_i \})\]
+and we want
+\[x_{m+1} \in L(\{ y_{m+1} \st y \in X, \forall i > {m+1} . x_i = y_i \})\]
+We can show the even stronger
+\[x_{m+1} \in \{ y_{m+1} \st y \in X, \forall i > {m+1} . x_i = y_i \}\]
+Because
+\[C(\{ y_m \st y \in X, \forall i > m . x_i = y_i \}) \]
+is not empty, also
+\[\{ y_m \st y \in X, \forall i > m . x_i = y_i \}\]
+is not empty. So let $y \in X$ be given with $\forall i > m . x_i = y_i$.
+Therefore
+\[y_{m+1} \in \{ y_{m+1} \st y \in X, \forall i > {m+1} . x_i = y_i \}\]
+But $m+1 > m$ so $x_{m+1} = y_{m+1}$ and we are done.
+\cqed
+\end{proof}
+
+No, wait, this seems wrong. This means the $L_1$-open sets in $\R^2$ are `too wide', and can't
+be any smaller in the $x_0$-direction than the entire real line.
+
+\subsection{Higher Dimensions, Attempt 5b}
+We stick with $C$ being the standard closure on $\R$.
+\[ E^x_m(X) = \{ y_m \st y \in X, \forall i > m . x_i = y_i \} \subseteq \R \]
+\[ L_m(X) = \{ x \st  x_m \in C(E^x_m(X)  \cap (-\infty, x)) \} \]
+\[ R_m(X) = \{ x \st  x_m \in C(E^x_m(X)  \cap (x, \infty)) \} \]
+\[ U_m(X) = \{ x \st  x_m \in C(E^x_m(X)) \} \]
+
+Then define
+\[ \hat L_0 = L_0 \qquad \hat R_0 = R_0\]
+\[ \hat U_m(X) = \hat L_m(X) \cup \hat R_m(X) \]
+\[ \hat L_{m+1}(X) = L_{m+1}(X) \cup \hat U_m(X) \]
+\[ \hat R_{m+1}(X) = R_{m+1}(X) \cup \hat U_m(X) \]
+In that case the containments
+\[\begin{tikzcd}
+ \hat L_0(X)\ar[dr]&[-3em]&[-3em] \hat L_1(X)\ar[dr]&[-3em]&[-3em] \hat L_2(X)\ar[dr]\\
+&  \hat U_0(X)\ar[ur]\ar[dr]&&  \hat U_1(X)\ar[ur]\ar[dr]&&[-2.2em] \cdots\\
+ \hat R_0(X)\ar[ur]&& \hat R_1(X)\ar[ur]&& \hat R_2(X)\ar[ur]\\
+\end{tikzcd}\]
+become obvious by definition.
+
+But I'm not sure I believe in this diagram anymore.
+
+\subsection{Higher Dimensions, Attempt 6}
+Isn't it actually this?
+\[\begin{tikzcd}
+&[-1.5em]  L_0\ar[dr]&[-1.5em]&[-1.5em]  L_1\ar[dr]&[-1.5em]&[-1.5em]  L_2\ar[dr]\\
+U_0\ar[ur]\ar[dr]&&   U_1\ar[ur]\ar[dr]&&   U_2\ar[ur]\ar[dr]&&[-1.5em] \cdots\\
+&  R_0\ar[ur]&&  R_1\ar[ur]&&  R_2\ar[ur]\\
+\end{tikzcd}\]
+The arrows point in the direction of having fewer arrows in a multigraph, and more open sets in topology.
+You have $U_m$ texture at a point in a direction if you have $L_m$ {\em and} $R_m$ texture there.
+Ordinary topology $(U_0)$ admits both forward and backward paths. I think I associate $L_m, R_m$ with $\le_m$.
+If $x \le_m y$ and $y \le_m x$, then $x \equiv_m y$, and we're in $U_m$.
+
+This means $U_0$ is actually about being literally the same point, up
+to homotopy. The relation $\le_0$ is antisymmetric. An open set in $U_0$ is one where nothing interesting happens.
+
+The graphs of the square look like
+\[
+U_0 =
+\begin{tikzcd}
+  * \ar[r, <->]\ar[d,  <->] & *\ar[d,  <->]\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\qquad L_0 =
+\begin{tikzcd}
+  * \ar[r, <-]\ar[d,  <->] & *\ar[d,  <->]\\
+  * \ar[r, <-] & *
+\end{tikzcd}
+\qquad
+R_0 =
+\begin{tikzcd}
+  * \ar[r, ->]\ar[d,  <->] & *\ar[d,  <->]\\
+  * \ar[r, ->] & *
+\end{tikzcd}
+\]
+\[
+U_1 =
+\begin{tikzcd}
+  *\ar[d,  <->] & *\ar[d,  <->]\\
+  * & *
+\end{tikzcd}
+\qquad
+L_1 =
+\begin{tikzcd}
+  * \ar[d,  <-] & *\ar[d,  <-]\\
+  *  & *
+\end{tikzcd}
+\qquad
+R_1 =
+\begin{tikzcd}
+  * \ar[d,  ->] & *\ar[d,  ->]\\
+  *  & *
+\end{tikzcd}
+\]
+\[
+U_2 =
+\begin{tikzcd}
+  * & *\\
+  * & *
+\end{tikzcd}
+\]
+Wait no maybe I have this backwards. I think the number of edges should go {\em up} as I increase the dimension.
+And there need not be any topology that actually takes place at $U_m$, but I could also list it:
+
+\[
+ U_0 =
+\begin{tikzcd}
+  *  & *\\
+  *  & *
+\end{tikzcd}
+\qquad
+ L_0 =
+\begin{tikzcd}
+  * \ar[r, <-] & *\\
+  * \ar[r, <-] & *
+\end{tikzcd}
+\qquad
+R_0 =
+\begin{tikzcd}
+  * \ar[r, ->] & *\\
+  * \ar[r, ->] & *
+\end{tikzcd}
+\]
+\[
+U_1 =
+\begin{tikzcd}
+  * \ar[r, <->] & *\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\qquad
+L_1 =
+\begin{tikzcd}
+  * \ar[r, <->] \ar[dr, <-]\ar[d,  <-] & *\ar[d,  <-]\ar[dl, <-]\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\qquad
+R_1 =
+\begin{tikzcd}
+  *\ar[r, <->] \ar[d,  ->]\ar[dr, ->] & *\ar[d,  ->]\ar[dl, ->]\\
+  *\ar[r, <->]  & *
+\end{tikzcd}
+\]
+\[
+U_2 =
+\begin{tikzcd}
+  * \ar[r, <->] \ar[dr, <->]\ar[d,  <->] & *\ar[d,  <->]\ar[dl, <->]\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\qquad
+L_2 =
+\begin{tikzcd}
+  * \ar[r, <->] \ar[dr, <->]\ar[d,  <->] & *\ar[d,  <->]\ar[dl, <->]\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\qquad
+R_2 =
+\begin{tikzcd}
+  * \ar[r, <->] \ar[dr, <->]\ar[d,  <->] & *\ar[d,  <->]\ar[dl, <->]\\
+  * \ar[r, <->] & *
+\end{tikzcd}
+\]
+
+\subsection{Higher Dimensions, Prelude to Attempt 7}
+My current belief state is that I actually do want the topologies to {\em decrease} the number
+of open sets as I crank up the dimension. I'd like to name them like so:
+\[\begin{tikzcd}
+&[-2.5em]  L_0\ar[from=dr]&[-2.5em]&[-2.5em]  L_1\ar[from=dr]&[-2.5em]&[-2.5em]  L_2\ar[from=dr]
+&[-2.5em]&[-2em]&[-3.5em]L_{n-1}\ar[dl]\ar[from=dr]&[-3.5em]
+\\
+U_{-1}\ar[from=ur]\ar[from=dr]&&   U_0\ar[from=ur]\ar[from=dr]&&   U_1\ar[from=ur]\ar[from=dr]&& \cdots
+&\cdots&&U_{n-1}
+\\
+&  R_0\ar[from=ur]&&  R_1\ar[from=ur]&&  R_2\ar[from=ur]
+&&&R_{n-1}\ar[ul]\ar[from=ur]
+\\
+\end{tikzcd}\]
+with the arrows pointing in the $\subseteq$ direction, where each one of these is a set of open sets.
+It will end up being that $U_{-1}$ is the discrete topology, and $U_{n-1}$ is the ordinary topology on $\R^n$.
+
+The $U_i$ aren't really part of the structure I intend to define; I'm
+just defining $U_i = L_i \cap R_i$. So I could draw this diagram more
+parsimoniously as
+\[
+\begin{tikzcd}
+  L_0\ar[from=r]\ar[from=dr] & L_1\ar[from=r]\ar[from=dr] & \cdots\ar[from=r]\ar[from=dr] & L_{n-1} \\
+  R_0\ar[from=r]\ar[from=ur] & R_1\ar[from=r]\ar[from=ur] & \cdots\ar[from=r]\ar[from=ur] & R_{n-1} \\
+\end{tikzcd}
+\]
+
+\subsection{Higher Dimensions, Attempt 7}
+
+Define a {\em polytopology} to be a set $X$ equipped with a function
+\[\textstyle  \O : \{0,\ldots,n-1\} \x \{- {1\over 2}, {1\over 2}\}  \to 2^{2^X}\]
+such that each $\O(m, d)$ is a topology, and $\O(m, d) \subseteq \O(m', d')$ whenever $m < m'$.
+The standard polytopology structure on $\R^n$ can be defined by saying
+\[
+\prec_k = \cases{
+  \le & if $k > 0$;\cr
+  < & otherwise.\cr
+}
+\qquad
+(a,b)_{k,d} =  \{ x \in \R \st a \prec_{k+d} x \prec_{k-d} b \} \]
+and letting a basis for $\O(d,m)$ be
+\[  \left\{\prod_{i=0}^{n-1} (a_i,b_i)_{i-m,d} \middle| a_i,b_i \in \R \right\}\]
+
+This means the high-dimensional topologies (i.e. $m \ge n$)
+are just the ordinary topology on $\R^n$, because the basis is
+all open boxes. If we decided to define $\O(-1, d)$, it would just be
+the discrete topology, because the basis is made of all closed boxes.
+
+Recall that a map $\R^m \to \R^k$ is orderly
+if $x \le_m y$ always implies $f(x) \le_m f(y)$, where
+\[(x \le_m y) \iff (x_m \le y_m) \land (\forall i. i > m \imp x_i = y_i)\]
+and we say conventionally that $x_i = 0$ if $x\in \R^n$ and $i \ge n$.
+As a consequence, we have that $m \ge n$ implies $x \le_m y$ for any $x,y$.
+
+\begin{lemma}
+A map $\R^m \to \R^k$ is polycontinuous just in case it is orderly.
+\end{lemma}
+
+\begin{proof}
+$\imp$: Suppose $f : \R^m \to \R^k$ is polycontinuous. We want to show $f$ is orderly.
+
+Let's first show that $f$ preserves $\le_0$.
+Pick an $x \in \R^m$. We want to show that any $y$ with $x \le_0 y$ guarantees $f(x) \le_0 f(y)$.
+In other words, we want to show that $f^{-1}\{z \in \R^k \st z \ge_0 f(x) \} \supseteq \{ y\in\R^n \st y \ge_0 x\}$,
+or
+\[f^{-1}( \dash\ge_0 f(x) ) \supseteq (\dash \ge_0 x) \]
+Now $( \dash\ge_0 f(x) )$ is definitely an $\O(0, r)$-open set, so
+$f^{-1}( \dash\ge_0 f(x) )$ must be also. So it must contain a basic $\O(0,r)$-open set, some interval
+$[x, a)_0$. $\cdots$ should finish this proof
+\cqed
+\end{proof}
+\vfil\eject
+\subsection{Higher Dimensions, Attempt 8}
+\def\eps{\varepsilon}
+Pick an arbitrary $\eps \in (0,1)$.
+A polytopology is a set $X$ equipped with with a function
+\[\O_X : \Z \x \{\eps, -\eps\} \to 2^{2^X}\]
+such that $\O_X(n,d)$ is a topology for any $n,d$.
+A polycontinuous function is a map of underlying sets that is
+continuous for every topology independently.
+
+Define $[a]_k$ by
+\[
+[a]_k = \cases{
+  \{a\} & if $k < 0$;\cr
+\emptyset & otherwise.
+}
+\]
+A polytopology can be given on $\R$ by letting
+$\O_\R(n,d)$ be generated by the basis $\{(a,b) \cup [a]_{n+d} \cup [b]_{n-d} \st a,b \in \R\}$.
+If $X$ is a polytopology, let $\lx X$ be the same underlying set with the topologies shifted over by one:
+\[\O_{\lx X}(n, d) = \O_X(n-1, d)\]
+I think then that an interesting polytopology that comes with the underlying set $\R^n$ is
+\[ \R^{\lx n} := \R \x \lx \R \x \lx^2 \R \x \cdots \x \lx^{n-1} \R \]
+It behaves something like a categorical $n$-cell; maps out of $\R^{\lx (n+1)}$ seem to be a natural
+notion of homotopy between pairs of maps out of $\R^{\lx n}$.
+
+\subsection{Higher Dimensions, Attempt 9}
+
+This leads me right back to more or less the same
+(pre)sheaf-theoretic conception of directed spaces that I had
+in 2019-12-04 with ${\bf MultOrdTop}$.
+
+\def\KMC{\langle \K\M\C \rangle}
+To recap: Suppose $\K, \M, \C$ are categories with the same object
+set $X$. Write, e.g. $\K \o \M$ for the set of all composites $k \o m$ of $k \in \K$
+and $m \in \M$. Assume:
+\begin{itemize}
+\item $(\K \o \C) \cup (\C \o \K) \subseteq \K \cap \M \cap \C$
+\item $(\C \o \M) \cup (\M \o \C) \subseteq \C$
+\item $(\K \o \M) \cup (\M \o \K) \subseteq \K$
+\end{itemize}
+Then we can define $\KMC$ to be the category
+whose objects are the set $X \x \Z$, and whose morphisms are given by
+\[\KMC((C, n), (D, m)) = \begin{tabular}{r@{\qquad}l}
+$\K(C, D)$&if $n < m$;\\
+ $\M(C, D)$&if $n = m$;\\
+$\C(C,D)$&if $n > m$.
+\end{tabular}\]
+Then I get a category of $\Z$-many interval objects if I let $\K$ be the monoid
+of constant functions $\I \to \I$, and $\M$ the monoid of continuous nondecreasing
+functions $\I \to \I$, and $\C$ the monoid of continuous functions $\I \to \I$.
+
+I'm then interested in $\rset^{\KMC^\op}$.
+
+Previously in the other note I'd talked about presheaves over free
+finite products of the intervals. I don't know if I need that or not.
+
+\section{Digression on Cartographic Things}
+
+I was shocked to find that I couldn't locate any tex notes on the idea
+I had last summer (and sent a couple emails to Noam about) so I
+thought I'd jot some of it down here now.
+
+The main idea is to move from of a cartographic set (i.e. a set $X$
+acted on by involutive flips $\sigma_0, \ldots, \sigma_n$ such that
+every pair of non-adjacent flips commutes) first to a cartographic
+{\em linear space}, i.e. a vector space $V$ with maps
+$\sigma_0, \ldots, \sigma_n : V \to V$ that are all involutions, and again
+every non-adjacent pair commutes, i.e.
+\[|i-j| > 1 \imp \sigma_i\sigma_j = \sigma_j \sigma_i\]
+And from there taking one more step and considering the {\em mixing} operators
+we can derive from flips, namely
+\[\mu^+_i = {1 + \sigma_i\over 2} \qquad \mu^-_i = {1 - \sigma_i\over 2}\]
+and we see the involutivity of the $\sigma$s (and of $-\sigma$s) means that the $\mu$ are idempotent:
+\[ \mu \mu  = (1 +  \sigma) (1 +  \sigma) / 4   = (1 +  \sigma + \sigma + \sigma^2) / 4
+   = (1 +  \sigma) / 2    = \mu \]
+
+We can also imagine iterating various $\mu$s towards convergence. I happen to know
+that for spaces based on finite cartographic sets that everything converges nicely.
+I'm not sure exactly what a minimal set of assumptions that guarantees convergence
+generally, but I can punt on that for now.
+
+Let $S$ be the set of partial functions $\{0,\ldots, n\} \to \{-, +\}$. For every $s\in S$
+suppose I have an idempotent $\mu_s : V \to V$. For an example of the intended semantics,
+suppose $n = 2$ and suppose $s = \{0\mapsto -, 2 \mapsto +\}$, which we can abbreviate
+as $-0+$. (We write $0$ in the $1^{th}$ position because 1 is not in the domain of the partial function $s$).
+Then the mixing operator $\mu_{-0+}$ converts an element of $V$ --- which is thought of
+as an assignment of values to every flag in the complex --- into a directed edge.
+
+I can think of a few requirements for these $\mu$s. There should be
+`monotone mutual idempotence`: if you mix over fewer dimensions, and
+over more. in either order, it's the same as mixing over more. Mixing
+over no dimensions should be the identity. Mixing over `contradictory
+functions', which try to impossibly assign both $+$ and $-$ to the
+same dimension, should produce the zero function.
+\[
+\erule
+{s \subseteq s'}
+{\mu_{s}\mu_{s'} = \mu_{s'}\mu_s = \mu_{s'}}
+\qquad
+\erule
+{}
+{\mu_{\emptyset} = \rid}
+\qquad
+\erule
+{s \# s'}
+{\mu_{s'}\mu_s = 0}
+\]
+
+I'm writing $s \# s'$ to mean $\exists i . s(i)\dns \land s'(i)\dns \land s(i) \ne s'(i)$.
+When $s$ and $s'$ are sufficiently ``independent'' they should commute.
+Define $s \| s'$ to mean
+\[\lnot \exists i,j . s(i)\dns \land s'(j) \dns \land |i - j| \le 1\]
+Then we want to require
+\[
+\erule
+{s \| s'}
+{\mu_{s'}\mu_s = \mu_s\mu_{s'}}
+\]
+\subsection{Star}
+
+%%%% WRONG:
+%%
+%% A collection $C \subseteq V \to V$ of linear operators is star-closed if for any
+%% $c \in C$ there exists a unique $c^* \in C$ such that $c c^* = c^* c = c^*$.
+%% \begin{lemma}
+%% $c^{**} = c^*$
+%% \end{lemma}
+
+%% \begin{proof}
+%% $c^{**} = c^{**}c^* = c^{**}c^* c = c^{**} c$. Symmetrically
+%% $c^{**} = cc^{**}$. So $c^{**}$ is the closure of $c$, and is equal to $c^*$ by uniqueness.
+%% \cqed
+%% \end{proof}
+
+I'd rather talk about $\mu_i = \mu^+_i$ (and define $\mu^-_i = 1 - \mu_i$)
+and talk about a canonical iteration closure of linear operators.
+
+If my eigenvalues are always in the interval $[0,1]$ this makes sense:
+If $f : V \to V$ is a linear operator of that sort, then $f^*$ is the one
+where we zero out all the eigenvalues less than 1.
+
+Specifically: we say $L^*$ is the closure of $L$ if it preserves any
+vector that $L$ preserves, and annihilates any vector that $L$ reduces.
+For any $v \in V$, and any $\lambda \in [0,1)$, we demand
+\[ (L v = v) \imp (L^* v = v) \]
+\[ (L v = \lambda v) \imp (L^* v = 0) \]
+
+An operator is complete if its eigenvectors span the whole space.
+
+
+Suppose we have $\mu_i$ which are complete, idempotent and non-adjacent-commutative. Can we
+show, for example, $(\mu_{i}\mu_j)^* = (\mu_j \mu_i)^*$? Hm, I don't even see that
+$\mu_i \mu_j$, for example, is complete.
+
+Maybe I really want to take the closure of a set of operators.
+This is going back to the $U$ and $Z$ notation in my august 2020 email to Noam.
+Let
+\[U[L] = \{v \in V \st Lv = v\}\qquad
+Z[L] = \{v \in V \st Lv = 0\}
+\]
+\[ U[\bigstar_i L_i] = \bigcap_i U[L_i] \]
+\[ Z[\bigstar_i L_i] = \span_i Z[L_i] \]
+or I could just write this as
+\[ ( \bigstar_i L_i )v = v \iff \forall i . L_i v = v \]
+\[ (\bigstar_i L_i) v = 0 \iff \sum_i v_i = v  \land \forall i .  L_i v_i = 0 \]
+Can I even show that closures are unique?
+
+
+Suppose I have some operators $L_i$ and $L$ such that
+$U[L] = \bigcap_i U[L_i]$. I know $L$ is a projection, so any eigenvalues
+it has other than 1 are 0. I know $LL_i = L_iL = L$. Does this uniquely
+characterize $L$? I don't think so.
+
+Suppose I have two operators $L$ and $M$ such that $\{UL,ZL\}$ and $\{UM, ZM\}$
+are both partitions of $V$ into two subspaces. If I define
+\[U(L \star M) = UL \cap UM \]
+\[Z(L \star M) = ZL + ZM \]
+does that share that property? Does that uniquely characterize $L \star M$ as an
+operator? What I know is if $v \in V$, then there exists a unique choice of
+ $\ell_1\in UL$ and $\ell_0 \in ZL$ such that $\ell_1 + \ell_2 = v$. Also I get
+ $m_1\in UM$ and $m_0 \in ZM$ such that $m_1 + m_2 = v$.
+
+Ah, I already settled this in the email. The counterexample is
+\[V = \R^2 \qquad
+UL  = \{(x,0) \st x \in \R\}\qquad
+UM = \{(0,y) \st y \in\R\}\]
+\[ZL = ZM = \{(t,-t) \st t \in \R\}\]
+Then $UL \cap UM$ is just the origin, and this isn't enough to span $\R^2$ together with $ZL = ZM$.
+%% If there were two
+%% different choices, I'd have $v_1, w_1\in UL$ and $v_2, w_2 \in ZL$ with
+%% also $w_1 + w_2 = v$ so $v_1 - w_1 + v_2 - w_2 = 0$ so $v_1 - w_1 \in UL$ and $w_2 - v_2 \in ZL$
+%% would be equal and nontrivial, violating my tacit assumption that $UL \cap VL = \{0\}$.
+
+\subsection{Characterization of Projections}
+
+Let's say I have two projections $L, M: V \to V$, and I know for each one that their kernel and image
+decompose $V$. If they have the same kernel and same image, are they the same?
+Then $v = v_1 + v_0$, and $Lv = v_1$ and $Mv = v_1$. Yes.
+
+Ok, so the data I need for a projection really is just a pair of subspaces $(V_0, V_1)$ that decompose $V$,
+i.e. $V_0 + V_1 = V$ and $V_0 \cap V_1 = 0$. And then I can define the join of two pairs as
+
+\[ (V_0, V_1) * (W_0, W_1) = (V_0 + W_0, V_1 \cap W_1) \]
+
+With the proviso being: the result may not in general be a decomposition pair. But I can ask
+for a set $\mu_0, \ldots, \mu_n = (V_{00}, V_{01}), \ldots, (V_{n0}, V_{n1})$ of decomposition
+pairs which have the property that the join of any subset of them is again a decomposition pair.
+
+\subsection{Setting this up formally}
+
+A {\em preprojection} is a pair of subspaces $(V_0, V_1)$.
+
+A {\em projection} is a preprojection $\mu = (V_0, V_1)$ such that
+$V_0 \cap V_1 = 0$ and $V_0 + V_1 = V$. We can do function application
+with $\mu$ because we can turn $v$ uniquely into
+$(v_0 \in V_0) + (v_1 \in V_1)$, and define $\mu(v) = v_1$.
+We can define the {\em conjunction} of two preprojections by
+\[ (V_0, V_1) \land (W_0, W_1) = (V_0 + W_0, V_1 \cap W_1) \]
+and the {\em negation} by
+\[ \lnot (V_0, V_1) = (V_1, V_0)\]
+It is easy to see that $\land$ is a commutative monoid, with
+unit $(0, V)$, which as a function is the identity function.
+
+I'd like to say a {\em cartographic space} is a space $V$ and a set $C$ of projections
+closed under $\land$ and $\lnot$, containing distinguished elements $\mu_0, \ldots, \mu_n$.
+
+\def\ket#1{|f\rangle}
+I'm not sure that I actually get this full structure from cartographic sets, though.
+Given some $\sigma$s, I'd want to define
+\[ \mu_i = (Z_i, U_i) =  (\{v \st \sigma_i v = - v\}, \{v \st \sigma_i v = v\})\]
+which means the decomposition is explicitly
+\[  v = {(1 - \sigma_i)v  \over 2}  + {(1 +\sigma_i)v  \over 2}  \]
+But I'm not quite as certain that an expression like
+\[ \lnot(\mu_{i} \land \mu_j) \land \mu_k \]
+is actually a projection. I start by knowing
+\[ \mu_i \land \mu_j = (Z_i + Z_j, U_i \cap U_j)\]
+and then
+\[ \lnot(\mu_i \land \mu_j) = ( U_i \cap U_j, Z_i + Z_j)\]
+and then
+\[ \lnot(\mu_i \land \mu_j) \land \mu_k  = ( (U_i \cap U_j) + Z_k , (Z_i + Z_j) \cap U_k)\]
+Some easy lemmas are
+\begin{lemma}
+$ (A \cap B) + (A \cap C) \subseteq A \cap (B + C) $
+\end{lemma}
+
+\begin{lemma}
+$ A + (B \cap C) \subseteq (A + B) \cap (A + C)   $
+\end{lemma}
+
+which would let me show
+\[ ( (U_i \cap U_j) + Z_k) \cap (Z_i + Z_j) \cap U_k \]
+\[ \subseteq  (U_i + Z_k) \cap (U_j + Z_k) \cap (Z_i + Z_j) \cap U_k \]
+Can I perhaps show specifically
+\[ (U_i+  Z_k) \cap U_k = U_i \cap U_k\]
+? In that case I'd have
+\[ \subseteq  U_i \cap U_j \cap (Z_i + Z_j) \cap U_k \]
+\[ \subseteq  U_i \cap U_j \cap \emptyset \cap U_k \]
+\[ = \emptyset\]
+which is what I want.
+
+This would be the same as saying
+\[ (\mu_i \lor \lnot \mu_k) \land \mu_k = \lnot (\lnot \mu_i \land \mu_k) \land \mu_k \]
+is actually the {\em same} preprojection as
+\[ \mu_i \land \mu_k \]
+which seems sensible on logical grounds, but I don't know if it's true.
+
+\subsection{The Punchline I was Trying to Build To}
+
+I think the $m$-vector fields --- assignments of values to $m$-cells ---
+are characterized by belonging to the image of the projection
+\[ D_m =  \lnot\mu_0 \land \cdots \land \lnot\mu_{m-1} \land \mu_{m+1}\land \cdots \land\mu_{n}\]
+For example, the edges in a 2-d space are characterized by being in the image of the projection
+\[ \lnot\mu_0 \land \mu_2 \]
+The sign of the field flips if you do a $\sigma_0$-flip, and stays the same if you do a $\sigma_2$.
+The $m$-covector fields are those that satisfy
+\[ \hat D_m = \mu_0 \land \cdots \land \mu_{m-1} \land \lnot\mu_{m+1}\land \cdots \land \lnot\mu_{n}\]
+A primal face in a 2-d space looks like a curl, but a co-face is more like a vertex: it just has a value.
+A co-edge has a direction {\em crossing} the edge from one face to another,
+where as a primal edge has a direction {\em along} the edge, from one vertex to another.
+
+I think boundary and coboundary operators are just these $D_m$ and
+$\hat D_m$ projections, but off by a scalar factor somehow.
+
+The fact that $dd = 0$ is somehow the same as the fact that $+$ contradicts $-$: if we start
+with an $(m+1)$-cell, (already in the image of $D_{m+1}$, where $\lnot \mu_{m}$ holds) and project it
+to $D_{m}$, then to $D_{m-1}$, we find that $D_{m-1}$ wants $\mu_{m}$ to hold, a contradiction,
+so we get 0.
+
+\subsection{A sad counterexample}
+
+The logic of projections can't be distributive, even for cartographic sets:
+I would want expect
+
+\[\top = (\mu_0 \land \mu_1) \lor (\lnot\mu_0 \land \mu_1) \lor (\mu_0 \land \lnot\mu_1) \lor (\lnot\mu_0 \land \lnot\mu_1)\]
+\[ = \lnot (\lnot(\mu_0 \lor \mu_1) \land \lnot(\lnot\mu_0 \lor \mu_1) \land \lnot(\mu_0 \lor \lnot\mu_1) \land \lnot(\lnot\mu_0 \lor \lnot\mu_1))\]
+
+\[V = U_0\cap U_1 + U_0\cap Z_1 + Z_0\cap U_1 + Z_0\cap Z_1\]
+on a (spatially) 1-dimensional cartographic space, but this clearly
+isn't true. On a connected space, each of the summands is at most only
+a 1-dimensional subspace of the cartographic space, which as a vector
+space can be arbitrarily high-dimensional.
+
+\subsection{Where to Find More}
+I noticed I actually did put some more elaborate notes around August
+2020 in my IDEAS file.
+
+\subsection{Scaling Factors}
+
+I want to determine the correct `gauge' for a vector field to be in so
+that projection operators actually compute boundaries. Naively, I
+would imagine a fixed isomorphism between $\R$ and each 1-dimensional
+subspace at each flag, and a directed cell would be represented by
+throwing weight 1 or -1 at all flags in it.
+
+\def\orb{\mathrm{Orb}}
+But instead I think I want to do the following. Let $\orb(x, I)$ be the orbit of flag $x$ under
+the flips $\{\sigma_i \st i \in I\}$. For primal $n$-vector fields,
+throw a factor of
+\[\pm |\orb(x, \{m \st m > n\})|^{-1}\]
+ at each flag $x$,
+and for the duals, for $n$-forms, throw in a factor
+\[\pm |\orb(x, \{m \st m < n\})|^{-1}\]
+
+\subsection{Proving $dd = 0$}
+I think I see more or less how to prove the chain complex condition $dd = 0$ now.
+Let
+\[ A_{m} = \lnot \mu_0 \land \cdots \land \lnot\mu_{m-1} \]
+\[ M_{m} = \mu_{m+1} \land \cdots \land \mu_n \]
+\[ D_{m} = A_m \land M_m \]
+
+First I claim that (writing composition of operators as juxtaposition)
+
+\[ D_m = A_m M_m = M_m A_m \]
+by commutativity of nonadjacent dimensions, and
+\[ (\lnot \mu_m) A_{m+1}  = A_{m+1} \]
+\[ M_{m-1} \mu_{m} =  M_{m-1} \]
+and
+\[ A_m A_{m+1}  = A_{m+1} \]
+\[ M_{m-1}M_m =  M_{m-1} \]
+by `absorption'
+
+Then I can derive
+\[ D_{m-1} D_m D_{m+1} = ( A_{m-1} M_{m-1})(  M_{m}A_{m})( A_{m+1} M_{m+1}) \]
+\[= A_{m-1} (M_{m-1} M_{m})( A_{m} A_{m+1}) M_{m+1} \]
+\[= A_{m-1} M_{m-1}  A_{m+1} M_{m+1} \]
+\[= A_{m-1} M_{m-1} (\mu_m) (\lnot \mu_m) A_{m+1} M_{m+1} \]
+\[= A_{m-1} M_{m-1} 0 A_{m+1} M_{m+1} \]
+\[ = 0\]
 
 \end{document}
