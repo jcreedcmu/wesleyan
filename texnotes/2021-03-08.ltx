@@ -1,0 +1,245 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcommand{\sqdiamond}[1][fill=black]{\tikz [x=1.2ex,y=1.85ex,line width=.1ex,line join=round, yshift=-0.285ex] \draw  [#1]  (-0.25,.5) -- (0.5,1) -- (1.25,.5) -- (.5,0) --  cycle;}%
+\newcommand{\dia}[1][fill=black]{\mathop{\raisebox{-0.275ex}{$\sqdiamond[#1]$}}}
+
+%\usepackage{wasysym}
+%\usepackage{stmaryrd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lgray}{rgb}{0.95,0.95,1.0}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\Top{\mathbf{Top}}
+\def\TopR{\mathbf{TopR}}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\K{\mathbf{K}}
+\def\M{\mathbf{M}}
+\def\T{\mathbf{T}}
+\def\Set{\mathbf{Set}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbb{R}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bt{\mathbf{t}}
+\def\bu{\mathbf{u}}
+\def\bp{\mathbf{p}}
+\def\bz{\mathbf{0}}
+\def\bzee{\mathbf{z}}
+\def\S{\mathfrak{S}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rvec{\mathbf{Vec}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\span{\mathop{\mathrm{span}}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+\def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
+\def\xx{{\bf x}}
+\def\yy{{\bf y}}
+\def\ps{\wp}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Thinking about a 2-d Modal Logic}
+
+This is something that arose by trying to think about higher-dimensional analogs of adjoints.
+A proposition is something like: a well-behaved compact subset of $\R^2$, (up to homotopies of $\R^2$)
+and an entailment is something like a way of `adding ink' to that subset, making it bigger.
+This is by analogy with with ordinary adjunctions characterize well-behaved compact subsets of $\R^1$
+as lists of finite intervals interpreted as alternations of the adjoint functors $UFUFUF$, and $\eta$
+lets us `create a new interval blob of ink' and $\epsilon$ lets us `join two blobs of ink'.
+If $F : \C \to \D$ and $U : \D \to \C$ then we think of $\C$ as `whitespace' on the page, and $\D$ as `ink',
+for $\eta : 1_\C \to UF$ and $\epsilon : FU \to 1_\D$.
+
+The two-dimensional case looks syntactically like this, I think:
+\def\ox{\otimes}
+\def\pr{{\,\hskip0.1em\bindnasrepma\,}}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Polarities&$i$&$0 \celse 1$\\
+   Contexts&$\Delta^i$&$\cdot \celse \Delta^i, A^i \celse \Delta^i, (\Delta^{\bar i})^i$\\
+   Propositions&$A^i$&$1^i \celse A^i \ox^i A^i\celse \bigcirc^i A^{\bar i} $\\
+\end{tabular}
+\]
+The complement of $i$ (swapping $0$ and $1$) is $\bar i$.
+We write $\Gamma$ for either $\Delta^0$ or $\Delta^1$, and $\Gamma[\Gamma']$ for $\Gamma$ with $\Gamma'$ occurring somewhere
+(perhaps deeply nested inside $($parentheses$)$) inside it.
+
+%We write $(\Omega)^i$ and $(\Delta)^s$
+%for the parentheses when it's important to disambiguate the overloading.
+
+The propositions here are all positive; on the left we asynchronously decompose into judgmental context-material,
+and on the right we demand it exists. Probably we could add some negative propositions but I haven't thought
+through them yet. We leave off all the polarity superscripts here because the most general set
+of them can be uniquely inferred.
+\[
+\erule
+{\using 1 R}
+{\cdot \prov 1}
+\qquad
+\erule
+{\Gamma[\cdot] \prov \using 1 L}
+{\Gamma[1] \prov}
+\qquad
+\erule
+{\Gamma \prov A \using \bigcirc R}
+{(\Gamma) \prov \bigcirc A}
+\qquad
+\erule
+{\Gamma[ (A_0)] \prov \using \bigcirc L}
+{\Gamma[\bigcirc A_0] \prov  }
+\]
+\[
+\erule
+{\Gamma_1 \prov A_1 \qquad \Gamma_2 \prov A_2\using \ox R}
+{\Gamma_1, \Gamma_2 \prov A_1 \ox A_2}
+\qquad
+\erule
+{\Gamma[A_1,A_2]\prov  \using {\ox} L}
+{\Gamma[A_1 \ox A_2] \prov }
+\]
+The interesting content of the logic is its structural rules. We have
+exchange (but not weakening or contraction) for the comma in both
+kinds of contexts, and
+
+\[
+\erule
+{\Gamma[(\Delta_1, \Delta_2)^1 ] \prov }
+{\Gamma[(\Delta_1)^1, (\Delta_2)^1 ] \prov }
+\qquad
+\erule
+{\Gamma[()^1 ] \prov }
+{\Gamma[\cdot ] \prov }
+\qquad
+\erule
+{\Gamma[(\Delta_1)^0, (\Delta_2)^0 ] \prov }
+{\Gamma[(\Delta_1, \Delta_2)^0 ] \prov }
+\qquad
+\erule
+{\Gamma[\cdot ] \prov }
+{\Gamma[()^0 ] \prov }
+\]
+\[
+\erule
+{\Gamma[\Delta_1, ( \Delta_2)^0] \prov }
+{\Gamma[((\Delta_1)^1, \Delta_2)^0] \prov }
+\qquad
+\erule
+{\Gamma[((\Delta_1)^0, \Delta_2)^1] \prov }
+{\Gamma[\Delta_1, ( \Delta_2)^1] \prov }
+\]
+\subsection{First-order Interpretation}
+\def\tri{\triangleright}
+
+Here's a translation that might be equivalent to the proof theory above. We imagine
+that there are two classes of first-order worlds, and interpret into first-order linear logic
+with unrestricted propositions for relation facts $v \tri w$.
+
+We define
+\def\wat{\mathrel{@}}
+\[ (\bigcirc^1 A) \wat w = \forall v . (v\tri w) \imp A \wat v \]
+\[ (\bigcirc^0 A) \wat v = \exists w.  (v \tri w)  \land A  \wat w \]
+\[ (A \ox B) \wat w = (A \wat w) \ox (B \wat w) \]
+\[ 1 \wat w = 1 \]
+\[ a \wat w = a(w) \]
+
+Essentially, this means $\bigcirc^0 A = \dia A$ and $\bigcirc^1 A = \square A$.
+\subsection{Proof Terms}
+
+A proof term of the entailment
+\[b : \square 1 \ox \square 1 \ox \square 1 \prov M : \square 1 \ox \square 1  \ox \square 1 \ox \square 1 \]
+should be something like a function $3 \to 4$. This seems about right. I could sketch
+\[ \blet (x, y, z) = b \bin (\]
+\[\Lambda k . \blet () = k[x] \bin\ \blet () = k[y] \bin () ,\]
+\[\Lambda k . \blet () = k[z] \bin () ,\]
+\[\Lambda k .  () ,\]
+\[\Lambda k .  () \]
+\[) \]
+And this is the map that takes $(x,y,z) \to (0,1,2,3)$ and assigns $x,y$ to $0$ and $z$ to $1$.
+
+Likewise a proof term  of
+\[b : \dia 1 \ox \dia 1 \ox \dia 1  \ox \dia 1 \prov M : \dia 1 \ox \dia 1  \ox \dia 1 \]
+should be a map $3 \to 4$. We write
+\[ \blet b = ((k_0, ()), (k_1, ()), (k_2, ()), (k_3, ())) \bin ( \]
+\[ \langle k_0,() \rangle, \langle k_0, () \rangle, \langle k_1, () \rangle \]
+\[ )\]
+for the same function.
+\end{document}
