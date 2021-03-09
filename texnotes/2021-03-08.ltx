@@ -277,8 +277,39 @@ and congruences
 {P^{\bar i} \le Q^{\bar i}}
 {\bigcirc^i P^{\bar i} \le \bigcirc^i Q^{\bar i}}
 \]
-Then I conjecture $P^i \le Q^i$ iff $P^i \wat w^i \prov Q^i \wat w^i$.
+Then I conjecture $P^i \le Q^i$ iff $P^i[ w] \prov Q^i [ w]$.
 
 I think the direction ${\le} \imp {\prov} $ is easy. I just inspect
 every axiom, and find that the sequent-calculus version under translation holds.
+
+The other direction is trickier. For every sequent
+\[\Delta \prov P^i[w] \iff  P_1^{i_1}[w_1], \ldots, P_n^{i_n}[w_n] \prov P^i[w]\]
+I need to come up with some interpretation of the context and the conclusion as props, and assert
+\[ \Delta^* \le (P^i[w])^* \]
+and proceed by induction on the sequent calculus rules somehow.
+
+Let's have the following data structure:
+\def\CC{{\mathsf C}}
+\def\xto{\rightsquigarrow}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Trees&$C^i$&$ w^{ i} ( C^{\bar i}) \celse C^i \ox C^i \celse P^i$
+\end{tabular}
+\]
+Tree expressions have actual world variables in them. I translate to contexts like
+\[ w(C) \wat v = w :\mathsf{world}, w\tri v, (C \wat v)\]
+\[ (C_1 \ox C_2) \wat w = (C_1 \wat w) \ox (C_2 \wat w) \]
+\[ P \wat w = P[w] \]
+I can translate to propositions like
+\[ \pi(w(C))  = \bigcirc (\pi C) \]
+\[ \pi(C_1 \ox C_2) = \pi C_1 \ox \pi C_2 \]
+\[ \pi P  = P \]
+and I can pick out a conclusion world via
+?
+
+Suppose I understood what it means for $C \xto_w \Delta$. One is meant to unpack
+all the modalities eagerly as if they were asynchronous, even when they are not.
+
+Then I claim: if $C \xto_w \Delta$, and $C' \xto_w P$, and $\Delta \prov P[w]$,
+then $C \le C'$.
 \end{document}
