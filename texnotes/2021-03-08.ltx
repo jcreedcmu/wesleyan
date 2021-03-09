@@ -11,6 +11,7 @@
 \usepackage{tikz-cd}
 \newcommand{\sqdiamond}[1][fill=black]{\tikz [x=1.2ex,y=1.85ex,line width=.1ex,line join=round, yshift=-0.285ex] \draw  [#1]  (-0.25,.5) -- (0.5,1) -- (1.25,.5) -- (.5,0) --  cycle;}%
 \newcommand{\dia}[1][fill=black]{\mathop{\raisebox{-0.275ex}{$\sqdiamond[#1]$}}}
+\def\bx{\square}
 
 %\usepackage{wasysym}
 %\usepackage{stmaryrd}
@@ -68,23 +69,6 @@
 \def\D{\mathbf{D}}
 \def\J{\mathbf{J}}
 \def\R{\mathbb{R}}
-\def\bx{\mathbf{x}}
-\def\by{\mathbf{y}}
-\def\bv{\mathbf{v}}
-\def\bt{\mathbf{t}}
-\def\bu{\mathbf{u}}
-\def\bp{\mathbf{p}}
-\def\bz{\mathbf{0}}
-\def\bzee{\mathbf{z}}
-\def\S{\mathfrak{S}}
-\def\X{\mathbf{X}}
-\def\Y{\mathcal{Y}}
-\def\x{\times}
-\def\st{\mathrel|}
-\def\rset{\mathbf{Set}}
-\def\rvec{\mathbf{Vec}}
-\def\rrel{\mathbf{Rel}}
-\def\rcat{\mathbf{Cat}}
 \def\op{\mathsf{op}}
 \def\P{\mathbb{P}}
 \def\I{\mathbb{I}}
@@ -221,11 +205,11 @@ We define
 \[ 1 \wat w = 1 \]
 \[ a \wat w = a(w) \]
 
-Essentially, this means $\bigcirc^0 A = \dia A$ and $\bigcirc^1 A = \square A$.
+Essentially, this means $\bigcirc^0 A = \dia A$ and $\bigcirc^1 A = \bx A$.
 \subsection{Proof Terms}
 
 A proof term of the entailment
-\[b : \square 1 \ox \square 1 \ox \square 1 \prov M : \square 1 \ox \square 1  \ox \square 1 \ox \square 1 \]
+\[b : \bx 1 \ox \bx 1 \ox \bx 1 \prov M : \bx 1 \ox \bx 1  \ox \bx 1 \ox \bx 1 \]
 should be something like a function $3 \to 4$. This seems about right. I could sketch
 \[ \blet (x, y, z) = b \bin (\]
 \[\Lambda k . \blet () = k[x] \bin\ \blet () = k[y] \bin () ,\]
@@ -242,4 +226,59 @@ should be a map $3 \to 4$. We write
 \[ \langle k_0,() \rangle, \langle k_0, () \rangle, \langle k_1, () \rangle \]
 \[ )\]
 for the same function.
+\subsection{Soundness/Completeness}
+I never know which direction to call these things. Let me describe directly a partial order
+on propositions
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Polarities&$i$&$0 \celse 1$\\
+   Propositions&$P^i$&$1^i \celse P^i \ox^i P^i\celse \bigcirc^i P^{\bar i} \celse a^i $\\
+\end{tabular}
+\]
+where I write as abbreviations $\dia = \bigcirc^0$ and $\bx = \bigcirc^1$.
+Let me use consistently $A$ for $P^0$ and $B$ for $P^1$. Write $\equiv$ when $\le$ and $\ge$ both hold.
+Take as axioms
+\[
+\bx A_1 \ox \bx A_2 \le \bx (A_1 \ox A_2)
+\qquad
+1 \le \bx 1
+\]
+\[
+\dia (B_2 \ox B_2) \le \dia B_1 \ox \dia B_2
+\qquad
+\dia 1 \le 1
+\]
+\[ \bx A \ox B \le \bx (A \ox \dia B)
+\qquad  \dia (B \ox \bx A) \le \dia B \ox A  \]
+and associativity/commutativity/unit laws
+\[ P^i \ox 1 \equiv P^i \]
+\[ P^i_1 \ox P^i_2 \equiv P^i_2 \ox P^i_1 \]
+\[ (P^i_1 \ox P^i_2) \ox P^i_3 \equiv P^i_1 \ox (P^i_2 \ox P^i_3) \]
+and reflexivity and transitivity
+\[
+\erule{}{
+a^i \le a^i}
+\qquad
+\erule
+{P^i_1 \le P^i_2 \qquad P^i_2 \le P^i_3}
+{P^i_1 \le P^i_3}
+\]
+and congruences
+\[
+\erule
+{P^i_1 \le Q^i_1 \qquad P^i_2 \le Q^i_2}
+{P^i_1 \ox P^i_2 \le Q^i_1 \ox Q^i_2}
+\qquad
+\erule
+{}
+{1 \le 1}
+\qquad
+\erule
+{P^{\bar i} \le Q^{\bar i}}
+{\bigcirc^i P^{\bar i} \le \bigcirc^i Q^{\bar i}}
+\]
+Then I conjecture $P^i \le Q^i$ iff $P^i \wat w^i \prov Q^i \wat w^i$.
+
+I think the direction ${\le} \imp {\prov} $ is easy. I just inspect
+every axiom, and find that the sequent-calculus version under translation holds.
 \end{document}
