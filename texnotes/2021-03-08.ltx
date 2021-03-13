@@ -6,6 +6,7 @@
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\pair#1#2{\langle #1 , #2 \rangle}
 
+\usepackage{bm}
 \usepackage{float}
 \usepackage{tikz}
 \usepackage{tikz-cd}
@@ -312,4 +313,349 @@ all the modalities eagerly as if they were asynchronous, even when they are not.
 
 Then I claim: if $C \xto_w \Delta$, and $C' \xto_w P$, and $\Delta \prov P[w]$,
 then $C \le C'$.
+
+\subsection{Another Try}
+
+Let's say $\Gamma$ is the unrestricted context in which world variables and relations between them exist.
+Define a judgment that says how a context can reduce to a single proposition.
+\[
+\erule
+{}
+{\Gamma \prov P[u] \xto P[u]}
+\]
+\[
+\erule{ \Gamma \prov v \tri w \qquad  \Gamma \prov \Delta, \bx B[w] \xto P[u]}
+{\Gamma \prov \Delta, B[v] \xto P[u]}
+\qquad
+\erule{ \Gamma \prov v \tri w \qquad \Gamma \prov \Delta, \dia A[v] \xto P[u]}
+{\Gamma \prov \Delta, A[w] \xto P[u]}
+\]
+\[
+\erule
+{\Gamma \prov \Delta, (P_1 \ox P_2)[w] \xto P[u]}
+{\Gamma \prov \Delta, P_1[w], P_2[w] \xto P[u]}
+\]
+Then I think the other half of the adequacy theorem is the claim:
+If $\Gamma; \Delta \prov P[w]$ and $\Gamma \prov \Delta \xto Q[u]$ and $\Gamma \prov P[w] \xto P'[u]$,
+then $Q \le P'$.
+
+The proof should go by induction on $\Gamma; \Delta \prov P[w]$. Let's look at an easy case first; the asynchronous
+case of a modal operator. We suppose we have a derivation like
+\[
+\erule
+{\Gamma, t, v\tri t; \Delta,  A[t] \prov P[w] \using {\dia} L}
+{\Gamma; \Delta, \dia A[v] \prov P[w]}
+\]
+By assumption we have derivations
+\[ \Gamma \prov \Delta, \dia A[v] \xto Q[u] \]
+\[ \Gamma \prov P[w] \xto P'[u] \]
+but we can construct
+\[ \Gamma, t, v \tri t\prov \Delta, \dia A[t] \xto Q[u] \]
+so the i.h. gives us $Q \le P'$ as required.
+
+Let's tackle the asynchronous case for $\bx$, too, I'm suspicious of the asymmetry. We start with a derivation like
+\[
+\erule
+{\Gamma, t, t\tri w; \Delta\prov B[t] \using {\bx} R}
+{\Gamma; \Delta \prov \bx B[w]}
+\]
+and also we have
+\[ \Gamma \prov \Delta \xto Q[u] \]
+\[ \Gamma \prov \bx B[w] \xto P'[u] \]
+but we can construct
+\[
+{\Gamma, t, t \tri w \prov \Delta, B[t] \xto P'[u]}
+\]
+so again we get $Q \le P'$ out of the induction hypothesis, phew.
+
+Let's lookat the {\em synchronous} side of the modalities. I expect to encounter the `escaping' move here.
+We could look at $\dia R$. We have a relation
+\[
+\erule
+{\Gamma \prov v \tri t \qquad \Gamma; \Delta\prov A[t] \using {\dia} R}
+{\Gamma; \Delta \prov \dia A[v]}
+\]
+and we have collateral derivations
+\[ \Gamma \prov \Delta \xto Q[u] \]
+\[ \Gamma \prov \dia A[v] \xto P'[u] \]
+Now we want to derive something from that $\xto$ derivation involving $\dia A$. It seems we can get
+\[
+{\Gamma \prov  A[t] \xto P'[u]}
+\]
+which seems like it's too easy? What did we get away with here.
+
+Let's try $\bx L$ just to be sure.
+We have a derivation
+\[
+\erule
+{\Gamma \prov  t\tri v \qquad \Delta,  B[t] \prov P[w] \using {\bx} L}
+{\Gamma; \Delta, \bx B[v] \prov P[w]}
+\]
+and collateral derivations
+\[ \Gamma \prov \Delta, \bx B[v] \xto Q[u] \]
+\[ \Gamma \prov P[w] \xto P'[u] \]
+and it seems we can derive
+\[
+\erule{ \Gamma \prov t \tri v \qquad  \Gamma \prov \Delta, \bx B[v] \xto Q[u]}
+{\Gamma \prov \Delta, B[t] \xto Q[u]}
+\]
+so it looks like again we just straightforwardly get $Q \le P'$.
+\subsection{Analyzing the Confusion}
+When I have $a, b, c$ arising in
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+b \tri a, b \tri c; A [c] \prov  B[b]
+\]
+\justifies
+b \tri a ; \dia A [b] \prov  B[b]
+\]
+\justifies
+b \tri a ; \bx( \dia A )[a] \prov  B[b]
+\]
+\justifies
+\bx( \dia A )[a] \prov \bx B[a]
+\end{prooftree}
+\]
+
+with $b \tri a$ and $b \tri c$ I don't actually know which is was the {\em root} of the tree of assumptions;
+I just know I have an acyclic connected bipartite graph, I think. This same arrangement could have come from
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\justifies
+b\tri a, b \tri c; A[c] \prov  B[b]
+\]
+\justifies
+b\tri a;\dia A[b] \prov  B[b]
+\]
+\justifies
+b\tri a;\dia A[b],  1[a] \prov  B[b]
+\]
+\justifies
+\dia A[b], \dia 1[b] \prov  B[b]
+\]
+\justifies
+\dia A\ox \dia 1[b] \prov  B[b]
+\end{prooftree}
+\]
+Now both of these sequents are provable, if I substitute $A = \bx B$. Do these make sense graphically?
+I think so:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{images/modal-proofs.png}
+\end{figure}
+
+I conjecture that there is some canonical way of rolling back a sequent to an entailment involving only
+a pair of propositions at the same world, given a choice of root of the bipartite tree, and maybe like
+an ordering of leaves to roll back. To prove this I'd have to show how to roll back any leaf.
+
+So there are really four cases. I spit on whether I'm going forward or backward on the leaf,
+and whether that world appears in the conclusion or not. Case one is eliminating $a \tri \dash$
+where $a$ is the conclusion.
+\[
+{\Gamma, a \tri b; \Delta, A_1[a], \ldots, A_n[a] \prov A[a]}
+\]
+goes to
+\[
+{\Gamma; \Delta, \bx(A_1\ox \cdots\ox A_n)[b] \prov \bx A[b]}
+\]
+Case two is eliminating $\dash \tri b$ where $b$ is the conclusion:
+\[
+{\Gamma, a \tri b; \Delta, A_1[b], \ldots, A_n[b] \prov A[b]}
+\]
+goes to
+\[
+{\Gamma; \Delta, \dia(A_1\ox \cdots\ox A_n)[a] \prov \dia A[a]}
+\]
+Case three is eliminating $\dash \tri b$ where $b$ is not the conclusion:
+\[
+{\Gamma, a \tri b; \Delta, A_1[b], \ldots, A_n[b] \prov A[c]}
+\]
+goes to
+\[
+{\Gamma; \Delta, \dia(A_1\ox \cdots\ox A_n)[a] \prov  A[c]}
+\]
+Case four is is eliminating $a \tri \dash$
+where $a$ is not the conclusion --- but I don't know how to handle this case.
+Can I rule it out? Does it arise organically?
+
+Let me define a relation $\xto$ by these three cases:
+
+\[
+\Gamma, a, a \tri b; \Delta, A_1[a], \ldots, A_n[a] \prov A[a]
+\xto
+\Gamma; \Delta, \bx(A_1\ox \cdots\ox A_n)[b] \prov \bx A[b]
+\]
+%
+\[
+\Gamma, b, a \tri b; \Delta, A_1[b], \ldots, A_n[b] \prov A[b]
+\xto
+\Gamma; \Delta, \dia(A_1\ox \cdots\ox A_n)[a] \prov \dia A[a]
+\]
+%
+\[\Gamma, b, a \tri b; \Delta, A_1[b], \ldots, A_n[b] \prov A[c]
+\xto
+\Gamma; \Delta, \dia(A_1\ox \cdots\ox A_n)[a] \prov  A[c]
+\]
+and conjecture that if $\Gamma;\Delta \prov A[w]$ and
+$\Gamma;\Delta \prov A[w] \xto^* v;A[v] \prov B[v]$ then $A \le B$.
+
+\subsection{Simpler Syntax}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Props&$A$&$ \dia B \celse A \ox A \celse 1 \celse a$\\
+   Coprops&$B$&$ \bx A \celse B \oplus B \celse 0 \celse a^\perp$\\
+\end{tabular}
+\]
+Define $A^\perp$ and $B^\perp$ by
+\[ 1^\perp = 0 \qquad  0^\perp = 1\qquad (\dia B)^\perp = \bx (B^\perp) \qquad (\bx A)^\perp = \dia (A^\perp) \]
+\[ (A_1 \ox A_2)^\perp = A_1^\perp \oplus A_2^\perp \qquad
+(B_1 \oplus B_2)^\perp = B_1^\perp \ox B_2^\perp \qquad a^{\perp\perp} = a\]
+Take as axioms
+\[
+\bx A_1 \ox \bx A_2 \le \bx (A_1 \ox A_2)
+\qquad
+1 \le \bx 1
+\qquad
+ \bx A \ox B \le \bx (A \ox \dia B)\]
+and associativity/commutativity/unit laws
+\[ (A_1 \ox A_2) \ox A_3 \equiv A_1 \ox (A_2 \ox A_3)  \qquad A_1 \ox A_2 \equiv A_2 \ox A_1
+\qquad  A \ox 1 \equiv A\]
+and reflexivity and transitivity
+\[
+\erule{}{
+a \le a}
+\qquad
+\erule
+{A_1 \le A_2 \qquad A_2 \le A_3}
+{A_1 \le A_3}
+\]
+and congruences
+\[
+\erule
+{A_1 \le A'_1 \qquad A_2 \le A'_2}
+{A_1 \ox A_2 \le A'_1 \ox A'_2}
+\qquad
+\erule
+{}
+{1 \le 1}
+\qquad
+\erule
+{B_2^\perp \le B_1^\perp  }
+{\dia B_1 \le \dia B_2}
+\]
+\def\mod{\vDash}
+\subsection{Even Simpler Syntax}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Propositions&$A, B, C$&$ \bx A \celse A \ox A \celse 1 \celse a$\\
+\end{tabular}
+\]
+Define $A \mod B$ (with $\equiv$ meaning $\mod$ in both directions) by the axioms
+\[
+\bx A \ox \bx B \mod \bx (A \ox B)
+\qquad
+1 \mod \bx 1
+\qquad
+ \bx A \ox B \mod \bx (A \ox \bx B)\]
+% and associativity/commutativity/unit laws
+\[ (A \ox B) \ox C \equiv A \ox (B \ox C)  \qquad A \ox B \equiv B \ox A
+\qquad  A \ox 1 \equiv A\]
+% and reflexivity, transitivity, and congruences
+\[
+\erule{}{
+a \mod a}
+\qquad
+\erule
+{A \mod B \qquad B \mod C}
+{A \mod C}
+\qquad
+\erule
+{A \mod A' \qquad B \mod B'}
+{A \ox B \mod A' \ox B'}
+\qquad
+\erule
+{}
+{1 \mod 1}
+\qquad
+\erule
+{B \mod A }
+{\bx A \mod \bx B}
+\]
+
+We can interpret this langauge into linear logic with
+first-order quantifiers over a sort of `kripke worlds', and unrestricted assumptions of a binary relation $\tri$ on worlds.
+We define two interpretation functions, $A^x$ and $A_y$, each of which takes a proposition and a world, and
+returns a (linear, first-order) proposition.
+\[ (\bx A)^x = \forall y . !(y \tri x) \multimap A_y \qquad (\bx A)_y = \exists x . !(y \tri x) \ox A_x  \]
+\[ ( A\ox B)^x = A^x \ox B^x \qquad (A \ox B)_y = A_y \ox B_y \]
+\[ 1^x = 1 \qquad 1_x = 1\]
+\[ a^x = a(x) \qquad a_x = a(x)\]
+\begin{conjecture}
+$A^x \prov B^x$ if and only if $A \mod B$.
+\end{conjecture}
+
+\subsection{The Limit of Generality of World Trees}
+
+\def\AA{\bm{\mathsf A}}
+\def\BB{\bm{\mathsf B}}
+I think I can characterize the variety of world structures one actually encounters while
+carrying out proof search. Suppose we have world-sorts $b \tri a$, with
+\[(\bx A) \wat b = \forall a .  (a\tri b) \imp (A \wat a)\]
+\[(\dia B) \wat a = \exists b . (a \tri b) \land (B \wat b)\]
+We define two classes of linear contexts (which tacitly depend on which worlds
+are available) $\AA$ and $\BB$ by
+\[
+\erule
+{}
+{ \cdot \in \BB(b)}
+\qquad
+\erule
+{}
+{ \cdot \in \AA(a)}
+\qquad
+\erule
+{\Delta \in \BB(b)}
+{ \Delta, B[b] \in \BB(b)}
+\]
+
+\[
+\erule
+{\Delta \in \AA(a)}
+{\Delta, A[a] \in \AA(a)}
+\qquad
+\erule
+{\Delta \in \AA(a) \qquad \Delta' \in \BB(b) \qquad a \tri b}
+{\Delta, \Delta' \in \AA(a)}
+\]
+
+\[
+\erule
+{\Delta \in \AA(a)}
+{\Delta \in \AA^+(a)}
+\qquad
+\erule
+{\Delta \in \AA(a) \qquad \Delta' \in \BB^+(b) \qquad a \tri b}
+{\Delta, \Delta' \in \AA^+(a)}
+\]
+
+\[
+\erule
+{\Delta \in \BB(b)}
+{\Delta \in \BB^+(b)}
+\qquad
+\erule
+{\Delta \in \BB(b) \qquad \Delta' \in \AA^+(a) \qquad a \tri b}
+{\Delta, \Delta' \in \BB^+(b)}
+\]
+
+
+
 \end{document}
