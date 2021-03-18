@@ -27,6 +27,7 @@
 \definecolor{mred}{rgb}{0.9,0.1,0.1}
 \definecolor{mgreen}{rgb}{0.1,0.5,0.1}
 \definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\x{\times}
 \def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
 \def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
 \def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
@@ -657,5 +658,267 @@ are available) $\AA$ and $\BB$ by
 \]
 
 
+\subsection{Refining This into Pseudo-Props}
 
+\[
+\erule
+{}
+{ \cdot \prov \BB[b]}
+\qquad
+\erule
+{}
+{ \cdot \prov \AA[a]}
+\qquad
+\erule
+{\Delta \prov \BB[b]}
+{ \Delta, B[b] \prov \BB[b]}
+\]
+
+\[
+\erule
+{\Delta \prov \AA[a]}
+{\Delta, A[a] \prov \AA[a]}
+\qquad
+\erule
+{\Delta \prov \AA[a] \qquad \Delta' \prov \BB[b] \qquad a \tri b}
+{\Delta, \Delta' \prov \AA[a]}
+\]
+
+\[
+\erule
+{\Delta \prov \AA[a]}
+{\Delta \prov \AA^+[a]}
+\qquad
+\erule
+{\Delta \prov \AA[a] \qquad \Delta' \prov \BB^+[b] \qquad a \tri b}
+{\Delta, \Delta' \prov \AA^+[a]}
+\]
+
+\[
+\erule
+{\Delta \prov \BB[b]}
+{\Delta \prov \BB^+[b]}
+\qquad
+\erule
+{\Delta \prov \BB[b] \qquad \Delta' \prov \AA^+[a] \qquad a \tri b}
+{\Delta, \Delta' \prov \BB^+[b]}
+\]
+\section{A Puzzle about Hyperfunctions}
+Suppose
+\[L(T) = (T \to A) \to B\]
+In some sense the hyperfunction type
+\[(A \imp B) = (((\cdots \to A) \to B) \to A) \to B\]
+resembles
+\[ B + LB + L^2B + L^3 B\]
+but I need to systematize how
+\[ B \to LB \to L^2B \to L^3B \to \cdots\]
+How about define
+\[K(T : \star \to \star) = \Lambda \alpha . T((\alpha \to B) \to A)\]
+\[\beta = \Lambda \alpha . \alpha \to B\]
+for which we have
+\[K \beta = \Lambda \alpha . ((\alpha \to B) \to A) \to B\]
+\[K^2 \beta = \Lambda \alpha . ((((\alpha \to B) \to A) \to B) \to A) \to B\]
+So definitely $f$ is a contravariant functor:
+if $f : C \to D$ then $\beta f : \beta D \to \beta C$.
+Moreover $K$ preserves the property of being a contravariant functor.
+So we get in general a map
+$(K^n \beta)(1) \to (K^{n+1} \beta)(1)$ because
+\[(K^n \beta)(1) \to (K^{n+1} \beta)(1)
+= (K^n \beta)(1) \to (K K^n\beta)(1) \]
+\[= (K^n \beta)(1) \to (\Lambda \alpha . (K^n \beta)((\alpha \to B) \to A))(1) \]
+\[= (K^n \beta)(1) \to  (K^n \beta)((1 \to B) \to A) \]
+and there's a unique map $((1 \to B) \to A) \to 1$.
+
+\subsection{Isomorphism?}
+So let's say I have an element of
+\[H_{AB} = \sum_{i = 0} L_{AB}^i B \]
+where
+\[L_{AB}(T) = (T \to A) \to B\]
+How close do I get to an isomorphism $H_{AB} \cong H_{BA} \to B$?
+Let me just write $H$ for $H_{AB}$ and $\bar H$ for $H_{BA}$.
+
+I just reasoned above that I do have canonical morphisms
+\[\begin{tikzcd}
+  B \ar[r, "\ell_0"] & LB \ar[r, "\ell_1"] & L^2 B\ar[r, "\ell_2"] & \cdots
+\end{tikzcd}\]
+So let's say I'm given
+\[h_1 \in H = B + (B \to A) \to B + (((B \to A) \to B) \to A) \to B + \cdots \]
+\[h_2 \in \bar H = A + (A \to B) \to A + (((A \to B) \to A) \to B) \to A + \cdots \]
+Surely I can get a $B$ out of this pair. I know I can push elements of either of these to the right.
+I just want to show that I can do
+\[L^{n+1}_{AB}(B) \x L^n_{BA}(A) \to B\]
+Ok let's write $[ A B C ]$ for $((1 \to A) \to B) \to C$, i.e.
+\[ [] = 1 \qquad [\vec A A ] = [\vec A] \to A\]
+in which case I'm trying to show
+\[ [B] + [BAB] + [BABAB] + \cdots = ([A] + [ABA] + [ABABA] + \cdots) \to B \]
+
+\section{Thinking about Logic in General}
+
+Remember that we represent some structured sequent
+\[ A, B \prov C\]
+as
+\[   A[\alpha], B[\beta], C[\phi]  \prov \alpha * \beta \tri \phi \]
+The symbol $\tri$ is really getting at some kind of heteromorphism
+homset --- it's always worlds on the left, frames on the right. The
+types of $\alpha * \beta$ and $\phi$ must match up somehow though,
+along any dimensions of syntactic variation orthogonal to the
+world-frame axis. Licata/Shulman/Riley considers
+ multicategory morphisms.
+
+But I could imagine $\alpha$ itself comes from some homset $X \to Y$
+and $\beta$ comes from $Y \to Z$, and $\phi$ from an abstract frame homset $X \to Z$
+and in that case I'm considering (if I fully annotate props and annotations with boundaries)
+\[   A_{XY}[\alpha_{X Y}], B_{YZ}[\beta_{YZ}], C_{XZ}[\phi_{XZ}]  \prov \beta_{YZ} \o \alpha_{XY} \tri \phi_{XZ} \]
+or more cleanly without annotations I mean just
+\[   A[\alpha], B[\beta], C[\phi]  \prov \beta \o \alpha \tri \phi \]
+and this could have come from
+\[   (B \bullet A)[\alpha'], C[\phi_{XZ}]  \prov  \alpha' \tri \phi \]
+where
+\[
+\erule
+{A : \mathsf{prop}^+(X, Y) \qquad B : \mathsf{prop}^+(Y, Z)}
+{B \bullet A : \mathsf{prop}^+(X, Z)}
+\]
+\[ (B \bullet A) [\alpha'] = \exists (\alpha:\mathsf{w}^+(X, Y))  (\beta: \mathsf{w}^+(Y, Z)) . (\beta \o \alpha) \le \alpha' \land B[\beta] \land A[\alpha]\]
+or it could have equally well come from a sequent like
+\def\rto{\twoheadrightarrow}
+\def\lto{\rightarrowtail}
+\def\st{\mathrel|}
+\[   A[\alpha],  B \rto C[\phi']  \prov   \alpha \tri \phi' \]
+where
+\[
+\erule
+{B : \mathsf{prop}^+(Y, Z) \qquad C : \mathsf{prop}^-(X, Z)}
+{B \rto C : \mathsf{prop}^-(X, Y)}
+\]
+\[ (B \rto C) [\phi'] = \exists (\beta:\mathsf{w}^+(Y, Z))  (\phi: \mathsf{w}^-(X, Z)) . (\beta \rto \phi) \le \phi' \land B[\beta] \land C[\phi]\]
+and we would expect something like
+\[ \beta \o \alpha \tri \phi \equiv \alpha \tri \beta \rto \phi \]
+
+How can I generalize this a bit? Suppose I have a set of sorts $\sigma_1, \sigma_2, \rho,$ etc.
+An example of a $\sigma$ from what I've described above is like a pair $(X, Y)$. I think they come in
+positive and negative versions.
+If I have an algebraic operation $\bullet$ that makes a $\sigma$ out of a $\sigma_1, \sigma_2$, then I should have
+\[
+\erule
+{A_1 : \mathsf{prop}^+(\sigma_1) \qquad A_2 : \mathsf{prop}^+(\sigma_2)}
+{A_1 \bullet A_2 : \mathsf{prop}^+(\sigma)}
+\]
+
+\[
+\erule
+{A : \mathsf{prop}^+(\sigma_2) \qquad B : \mathsf{prop}^-(\sigma)}
+{A \rto B : \mathsf{prop}^-(\sigma_1)}
+\]
+
+\[
+\erule
+{A : \mathsf{prop}^+(\sigma_1) \qquad B : \mathsf{prop}^-(\sigma)}
+{A \lto B : \mathsf{prop}^-(\sigma_2)}
+\]
+
+How would this work with $n$-ary operations?
+Let me imagine binary $\bullet_L$ that takes $\sigma_1$ and $\sigma_2$ to $\sigma_L$
+and $\bullet_R$ which takes $\sigma_L$ and $\sigma_3$ to $\sigma$.
+
+We would get out the rules
+\[
+\erule
+{A_1 : \sigma_1 \qquad A_2 : \sigma_2}
+{A_1 \bullet_L A_2 : \sigma_L}
+\qquad
+\erule
+{A_L : \sigma_L \qquad A_3 : \sigma_3}
+{A_L \bullet_R A_3 : \sigma}
+\]
+
+\[
+\erule
+{A : \sigma_2 \qquad B : \sigma_L}
+{A \rto_L B : \sigma_1}
+\qquad
+\erule
+{A : \sigma_3 \qquad B : \sigma}
+{A \rto_R B : \sigma_L}
+\]
+
+\[
+\erule
+{A : \sigma_1 \qquad B : \sigma_L}
+{A \lto_L B : \sigma_2}
+\qquad
+\erule
+{A : \sigma_L \qquad B : \sigma}
+{A \lto_R B : \sigma_3}
+\]
+From which we can make the compound rules
+\[
+\erule
+{A_1 : \sigma_1 \qquad A_2 : \sigma_2 \qquad A_3 : \sigma_3}
+{A_1 \bullet_L A_2 \bullet_R A_3 : \sigma}
+\]
+
+\[
+\erule
+{A_2 : \sigma_2 \qquad \[ A_3 : \sigma_3 \qquad B : \sigma \justifies A_3 \rto_R B : \sigma_L\]}
+{A_2 \rto_L A_3 \rto_R B : \sigma_1}
+\]
+
+\[
+\erule
+{A_1 : \sigma_1 \qquad \[ A_3 : \sigma_3 \qquad B : \sigma \justifies A_3 \rto_R B : \sigma_L\]}
+{A_1 \lto_L A_3 \rto_R B : \sigma_2}
+\]
+
+\[
+\erule
+{\[A_1 :  \sigma_1 \qquad A_2 :  \sigma_2
+ \justifies A_1 \bullet A_2 : \sigma_L\] \qquad B : \sigma}
+{A_1 \bullet A_2 \lto_R B : \sigma_3}
+\]
+
+Ok, so the generalization I want is clear. Suppose
+I have sorts $\sigma_1, \ldots, \sigma_n$ and some
+operation $\bullet : \sigma_1 \x \cdots \x \sigma_n \to \sigma$. Then I should have
+some propositional operations
+\[
+\erule
+{A_i : \sigma_i^+}
+{\bullet(\vec A) : \sigma^+}
+\qquad
+\erule
+{A_i : \sigma_i^+ \qquad (i \ne j) \qquad B : \sigma^-}
+{{\to}([B/j]\vec A) : \sigma_j^-}
+\]
+and I think the adjointness relationship I expect between these is
+\[ \bullet(\vec A) \tri_\sigma B \equiv A_j  \tri_{\sigma_j} {\to}([B/j]\vec A) \]
+where $\tri_\sigma$ is the relation that takes a $\sigma^+$ and a $\sigma^-$ and yields a proposition.
+
+\subsection{An Example}
+
+Here's an example: there are four sorts, $00$, $01$, $10$, and $11$.
+There are composition operators on worlds/frames:
+\[\{ \bullet_{abc} : ab^+ \x bc^+ \to ac^+\st a,b,c\in\{0,1\}\} \]
+\[\{ \rto_{abc} : ac^- \x bc^+ \to ab^- \st a,b,c\in\{0,1\}\} \]
+\[\{ \lto_{abc} : ab^+ \x ac^- \to bc^-\st a,b,c\in\{0,1\}\} \]
+with like
+\[
+\erule{\alpha : ab^+ \qquad \beta : bc^+ \qquad \phi : ac^-}
+{ (\alpha \bullet \beta \tri \phi)  = (\alpha \tri \beta \rto \phi) = (\beta \tri \alpha \lto \phi) }\]
+and there are four constants
+\[\{ m_{ab} : () \to ab \st a,b \in \{0,1\}\} \]
+and maybe I have `2-cells' to witness
+\[ m_{00} \imp m_{01} \bullet m_{10} \]
+\[   m_{10} \bullet m_{01} \imp m_{11}\]
+or maybe I can just say
+\[   m_{a0} \bullet m_{0b} \imp m_{a1} \bullet m_{1b}\]
+because in any event I have identity laws
+\[
+  \erule{\alpha : a0}{\alpha \bullet m_{00} = \alpha}\qquad
+  \erule{\alpha : 0a}{m_{00} \bullet \alpha = \alpha}\qquad
+  \erule{\alpha : a1}{\alpha \bullet m_{11} = \alpha}\qquad
+  \erule{\alpha : 1a}{m_{11} \bullet \alpha = \alpha}
+\]
+I think this ends up creating a sort of ordered logic where propositions
+can live over 00, 01, 10, 11, and there are some joins that are allowed.
 \end{document}
