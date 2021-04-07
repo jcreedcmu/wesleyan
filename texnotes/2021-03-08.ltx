@@ -5,6 +5,7 @@
 \input{prooftree}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
 \def\pair#1#2{\langle #1 , #2 \rangle}
+\def\lol{\multimap}
 
 \usepackage{bm}
 \usepackage{float}
@@ -921,4 +922,174 @@ because in any event I have identity laws
 \]
 I think this ends up creating a sort of ordered logic where propositions
 can live over 00, 01, 10, 11, and there are some joins that are allowed.
+
+\subsection{Higher Adjunctions}
+
+Can I clearly describe the `walking higher adjunction'?
+Let me start with the walking higher equivalence, since the adjunction should be a subset of that.
+How many objects are there? Up to equivalence, two, call them $C, D$.
+How many morphisms are there in each homset? Essentially, one. There's $\rid_C$ and $\rid_D$ in the
+homogeneous homsets, and let's call them $F: C \to D$ and $U : D \to C$ elsewhere.
+As we go up in dimensions, we'll always get exactly one cell in each homset --- that's the contractibility
+that being an equivalence implies.
+
+But if we have an equivalence up to 1-dimensional cells --- we have
+$C, D, F, U$ --- but we want an adjunction above that, we find that we have
+$\eta : \rid_{C} \to UF$ and $\epsilon : FU \to \rid_{D}$, and not any converses
+to them. And in fact prior to that, we should point out that $FU$ is now {\em distinct} from $\rid_D$.
+The `size' of the homset $D \to D$ (considered up to equivalence) got bigger because we {\em removed} cells that would
+have constituted an equivalence. It's now infinitely big:
+\[ \hom(D, D) = \{(FU)^n \st n \in \N\}\]
+\[ \hom(C, C) = \{(UF)^n \st n \in \N\}\]
+\[ \hom(C, D) = \{F(UF)^n \st n \in \N\}\]
+\[ \hom(D, C) = \{U(FU)^n \st n \in \N\}\]
+
+\section{Returning to a Proof}
+
+Remember the syntax of ``blob logic'' is
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Polarities&$i$&$0 \celse 1$\\
+   Propositions&$P^i$&$1^i \celse P^i \ox^i P^i\celse \bigcirc^i P^{\bar i} \celse a^i $\\
+\end{tabular}
+\]
+where I write as abbreviations $\dia = \bigcirc^0$ and $\bx = \bigcirc^1$,
+and I'll write $A$ for $P^0$ and $B$ for $P^1$. We'll drop superscripts when they're
+inferrable from context.
+
+The translation into first-order linear logic requires two syntactic classes of worlds
+$u^i$ and (we write $v$ for $u^0$ and $w$ for $u^1$), and a relation $v \tri w$, and goes like
+\[ (\bx A) \wat w = \forall v . !(v\tri w) \lol (A \wat v) \]
+\[ (\dia B) \wat v = \exists w.  !(v \tri w)  \ox (B  \wat w) \]
+\[ (P_1 \ox P_2) \wat u = (P_1 \wat u) \ox (P_2 \wat u) \]
+\[ 1 \wat u = 1 \]
+\[ a \wat u = a(u) \]
+
+And a pair of preorders on propositions of the same polarity can
+be given inductively by the rules
+(writing $\equiv$ for when $\le$ and $\ge$ both hold)
+
+\[
+\bx A_1 \ox \bx A_2 \le \bx (A_1 \ox A_2)
+\qquad
+1 \le \bx 1
+\qquad  \dia \bx A \le A
+\]
+\[
+\dia (B_2 \ox B_2) \le \dia B_1 \ox \dia B_2
+\qquad
+\dia 1 \le 1
+\qquad  B \le \bx  \dia B
+\]
+\[ P \ox 1 \equiv P \qquad
+P_1 \ox P_2 \equiv P_2 \ox P_1
+\qquad
+\erule
+{P_1 \le Q_1 \qquad P_2 \le Q_2}
+{P_1 \ox P_2 \le Q_1 \ox Q_2}
+\]
+\[ (P_1 \ox P_2) \ox P_3 \equiv P_1 \ox (P_2 \ox P_3)
+\qquad
+\erule
+{P \le Q}
+{\bigcirc P \le \bigcirc Q}
+\]
+closing under reflexivity and transitivity.
+
+\begin{lemma}
+If $P \le Q$, then $P \wat u \prov Q \wat u$.
+\end{lemma}
+
+\begin{proof}
+We need only show this holds for all the axioms of $\le$, the rest follows by cut.
+For example, $B \le \bx \dia B$ becomes (assuming
+we make the abbreivations $P \imp Q = {!}P \lol Q$ and $P \land Q = {!}P \ox Q$)
+\[ B \wat w \prov \bx \dia B \wat w\]
+\[ B \wat w \prov \forall v . v\tri w \imp  \exists w' . v \tri w' \land  B \wat w'\]
+which can be proven
+
+\[
+\erule
+{
+\[
+\[
+\justifies
+v\tri w; B \wat w \prov B \wat w
+\]
+\justifies
+v\tri w; B \wat w \prov   \exists w' . v \tri w' \land  B \wat w'\]
+}
+{ B \wat w \prov \forall v . v\tri w \imp  \exists w' . v \tri w' \land  B \wat w'}\]
+\cqed
+\end{proof}
+
+To prove the converse, we need to generalize a little. I'm going to slip back into
+some notation that makes the modality more baked into the judgment. Something like
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Unrestricted Contexts&$\Gamma$&$\cdot\celse \Gamma, v \tri w$\\
+   Linear Context&$\Delta$&$\cdot\celse \Delta, P^i[u^i]$\\
+\end{tabular}
+\]
+with rules
+\[
+\erule{}{\Gamma;a[u] \prov a[u]}
+\]
+\[
+\erule{\Gamma; \Delta_1 \prov P_1[u] \qquad \Gamma;\Delta_2\prov P_2[u]}{\Gamma;\Delta_1, \Delta_2 \prov P_1 \ox P_2[u]}
+\qquad
+\erule{\Gamma; \Delta, P[u], Q[u] \prov J}{\Gamma; \Delta, P\ox Q[u] \prov J}
+\]
+\[
+\erule{}{\Gamma;\cdot \prov 1[u]}
+\qquad
+\erule{\Gamma; \Delta \prov J}{\Gamma; \Delta, 1[u] \prov J}
+\]
+\[
+\erule{\Gamma, v\tri w;\Delta \prov  A[v]}{\Gamma;\Delta \prov \bx A[w]}
+\qquad
+\erule{v\tri w \in \Gamma \qquad \Gamma;\Delta, A[v] \prov  J}{\Gamma;\Delta, \bx A[w] \prov J}
+\]
+\[
+\erule{ v\tri w \in \Gamma  \qquad \Gamma;\Delta \prov   B[w]}{\Gamma;\Delta  \prov \dia B[v]}
+\qquad
+\erule{\Gamma, v\tri w;\Delta, B[w] \prov J}{\Gamma;\Delta,\dia B[v] \prov  J}
+\]
+ From $\Gamma;\Delta$ an unrestricted and
+linear context together, and a choice of world for the root,
+we can construct a unique proposition, or at least unique up to $\equiv$.
+Call this $(\Gamma;\Delta)^u$. For example,
+\[(v \tri w, v \tri w', v' \tri w'; A_1[v], A_2[v], B[w], B'[w'], A'[v'] )^v = \]
+\[ A_1 \ox A_2 \ox \dia B \ox \dia (B' \ox \bx A') \]
+
+Then I think my claim is
+\begin{lemma}
+If  $\Gamma;\Delta_j \prov P_j[u_j]$ for every $j \in \{1,\ldots,n\}$, and $u\in\Gamma$, then
+\[ (\Gamma; \Delta_1, \ldots, \Delta_n)^u \le (\Gamma;P_1[u_1],\ldots,P_n[u_n])^u \]
+\end{lemma}
+
+\begin{proof}
+By induction on the list of derivations $\Gamma;\Delta_j \prov P_j[u_j]$.
+
+If we need to peel off a terminal proof using the init rule, it's easy:
+appeal to the induction hypothesis, and tack on the variable to both sides of the tree.
+
+The tensor (and 1) rules are extremely easy, they just shuffle around
+the shape of the same proof obligation.
+
+The $\bx$ and $\dia$ asynchronous rules are similarly easy. They don't actually affect
+the tree shape, but just rename parts of it.
+
+The $\bx$ and $\dia$ synchronous rules are where the real core of the proof is.
+\cqed
+\end{proof}
+
+\begin{corollary}
+If  $u ;P[u] \prov Q[u]$, then $P \le Q$.
+\end{corollary}
+
+
+
+
+
 \end{document}
