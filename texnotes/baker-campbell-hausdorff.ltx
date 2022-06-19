@@ -1,6 +1,7 @@
 \documentclass{article}
 
 
+\usepackage{amsmath}
 \usepackage{amssymb}
 \input{theorem}
 
@@ -45,709 +46,242 @@
    arrow style=tikz,
    diagrams={>=stealth}}
 \section{Categorifying BCH}
-Given a groupoid $G$, its cardinality is defined as
-\[|G| =  \sum_{X \in G/\sim} {1\over |\mathrm{Aut}(X)|}\]
-A span of groupoids
-\[
- \begin{tikzcd}
-& G \ar[dl, "\alpha"']\ar[dr, "\beta"]\\
-A && B
- \end{tikzcd}
-\]
-plays the role of a matrix. The $(a,b)$ entry of the matrix is the groupoid cardinality of the fiber over $(a,b)$.
-A span where the two legs are equal
-\[
- \begin{tikzcd}
-& G \ar[dl]\ar[dr]\\
-A && A
- \end{tikzcd}
-\]
-plays the role of a square matrix. Call it a {\em square span}. The product of matrices is represented by weak pullback of spans.
-\[\begin{tikzcd}
-    & & G  H \ar[dr] \ar[dl] \ar[dd, very near start, phantom, "{\hbox{\rotatebox{-45}{\Large$\lrcorner$}}}"] & & \\
-    & G \ar[dl, "\alpha"'] \ar[dr, "\beta_1"] & & H \ar[dl, "\beta_2"'] \ar[dr, "\gamma"] & \\
-    A & & B & & C \\
-\end{tikzcd}\]
-\def\gg{{\bf g}}
-\def\hh{{\bf h}}
-An object of $GH$ is a tuple $(g, h, b)$ where $g,h$ are objects of $G,H$ and $b$ is an isomorphism
-$b : \beta_1 (g) \to \beta_2(h) \in B$. A morphism $(g,h,b) \to (g',h',b')$ in $GH$ is a pair of morphisms
-$\gg : g \to g', \hh : h \to h'$ such that
-\[\begin{tikzcd}
-\beta_1 g \ar[r, "b"]\ar[d, "\beta_1 \gg"']& \beta_2 h\ar[d, "\beta_2\hh"]\\
-\beta_1 g' \ar[r, "b'"']& \beta_2 h'
-\end{tikzcd}\]
 
-We can explicitly describe, the $n$th power of a square span
-\[
- \begin{tikzcd}
-& G \ar[dl, "\alpha"']\ar[dr, "\beta"]\\
-A && A
- \end{tikzcd}
-\]
-as follows. An object of $G^n$ consists of
-\begin{enumerate}
-\item An $n$-tuple $\vec g = (g_1, \ldots, g_n)$ of objects of $G$.
-\item An $(n-1)$-tuple $\vec a = (a_i : \beta(g_i) \to \alpha(g_{i+1}) \st i \in 1,\ldots,n-1)$ of isomorphisms in $A$.
-\end{enumerate}
-A morphism $(\vec g, \vec a) \to (\vec g', \vec a')$ is a tuple of morphisms $\vec \gg = (\gg_i : g_i \to g'_i)$
-such that for every $i$ we have
-\[\begin{tikzcd}
-\beta g_i \ar[r, "a_i"]\ar[d, "\beta \gg_i"']& \alpha g_{i+1}\ar[d, "\alpha\gg_{i+1}"]\\
-\beta g_i' \ar[r, "a_i'"']& \alpha g_{i+1}'
-\end{tikzcd}\]
-Now I want to try to describe the symmetric power $G^n/n!$.
+My goal is to phrase the Baker-Campbell-Hausdorff formula in a more combinatorial way; i.e.
+I want to replace the arithmetic/analytic statement that
+\[ e^A e^B = e^{A + B + [A,B]/2 + [A,[A,B]]/12 + [B,[B,A]]/12 + \cdots}\]
+with some statement or statements about isomorphisms between sets and/or relations.
 
- An object of $G^n/n!$ consists of
-\begin{enumerate}
-\item A permutation $\sigma : [n] \to [n]$.
-\item An $n$-tuple $\vec g = (g_1, \ldots, g_n)$ of objects of $G$.
-\item An $(n-1)$-tuple $\vec a = (a_i : \beta(g_{\sigma i}) \to \alpha(g_{\sigma(i+1)}) \st i \in 1,\ldots,n-1)$ of isomorphisms in $A$.
-\end{enumerate}
-A morphism $(\sigma, \vec g, \vec a) \to (\sigma', \vec g', \vec a')$ is a tuple of morphisms $\vec \gg = (\gg_{ i} : g_{\sigma i} \to g'_{\sigma' i})$
-such that for every $i$ we have
-\[\begin{tikzcd}
-\beta g_{\sigma i} \ar[r, "a_{ i}"]\ar[d, "\beta \gg_i"']& \alpha g_{\sigma(i+1)}\ar[d, "\alpha\gg_{i+1}"]\\
-\beta g_{\sigma'i}' \ar[r, "a_{i}'"']& \alpha g_{\sigma'(i+1)}'
-\end{tikzcd}\]
-This doesn't seem quite right
-
-\subsection{Groupoid Quotients Generally}
-Let $G$ be a groupoid and $H$ be a group, considered as a one-object groupoid.
-Suppose we have an action which is a functor $H \to {\mathrm Aut}(G)$, meaning
-that the action of every $\eta\in H$ is a functor $G \to G$. We define
-the quotient $G // H$ by saying an object in it is an object of $G$, and a
-morphism in $\hom_{G // H}(A, B)$ is a tuple $(\eta, f)$ where $\eta \in H$
-and $f : A \to \eta B$ in $G$. We need to say how to compose $f : A \to \eta B$ and
-$g : B \to \gamma C$. We hit $g$ with the functor $\eta$ to get $\eta g : \eta B \to \eta \gamma C$.
-Then we define
-\[(\gamma, g) \o (\eta, f) = (\eta \gamma, \eta g \o f)  \]
-Then we should be able to prove $|G//H| = |G| / |H|$. Or really I guess if I view $H$ as a 1-object groupoid rather than a group,
-I'd be proving $|G//H| = |G| |H|$. In any case, I've blown up every homset uniformly by a factor of $|H|$, so this should be
-true.
-
-\subsection{Easy Special Case}
-Let's suppose $[X,[X,Y]] = [Y,[X,Y]] = 0$, so that
-\[ e^X e^Y = e^{X + Y + [X,Y]/2}\]
-Set $L = [X,Y]/2$. That means we're assuming $XL = LX$ and $YL = LY$.
-Let's expand both sides of the equation $e^X e^Y = e^{X+Y+L}$ and see what we get.
-The left is
-\[ (1 + X + X^2/2! + X^3/3! + \cdots)(1 + Y + Y^2/2! + Y^3/3! + \cdots)  \]
-\[ = 1 + (X + Y)\]
-\[ + (X^2/2! + XY + Y^2/2!)\]
-\[ + (X^3/3! + X^2Y/2! + XY^2/2! + Y^3/3!)\]
-\[ + (X^4/4! + X^3Y/3! + X^2Y^2/2!2! + XY^3/3! + Y^4/4!)\]
-\[ + \cdots\]
-The right is
-\[ (1 + X + Y + L + (X + Y + L)^2/2! + (X + Y + L)^3/3! + \cdots)\]
-\[ = 1 + (X + Y) \]
-\[ + L + (X^2 + XY + YX + Y^2)/2! \]
-\[ + XL + YL + (X^3 + X^2Y + XYX + XY^2 + YX^2 + YXY + Y^2X + Y^3)/3! \]
-\[ + (X^2 + XY + YX + Y^2)L/2! + L^2/2!\]
-\[ + (X^4 + X^3Y + X^2YX + X^2Y^2 + XYX^2 + XYXY + XY^2X + XY^3 \]
-\[ + YX^3 + YX^2Y + YXYX + YXY^2 + Y^2X^2 + Y^2XY + Y^3X + Y^4)/4! + \cdots \]
-So I want to hope for some kind of isomorphism $L + (XY + YX)/2 \cong XY$.
-This would let me reconcile the order-2 terms. For the order-3 terms I need to show
-\[ (X+Y)L + (X^2Y + XYX + XY^2 + YX^2 + YXY + Y^2X)/3! = X^2Y/2! + XY^2/2!\]
-or
-\[ 6(X+Y)L +  XYX + Y^2X + YX^2 + YXY = 2X^2Y + 2XY^2\]
-and I know
-\[2L + XY + YX = 2XY\]
-which would give me
-\[2XL + X^2Y + XYX = 2X^2Y\]
-\[2YL + YXY + Y^2X = 2YXY\]
-\[2XL + XYX + YX^2 = 2XYX\]
-\[2YL + XY^2 + YXY = 2XY^2\]
-so using the middle two equations I can reduce my goal to
-\[ 4(X+Y)L +  2XYX +  2YXY = 2X^2Y + 2XY^2\]
-and using the outer two twice each I can establish this --- but only by using negatives.
-Maybe I really want something more like
-\[2L + YX = XY\]
-?
-
-\subsection{The Commutative Equivalence}
-Suppose $X$ and $Y$ are groupoids rather than spans. Then in what sense is it the case that
-\[ e^X e^Y = e^{X+Y} \]
-holds? Observe that an object in the latter is some mixed sequence of objects from $X$ and $Y$,
-e.g.
-\[ x_1x_5y_1x_3y_1y_2y_1x_9 \]
-and a morphism is some wiring diagram of morphisms from $X \cup Y$ to some other sequence like
-that. We can filter this into a pair of sequences $ x_1x_5x_3x_9 $ and $ y_1y_1y_2y_1 $ and it
-will be possible to filter
-the wiring diagrams accordingly because the coproduct of groupoids guarantees there will be no $x \to y$ wires.
-This constitutes a functor from $e^{X+Y}$ to $e^X e^Y$.
-
-This seems like it should extend to a pair of commuting spans.
-To be clearer about the meaning of the factorials in the quotients, I could let the exponential
-take a groupoid parameter $Q$ as well as the span itself:
-\[ \exp(X, Q) = 1 + QX + {Q^2\over 2!}X^2 + {Q^3\over 3!} X^3 + \cdots \]
-So then how do I reconcile \[ \exp(X, Q) \exp (Y, Q) = \exp(X + Y, Q)\]
-when it happens to be the case that $X, Y$ commute? We need to construct a functor from
-$\exp(X + Y, Q)$ to $\exp(X, Q) \exp (Y, Q)$. On the input side we effectively
-have a {\em path} that we need to untangle. Each step comes from $X$ or $Y$.
-We assume we have an isomorphism of spans $XY \cong YX$. So we swap around steps
-until we have all $X$s on the left and all $Y$s on the right. We move the corresponding $Q$s
-around in parallel. Now we have an object of $\exp(X, Q) \exp (Y, Q)$.
-
-$\ldots$ or do we? I don't know the wiring of the
-$Q$s splits into distinct $X$ and $Y$ chunks.
-
-\subsection{Unifying the last two thoughts}
-
-Let's axiomatize just enough of formal noncommutative power series to get the job done.
-We have a single `scalar' variable $q$, and operator-valued variables $X, Y, L, \ldots$.
- We have an associative noncommutative algebra on the operators,
-so that $XY$ generally is not $YX$, but $qX = Xq$. We
-
-We write $\lambda$ for a composition, i.e. a sequence $\lambda_1, \ldots, \lambda_k$ with $\lambda_i \ge 1$ summing to $n$.
-We write $(\lambda + 1)$ to mean $\lambda_1+1, \ldots, \lambda_k+1$ when $\lambda = \lambda_1,\ldots,\lambda_k$.
-The notation ${n \choose \lambda }$ is the usual definition of multinomial coefficient for the sequence
-$\lambda$. We define
-\[D^\lambda f = \prod_i  (D^{\lambda_i})f\]
-We can then define an operation of extracting the $n$th derivative at zero $D^n f = (d/dq)^n f \adjust_{q=0}$.
-We require every exponential $e^f$ to factor as $e^{qf_0}$.
-\[ D^n (fg) = \sum_{i+j = n} {n \choose i} (D^if)(D^j g) \]
-\[ D^n e^{qf} = \sum_{\lambda + 1 \prov n}{n \choose \lambda} D^{\lambda} f  \]
-\[ D^n q = \cases{1 & if $n=1$;\cr 0 & otherwise.}\]
-\[ D^n C = 0 \qquad (q\not\in C)\]
-
-
-So I want to assume $XY = YX + 2L$ and try to show
-\[ D^n(e^{qX} e^{qY})  \stackrel{?}{=} D^n(e^{q(X + Y + qL)})\]
-The $n=0$ case is showing $1=1$. The $n=1$ case is showing
-\[ X + Y  = D(qX + qY + q^2L) = X+Y\]
-The $n=2$ case involves the compositions of 2. There are two of them,
-1+1 and 2. We conclude
-\[ D^2 e^{qf} = (D^0 f)^2 + 2D^1 f\]
-so specifically we need
-\[ X^2 + 2XY + Y^2 {=} (X+Y)^2 + 2L\]
-which we can accomplish with $XY = YX + 2L$.
-
-Let's try $n=3$. Generally,
-\[ D^3 e^{qf} = f^3 + 3 ff' + 3f'f + 3f''\]
-
-We need to show
-\[ D^3(e^{qX} e^{qY})  = D^3(e^{q(X + Y + qL)})\]
-\[ X^3 + 3X^2Y + 3XY^2 + Y^3  = (X + Y)^3 + 3(X+Y)L + 3L(X+Y)\]
-which reduces to showing
-\[  3X^2Y + 3XY^2  =  XXY + XYX + XYY + YXX + YXY + YYX + 3(X+Y)L + 3L(X+Y)\]
-and then, if we have $LX = XL$ and $LY = YL$, we can reason our way towards
-\[  3X^2Y + 3XY^2  =  2XXY + XYY + YXX + YXY + YXY + (X+Y)L + 3L(X+Y)\]
-\[  3X^2Y + 3XY^2  =  2XXY + 2XYY + XYX + YXY + (X+Y)L + L(X+Y)\]
-\[  3X^2Y + 3XY^2  =  2XXY + 2XYY + XYX + YXY + 2XL + 2LY\]
-\[  3X^2Y + 3XY^2  =  3XXY + 3XYY \]
-
-Let's just try to see where the $n=4$ case is going.  Generally,
-\[ D^4 e^{qf} = f^4 +  4 f'ff + 4ff'f + 4fff' + 12ff'' + 12f''f + 12f' f' + 4 f''' \]
-and so specifically (using commutativity)
-\[ (X^4 + 4X^3Y + 6X^2Y^2 + 4XY^3 + Y^4) = (X+Y)^4 +  12L(X+Y)^2 + 12L^2 \]
-So if I move all the $X$s and $Y$s on the lhs to general position, I get to
-\[ (X + Y)^4 + 12LX^2 + 12LY^2 + 18LXY + 6LYX \]
-so I need only show that
-\[ 18LXY + 6LYX = 12LXY + 12LYX + 12L^2\]
-but $XY = YX + 2L$ times $6L$ is exactly the $6LXY = 6LYX + 12L^2$ I need.
-
-\subsection{ The $1/12$ terms}
-Suppose we have operators $X, Y, L, M, N$ such that
-\[\begin{array}{l}
-2L + YX = XY\\
-6M + LX = XL\\
-6N + YL = LY\\
-XM = MX \qquad YM = MY\\
-XN = NX \qquad YN = NY
-\end{array}\]
-Then for all $n$,
-\[ D^n(e^{qX} e^{qY})  = D^n(e^{q(X + Y + qL + q^2M + q^2N)})\]
-analogous to saying
-\[ e^{X} e^{Y}  = e^{X + Y + [X,Y]/2 + [X,[X,Y]]/12 + [[X,Y],Y]/12}\]
-Let's look at the $n=3$ case. On the left we have
-\[ X^3 + 3X^2Y + 3XY^2 + Y^3 \]
-and on the right we use
-\[ D^3 e^{qf} = f^3 + 3 ff' + 3f'f + 3f''\]
-to see that our goal is
-\[ (X + Y)^3 + 3(X + Y)L + 3L(X + Y) + 6M + 6N\]
-Starting from the left, we can expand some of the $XY$s to get to
-\[ (X + Y)^3 + 4XL + 2LX + 4LY + 2YL\]
-and then we can expand an $XL$ to $6M + LX$ to get
-\[ (X + Y)^3 + 3XL + 3LX + 4LY + 2YL + 6M\]
-and an $LY$ to $6N + YL$ to get
-\[ (X + Y)^3 + 3XL + 3LX + 3LY + 3YL + 6M + 6N\]
-as required.
-
-\[ D^3 e^{qf} = f^3 + 3 ff' + 3f'f + 3f''\]
-
-\[ D^4 e^{qf} = f^4 +  4 f'ff + 4ff'f + 4fff' + 12ff'' + 12f''f + 12f' f' + 4 f''' \]
-
-\subsection{Inventing BCH from scratch}
-
-Suppose we start by just looking at
-\[ D^2(e^{qX}e^{qY}) \stackrel{?}{=} D^2(e^{qX + qY})\]
-This {\em isn't} true, (unless $XY = YX$) but we can identify the extent to which it fails to be true.
-We calculate:
-\[ X^2 + 2XY + Y^2 \stackrel{?}{=} X^2 + XY + YX + Y^2 \]
-So we want to introduce some $\Lambda$ on the right such that
-\[ XY = \Lambda + YX\]
-It's clear that $\Lambda$ is degree two in terms of $X, Y$, so we try putting a $q^2 L$
-term in the BCH expansion:
-\[ D^2(e^{qX}e^{qY}) \stackrel{?}{=} D^2(e^{qX + qY + q^2L})\]
-Then we get
-\[ X^2 + 2XY + Y^2 \stackrel{?}{=} X^2 + XY + YX + Y^2 + 2L \]
-So we assert $\Lambda = 2L$ and so
-\[ XY = 2L + YX\]
-and the $n=2$ case is settled. Now we look at the $n=3$ case, and we that our goal is
-\[X^3 + 3X^2Y + 3XY^2 + Y^3 = (X+Y)^3 + 3(X + Y)L + 3L(X + Y) \]
-As we noted before, we can massage the left side all the way into
-\[ (X + Y)^3 + 2(X + Y)L + 2L(X + Y) + 2XL + 2LY\]
-So we introduce $M = [XL]$ and $N = [LY]$ to swap these excesses around.
-We start from scratch computing
-\[ D^3(e^{qX}e^{qY}) \stackrel{?}{=} D^3(e^{qX + qY + q^2L + q^3[XL] + q^3[LY]})\]
-and find that it suffices  motivates the isomorphisms
-\[6[XL] + LX = XL\]
-\[6[LY] + YL = LY\]
-Let's try the next step.
-\[ D^4(e^{qX}e^{qY}) \stackrel{?}{=} D^4(e^{qX + qY + q^2L + q^3[XL] + q^3[LY] + q^4Z})\]
-on the left gives us
-\[ X^4 + 4X^3Y + 6X^2Y^2 + 4XY^3 + Y^4\]
-and on the right, according to
-\[ D^4 e^{qf} = f^4 +  4 f'ff + 4ff'f + 4fff' + 12ff'' + 12f''f + 12f' f' + 4 f''' \]
-gives us
-\[ (X + Y)^4 + 4L(X+Y)^2 + 4(X+Y)L(X+Y) + 4(X+Y)^2L + \]
-\[24(X+Y)([XL] + [LY]) + 24([XL] + [LY])(X+Y) + 12L^2 + 24Z\]
-Let's make a table of how much extra $L$-factors we incur by sorting various strings:
-(scaled by $1/2$)
-\[
-\begin{array}{ll}
-XXXX & 0\\
-XXXY & 0\\
-XXYX & XXL\\
-XXYY & 0\\
-XYXX & XLX + XXL\\
-XYXY & XLY\\
-XYYX & XYL + XLY\\
-XYYY & 0\\
-YXXX & LXX + XLX + XXL\\
-YXXY & LXY + XLY\\
-YXYX & LYX + XYL + XLY\\
-YXYY & LYY\\
-YYXX & YLX + LXY + YXL + XLY\\
-YYXY & YLY + LYY\\
-YYYX & YYL + YLY + LYY\\
-YYYY & 0\\
-\end{array}
-\]
-So this sums to
-\[2L(XX + 2XY + YX + 3YY) + 4XLX + 10XLY + 2YLX + 4YLY \]
-\[+ 2(3XX + 2XY + YX + YY)L\]
-which seems like kind of a disorganized mess. I don't see a canonical way of fixing it,
-even though there surely is a way.
-
-\subsection{Retreating to the almost-commutative Case}
-Suppose for the time being that $LX = XL$ and $LY = YL$
-and $XY = 2L + YX$.
-
-Let's make up the notation
-\[ (X\oplus Y)^n = \sum_{k=0}^n {n \choose k}X^kY^{n-k} \]
-for the ``ordered binomial''.
-Define a type $D_n$ for $n \ge 1$, by saying $D_1 = 0$ and generally
-%% \[
-%% \begin{array}{ll}
-%% D_1 & 0\\
-%% D_2 & 1\\
-%% D_3 & 3X + 3Y\\
-%% D_4 & 6XX + 9XY + 3YX + 6YY \\
-%% D_5 & 10 XXX + 21 XXY + 3 XYX + 18 XYY + 6 YXX + 9 YXY + 3 YYX + 10 YYY
-%% \end{array}
-%% \]
-%% The recurrence that defines $D_{n+1}$ is:
-\[ D_{n+1} = (X + Y) D_n + n(X\oplus Y)^{n-1}\]
-
-\begin{lemma}
-For any $k \ge 1$,
-\[YX^k +  2kLX^{k-1} =  X^kY\]
-\end{lemma}
-
-\begin{lemma}
-For any $k, n$,
-\[{n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} =  {n\choose k } X^kY^{n-k+1}\]
-\end{lemma}
-\begin{proof}
-Use the fact that $n {n-1\choose k-1} = {n! \over (k-1)! (n-k)!} = k{n \choose k}$.
-\[{n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} \]
-\[= {n\choose k }(YX^k Y^{n-k} +  2kL X^{k-1}Y^{n-k}) \]
-\[= {n\choose k }(X^kY^{n-k+1}) \]
-
-\end{proof}
-
-\begin{lemma}
-\[  (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1} = (X \oplus Y)^{n+1} \]
-\end{lemma}
-
-\begin{proof}
-\[  (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1}\]
-\[ = (X+Y)\sum_{k=0}^n {n\choose k} X^kY^{n-k} + 2nL \sum_{k=0}^{n-1} {n-1\choose k}X^kY^{n-k-1}\]
-\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} YX^kY^{n-k} + 2nL \sum_{k=0}^{n-1} {n-1\choose k}X^kY^{n-k-1}\]
-\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} YX^kY^{n-k} + 2nL \sum_{k=1}^{n} {n-1\choose k-1}X^{k-1}Y^{n-k}\]
-\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n \left( {n\choose k }YX^k Y^{n-k} +  2n {n-1 \choose k-1} LX^{k-1}Y^{n-k} \right)\]
-\[ = \sum_{k=0}^n {n\choose k} X^{k+1}Y^{n-k} + \sum_{k=0}^n {n\choose k} X^kY^{n-k+1}\]
-\[ = \sum_{k=0}^{n+1} {n+1\choose k} X^{k}Y^{n-k} \]
-\[ = (X \oplus Y)^{n+1} \]
-as required. \cqed
-\end{proof}
-
-\begin{lemma} For any $n \ge 1$,
-\[ (X + Y)^n + 2LD_n  = (X\oplus Y)^n \]
-\end{lemma}
-\begin{proof}
-By induction. The base case is trivial.
-In the step case, we try to evaluate
-\[  (X + Y)^{n+1} + 2LD_{n+1} \]
-\[ = (X + Y)^{n+1} + 2L(X+Y)D_{n} + 2nL(X\oplus Y)^{n-1} \qquad \hbox{(by def'n of $D_{n+1}$)}\]
-\[ = (X+Y)(X \oplus Y)^n + 2nL(X\oplus Y)^{n-1}\qquad \hbox{(by i.h.)} \]
-\[ = (X \oplus Y)^{n+1} \]
-as required. \cqed
-\end{proof}
-
-\subsection{Defining Things Carefully}
-An `exponential power series' is a sequence of groupoids (or groupoid spans) $\{n.A_n\}$.
-The evaluation (at a groupoid), derivative, and product are defined by
-\[\{n.A_n\}(x) = \sum_{n=0}^\infty {x^n\over n!}A_n \]
-\[D \{n. A_n\} = \{n. A_{n+1}\}\]
-\[\{n. A_n\}\{n. B_n\} = \left\{n. \sum_{i=0}^n{n \choose i} A_i B_{n-i}\right\}\]
-
-We should be able to define an `ordinary power series' in terms of this:
-\[ (n.A_n) = \{n.n!A_n\}\]
-and show some isomorphisms
-\[(n.A_n)(x) = \sum_{n=0}^\infty x^nA_n \]
-\[D (n. A_n) = (n. (n+1)A_{n+1})\]
-\[(n. A_n)(n. B_n) = \left(n. \sum_{i=0}^n A_i B_{n-i}\right)\]
-
-Or maybe it's better to treat this as a first-class concept and relate the two?
-
-Compute exponential function of ordinary gf:
-(requires $A_0 = 0$)
-\[ \exp(n.A_n) = \left\{n . \sum_{\lambda_1, \ldots, \lambda_k \prov n}{n!\over k!} \prod_{i=1}^k A_{\lambda_i}\right\}\]
-I could instead define, given an arbitrary ogf $(n.A_n)$ the operation of
-\[ E(n.A_n) = \left\{n . \sum_{\lambda_1, \ldots, \lambda_k \prov n}{n!\over k!} \prod_{i=1}^k A_{\lambda_i-1}\right\}\]
-with the intuition being that $E(A) = e^{xA}$, because
-\[x(n.A_n) = \left( n.\cases{0 & if $n=0$;\cr n-1 & otherwise. }\right)\]
-This simplifies for the singleton sequence
-\[(A) = \left( n.\cases{A & if $n= 1$;\cr 0 & otherwise. }\right)\]
-to
-\[ E(A) = \{n .  A^n \}\]
-
-Then my earlier
-\[ e^A B e^{-A} =\sum_{i = 0}^\infty L_n  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
-becomes
-\[ E(A) B  =\sum_{i = 0}^\infty L_n E(A)\]
-\[ \{n.A^n\} B  =\sum_{i = 0}^\infty L_n \{n.A^n\} \]
-
-\subsection{Polynomials over Many Variables}
-\def\bn{{\bf n}}
-\def\bm{{\bf m}}
-Let $V = \{x,y,\ldots\}$ be a set of variables. An exponential generating function
-is given by a function from $\N^V$ to types that gives all the coefficients.
-We can write this as an abstraction $\{\bn.A_\bn\}$. If $P$ is a proposition, let $[P]$
-be the type that has one point when $P$ is true and is empty otherwise.
-Examples of exponential generating functions in this notation when $V = \{x,y\}$ are
-\[
-\begin{array}{ll}
-  \{\bn.[\bn(x) = 3]\} & x^3/3! (1 + y + y^2/2! + \cdots)\\
-  \{\bn.[\bn(y) = 5 \land \bn(y) = 6 ]\} & x^5y^6/5!6!\\
-  \{\bn.A_\bn\} & \sum_{\bn \in \N^V} A_\bn/ \bn!\\
-\end{array}
-\]
-where we define
-\[\bn! = \prod_{v\in V} \bn(v)! \]
-\[(\bn + x)(v) = \bn(v) + [v=x]\]
-Evaluation, derivative, product are defined by
-\[\{\bn.A_\bn\}(x=X) = \left\{ \bn: \N^{V\setminus x} . \sum_{n=0}^\infty {X^{n}\over n!}A_{\bn[n/x]} \right\} \]
-\[D_\bm \{\bn. A_\bn\} = \{\bn. A_{\bn + \bm}\}\]
-\[\{\bn. A_\bn\}\{\bn. B_\bn\} = \left\{\bn. \sum_{\bn_1 + \bn_2 = \bn}{\bn! \over \bn_1!\bn_2!} A_{\bn_1} B_{\bn_2}\right\}\]
-
-\subsection{...}
-
-\begin{tabular}{|l|l|}
- \bf Analysis & \bf Type Theory\\
-Numbers & Types/Sets \\
-Operators/Matrices & Relations/Spans \\
-Equalities & Isomorphisms \\
-\end{tabular}
-\[\begin{tikzcd}
-& A\ar[dl]\ar[dr]\\
-n && n
-\end{tikzcd}\]
-\[ e^A e^B = e^{A + B + [A,B]/2 + [A,[A,B]]/12 + \cdots} \]
-\[ F = C_0 + xC_1 + x^2C_2/2! + x^3C_3/3! + \cdots \]
-\[ (d/dx)^n F \adjust_{x=0} = C_n\]
-
-
-\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\]
-\[ e^A B  = \left( B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots\right) e^{A} \]
-\[ e^{qA} B  = \left( B + [qA,B] + [qA,[qA,B]]/2 + [qA,[qA,[qA,B]]]/3! + \cdots\right) e^{qA} \]
-\[ \left(\partial\over\partial q\right)^n e^{qA} B \adjust_{q=0}  = \left(\partial\over\partial q\right)^n \left( B + [qA,B] + [qA,[qA,B]]/2 + [qA,[qA,[qA,B]]]/3! + \cdots\right) e^{qA} \adjust_{q=0}\]
-
-\[ \left(\partial\over\partial q\right)^n e^{qA} B \adjust_{q=0}  = \left(\partial\over\partial q\right)^n \left( B + q[A,B] + q^2[A,[A,B]]/2 + q^3[A,[A,[A,B]]]/3! + \cdots\right) e^{qA} \adjust_{q=0}\]
-
-
-\[ L_m =  [\overbrace{A,[A}^m\cdots, B]]\]
-
-\begin{theorem}
-Suppose
-\[\begin{tikzcd}
-& A\ar[dl]\ar[dr]\\
-X && X
-\end{tikzcd} \qquad
-\begin{tikzcd}
-& B\ar[dl]\ar[dr]\\
-X && X
-\end{tikzcd}\]
-Suppose I have a family of relations/spans $(L_m \st m \ge 0)$ such that
-\[ L_0 = B\]
-\[ \forall m \ge 0 . L_m A + L_{m+1} = A L_{m} \]
-Then
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_m A^{n-m}\]
-\end{theorem}
-
-\begin{proof}
-
-\cqed
-\end{proof}
-
-\[ e^{qA}B = B + qAB + (q^2/2)A^2B + (q^3/3!)A^3B + \cdots\]
-
-\section{Using BCH Notes}
-I think I rather like the approach I find in
+I'm trying to follow the approach in
  \[\texttt{http://webhome.phy.duke.edu/$\sim$mehen/760/ProblemSets/BCH.pdf}\]
+for understanding what the coefficients of the BCH are in general.
+
+\subsection{Relations}
+A binary relation on $X$ means a set $R$ together with a map $R \to X \x X$.
+\begin{center}
+\begin{tikzcd}
+&[-12pt] R
+\ar["{\rho_1}"']{ld}\ar["{\rho_2}"]{rd}
+&[-12pt]
+\\
+X&&X
+\end{tikzcd}
+\end{center}
+These play the role of the operators $A, B$ in the BCH formula. We can
+do some of the same arithmetic on relations as we can do on operators,
+of course saliently missing out on subtraction and division.
+
+The sum of two relations $(R,\rho_1, \rho_2),(S, \sigma_1,\sigma_2)$ is written $R+S$ and is defined by taking
+its carrier to be the coproduct of the relations' carriers, and
+its projections to be the copairing of the projections
+of the relations:
+\begin{center}
+\begin{tikzcd}
+&[-12pt] R+S
+\ar["{[\rho_1,\sigma_1]}"']{ld}\ar["{[\rho_2,\sigma_2]}"]{rd}
+&[-12pt]
+\\
+X&&X
+\end{tikzcd}
+\end{center}
+We can do ``scalar multiplication'' of a relation (i.e. ``operator'') by a set (i.e. ``scalar'').
+If $R$ is a relation and $y$ is a set, then $yR$ is a relation in an evident way. We take the carrier
+to be the product of the carrier of $R$ with the set $y$, and project out the $y$.
+\begin{center}
+\begin{tikzcd}
+&[-12pt] y \x R
+\ar["{ \rho_1 \o \pi_2}"']{ld}\ar["{\rho_2 \o \pi_2}"]{rd}
+&[-12pt]
+\\
+X&&X
+\end{tikzcd}
+\end{center}
+Two relations are considered isomorphic if there is an isomorphism of their carriers
+such that both triangles in the diagram
+\begin{center}
+\begin{tikzcd}&[-12pt]  R\ar[dd, equal]
+\ar{ld}\ar{rd}
+&[-12pt]
+\\
+X&&X\\
+&  S\ar[ul]\ar[ur]
+\end{tikzcd}
+\end{center}
+commute.
+Finally, composition of two relations $R$ and $S$ is given by pullback:
+
+\begin{center}
+\begin{tikzcd}
+&[-6pt]&[-12pt] RS
+\ar{ld}\ar{rd}
+\ar[phantom, very near start]{dd}{\rotatebox{-45}{$\lrcorner$}}
+&[-12pt]&[-6pt]
+\\
+&
+R\ar{ld}\ar{rd}
+&& S\ar{ld}\ar{rd}\\
+X && X && X
+\end{tikzcd}
+\end{center}
+
 
 \subsection{First Lemma}
-We aim to show a type-theoretic analogue of
-\[ e^A B e^{-A}  = B + [A,B] + [A,[A,B]]/2 + [A,[A,[A,B]]]/3! + \cdots \]
-First let's generalize this by replacing $A$ with $xA$. We get
-\[ e^{xA} B e^{-xA}  = B + [xA,B] + [xA,[xA,B]]/2 + [xA,[xA,[xA,B]]]/3! + \cdots \]
+The first step is to categorify
+\[ e^{-B} A e^{B}  = A + [A,B] + [[A,B],B]/2 + [[[A,B],B],B]/3! + \cdots \]
+First let's generalize this by replacing $B$ with $Bx$. We get
+\[ e^{-Bx} A e^{Bx}  = A + [A,Bx] + [[A,Bx],Bx]/2 + [[[A,Bx],Bx],Bx]/3! + \cdots \]
 which by bilinearity of Lie bracket is
-\[ e^{xA} B e^{-xA}  = B + x[A,B] + x^2[A,[A,B]]/2 + x^3[A,[A,[A,B]]]/3! + \cdots \]
-If we define
-\[L_0 = B \qquad L_{m+1} + L_m A = A L_m\]
-(which means $L_m = [\overbrace{A,[A,\cdots, [A}^m,B]\cdots]]$)
-then our equation becomes
-\[ e^{xA} B e^{-xA}  = \sum_m {x^m \over m!} L_m \]
-or equivalently, by moving the $e^{-xA}$ over to the right as $e^{xA}$,
-\[ e^{xA} B   = \left( \sum_m {x^m \over m!} L_m \right) e^{xA}\]
+\[ e^{-Bx} A e^{Bx}  = A + [A,B]x + [[A,B],B]x^2/2 + [[[A,B],B],B]x^3/3! + \cdots \]
+
+Let's abbreviate $L_m = [[\cdots [A,\overbrace{B],\cdots, B ],B}^m]$ and note that these satisfy the recurrence
+(which makes sense for relations as well as operators, since we have removed the subtraction involved in the Lie bracket)
+\[L_0 = A \qquad L_{m+1} + B L_m = L_m B\]
+
+Then our equation becomes
+\[ e^{-Bx} A e^{Bx}  = \sum_m {x^m \over m!} L_m \]
+Let's multiply both of these on the left by $e^{Bx}$. We get
+\[  A e^{Bx}  = e^{xB} \left( \sum_m {x^m \over m!} L_m \right) \]
 We can pull out the coefficients of these exponential generating functions by
 taking iterated derivatives:
-\[ \left(\partial\over\partial x\right)^n \left. \left(e^{xA} B  \right)\right|_{x=0} =
- \left(\partial\over\partial x\right)^n \left.\left(\left(\sum_m {x^m \over m!} L_m \right) e^{xA} \right)\right|_{x=0} \]
+\[ \left(\partial\over\partial x\right)^n \left. \left(A e^{Bx}  \right)\right|_{x=0} =
+ \left(\partial\over\partial x\right)^n \left.\left(e^{xB} \left( \sum_m {x^m \over m!} L_m \right)  \right)\right|_{x=0} \]
 and computing these derivatives gives us the equation
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
-
-
-Therefore, our goal is to show the theorem
+\[ A B^n  = \sum_{m=0}^n   {n \choose m} B^{n-m} L_{m} \]
+Now this equation is also free of any operations that don't make sense for relations.
+So our goal is to prove the following:
 \begin{lemma}
 Suppose $A$ and $B$ are binary relations on some set $X$.
 Suppose for every $m \ge 0$ that $L_m$ is a binary relation on $X$,
 together satisfying the isomorphisms
-\[L_0 = B \qquad A L_m =  L_{m+1} + L_m A \]
-Then there is an isomorphism
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+\[L_0 = A \qquad L_{m+1} + B L_m = L_m B\]
+Then there is an isomorphism of relations
+\[ AB^n  = \sum_{m=0}^n   {n \choose m} B^{n-m} L_{m} \]
 \end{lemma}
 
 \begin{proof}
-By induction on $n$. If $n=0$, then we are to show $B=L_0$, which is by definition.
+By induction on $n$. If $n=0$, then we are to show $A=L_0$, which is true by definition.
 Otherwise, we know
-\[ A^n B = \sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\]
+\begin{equation}\tag{$\dagger$}
+AB^n  = \sum_{m=0}^n   {n \choose m} B^{n-m} L_{m}
+\end{equation}
 and we must show
-\[ A^{n+1} B = \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
-By induction hypothesis, it would suffice to show
-\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
- \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m}\]
-Let's work on the left side of this equation:
-\[A\left(\sum_{m=0}^n   {n \choose m} L_{m} A^{n-m}\right) =
-\left(\sum_{m=0}^n   {n \choose m} A L_{m} A^{n-m}\right) \]
-\[= \left(\sum_{m=0}^n   {n \choose m} (L_{m+1} + L_mA) A^{n-m}\right) \]
-\[= \left(\sum_{m=0}^n   {n \choose m} L_{m+1} A^{n-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
-\[= \left(\sum_{m=1}^{n+1}   {n \choose m-1} L_{m} A^{n+1-m}\right) + \left(\sum_{m=0}^n   {n \choose m} L_m A^{n+1-m}\right) \]
-\[= \sum_{m=0}^{n+1}   \left({n \choose m-1} + {n \choose m}\right) L_{m} A^{n+1-m} \]
-\[= \sum_{m=0}^{n+1}   {n+1 \choose m} L_{m} A^{n+1-m} \]
+\[A B^{n+1}  = \sum_{m=0}^{n+1}   {n+1 \choose m} B^{n+1-m} L_{m} \]
+By $(\dagger)$, it would suffice to show
+\[\left(\sum_{m=0}^n   {n \choose m} B^{n-m} L_{m} \right)B =
+ \sum_{m=0}^{n+1}   {n+1 \choose m} B^{n+1-m} L_{m} \]
+But we can in fact reason that
+\[\left(\sum_{m=0}^n   {n \choose m} B^{n-m} L_{m} \right)B =
+\left(\sum_{m=0}^n   {n \choose m} B^{n-m} L_{m} B\right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} B^{n-m} (L_{m+1} + B L_m) \right) \]
+\[= \left(\sum_{m=0}^n   {n \choose m} B^{n-m} L_{m+1} \right) + \left(\sum_{m=0}^n   {n \choose m} B^{n+1-m} L_m \right) \]
+\[= \left(\sum_{m=1}^{n+1}   {n \choose m-1} B^{n+1-m} L_{m} \right) + \left(\sum_{m=0}^n   {n \choose m} B^{n+1-m} L_m \right) \]
+\[= \sum_{m=0}^{n+1}   \left({n \choose m-1} + {n \choose m}\right) B^{n+1-m} L_{m}  \]
+\[= \sum_{m=0}^{n+1}   {n+1 \choose m} B^{n+1-m} L_{m}  \]
 as required.
 \cqed
 \end{proof}
 
-%% \subsection{Preface to Second Lemma}
-
-%% Let $Q = xA + yB$.
-%% I'm going to try to prove something like
-%% \[ e^{-zQ} {d\over dy} e^{zQ} = zB + {z^2\over 2!}[B,Q] + {z^3\over 3!}[[B, Q], Q]]  + \cdots\]
-%% So let me define $M_m$ by
-%% \[M_1 = B \qquad M_{m+1} = [M_m, Q]\]
-%% which could also be phrased
-%% \[M_{m+1} = M_m Q - Q M_m\]
-%% or
-%%  \[M_{m+1} +  x A M_m + yB M_m = xM_m A + yM_m B \]
-
-%% Then our goal is
-%% \[ e^{-zQ} {d\over dy} e^{zQ} = \sum_{m=1}^\infty {z^m\over m!} M_m \]
-%% this
-%% \[  {d\over dy} e^{zQ} = e^{zQ} \left(\sum_{m=1}^\infty {z^m\over m!} M_m \right)\]
-%% Then I can pull $z$-egf coefficients out and get
-%% \[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
-
-%% Let's try this for low $n$. For $n=1$ I get
-%% \[ {d\over dy} (xA + yB) = M_1 \]
-%% which is correct. For $n=2$ I get
-%% \[ {d\over dy} (x^2A^2 + xy(AB + BA) + y^2B^2) = 2QM_1 + M_2 \]
-%% \[ x(AB + BA) + 2yB^2 = 2xAB + 2yB^2 + 2M_2 \]
-%% and
-%%  \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
-%% so yes, this checks out also. Let's try $n=3$.
-%% \[ {d\over dy} (x^3A^3 + x^2y(AAB + ABA + BAA) + xy^2(BBA + BAB + ABB) + y^3B^3) =\]
-%% \[ 3Q^2M_1 + 3QM_2 + M_3 \]
-%% The lhs is
-%% \[  x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
-%% The rhs is
-%% \[ 3(x^2A^2 + xy(AB + BA) + y^2B^2)B + 3(xA + yB)M_2 + M_3 \]
-%% \[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 3(xA + yB)M_2 + M_3 \]
-%% what we know about $M_2, M_3$ is
-%%  \[M_{2} +  x AB + yB^2 = xB A + y B^2 \]
-%%  \[M_{3} +  x AM_2 + yBM_2 = xM_2A + y M_2B \]
-%% so the rhs becomes
-%% \[ =  3(x^2AAB + xy(ABB + BAB) + y^2B^3) + 2(xA + yB)M_2 + xM_2A + y M_2B\]
-%% which after some tedious algebra becomes
-%% \[ = x^2(AAB + ABA + BAA) + 2xy(BBA + BAB + ABB) + 3y^2B^3\]
-%% as required.
-
-%% \subsubsection{Trying To Prove It}
-
-%% Say $\beta$ is a bitstring, $b_1, \ldots, b_n$. We define
-%% $A_0 = A$ and $A_1 = B$ and $x_0 = x$ and $x_1 = y$.
-%% Then $Q = \sum_{b \in \{0,1\}} x_b A_b$. We still want to show
-%% \[  {d\over dy} Q^n = \sum_{k = 0}^{n-1} {n \choose k} Q^k  M_{n-k}\]
-%% Let $k_b(\beta)$ be the number times the bit $b$ occurs in $\beta$.
-%% We can see that
-%% \[  Q^n = \sum_{\beta \in 2^n} x_\beta A_\beta\]
-%% \[  Q^n = \sum_{\beta \in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta\]
-%% \[  {\partial\over\partial x_1} Q^n = \sum_{\beta \in 2^n} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta\]
-%% We can see the rhs of our goal is equal to
-%% \[\sum_{k = 0}^{n-1} {n \choose k} \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\]
-%% so our goal is to prove
-%% \[\sum_{\beta \in 2^n} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta =
-%% \sum_{k = 0}^{n-1} {n \choose k} \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\]
-%% The base case of this, $n = 1$, is still the trivial goal of $B = M_1$.
-%% For the step case, we start with
-%% \[\sum_{\beta \in 2^{n+1}} k_1(\beta)x_0^{k_0(\beta)}x_1^{k_1(\beta)-1} A_\beta \]
-%% and we can rewrite this in terms of smaller bitstrings: either I want to use
-%% \[\sum_{\beta \in 2^{n}} k_1(\beta)x_0^{k_0(\beta)+1}x_1^{k_1(\beta)-1} AA_\beta   +
-%% (k_1(\beta) + 1)x_0^{k_0(\beta)}x_1^{k_1(\beta)} BA_\beta  \]
-%% or
-%% \[\sum_{\beta \in 2^{n}} k_1(\beta)x_0^{k_0(\beta)+1}x_1^{k_1(\beta)-1} A_\beta A  +
-%% (k_1(\beta) + 1)x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta B  \]
-%% which based on i.h. goes to
-%% \[(x_0A + x_1B)\left(\sum_{k = 0}^{n-1} {n \choose k}  \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\right)
-%% + \sum_{\beta\in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} BA_\beta   \]
-%% or
-%% \[\left(\sum_{k = 0}^{n-1} {n \choose k}  \left(\sum_{\beta \in 2^k} x^\beta A^\beta\right)  M_{n-k}\right) (x_0A + x_1B)
-%% + \sum_{\beta\in 2^n} x_0^{k_0(\beta)}x_1^{k_1(\beta)} A_\beta B  \]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Second Lemma}
-There's another important one about differentiation. It's
-\[ e^{-A} {d\over dx} e^A = A' + {1\over 2} [A', A] + {1 \over 3!} [[A', A], A] + \cdots\]
+Next we want to categorify the fact that
+\[ e^{-G} {d\over dx} e^G = D + {1\over 2} [D, G] + {1 \over 3!} [[D, G], G] + \cdots\]
+For any $G(x)$ that produces an operator given a scalar $x$, where $D = (d/dx)G$.
+We first generalize by replacing $G$ with $Gy$. We get
+\[ e^{-Gy} {d\over dx} e^{Gy} = yD + {y^2\over 2} [D, G] + {y^3 \over 3!} [[D, G], G] + \cdots\]
+Multiply both sides on the left by $e^{Gy}$ to obtain
+\[  {d\over dx} e^{Gy} = e^{Gy} \left(Dy + {y^2\over 2} [D, G] + {y^3 \over 3!} [[D, G], G] + \cdots\right)\]
 
-I'm going to generalize to
-\[ e^{-yA} {d\over dx} e^{yA} = yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\]
-and rearrange
-\[  {d\over dx} e^{yA} = e^{yA} \left(yA' + {y^2\over 2} [A', A] + {y^3 \over 3!} [[A', A], A] + \cdots\right)\]
-and just give the name $D = A'$ to be more visually clear, so this is
-\[  {d\over dx} e^{yA} = e^{yA} \left(yD + {y^2\over 2} [D, A] + {y^3 \over 3!} [[D, A], A] + \cdots\right)\]
-and make the definitions
-\[ M_1 = D \qquad M_{m+1} = [M_m, A]\]
-or equivalently require (in a more type-theory compatible fashion) that
-\[ M_0 = 0 \qquad M_1 = D \qquad M_{m+1} + A M_m = M_m A\]
-so that this is
-\[  {d\over dx} e^{yA} = e^{yA} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right)\]
+Make the definitions
+\[ M_1 = D \qquad M_{m+1} = [M_m, G]\]
+Foreshadowing the desire to express constraints on relations rather than operators, this is equivalent
+to requiring
+\[ M_0 = 0 \qquad M_1 = D \qquad M_{m+1} + G M_m = M_m G\]
+The equation we're trying to show now becomes
+\[  {d\over dx} e^{Gy} = e^{Gy} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right)\]
 
 Now let's also define $S_m$ to be the $m$-term sum of $m-1$ iterates
-of $A$ with a $D$ somewhere in the middle.
-\[ (DA\cdots A) + (AD\cdots A) + \cdots + (A\cdots DA) + (A\cdots AD)\]
+of $G$ with a $D$ somewhere in the middle.
+\[ (DG\cdots G) + (GD\cdots G) + \cdots + (G\cdots DG) + (G\cdots GD)\]
 So that
-\[ {d\over dx}e^{yA} = {d\over dx}\left(yA + {y^2\over 2!}A^2 + {y^3\over 3!}A^3 + \cdots\right)\]
-\[= \left(yD + {y^2\over 2!}(DA + AD) + {y^3\over 3!}(DAA + ADA + AAD) + \cdots\right)\]
+\[ {d\over dx}e^{Gy} = {d\over dx}\left(1 + Gy + {y^2\over 2!}G^2 + {y^3\over 3!}G^3 + \cdots\right)\]
+\[= \left(yD + {y^2\over 2!}(DG + GD) + {y^3\over 3!}(DGG + GDG + GGD) + \cdots\right)\]
 \[= \left(yS_1 + {y^2\over 2!}S_2 + {y^3\over 3!}S_3 + \cdots\right)\]
 \[= \sum_{m=0}^\infty {y^m\over m!}S_m \]
 So what we want to show is
-
-\[ \sum_{m=0}^\infty {y^m\over m!}S_m = e^{yA} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right) \]
-and it would suffice to show
-\[ S_n = \sum_{k = 0}^n {n \choose k} A^k M_{n-k} \]
+\[ \sum_{m=0}^\infty {y^m\over m!}S_m = e^{Gy} \left(\sum_{m=0}^\infty {y^m\over m!} M_m \right) \]
+By differentiating this expression by $y$ on both sides $n$ times, we see that it would suffice to show
+\[ S_n = \sum_{k = 0}^n {n \choose k} G^k M_{n-k} \]
 for every $n$.
 
 \begin{lemma}
-Suppose $A$ is a relation and
-\[  M_1 = D \qquad M_{n+1} + A M_n = M_n A\]
-\[  S_1 = D \qquad S_{n+1} = A^n D + S_n A \]
-then for every $n \ge 0$ we have
-\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \]
+Suppose $G$ is a binary relation on a set $X$ and there exist sequences
+ $(M_i)_{i \ge 1}$ and $(S_i)_{i\ge 1}$ of binary relations on $X$ satisfying the isomorphisms
+\[  M_1 = D \qquad M_{n+1} + G M_n = M_n G\]
+\[  S_1 = D \qquad S_{n+1} = G^n D + S_n G \]
+Then for every $n \ge 0$ we have an isomorphism
+\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} G^k M_{n-k} \]
 \end{lemma}
 
 \begin{proof}
 The base case is $n=1$. We must show $S_1 = M_1$, but this is true by definition.
 Otherwise, we know
-\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \]
+\[ S_n = \sum_{k = 0}^{n-1} {n \choose k} G^k M_{n-k} \]
 and try to show
-\[ S_{n+1} = \sum_{k = 0}^{n} {{n+1} \choose k} A^k M_{{n+1}-k} \]
+\[ S_{n+1} = \sum_{k = 0}^{n} {{n+1} \choose k} G^k M_{{n+1}-k} \]
 We show this as follows:
-\[ S_{n+1} = A^n D + S_n A   \]
-\[ = A^n D + \left(\sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} \right)A \]
-\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n-k} A \]
-\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k (M_{n+1-k} + A M_{n-k})  \]
-\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n+1-k} + \sum_{k = 0}^{n-1} {n \choose k} A^{k+1} M_{n-k}  \]
-\[ = A^n D + \sum_{k = 0}^{n-1} {n \choose k} A^k M_{n+1-k} + \sum_{k = 1}^{n} {n \choose k - 1} A^{k} M_{n+1-k}  \]
-\[ = A^n D + \left(M_{n+1} +  \sum_{k = 1}^{n-1} {n \choose k} A^k M_{n+1-k}\right)
- +\left(nA^nD + \sum_{k = 1}^{n-1} {n \choose k - 1} A^{k} M_{n+1-k} \right) \]
-\[ = A^n D + M_{n+1} + nA^nD + \sum_{k = 1}^{n-1} \left({n \choose k}+{n \choose k - 1}\right) A^k M_{n+1-k}\]
-\[ = A^n D + M_{n+1} + nA^nD + \sum_{k = 1}^{n-1} {n+1 \choose k} A^k M_{n+1-k} \]
-\[ = (n+1)A^nD + \sum_{k = 0}^{n-1} {n+1 \choose k} A^k M_{n+1-k} \]
-\[ = \sum_{k = 0}^{n} {n+1 \choose k} A^k M_{n+1-k} \]
+\[ S_{n+1} = G^n D + S_n G   \]
+\[ = G^n D + \left(\sum_{k = 0}^{n-1} {n \choose k} G^k M_{n-k} \right)G \]
+\[ = G^n D + \sum_{k = 0}^{n-1} {n \choose k} G^k M_{n-k} G \]
+\[ = G^n D + \sum_{k = 0}^{n-1} {n \choose k} G^k (M_{n+1-k} + G M_{n-k})  \]
+\[ = G^n D + \sum_{k = 0}^{n-1} {n \choose k} G^k M_{n+1-k} + \sum_{k = 0}^{n-1} {n \choose k} G^{k+1} M_{n-k}  \]
+\[ = G^n D + \sum_{k = 0}^{n-1} {n \choose k} G^k M_{n+1-k} + \sum_{k = 1}^{n} {n \choose k - 1} G^{k} M_{n+1-k}  \]
+\[ = G^n D + \left(M_{n+1} +  \sum_{k = 1}^{n-1} {n \choose k} G^k M_{n+1-k}\right)
+ +\left(nG^nD + \sum_{k = 1}^{n-1} {n \choose k - 1} G^{k} M_{n+1-k} \right) \]
+\[ = G^n D + M_{n+1} + nG^nD + \sum_{k = 1}^{n-1} \left({n \choose k}+{n \choose k - 1}\right) G^k M_{n+1-k}\]
+\[ = G^n D + M_{n+1} + nG^nD + \sum_{k = 1}^{n-1} {n+1 \choose k} G^k M_{n+1-k} \]
+\[ = (n+1)G^nD + \sum_{k = 0}^{n-1} {n+1 \choose k} G^k M_{n+1-k} \]
+\[ = \sum_{k = 0}^{n} {n+1 \choose k} G^k M_{n+1-k} \]
 as required. \cqed
 \end{proof}
 
-\subsection{Combining the Above Results}
+\subsection{Combining Lemmas}
 
-We want to find a $G$, depending on $x$, such that
-
-\[e^{-xB} e^{-xA}   {d\over dx} e^{xA} e^{xB} = e^{-G} {d\over dx} e^{G}  \]
-the lhs is equal to
-\[e^{-xB} e^{-xA}   (A e^{xA} e^{xB} +  e^{xA}B  e^{xB}) \]
-\[= e^{-xB} A e^{xB} +  B  \]
-\[= B + e^{-xB} A e^{xB}  \]
-\[= B + A + [-xB, A] + [-xB, [-xB, A]]/2! + [-xB,[-xB,[-xB,A]]]/3! + \cdots  \]
-\[= B + A + [A, B]x + [[A, B], B]{x^2\over 2!} + [[[A,B], B], B]{x^3\over3!} + \cdots  \]
-and if $G = xG_1 + x^2G_2 + x^3G_3 + \cdots$, then the rhs is equal to
-\[ G' +  [G', G]{1\over 2!} +  [[G', G], G]{1 \over 3!} + \cdots\]
-Noting that
-\[G = xG_1 + x^2G_2 + x^3G_3 + x^4G_4 + x^5G_5 + \cdots\]
-\[G' = G_1 + 2xG_2 + 3x^2G_3 + 4x^3G_4 + 5x^4G_5 + \cdots\]
-\[G'G =  x(G_1G_1) + x^2(2G_2G_1 + G_1G_2)\]
+We want to find $G$ such that
+\[ e^{A}e^{B} = e^{G}\]
+Mehen's approach is to observe that it would be enough to find a
+\[G(x) = \sum_{n \ge 1} x^n G_n\]
+satisfying
+\[e^{-Bx} e^{-Ax}   {d\over dx} e^{Ax} e^{Bx} = e^{-G(x)} {d\over dx} e^{G(x)}  \]
+By the above lemmas, the lhs of this is equal to
+\[e^{-Bx} e^{-Ax}   (A e^{Ax} e^{Bx} +  e^{Ax}B  e^{Bx}) \]
+\[= e^{-Bx} A e^{Bx} +  B  \]
+\[= B + e^{-Bx} A e^{Bx}  \]
+\[= B + A + [A, B]x + [[A, B], B] x^2/2 + [[[A,B],B],B]x^3/3! + \cdots \]
+and the rhs is
+\[ D +  [D, G]{1\over 2!} +  [[D, G], G]{1 \over 3!} + \cdots\]
+where $D = (d/dx)G$. Noting that
+\[D = G_1 + 2xG_2 + 3x^2G_3 + 4x^3G_4 + 5x^4G_5 + \cdots\]
+\[DG =  x(G_1G_1) + x^2(2G_2G_1 + G_1G_2)\]
 \[ + x^3(3G_3G_1 + 2G_2G_2 + G_1G_3) \]
 \[ + x^4(4G_4G_1 + 3G_3G_2 + 2G_2G_3 + G_1G_4) + \cdots\]
-\[GG' =  x(G_1G_1) + x^2(2G_1G_2 + G_2G_1)\]
+\[GD =  x(G_1G_1) + x^2(2G_1G_2 + G_2G_1)\]
 \[ + x^3(3G_1G_3 + 2G_2G_2 + G_3G_1) \]
 \[ + x^4(4G_1G_4 + 3G_2G_3 + 2G_3G_2 + G_4G_1) + \cdots \]
-\[ [G',G]{1\over 2!} = {1\over 2!}(x[G_1,G_1] +  x^2(2[G_2,G_1] + [G_1,G_2])\]
+\[ [D,G]{1\over 2!} = {1\over 2!}(x[G_1,G_1] +  x^2(2[G_2,G_1] + [G_1,G_2])\]
 \[ + x^3(3[G_3,G_1] + 2[G_2,G_2] + [G_1,G_3]) \]
 \[ + x^4(4[G_4,G_1] + 3[G_3,G_2] + 2[G_2,G_3] + [G_1,G_4]) + \cdots)\]
-\[ [G',G] =  x^2[G_2,G_1]  + 2x^3[G_3,G_1]  + x^4(3[G_4,G_1] + [G_3,G_2] ) + \cdots\]
+\[ [D,G] =  x^2[G_2,G_1]  + 2x^3[G_3,G_1]  + x^4(3[G_4,G_1] + [G_3,G_2] ) + \cdots\]
 
 \[G = xG_1 + x^2G_2 + x^3G_3 + x^4G_4 + x^5G_5 + \cdots\]
-\[ [[G',G],G] =  x^3[[G_2,G_1],G_2]  + x^4(2[[G_3,G_1],G_1] + [[G_2,G_1],G_2]) \]
+\[ [[D,G],G] =  x^3[[G_2,G_1],G_2]  + x^4(2[[G_3,G_1],G_1] + [[G_2,G_1],G_2]) \]
 \[ + x^5(3[[G_4,G_1],G_1] + [[G_3,G_2],G_1] + 2[[G_3,G_1],G_2] + [[G_2,G_1],G_3] ) + \cdots\]
 
 
 \[G = \sum_{n = 1}^\infty x^n G_n\]
-\[G' = \sum_{n = 1}^\infty nx^{n-1} G_n\]
-\[[G', G] = \sum_{n = 2}^\infty \sum_{i+j = n} ix^{n-1} [G_i,  G_j]\]
+\[D = \sum_{n = 1}^\infty nx^{n-1} G_n\]
+\[[D, G] = \sum_{n = 2}^\infty \sum_{i+j = n} ix^{n-1} [G_i,  G_j]\]
 
 
-\[\sum_{k=0}^\infty {1\over(k+1)!}[[G', \overbrace{G]\cdots G}^k] = \]
+\[\sum_{k=0}^\infty {1\over(k+1)!}[[D, \overbrace{G]\cdots G}^k] = \]
 \[\sum_{k=0}^\infty {1\over(k+1)!}\sum_{n = k}^\infty \sum_{\lambda, \lambda_1,\ldots,\lambda_k \prov n} \lambda x^{n-1} [[G_{\lambda}, G_{\lambda_1} ]\cdots  G_{\lambda_k}]\]
 
 \[\sum_{n = 1}^\infty x^{n-1} \sum_{k=0}^\infty {1\over(k+1)!} \sum_{\lambda, \lambda_1,\ldots,\lambda_k \prov n} \lambda  [[G_{\lambda}, G_{\lambda_1} ]\cdots  G_{\lambda_k}]\]

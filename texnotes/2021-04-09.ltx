@@ -1,0 +1,484 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+\def\lol{\multimap}
+
+\usepackage{bm}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\newcommand{\sqdiamond}[1][fill=black]{\tikz [x=1.2ex,y=1.85ex,line width=.1ex,line join=round, yshift=-0.285ex] \draw  [#1]  (-0.25,.5) -- (0.5,1) -- (1.25,.5) -- (.5,0) --  cycle;}%
+\newcommand{\dia}[1][fill=black]{\mathop{\raisebox{-0.275ex}{$\sqdiamond[#1]$}}}
+\def\bx{\square}
+
+%\usepackage{wasysym}
+%\usepackage{stmaryrd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.95,1,0.8}
+\definecolor{lgray}{rgb}{0.95,0.95,1.0}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{mred}{rgb}{0.9,0.1,0.1}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\x{\times}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\ep{\varepsilon}
+\def\Top{\mathbf{Top}}
+\def\TopR{\mathbf{TopR}}
+\def\bcase{\mathop\mathbf{case}}
+\def\bof{\mathop\mathbf{of}}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bif{\mathrel\mathbf{if}}
+\def\bthen{\mathrel\mathbf{then}}
+\def\belse{\mathrel\mathbf{else}}
+\def\bfix{\mathrel\mathbf{fix}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\grad{\nabla}
+\def\uups{{\Uparrow}}
+\def\ddns{{\Downarrow}}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+%\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\K{\mathbf{K}}
+\def\M{\mathbf{M}}
+\def\T{\mathbf{T}}
+\def\Set{\mathbf{Set}}
+\def\D{\mathcal{D}}
+\def\E{\mathcal{E}}
+\def\F{\mathcal{F}}
+\def\op{\mathsf{op}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\rworld{\mathrm{world}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+\def\lerp#1#2#3{#1[\![#2,#3]\!]}
+\def\nope{\emptyset}
+\def\ep{\varepsilon}
+\def\rng{\mathop\mathrm{rng}}
+\def\npart{\not\!\partial}
+\def\null{\emptyset}
+\def\xx{{\bf x}}
+\def\yy{{\bf y}}
+\def\ps{\wp}
+\def\ox{\otimes}
+\def\tri{\triangleright}
+\def\wat{\mathrel{@}}
+\def\pprov{\Vdash}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Blob Logic}
+
+\subsection{Syntax}
+\[
+\begin{tabular}{r@{$\quad$}c@{$\quad::=\quad$ }l}
+   Polarities&$i$&$0 \celse 1$\\
+   Propositions&$P^i$&$1^i \celse P^i \ox^i P^i\celse \bigcirc^i P^{\bar i} \celse a^i $\\
+   Worlds&$u^i$&$u$\\
+   Unres Contexts&$\Gamma$&$\cdot\celse \Gamma, u^i : \rworld^i\celse \Gamma, v\tri w$\\
+   Linear Contexts&$\Delta^i$&$\cdot\celse \Delta, P^i[u^i]$\\
+\end{tabular}
+\]
+where conventionally
+\[\dia = \bigcirc^0 \qquad \bx = \bigcirc^1\]
+\[A = P^0 \qquad B = P^1\]
+\[v = u^0 \qquad w = u^1\]
+We drop superscripts when they're inferrable from context.
+
+\subsection{Sequent Calculus}
+The judgment is $\Gamma;\Delta \prov P[u]$. We use $J$  to abbreviate a generic conclusion $P[u]$.
+\[
+\erule{}{\Gamma;a[u] \prov a[u]}
+\]
+\[
+\erule{\Gamma; \Delta_1 \prov P_1[u] \qquad \Gamma;\Delta_2\prov P_2[u]}{\Gamma;\Delta_1, \Delta_2 \prov P_1 \ox P_2[u]}
+\qquad
+\erule{\Gamma; \Delta, P[u], Q[u] \prov J}{\Gamma; \Delta, P\ox Q[u] \prov J}
+\]
+\[
+\erule{}{\Gamma;\cdot \prov 1[u]}
+\qquad
+\erule{\Gamma; \Delta \prov J}{\Gamma; \Delta, 1[u] \prov J}
+\]
+\[
+\erule{\Gamma, v : \rworld, v\tri w;\Delta \prov  A[v]}{\Gamma;\Delta \prov \bx A[w]}
+\qquad
+\erule{v\tri w \in \Gamma \qquad \Gamma;\Delta, A[v] \prov  J}{\Gamma;\Delta, \bx A[w] \prov J}
+\]
+\[
+\erule{ v\tri w \in \Gamma  \qquad \Gamma;\Delta \prov   B[w]}{\Gamma;\Delta  \prov \dia B[v]}
+\qquad
+\erule{\Gamma, w : \rworld, v\tri w;\Delta, B[w] \prov J}{\Gamma;\Delta,\dia B[v] \prov  J}
+\]
+
+\subsection{Translation into First-Order Linear Logic}
+We suppose the existence of first-order linear logic with two sorts of first-order variables $\rworld^0$
+and $\rworld^1$, and a relation symbol on $\rworld^0 \x \rworld^1$ named $\tri$, written infix.
+The translation on contexts goes
+\[ \cdot^* = \cdot \]
+\[ (\Delta, P[u])^* = \Delta^*, P \wat u\]
+and on propositions is defined by
+\[ (\bx A) \wat w = \forall v . !(v\tri w) \lol (A \wat v) \]
+\[ (\dia B) \wat v = \exists w.  !(v \tri w)  \ox (B  \wat w) \]
+\[ (P_1 \ox P_2) \wat u = (P_1 \wat u) \ox (P_2 \wat u) \]
+\[ 1 \wat u = 1 \]
+\[ a \wat u = a(u) \]
+
+\begin{lemma}
+$\Gamma ; \Delta \prov J$ if and only if $\Gamma; \Delta^* \prov J^*$.
+\end{lemma}
+
+\begin{proof}
+By induction on derivations.
+\cqed
+\end{proof}
+
+\subsection{Axiomatization}
+For each $i\in \{0,1\}$, a preorder $P^i \le^i Q^i$ on propositions of polarity $i$
+can be given inductively by the rules
+(writing $\equiv$ for when $\le$ and $\ge$ both hold)
+
+\[
+\bx A_1 \ox \bx A_2 \le \bx (A_1 \ox A_2)
+\qquad
+1 \le \bx 1
+\qquad  \dia \bx A \le A
+\]
+\[
+\dia (B_2 \ox B_2) \le \dia B_1 \ox \dia B_2
+\qquad
+\dia 1 \le 1
+\qquad  B \le \bx  \dia B
+\]
+\[ P \ox 1 \equiv P \qquad
+P_1 \ox P_2 \equiv P_2 \ox P_1
+\qquad
+\erule
+{P_1 \le Q_1 \qquad P_2 \le Q_2}
+{P_1 \ox P_2 \le Q_1 \ox Q_2}
+\]
+\[ (P_1 \ox P_2) \ox P_3 \equiv P_1 \ox (P_2 \ox P_3)
+\qquad
+\erule
+{P \le Q}
+{\bigcirc P \le \bigcirc Q}
+\]
+closing under reflexivity and transitivity.
+
+\begin{lemma}
+If $P \le Q$, then $u : \rworld ; P[u] \prov Q[u]$.
+\end{lemma}
+
+\begin{proof}
+We need only show this holds for all the axioms of $\le$, the rest follows by cut.
+For example, $b \le \bx \dia b$ can be proven
+
+\[
+\erule
+{
+\[
+\[
+\justifies
+ b [w] \prov    b[w]
+\]
+\justifies
+ v: \rworld, v\tri w; b [w] \prov   \dia b[v]\]
+}
+{w:\rworld; b[w] \prov \bx\dia b [w]}\]
+\cqed
+\end{proof}
+
+To prove the converse, let's define another judgment-esque relation
+\[\Gamma;\Delta\pprov P^i[u^i]\]
+by the right rules (tweaking box to be synchronous)
+\[
+\erule{}{\Gamma;P[u] \pprov P[u]}
+\]
+\[
+\erule{\Gamma; \Delta_1 \pprov P_1[u] \qquad \Gamma;\Delta_2\pprov P_2[u]}{\Gamma;\Delta_1, \Delta_2 \pprov P_1 \ox P_2[u]}
+\qquad
+\erule{}{\Gamma;\cdot \pprov 1[u]}
+\]
+\[
+\erule{v \tri w \in \Gamma \qquad \Gamma;\Delta \pprov  A[v]}{\Gamma;\Delta \pprov \bx A[w]}
+\qquad
+\erule{ v\tri w \in \Gamma  \qquad \Gamma;\Delta \pprov   B[w]}{\Gamma;\Delta  \pprov \dia B[v]}
+\]
+
+
+Then I think I proceed like so
+\begin{lemma}
+If $\Gamma;\Delta \pprov P[u]$ and $\Gamma;\Delta \pprov Q[u]$, then $P\equiv Q$.
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+Suppose we have derivations $\D_j :: \Gamma;\Delta_j \prov P_j[u_j]$ for every $j \in \{1,\ldots,n\}$, and
+\[ \E ::  \Gamma; \Delta_1, \ldots, \Delta_n \pprov Q[u] \]
+\[ \F ::\Gamma; P_1[u_1], \ldots, P_n[u_n] \pprov P[u] \]
+then
+\[ Q \le P \]
+\end{lemma}
+
+\begin{proof}
+By induction on the total size of the derivations $\D_j :: \Gamma;\Delta_j \prov P_j[u_j]$.
+
+\begin{itemize}
+\item[Case:]
+Suppose for every $j$ that $\D_j$ is of the form
+\[
+\erule{}{\Gamma;a_j[u_j] \prov a_j[u_j]}
+\]
+then
+\[ \E ::  \Gamma; a_1[u_1], \ldots, a_n[u_n] \pprov Q[u] \]
+\[ \F ::\Gamma; a_1[u_1], \ldots, a_n[u_n] \pprov P[u] \]
+Appeal to previous lemma.
+
+\item[Case:]
+There is some derivation $\D_j$ that ends with
+\[
+\erule{\Gamma; \Delta'_1 \prov P'_1[u_j] \qquad \Gamma;\Delta'_2\prov P'_2[u_j]}
+{\Gamma;\Delta'_1, \Delta'_2 \prov P'_1 \ox P'_2[u_j]}
+\]
+So $\Delta_j = \Delta'_1, \Delta'_2$ and $P_j = P'_1 \ox P'_2$. In this case we already have a derivation
+\[ \E ::  \Gamma; \Delta_1, \ldots, \Delta'_1, \Delta'_2, \ldots, \Delta_n \pprov Q[u] \]
+and we can obtain from $\F$ a derivation
+\[ \F' ::\Gamma; P_1[u_1], \ldots, P'_1 [u_j], P'_2[u_j], \ldots, P_n[u_n] \pprov P[u] \]
+by cutting in $P'_1 [u_j], P'_2[u_j]$ for $P_j[u_j]$,
+so we can use the i.h. to conclude $Q \le P$.
+
+\item[Case:]
+There is some derivation $\D_j$ that ends with
+\[
+\erule{\Gamma; \Delta', P'[u'], Q'[u'] \prov P_j[u_j]}{\Gamma; \Delta, P'\ox Q'[u'] \prov P_j[u_j]}
+\]
+So $\Delta_j = \Delta', P'\ox Q'[u']$. In this case we already have a derivation
+\[ \F ::\Gamma; P_1[u_1], \ldots, P_j [u_j], \ldots, P_n[u_n] \pprov P[u] \]
+and we can obtain from $\E$ a derivation
+\[ \E' ::  \Gamma; \Delta_1, \ldots, \Delta', P'[u'], Q'[u'], \ldots, \Delta_n \pprov Q[u] \]
+by cutting in $P'[u'], Q'[u']$ for $P \ox Q [u']$,
+so we can use the i.h. to conclude $Q \le P$.
+\item[Case:]
+There is some derivation $D_j$ that ends with one of
+\[
+\erule{}{\Gamma;\cdot \prov 1[u]}
+\qquad
+\erule{\Gamma; \Delta \prov J}{\Gamma; \Delta, 1[u] \prov J}
+\]
+These cases proceed analogously.
+
+\item[Case:]
+There is some derivation $D_j$ that ends with
+\[
+\erule{\Gamma, v : \rworld, v\tri u_j;\Delta_j \prov  A[v]}{\Gamma;\Delta_j \prov \bx A[u_j]}
+\]
+This means $P_j = \bx A$. We have
+\[ \E ::  \Gamma; \Delta_1, \ldots, \Delta_n \pprov Q[u] \]
+\[ \F ::\Gamma; P_1[u_1], \ldots, \bx A[u_j],\ldots P_n[u_n] \pprov P[u] \]
+and we have to come up with
+\[ \E' ::  \Gamma, v:\rworld, v\tri u_j ; \Delta_1, \ldots, \Delta_n \pprov Q[u] \]
+\[ \F' ::\Gamma, v:\rworld, v\tri u_j ; P_1[u_1], \ldots, A[v], \ldots, P_n[u_n] \pprov P[u] \]
+I can reuse $\E' = \E$, and obtain $\F'$ from $\F$ by cut.
+
+\end{itemize}
+
+
+
+\[
+\erule{v\tri w \in \Gamma \qquad \Gamma;\Delta, A[v] \prov  J}{\Gamma;\Delta, \bx A[w] \prov J}
+\]
+\[
+\erule{ v\tri w \in \Gamma  \qquad \Gamma;\Delta \prov   B[w]}{\Gamma;\Delta  \prov \dia B[v]}
+\qquad
+\erule{\Gamma, w : \rworld, v\tri w;\Delta, B[w] \prov J}{\Gamma;\Delta,\dia B[v] \prov  J}
+\]
+
+If we need to peel off a terminal proof using the init rule, it's easy:
+appeal to the induction hypothesis, and tack on the variable to both sides of the tree.
+
+The tensor (and 1) rules are extremely easy, they just shuffle around
+the shape of the same proof obligation.
+
+The $\bx$ and $\dia$ asynchronous rules are similarly easy. They don't actually affect
+the tree shape, but just rename parts of it.
+
+The $\bx$ and $\dia$ synchronous rules are where the real core of the proof is.
+\cqed
+\end{proof}
+
+\begin{corollary}
+If  $u ;P[u] \prov Q[u]$, then $P \le Q$.
+\end{corollary}
+
+\section{A Little Language for Circuits}
+Here's an expression language:
+\[
+\begin{tabular}{r@{$\quad$}ccl}
+   Types&$\tau$&$\quad::=\quad$ &$\B \celse \prod_i \tau_i $\\
+   Expressions&$e$&$\quad::=\quad$ &$\pi_i e \celse \langle {\vec e} \rangle\celse {\bfix x = e_1 \bin e_2} \celse$\\
+&&&$\ 1 \celse 0 \celse {\bif e_1 \bthen e_2 \belse e_3}$\\
+\end{tabular}
+\]
+It has some standard typing rules like
+\[
+\erule
+{\Gamma \prov e_1 : \B \qquad \Gamma\prov e_2 : \tau \qquad \Gamma\prov e_3 : \tau}
+{\Gamma \prov {\bif e_1 \bthen e_2 \belse e_3} : \tau}
+\]
+
+\[
+\erule
+{\Gamma, x : \tau_1 \prov e_1 : \tau_1 \qquad  \Gamma, x : \tau_1 \prov e_2 : \tau_2}
+{\Gamma \prov {\bfix x =  e_1 \bin e_2}: \tau_2}
+\]
+
+\def\elab{\rightsquigarrow}
+And I want to define a sort of elaboration phase by judgments
+\[ \Gamma \prov e : \tau \elab \tau'\]
+\[ \Gamma \prov e : \tau \elab_1 s. e'\]
+\[ \Gamma \prov e : \tau \elab_2 s.e'\]
+
+such that
+
+\[
+\erule
+{\Gamma \prov e : \tau \elab \tau' \qquad \Gamma \prov e : \tau \elab_1 s.e'}
+{\Gamma, s : \tau' \prov e' : \tau'}
+\]
+\[
+\erule
+{\Gamma \prov e : \tau \elab \tau' \qquad \Gamma \prov e : \tau \elab_2 s.e'}
+{\Gamma, s : \tau' \prov e' : \tau}
+\]
+
+Let's try to write some rules that capture these elaboration judgments.
+
+\[
+\erule
+{\Gamma \prov e_1 : \B\elab\tau_1 \qquad \Gamma\prov e_2 : \tau\elab\tau_2 \qquad \Gamma\prov e_3 : \tau\elab\tau_3}
+{\Gamma \prov {\bif e_1 \bthen e_2 \belse e_3} : \tau \elab \tau_1 \x \tau_2 \x \tau_3}
+\]
+
+\[
+\erule
+{\Gamma \prov e_1 : \B\elab_1s.e_1' \qquad \Gamma\prov e_2 : \tau\elab_1s.e_2' \qquad \Gamma\prov e_3 : \tau\elab_1s.e_3'}
+{\Gamma \prov {\bif e_1 \bthen e_2 \belse e_3} : \tau \elab_1 s.\langle[\pi_1 s / s]e'_1, [\pi_2 s / s]e'_2, [\pi_3 s / s]e'_3\rangle}
+\]
+
+\[
+\erule
+{\Gamma \prov e_1 : \B\elab_2s.e_1' \qquad \Gamma\prov e_2 : \tau\elab_2s.e_2' \qquad \Gamma\prov e_3 : \tau\elab_2s.e_3'}
+{\Gamma \prov {\bif e_1 \bthen e_2 \belse e_3} : \tau \elab_2 s.\bif [\pi_1s/s]e'_1 \bthen [\pi_2s/s]e'_2 \belse [\pi_3s/s]e'_3\rangle}
+\]
+and for fix it'd be like
+
+\[
+\erule
+{\Gamma, x : \tau_1 \prov e_1 : \tau_1\elab \tau_1' \qquad \Gamma, x : \tau_1 \prov e_2 : \tau_2\elab \tau_2' }
+{\Gamma \prov {\bfix x =  e_1 \bin e_2 } : \tau_2 \elab   \tau_1 \x \tau_1' \x \tau_2' }
+\]
+
+
+\[
+\erule
+{ \Gamma, x : \tau_1 \prov e_1 : \tau_1\elab_2s.e_1''\qquad \Gamma, x : \tau_1 \prov e_1 : \tau_1\elab_1s.e_1' \qquad \Gamma, x : \tau_1 \prov e_2 : \tau_2\elab_1s.e_2'}
+{\Gamma \prov {\bfix x =  e_1 \bin e_2 } : \tau_2 \elab_1 s. \langle [\pi_1 s /x, \pi_2 s / s]e_1'', [\pi_1 s / x, \pi_2 s / s]e_1' , [\pi_1 s / x, \pi_3 s / s]e_2'\rangle}
+\]
+
+\[
+\erule
+{ \Gamma, x : \tau_1 \prov e_2 : \tau_2\elab_2s.e_2' }
+{\Gamma \prov {\bfix x =  e_1 \bin e_2 } : \tau_2 \elab_2 s.[\pi_1 s / x, \pi_3 s / s]  e_2'}
+\]
+
+\subsection{Existentials}
+
+Another way of thinking about this is defining the type operator
+\[\lx \tau = \Sigma (S : *) . S \to S \x \tau\]
+and then observing that we can interpret $\Gamma \prov e : \tau$ as
+if it's really saying $\Gamma \prov e : \lx \tau$.
+
+Which is to say we can show that `$\lx$ified' versions of our typing rules are admissible.
+We could say
+\[ (\bif e_1 \bthen e_2 \belse e_3)^* = \]
+\[\langle (\pi_1 e_1^* \x  \pi_1 e_2^*\x \pi_1 e_3^*), \lambda \langle x_1x_2x_3\rangle . \]
+\[ \blet \pair{s_1}{e_1'} = (\pi_2 e_1^*) x_1 \bin\]
+\[ \blet \pair{s_2}{e_2'} = (\pi_2 e_2^*) x_2 \bin\]
+\[ \blet \pair{s_3}{e_3'} = (\pi_2 e_3^*) x_3 \bin\]
+\[ \pair {\langle s_1s_2s_3\rangle} {\bif e'_1 \bthen e'_2 \belse e'_3\rangle}\]
+then observe that
+\[
+\erule
+{\Gamma \prov e^*_1 : \lx \B \qquad \Gamma\prov e^*_2 : \lx\tau \qquad \Gamma\prov e^*_3 : \lx\tau}
+{\Gamma \prov  (\bif e_1 \bthen e_2 \belse e_3)^* : \lx\tau}
+\]
+
+but this is just sort of a reassociation of the earlier development.
+
+Is this properly monadic? I think it might be.
+
+I can make $\eta$:
+\[ \eta : \tau \to \lx \tau = \lambda x . \pair \top {\lambda \underline\ . \pair {\langle\rangle} x } \]
+and I can almost make $\mu$, but I get stuck about here:
+\[ \mu : \lx\lx\tau \to \lx \tau = \lambda x .  \blet \pair{S_1}{f} = x\]
+I don't know that the first component of the (inner) $\Sigma$ {\em
+  doesn't} depend on the (outer) input $S$. How do I express that?
+Or do I need to?
+
+The point of $\mu$ is that it lets me compose Kleisli arrows. But can I do that directly in this case?
+Suppose I have $f : A \to \lx B$ and $g : B \to \lx C$. Ahh, I see, that's the point. I don't want
+to interpret $\Gamma \prov e : \tau$ as $\Gamma \prov e : \lx \tau$ at all, because that implies that the
+type in the $\Sigma$ might depend on $\Gamma$. I want it instead to be something like
+\[ \Sigma (S : *) . S \to  \Gamma \to S \x \tau \]
+And if I did have
+\[ \pair{S_1}{f} : \Sigma (S_1 : *) . S_1 \to A \to S_1 \x B \]
+\[ \pair{S_2}{g} : \Sigma (S_2 : *) . S_2 \to B \to S_2 \x C \]
+then I could make
+\[ \pair{S_1 \x S_2}{g \star f} : \Sigma (S : *) . S \to A \to S \x C \]
+if I define
+\[(g \star f)((s_1, s_2), a) = {\blet (s_1',b) = f(s_1, a) \bin}\]
+\[ \blet (s_2',c) = g(s_2,b) \bin  \pair {(s_1', s_2')} {c}\]
+\end{document}
