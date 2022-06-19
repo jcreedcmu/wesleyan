@@ -67,10 +67,17 @@ function getRecs(n) {
   return {posrec, negrec};
 }
 
-function go(m) {
+function recurrenceG(m) {
   const n = m - 1;
   const {posrec, negrec} = getRecs(n);
-  console.log(`${factorial(n+1)}G_{${n+1}} + ${pretty(posrec)} = L_{${n}} + ${pretty(negrec)}`.replace(/\+/g, '+\n'));
+  return `${factorial(n+1)}G_{${n+1}} + ${pretty(posrec)} = L_{${n}} + ${pretty(negrec)}`;
 }
 
-go(4);
+for (let i = 2; i < 5; i++) {
+  console.log(recurrenceG(i)
+              .replace(/ \+ 1 /g, ' + ')
+              .replace(/ \+  =/g, ' =')
+              .replace(/ \+ $/g, '')
+              .replace(/[{}]/g, '')
+             );
+}
