@@ -411,6 +411,28 @@ Let's work out the next few.
 \[ 6G_3 + G_{21}  = L_2 + G_{12} \qquad \hbox {(net)}\]
 \[ 24G_4 + \cdots = L_3 + \cdots\]
 Probably want to write some code for this.
+
+%% function comps(n) {
+%%   if (n <= 0) return [[]];
+%%   let rv = [];
+%%   for (let i = 1; i <= n; i++) {
+%%     rv = [...rv, ...comps(n-i).map(c => [...c, i])];
+%%   }
+%%   return rv;
+%% }
+
+%% function perms(comp, sgn) {
+%%   if (comp.length == 1) {
+%%     return sgn == 1 ? [comp] : [];
+%%   }
+%%   const prefix = comp.slice(0, comp.length - 1);
+%%   const last = comp[comp.length - 1];
+%%   return [
+%%     ...perms(prefix, -sgn).map(perm => [last, ...perm]),
+%%     ...perms(prefix, sgn).map(perm => [...perm, last]),
+%%   ];
+%% }
+
 \vskip 1in
 \vfil\eject
 
