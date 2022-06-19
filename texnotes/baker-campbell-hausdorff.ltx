@@ -243,6 +243,51 @@ We show this as follows:
 as required. \cqed
 \end{proof}
 
+\subsection{Conjectures}
+
+This is the most up-to-date rephrasing of ``The Lemma'' below as of 2022-06-09.
+
+Define
+\[(A \oplus B)^n = \sum_{k = 0}^n {n \choose k} A^k B^{n-k}\]
+ \[G_{[\lambda_0,\ldots, \lambda_{k-1}]} = [[G_{\lambda_0}, G_{\lambda_1} ]\cdots  G_{\lambda_{k-1}}]\]
+ \[G_{\lambda_0,\ldots, \lambda_{k-1}} = G_{\lambda_0} G_{\lambda_1} \cdots  G_{\lambda_{k-1}}\]
+
+
+\begin{lemma}
+Let relations $A, B$ be given. Suppose I have $L_0, L_1, L_2, \ldots$ such that
+\[L_0 = A; \qquad L_{n+1} + BL_n = L_nB \qquad (n \ge 1)\]
+
+\[ L_n = \sum_{k = 1}^{n}\sum_{\lambda : k, n+1}
+  {\lambda_0 n! \over k!}  G_{[\lambda]} \eqno(\dagger)\]
+Then
+\[ (A \oplus B)^n = \sum_{\lambda : (k,n)} {n!\over k!}  G_\lambda\]
+(i.e. ``$ e^{xA}e^{xB} = e^{G(x)}$'')
+\end{lemma}
+
+To refine this, I want to understand $G_{[\lambda]}$ better. I think I can
+define \[S^\sigma_{n} = \sum_{k=2}^n \sum_{\lambda :(k, n+1)} \sum_{\rho \in M^\sigma (\lambda)} {\lambda_0 n!\over k!} G_{\rho}\]
+
+and replace $(\dagger)$ with
+\[  (n+1)!G_{n+1} + S^+_{n} = L_n + S^-_{n}  \qquad (n \ge 1)\eqno(\ddagger)\]
+
+But in another direction I think I convinced myself once that
+\begin{lemma}
+\[  \sum_{\lambda : (k, n)} G_{[\lambda]}\lambda_0
+  = \sum_{\lambda : (k, n)}   G_\lambda\sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+\end{lemma}
+which means
+
+\begin{corollary}
+\[  \sum_{k = 1}^{n}\sum_{\lambda : (k, n+1)} { n! \over k!}G_{[\lambda]}\lambda_0
+  = \sum_{k = 1}^{n} \sum_{\lambda : (k, n+1)}  { n! \over k!} G_\lambda\sum_{i=0}^{k-1} (-1)^i{k-1 \choose i}\lambda_i\]
+\end{corollary}
+
+So I could keep $(\ddagger)$ but replace the definition of $S$ with
+\[S^\sigma_{n} = \sum_{k = 1}^{n} \sum_{\lambda : (k, n+1)}  { n! \over k!} G_\lambda\sum_{i=0}^{k-1} [(-1)^i = \sigma]{k-1 \choose i}\lambda_i\]
+
+
+
+
 \subsection{Combining Lemmas}
 
 We want to find $G$ such that
