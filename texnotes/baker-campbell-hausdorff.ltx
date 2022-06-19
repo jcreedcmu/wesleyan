@@ -259,7 +259,81 @@ By the above lemmas, the lhs of this is equal to
 and the rhs is
 \[ D +  [D, G]{1\over 2!} +  [[D, G], G]{1 \over 3!} + \cdots\]
 where $D = (d/dx)G$. Noting that
+\[G = xG_1 + x^2G_2 + x^3G_3 + x^4G_4 + x^5G_5 + \cdots\]
 \[D = G_1 + 2xG_2 + 3x^2G_3 + 4x^3G_4 + 5x^4G_5 + \cdots\]
+we can write out what the rhs looks like in somewhat more detail, in terms of commutators of the individual $G_i$.
+
+\[\mathsf{rhs} = G_1 + 2xG_2 + 3x^2G_3+ {\cdots} + {}\]
+\[  [G_1 + 2xG_2 + 3x^2G_3+ \cdots, xG_1 + x^2G_2 + x^3G_3 + \cdots] / 2! + {}\]
+\[  [[G_1 + 2xG_2 + 3x^2G_3+ \cdots, xG_1 + x^2G_2 + x^3G_3 + \cdots], xG_1 + x^2G_2 + \cdots] / 3! + \]
+\[ \cdots\]
+so here's what we're going to do:
+\begin{enumerate}
+\item collect terms together of like degree in $x$
+\item define $G_{[ij\cdots k]}$ to be $[[\cdots [G_i,G_j],\cdots],G_k]$
+\item define $R_{n+1} = (\partial / \partial x)^{n} \mathsf{rhs} \adjust_{x=0}$
+and $L_{n+1} = (\partial / \partial x)^{n} \mathsf{lhs} \adjust_{x=0}$ and observe
+$L_n = R_n$.
+\item ignore $G_{[11\cdots 1]}$ because they're always zero.
+\end{enumerate}
+We get:
+\[A + B = G_1\]
+\[L_1 = [A,B] = 2G_{2}\]
+\[L_2 = [L_1, B] = 6G_3 + G_{[12]} + 2G_{[21]} \]
+\[L_3 = [L_2, B] = 24G_4 + 3G_{[13]}  + 6G_{[22]} + 9G_{[31]} + G_{[112]} + G_{[121]} + 2G_{[211]}\]
+\[L_4 = [L_3, B] = 120G_5 + 12G_{[14]} + 24G_{[23]} + 36G_{[32]} + 48G_{[41]} + {}\]
+\[ 4G_{[113]} + 4G_{[131]} + 12G_{[311]} + 4G_{[122]} + 8G_{[221]} + 8G_{[212]} + {}\]
+\[ G_{[1112]} + G_{[1121]} + G_{[1211]} + 2G_{[2111]} \]
+
+When $\lambda_1,\ldots,\lambda_k$ satisfy
+\begin{itemize}
+\item $\forall i . \lambda_i \ge 1$
+\item $n = \sum_i \lambda_i$
+\end{itemize}
+we write $\lambda : (k, n)$.
+
+In general I think what the above is saying is that
+\[ A + B = G_1 \]
+\[  L_n = \sum_{k = 1}^{n}\sum_{\lambda : (k, n+1)} {\lambda_1 n! \over k!}  G_{[\lambda]} \]
+
+We can rearrange this to emphasize $G_{n+1}$:
+
+\[  (n+1)!G_{n+1} = L_n - \sum_{k = 2}^{n}\sum_{\lambda : (k, n+1)} {\lambda_1 n! \over k!}  G_{[\lambda]}   \]
+
+The recurrences I should have are
+
+\[L_0 = A \qquad L_{n+1} + BL_n = L_nB \]
+\[G_{[\lambda n]} + G_nG_{[\lambda]} = G_{[\lambda]} G_n\]
+
+Let's define $H_{[\lambda]} = -G_{[\lambda]}$ when $|\lambda| \ge 2$, then we have the
+``definitions'' of $G_i$ and $L_i$ and $H_{[\lambda]}$:
+
+\[  (n+1)!G_{n+1} = L_n + \sum_{k = 2}^{n}\sum_{\lambda : (k, n+1)} {\lambda_1 n! \over k!}  H_{[\lambda]}   \]
+\[L_0 = A \qquad L_{n+1} + BL_n = L_nB \]
+\[H_{[\lambda n]} + G_nH_{[\lambda]} =  H_{[\lambda]} G_n  \qquad (|\lambda| \ge 2)\]
+\[H_{[m n]} + G_{m} G_n = G_nG_{m} \]
+
+Now if we define
+\[ (A \oplus B)^n = \sum_{i=0^n}{n\choose i} A^i B^{n-i} \]
+we should expect
+\[ (A \oplus B)^n = \left({\partial \over \partial x}\right)^n e^{xG_1 + x^2G_2 + x^3G_3 + \cdots }\]
+e.g. defining $G_{ijk} = G_iG_jG_k$ I get
+\[ (A + B) = G_1 \]
+\[ (A \oplus B)^2 = G_{11} + 2G_2 \]
+\[ (A \oplus B)^3 = G_{111} + 3G_{21} + 3G_{12} + 6G_3 \]
+\[ (A \oplus B)^4 = G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + 12G_{31} + 12G_{22} + 12G_{13} + 24G_4 \]
+Let's see which of these I can show.
+\begin{itemize}
+\item[$n=1$.]
+Trivial.
+\item[$n=2$.]
+We have $G_1^2 = AA + AB + BA + BB$ and $2G_2 = L_1$. So clearly $AA + AB + BA + BB + L_1 = AA + 2AB + BB$ as required.
+\end{itemize}
+\vskip 1in
+\vfil\eject
+
+
+
 \[DG =  x(G_1G_1) + x^2(2G_2G_1 + G_1G_2)\]
 \[ + x^3(3G_3G_1 + 2G_2G_2 + G_1G_3) \]
 \[ + x^4(4G_4G_1 + 3G_3G_2 + 2G_2G_3 + G_1G_4) + \cdots\]
