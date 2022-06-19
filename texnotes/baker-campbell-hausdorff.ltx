@@ -328,6 +328,20 @@ Let's see which of these I can show.
 Trivial.
 \item[$n=2$.]
 We have $G_1^2 = AA + AB + BA + BB$ and $2G_2 = L_1$. So clearly $AA + AB + BA + BB + L_1 = AA + 2AB + BB$ as required.
+\item[$n=3$.]
+Let's first look at $6G_3$. We know that's equal to
+\[L_2 + \sum_{\lambda:(2, 3)} \lambda_1 H_{[\lambda]}
+= L_2 + 2H_{[21]} + H_{[12]}
+\]
+Let's try to use up these $H$'s. I reckon these will turn our $3G_{21}+3G_{12}$ into $2G_{21} + 4G_{12}$.
+I can evaluate that to $LA + LB + 2AL + 2BL$. Now I want to use the $L_2$ to turn this into
+$LA + 2LB + 2AL + BL$.
+This is finally the right set of ingredients to turn
+\[G_1^3 = AAA + AAB + ABA + ABB + BAA + BAB + BBA + BBB\]
+into
+\[AAA + 3AAB + 3ABB + BBB\]
+as required.
+
 \end{itemize}
 \vskip 1in
 \vfil\eject
