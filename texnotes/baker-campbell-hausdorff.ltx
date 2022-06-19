@@ -341,8 +341,76 @@ This is finally the right set of ingredients to turn
 into
 \[AAA + 3AAB + 3ABB + BBB\]
 as required.
-
+\item[$n=4$.]
+Let's first look at $24G_4$. We know that's equal to
+\[L_3 + \sum_{k = 2}^3 \sum_{\lambda:(k, 4)} {\lambda_1 3!\over k!} H_{[\lambda]}
+= L_3 + \sum_{\lambda:(2, 4)} {3\lambda_1} H_{[\lambda]}
++ \sum_{\lambda:(3, 4)} {\lambda_1} H_{[\lambda]}
+\]
+\[
+= L_3 + \sum_{\lambda:(2, 4)} {3\lambda_1} H_{[\lambda]}
++ \sum_{\lambda:(3, 4)} {\lambda_1} H_{[\lambda]}
+\]
+\[
+= L_3 + 3H_{[13]}  + 6H_{[22]} + 9H_{[31]} + H_{[112]} + H_{[121]} + 2H_{[211]}
+\]
+The remainder of the stuff we have to act on is
+\[ G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + 12G_{31} + 12G_{22} + 12G_{13}\]
+Oof I'm kind of anxious about those $H_{[112]}$ with three digits. Can I reduce it to actions
+on multiplied $G$'s?
+\[ H_{[112]} = -[[G_1, G_1], G_2] = 0 \]
+\[ H_{[121]} = -[[G_1, G_2], G_1] = -H_{[211]} \]
+so in this case I can ignore them but that's a tiny bit suspect.
+What I have now is
+\[ = L_3 + 3H_{[13]} + 9H_{[31]}\]
+acting on
+\[ G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + 12G_{31} + 12G_{22} + 12G_{13}\]
+I know that $H_{[mn]}$ swaps $G_{m}G_{n}$ so what I have now is
+\[ G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + 6G_{31} + 12G_{22} + 18G_{13}\]
+Let's expand out the definitions of $G_3$.
+\[ G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + {}\]
+\[(L_2 + 2H_{[21]} + H_{[12]})G_1 + 12G_{22} + 3G_1 (L_2 + 2H_{[21]} + H_{[12]})\]
+and simplify for net effect:
+\[ G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + {}\]
+\[(L_2 + H_{[21]})G_1 + 12G_{22} + 3G_1 (L_2 + H_{[21]})\]
+Let's use up those $H_{[21]}$ now:
+\[ G_{1111} + 7G_{112} + 2G_{121} + 3G_{211} + {}\]
+\[L_2 G_1 + 12G_{22} + 3G_1 L_2 \]
+Now what do the $L_2$'s do? $L_2 + BL_1 = L_1B$.
+So
+\[L_2G_1 + BL_1G_1 = L_1BG_1\]
+\[3G_1L_2 + 3G_1BL_1 = 3G_1L_1B\]
+which means we compute... ugh this seems wrong. I don't trust these odd numbers.
 \end{itemize}
+
+\subsection{More Sandbox}
+I need to rework the definition
+\[  (n+1)!G_{n+1} = L_n - \sum_{k = 2}^{n}\sum_{\lambda : (k, n+1)} {\lambda_1 n! \over k!}  G_{[\lambda]}   \]
+to capture both the $G$-products that $G_{n+1}$ creates and destroys.
+
+Suppose $\lambda = \lambda_1, \ldots,\lambda_k$ is a sequence. We define $\lambda \to^{\sigma} \rho$ for
+$\sigma \in \{+,-\}$like so.
+
+\[
+\erule{}{n \to^+ n}
+\qquad
+\erule{\lambda \to^\sigma \rho}{\lambda n \to^{\sigma} \rho n}
+\quad
+\erule{\lambda \to^\sigma \rho}{\lambda n \to^{-\sigma} n \rho }
+\]
+So for example $abc \to^+ abc, cba$ and $abc \to^- bac, cab$.
+
+Define
+\[S^\sigma_{n} = \sum_{k=2}^n \sum_{\lambda :(k, n+1)} \sum_{\rho \leftarrow^\sigma \lambda} {\lambda_1 n!\over k!} G_{\rho}\]
+Then we can assert more explicit recurrence defining the $G_n$ as
+\[ G_1 = A+B \]
+\[  (n+1)!G_{n+1} + S^+_{n} = L_n + S^-_{n}  \qquad (n \ge 1)\]
+Let's work out the next few.
+\[ 2G_2 = L_1 \]
+\[ 6G_3 + 2G_{21} + G_{12} = L_2 + 2G_{12} + G_{21}\]
+\[ 6G_3 + G_{21}  = L_2 + G_{12} \qquad \hbox {(net)}\]
+\[ 24G_4 + \cdots = L_3 + \cdots\]
+Probably want to write some code for this.
 \vskip 1in
 \vfil\eject
 
