@@ -7,17 +7,6 @@ function comps(n) {
   return rv;
 }
 
-function perms(comp, sgn) {
-  if (comp.length == 1) {
-    return sgn == 1 ? [comp] : [];
-  }
-  const prefix = comp.slice(0, comp.length - 1);
-  const last = comp[comp.length - 1];
-  return [
-    ...perms(prefix, -sgn).map(perm => [last, ...perm]),
-    ...perms(prefix, sgn).map(perm => [...perm, last]),
-  ];
-}
 
 function factorial(n) {
   if (n <= 1) return 1;
@@ -31,8 +20,8 @@ function choose(n, k) {
 function recordOfTerms(terms) {
   const rv = {};
   terms.forEach(term => {
-    const {coeff, perm} = term;
-    const k = perm.map(n => 'G' + n).join('*');
+    const {coeff, prod} = term;
+    const k = prod.map(n => 'G' + n).join('*');
     rv[k] = (rv[k] ?? 0) + coeff;
   });
   return rv;
@@ -40,7 +29,7 @@ function recordOfTerms(terms) {
 
 function pretty(rec) {
   return Object.entries(rec).map(([k,v]) => {
-    return `${v} {${k}}`;
+    return `${v} ${k}`;
   }).join(' + ');
 }
 
@@ -54,7 +43,7 @@ function getRecs(n) {
     function getTerms(c, sgn) {
       const rv = [];
       for (let i = 0; i < k; i++) {
-        if (i % 2 == sgn) rv.push({perm: c, coeff: nk * choose(k-1, i) * c[i]});
+        if (i % 2 == sgn) rv.push({prod: c, coeff: nk * choose(k-1, i) * c[i]});
       }
       return rv;
     }
@@ -70,14 +59,113 @@ function getRecs(n) {
 function recurrenceG(m) {
   const n = m - 1;
   const {posrec, negrec} = getRecs(n);
-  return `${factorial(n+1)}G${n+1} + ${pretty(posrec)} = L{${n}} + ${pretty(negrec)}`;
+  return `${factorial(n+1)}G${n+1} + ${pretty(posrec)} = L${n} + ${pretty(negrec)}`;
 }
 
-for (let i = 2; i < 5; i++) {
-  console.log(recurrenceG(i)
-              .replace(/ \+ 1 /g, ' + ')
-              .replace(/ \+  =/g, ' =')
-              .replace(/ \+ $/g, '')
-              .replace(/[{}]/g, '')
-             );
+function filterZeros(rec) {
+  return Object.fromEntries(Object.entries(rec).filter(([k,v]) => v != 0));
 }
+
+function addRecs(r1, r2) {
+  const rv = {};
+  for (const k of Object.keys(r1)) {
+    rv[k] = (rv[k] ?? 0) + r1[k];
+  }
+  for (const k of Object.keys(r2)) {
+    rv[k] = (rv[k] ?? 0) + r2[k];
+  }
+  return filterZeros(rv);
+}
+
+function subRecs(r1, r2) {
+  const rv = {};
+  for (const k of Object.keys(r1)) {
+    rv[k] = (rv[k] ?? 0) + r1[k];
+  }
+  for (const k of Object.keys(r2)) {
+    rv[k] = (rv[k] ?? 0) - r2[k];
+  }
+  return rv;
+}
+
+function ruleG(m) {
+  if (m == 1) return {src: {'G1': 1}, dst:{ 'A' : 1, 'B': 1}};
+  const n = m - 1;
+  const {posrec, negrec} = getRecs(n);
+  posrec[`G${m}`] = factorial(m);
+  negrec[`L${n}`] = 1;
+  return  {src:  posrec, dst: negrec};
+}
+
+// f : string → string
+function srec(f, rec) {
+  const rv = {};
+  for (const k of Object.keys(rec)) {
+    rv[f(k)] = rec[k];
+  }
+  return rv;
+}
+
+
+function ruleprod(rr1, rr2) {
+  return {src: recprod(rr1.src, rr2.src),
+          dst: recprod(rr1.dst, rr2.dst)};
+}
+
+function rulesprod(f, r) {
+  return {src: srec(f, r.src),
+          dst: srec(f, r.dst)};
+}
+
+function recprod(r1, r2) {
+  const rv = {};
+  for (const k1 of Object.keys(r1)) {
+    for (const k2 of Object.keys(r2)) {
+      rv[`${k1}*${k2}`] = r1[k1] * r2[k2];
+    }
+  }
+  return rv;
+}
+
+function net(rule) {
+  return subRecs(rule.dst, rule.src);
+}
+
+function initialState(n) {
+  const cs = comps(n);
+  const terms = cs.map(c => ({coeff: factorial(n) / factorial(c.length), prod: c}));
+  return recordOfTerms(terms);
+}
+
+function ruleL(n) {
+  const prev = n == 1 ? 'A' : `L${n-1}`;
+  return {src: {[`L${n}`]: 1, [`B*${prev}`]: 1}, dst: {[`${prev}*B`]: 1 }};
+}
+
+console.log(recurrenceG(3));
+let state = initialState(3);
+state = addRecs(state, net(ruleG(3)) );
+state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
+state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*G1`, ruleG(2)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
+state = addRecs(state, net(rulesprod( x => `L1*${x}`, ruleG(1)) ));
+state = addRecs(state, net(ruleL(2) ));
+state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*A`, ruleL(1)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
+state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
+state = addRecs(state, net(rulesprod( x => `B*${x}`, ruleL(1)) ));
+state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
+state = addRecs(state, net(ruleprod(ruleG(1), ruleprod(ruleG(1), ruleG(1)))) );
+console.log(state);
+
+// for (let i = 2; i < 5; i++) {
+//   console.log(recurrenceG(i)
+//               .replace(/ \+ 1 /g, ' + ')
+//               .replace(/ \+  =/g, ' =')
+//               .replace(/ \+ $/g, '')
+//               .replace(/[{}]/g, '')
+//              );
+// }
