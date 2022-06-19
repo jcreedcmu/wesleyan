@@ -98,10 +98,10 @@ function ruleG(m) {
 }
 
 // f : string → string
-function srec(f, rec) {
+function srec(f, rec, nn=1) {
   const rv = {};
   for (const k of Object.keys(rec)) {
-    rv[f(k)] = rec[k];
+    rv[f(k)] = rec[k]*nn;
   }
   return rv;
 }
@@ -112,9 +112,9 @@ function ruleprod(rr1, rr2) {
           dst: recprod(rr1.dst, rr2.dst)};
 }
 
-function rulesprod(f, r) {
-  return {src: srec(f, r.src),
-          dst: srec(f, r.dst)};
+function rulesprod(f, r, nn=1) {
+  return {src: srec(f, r.src, nn),
+          dst: srec(f, r.dst, nn)};
 }
 
 function recprod(r1, r2) {
@@ -142,30 +142,70 @@ function ruleL(n) {
   return {src: {[`L${n}`]: 1, [`B*${prev}`]: 1}, dst: {[`${prev}*B`]: 1 }};
 }
 
-console.log(recurrenceG(3));
-let state = initialState(3);
-state = addRecs(state, net(ruleG(3)) );
-state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
-state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*G1`, ruleG(2)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
-state = addRecs(state, net(rulesprod( x => `L1*${x}`, ruleG(1)) ));
-state = addRecs(state, net(ruleL(2) ));
-state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*A`, ruleL(1)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
-state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
-state = addRecs(state, net(rulesprod( x => `B*${x}`, ruleL(1)) ));
-state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
-state = addRecs(state, net(ruleprod(ruleG(1), ruleprod(ruleG(1), ruleG(1)))) );
-console.log(state);
+// Proof of n=3 case
+// console.log(recurrenceG(3));
+// let state = initialState(3);
+// state = addRecs(state, net(ruleG(3)) );
+// state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
+// state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*G1`, ruleG(2)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
+// state = addRecs(state, net(rulesprod( x => `L1*${x}`, ruleG(1)) ));
+// state = addRecs(state, net(ruleL(2) ));
+// state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*A`, ruleL(1)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
+// state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
+// state = addRecs(state, net(rulesprod( x => `B*${x}`, ruleL(1)) ));
+// state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
+// state = addRecs(state, net(ruleprod(ruleG(1), ruleprod(ruleG(1), ruleG(1)))) );
+// console.log(state);
+console.log(recurrenceG(4));
+let state = initialState(4);
+const steps = [
+  // G4
+  ruleG(4),
+  // G3
+  rulesprod( x => `G1*${x}`, ruleG(3), 3),
+  rulesprod( x => `${x}*G1`, ruleG(3)),
+  // G2
+  rulesprod( x => x, ruleprod( ruleG(2), ruleG(2)), 3),
+  rulesprod( x => `${x}*G1*G1`, ruleG(2), 1),
+  rulesprod( x => `G1*${x}*G1`, ruleG(2), 2),
+  rulesprod( x => `G1*G1*${x}`, ruleG(2), 3),
+  // G1
+  ruleprod(ruleprod(ruleG(1), ruleG(1)), ruleprod(ruleG(1), ruleG(1))),
+  rulesprod( x => `L1*${x}`, ruleprod(ruleG(1), ruleG(1)) ),
+  ruleprod(ruleG(1), rulesprod( x => `L1*${x}`, ruleG(1), 2 )),
+  rulesprod( x => `${x}*L1`, ruleprod(ruleG(1), ruleG(1)), 3 ),
+  rulesprod( x => `${x}*L2`, ruleG(1), 3),
+  rulesprod( x => `L2*${x}`, ruleG(1), 1),
+  // L3
+  ruleL(3),
+  // L2
+  rulesprod( x => `${x}*A`, ruleL(2)),
+  rulesprod( x => `${x}*B`, ruleL(2), 2),
+  rulesprod( x => `A*${x}`, ruleL(2), 3),
+  rulesprod( x => `B*${x}`, ruleL(2), 2),
+  // L1
+  rulesprod(x=>x, ruleprod(ruleL(1), ruleL(1)), 3),
+  // Everything past this point is a little suspect; we head into the negatives.
+  rulesprod( x =>   `${x}*A*A`, ruleL(1), 1),
+  rulesprod( x =>   `${x}*A*B`, ruleL(1), 1),
+  rulesprod( x =>   `${x}*B*B`, ruleL(1), 1),
+  rulesprod( x =>   `A*${x}*A`, ruleL(1), 2),
+  rulesprod( x =>   `A*${x}*B`, ruleL(1), 3),
+  rulesprod( x =>   `B*${x}*A`, ruleL(1), 1),
+  rulesprod( x =>   `A*A*${x}`, ruleL(1), 3),
+  rulesprod( x =>   `B*B*${x}`, ruleL(1), 1),
+  rulesprod( x =>   `B*${x}*B`, ruleL(1), 2),
+  rulesprod( x =>   `${x}*B*B`, ruleL(1), 2),
+  rulesprod( x =>   `A*${x}*B`, ruleL(1), 2),
+  rulesprod( x =>   `${x}*B*A`, ruleL(1), -1),
+]
+for (const step of steps) {
+  state = addRecs(state, net(step) );
+}
 
-// for (let i = 2; i < 5; i++) {
-//   console.log(recurrenceG(i)
-//               .replace(/ \+ 1 /g, ' + ')
-//               .replace(/ \+  =/g, ' =')
-//               .replace(/ \+ $/g, '')
-//               .replace(/[{}]/g, '')
-//              );
-// }
+console.log(state);
