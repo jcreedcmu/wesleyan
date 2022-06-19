@@ -388,20 +388,19 @@ I need to rework the definition
 \[  (n+1)!G_{n+1} = L_n - \sum_{k = 2}^{n}\sum_{\lambda : (k, n+1)} {\lambda_1 n! \over k!}  G_{[\lambda]}   \]
 to capture both the $G$-products that $G_{n+1}$ creates and destroys.
 
-Suppose $\lambda = \lambda_1, \ldots,\lambda_k$ is a sequence. We define $\lambda \to^{\sigma} \rho$ for
-$\sigma \in \{+,-\}$like so.
+Suppose $\lambda = \lambda_1, \ldots,\lambda_k$ is a sequence. We define $M^\sigma(\lambda)$
+to be a multiset of sequences for $\sigma \in \{+,-\}$ like so.
 
 \[
-\erule{}{n \to^+ n}
-\qquad
-\erule{\lambda \to^\sigma \rho}{\lambda n \to^{\sigma} \rho n}
-\quad
-\erule{\lambda \to^\sigma \rho}{\lambda n \to^{-\sigma} n \rho }
+M^+(n) = \{n\} \qquad M^-(n) = \emptyset
 \]
-So for example $abc \to^+ abc, cba$ and $abc \to^- bac, cab$.
+\[
+M^\sigma(\lambda n) = \{ \rho n \st \rho \in M^\sigma(\lambda)\} \cup \{ n \rho  \st \rho \in M^{-\sigma}(\lambda)\}
+\]
+So for example $M^+(abc) = \{abc, cba\}$ and $M^-(abc) =  \{bac, cab\}$.
 
 Define
-\[S^\sigma_{n} = \sum_{k=2}^n \sum_{\lambda :(k, n+1)} \sum_{\rho \leftarrow^\sigma \lambda} {\lambda_1 n!\over k!} G_{\rho}\]
+\[S^\sigma_{n} = \sum_{k=2}^n \sum_{\lambda :(k, n+1)} \sum_{\rho \in M^\sigma (\lambda)} {\lambda_1 n!\over k!} G_{\rho}\]
 Then we can assert more explicit recurrence defining the $G_n$ as
 \[ G_1 = A+B \]
 \[  (n+1)!G_{n+1} + S^+_{n} = L_n + S^-_{n}  \qquad (n \ge 1)\]
@@ -409,9 +408,43 @@ Let's work out the next few.
 \[ 2G_2 = L_1 \]
 \[ 6G_3 + 2G_{21} + G_{12} = L_2 + 2G_{12} + G_{21}\]
 \[ 6G_3 + G_{21}  = L_2 + G_{12} \qquad \hbox {(net)}\]
-\[ 24G_4 + \cdots = L_3 + \cdots\]
-Probably want to write some code for this.
+I wrote some code to compute the following:
+\[24G_{4} + 3 G_{13} + 6 G_{22} + 9 G_{31} + 3 G_{112} + 2 G_{121} + 3 G_{211} =\]
+\[ L_{3} + 9 G_{13} + 6 G_{22} + 3 G_{31} + 2 G_{112} + 4 G_{121} + 2 G_{211}\]
+\[24G_{4} + 6 G_{31} +  G_{112} +  G_{211} =  L_{3} + 6 G_{13} + 2 G_{121} \qquad\hbox{(net)}\]
 
+Going back to the $n=4$ case I have
+\[ (A \oplus B)^4 = G_{1111} + 4G_{112} + 4G_{121} + 4G_{211} + 12G_{31} + 12G_{22} + 12G_{13} + 24G_4 \]
+and using up the $G_4$ I get
+\[  G_{1111} + 3G_{112} + 6G_{121} + 3G_{211} + 6G_{31} + 12G_{22} + 18G_{13} + L_3 \]
+Let's try the $G_{3}$ now.
+\[ G_{1111} + 6G_{112} + 4G_{121} + 2G_{211} + L_2G_{1} + 12G_{22} + 3G_{1}L_2 + L_3 \]
+Looking better than before! Let's try the $L_3$.
+\[ G_{1111} + 6G_{112} + 4G_{121} + 2G_{211} + 12G_{22} + L_2A + 3 AL_2 + 2BL_2 + 2L_2B  \]
+Ok, let's try the $G_2$s. They turn into $L_1$s dividing by two.
+\[ G_{1111} + 3G_{11L} + 2G_{1L1} + G_{L11} + 3L_1L_1 + L_2A + 3 AL_2 + 2BL_2 + 2L_2B  \]
+I have to expand out some of these $G_1$'s I guess.
+\[ G_{1111} + 3(A+B)^2L_1 + 2(A+B)L_1(A+B) + L_1(A+B)^2 + {}\]
+\[ 3L_1L_1 + L_2A + 3 AL_2 + 2BL_2 + 2L_2B  \]
+which is
+\[ G_{1111} + 3AAL + 3ABL + 3BAL + 3BBL +{}\]
+\[  2ALA + 2ALB + 2BLA + 2BLB + {}\]
+\[  LAA + LAB + LBA + LBB + {}\]
+\[ 3L_1L_1 + L_2A + 3 AL_2 + 2BL_2 + 2L_2B  \]
+Let's see what I can do with the $L_2$s. They should each move a $B$ to the right across an $L_1$.
+\[ G_{1111} + 3AAL +  3BAL + BBL + 2BLB + {}\]
+\[  2ALA + 5ALB + BLA + {}\]
+\[  LAA + LAB + 2LBA + 3LBB + {}\]
+\[ 3LL    \]
+I'ma take a leap of faith and assume the $LL$ applies to $BAL$ even though I have no way of being sure:
+\[ G_{1111} + 3AAL +  3ABL + BBL + 2BLB + {}\]
+\[  2ALA + 5ALB + BLA + {}\]
+\[  LAA + LAB + 2LBA + 3LBB \]
+Let's see what happens to $G_{1111}$.
+
+Grr... I didn't turn out right.
+
+% L_2 : BL →  LB
 %% function comps(n) {
 %%   if (n <= 0) return [[]];
 %%   let rv = [];
@@ -432,6 +465,41 @@ Probably want to write some code for this.
 %%     ...perms(prefix, sgn).map(perm => [...perm, last]),
 %%   ];
 %% }
+
+%% function factorial(n) {
+%%   if (n <= 1) return 1;
+%%   return n * factorial(n-1);
+%% }
+
+%% function pretty(terms) {
+%%   const rv = {};
+%%   terms.forEach(term => {
+%%     const {coeff, perm} = term;
+%%     const k = perm.join(''); // not valid if numbers > 9!
+%%     rv[k] = (rv[k] ?? 0) + coeff;
+%%   });
+
+%%   return Object.entries(rv).map(([k,v]) => {
+%%     return `${v} G_{${k}}`;
+%%   }).join(' + ');
+%% }
+
+%% function go(m) {
+%%   const n = m - 1;
+%%   const cs = comps(n+1);
+%%   let posTerms = [];
+%%   let negTerms = [];
+%%   for (let k = 2; k <= n; k++) {
+%%     const csk = cs.filter(c => c.length == k); // compositions of k parts, adding to n+1
+%%     const nk = factorial(n) / factorial(k);
+%%     posTerms = [...posTerms, ...csk.flatMap(c => perms(c,  1).map(perm => ({coeff: c[0] * nk, perm})))];
+%%     negTerms = [...negTerms, ...csk.flatMap(c => perms(c, -1).map(perm => ({coeff: c[0] * nk, perm})))];
+
+%%   }
+%%   console.log(`${factorial(n+1)}G_{${n+1}} + ${pretty(posTerms)} = L_{${n}} + ${pretty(negTerms)}`);
+%% }
+
+%% go(4);
 
 \vskip 1in
 \vfil\eject
