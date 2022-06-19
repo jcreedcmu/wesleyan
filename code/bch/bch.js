@@ -32,7 +32,7 @@ function recordOfTerms(terms) {
   const rv = {};
   terms.forEach(term => {
     const {coeff, perm} = term;
-    const k = perm.join(''); // not valid if numbers > 9!
+    const k = perm.map(n => 'G' + n).join('*');
     rv[k] = (rv[k] ?? 0) + coeff;
   });
   return rv;
@@ -40,7 +40,7 @@ function recordOfTerms(terms) {
 
 function pretty(rec) {
   return Object.entries(rec).map(([k,v]) => {
-    return `${v} G_{${k}}`;
+    return `${v} {${k}}`;
   }).join(' + ');
 }
 
@@ -70,7 +70,7 @@ function getRecs(n) {
 function recurrenceG(m) {
   const n = m - 1;
   const {posrec, negrec} = getRecs(n);
-  return `${factorial(n+1)}G_{${n+1}} + ${pretty(posrec)} = L_{${n}} + ${pretty(negrec)}`;
+  return `${factorial(n+1)}G${n+1} + ${pretty(posrec)} = L{${n}} + ${pretty(negrec)}`;
 }
 
 for (let i = 2; i < 5; i++) {
