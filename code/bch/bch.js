@@ -236,6 +236,37 @@ const steps5a = [
   rulesprod( x => `G1*${x}`, ruleprod(ruleG(2), ruleG(2)), 4),
 ];
 
+const steps6a = [
+  // G6
+  ruleG(6),
+  // G5
+  rulesprod( x => `G1*${x}`, ruleG(5), 5), // negative already?
+  rulesprod( x => `${x}*G1`, ruleG(5)),
+  // G4
+  rulesprod( x => `${x}*G1*G1`, ruleG(4), 1),
+  rulesprod( x => `G1*${x}*G1`, ruleG(4), 4),
+  rulesprod( x => `G1*G1*${x}`, ruleG(4), 10), // positive again?
+  rulesprod( x => x, ruleprod( ruleG(4), ruleG(2)), 5), // negative again
+  rulesprod( x => x, ruleprod( ruleG(2), ruleG(4)), 10), // still negative
+
+  rulesprod( x =>  `${x}*G1*G1*G1`, ruleG(3), 1),
+  rulesprod( x =>  `G1*${x}*G1*G1`, ruleG(3), 3),
+  rulesprod( x =>  `${x}*G2*G1`, ruleG(3), -2),
+  rulesprod( x =>  `G2*${x}*G1`, ruleG(3), 2),
+  rulesprod( x =>  `${x}*G1*G2`, ruleG(3), -15),
+  rulesprod( x =>  `G1*${x}*G2`, ruleG(3), 15),
+  rulesprod( x =>  `G1*G2*${x}`, ruleG(3), 20),
+  rulesprod( x =>  `G2*G1*${x}`, ruleG(3), -20),
+
+  rulesprod( x =>  `G1*G1*${x}*G1`, ruleG(3), 6),
+  rulesprod( x =>  `G1*G1*G1*${x}`, ruleG(3), 10),
+  rulesprod( x =>  `L1*${x}*G1`, ruleG(3), 5),
+  rulesprod( x =>  `L1*G1*${x}`, ruleG(3), 15),
+
+  rulesprod( x =>  x, ruleprod(ruleG(3), ruleG(3)), 10),
+
+];
+
 function doSteps(n, steps) {
    let state = initialState(n);
     for (const step of steps) {
@@ -264,7 +295,8 @@ function prefixes() {
   const things = [[2,steps2a],
                   [3,steps3a],
                   [4,steps4a],
-                  [5,steps5a]];
+                  [5,steps5a],
+                  [6,steps6a]];
   things.forEach(([n, steps]) => {
     console.log(doSteps(n, steps));
   });
