@@ -142,28 +142,32 @@ function ruleL(n) {
   return {src: {[`L${n}`]: 1, [`B*${prev}`]: 1}, dst: {[`${prev}*B`]: 1 }};
 }
 
-// Proof of n=3 case
-// console.log(recurrenceG(3));
-// let state = initialState(3);
-// state = addRecs(state, net(ruleG(3)) );
-// state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
-// state = addRecs(state, net(rulesprod( x => `G1*${x}`, ruleG(2)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*G1`, ruleG(2)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*L1`, ruleG(1)) ));
-// state = addRecs(state, net(rulesprod( x => `L1*${x}`, ruleG(1)) ));
-// state = addRecs(state, net(ruleL(2) ));
-// state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*A`, ruleL(1)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
-// state = addRecs(state, net(rulesprod( x => `A*${x}`, ruleL(1)) ));
-// state = addRecs(state, net(rulesprod( x => `B*${x}`, ruleL(1)) ));
-// state = addRecs(state, net(rulesprod( x => `${x}*B`, ruleL(1)) ));
-// state = addRecs(state, net(ruleprod(ruleG(1), ruleprod(ruleG(1), ruleG(1)))) );
-// console.log(state);
-console.log(recurrenceG(4));
-let state = initialState(4);
-const steps = [
+const steps2a = [
+  ruleG(2),
+]
+
+const steps3a = [
+  ruleG(3),
+  rulesprod( x => `G1*${x}`, ruleG(2)),
+  rulesprod( x => `G1*${x}`, ruleG(2)),
+  rulesprod( x => `${x}*G1`, ruleG(2)),
+]
+const steps3b = [
+  rulesprod( x => `${x}*L1`, ruleG(1)),
+  rulesprod( x => `${x}*L1`, ruleG(1)),
+  rulesprod( x => `L1*${x}`, ruleG(1)),
+  ruleL(2) ,
+  rulesprod( x => `A*${x}`, ruleL(1)) ,
+  rulesprod( x => `${x}*A`, ruleL(1)) ,
+  rulesprod( x => `${x}*B`, ruleL(1)) ,
+  rulesprod( x => `A*${x}`, ruleL(1)) ,
+  rulesprod( x => `B*${x}`, ruleL(1)) ,
+  rulesprod( x => `${x}*B`, ruleL(1)) ,
+  ruleprod(ruleG(1), ruleprod(ruleG(1), ruleG(1))),
+];
+
+
+const steps4a = [
   // G4
   ruleG(4),
   // G3
@@ -174,6 +178,8 @@ const steps = [
   rulesprod( x => `${x}*G1*G1`, ruleG(2), 1),
   rulesprod( x => `G1*${x}*G1`, ruleG(2), 2),
   rulesprod( x => `G1*G1*${x}`, ruleG(2), 3),
+];
+const steps4b = [
   // G1
   ruleprod(ruleprod(ruleG(1), ruleG(1)), ruleprod(ruleG(1), ruleG(1))),
   rulesprod( x => `L1*${x}`, ruleprod(ruleG(1), ruleG(1)) ),
@@ -203,9 +209,69 @@ const steps = [
   rulesprod( x =>   `${x}*B*B`, ruleL(1), 2),
   rulesprod( x =>   `A*${x}*B`, ruleL(1), 2),
   rulesprod( x =>   `${x}*B*A`, ruleL(1), -1),
-]
-for (const step of steps) {
-  state = addRecs(state, net(step) );
+];
+
+const steps5a = [
+  // G5
+  ruleG(5),
+  // G4
+  rulesprod( x => `G1*${x}`, ruleG(4), 4),
+  rulesprod( x => `${x}*G1`, ruleG(4)),
+  // G3
+  rulesprod( x => `${x}*G1*G1`, ruleG(3), 1),
+  rulesprod( x => `G1*${x}*G1`, ruleG(3), 3),
+  rulesprod( x => `G1*G1*${x}`, ruleG(3), 6),
+  rulesprod( x => x, ruleprod( ruleG(3), ruleG(2)), 4), // negative?
+  rulesprod( x => x, ruleprod( ruleG(2), ruleG(3)), 6), // negative?
+  // G2
+  rulesprod( x => `${x}*G1*G1*G1`, ruleG(2), 1),
+  rulesprod( x => `G1*${x}*G1*G1`, ruleG(2), 2),
+  rulesprod( x => `G1*G1*${x}*G1`, ruleG(2), 3),
+  rulesprod( x => `G1*G1*G1*${x}`, ruleG(2), 4),
+  rulesprod( x => `${x}*G1*L1`, ruleG(2), 2),
+  rulesprod( x => `L1*${x}*G1`, ruleG(2), 3),
+  rulesprod( x => `G1*${x}*L1`, ruleG(2), 4),
+  rulesprod( x => `L1*G1*${x}`, ruleG(2), 6),
+  ruleprod(ruleG(2),  rulesprod( x => `G1*${x}`, ruleG(2), -4)),
+  rulesprod( x => `G1*${x}`, ruleprod(ruleG(2), ruleG(2)), 4),
+];
+
+function doSteps(n, steps) {
+   let state = initialState(n);
+    for (const step of steps) {
+      state = addRecs(state, net(step) );
+    }
+  return state;
 }
 
-console.log(state);
+function proofOf3() {
+  // Proof of n=3 case
+  console.log(recurrenceG(3));
+  console.log(doSteps(3, [...steps3a, ...steps3b]));
+}
+
+function almostProofOf4() {
+  // Imperfect proof of n=4 case, goes negative
+  console.log(recurrenceG(4));
+  console.log(doSteps(4, [...steps4a, ...steps4b]));
+}
+
+function sumrec(rec) {
+  return Object.values(rec).reduce((x,y) => x+y);
+}
+
+function prefixes() {
+  const things = [[2,steps2a],
+                  [3,steps3a],
+                  [4,steps4a],
+                  [5,steps5a]];
+  things.forEach(([n, steps]) => {
+    console.log(doSteps(n, steps));
+  });
+  things.forEach(([n, steps]) => {
+    console.log(sumrec(doSteps(n, steps))); // I'm pretty certain this is gonna be A000110, the partition function.
+    // It starts 2, 5, 15, 52, …
+  });
+}
+
+prefixes();
