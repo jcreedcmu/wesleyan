@@ -972,23 +972,38 @@ So we could take literally this as the defining characteristic of $G_2$, or we c
 $ L =  2G_2$ as a more minimal choice.
 
 \def\L{\left(L\over 2\right)}
-Why does this work for every $n$?
-
-\[  (A \oplus B)^n = \sum_{p} {n!\over (n-p)!}{n-p \choose p}(A+B)^{n-2p}\L^p \]
-\[   = \sum_{p} {n!\over (n-p)!}{(n-p)!\over (n-2p)!p!}(A+B)^{n-2p}\L^p \]
-\[   = \sum_{p} {n!\over (n-2p)!p! 2^p}(A+B)^{n-2p}L^p \]
-
-\[  (A \oplus B)^3 = {3!\over 3!}{3 \choose 0}(A + B)^3 + {3!\over 2!}{2 \choose 1}(A+B) \L   \]
-\[  (A \oplus B)^4 = {4!\over 4!}{4 \choose 0}(A + B)^4 + {4!\over 3!}{3 \choose 1}(A+B)^2 \L^1 + {4!\over 2!}{2 \choose 2} \L^2  \]
-\[  (A \oplus B)^5 = {5!\over 5!}{5 \choose 0}(A + B)^5 + {5!\over 4!}{4 \choose 1}(A+B)^3 \L^1 + {5!\over 3!}{3 \choose 2}(A+B)^1 \L^2  \]
-\[  (A \oplus B)^6 = (A + B)^6 + {6!\over 5!}{5 \choose 1}(A+B)^4 \L^1 + {6!\over 4!}{4 \choose 2}(A+B)^2 \L^2 + {6!\over 3!}{3 \choose 3}\L^3 \]
-
+Why does this work for every $n$? Since we're cutting off at $G_2$, an alternate characterization for the general partition
+expression above is just
+\[ \sum_{p} {n!\over (n-2p)!p! 2^p}(A+B)^{n-2p}L^p \]
+so a few examples of what we're trying to show is
 \[  A \oplus B = A + B \]
 \[  (A \oplus B)^2 = (A + B)^2 + L  \]
 \[  (A \oplus B)^3 = (A + B)^3 + 3(A+B)L  \]
 \[  (A \oplus B)^4 = (A + B)^4 + 6L(A+B)^2 + 3LL  \]
 \[  (A \oplus B)^5 = (A + B)^5 + 10(A+B)^3 L + 15(A+B) LL  \]
 \[  (A \oplus B)^6 = (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
+
+We can easily observe (or take as a definition, even) that $(A\oplus B)^{n+1} = A(A \oplus B)^n + (A \oplus B)^nB$.
+We claim the following lemma about pushing an $A$ past an $(A \oplus B)^n$:
+\begin{lemma}
+Suppose $A, B, L$ are relations, and $L + BA = AB$, $LA = AL$, and $LB = BL$.
+Then $ A(A \oplus B)^n = (A \oplus B)^nA + nL(A\oplus B)^n $.
+\end{lemma}
+
+We can now give a sketch of the $n=6$ case of the result we really want:
+\[ (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
+We break up the $(A + B)^6$.
+\[= (A + B)^5(A+B) + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
+We look up what the induction case needs for $n=5$, and separate out the bits we need, multiplied by $(A+B)$.
+\[= (A + B)^5(A+B) + 10(A+B)^4L + 15(A+B)^2L + 5(A+B)^4 L + 30(A+B)^2 LL + 15LLL\]
+Apply the induction hypothesis, for $n=5$.
+\[= (A \oplus B)^5(A+B) + 5(A+B)^4 L + 30(A+B)^2 LL + 15LLL\]
+Now apply the induction hypothesis, for $n=4$, but multipled by $5L$.
+\[= (A \oplus B)^5(A+B) + 5(A\oplus B)^4 L \]
+Now apply the above lemma.
+\[= A(A\oplus B)^5 + (A \oplus B)^5B = (A\oplus B)^6 \]
+
+
 \begin{lemma}
 Suppose $A, B, L$ are relations, and $L + BA = AB$, $LA = AL$, and $LB = BL$.
 Suppose $G_1 = A + B$ and $2G_2 = L$. Then for all $n$,
@@ -1003,54 +1018,5 @@ and we want to show
 %\[  \sum_{m=0}^{n+1}{n+1\choose m} A^m B^{n+1-m} = \sum_{k}\sum_{\lambda : (k, n+1, 2)} {(n+1)!\over k!}\prod_{i=0}^{k-1} G_{\lambda_i}\]
 \[ \sum_{m=0}^{n+1} {{n+1}\choose m}A^m B^{{n+1}-m}  = \sum_{p} {(n+1)!\over ({n+1}-2p)!p! 2^p}(A+B)^{{n+1}-2p}L^p \]
 {\color{red}[Unfinished] \cqed}
-
-Let's say that $[A\oplus B]G = AG + GB$. In this case $(A\oplus B)^n = [A\oplus B]^n I$,
-e.g.
-\[(A\oplus B)^3 = [A\oplus B]^3I \]
-\[= [A \oplus B]^2 (A + B)\]
-\[= [A\oplus B](AA + AB + AB + BB)\]
-\[= AAA + AAB + AAB + ABB + AAB + ABB + ABB + BBB\]
-\[= AAA + 3AAB + 3ABB + BBB\]
 \end{proof}
-Then I notice that I can prove things like
-\[L + (A + B)^2 = (A \oplus B)^2\]
-\[2L(A+B) + (A \oplus B)^2A = A(A \oplus B)^2\]
-and this means
-\[ 3L(A+B) + (A + B)^3 = 3L(A+B) + (A + B)^2 (A + B) \]
-\[ = 2L(A+B) + (A\oplus B)^2(A+B) \]
-\[ = 2L(A+B) + (A\oplus B)^2A  + (A\oplus B)^2B \]
-\[ =  A(A\oplus B)^2  + (A\oplus B)^2B \]
-\[ =  (A\oplus B)^3  \]
-Now let's try the $n=4$ case. I'm to show
-\[  (A \oplus B)^4 = (A + B)^4 + 6L(A+B)^2 + 3LL  \]
-I always seem to run into problems with $LL$.
-I know $L + BA = AB$ so I should find $LL + LBA + BAL + BABA = ABAB$.
-And I have three of them to get rid of!
-
-I could instead focus on the fact that $LL + LBA = LAB$ or $LL + BAL = ABL$.
-Oh but wait the product of course arises from individual steps, it just
-assumes we want to do both of them at once.
-\[ (L{\color{blue}L} + L{\color{blue}BA}) + (BA{\color{red}L} + BA{\color{red}BA})\]
-\[ =  L{\color{blue}AB}  + {\color{green}BA}{\color{red}AB}\]
-\[ = {\color{green}AB}AB\]
-Okay, let's see how close I can get to the above
-\[  (A + B)^4 + 6L(A+B)^2 + 3LL  \]
-\[ = (A + B)^3(A + B) + 6L(A+B)^2 + 3LL  \]
-\[ = (A + B)^3(A + B) + 3L(A + B)^2 + 3L(A+B)^2 + 3LL  \]
-\[ = (A \oplus B)^3(A +B) + 3L(A+B)^2 + 3LL  \]
-So to finish this off I'd need
-\[ A(A \oplus B)^3 = (A \oplus B)^3A + 3L(A+B)^2 + 3LL  \]
-for which it would suffice
-\[ A(A \oplus B)^3 = (A \oplus B)^3A + 3L(A\oplus B)^2   \]
-does this fit into a pattern of
-\[ A(A + B) = (A + B)A + L \]
-\[A(A \oplus B)^2 = (A \oplus B)^2A + 2L(A+B)   \]
-\[ A(A \oplus B)^3 = (A \oplus B)^3A + 3L(A\oplus B)^2  \]
-Oh this looks nice.
-\begin{lemma}
-Suppose $A, B, L$ are relations, and $L + BA = AB$, $LA = AL$, and $LB = BL$.
-Then $ A(A \oplus B)^n = (A \oplus B)^nA + 3L(A\oplus B)^n $.
-\end{lemma}
-
-
 \end{document}
