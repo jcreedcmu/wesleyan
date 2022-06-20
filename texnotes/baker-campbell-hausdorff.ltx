@@ -961,29 +961,13 @@ When $n=1$, we find $A + B = G_1$.
 Since $A$ and $B$ commute, this works in general.
 
 \subsection{Cut off at $G_2$}
-Suppose $A, B$ are relations, %% and $L$ captures the noncommutativity of $A$ and $B$
-%% in the sense that $L + BA = AB$, $LA = AL$, and $LB = BL$.
+Suppose $A, B$ are relations,
 We set $G_1 = A +B$ and seek some constraints on $G_2$  such that for all $n$
 \[  (A \oplus B)^n = \sum_{k} \sum_{\lambda : (k, n, 2)} {n!\over k!}\prod_{i=0}^{k-1} G_{\lambda_i}\]
 
-%% When $n=2$, we find
-%% \[  AA + 2AB + BB = AA + AB + BA + BB + 2G_2 \]
-%% So we could take literally this as the defining characteristic of $G_2$, or we could take
-%% $ L =  2G_2$ as a more minimal choice.
-
-\def\L{\left(L\over 2\right)}
-%% Why does this work for every $n$?
 Or we can use an alternate special-case characterization (because we're cutting off at $G_2$)
 for the general partition expression above, and instead seek
 \[  (A \oplus B)^n =\sum_{p} {n!\over (n-2p)!p! }G_1^{n-2p}G_2^p \]
-%% so a few examples of what we're trying to show is
-%% \[  A \oplus B = A + B \]
-%% \[  (A \oplus B)^2 = (A + B)^2 + L  \]
-%% \[  (A \oplus B)^3 = (A + B)^3 + 3(A+B)L  \]
-%% \[  (A \oplus B)^4 = (A + B)^4 + 6L(A+B)^2 + 3LL  \]
-%% \[  (A \oplus B)^5 = (A + B)^5 + 10(A+B)^3 L + 15(A+B) LL  \]
-%% \[  (A \oplus B)^6 = (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
-
 
 First we show a lemma about $(A\oplus B)^n$:
 \begin{lemma}
@@ -1003,21 +987,6 @@ By induction on $n$. Assuming $P(n)$, we show $P(n+1)$, by reasoning
 \[= Z_{n+2}(A+B) + (n+2)LZ_{n+1} \]
 \cqed
 \end{proof}
-
-%% \section{Valid stuff maybe}
-
-We can now give a sketch of the $n=6$ case of the result we really want:
-\[ (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
-We break up the $(A + B)^6$.
-\[= (A + B)^5(A+B) + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
-We look up what the induction case needs for $n=5$, and separate out the bits we need, multiplied by $(A+B)$.
-\[= (A + B)^5(A+B) + 10(A+B)^4L + 15(A+B)^2L + 5(A+B)^4 L + 30(A+B)^2 LL + 15LLL\]
-Apply the induction hypothesis, for $n=5$.
-\[= (A \oplus B)^5(A+B) + 5(A+B)^4 L + 30(A+B)^2 LL + 15LLL\]
-Now apply the induction hypothesis, for $n=4$, but multipled by $5L$.
-\[= (A \oplus B)^5(A+B) + 5(A\oplus B)^4 L \]
-Now apply the above lemma.
-\[= A(A\oplus B)^5 + (A \oplus B)^5B = (A\oplus B)^6 \]
 
 For the following, suppose $G_1, G_2$ are relations that commute with one another, and define
 \[F(n) =  \sum_{\{p\st 2p \le n\}} {n!\over (n-2p)!p! }G_1^{n-2p}G_2^p\]
