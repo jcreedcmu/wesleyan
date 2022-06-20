@@ -1038,5 +1038,55 @@ $= Z_{n+1}G_1 + 2(n+1)G_2Z_n$\`i.h.\\
 $= Z_{n+2}$\`Lemma~\ref{littlun}
 \end{tabbing}
 as required. \cqed
+
+\section{Thinking Ahead}
+
+Imagine a world where I cut off at $G_3$.
+Suppose I know that $G_3$ commutes with everything, and
+\[A+B = G_1\]
+\[(A\oplus B)^2 = 2G_{2} + G_{11}\]
+\[(A\oplus B)^3 = 6G_{3} + 3G_{21} + 3G_{12} + G_{111} \]
+and I want to show
+\[(A\oplus B)^4 = 24G_{31} + 12G_{22} + 4G_{211} + 4G_{112} + 4G_{121} + G_{1111}\]
+\def\Z{\mathcal Z}
+Define  $\Z[G] = AG + GB$.
+I could first try to reason that
+\[(A\oplus B)^4 = \Z[(A\oplus B)^3]\]
+\[ = 6\Z[G_{3}] + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}]\]
+
+I think I know that $AG_1 = G_1A + 2G_2$,  which would mean
+\[ AG_{111}  = 2G_{211}+ 2G_{121} + 2G_{112} + G_{111}A\]
+\[ \Z[G_{111}]  = 2G_{211}+ 2G_{121} + 2G_{112} + G_{1111}\]
+Now sort of $G_3 = ([A,[A,B]] + [B,[B,A]])/12$.
+So $12G_3 = A[A,B] - [A,B]A - B[A,B] + [A,B]B$.
+So $6G_3 = AG_2 - G_2A - BG_2 + G_2B$.
+So I expect
+\[6G_{3a} + G_2A  = AG_2  \eqno(*a)\]
+\[6G_{3b} +  BG_2 = G_2B\eqno(*b)\]
+Now I reason that
+
+\[ 3AG_2G_1\]
+\[ = AG_2G_1 + 12G_{3a}G_1 + 2G_2AG_1\]
+\[ = 12G_{3a}G_1 + 2G_{22} + AG_2G_1 +  G_2AG_1 + G_2G_1A\]
+
+\[ 3AG_1G_2\]
+\[ = AG_1G_2 + 4G_{22} + 2G_1AG_2\]
+\[ = 6G_{3a}G_1 + 4G_{22} + AG_1G_2 +  G_1AG_2 + G_1G_2A\]
+
+\[ 3G_2G_1B\]
+\[ = 4G_{22} + 2G_2BG_1 + G_2G_1B\]
+\[ = 4G_{22} + 6G_{3b}G_1 + BG_2G_1 + G_2BG_1 + G_2G_1B\]
+
+\[ 3G_1G_2B\]
+\[ = 12G_{3b}G_1 + 2G_1BG_2 + G_1G_2B\]
+\[ = 2G_{22} + 12G_{3b}G_1 + BG_1G_2 + G_1BG_2 + G_1G_2B\]
+Hence what we know is
+\[3\Z[G_{21}] + 3\Z[G_{12}] = 18G_{31} + 12G_{22} + 2G_{211} + 2G_{121} + 2G_{112}\]
+\[ \Z[G_{111}]  = 2G_{211}+ 2G_{121} + 2G_{112} + G_{1111}\]
+so indeed
+\[ 6\Z[G_{3}] + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}] = \]
+\[ 6G_{31} + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}] = \]
+\[ = 24G_{31} + 12G_{22} + 4G_{211} + 4G_{112} + 4G_{121} + G_{1111}\]
+
 \end{proof}
 \end{document}
