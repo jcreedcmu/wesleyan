@@ -983,12 +983,28 @@ so a few examples of what we're trying to show is
 \[  (A \oplus B)^5 = (A + B)^5 + 10(A+B)^3 L + 15(A+B) LL  \]
 \[  (A \oplus B)^6 = (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
 
-We can easily observe (or take as a definition, even) that $(A\oplus B)^{n+1} = A(A \oplus B)^n + (A \oplus B)^nB$.
-We claim the following lemma about pushing an $A$ past an $(A \oplus B)^n$:
+
+Here's a lemma about pushing things across $(A\oplus B)^n$:
 \begin{lemma}
-Suppose $A, B, L$ are relations, and $L + BA = AB$, $LA = AL$, and $LB = BL$.
-Then $ A(A \oplus B)^n = (A \oplus B)^nA + nL(A\oplus B)^n $.
+Suppose $A, B, L$ are relations, assume $L$ commutes with $A,B$.
+Define $Z_0 = 1$ and $Z_{n+1} = AZ_n + Z_nB$.
+Define $P(n)$ to be the following proposition:
+ \[Z_{n+2} = Z_{n+1}(A+B) + (n+1)LZ_n  \]
+If $P(0)$, then $\forall n . P(n)$.
 \end{lemma}
+\begin{proof}
+By induction on $n$. Assuming $P(n)$, we show $P(n+1)$, by reasoning
+\[ Z_{n+3} = AZ_{n+2} + Z_{n+2}B  \]
+\[= A(Z_{n+1}(A+B) + nLZ_{n}) + (Z_{n+1}(A+B) + (n+1)LZ_{n})B  \]
+\[= AZ_{n+1}(A+B) + Z_{n+1}(A+B)B +  (n+1)LZ_{n+1} \]
+\[= AZ_{n+1}(A+B) + Z_{n+1}B(A+B) +  (n+2)LZ_{n+1} \]
+\[= Z_{n+2}(A+B) + (n+2)LZ_{n+1} \]
+
+
+\cqed
+\end{proof}
+
+\section{Valid stuff maybe}
 
 We can now give a sketch of the $n=6$ case of the result we really want:
 \[ (A + B)^6 + 15(A+B)^4 L + 45(A+B)^2 LL + 15LLL\]
@@ -1005,18 +1021,18 @@ Now apply the above lemma.
 
 
 \begin{lemma}
-Suppose $A, B, L$ are relations, and $L + BA = AB$, $LA = AL$, and $LB = BL$.
-Suppose $G_1 = A + B$ and $2G_2 = L$. Then for all $n$,
-\[ \sum_{m=0}^n {n\choose m}A^m B^{n-m}  = \sum_{p} {n!\over (n-2p)!p! 2^p}(A+B)^{n-2p}L^p \eqno(\dagger)\]
-
-% \[  \sum_{m=0}^n {n\choose m}A^m B^{n-m} = \sum_{k}\sum_{\lambda : (k, n, 2)} {n!\over k!}\prod_{i=0}^{k-1} G_{\lambda_i}\eqno(\dagger)\]
+Suppose $A, B, G_1, G_2$ are relations,
+Define
+\[F(n) =  \sum_{\{p\st 2p \le n\}} {n!\over (n-2p)!p! }G_1^{n-2p}G_2^p\]
+If $(A \oplus B)^n  = F(n)$ for $n = 1, 2$, then the equation holds for all $n$.
 \end{lemma}
 
 \begin{proof}
- By induction on $n$. Trivial for $n = 1$. For larger $n$, we assume we know $(\dagger)$
-and we want to show
-%\[  \sum_{m=0}^{n+1}{n+1\choose m} A^m B^{n+1-m} = \sum_{k}\sum_{\lambda : (k, n+1, 2)} {(n+1)!\over k!}\prod_{i=0}^{k-1} G_{\lambda_i}\]
-\[ \sum_{m=0}^{n+1} {{n+1}\choose m}A^m B^{{n+1}-m}  = \sum_{p} {(n+1)!\over ({n+1}-2p)!p! 2^p}(A+B)^{{n+1}-2p}L^p \]
-{\color{red}[Unfinished] \cqed}
+ By induction on $n$. True by assumption for $n = 1,2$.
+Suppose $(A \oplus B)^n  = F(n)$ and $(A \oplus B)^{n+1}  = F(n+1)$.
+We aim to show $(A \oplus B)^{n+2}  = F(n+2)$.
+\[(A \oplus B)^{n+2} = A(A \oplus B)^{n+1} + (A \oplus B)^{n+1}B\]
+\[ = n2G_2(A \oplus B)^{n+1}A + (A \oplus B)^{n+1}B\]
+\cqed
 \end{proof}
 \end{document}
