@@ -1071,7 +1071,7 @@ Now I reason that
 
 \[ 3AG_1G_2\]
 \[ = AG_1G_2 + 4G_{22} + 2G_1AG_2\]
-\[ = 6G_{3a}G_1 + 4G_{22} + AG_1G_2 +  G_1AG_2 + G_1G_2A\]
+\[ = 6G_1G_{3a} + 4G_{22} + AG_1G_2 +  G_1AG_2 + G_1G_2A\]
 
 \[ 3G_2G_1B\]
 \[ = 4G_{22} + 2G_2BG_1 + G_2G_1B\]
@@ -1079,7 +1079,7 @@ Now I reason that
 
 \[ 3G_1G_2B\]
 \[ = 12G_{3b}G_1 + 2G_1BG_2 + G_1G_2B\]
-\[ = 2G_{22} + 12G_{3b}G_1 + BG_1G_2 + G_1BG_2 + G_1G_2B\]
+\[ = 2G_{22} + 12G_1G_{3b} + BG_1G_2 + G_1BG_2 + G_1G_2B\]
 Hence what we know is
 \[3\Z[G_{21}] + 3\Z[G_{12}] = 18G_{31} + 12G_{22} + 2G_{211} + 2G_{121} + 2G_{112}\]
 \[ \Z[G_{111}]  = 2G_{211}+ 2G_{121} + 2G_{112} + G_{1111}\]
@@ -1087,6 +1087,60 @@ so indeed
 \[ 6\Z[G_{3}] + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}] = \]
 \[ 6G_{31} + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}] = \]
 \[ = 24G_{31} + 12G_{22} + 4G_{211} + 4G_{112} + 4G_{121} + G_{1111}\]
+\vfil\eject
+\section{From Scratch}
 
+I think I'm always going to want to be able to push $A$'s to the right
+and $B$'s to the left. So I think I want two kinds of type constructors, $L$ and $M$.
+The intent is
+\[L[X] \approx [A,X] \qquad M[X] \approx [X,B]\]
+so I define
+\[L[X] + XA = AX \qquad M[X] + BX = XB \]
+My goal is still to get
+\[ (A+B) = G_{1}\]
+\[ (A\oplus B)^2 = 2G_2 + G_{11}\]
+\[ (A\oplus B)^3 = 6G_3 + 3G_{(21)} + G_{111}\]
+\[ (A\oplus B)^4 = 24G_{4} + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
+\[ (A\oplus B)^5 = 120G_{5} + 60G_{(41)} + 60G_{(23)} + 20G_{(221)} + 5G_{(2111)} + G_{11111}\]
+etc.
+I seem to know that
+\[2G_2 = L[B] = M[A] = L[G_1] = M[G_1]\]
+\[12G_3 = LL[B] + MM[A] \qquad 6G_3 = L[G_2] + M[G_2]\]
+
+\subsection{$n=2$}
+Need to show that $\Z[G_1] = 2G_2 + G_{11}$. Easy.
+$AG_1 = G_1A + L[G_1]$ so $AG_1 + G_1B = G_1(A+B) + L[G_1] = G_{11} + 2G_2$.
+\subsection{$n=3$}
+Need to show that $2\Z[G_2] + \Z[G_{11}] = 6G_3 + 3G_{(21)} + G_{111}$.
+It's fairly easy to see that
+\[2\Z[G_2] = G_{12} + G_{21} + L[G_2] + M[G_2] \]
+\[\Z[G_{11}] = AG_{11} + G_{11}B = L[G_1]G_1 + G_{1}AG_{1} + G_{11}B \]
+\[ = L[G_1]G_1 + G_1L[G_1] + G_{11}A + G_{11}B \]
+\[ = L[G_1]G_1 + G_1L[G_1] + G_{111} \]
+\[ = 2G_{21} + 2G_{21} + G_{111} \]
+From this we find out $6G_3 = L[G_2] + M[G_2]$ because that's what's left over, I guess.
+\subsection{$n=4$}
+Need to show that
+\[6\Z[G_3] + 3\Z[G_{(21)}] + \Z[G_{111}]
+=
+24G_{4} + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
+We can see
+\[6\Z[G_{3}] =  3G_{31} + 3G_{13} + L[G_3] + M[G_3]  \]
+
+\[3\Z[G_{(21)}] =  3\Z[G_{21}] + 3\Z[G_{12}]\]
+\[= 2L[G_2]G_1 + G_2L[G_1] + 2G_2M[G_1] + M[G_2]G_1 \]
+\[ + 2L[G_1]G_2 + G_1L[G_2] + 2G_1M[G_2] + M[G_1]G_2 \]
+\[ + 2G_{(211)} \]
+\[= 12G_{22} + 2L[G_2]G_1 + M[G_2]G_1  + G_1L[G_2] + 2G_1M[G_2] + 2G_{(211)} \]
+\[= 12G_{22} + 6G_{31} + 6G_{13} + L[G_2]G_1 + G_1M[G_2] + 2G_{(211)} \]
+
+\[\Z[G_{111}] =  2G_{(211)} + G_{1111} \]
+
+We seem to need that
+\[ 24G_4 + 3G_{31} + 3G_{13} = L[G_3] + M[G_3] + L[G_2]G_1 + G_1M[G_2]\]
+I wonder if I can massage this into something more sensible.
+\[ 24G_4 + M[G_2]G_1 + G_1L[G_2]  = L[G_3] + M[G_3] + 3G_{31} + 3G_{13}\]
+\[ 24G_4  = L[G_3] + M[G_3] + 3G_{31} + 3G_{13} + (-M)[G_2]G_1 + G_1(-L)[G_2] \]
+Dunno, this is pretty messy.
 \end{proof}
 \end{document}
