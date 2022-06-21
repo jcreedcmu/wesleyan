@@ -1143,4 +1143,57 @@ I wonder if I can massage this into something more sensible.
 \[ 24G_4  = L[G_3] + M[G_3] + 3G_{31} + 3G_{13} + (-M)[G_2]G_1 + G_1(-L)[G_2] \]
 Dunno, this is pretty messy.
 \end{proof}
+\section{Digression on the Bernoulli Numbers}
+We have
+\[\sum_{k=0}^m {m+1\choose k}B_k = m+1\]
+And also
+\[ B_n = {|A_n|\over (n+1)!}\]
+for $A_{n}$ being a matrix with $(i,j)$ entry ${i+1\choose j-1}$ when $j \le i+1$, and 0 otherwise.
+Let's call this $a_{ij}$. It's independent of $n$.
+Then note
+\[  (n+1)!B_n = {|A_n|}\]
+So let's define $E_n = (n+1)!B_n$. By definition of determinant,
+\[E_n = \sum_{\pi \in S_n} \mathsf{sgn}(\pi) \prod_{i =1}^n a_{i\pi_i}\]
+or we could phrase this as
+\[E^\sigma_n = \sum_{\pi \in S^\sigma_n}  \prod_{i =1}^n a_{i\pi_i}\qquad E_n = E^+_n - E^-_n\]
+So our recurrence becomes
+\[\sum_{k=0}^m {m+1\choose k} E_k / (k+1)! = m+1\]
+and multiplying through by $(m+1)!$ makes things always integers:
+\[\sum_{k=0}^m{m+1\choose k}{(m+1)!\over (k+1)!} E_k  = (m+1)(m+1)!\]
+and we can get rid of negatives by defining
+\[F^\sigma_m = \sum_{k=0}^m{m+1\choose k}{(m+1)!\over (k+1)!} E^\sigma_k\]
+%% For a fully expanded definition, we can say
+%% \[F^\sigma_m = \sum_{k=0}^m{m+1\choose k}{(m+1)!\over (k+1)!} \sum_{\pi \in S^\sigma_k}  \prod_{i =1}^k {i+1 \choose \pi_i-1}[\pi_i \le i+1]\]
+and then the bijection to be shown is that
+\[ F^+_m = F^-_m + (m+1)(m+1)!\]
+Or I could think of this as being about general vs. alternating permutations
+rather than positive vs. negative:
+\[ 2F^+_m = F_m + (m+1)(m+1)!\]
+\[{m+1\choose k}{(m+1)!\over (k+1)!} = \begin{tabular}{llllll}
+1\\
+2&2\\
+6&9&3\\
+24&48&24&4\\
+120&300&200&50&5\\
+720&2160&1800&600&90&6\\
+\end{tabular}\]
+\[\begin{tabular}{ll}
+$E_0^+ = 1$&$E_0^- = 0$\\
+$E_1^+ = 1$&$E_1^- = 0$\\
+$E_2^+ = 3$&$E_2^- = 2$\\
+$E_3^+ = 24$&$E_3^- = 24$\\
+$E_4^+ = 380$&$E_4^- = 384$\\
+$E_5^+ = 9120$&$E_5^- = 9120$\\
+$E_6^+ = 304920$&$E_6^- = 304800$
+\end{tabular}
+%
+\begin{tabular}{ll}
+$F_0^+ = 1$&$F_0^- = 0$\\
+$F_1^+ = 4$&$F_1^- = 0$\\
+$F_2^+ = 24$&$F_2^- = 6$\\
+$F_3^+ = 240$&$F_3^- = 144$\\
+$F_4^+ = 4120$&$F_4^- = 3520$\\
+$F_5^+ = 111600$&$F_5^- = 107280$\\
+$F_6^+ = $&$F_6^- =$
+\end{tabular}\]
 \end{document}
