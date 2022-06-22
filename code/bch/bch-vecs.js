@@ -142,12 +142,48 @@ assert(equal(lhs(5), S[5]));
 
 // t = 10
 const ll = vplusl([
-  vs(lie(G0,G3), 6),
-  vs(lie(lie(G0,G2),G1), 1),
+  vs(lie(G0, G4), 24),
+
+  vs(vprod(lie(G0,G3),G1), 12),
+  vs(vprod(G1,lie(G0,G3)), 12),
+
+  vs(vprod(lie(G0,G2),G2), 12),
+  vs(vprod(G2,lie(G0,G2)), 12),
+
+  vs(vprodl([lie(G0,G2), G1, G1]), 4),
+  vs(vprodl([G2, lie(G0,G1), G1]), 4),
+  vs(vprodl([G2, G1, lie(G0,G1)]), 4),
+
+
+  vs(vprodl([lie(G0,G1), G2, G1]), 4),
+  vs(vprodl([G1, lie(G0,G2), G1]), 4),
+  vs(vprodl([G1, G2, lie(G0,G1)]), 4),
+
+
+  vs(vprodl([lie(G0,G1), G1, G2]), 4),
+  vs(vprodl([G1, lie(G0,G1), G2]), 4),
+  vs(vprodl([G1, G1, lie(G0,G2)]), 4),
+
+
 ]);
 const rr = vplusl([
-  vs(G4, 24),
-
+  vs(G5, 120),
+  vs(vprod(G4,G1), 36),
+  vs(vprod(G1,G4), 60),
+  vs(vprod(G2,G3), 36),
+  vs(vprod(G3,G2), 36),
+  vs(vprodl([G3, G1, G1]), 8),
+  vs(vprodl([G1, G3, G1]), 8),
+  vs(vprodl([G1, G1, G3]), 20),
+  vs(vprodl([G2, G2, G1]), 8),
+  vs(vprodl([G2, G1, G2]), 20),
+  vs(vprodl([G1, G2, G2]), 20),
+  vs(vprodl([G1, G1, G1, G2]), 3),
+  vs(vprodl([G1, G1, G2, G1]), -1),
+  vs(vprodl([G1, G2, G1, G1]), -1),
+  vs(vprodl([G2, G1, G1, G1]), -1),
 
 ]);
+
+
 assert(equal(ll, rr));
