@@ -73,7 +73,7 @@ function lhs(n) { // (A ⊕ B)^n
 
 const G0 = A;
 const G1 = vplus(A, B);
-const G2 = vs(lie(A, B), 1/2);
+const G2 = vs(lie(G0, G1), 1/2);
 const G3 = vs(vplus( lie(A,lie(A, B)), lie(B, lie(B, A))), 1/12);
 const G3a = vs(vplus(lie(G2, G1), vs(lie(G0, G2), 2)), 1/6);
 
@@ -106,3 +106,15 @@ const S = [undefined,
 assert(equal(lhs(2), S[2]));
 assert(equal(lhs(3), S[3]));
 assert(equal(lhs(4), S[4]));
+
+// t = 10
+const ll = vplusl([
+  vs(lie(G0,G3), 6),
+  vs(lie(lie(G0,G2),G1), 1),
+]);
+const rr = vplusl([
+  vs(G4, 24),
+
+
+]);
+assert(equal(ll, rr));
