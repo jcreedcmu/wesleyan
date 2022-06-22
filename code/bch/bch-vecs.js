@@ -80,8 +80,21 @@ const G3a = vs(vplus(lie(G2, G1), vs(lie(G0, G2), 2)), 1/6);
 assert(equal(G3, G3a));
 
 const G4 = vs( lie(B, lie(A, lie(A, B))), -1/24);
-//const G4 = vs(lie(lie(G0, G2), G1), 1/24);
+const G4a = vs(vplusl([
+  vs(lie(G0,G3), 6),
+  vs(lie(lie(G0,G2),G1), 1),
+]), 1/24);
+assert(equal(G4, G4a));
 
+
+const G5 = vplusl([
+  vs(lie(B, lie(B, lie(B, lie(B, A)))), -1/720),
+  vs(lie(A, lie(A, lie(A, lie(A, B)))), -1/720),
+  vs(lie(A, lie(B, lie(B, lie(B, A)))), +1/360),
+  vs(lie(B, lie(A, lie(A, lie(A, B)))), +1/360),
+  vs(lie(A, lie(B, lie(A, lie(B, A)))), +1/120),
+  vs(lie(B, lie(A, lie(B, lie(A, B)))), +1/120),
+]);
 
 const S = [undefined,
            G1, // n=1
@@ -102,10 +115,30 @@ const S = [undefined,
              vs(vprodl([G1, G1, G2]), 4),
              vprodl([G1, G1, G1, G1]),
            ]), // n=4
+           vplusl([
+             vs(G5, 120),
+             vs(vprod(G4,G1), 60),
+             vs(vprod(G1,G4), 60),
+             vs(vprod(G2,G3), 60),
+             vs(vprod(G3,G2), 60),
+             vs(vprodl([G3, G1, G1]), 20),
+             vs(vprodl([G1, G3, G1]), 20),
+             vs(vprodl([G1, G1, G3]), 20),
+             vs(vprodl([G2, G2, G1]), 20),
+             vs(vprodl([G2, G1, G2]), 20),
+             vs(vprodl([G1, G2, G2]), 20),
+             vs(vprodl([G1, G1, G1, G2]), 5),
+             vs(vprodl([G1, G1, G2, G1]), 5),
+             vs(vprodl([G1, G2, G1, G1]), 5),
+             vs(vprodl([G2, G1, G1, G1]), 5),
+             vprodl([G1, G1, G1, G1, G1]),
+           ]), // n=5
       ];
 assert(equal(lhs(2), S[2]));
 assert(equal(lhs(3), S[3]));
 assert(equal(lhs(4), S[4]));
+assert(equal(lhs(5), S[5]));
+
 
 // t = 10
 const ll = vplusl([
