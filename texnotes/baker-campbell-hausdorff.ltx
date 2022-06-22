@@ -10,6 +10,7 @@
 
 \usepackage{tikz}
 \usepackage{tikz-cd}
+\def\Z{\mathcal Z}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
@@ -1041,6 +1042,7 @@ as required. \cqed
 
 \section{Thinking Ahead}
 
+
 Imagine a world where I cut off at $G_3$.
 Suppose I know that $G_3$ commutes with everything, and
 \[A+B = G_1\]
@@ -1048,7 +1050,6 @@ Suppose I know that $G_3$ commutes with everything, and
 \[(A\oplus B)^3 = 6G_{3} + 3G_{21} + 3G_{12} + G_{111} \]
 and I want to show
 \[(A\oplus B)^4 = 24G_{31} + 12G_{22} + 4G_{211} + 4G_{112} + 4G_{121} + G_{1111}\]
-\def\Z{\mathcal Z}
 Define  $\Z[G] = AG + GB$.
 I could first try to reason that
 \[(A\oplus B)^4 = \Z[(A\oplus B)^3]\]
@@ -1124,8 +1125,40 @@ Need to show that
 \[6\Z[G_3] + 3\Z[G_{(21)}] + \Z[G_{111}]
 =
 24G_{4} + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
-We can see
-\[6\Z[G_{3}] =  3G_{31} + 3G_{13} + L[G_3] + M[G_3]  \]
+
+What choices do I have? I know in general
+\[\Z[G_{ij}] = G_{1ij} + M[G_i]G_j + G_iM[G_j]  \]
+\[\Z[G_{ij}] = G_{i1j} + L[G_i]G_j + G_iM[G_j] \]
+\[\Z[G_{ij}] = G_{ij1} + L[G_i]G_j + G_iL[G_j] \]
+so in particular
+\[\Z[G_{21}] = G_{121} + M[G_2]G_1 + G_2M[G_1]  \]
+\[ = G_{211} + L[G_2]G_1 + G_2M[G_1] \]
+\[ = G_{211} + L[G_2]G_1 + G_2L[G_1] \]
+and
+\[\Z[G_{12}] = G_{112} + M[G_1]G_2 + G_1M[G_2]  \]
+\[ = G_{112} + L[G_1]G_2 + G_1M[G_2] \]
+\[ = G_{121} + L[G_1]G_2 + G_1L[G_2] \]
+All right; I have $3\Z[G_{(21)}]$. I thought it was appropriate to take one of each
+of these six possibilities, but now I want to see if I can do something more asymmetric.
+I know I need to wind up with $2G_{(211)}$, though, so I can't be too asymmetric.
+\[3\Z[G_{(21)}] = 2G_{(211)} + M_2G_1 + G_2M_1 +2L_2G_1 + 2G_2M_1 + {}\]
+\[ 2M_1G_2 + 2G_1M_2 + L_1G_2 + G_1L_2\]
+
+\[= 12G_{22} + 2G_{(211)} + M_2G_1 + 2L_2G_1 + 2G_1M_2 + G_1L_2\]
+Now I wish I lived in $\mathbb{Q}$ and that
+\[[L_2, G_1] = [M_2, G_1]\] because then
+\[L_2G_1 + G_1M_2 = M_2G_1 + G_1L_2\]
+and
+\[M_2G_1 + 2L_2G_1 + 2G_1M_2 + G_1L_2 = (3/2)(M_2G_1 + L_2G_1 + G_1M_2 + G_1L_2)\]
+\[= (3/2)6(G_{31} + G_{13})\]
+\[= 9G_{(31)}\]
+because that would let me finish the case.
+
+For I can see
+\[6\Z[G_{3}] = 3G_{(31)} + 3L[G_3] + 3M[G_3] \]
+and
+\[\Z[G_{111}] =  2G_{(211)} + G_{1111} \]
+
 
 \[3\Z[G_{(21)}] =  3\Z[G_{21}] + 3\Z[G_{12}]\]
 \[= 2L[G_2]G_1 + G_2L[G_1] + 2G_2M[G_1] + M[G_2]G_1 \]
@@ -1134,7 +1167,6 @@ We can see
 \[= 12G_{22} + 2L[G_2]G_1 + M[G_2]G_1  + G_1L[G_2] + 2G_1M[G_2] + 2G_{(211)} \]
 \[= 12G_{22} + 6G_{31} + 6G_{13} + L[G_2]G_1 + G_1M[G_2] + 2G_{(211)} \]
 
-\[\Z[G_{111}] =  2G_{(211)} + G_{1111} \]
 
 We seem to need that
 \[ 24G_4 + 3G_{31} + 3G_{13} = L[G_3] + M[G_3] + L[G_2]G_1 + G_1M[G_2]\]
@@ -1143,6 +1175,72 @@ I wonder if I can massage this into something more sensible.
 \[ 24G_4  = L[G_3] + M[G_3] + 3G_{31} + 3G_{13} + (-M)[G_2]G_1 + G_1(-L)[G_2] \]
 Dunno, this is pretty messy.
 \end{proof}
+\section{Only Pushing $A$s to the right}
+Still trying to figure out something with less ambiguity.
+Assert
+\[L[X] + XA = AX  \]
+My goal is to find $G_i$ such that
+\[ (A+B) = G_{1}\]
+\[ (A\oplus B)^2 = 2G_2 + G_{11}\]
+\[ (A\oplus B)^3 = 6G_3 + 3G_{(21)} + G_{111}\]
+\[ (A\oplus B)^4 = 24G_{4} + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
+\[ (A\oplus B)^5 = 120G_{5} + 60G_{(41)} + 60G_{(23)} + 20G_{(221)} + 5G_{(2111)} + G_{11111}\]
+In $n=1$, I know $G_1 = A + B$. Great.
+
+In $n=2$, I try to show $\Z[G_1] = AG_1 + G_1B = 2G_2 + G_{11}$.
+So I push an $A$ to the right and get $G_{11} + L[G_1] = 2G_2 + G_{11}$. I infer
+$2G_2 = L[G_1]$. Great.
+
+In $n=3$, I try to show $2\Z[G_2] + \Z[G_{11}] = 6G_3 + 3G_{(21)} + G_{111}$.
+I push $A$ all the way to the right to see
+\[(A \oplus B)^3 = 2G_{21} + 2L[G_2] + L[G_1]G_1 + G_1L[G_1] + G_{111}\]
+\[= 2G_{21} + 2L[G_2] + 2G_{21} + 2G_{12} + G_{111}\]
+\[= 4G_{21} + 2G_{12} + 2L[G_2] + G_{111}\]
+So if I need
+\[ 6G_3 + 3G_{(21)} + G_{111} = 4G_{21} + 2G_{12} + 2L[G_2] + G_{111}\]
+then
+\[ 6G_3  = [G_2, G_1] + 2[G_0, G_2] \]
+if I say $G_0 = A$. Ok, that's interesting. It's still Lie.
+
+Let's try $n=4$ now, with all pushing $A$ to the right.
+I want to make a clever choice of $G_4$ so that
+\[6\Z[G_3] + 3\Z[G_{(21)}] + \Z[G_{111}] =
+24G_{4} + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
+I know
+\[6\Z[G_{3}] = 6G_{31} + 6L[G_3] \]
+and
+\[\Z[G_{111}] =  2G_{(211)} + G_{1111} \]
+so what remains is
+\[ 3\Z[G_{(21)}]  = 24G_{4} + 6G_{31} +  12G_{13} + 12G_{22} + 2G_{(211)} \]
+But by pushing $A$ to the right
+\[ 3\Z[G_{(21)}]  = 3\Z[G_{21}] + 3\Z[G_{12}]\]
+\[= 3(G_{211} + L[G_2]G_1 + G_2L[G_1]) + 3(G_{121} + L[G_1]G_2 + G_1L[G_2])\]
+\[= 3(G_{211} + L[G_2]G_1 + 2G_{22}) + 3(G_{121} + 2G_{22} + G_1L[G_2])\]
+\[= 12G_{22} + 3(G_{211} + L[G_2]G_1) + 3(G_{121} + G_1L[G_2])\]
+so what remains is
+\[ 3(G_{211} + L[G_2]G_1) + 3(G_{121} + G_1L[G_2])  = 24G_{4} + 6G_{31} +  12G_{13} + 2G_{(211)} \]
+\[ 3L[G_2]G_1 + 3G_1L[G_2]  = 24G_{4} + 6G_{31} +  12G_{13} - G_{211} - G_{121} + 2G_{112} \]
+\[ 3L[G_2]G_1 + 3G_1L[G_2]  = 24G_{4} + 6G_{31} +  12G_{13} - G_{211} + G_{112} + G_1[G_1,G_2]\]
+\[ 3L[G_2]G_1 + 3G_1L[G_2]  = 24G_{4} + 6G_{31} +  12G_{13} - G_{211} + G_{121} + 2G_1[G_1,G_2]\]
+\[ 3L[G_2]G_1 + 3G_1L[G_2]  = 24G_{4} + 6G_{31} +  12G_{13} + [G_1,G_2]G_1 + 2G_1[G_1,G_2]\]
+\[ 3L[G_2]G_1 + 3G_1L[G_2] + [G_2,G_1]G_1 + 2G_1[G_2,G_1]  = 24G_{4} + 6G_{31} +  12G_{13} \]
+At this point I stare at the consequences
+\[  [G_2, G_1]G_1 + 2L[G_2] = 6G_{31}\]
+\[  2G_1[G_2, G_1] + 4G_1L[G_2] = 12G_{13}\]
+and find
+\[ L[G_2]G_1 - G_1L[G_2]   = 24G_{4}   \]
+so
+\[24G_4 = [[G_0, G_2], G_1]\]
+Now... Hm. Can I express this as a sum of $\pm [G_3,G_0], \pm [G_3,G_1], \pm [G_3,G_2]$? That would be nice.
+\subsection{What I Think I Know}
+\[2G_2 = [G_0, G_1]\]
+\[6G_3  = [G_2, G_1] + 2[G_0, G_2]\]
+\[24G_4 = [[G_0, G_2], G_1]\]
+
+\[[G_2, G_0]    = [G_2, G_1]/2 - 3G_3 \]
+\[[G_0, G_2]    = 3G_3 + [G_1, G_2]/2  \]
+
+\[24G_4 = 3[G_3, G_1] + (1/2)[[G_1, G_2], G_1]\]
 \section{Digression on the Bernoulli Numbers}
 We have
 \[\sum_{k=0}^m {m+1\choose k}B_k = m+1\]
