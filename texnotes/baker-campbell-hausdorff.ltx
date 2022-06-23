@@ -1451,4 +1451,44 @@ Do some more $2$-motion
 \[ 32G_{221} + 16G_{212} + 12G_{122}  + G_{11111} + \]
 \[8G_{2111} + 6G_{1211} + 4G_{1121} + G_{1112}\]
 I don't know, this feels stuck. Maybe try again later.
+
+\section{Starting Small, Looking at Provenance}
+
+\def\rr#1{{\color{red}\mathbf {#1}}}
+\def\bb#1{{\color{blue}\mathbf{#1}}}
+Write $A'$ for $[0,A]$.
+\subsection{$n=1$}
+Assert $G_{\rr 1} = A + B$, which is what we need to show already.
+\subsection{$n=2$}
+Assert $2G_{\rr 2} = G_{1'}$. Compute
+\[\Z[G_{1}] = G_{1'} + G_{1\rr 1} = 2G_{\rr2} + G_{1\rr1}\]
+\subsection{$n=3$}
+Assert $6G_{\rr3}  = 2G_{2'} + G_{[2\rr 1]}$.
+Need to show $\Z[2G_{2} + G_{{11}}] = 6G_3 + 3G_{(21)} + G_{111}$.
+Compute
+\[2\Z[G_{2}] + \Z[G_{{11}}] = 2G_{2'} + 2G_{2\rr 1} + G_{1'1} + G_{ 11'} + G_{11\rr1}\]
+Now collect up $G_{1'}$'s:
+\[ = 2G_{2'} + 2G_{2\rr 1} + 2G_{\rr21} + 2G_{ 1\rr2} + G_{11\rr1}\]
+Now I notice I need to swap around some $G_{21}$. I'm going to guess for symmetry reasons
+that I want to swap the $G_{2\rr 1}$.
+
+\[ = 2G_{2'} + G_{[2\rr 1]} + G_{2\rr 1} + 2G_{\rr21} + 2G_{ 1\rr2} + G_{\rr 1 2} + G_{11\rr1}\]
+\[ = 6G_{\rr 3} + G_{2\rr 1} + 2G_{\rr21} + 2G_{ 1\rr2} + G_{\rr 1 2} + G_{11\rr1}\]
+The coefficient is the factorial of the red digit! That's interesting.
+%% If I'd made the other choice, by saying $6G_{\rr3}  = 2G_{2'} + G_{[\rr 2 1]}$, I'd have found
+%% \[ = 2G_{2'} + G_{[\rr21]} + 2G_{2\rr 1} + G_{\rr21} + 3G_{ 1\rr2} + G_{11\rr1}\]
+%% \[ = 3G_{\rr 3} + 2G_{2\rr 1} + G_{\rr21} + 3G_{ 1\rr2} + G_{11\rr1}\]
+\subsection{$n=4$}
+Assert $24G_4 = 6G_{3'} + G_{[2'1]}$.
+Need to show
+\[\Z[6G_3 + 3G_{(21)} + G_{111}] = 24G_4 + 12G_{(31)} + 12G_{22} + 4G_{(211)} + G_{1111}\]
+Compute:
+\[6\Z[G_3] + 3\Z[G_{(21)}] + \Z[G_{111}]\]
+\[ = 6G_{3'} + 6G_{3\rr 1} + 3G_{2'1} + 3G_{21'} + 3G_{21\rr1} + 3G_{1'2} + 3G_{12'} + 3G_{12\rr1} +{}\]
+\[ G_{1'11} + G_{11'1} + G_{111'} + G_{111\rr1}\]
+Now I can synthesize some $2G_{\rr 2}$ from $G_{1'}$:
+\[ = 6G_{3'} + 6G_{3\rr 1} + 3G_{2'1} + 6G_{2\rr2} + 3G_{21\rr1} + 6G_{\rr22} + 3G_{12'} + 3G_{12\rr1} +{}\]
+\[ 2G_{\rr211} + 2G_{1\rr21} + 2G_{11\rr 2} + G_{111\rr1}\]
+I need to spread out the $3G_{21\rr1} + 3G_{12\rr1}$. Oof, so much ambiguity!
+Less so with the synthetic-twos.
 \end{document}
