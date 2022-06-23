@@ -143,21 +143,22 @@ assert(equal(lhs(5), S[5]));
 // t = 10
 const ll = vplusl([
   vs(lie(G0,G4), 24),
-  vs(vprod(G4,G1), 24),
+  vs(lie(G4,G1), 12),
+  vs(vprod(G4,G1), 60),
+  vs(vprod(G1,G4), 60),
 
-  vs(vprod(lie(G0,G3),G1), 12),
   vs(vprod(G3,G2), 24),
   vs(vprodl([G3,G1,G1]), 12),
   vs(vprod(G2,G3), 24),
-  vs(vprod(G1,lie(G0,G3)), 12),
+
   vs(vprodl([G1,G3,G1]), 12),
 
   vs(vprodl([lie(G0,G2), G2]), 12),
   vs(vprodl([G2, lie(G0,G2)]), 12),
 
-  vs(vprodl([lie(G0,G2), G1, G1]), 4),
+  vs(vprodl([lie(G0,G2), G1, G1]), 2),
   vs(vprodl([G1, lie(G0,G2), G1]), 4),
-  vs(vprodl([G1, G1, lie(G0,G2)]), 4),
+  vs(vprodl([G1, G1, lie(G0,G2)]), 6),
 
   vs(vprodl([G2,lie(G2,G1)]), 8),
   vs(vprodl([lie(G2,G1),G2]), 4),
