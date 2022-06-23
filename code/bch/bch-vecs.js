@@ -147,21 +147,21 @@ const ll = vplusl([
   vs(vprod(G4,G1), 60),
   vs(vprod(G1,G4), 60),
 
-  vs(vprod(G3,G2), 24),
-  vs(vprodl([G3,G1,G1]), 12),
-  vs(vprod(G2,G3), 24),
+  vs(vprod(G3,G2), 60),
+  vs(vprod(G2,G3), 60),
 
+  vs(vprodl([G3,G1,G1]), 12),
   vs(vprodl([G1,G3,G1]), 12),
 
-  vs(vprodl([lie(G0,G2), G2]), 12),
-  vs(vprodl([G2, lie(G0,G2)]), 12),
+//  vs(vprodl([lie(G0,G2), G2]), 12),
+//  vs(vprodl([G2, lie(G0,G2)]), 12),
 
   vs(vprodl([lie(G0,G2), G1, G1]), 2),
   vs(vprodl([G1, lie(G0,G2), G1]), 4),
   vs(vprodl([G1, G1, lie(G0,G2)]), 6),
 
-  vs(vprodl([G2,lie(G2,G1)]), 8),
-  vs(vprodl([lie(G2,G1),G2]), 4),
+//  vs(vprodl([G2,lie(G2,G1)]), 6),
+//  vs(vprodl([lie(G2,G1),G2]), 6),
 
   vs(vprodl([lie(G2, G1), G1, G1]),1),
   vs(vprodl([G1, lie(G2, G1), G1]),2),
@@ -177,6 +177,8 @@ const ll = vplusl([
   vs(vprodl([G1,G2,G2]), 20),
 
   vprodl([G1, G1, G1, G1, G1]),
+
+  vs(lie(G2,lie(G2,G1)),2),
 ]);
 
 const rr = S[5];
