@@ -151,10 +151,11 @@ const ll = vplusl([
 
   vs(vprod(G3,G2), 60),
   vs(vprod(G2,G3), 60),
+  vs(vprodl([lie(lie(G1,G3), G1)]),2),
 
-  vs(vprodl([G3,G1,G1]), 18),
-  vs(vprodl([G1,G3,G1]), 24),
-  vs(vprodl([G1,G1,G3]), 18),
+  vs(vprodl([G3,G1,G1]), 20),
+  vs(vprodl([G1,G3,G1]), 20),
+  vs(vprodl([G1,G1,G3]), 20),
 
 //  vs(vprodl([lie(G0,G2), G2]), 12),
 //  vs(vprodl([G2, lie(G0,G2)]), 12),
