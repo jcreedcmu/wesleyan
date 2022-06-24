@@ -13,6 +13,8 @@
 \definecolor{green}{HTML}{007f00}
 \definecolor{cyan}{HTML}{007f7f}
 \definecolor{purple}{HTML}{af00af}
+\def\rr#1{{\color{red}\mathbf {#1}}}
+\def\bb#1{{\color{blue}\mathbf{#1}}}
 \def\Z{\mathcal Z}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
@@ -1369,17 +1371,49 @@ But conjecturally it might be that there are more `screened' terms:
 \[120G_5 = 24G_{[04]} + 12G_{[41]} + 2G_{[[13]1]} + 2G_{[[12]2]}\]
 \section{Backwards Proof}
 Let's start with
-\[ 120G_5 + 60G_{(41)} + 60G_{(32)} + 20G_{(311)} + 20G_{(221)} + 5G_{(2111)} + G_{11111} \]
-and try to unpack all the ``tools'' we have for shunting stuff around. Unpack the $G_5$.
-\[ = 24G_{[04]} + 12G_{[41]} + 2G_{[[13]1]} + 2G_{[[12]2]} + {}\]
-\[ 60G_{(41)} + 60G_{(32)} + 20G_{(311)} + 20G_{(221)} + 5G_{(2111)} + G_{11111} \]
-Remember that what a $G_{[04]}$ does is takes a $G_{41}$ and makes a $\Z[G_4]$.
-Remember that what a $G_{[41]}$ does is takes a $G_{14}$ and makes a $G_{41}$.
-So, ok, I can use up all my `4-swapping tools'. Blue stuff I will leave alone --- in fact I'll stop writing it down,
-and just collect it later.
+\[X_5 = 120G_{\rr5} + 24G_{4\rr 1} + 36G_{\rr 41}  + 60G_{1\rr 4} + {}\]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{11\rr 3} + 20G_{1\rr 31} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+and try to unpack all the ``tools'' we have for shunting stuff around. First unpack the $G_5$.
+\[= 24G_{4'} + 12G_{[\rr 41]} + 2G_{[[13]1]} + 2G_{[[12]2]} + {}\]
+\[ 24G_{4\rr 1} + 36G_{\rr 41}  + 60G_{1\rr 4} + {}\]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{11\rr 3} + 20G_{1\rr 31} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+Remember that what a $G_{[\rr 41]}$ does is takes a $G_{1\rr 4}$ and makes a $G_{\rr 41}$.
+\[= 24G_{4'} + 2G_{[[13]1]} + 2G_{[[12]2]} + {}\]
+\[ 24G_{4\rr 1} + 48G_{\rr 41}  + 48G_{1\rr 4} + {}\]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{11\rr 3} + 20G_{1\rr 31} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+So, ok, I can use up all my `4-swapping tools'.
+Now I can expand out my $G_{\rr 4}$s. They're good multiples of 24, and I know they won't move around any in the future.
+\[= 24G_{4'} + 2G_{[[13]1]} + 2G_{[[12]2]} + 24G_{4\rr 1} + {}\]
+\[ + 12G_{3'1} + 3G_{[2'1]1} + 12G_{13'} + 3G_{1[2'1]} + {}\]
+\[ {\color{green} 2G_{[13]1} + 4G_{1[13]} + 2G_{[31]1} + 2G_{1[31]}} + {}\]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{11\rr 3} + 20G_{1\rr 31} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+I guess I'll try to use up the $[[13]1]$ movers then.
+\[= 24G_{4'} + 2G_{[[12]2]} + 24G_{4\rr 1} + {}\]
+\[ + 12G_{3'1} + 3G_{[2'1]1} + 12G_{13'} + 3G_{1[2'1]} + {}\]
+\[ + 2G_{[1\rr 3] 1} + 4G_{1[1\rr 3]} \]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{11\rr 3} + 20G_{1\rr 31} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+Which $\rr3$ are red? I need multiples of 6.
+
+\hrule
+
 \[ = {\color{blue} 24\Z[G_4]} + 2G_{[[13]1]} + 2G_{[[12]2]} + {}\]
 \[ 48G_{41} + 48G_{14} + 60G_{(32)} + 20G_{(311)} + 20G_{(221)} + 5G_{(2111)} + G_{11111} \]
-Ok, now I can expand out my $G_4$s. They're good multiples of 24, and I know they won't move around any in the future.
+Ok,
 \[ = 2G_{[[13]1]} + 2G_{[[12]2]} + {}\]
 \[ 12G_{[03]1} + 2kG_{[31]1} + 2G_{[[02]1]1} + 2kG_{[13]1} + {}\]
 \[ 12G_{1[03]} + 2kG_{1[31]} + 2G_{1[[02]1]} + 2kG_{1[13]} + {}\]
@@ -1454,17 +1488,15 @@ I don't know, this feels stuck. Maybe try again later.
 
 \section{Starting Small, Looking at Provenance}
 
-\def\rr#1{{\color{red}\mathbf {#1}}}
-\def\bb#1{{\color{blue}\mathbf{#1}}}
 Write $A'$ for $[0,A]$.
 \subsection{$n=1$}
 Assert $G_{\rr 1} = A + B$, which is what we need to show already.
 \subsection{$n=2$}
 Assert $2G_{\rr 2} = G_{1'}$. Compute
-\[\Z[G_{1}] = G_{1'} + G_{1\rr 1} = 2G_{\rr2} + G_{1\rr1}\]
+\[\Z[G_{ 1}] = G_{1'} + G_{1\rr 1} = 2G_{\rr2} + G_{1\rr1}\]
 \subsection{$n=3$}
 Assert $6G_{\rr3}  = 2G_{2'} + G_{[\rr 2 1]}$.
-Need to show $\Z[2G_{2} + G_{{11}}] = 6G_3 + 3G_{(21)} + G_{111}$.
+Need to show $\Z[2G_{ 2} + G_{{11}}] = 6G_3 + 3G_{(21)} + G_{111}$.
 Compute
 \[2\Z[G_{2}] + \Z[G_{{11}}] = 2G_{2'} + 2G_{2\rr 1} + G_{1'1} + G_{ 11'} + G_{11\rr1}\]
 Now collect up $G_{1'}$'s:
@@ -1498,9 +1530,76 @@ Now synthesize some $G_{\rr 4}$:
 \[ = 24G_{\rr4} + 6G_{3\rr 1} + 6G_{\rr 31}  + 12G_{1\rr3} + 6G_{2\rr2} +  6G_{\rr22} + {}\]
 \[ 3G_{21\rr1} + G_{\rr211} + 3G_{12\rr1} + G_{1\rr21} + 4G_{11\rr 2} + G_{111\rr1}\]
 \subsection{Summary}
-\[C_2 = 2G_{\rr2} + G_{1\rr1}\]
-\[C_3 = 6G_{\rr 3} + 2G_{2\rr 1} + G_{\rr21} + 3G_{ 1\rr2} + G_{11\rr1}\]
-\[C_4 = 24G_{\rr4} + 6G_{3\rr 1} + 6G_{\rr 31}  + 12G_{1\rr3} + 6G_{2\rr2} +  6G_{\rr22} + {}\]
+\[X_2 = 2G_{\rr2} + G_{1\rr1}\]
+
+\[X_3 = 6G_{\rr 3} + 2G_{2\rr 1} + G_{\rr21} + 3G_{ 1\rr2} + G_{11\rr1}\]
+
+\[X_4 = 24G_{\rr4} + 6G_{3\rr 1} + 6G_{\rr 31}  + 12G_{1\rr3} + 6G_{2\rr2} +  6G_{\rr22} + {}\]
 \[ 3G_{21\rr1} + G_{\rr211} + 3G_{12\rr1} + G_{1\rr21} + 4G_{11\rr 2} + G_{111\rr1}\]
+
+\[X_5 = 120G_{\rr5} + 24G_{4\rr 1} + 36G_{\rr 41}  + 60G_{1\rr 4} + {}\]
+\[ 24G_{3\rr 2} + 24G_{\rr 2 3} + 36G_{\rr3 2} + 36G_{2\rr 3} +{}\]
+\[ 12G_{31\rr1} + 8G_{\rr 311} + 12G_{13\rr1} + 8G_{1\rr 31} + 20G_{11\rr 3} + {}\]
+\[ 12G_{22\rr1} + 8G_{\rr 2 2 1} +  8G_{\rr212} +  12G_{21\rr2}+ 12G_{1\rr22} +  8G_{12\rr2} {} \]
+\[ 4G_{211\rr1} + G_{\rr2111} + 4G_{121\rr1} + G_{1\rr211} + 4G_{112\rr1} + G_{11\rr21} + 5G_{111\rr 2} + G_{1111\rr1}\]
+
+\section{Lie Stuff}
+We want to define a little generalization of right-nested Lie bracket notation
+$[A_n,[\cdots [A_2,A_1]\cdots]]$.
+First, we have a notion $L^\sigma_n$ of Lie permutations of $n$ things, with sign $\sigma$.
+\[
+\erule{}{1 \in L^+_1}
+\qquad
+\erule{\pi\in L^\sigma_n}{(n+1,\pi) \in L^\sigma_{n+1}}
+\qquad
+\erule{\pi\in L^\sigma_n}{(\pi,n+1) \in L^{-\sigma}_{n+1}}
+\]
+For example, $21 \in L^+_2$ and $12 \in L^-_2$ to capture that $[A_2,A_1] = A_2A_1 - A_1A_2$.
+
+ Suppose $R$ is a ring and $A:R^n$, and $f : R^n \to R$.
+The action of $\pi$ on $R^n \to R^n$ should be evident, except that our notion of the ``default permutation''
+of $n$ things is $n,(n-1),\cdots,2,1$ so e.g. $(3,2,1)$ is the way we write the identity permutation.
+
+We define:
+\[[A]^f = \sum_{\pi \in L^\sigma_n} \sigma f( \pi \cdot A)\]
+So the ordinary right-nested lie bracket can be written
+\[[A_n, [\cdots,[A_2, A_1]\cdots]] = [A_n,\ldots,A_1]^{\Pi} = [A_n,\ldots,A_1]\]
+Now we can show
+\begin{lemma}
+In the free $\mathbb{Z}$-module over permutations,
+\[\sum_{\pi \in L^\sigma_n} \sum_{\pi' \in L^{\sigma'}_n} \sigma\sigma' (\pi' \o \pi)
+= n\sum_{\pi \in L^\sigma_n}  \sigma \pi\]
+\end{lemma}
+
+\begin{proof}
+Write
+\[D_{\sigma\sigma'} = \sum_{\pi \in L^\sigma_n} \sum_{\pi' \in L^{\sigma'}_n}  (\pi' \o \pi)\]
+\[D_{\sigma} = \sum_{\pi \in L^\sigma_n}    \pi\]
+then we're asserting
+\[D_{++} - D_{-+} - D_{+-} + D_{--} = nD_+ - nD_-\]
+in other words there should be an isomorphism
+\[nD_- + D_{++} + D_{--} = nD_+ + D_{-+} + D_{+-}\]
+{\color{red}???}
+\cqed
+\end{proof}
+
+\begin{lemma}
+\[[A_n,\ldots,A_1]^{[\dash]} = n[A_n,\ldots, A_1]\]
+\end{lemma}
+
+\begin{proof}
+\[[A_{n},\ldots,A_1]^{[\dash]} = \sum_{\pi \in L^\sigma_n} \sigma [ \pi \cdot A]\]
+\[= \sum_{\pi \in L^\sigma_n} \sum_{\pi' \in L^{\sigma'}_n} \sigma\sigma' (\pi' \cdot \pi \cdot A)\]
+\[= \sum_{\pi \in L^\sigma_n} \sum_{\pi' \in L^{\sigma'}_n} \sigma\sigma' ((\pi' \o \pi) \cdot A)\]
+\[= n\sum_{\pi \in L^\sigma_n}  \sigma (\pi \cdot A)\]
+\[= n[A_{n},\ldots,A_1]\]
+
+\cqed
+\end{proof}
+
+
+
+
+
 
 \end{document}
