@@ -14,7 +14,7 @@ function termOfItem(it: Item): Term {
 }
 
 function _termOfTree(t: Tree): Term {
-  return t.map(termOfItem).join(',');
+  return t.map(termOfItem).join(';');
 }
 
 export function termOfTree(t: Tree): Term {
