@@ -276,9 +276,7 @@ function pseudoZ(e: Exp, e2: Exp, cond: (x: Item) => boolean): Exp {
 }
 
 
-
-console.log('target:\n', spretty(target(5)));
-console.log('have:\n', spretty(plusa(
+assert.equal('0', spretty(plusa(
   Z(target(4)),
   // synthesize all 2's
   pseudoZ(target(4), rule2, x => x == 1),
@@ -323,4 +321,52 @@ console.log('have:\n', spretty(plusa(
   rule5,
 
   sep(-1, target(5)),
+)));
+
+console.log('target:\n', spretty(target(6)));
+console.log('have:\n', spretty(plusa(
+  Z(target(5)),
+  // synthesize all 2's
+  pseudoZ(target(5), rule2, x => x == 1),
+  // // clean up 221
+  // sep(8, prod(G(2), lierule(G(2), G(1)))),
+  // sep(4, prod(lierule(G(2), G(1)), G(2))),
+  // // clean up 2111
+  // sep(3, proda(G(1), G(1), lierule(G(2), G(1)))),
+  // sep(2, proda(G(1), lierule(G(2), G(1)), G(1))),
+  // sep(1, proda(lierule(G(2), G(1)), G(1), G(1))),
+  // // synthesize all 3's
+  // sep(6, proda(G(2), rule3)),
+  // sep(6, proda(rule3, G(2))),
+  // sep(2, lierule(G(2), glie(2, 1))),
+
+  // // this gets rid of all [2,1]s
+  // sep(3, proda(G(1), G(1), rule3)),
+  // sep(2, proda(G(1), rule3, G(1))),
+  // sep(1, proda(rule3, G(1), G(1))),
+
+  // // this gets rid of all [0,2]s remaining.
+  // sep(2, prod(lierule(glie(0, 2), G(1)), G(1))),
+  // sep(2, prod(G(1), lierule(glie(0, 2), G(1)))),
+
+  // // This clears up the G_{(311)}
+  // sep(2, prod(lierule(G(1), G(3)), G(1))),
+  // sep(2, prod(G(1), lierule(G(3), G(1)))),
+
+  // // synthesize some 4's
+  // sep(2, proda(G(1), rule4)),
+  // sep(2, proda(rule4, G(1))),
+
+  // // sort out (41)
+  // sep(12, lierule(G(4), G(1))),
+
+  // // swizzle [1,[3,1]] business
+  // sep(2, lierule(glie(1, 3), G(1))),
+  // sep(-2, prod(G(1), lierule(G(1), G(3)))),
+  // sep(-2, prod(G(1), lierule(G(3), G(1)))),
+
+  // // synthesize 5
+  // rule5,
+
+  sep(-1, target(6)),
 )));
