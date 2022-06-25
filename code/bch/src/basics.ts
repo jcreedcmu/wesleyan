@@ -33,3 +33,7 @@ export function treeOfTerm(tm: Term): Tree {
 export function mkexp(tr: Tree, coeff: number = 1): Exp {
   return { [termOfTree(tr)]: coeff };
 }
+
+export function G(n: number, coeff: number = 1): Exp {
+  return mkexp([n], coeff);
+}
