@@ -1,7 +1,7 @@
 // values are coefficients
 export type Exp = Record<Term, number>;
 export type Term = string // e.g. '1,2,[3,4]'
-export type Item = number | [Item, Item];
+export type Item = number | [Tree, Tree];
 export type Tree = Item[];
 
 const _cache: Record<Term, Tree> = {};
@@ -10,7 +10,7 @@ function termOfItem(it: Item): Term {
   if (typeof it == 'number')
     return it + '';
   else
-    return '[' + termOfItem(it[0]) + ',' + termOfItem(it[1]) + ']';
+    return '[' + termOfTree(it[0]) + ',' + termOfTree(it[1]) + ']';
 }
 
 function _termOfTree(t: Tree): Term {
