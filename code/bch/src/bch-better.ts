@@ -105,20 +105,26 @@ function sub(t1: Exp, t2: Exp): Exp {
   return plus(t1, sep(-1, t2));
 }
 
-// tree-expression product
-function tep(tr: Tree, e: Exp): Exp {
+type TreeCombiner = (tr1: Tree, tr2: Tree) => Tree;
+
+function defaultTreeCombiner(tr1: Tree, tr2: Tree): Tree {
+  return [...tr1, ...tr2];
+}
+
+// tree-expression product, f to combine trees
+function tep(tr: Tree, e: Exp, f: TreeCombiner): Exp {
   const rv: Exp = {};
   for (const etm of Object.keys(e)) {
-    rv[termOfTree([...tr, ...treeOfTerm(etm)])] = e[etm];
+    rv[termOfTree(f(tr, treeOfTerm(etm)))] = e[etm];
   }
   return rv;
 }
 
 // product of two expressions
-function prod(e1: Exp, e2: Exp): Exp {
+function prod(e1: Exp, e2: Exp, f: TreeCombiner = defaultTreeCombiner): Exp {
   let rv: Exp = {};
   for (const t of Object.keys(e1)) {
-    rv = plus(tep(treeOfTerm(t), sep(e1[t], e2)), rv);
+    rv = plus(tep(treeOfTerm(t), sep(e1[t], e2), f), rv);
   }
   return rv;
 }
