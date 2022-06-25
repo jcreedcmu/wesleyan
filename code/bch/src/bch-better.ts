@@ -1,4 +1,4 @@
-import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm } from './basics';
+import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm, G } from './basics';
 import assert from 'assert';
 
 // assumes a.length == b.length
@@ -100,6 +100,11 @@ function sep(s: number, e: Exp): Exp {
   return rv;
 }
 
+// difference of two expressions
+function sub(t1: Exp, t2: Exp): Exp {
+  return plus(t1, sep(-1, t2));
+}
+
 // tree-expression product
 function tep(tr: Tree, e: Exp): Exp {
   const rv: Exp = {};
@@ -150,3 +155,6 @@ function Z(e: Exp): Exp {
 }
 
 assert.equal(epretty(Z(target(3))), '6G_{[03]} + 6G_{31} + 3G_{[02]1} + 3G_{2[01]} + 3G_{211} + 3G_{[01]2} + 3G_{1[02]} + 3G_{121} + G_{[01]11} + G_{1[01]1} + G_{11[01]} + G_{1111}');
+
+const rule2: Exp = sub(mkexp([2], 2), prod(G(0), G(1)));
+console.log(epretty(rule2));
