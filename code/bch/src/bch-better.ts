@@ -1,9 +1,74 @@
 import assert from 'assert';
 
+// assumes a.length == b.length
+function lexo(a: number[], b: number[]) {
+  for (let i = 0; i < a.length; i++) {
+    const d = a[i] - b[i];
+    if (d) return d;
+  }
+  return 0;
+}
+
+// list of all compositions (i.e. ordered partitions) of length n
+function comps(n: number): number[][] {
+  if (n <= 0) return [[]];
+  let rv: number[][] = [];
+  for (let i = 1; i <= n; i++) {
+    rv = [...rv, ...comps(n - i).map(c => [...c, i])];
+  }
+  return rv
+    .map(val => ({ val, sortBy: [...val].sort((a, b) => b - a) }))
+    .sort((a, b) => a.val.length - b.val.length || lexo(b.sortBy, a.sortBy))
+    .map(x => x.val);
+}
+
+assert.deepEqual(comps(4), [
+  [4],
+  [3, 1],
+  [1, 3],
+  [2, 2],
+  [2, 1, 1],
+  [1, 2, 1],
+  [1, 1, 2],
+  [1, 1, 1, 1]
+]);
+
+// factorial
+function factorial(n: number): number {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+assert.equal(factorial(10), 3628800);
+
+// binomial coefficients
+function choose(n: number, k: number): number {
+  return factorial(n) / factorial(k) / factorial(n - k);
+}
+
+assert.equal(choose(10, 3), 120);
+
 // values are coefficients
 type Exp = Record<Term, number>;
 type Term = string // e.g. '1,2,[3,4]'
 
+// pretty-print an expression
+function epretty(e: Exp): string {
+  if (Object.keys(e).every(k => e[k] == 0)) {
+    return '0';
+  }
+  let rv: string[] = [];
+  for (const t of Object.keys(e)) {
+    if (e[t] != 0) {
+      let coeff = e[t] == -1 ? '-' : e[t] == 1 ? '' : e[t];
+      const sub = t.replace(/,/g, '');
+      rv.push(`${coeff}G_{${sub}}`);
+    }
+  }
+  return rv.join(" + ").replace(/\+ -/g, '- ');
+}
+
+// sum of two expressions
 function plus(t1: Exp, t2: Exp): Exp {
   const rv: Exp = {};
   for (const e of Object.keys(t1)) {
@@ -14,6 +79,11 @@ function plus(t1: Exp, t2: Exp): Exp {
   }
   return rv;
 }
+
+assert.equal(
+  epretty(plus({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2, '6': -3 })),
+  '-2G_{0} + 10G_{5} - 3G_{6} + 3G_{12} - G_{21}'
+);
 
 // scalar-expression product
 function sep(s: number, e: Exp): Exp {
@@ -33,6 +103,7 @@ function tep(t: Term, e: Exp): Exp {
   return rv;
 }
 
+// product of two expressions
 function prod(e1: Exp, e2: Exp): Exp {
   let rv: Exp = {};
   for (const t of Object.keys(e1)) {
@@ -41,17 +112,17 @@ function prod(e1: Exp, e2: Exp): Exp {
   return rv;
 }
 
-function epretty(e: Exp): string {
-  let rv: string[] = [];
-  for (const t of Object.keys(e)) {
-    if (e[t] != 0) {
-      let coeff = e[t] == -1 ? '-' : e[t] == 1 ? '' : e[t];
-      const sub = t.replace(/,/g, '');
-      rv.push(`${coeff}G_{${sub}}`);
-    }
-  }
-  return rv.join(" + ").replace(/\+ -/g, '- ');
+assert.equal(
+  epretty(prod({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2 })),
+  '2G_{210} - 10G_{215} - 6G_{120} + 30G_{125}'
+);
+
+// compute the "target rhs", which corresponds to
+// n! times the q^n coefficient of e^{qG₁ + q²G₂ + q³G₃ + ⋯ }
+// which turns out to be the sum over all compositions λ₁, …, λₖ of n into k parts of
+// (n!/k!) G_{λ₁}⋯G_{λₖ}
+function target(n: number): Exp {
+  return comps(n).map(c => ({ [c.join(',')]: factorial(n) / factorial(c.length) })).reduce(plus);
 }
 
-assert.equal(epretty(plus({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2, '6': -3 })), '-2G_{0} + 10G_{5} - 3G_{6} + 3G_{12} - G_{21}');
-assert.equal(epretty(prod({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2 })), '2G_{210} - 10G_{215} - 6G_{120} + 30G_{125}');
+assert.equal(epretty(target(4)), '24G_{4} + 12G_{31} + 12G_{13} + 12G_{22} + 4G_{211} + 4G_{121} + 4G_{112} + G_{1111}');
