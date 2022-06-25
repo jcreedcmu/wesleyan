@@ -111,6 +111,10 @@ function defaultTreeCombiner(tr1: Tree, tr2: Tree): Tree {
   return [...tr1, ...tr2];
 }
 
+function lieTreeCombiner(tr1: Tree, tr2: Tree): Tree {
+  return [[tr1, tr2]];
+}
+
 // tree-expression product, f to combine trees
 function tep(tr: Tree, e: Exp, f: TreeCombiner): Exp {
   const rv: Exp = {};
@@ -127,6 +131,10 @@ function prod(e1: Exp, e2: Exp, f: TreeCombiner = defaultTreeCombiner): Exp {
     rv = plus(tep(treeOfTerm(t), sep(e1[t], e2), f), rv);
   }
   return rv;
+}
+
+function lie(e1: Exp, e2: Exp): Exp {
+  return prod(e1, e2, lieTreeCombiner);
 }
 
 const e1 = [1, 2]
@@ -152,7 +160,7 @@ function Z(e: Exp): Exp {
     const coef = e[tm];
     const tr = treeOfTerm(tm);
     for (let i = 0; i < tr.length; i++) {
-      const deriv: Exp = mkexp([...tr.slice(0, i), [0, tr[i]], ...tr.slice(i + 1)], coef);
+      const deriv: Exp = mkexp([...tr.slice(0, i), [[0], [tr[i]]], ...tr.slice(i + 1)], coef);
       rv.push(deriv);
     }
     rv.push(mkexp([...tr, 1], coef));
@@ -162,5 +170,5 @@ function Z(e: Exp): Exp {
 
 assert.equal(epretty(Z(target(3))), '6G_{[0,3]} + 6G_{31} + 3G_{[0,2]1} + 3G_{2[0,1]} + 3G_{211} + 3G_{[0,1]2} + 3G_{1[0,2]} + 3G_{121} + G_{[0,1]11} + G_{1[0,1]1} + G_{11[0,1]} + G_{1111}');
 
-const rule2: Exp = sub(mkexp([2], 2), prod(G(0), G(1)));
+const rule2: Exp = sub(mkexp([2], 2), lie(G(0), G(1)));
 console.log(epretty(rule2));
