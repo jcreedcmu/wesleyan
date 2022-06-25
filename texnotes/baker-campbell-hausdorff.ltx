@@ -1597,9 +1597,64 @@ in other words there should be an isomorphism
 \cqed
 \end{proof}
 
+\section{More Sandbox}
+I should be able to show first of all that $\ln(e^x) = x$. Generally
+\[\ln(f) = \sum_{k\ge 1} {(-1)^{k+1}\over k} (f-1)^k\]
+so
+\[x =\ln(e^x) = \sum_{k\ge 1} {(-1)^{k+1}\over k} (e^x-1)^k\]
+\[= \sum_{k\ge 1} {(-1)^{k+1}\over k} \left(\sum_{n\ge 1} {x^n\over n!}\right)^k\]
+\[= \sum_{k\ge 1, n\ge 1} {(-1)^{k+1}\over k} x^n \sum_{\lambda :(k,n)}  \prod_{i=1}^k {1 \over \lambda_i!}\]
+The $n=1$ case is trivially satisfied, so what I'm really saying is for all $n \ge 2$,
+\[  0 = \sum_{k\ge 1} {(-1)^{k+1}\over k} \sum_{\lambda :(k,n)}  \prod_{i=1}^k {1 \over \lambda_i!}\]
+i.e. if
+\[  P(k) = {1\over k} \sum_{\lambda :(k,n)}  \prod_{i=1}^k {1 \over \lambda_i!}\]
+then
+\[ \sum_{\{2k \st k \ge 1\}} P(k) =  \sum_{\{2k+1 \st k \ge 1\}} P(k)\]
+Let's try this for $n = 2$. The $\lambda :(k,2)$ are $2,11$, so I get
+\[ {1\over 2!} = {1\over 2} = 1/2\]
+Let's try this for $n = 3$. The $\lambda :(k,3)$ are $3,21,12,111$, so I get
+\[{1\over 3!} + {1\over 3} = {1\over 2!}{1\over 2} + {1\over 2!}{1\over 2} = 1/2\]
+Still works.
+Let's try this for $n = 4$. The $\lambda :(k,4)$ are $4,31,13,22,211,121,112,1111$, so I get
+\[{1\over 4!}  + {1\over 2!3} + {1\over 2!3} + {1\over 2!3} = {1\over 2!2!2} + {1\over 3!2} +  {1\over 3!2} + {1\over 4} = 13/24\]
+Multiplying through by $4!$ I'd get
+\[{{4\choose 4}\over 1}  + {{4 \choose 2,1,1}\over 3} + {{4 \choose 1,2,1}\over 3} + {{4\choose 1,1,2}\over 3} =
+{{4 \choose 2,2}\over 2} + {{4\choose 3,1}\over 2} +  {{4\choose 1,3}\over 2} + {{4\choose 1,1,1,1}\over 4} = 13\]
+Let's try this for $n = 5$. The $\lambda :(k,5)$ are $5,(41),(32),(311),(221),(2111),11111$.
+\[{1\over 5!}  + {1\over 2!2!} + {1\over 3!} + {1\over 5} = {1\over 4!} + {1\over 3!2!} + {1\over 2!}\]
+or times $5!$ I have
+\[\underbrace{1}_5  + \underbrace{10 + 10 + 10}_{(221)} + \underbrace{20 + 20 + 20}_{(311)} + \underbrace{24}_{11111} =
+ \underbrace{{5\over 2} + {5\over 2}}_{(41)} + \underbrace{5 + 5}_{(32)} + \underbrace{15 + 15 + 15 + 15}_{(2111)}\]
 
+Given an unordered set partition like $\{1,2,3\}$ of $6$, I'd get a term
 
-
-
-
+\[ {6 \choose 1,2,3} {3\choose 1,1,1}{1 \over 3}\]
+where $3!$ is the number of distinct permutations of $\{1,2,3\}$ and $3$ is its length.
+So for $\{2,2,1,1\}$ I'd get
+\[ {6 \choose 2,2,1,1} {4 \choose 2,2} {1 \over 4}\]
+Let's try to do the computation for $n=6$.
+Odds are $6,411,222,321,21111$. Evens are $51,42,33,2211,3111,111111$.
+Odds yield
+\[{{6 \choose 6}{1\choose 1}\over 1}
++ {{6\choose 222}{3\choose 3}\over 3}
++ {{6\choose 411}{3\choose 12}\over 3}
++ {{6\choose 321}{3\choose 111}\over 3}
++ {{6\choose 21111}{5\choose 14}\over 5}
+\]
+\[ = 1 + 30 + 30 + 120 + 360 = 541\]
+Evens yield
+\[{{6 \choose 51}{2\choose 11}\over 2}
++ {{6\choose 42}{2\choose 11}\over 2}
++ {{6\choose 33}{2\choose 2}\over 2}
++ {{6\choose 2211}{4\choose 22}\over 4}
++ {{6\choose 3111}{4\choose 31}\over 4}
++ {{6\choose 111111}{6\choose 6}\over 6}
+\]
+\[= 6 + 15 + 10 + 270 + 120 + 120 = 541\]
+So what I'm doing here is assigning some kind of integer $w(\lambda)$ to every {\em unordered} partition $\lambda$
+in the set of partitions $P^k_n$ with $k$ parts and total $n$, and asserting
+\[  \sum_{\lambda \in P^+_n} w(\lambda) =  \sum_{\lambda \in P^-_n}  w(\lambda)\]
+where the $+$ and $-$ indicate even and odd numbers of parts.
+Let's say the partition I'm considering is $\lambda = 1111122334 \in P^{10}_{19}$. Then
+\[w(\lambda) = {19 \choose 1,1,1,1,1,2,2,3,3,4}{10 \choose 5,2,2,1}{1\over 10}\]
 \end{document}
