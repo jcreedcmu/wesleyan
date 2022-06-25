@@ -172,3 +172,7 @@ assert.equal(epretty(Z(target(3))), '6G_{[0,3]} + 6G_{31} + 3G_{[0,2]1} + 3G_{2[
 
 const rule2: Exp = sub(mkexp([2], 2), lie(G(0), G(1)));
 console.log(epretty(rule2));
+assert.equal(
+  epretty(target(2)),
+  epretty(plus(Z(target(1)), rule2))
+);
