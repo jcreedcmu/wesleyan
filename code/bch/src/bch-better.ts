@@ -212,8 +212,17 @@ const rule4: Exp = sub(mkexp([4], 24), plusa(
   sep(6, glie(0, 3)),
 ));
 
+const rule5: Exp = sub(mkexp([5], 120), plusa(
+  sep(24, glie(0, 4)),
+  sep(12, glie(4, 1)),
+  sep(2, lie(glie(1, 3), G(1))),
+  sep(2, lie(G(2), glie(2, 1))),
+));
+
 console.log('rule2:', epretty(rule2));
 console.log('rule3:', epretty(rule3));
+console.log('rule4:', epretty(rule4));
+console.log('rule4:', epretty(rule5));
 console.log('---');
 //proof of 1->2
 assert.equal(
@@ -271,5 +280,47 @@ function pseudoZ(e: Exp, e2: Exp, cond: (x: Item) => boolean): Exp {
 console.log('target:\n', spretty(target(5)));
 console.log('have:\n', spretty(plusa(
   Z(target(4)),
-  pseudoZ(target(4), rule2, x => x == 1))
-));
+  // synthesize all 2's
+  pseudoZ(target(4), rule2, x => x == 1),
+  // clean up 221
+  sep(8, prod(G(2), lierule(G(2), G(1)))),
+  sep(4, prod(lierule(G(2), G(1)), G(2))),
+  // clean up 2111
+  sep(3, proda(G(1), G(1), lierule(G(2), G(1)))),
+  sep(2, proda(G(1), lierule(G(2), G(1)), G(1))),
+  sep(1, proda(lierule(G(2), G(1)), G(1), G(1))),
+  // synthesize all 3's
+  sep(6, proda(G(2), rule3)),
+  sep(6, proda(rule3, G(2))),
+  sep(2, lierule(G(2), glie(2, 1))),
+
+  // this gets rid of all [2,1]s
+  sep(3, proda(G(1), G(1), rule3)),
+  sep(2, proda(G(1), rule3, G(1))),
+  sep(1, proda(rule3, G(1), G(1))),
+
+  // this gets rid of all [0,2]s remaining.
+  sep(2, prod(lierule(glie(0, 2), G(1)), G(1))),
+  sep(2, prod(G(1), lierule(glie(0, 2), G(1)))),
+
+  // This clears up the G_{(311)}
+  sep(2, prod(lierule(G(1), G(3)), G(1))),
+  sep(2, prod(G(1), lierule(G(3), G(1)))),
+
+  // synthesize some 4's
+  sep(2, proda(G(1), rule4)),
+  sep(2, proda(rule4, G(1))),
+
+  // sort out (41)
+  sep(12, lierule(G(4), G(1))),
+
+  // swizzle [1,[3,1]] business
+  sep(2, lierule(glie(1, 3), G(1))),
+  sep(-2, prod(G(1), lierule(G(1), G(3)))),
+  sep(-2, prod(G(1), lierule(G(3), G(1)))),
+
+  // synthesize 5
+  rule5,
+
+  sep(-1, target(5)),
+)));
