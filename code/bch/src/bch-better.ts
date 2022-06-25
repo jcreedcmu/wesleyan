@@ -81,10 +81,8 @@ function spretty(e: Exp): string {
       rv.push(`${coeff}G_{${sub}}`);
     }
   }
-  return rv.join(" + ").replace(/\+ -/g, '- ');
+  return rv.join(" +\n ").replace(/\+\n -/g, '\n - ');
 }
-
-console.log(spretty(target(4)));
 
 // sum of two expressions
 function plus(t1: Exp, t2: Exp): Exp {
@@ -154,8 +152,16 @@ function prod(e1: Exp, e2: Exp, f: TreeCombiner = defaultTreeCombiner): Exp {
   return rv;
 }
 
+function proda(...args: Exp[]): Exp {
+  return args.reduce((x, y) => prod(x, y));
+}
+
 function lie(e1: Exp, e2: Exp): Exp {
   return prod(e1, e2, lieTreeCombiner);
+}
+
+function glie(n1: number, n2: number): Exp {
+  return prod(G(n1), G(n2), lieTreeCombiner);
 }
 
 const e1 = [1, 2]
@@ -200,18 +206,49 @@ const rule3: Exp = sub(mkexp([3], 6), plusa(
   sep(2, lie(G(0), G(2))),
   sep(1, lie(G(2), G(1))),
 ));
+const rule4: Exp = sub(mkexp([4], 24), plusa(
+  lie(glie(0, 2), G(1)),
+  sep(6, glie(0, 3)),
+));
 
-console.log(epretty(rule2));
+console.log('rule2:', epretty(rule2));
+console.log('rule3:', epretty(rule3));
 console.log('---');
+//proof of 1->2
 assert.equal(
   epretty(target(2)),
   epretty(plus(Z(target(1)), rule2))
 );
-console.log(spretty(target(3)));
-console.log(spretty(plusa(
-  Z(target(2)),
-  prod(rule2, G(1)),
-  prod(G(1), rule2),
-  lierule(G(2), G(1)),
-  rule3,
+// proof of 2->3
+assert.equal(
+  spretty(plusa(
+    Z(target(2)),
+    prod(rule2, G(1)),
+    prod(G(1), rule2),
+    lierule(G(2), G(1)),
+    rule3
+  )),
+  spretty(target(3))
+);
+// proof of 3->4
+assert.equal('0', epretty(plusa(
+  Z(target(3)),
+  proda(rule2, G(1), G(1)),
+  proda(G(1), rule2, G(1)),
+  proda(G(1), G(1), rule2),
+  prod(lierule(G(2), G(1)), G(1)),
+  sep(3, proda(G(2), rule2)),
+  sep(3, proda(rule2, G(2))),
+  sep(2, prod(G(1), lierule(G(2), G(1)))),
+  sep(1, prod(rule3, G(1))),
+  sep(2, prod(G(1), rule3)),
+  lierule(lie(G(0), G(2)), G(1)),
+  rule4,
+  sep(-1, target(4))
+)));
+
+
+console.log('target:\n', spretty(target(5)));
+console.log('have:\n', spretty(plusa(
+  Z(target(4)),
 )));
