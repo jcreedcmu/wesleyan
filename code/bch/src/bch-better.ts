@@ -1,3 +1,4 @@
+import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm } from './basics';
 import assert from 'assert';
 
 // assumes a.length == b.length
@@ -48,10 +49,6 @@ function choose(n: number, k: number): number {
 
 assert.equal(choose(10, 3), 120);
 
-// values are coefficients
-type Exp = Record<Term, number>;
-type Term = string // e.g. '1,2,[3,4]'
-
 // pretty-print an expression
 function epretty(e: Exp): string {
   if (Object.keys(e).every(k => e[k] == 0)) {
@@ -80,9 +77,18 @@ function plus(t1: Exp, t2: Exp): Exp {
   return rv;
 }
 
+function plusa(...args: Exp[]): Exp {
+  return args.reduce(plus);
+}
+
 assert.equal(
-  epretty(plus({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2, '6': -3 })),
-  '-2G_{0} + 10G_{5} - 3G_{6} + 3G_{12} - G_{21}'
+  epretty(plusa(
+    mkexp([1, 2], 3),
+    mkexp([2, 1], -1),
+    mkexp([5], 10),
+    mkexp([5], -2),
+    mkexp([6], -3))),
+  '8G_{5} - 3G_{6} + 3G_{12} - G_{21}'
 );
 
 // scalar-expression product
@@ -94,11 +100,11 @@ function sep(s: number, e: Exp): Exp {
   return rv;
 }
 
-// term-expression product
-function tep(t: Term, e: Exp): Exp {
+// tree-expression product
+function tep(tr: Tree, e: Exp): Exp {
   const rv: Exp = {};
-  for (const tt of Object.keys(e)) {
-    rv[`${t},${tt}`] = e[tt];
+  for (const etm of Object.keys(e)) {
+    rv[termOfTree([...tr, ...treeOfTerm(etm)])] = e[etm];
   }
   return rv;
 }
@@ -107,13 +113,14 @@ function tep(t: Term, e: Exp): Exp {
 function prod(e1: Exp, e2: Exp): Exp {
   let rv: Exp = {};
   for (const t of Object.keys(e1)) {
-    rv = plus(tep(t, sep(e1[t], e2)), rv);
+    rv = plus(tep(treeOfTerm(t), sep(e1[t], e2)), rv);
   }
   return rv;
 }
 
+const e1 = [1, 2]
 assert.equal(
-  epretty(prod({ '1,2': 3, '2,1': -1 }, { '5': 10, '0': -2 })),
+  epretty(prod(plusa(mkexp([1, 2], 3), mkexp([2, 1], -1)), plusa(mkexp([5], 10), mkexp([0], -2)))),
   '2G_{210} - 10G_{215} - 6G_{120} + 30G_{125}'
 );
 
