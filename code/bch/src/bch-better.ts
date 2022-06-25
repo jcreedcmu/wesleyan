@@ -58,7 +58,7 @@ function epretty(e: Exp): string {
   for (const t of Object.keys(e)) {
     if (e[t] != 0) {
       let coeff = e[t] == -1 ? '-' : e[t] == 1 ? '' : e[t];
-      const sub = t.replace(/,/g, '');
+      const sub = t.replace(/;/g, '');
       rv.push(`${coeff}G_{${sub}}`);
     }
   }
@@ -160,7 +160,7 @@ function Z(e: Exp): Exp {
   return rv.reduce(plus);
 }
 
-assert.equal(epretty(Z(target(3))), '6G_{[03]} + 6G_{31} + 3G_{[02]1} + 3G_{2[01]} + 3G_{211} + 3G_{[01]2} + 3G_{1[02]} + 3G_{121} + G_{[01]11} + G_{1[01]1} + G_{11[01]} + G_{1111}');
+assert.equal(epretty(Z(target(3))), '6G_{[0,3]} + 6G_{31} + 3G_{[0,2]1} + 3G_{2[0,1]} + 3G_{211} + 3G_{[0,1]2} + 3G_{1[0,2]} + 3G_{121} + G_{[0,1]11} + G_{1[0,1]1} + G_{11[0,1]} + G_{1111}');
 
 const rule2: Exp = sub(mkexp([2], 2), prod(G(0), G(1)));
 console.log(epretty(rule2));
