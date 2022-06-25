@@ -65,6 +65,27 @@ function epretty(e: Exp): string {
   return rv.join(" + ").replace(/\+ -/g, '- ');
 }
 
+// pretty-print an expression, sorted
+function spretty(e: Exp): string {
+  if (Object.keys(e).every(k => e[k] == 0)) {
+    return '0';
+  }
+  function sortBy(a: string, b: string): number {
+    return a.length - b.length || a.split('').sort().join('').localeCompare(b.split('').sort().join('')) || b.localeCompare(a);
+  }
+  let rv: string[] = [];
+  for (const t of Object.keys(e).sort(sortBy)) {
+    if (e[t] != 0) {
+      let coeff = e[t] == -1 ? '-' : e[t] == 1 ? '' : e[t];
+      const sub = t.replace(/;/g, '');
+      rv.push(`${coeff}G_{${sub}}`);
+    }
+  }
+  return rv.join(" + ").replace(/\+ -/g, '- ');
+}
+
+console.log(spretty(target(4)));
+
 // sum of two expressions
 function plus(t1: Exp, t2: Exp): Exp {
   const rv: Exp = {};
@@ -170,9 +191,27 @@ function Z(e: Exp): Exp {
 
 assert.equal(epretty(Z(target(3))), '6G_{[0,3]} + 6G_{31} + 3G_{[0,2]1} + 3G_{2[0,1]} + 3G_{211} + 3G_{[0,1]2} + 3G_{1[0,2]} + 3G_{121} + G_{[0,1]11} + G_{1[0,1]1} + G_{11[0,1]} + G_{1111}');
 
+function lierule(a: Exp, b: Exp): Exp {
+  return sub(lie(a, b), sub(prod(a, b), prod(b, a)));
+}
+
 const rule2: Exp = sub(mkexp([2], 2), lie(G(0), G(1)));
+const rule3: Exp = sub(mkexp([3], 6), plusa(
+  sep(2, lie(G(0), G(2))),
+  sep(1, lie(G(2), G(1))),
+));
+
 console.log(epretty(rule2));
+console.log('---');
 assert.equal(
   epretty(target(2)),
   epretty(plus(Z(target(1)), rule2))
 );
+console.log(spretty(target(3)));
+console.log(spretty(plusa(
+  Z(target(2)),
+  prod(rule2, G(1)),
+  prod(G(1), rule2),
+  lierule(G(2), G(1)),
+  rule3,
+)));
