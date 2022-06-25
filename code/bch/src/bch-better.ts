@@ -1,4 +1,4 @@
-import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm, G } from './basics';
+import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm, G, Item } from './basics';
 import assert from 'assert';
 
 // assumes a.length == b.length
@@ -178,6 +178,7 @@ function target(n: number): Exp {
   return comps(n).map(c => (mkexp(c, factorial(n) / factorial(c.length)))).reduce(plus);
 }
 
+
 assert.equal(epretty(target(4)), '24G_{4} + 12G_{31} + 12G_{13} + 12G_{22} + 4G_{211} + 4G_{121} + 4G_{112} + G_{1111}');
 
 
@@ -247,8 +248,28 @@ assert.equal('0', epretty(plusa(
   sep(-1, target(4))
 )));
 
+function pseudoZ(e: Exp, e2: Exp, cond: (x: Item) => boolean): Exp {
+  const rv: Exp[] = [];
+  for (const tm of Object.keys(e)) {
+    const coef = e[tm];
+    const tr = treeOfTerm(tm);
+    for (let i = 0; i < tr.length; i++) {
+      const deriv: Exp = sep(coef, proda(
+        mkexp([...tr.slice(0, i)]),
+        e2,
+        mkexp([...tr.slice(i + 1)])
+      ));
+      if (cond(tr[i]))
+        rv.push(deriv);
+    }
+  }
+  return rv.reduce(plus);
+}
+
+
 
 console.log('target:\n', spretty(target(5)));
 console.log('have:\n', spretty(plusa(
   Z(target(4)),
-)));
+  pseudoZ(target(4), rule2, x => x == 1))
+));
