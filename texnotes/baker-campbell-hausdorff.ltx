@@ -1657,4 +1657,60 @@ in the set of partitions $P^k_n$ with $k$ parts and total $n$, and asserting
 where the $+$ and $-$ indicate even and odd numbers of parts.
 Let's say the partition I'm considering is $\lambda = 1111122334 \in P^{10}_{19}$. Then
 \[w(\lambda) = {19 \choose 1,1,1,1,1,2,2,3,3,4}{10 \choose 5,2,2,1}{1\over 10}\]
+\section{Picking at What I Can Understand}
+Recall
+\[2G_2 = G_{[01]}\]
+\[6G_3  = 2G_{[02]} + G_{[21]}\]
+\[24G_4 = 6G_{[03]} + G_{[[02]1]}\]
+\[120G_5 = 24G_{[04]} + 12G_{[41]} + 2G_{[[13]1]} + 2G_{[[12]2]}\]
+
+\[X_0 = 1\]
+\[\Z[X_0] = X_1 = G_{1} \]
+\[\Z[X_1] = X_2 = 2G_{2} + G_{11} \]
+\[\Z[X_2] = X_3 = 6G_{ 3} + 3G_{(2 1)} + G_{111}\]
+\[\Z[X_3] = X_4 = 24G_{4} +12G_{(31)} + 12G_{(22)} + 3G_{(211)} + G_{1111}\]
+\[\Z[X_4] = X_5 = 120G_{5} + 60G_{(4 1)}+  60G_{(3 2)} + 20G_{(311)} + 20G_{(221)} + 4G_{(2111)} + G_{11111}\]
+How much 1-synthesis is going on when producing $X_{n+1}$ from $\Z[X_n]$? Let's say $R_1$ or a (subscript red 1)
+is an application of the $1$
+synthesis rule. It's %% I get
+%% \[\Z[X_0] = X_1 \ \leftarrow\  R_1 \]
+%% \[\Z[X_1] = X_2 \ \leftarrow\  G_{1\rr1} \]
+%% \[\Z[X_2] = X_3 \ \leftarrow\  2G_{2\rr1} + G_{11\rr1} \]
+%% This is conclusive:
+\[(\Z[X_n] = X_{n+1}) \ \leftarrow\  X_nR_1 \]
+Now how much 2-synthesis is going on? Write $R_2$ or ${}_{\rr 2}$.
+\[(\Z[X_1] = X_2) \ \leftarrow\  G_{\rr2} \]
+\[(\Z[X_2] = X_3) \ \leftarrow\  G_{1\rr2} + G_{\rr 21} \]
+\[(\Z[X_3] = X_4) \ \leftarrow\  G_{11\rr 2} + G_{1\rr21} + G_{\rr211} + 3G_{2\rr 2} + 3G_{\rr2 2}\]
+Hm, I sort of know how to deal with this. Let's define noncommutative polynomials
+$h_n(x_1, \ldots, x_n)$ like so:
+\[h_1(x_1) = x_1\]
+\[h_2(x_1,x_2) = 2x_2 + x_1^2  \]
+\[h_3(x_1,x_2,x_3) = 6x_3 + 3(x_2x_1 + x_1x_2) + x_1^3\]
+\[h_4(x_1,x_2,x_3,x_4) = 24x_{4} +12(x_{3}x_{1} + x_1x_3) + 12x_{22} + 4(x_2x_1^2 + x_1x_2x_1 + x_1^2x_2) + x_1^4\]
+etc.
+
+Then the ``synthesis counter'' is actually a doubly $\N$-index map from relations to relations.
+If we want to count how many times we synthesize $G_n$ when trying to show $\Z[X_m] = X_{m+1}$,
+then let's call that $S_{n}[r,h]$, which maps a variable relation $r$ and a polynomial $h$
+to another polynomial which shows all the contexts in which we need to apply the rule.
+ For example, we have established that
+\[S_{1}[r, h] = h r \]
+and now I think I've convinced myself that
+\[S_{2}[r, h] = h  \{r/x_1\}\]
+where $\{r/x_1\}$ is an operation kind of like a derivative or Lie bracket, in that we define it by
+\[H\{r/x\} = 0 \qquad\hbox{(if $x\not\in H$)}\]
+\[x\{r/x\} = r \qquad(HK) \{r/x\} = (H\{r/x\})K + H(K\{r/x\}) \]
+
+Concretely, $2$synthesis?
+\[(1\to 2) r\]
+\[(2\to 3) rx_1 + x_1r\]
+What about $3$-synthesis?
+\[(2\to 3) r\]
+\[(3\to 4) rx_1 + 2x_1r\]
+\[(4\to 5) 6x_2r  + 6rx_2 + 3x_1x_1r + 2x_1rx_1 + rx_1x_1 \]
+What about $4$-synthesis?
+\[(3\to 4) r\]
+\[(4\to 5)  2rx_1 + 2x_1r  \]
+
 \end{document}
