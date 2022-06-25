@@ -323,27 +323,50 @@ assert.equal('0', spretty(plusa(
   sep(-1, target(5)),
 )));
 
+const L21 = lierule(G(2), G(1));
+
 console.log('target:\n', spretty(target(6)));
 console.log('have:\n', spretty(plusa(
   Z(target(5)),
   // synthesize all 2's
   pseudoZ(target(5), rule2, x => x == 1),
-  // // clean up 221
-  // sep(8, prod(G(2), lierule(G(2), G(1)))),
-  // sep(4, prod(lierule(G(2), G(1)), G(2))),
-  // // clean up 2111
-  // sep(3, proda(G(1), G(1), lierule(G(2), G(1)))),
-  // sep(2, proda(G(1), lierule(G(2), G(1)), G(1))),
-  // sep(1, proda(lierule(G(2), G(1)), G(1), G(1))),
-  // // synthesize all 3's
-  // sep(6, proda(G(2), rule3)),
-  // sep(6, proda(rule3, G(2))),
-  // sep(2, lierule(G(2), glie(2, 1))),
+  // clean up 2211
+  sep(10, proda(G(1), G(2), L21)),
+  sep(10, proda(G(1), L21, G(2))),
+  sep(10, proda(L21, G(1), G(2))),
+  // -@-
+  sep(20, proda(G(2), G(1), L21)),
+  sep(10, proda(G(2), L21, G(1))),
+  sep(0, proda(L21, G(2), G(1))),
+  // get rid of all the [2,1]s we just created, by synthesizing 3's
+  sep(10, proda(G(1), G(2), rule3)),
+  sep(10, proda(G(1), rule3, G(2))),
+  sep(10, proda(rule3, G(1), G(2))),
+  // -@-
+  sep(20, proda(G(2), G(1), rule3)),
+  sep(10, proda(G(2), rule3, G(1))),
+  sep(0, proda(rule3, G(2), G(1))),
 
-  // // this gets rid of all [2,1]s
-  // sep(3, proda(G(1), G(1), rule3)),
-  // sep(2, proda(G(1), rule3, G(1))),
-  // sep(1, proda(rule3, G(1), G(1))),
+  // clean up 21111
+  sep(4, proda(G(1), G(1), G(1), L21)),
+  sep(3, proda(G(1), G(1), L21, G(1))),
+  sep(2, proda(G(1), L21, G(1), G(1))),
+  sep(1, proda(L21, G(1), G(1), G(1))),
+  // get rid of all [2,1]s we just created's by synthesizing 3's
+  sep(4, proda(G(1), G(1), G(1), rule3)),
+  sep(3, proda(G(1), G(1), rule3, G(1))),
+  sep(2, proda(G(1), rule3, G(1), G(1))),
+  sep(1, proda(rule3, G(1), G(1), G(1))),
+
+  // // synthesize G_33 somehow? this kills the
+  // [0,2]3 and 3[0,2] terms, which is good.
+  sep(30, proda(G(3), rule3)),
+  sep(30, proda(rule3, G(3))),
+
+  // I guess swizzle around the (123) accordingly?
+  // sep(30, prod(G(3), lierule(G(2), G(1)))),
+  // sep(30, prod(lierule(G(2), G(1)), G(3))),
+
 
   // // this gets rid of all [0,2]s remaining.
   // sep(2, prod(lierule(glie(0, 2), G(1)), G(1))),
