@@ -277,55 +277,90 @@ function pseudoZ(e: Exp, e2: Exp, cond: (x: Item) => boolean): Exp {
 
 
 const L21 = lierule(G(2), G(1));
-console.log(spretty(plusa(
-  Z(target(4)),
-  // synthesize all 2's
-  pseudoZ(target(4), rule2, x => x == 1),
-  // synthesize all 3's
-  sep(6, proda(G(2), rule3)),
-  sep(6, proda(rule3, G(2))),
-  sep(3, proda(G(1), G(1), rule3)),
-  sep(2, proda(G(1), rule3, G(1))),
-  sep(1, proda(rule3, G(1), G(1))),
-  // synthesize all 4's
-  prod(rule4, G(1)),
-  sep(3, prod(G(1), rule4)),
+const L31 = lierule(G(3), G(1));
+const L13 = lierule(G(1), G(3));
+function alternate34() {
+  console.log(spretty(plusa(
+    Z(target(3)),
+    // synthesize all 2's
+    pseudoZ(target(3), rule2, x => x == 1),
 
-  // remainder is cleanup
 
-  // clean up 41
-  sep(12, lierule(G(1), G(4))),
+    sep(2, prod(rule3, G(1))),
+    sep(1, prod(G(1), rule3)),
 
-  // clean up 311
-  sep(2, prod(lierule(G(1), G(3)), G(1))),
-  sep(2, prod(G(1), lierule(G(3), G(1)))),
+    sep(6, lierule(G(3), G(1))),
 
-  // clean up 221
-  sep(8, prod(G(2), lierule(G(2), G(1)))),
-  sep(4, prod(lierule(G(2), G(1)), G(2))),
+    sep(1, lierule(G(1), glie(0, 2))),
+    sep(1, prod(G(1), lierule(G(2), G(1)))),
+    sep(2, prod(lierule(G(2), G(1)), G(1))),
+    sep(-1, target(4)),
 
-  // clean up 2111
-  sep(3, proda(G(1), G(1), lierule(G(2), G(1)))),
-  sep(2, proda(G(1), lierule(G(2), G(1)), G(1))),
-  sep(1, proda(lierule(G(2), G(1)), G(1), G(1))),
+    // clean up 211
+    sep(1, prod(lierule(G(1), G(2)), G(1))),
+    sep(1, prod(G(1), lierule(G(2), G(1)))),
 
-  // clean up 1[0,3]
-  sep(6, lierule(glie(0, 3), G(1))),
+    // swizzle [1,[2,1]]
+    sep(1, lierule(glie(1, 2), G(1))),
+    sep(-1, prod(G(1), lierule(G(1), G(2)))),
+    sep(-1, prod(G(1), lierule(G(2), G(1)))),
 
-  // clean up [[0,2]11
-  sep(2, prod(lierule(glie(0, 2), G(1)), G(1))),
-  sep(2, prod(G(1), lierule(glie(0, 2), G(1)))),
+  )));
+}
 
-  // clean up 1[[0,2],1]
-  lierule(lie(glie(0, 2), G(1)), G(1)),
+function alternate45() {
+  console.log(spretty(plusa(
+    Z(target(4)),
+    // synthesize all 2's
+    pseudoZ(target(4), rule2, x => x == 1),
+    // synthesize all 3's
+    sep(6, proda(G(2), rule3)),
+    sep(6, proda(rule3, G(2))),
+    sep(3, proda(G(1), G(1), rule3)),
+    sep(2, proda(G(1), rule3, G(1))),
+    sep(1, proda(rule3, G(1), G(1))),
+    // synthesize all 4's
+    prod(rule4, G(1)),
+    sep(3, prod(G(1), rule4)),
 
-  // clean up 2[2,1]
-  sep(2, lierule(G(2), glie(2, 1))),
+    // remainder is cleanup
 
-  // swizzle [1,[3,1]]
-  sep(2, lierule(glie(1, 3), G(1))),
-  sep(-2, prod(G(1), lierule(G(1), G(3)))),
-  sep(-2, prod(G(1), lierule(G(3), G(1)))),
+    // clean up 41
+    sep(12, lierule(G(1), G(4))),
 
-  sep(-1, target(5)),
-)));
+    // clean up 311
+    sep(2, prod(lierule(G(1), G(3)), G(1))),
+    sep(2, prod(G(1), lierule(G(3), G(1)))),
+
+    // clean up 221
+    sep(8, prod(G(2), lierule(G(2), G(1)))),
+    sep(4, prod(lierule(G(2), G(1)), G(2))),
+
+    // clean up 2111
+    sep(3, proda(G(1), G(1), lierule(G(2), G(1)))),
+    sep(2, proda(G(1), lierule(G(2), G(1)), G(1))),
+    sep(1, proda(lierule(G(2), G(1)), G(1), G(1))),
+
+    // clean up 1[0,3]
+    sep(6, lierule(glie(0, 3), G(1))),
+
+    // clean up [[0,2]11
+    sep(2, prod(lierule(glie(0, 2), G(1)), G(1))),
+    sep(2, prod(G(1), lierule(glie(0, 2), G(1)))),
+
+    // clean up 1[[0,2],1]
+    lierule(lie(glie(0, 2), G(1)), G(1)),
+
+    // clean up 2[2,1]
+    sep(2, lierule(G(2), glie(2, 1))),
+
+    // swizzle [1,[3,1]]
+    sep(2, lierule(glie(1, 3), G(1))),
+    sep(-2, prod(G(1), lierule(G(1), G(3)))),
+    sep(-2, prod(G(1), lierule(G(3), G(1)))),
+
+    sep(-1, target(5)),
+  )));
+}
+
+alternate34();
