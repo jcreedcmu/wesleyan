@@ -149,4 +149,4 @@ function Z(e: Exp): Exp {
   return rv.reduce(plus);
 }
 
-console.log(epretty(Z(target(3))));
+assert.equal(epretty(Z(target(3))), '6G_{[03]} + 6G_{31} + 3G_{[02]1} + 3G_{2[01]} + 3G_{211} + 3G_{[01]2} + 3G_{1[02]} + 3G_{121} + G_{[01]11} + G_{1[01]1} + G_{11[01]} + G_{1111}');
