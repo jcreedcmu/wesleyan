@@ -129,7 +129,24 @@ assert.equal(
 // which turns out to be the sum over all compositions λ₁, …, λₖ of n into k parts of
 // (n!/k!) G_{λ₁}⋯G_{λₖ}
 function target(n: number): Exp {
-  return comps(n).map(c => ({ [c.join(',')]: factorial(n) / factorial(c.length) })).reduce(plus);
+  return comps(n).map(c => (mkexp(c, factorial(n) / factorial(c.length)))).reduce(plus);
 }
 
 assert.equal(epretty(target(4)), '24G_{4} + 12G_{31} + 12G_{13} + 12G_{22} + 4G_{211} + 4G_{121} + 4G_{112} + G_{1111}');
+
+
+function Z(e: Exp): Exp {
+  const rv: Exp[] = [];
+  for (const tm of Object.keys(e)) {
+    const coef = e[tm];
+    const tr = treeOfTerm(tm);
+    for (let i = 0; i < tr.length; i++) {
+      const deriv: Exp = mkexp([...tr.slice(0, i), [0, tr[i]], ...tr.slice(i + 1)], coef);
+      rv.push(deriv);
+    }
+    rv.push(mkexp([...tr, 1], coef));
+  }
+  return rv.reduce(plus);
+}
+
+console.log(epretty(Z(target(3))));
