@@ -13,6 +13,7 @@ const G4 = G(4);
 const G5 = G(5);
 const L01 = lie(G0, G1);
 const L02 = lie(G0, G2);
+const L04 = lie(G0, G4);
 const L12 = lie(G1, G2);
 const L011 = lie(L01, G1);
 const L012 = lie(L01, G2);
@@ -160,9 +161,66 @@ proof[4] = plusa(
   sep(36, lierule(G1, G4)),
 );
 
+const knob = -5; // can be anywhere [-5, 5]
+
 proof[5] = plusa(
   // move [01]
-  sep(0, R013),
+  sep(60, lierule(L01, G4)),
+
+  sep(20, prod(lierule(L01, G3), G1)),
+  sep(20, prod(lierule(L01, G1), G3)),
+  sep(40, prod(G1, lierule(L01, G3))),
+  sep(40, prod(G3, lierule(L01, G1))),
+
+  sep(20, prod(lierule(L01, G2), G2)),
+  sep(40, prod(G2, lierule(L01, G2))),
+
+  sep(5, proda(lierule(L01, G2), G1, G1)),
+  sep(5, proda(lierule(L01, G1), G2, G1)),
+  sep(5, proda(lierule(L01, G1), G1, G2)),
+
+  sep(10, proda(G1, lierule(L01, G2), G1)),
+  sep(10, proda(G2, lierule(L01, G1), G1)),
+  sep(10, proda(G1, lierule(L01, G1), G2)),
+
+  sep(15, proda(G1, G1, lierule(L01, G2))),
+  sep(15, proda(G2, G1, lierule(L01, G1))),
+  sep(15, proda(G1, G2, lierule(L01, G1))),
+
+  sep(1, proda(lierule(L01, G1), G1, G1, G1)),
+  sep(2, proda(G1, lierule(L01, G1), G1, G1)),
+  sep(3, proda(G1, G1, lierule(L01, G1), G1)),
+  sep(4, proda(G1, G1, G1, lierule(L01, G1))),
+
+  // synthesize G2
+  sep(120, proda(G4, rule[2])),
+  sep(60, proda(G1, G3, rule[2])),
+  sep(60, proda(G3, G1, rule[2])),
+  sep(60, proda(G2, G2, rule[2])),
+  sep(20, proda(G2, G1, G1, rule[2])),
+  sep(20, proda(G1, G2, G1, rule[2])),
+  sep(20, proda(G1, G1, G2, rule[2])),
+  sep(5, proda(G1, G1, G1, G1, rule[2])),
+
+  // rebalance (2211)
+  sep(10, proda(G1, R12, G2)),
+  sep(5 - knob, proda(R12, G1, G2)),
+  sep(15 - knob, proda(G2, G1, R12)),
+  sep(15 + knob, proda(G1, G2, R12)),
+  sep(5 + knob, proda(R12, G2, G1)),
+  sep(10, proda(G2, R12, G1)),
+
+  // rebalance (21111)
+  sep(4, proda(G1, G1, G1, lierule(G1, G2))),
+  sep(3, proda(G1, G1, lierule(G1, G2), G1)),
+  sep(2, proda(G1, lierule(G1, G2), G1, G1)),
+  sep(1, proda(lierule(G1, G2), G1, G1, G1)),
+
+  // prepare to synthesize G3...
+  // move [011]
+  // move [12]
+  // move [02]
+  // synthesize G3
 )
 
 const N = 5;
