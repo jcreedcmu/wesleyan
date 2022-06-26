@@ -1716,4 +1716,56 @@ What about $4$-synthesis?
 \[(3\to 4) R\]
 \[(4\to 5)  3xR + Rx   \]
 
-\end{document}
+\section{Always Synthesize On the Right}
+Here's a strategy for trying to reduce the amount of nondeterminism I
+have to deal with: notice that I'm always synthesizing $A + B \to G_1$
+on the right side of an expression, and follow that pattern for all
+other synthesis. This will introduce a {\em lot} of swapping, but
+maybe it will reveal the ``screened'' terms that have been confounding
+me until now.
+
+$0\to1$: I still have $\Z[X_0] = A + B = G_1$.
+
+$1\to2$: I still have $\Z[X_1] = \Z[G_1] = G_{1'} + G_{11} = 2G_2 + G_{11}$.
+Synthesis of $G_2$ still takes place on the right. I still have $2G_2 = G_{1'}$.
+
+$2\to3$: I have $\Z[X_2] = 2\Z[G_2] + \Z[G_{11}] = 2G_{2'} + 2G_{21} + G_{1'1} + G_{11'} + G_{111}$.
+Here I diverge: I first go to
+\[2G_{2'} + 2G_{21} + G_{[1'1]} + 2G_{11'} + G_{111}\]
+then synthesize
+\[2G_{2'} + 2G_{21} + G_{[1'1]} + 4G_{12} + G_{111}\]
+then swap back to balance out:
+\[2G_{2'} + 3G_{21} + G_{[12]} + G_{[1'1]} + 3G_{12} + G_{111}\]
+finding that I need
+\[6G_3 = 2G_{2'} + G_{[12]} + G_{[1'1]}\]
+This is equal in the noncommutative polynomial ring, but maybe it will reveal more structure.
+
+Time to try $3\to4$. We first know
+\[\Z[X_3] = 6\Z[G_{3}] + 3\Z[G_{21}] + 3\Z[G_{12}] + \Z[G_{111}]\]
+\[ = 6G_{3'} + 6G_{31} + 3G_{2'1} + 3G_{21'} + 3G_{211} + 3G_{1'2} + 3G_{12'} + 3G_{121} + {}\]
+\[G_{1'11} + G_{11'1} + G_{111'} + G_{1111}\]
+Now we shunt all the $1'$ and $2'$ to the right:
+\[ = 6G_{3'} + 6G_{31} + 3G_{[2'1]} +  6G_{21'} + 3G_{211} + 3G_{[1'2]} +  6G_{12'} + 3G_{121} + {}\]
+\[G_{[1'1]1} + 2G_{1[1'1]}  + 3G_{111'} + G_{1111}\]
+Now synthesize some $G_2$:
+\[ = 6G_{3'} + 6G_{31} + 3G_{[2'1]} +  12G_{22} + 3G_{211} + 3G_{[1'2]} +  6G_{12'} + 3G_{121} + {}\]
+\[G_{[1'1]1} + 2G_{1[1'1]}  + 6G_{112} + G_{1111}\]
+Now balance out the $(211)$, which I seem to need to do before I can synthesize $G_3$! interestingly constrained.
+\[ = 6G_{3'} + 6G_{31} + 3G_{[2'1]} +  12G_{22} +  3G_{[1'2]} +  6G_{12'} +  {}\]
+\[G_{[1'1]1} + 2G_{1[1'1]}  + 2G_{1[12]} + G_{[12]1} + 4G_{(211)} + G_{1111}\]
+Now shunt the $[1'1]$ and $[12]$ to the right across $1$ so they're in the right place for $G_3$-synthesis:
+\[ = 6G_{3'} + 6G_{31} + 3G_{[2'1]} +  12G_{22} +  3G_{[1'2]} +  6G_{12'} +  {}\]
+\[G_{[[1'1]1]} + 3G_{1[1'1]}  + 3G_{1[12]} + G_{[[12]1]} + 4G_{(211)} + G_{1111}\]
+Now everything is in the right ratio, nice:
+\[ = 6G_{3'} + 6G_{31} + 3G_{[2'1]} +  12G_{22} +  3G_{[1'2]} +  18G_{13} +  {}\]
+\[G_{[[1'1]1]} + G_{[[12]1]} + 4G_{(211)} + G_{1111}\]
+Now balance out the $G_{(13)}$:
+\[ = 6G_{3'} + 12G_{(31)} + 3G_{[2'1]} +  12G_{22} +  3G_{[1'2]} +  6G_{[13]} +  {}\]
+\[G_{[[1'1]1]} + G_{[[12]1]} + 4G_{(211)} + G_{1111}\]
+And we find we need
+\[\color{blue} 24G_4 = 6G_{3'} + 6G_{[13]} + 3G_{[2'1]} + 3G_{[1'2]} + G_{[[1'1]1]} + G_{[[12]1]}\]
+Now this is looking very nice. If I expand out the ``derivatives'' I see
+\[ 24G_4 = 6G_{[03]} + 6G_{[13]} + 3G_{[[02]1]} + 3G_{[[01]2]} + G_{[[[01]1]1]} + G_{[[12]1]}\]
+and apart from some confusion about $G_0$ vs. $G_1$ this is covering all compositions of $4$, and they're
+all left-nested.
+\end{document}]
