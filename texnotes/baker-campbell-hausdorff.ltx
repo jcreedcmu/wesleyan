@@ -1837,8 +1837,60 @@ ah and I could move all of the resulting brackets to the right as well:
 \[\left(\sum_{1 \le i < j \le k} G_{\lambda_{[1,\hat i, \hat j,k)}} G_{[0,\lambda _i,\lambda_j]} \right) + \]
 \[\left.\sum_{1 \le i \le k}  G_{\lambda_{[1,\hat i,k]}}G_{[0\lambda_i]}  \right)\]
 Ok, so clearly what this comes down to is summing over subsets $S \subseteq [1,\ldots,k]$. Write $\bar S$ for the complement of $S$ in $[1,k]$.
-\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!} \left( \sum_{S \subseteq [1,k]} G_{\lambda_{\bar S}} G_{[0,\lambda_S]}\right)\]
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!} \left( \sum_{S \subseteq [1,k]} G_{\lambda_{\bar S}} G_{[0,\lambda_S]}\right)\eqno(\dagger)\]
 Where we think of $G_{\lambda 1}$ as arising from setting $S$ to the empty set, so that $G_{\lambda_{\bar S}}$ is all of $S$ and we
-set $G_{[0,\lambda_\emptyset]} = G_1$.
+set $G_{[0,\lambda_\emptyset]} = G_1$. I'm pretty happy about this result.
+It's fairly clean.
+
+\subsubsection{Cleanup after $2$-synthesis: $(21^*)$}
+So let's try to analyze what happens to partitions involving just
+one $2$ and some $1$s. Set
+\[ T_{nk} = G_{1^k21^{n-2-k}}\]
+We know $X_n$ includes $\sum_{k=0}^{n-2} nT_{nk}$
+so $\Z[X_n]$ by 1-synthesis has $\sum_{k=0}^{n-2} nT_{(n+1)k}$
+We also know that the rhs of $\dagger$ includes
+\[nG_{1^{n-1} [0,1]}\]
+because there are $n$ different subsets of $[1,\ldots, n]$ that
+exclude one element.
+
+By 2-synthesis this gives us $2nG_{1^{n-1}2}$.
+
+It seems clear we're meant to spread out the
+$(\overbrace{n, \ldots, n}^{n-1}, 2n)$
+vector to instead be
+$(\overbrace{n+1, \ldots,  n+1}^n)$, i.e. $(n-1)n + 2n = (n+1)n$.
+So the result of doing the Lie rearrangement is
+\[ 2nG_{1^{n-1}2} + \sum_{k=0}^{n-2} nT_{(n+1)k} =
+\sum_{k=0}^{n-2} (k+1)G_{1^{k}[12]1^{n-2-k}} +
+\sum_{k=0}^{n-1} (n+1)T_{(n+1)k}
+\]
+
+\subsubsection{Cleanup after $2$-synthesis: $(2^*1^*)$}
+What if we have more 2s? If $p_1,\ldots,p_N$ is a list of numbers,
+then define an ordered partition $\pi_p$ by
+\[ \pi_{p} = 1^{p_1}21^{p_2}2\cdots2 1^{p_{N-1}} 2 1^{p_N} \]
+e.g.
+\[ G_{\pi_{ijk}} = G_{1^i21^{j}21^k}\]
+Define $P_n$ to be the set of $p$ that make sense for $n$, namely
+\[P_n = \{ p\st \sum p = n-2|p|+2\}\]
+Say $p \to^+ q$ if
+$q$ does nothing but increments one of the numbers in $p$.
+
+We know $X_n$ includes
+\[\sum_{p \in P_n } {n!\over (n-|p|+1)!}G_{\pi_p}\]
+e.g.
+\[\sum_{i+j+k=n-4} n(n-1)\pi_{ijk}\]
+So after doing 1-synthesis in $\Z[X_n]$ we surely have for $|p| = 3$
+\[\sum_{i+j+k=n-4} n(n-1)G_{\pi_{ij(k+1)}}\]
+And generally we would have
+\[\sum_{p \in P_n } {n!\over (n-|p|+1)!}\pi_{p}G_1\]
+Any 2-synthesis is going to come from picking out a 1 in between somewhere.
+But they've already been moved to the right. Let's
+\[\sum_{n_1 + n_2 + 1= n} \sum_{p_1 \in P_{n_1}} \sum_{p_2 \in P_{n_2}}
+ {n!\over (n-|p|+1)!}\pi_{p_1}G_{[0,1]} \pi_{p_2}\]
+which lives in $\Z[X_n]$,
+into
+\[\sum_{n_1 + n_2 + 1= n} \sum_{p_1 \in P_{n_1}} \sum_{p_2 \in P_{n_2}}
+ {n!\over (n-|p|+1)!}\pi_{p_1p_2}\]
 
 \end{document}
