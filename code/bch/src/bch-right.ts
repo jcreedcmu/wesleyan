@@ -160,7 +160,12 @@ proof[4] = plusa(
   sep(36, lierule(G1, G4)),
 );
 
-const N = 4;
+proof[5] = plusa(
+  // move [01]
+  sep(0, R013),
+)
+
+const N = 5;
 
 for (let i = 2; i < N + 1; i++) {
   console.log(`rule ${i}: ${epretty(rule[i])}`);
@@ -170,4 +175,4 @@ console.log('---\nhave:\n', spretty(plusa(
   proof[N],
   sep(-1, target(N + 1))
 )));
-console.log(extract(proof[N], N));
+//console.log(extract(proof[N], N));
