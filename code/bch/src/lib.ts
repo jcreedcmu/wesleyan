@@ -201,3 +201,44 @@ assert.equal(epretty(Z(target(3))), '6G_{[0,3]} + 6G_{31} + 3G_{[0,2]1} + 3G_{2[
 export function lierule(a: Exp, b: Exp): Exp {
   return sub(lie(a, b), sub(prod(a, b), prod(b, a)));
 }
+
+// return a string that is a piece of javascript code that reconstructs the expression e
+export function rpretty(e: Exp): string {
+  function treePretty(tr: Tree): string {
+    if (tr.length == 1) { return itemPretty(tr[0]); }
+    return `proda(${tr.map(itemPretty).join(',')})`;
+  }
+  function itemPretty(it: Item): string {
+    if (typeof it == 'number') {
+      return `G${it}`;
+    }
+    else {
+      return `lie(${treePretty(it[0])},${treePretty(it[1])})`;
+    }
+  }
+  function termPretty(coeff: number, tree: Tree) {
+    if (coeff == 1)
+      return treePretty(tree);
+    else
+      return `sep(${coeff},${treePretty(tree)})`;
+  }
+  let summands: string[] = [];
+  for (const tm of Object.keys(e)) {
+    if (e[tm] !== 0)
+      summands.push(`${termPretty(e[tm], treeOfTerm(tm))}`);
+  }
+  return `plusa(\n${summands.join(',\n')}\n)`;
+}
+
+// return a string that is a piece of javascript code that expresses the "rule" at level n,
+// given that e is an expression that is the putative "proof" that Z[target(n)] = target(n+1)
+export function extract(e: Exp, n: number): string {
+  const fn1 = factorial(n + 1);
+  const ruleContent = plusa(
+    Z(target(n)),
+    sep(-1, target(n + 1)),
+    e,
+    sep(factorial(n + 1), G(n + 1))
+  );
+  return `rule[${n + 1}] = sub(sep(${fn1}, G${n}), ${rpretty(ruleContent)});`;
+}

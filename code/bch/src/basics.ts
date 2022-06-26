@@ -1,8 +1,8 @@
 // values are coefficients
 export type Exp = Record<Term, number>;
 export type Term = string // e.g. '1,2,[3,4]'
-export type Item = number | [Tree, Tree];
-export type Tree = Item[];
+export type Item = number | [Tree, Tree]; // a pair meanse a lie product
+export type Tree = Item[]; // the list structure here implies ordinary product
 
 const _cache: Record<Term, Tree> = {};
 
