@@ -240,5 +240,5 @@ export function extract(e: Exp, n: number): string {
     e,
     sep(factorial(n + 1), G(n + 1))
   );
-  return `rule[${n + 1}] = sub(sep(${fn1}, G${n}), ${rpretty(ruleContent)});`;
+  return `rule[${n + 1}] = sub(sep(${fn1}, G${n + 1}), ${rpretty(ruleContent)});`;
 }
