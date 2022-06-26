@@ -30,9 +30,12 @@ const proof23 = plusa(
   lierule(G1, G2),
 );
 
+// const proof34 = plusa(
+// );
+
 console.log('have:\n', spretty(plusa(
-  Z(target(2)),
-  proof23,
-  sep(-1, target(3))
+  Z(target(3)),
+  //  proof34,
+  sep(-1, target(4))
 )));
-// console.log(extract(proof23, 2));
+// console.log(extract(proof34, 3));
