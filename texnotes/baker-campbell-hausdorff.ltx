@@ -1784,15 +1784,61 @@ Ok, I got as far as confirming $3\to4$ as well in code. What I have found so far
 
  \begin{nstabbing}
 \hspace{0.5in}\=$=\ $ \=\kill\\
-$L_1 $\>$=$\>$ A+B$\\
-$2L_2 $\>$=$\>$ L_{01}$\\
-$6L_3 $\>$=$\>$ 2L_{02} + L_{12} + L_{011}$\\
-$24L_4 $\>$=$\>$ 6L_{03} + 6L_{13} + 3L_{021} + 3L_{012} + L_{121} + L_{0111} $\\
-$120L_{5} $\>$=$\>$ 24L_{04} + 36L_{14} + 12L_{23} + {}$\\
+$G_1 $\>$=$\>$ A+B$\\
+$2G_2 $\>$=$\>$ L_{01}$\\
+$6G_3 $\>$=$\>$ 2L_{02} + L_{12} + L_{011}$\\
+$24G_4 $\>$=$\>$ 6L_{03} + 6L_{13} + 3L_{021} + 3L_{012} + L_{121} + L_{0111} $\\
+$120G_{5} $\>$=$\>$ 24L_{04} + 36L_{14} + 12L_{23} + {}$\\
 \>\>$ 12L_{031} + 12L_{013} + 8L_{131} +{}$\\
 \>\>$ 12L_{022} + 4L_{122} + {}$\\
 \>\>$ 4L_{0211} + 4L_{0121} +  4L_{0112} + L_{1211} + L_{01111}$\\
 \end{nstabbing}
 %
 where $L_e = G_{[e]}$ and brackets nest to the left.
+%% \subsection{Backwards Proof}
+%% Let's try to show that $X_3 = \Z[X_2]$ `backwards'. We start with
+%% \[6G_3  + 3G_{21} + 3G_{12} + G_{111}\]
+%% we unpack the $G_3$:
+%% \[2L_{02} + L_{12} + L_{011}  + 3G_{21} + 3G_{12} + G_{111}\]
+%% Now the $L_{[02]}$ is already `finished'. We can use the $L_{12}$:
+%% \[2L_{02} + L_{011}  + 2G_{21} + 4G_{12} + G_{111}\]
+%% I claim I can tell from the size of $L_{011}$ that it's meant to be used to migrate the products
+%% of $G_2$ desynthesis. So let's do $2$-desynthesis now. Conveniently, we know which to desynthesize: all the expressions
+%% that end in $2$.
+%% \[2L_{02} + L_{011}  + 2G_{21} + 2G_{1[01]} + G_{111}\]
+%% Now I can use the $L_{011}$.
+%% \[2L_{02} +  2G_{21} + G_{[01]1} + G_{1[01]} + G_{111}\]
+%% Now I can finish up:
+%% \[2\Z[G_{2}] + \Z[G_{11}]\]
+
+\subsection{Generalizing the Code}
+Let me try to generalize my intent in writing the $3\to4$ proof.
+First what we do is move all the $[0,1]$ to the right.
+
+How many of these do we move? Well, they come from occurrences of $1$ in ordered partitions.
+What's the coefficient? In moving $12G_{[01]3}$ we pick up a factor of 12 from the ambient $4!/2!$
+that we started with. But in moving all the $[0,1]$ to the right in
+\[4G_{[01]21} + 4G_{2[01]1} + 4G_{[01]12} + 4G_{1[01]2}\]
+we have the factor of $4 = 4!/3!$, but also the fact that the leftmost $[0,1]$s need
+to move {\em twice}. So we get
+\[4G_{[[01]2]1} + 8G_{2[[01]1]} + 4G_{[[01]1]2} + 8G_{1[[01]2]} \]
+So let's step back. What's the math equivalent of the {\tt target} function, as a polynomial?
+\[X_n = \sum_{\lambda:(k,n)} {n!\over k!} G_\lambda\]
+And what do I know about $\Z[X_n]$?
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!}(G_{\lambda 1} + [G_0, G_\lambda ] )\]
+And what do I know about $[G_0, G_\lambda]$, as a pseudo-derivative?
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!}\left(G_{\lambda 1}+\sum_{i = 1}^k G_{\lambda_{<i}}[G_0, G_{\lambda_i} ]G_{\lambda_{>i}} \right)\]
+Now consider what happens when I move {\em all} $[G_0, \dash]$  to the right
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!}\left(G_{\lambda 1}+\left(\sum_{i = 1}^k\sum_{j = i+1}^k G_{\lambda_{[1,i)(i,j)}} G_{[0,\lambda _i,\lambda_j]} G_{\lambda_{(j,k]}}\right) + \sum_{i = 1}^k G_{\lambda_{[1,i)(i,k]}}G_{[0\lambda_i]} \right)\]
+ah and I could move all of the resulting brackets to the right as well:
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!} Q(n,k)\]
+\[Q(n,k) = \left(G_{\lambda 1}+ \vphantom{\sum_{i+1}^k}\right.\]
+\[\left(\sum_{1 \le i < j < \ell \le k} G_{\lambda_{[1,\hat i, \hat k, \ell)}} G_{[0,\lambda _i, \lambda_j, \lambda_\ell]} G_{\lambda_{(\ell, k]}}\right) + \]
+\[\left(\sum_{1 \le i < j \le k} G_{\lambda_{[1,\hat i, \hat j,k)}} G_{[0,\lambda _i,\lambda_j]} \right) + \]
+\[\left.\sum_{1 \le i \le k}  G_{\lambda_{[1,\hat i,k]}}G_{[0\lambda_i]}  \right)\]
+Ok, so clearly what this comes down to is summing over subsets $S \subseteq [1,\ldots,k]$. Write $\bar S$ for the complement of $S$ in $[1,k]$.
+\[Z[X_n] =  \sum_{\lambda:(k,n)} {n!\over k!} \left( \sum_{S \subseteq [1,k]} G_{\lambda_{\bar S}} G_{[0,\lambda_S]}\right)\]
+Where we think of $G_{\lambda 1}$ as arising from setting $S$ to the empty set, so that $G_{\lambda_{\bar S}}$ is all of $S$ and we
+set $G_{[0,\lambda_\emptyset]} = G_1$.
+
 \end{document}
