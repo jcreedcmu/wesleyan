@@ -81,7 +81,7 @@ export function spretty(e: Exp): string {
       rv.push(`${coeff}G_{${sub}}`);
     }
   }
-  return rv.join(" +\n ").replace(/\+\n -/g, '\n - ');
+  return rv.join(" +\n ");
 }
 
 // sum of two expressions
