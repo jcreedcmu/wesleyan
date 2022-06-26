@@ -1717,6 +1717,7 @@ What about $4$-synthesis?
 \[(4\to 5)  3xR + Rx   \]
 
 \section{Always Synthesize On the Right}
+\subsection{First Sketch}
 Here's a strategy for trying to reduce the amount of nondeterminism I
 have to deal with: notice that I'm always synthesizing $A + B \to G_1$
 on the right side of an expression, and follow that pattern for all
@@ -1768,4 +1769,30 @@ Now this is looking very nice. If I expand out the ``derivatives'' I see
 \[ 24G_4 = 6G_{[03]} + 6G_{[13]} + 3G_{[[02]1]} + 3G_{[[01]2]} + G_{[[[01]1]1]} + G_{[[12]1]}\]
 If I do $[0,\dash] \mapsto [\dash, 1]$ everywhere, then all compositions of $4$ are covered, and they
 all remain left-nested.
-\end{document}]
+\vfil\eject
+\subsection{After Numerical Experiment}
+
+\newenvironment{nstabbing}
+  {\setlength{\topsep}{-\parskip}%
+   \setlength{\partopsep}{0pt}%
+   \vskip-2em\hphantom{.}%
+   \tabbing}
+  {\endtabbing}
+
+Ok, I got as far as confirming $3\to4$ as well in code. What I have found so far
+
+
+ \begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$L_1 $\>$=$\>$ A+B$\\
+$2L_2 $\>$=$\>$ L_{01}$\\
+$6L_3 $\>$=$\>$ 2L_{02} + L_{12} + L_{011}$\\
+$24L_4 $\>$=$\>$ 6L_{03} + 6L_{13} + 3L_{021} + 3L_{012} + L_{121} + L_{0111} $\\
+$120L_{5} $\>$=$\>$ 24L_{04} + 36L_{14} + 12L_{23} + {}$\\
+\>\>$ 12L_{031} + 12L_{013} + 8L_{131} +{}$\\
+\>\>$ 12L_{022} + 4L_{122} + {}$\\
+\>\>$ 4L_{0211} + 4L_{0121} +  4L_{0112} + L_{1211} + L_{01111}$\\
+\end{nstabbing}
+%
+where $L_e = G_{[e]}$ and brackets nest to the left.
+\end{document}
