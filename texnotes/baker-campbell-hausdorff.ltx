@@ -2001,4 +2001,91 @@ And I get $n!m_2$ copies of $G_{m_1m_2}$. So my rebalancing needs to have $(n!/2
 
 Alternatively --- and I think this may be important for understanding `screened' terms ---
 I could think of this as $(n!/2)m_2G_{[m_1m_2]} + (n!/2)m_1G_{[m_2m_1]}$.
+\subsection{Understanding $G_{[(411)]}$ in rules}
+Here's some synthesis counts, in the $5\to 6$ case. I'm aiming to explain that the coefficient of $G_{[141]}$ is 60.
+\[\begin{tabular}{l|l|l|l}
+$\lambda$&$n$&synthesis count&result\\
+\hline
+41&1&$60 = 5!/2!0!$&$60G_{411}$\\
+14&1&$60 = 5!/2!0!$&$60G_{141}$\\
+11&4&$ 10 = 5!/2!3!$&$240G_{114}$\\
+\end{tabular}\]
+Since I eventually want $6!/3! = 120$ copies of $G_{(411)}$ in my result, I need to migrate
+$60G_{[14]1} + 120G_{1[14]}$, and I need to actually push the $[14]$ in $60G_{[14]1}$ to the right --- so that's where I get my
+$60G_{[141]}$ from.
+
+But here's a nother way of looking at this `balancing': I could try to
+spread all the $60G_{411}$ out, independently of the $60G_{141}$ and
+the $240G_{114}$.
+
+This would mean
+\[ 40G_{[41]1} + 20G_{1[41]} + 20G_{[14]1} + 20G_{1[41]} + 160G_{1[14]} + 80G_{[14]1} \]
+\[ = 40G_{[411]} + 100G_{[141]}  + \cdots\]
+which does net the right result at least.
+\subsection{Understanding $G_{[(abc)]}$ in rules}
+ Let's suppose we're doing an $n \to n+1$ step, so $a + b + c = n+1$.
+\[\begin{tabular}{l|l|l|l}
+$\lambda$&$m$&synthesis count&result\\
+\hline
+$ab$&$c$&$ n!/2!(c-1)!$&$(cn!/2)G_{abc}$\\
+$ac$&$b$&$ n!/2!(b-1)!$&$(bn!/2)G_{acb}$\\
+$ba$&$c$&$ n!/2!(c-1)!$&$(cn!/2)G_{bac}$\\
+$ca$&$b$&$ n!/2!(b-1)!$&$(bn!/2)G_{cab}$\\
+$bc$&$a$&$ n!/2!(a-1)!$&$(an!/2)G_{bca}$\\
+$cb$&$a$&$ n!/2!(a-1)!$&$(an!/2)G_{cba}$\\
+\end{tabular}\]
+Let's check this is right with $G_{(321)}$. I should see in code
+\[\begin{tabular}{l|l|l|l}
+$\lambda$&$m$&synthesis count&result\\
+\hline
+$32$&$1$&$60= 5!/2!0!$&$60G_{321} = (1\cdot 5!/2)G_{321}$\\
+$31$&$2$&$60= 5!/2!1!$&$120G_{312} = (2\cdot 5!/2)G_{312}$\\
+$23$&$1$&$60= 5!/2!0!$&$60G_{231} = (1\cdot 5!/2)G_{231}$\\
+$13$&$2$&$60= 5!/2!1!$&$120G_{132} = (2\cdot 5!/2)G_{132}$\\
+$21$&$3$&$30= 5!/2!2!$&$180G_{213}= (3\cdot 5!/2)G_{213}$\\
+$12$&$3$&$30= 5!/2!2!$&$180G_{123} = (3\cdot 5!/2)G_{123}$\\
+\end{tabular}\]
+And yeah, this is what I saw.
+
+I can reason
+
+
+\[ (n!/2) \left(\sum_{abc \in S_3(abc)} zG_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} 2zG_{xyz} +\sum_{xyz \in S_3(abc)}  zG_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (2zG_{xzy} + 2zG_{x[yz]}) +\sum_{xyz \in S_3(abc)}  zG_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (2yG_{xyz} + 2yG_{x[zy]}) +\sum_{xyz \in S_3(abc)}  zG_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (yG_{xyz} + 2yG_{x[zy]}) +\sum_{xyz \in S_3(abc)}  (y+z)G_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (yG_{yxz} + yG_{[xy]z} + 2yG_{x[zy]}) +\sum_{xyz \in S_3(abc)}  (y+z)G_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (xG_{xyz} + xG_{[yx]z} + 2xG_{y[zx]}) +\sum_{xyz \in S_3(abc)}  (y+z)G_{xyz}\right) \]
+\[ {n!\over 3!} \left(\sum_{xyz \in S_3(abc)} (xG_{[yx]z} + 2xG_{y[zx]}) +\sum_{xyz \in S_3(abc)}  (x+y+z)G_{xyz}\right) \]
+\[ {n!\over 2!}{a+b+c\over 3} \left(G_{(abc)} + \sum_{xyz \in S_3(abc)} (xG_{[yx]z} + 2xG_{y[zx]})  \right) \]
+
+
+I can do the same general trick with an arbitrary number of items:
+\[ \sum_{abcd} 4dG_{abcd} \]
+\[ \sum_{abcd} 3dG_{abcd} + \sum_{abcd} dG_{abcd} \]
+\[ \sum_{abcd} 3dG_{abdc} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} dG_{abcd} \]
+\[ \sum_{abcd} 3cG_{abcd} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} dG_{abcd} \]
+\[ \sum_{abcd} 2cG_{abcd} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (c+d)G_{abcd} \]
+\[ \sum_{abcd} 2cG_{acbd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (c+d)G_{abcd} \]
+\[ \sum_{abcd} 2bG_{abcd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (c+d)G_{abcd} \]
+\[ \sum_{abcd} bG_{abcd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (b+c+d)G_{abcd} \]
+\[ \sum_{abcd} bG_{bacd} + \sum_{abcd} bG_{[ab]cd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (b+c+d)G_{abcd} \]
+\[ \sum_{abcd} aG_{abcd} + \sum_{abcd} bG_{[ab]cd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (b+c+d)G_{abcd} \]
+\[ \sum_{abcd} bG_{[ab]cd} + \sum_{abcd} 2cG_{a[bc]d} + \sum_{abcd} 3dG_{ab[cd]} + \sum_{abcd} (a+b+c+d)G_{abcd} \]
+
+
+\subsection{Small Examples Again}
+How does this aggressive general rebalancing look on small examples?
+Start with $\Z[G_2] = 2\Z[G_2] + \Z[G_{11}] = 2G_{[02]} + 2G_{21} + G_{[01]1} + G_{1[01]} + G_{111}$.
+Do motion of $[01]$ to get
+\[ 2G_{[02]} + 2G_{21} + G_{[011]} + 2G_{1[01]} + G_{111}\]
+Do $G_2$ synthesis to get
+\[ 2G_{[02]} + 2G_{21} + G_{[011]} + 4G_{12} + G_{111}\]
+Now I think general rebalancing says that we reason
+\[2G_{21} + 2\cdot 2G_{12} \]
+\[= G_{21} + G_{21} + 2G_{12} + 2G_{12} \]
+\[= G_{[21]}  + 2G_{[12]} + 3G_{(12)} \]
+So we conclude $6G_3 = 2G_{[02]} + G_{[21]}  + 2G_{[12]} + G_{[011]}$.
+
 \end{document}
