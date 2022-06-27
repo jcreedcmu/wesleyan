@@ -11,6 +11,7 @@ const G2 = G(2);
 const G3 = G(3);
 const G4 = G(4);
 const G5 = G(5);
+const G6 = G(6);
 const L01 = lie(G0, G1);
 const L02 = lie(G0, G2);
 const L04 = lie(G0, G4);
@@ -61,6 +62,32 @@ rule[5] = sub(sep(120, G5), plusa(
   lie(lie(lie(G1, G2), G1), G1),
   sep(8, lie(lie(G1, G3), G1)),
   sep(36, lie(G1, G4))
+));
+rule[6] = sub(sep(720, G6), plusa(
+  sep(120, lie(G0, G5)),
+  sep(60, lie(lie(G0, G1), G4)),
+  sep(20, lie(lie(lie(G0, G1), G1), G3)),
+  sep(60, lie(lie(G0, G2), G3)),
+  sep(60, lie(lie(G0, G3), G2)),
+  sep(20, lie(lie(lie(G0, G1), G2), G2)),
+  sep(5, lie(lie(lie(lie(G0, G1), G1), G1), G2)),
+  sep(5, lie(lie(lie(G1, G2), G1), G2)),
+  sep(20, lie(lie(lie(G0, G2), G1), G2)),
+  sep(60, lie(lie(G1, G3), G2)),
+  sep(120, lie(G2, G4)),
+  sep(60, lie(lie(G0, G4), G1)),
+  sep(20, lie(lie(lie(G0, G1), G3), G1)),
+  sep(5, lie(lie(lie(lie(G0, G1), G1), G2), G1)),
+  sep(5, lie(lie(lie(G1, G2), G2), G1)),
+  sep(20, lie(lie(lie(G0, G2), G2), G1)),
+  sep(20, lie(lie(lie(G0, G3), G1), G1)),
+  sep(5, lie(lie(lie(lie(G0, G1), G2), G1), G1)),
+  sep(5, lie(lie(lie(lie(G0, G2), G1), G1), G1)),
+  lie(lie(lie(lie(lie(G0, G1), G1), G1), G1), G1),
+  lie(lie(lie(lie(G1, G2), G1), G1), G1),
+  sep(10, lie(lie(lie(G1, G3), G1), G1)),
+  sep(60, lie(lie(G1, G4), G1)),
+  sep(240, lie(G1, G5))
 ));
 
 proof[2] = plusa(
@@ -365,9 +392,9 @@ proof[5] = plusa(
 const N = 5;
 
 for (let i = 2; i < N + 1; i++) {
-  console.log(`rule ${i}: ${epretty(rule[i])}`);
+  console.log(`rule ${i}: ${spretty(sep(-1, rule[i]))}`);
 }
-console.log('---\nhave:\n', spretty(plusa(
+console.log('---\nhave:', spretty(plusa(
   Z(target(N)),
   proof[N],
   sep(-1, target(N + 1))

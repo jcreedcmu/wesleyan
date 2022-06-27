@@ -1933,4 +1933,72 @@ and $[1221] = [[[G_1,G_2], G_2], G_1]$. But generally we have
 So they're numerically the same.
 
 Meanwhile there seemed to be some ambiguity about the $(321)$ resolution, but the needs of 3-synthesis forced my hand.
+
+\subsection{Understanding $[0,\dash]$}
+If I look at the order-6 `rule' that tells me
+what $6!G_6$ is equal to, and I pick out just terms that start with 0,
+I get
+\[
+ 120G_{[05]} +  60G_{[0(41)]} +  60G_{[0(32)]} +
+ 20G_{[0(311)]} +  20G_{[0(221)]} + 5G_{[0(2111)]} + G_{[011111]}
+\]
+where parentheses mean as usual ``sum over all permutations of these'',
+and brackets nest to the left. This is just a sum over $(k,n)$ partitions
+with a factor of $n!/k!$ as I expect. It remains to understand the
+coefficients on the remaining terms:
+\[
+ 240G_{[1,5]} +
+ 120G_{[2,4]} +
+ 60G_{[[1,4],1]} +
+ 60G_{[[1,3],2]} + {}\]
+\[
+ 10G_{[[[1,3],1],1]} +
+ 5G_{[[[1,2],2],1]} +
+ 5G_{[[[1,2],1],2]} +
+ G_{[[[[1,2],1],1],1]} +
+\]
+\subsection{Understanding Synthesis Counts}
+For a given partition $\lambda$, and a number $n$
+how many times do I synthesize $\lambda n$? Let's look at the $5\to 6$ case.
+\[\begin{tabular}{l|l|l}
+$\lambda$&$n$&synthesis\\
+\hline
+4&2&$120 = 5!/1!$\\
+(31)&2&$60 = 5!/2!$\\
+22&2&$60 = 5!/2!$\\
+(211)&2&$20 = 5!/3!$\\
+1111&2&$5 = 5!/4!$\\
+3&3&$60 = 5/2! / 1!$\\
+(21)&3&$30 = 5!/2! / 2!$\\
+111&3&$10 = 5!/2! / 3!$\\
+2&4&$20 = 5!/3!/ 1!$\\
+11&4&$10 = 5!/3! / 2!$\\
+1&5&$5 = 5!/4! / 1!$\\
+\end{tabular}\]
+This is actually a pretty clear pattern. If I'm doing $m \to m+1$ (i.e. proving $\Z[X_m] = X_{m+1}$)
+and I'm trying to synthesize $G_{\lambda n}$ then I think I have to do it with multiplicity
+\[m! \over |\lambda|!(n-1)!\]
+\subsection{Understanding $G_{[1n]}$ in rules}
+Ok I notice that we have things like
+\[6G_3 = \cdots + G_{[12]} + \cdots\]
+\[24G_4 = \cdots + 6G_{[13]} + \cdots\]
+\[120G_5 = \cdots + 36G_{[14]} + \cdots\]
+\[720G_6 = \cdots + 240G_{[15]} + \cdots\]
+How do I continue this sequence? Might be oeis sequence {\tt A001286}: $(n-1)n!/2$.
+In the $2\to3$ move, I have $\Z[X_2] = 2\Z[G_2] + \Z[G_{11}]$ and I need to eventually make $3G_{21} + 3G_{12}$.
+But I know synthesis counts: $G_{21}$ gets synthesized $2!\over 1!0!$ times, and $G_{12}$ gets synthesized $2!\over 1!1!$ times,
+but $G_2$ synthesis creates a factor of 2, so I get $2G_{21} +4G_{12}$. So that means the total migration I need is $(4-2)/2$ copyies of $G_{[12]}$
+to balance things out.
+
+For a bigger example, let's say I'm doing $5\to 6$. Where do $G_{51}$ and $G_{15}$ come from? From 1- and 5-synthesis, respectively.
+How many get synthesized? $5!/1!0! = 120$ and $5!/1!4! = 5$ times, respectively, but the latter comes with a built-in factor of $120$.
+So I get $120G_{51} + 600G_{15}$. So I have to use $(600-120)/2 = 240$ copies of $G_{[15]}$. That checks out ok, good.
+And indeed this is $(n-1)n!/2 = {n\choose 2}(n-1)!$ in general. (e.g. when $n=5$, I get ${5 \choose 2}4! = 10 \cdot 24 = 240$).
+\subsection{Understanding $G_{[m_1m_2]}$ in rules}
+What about that $120G_{[2,4]}$ that occurs in the order-6 rule? Let's say I'm doing $n \to n+1$ and I'm trying to balance $G_{(m_1m_2)}$.
+When I do $m_1$-synthesis, I synthesize $n!/1!(m_1 - 1)!$ times, leading to $n!m_1!/(m_1 - 1)! = n!m_1$ copies of $G_{m_2m_1}$.
+And I get $n!m_2$ copies of $G_{m_1m_2}$. So my rebalancing needs to have $(n!/2)(m_2-m_1)$ copies of $G_{[m_1m_2]}$.
+
+Alternatively --- and I think this may be important for understanding `screened' terms ---
+I could think of this as $(n!/2)m_2G_{[m_1m_2]} + (n!/2)m_1G_{[m_2m_1]}$.
 \end{document}
