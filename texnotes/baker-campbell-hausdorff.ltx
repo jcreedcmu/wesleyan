@@ -1895,4 +1895,42 @@ into
 \subsection{Wait Before I Finish This}
 I notice there's an unresolved ambiguity in how I `balance out' even
 the $G_{(2211)}$ case. I'm not sure how to do it. I suppose I should try the $5\to 6$ case to see how it goes.
+\vskip1em
+\hrule
+\vskip1em
+How did it go? I found out there's specifically a ``degree of
+freedom'' in how I push an extra $10G_{1212}$ around: I can
+either start working on the left and reason
+\[1212 = 2112 + [12]12\]
+\[ = 2121 + 21[12] + [12]12\]
+\[ = 2211 + 2[12]1 + 21[12] + [12]12\]
+\[ = 2211 + 2[12]1 + 21[12] + 1[12]2 + [121]2\]
+\[ = 2211 + 2[12]1 + 21[12] + 1[12]2 + 2[121] + [1212]\]
+\[ = 2211 + 2[12]1 + 21[12] + 12[12] + 1[122] + 2[121] + [1212]\]
+\[ = 2211 + 21[12] + 2[121] + 21[12] + 12[12] + 1[122] + 2[121] + [1212]\]
+\[ = 2211 + 21[12] + 2[121] + 21[12] + 12[12] + 1[122] + 2[121] + [1212]\]
+or start working on the right and do
+\[1212 = 1221 + 12[12]\]
+\[ = 2121 + [12]21 + 12[12]\]
+\[ = 2211 + 2[12]1 + [12]21 + 12[12]\]
+\[ = 2211 + 2[12]1 + 2[12]1 + [122]1 + 12[12]\]
+\[ = 2211 + 2[12]1 + 2[12]1 + 1[122] + [1221] + 12[12]\]
+\[ = 2211 + 2[12]1 + 21[12] + 2[121] + 1[122] + [1221] + 12[12]\]
+\[ = 2211 + 21[12] + 2[121] + 21[12] + 2[121] + 1[122] + [1221] + 12[12]\]
+rearranging I get
+\[ = 2211 + 21[12] + 2[121] + 21[12] + 12[12] + 1[122] + 2[121] + [1221]\]
+and so I see the only difference is between $[1212] = [[[G_1,G_2], G_1], G_2]$
+and $[1221] = [[[G_1,G_2], G_2], G_1]$. But generally we have
+\[[[[A,B], A], B] = [[[A,B], A]B - B[[A,B], A]\]
+\[= ([A,B]A - A[A,B])B - B([A,B]A - A[A,B])\]
+\[= ((AB - BA)A - A(AB - BA))B - B((AB - BA)A - A(AB - BA))\]
+\[= (2ABA - BAA - AAB)B - B(2ABA - BAA - AAB)\]
+\[= 2ABAB - BAAB - AABB - 2BABA + BBAA + BAAB\]
+\[= 2ABAB - AABB - 2BABA + BBAA \]
+\[= -2BABA + BBAA + 2ABAB - AABB\]
+\[-[[[B,A], B], A]\]
+\[[[[A,B], B], A]\]
+So they're numerically the same.
+
+Meanwhile there seemed to be some ambiguity about the $(321)$ resolution, but the needs of 3-synthesis forced my hand.
 \end{document}
