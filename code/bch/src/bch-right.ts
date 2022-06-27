@@ -161,7 +161,7 @@ proof[4] = plusa(
   sep(36, lierule(G1, G4)),
 );
 
-const knob = -5; // can be anywhere [-5, 5]
+const knob = 5; // can be anywhere [-5, 5]
 
 proof[5] = plusa(
   // move [01]
@@ -205,8 +205,9 @@ proof[5] = plusa(
   // rebalance (2211)
   sep(10, proda(G1, R12, G2)),
   sep(5 - knob, proda(R12, G1, G2)),
-  sep(15 - knob, proda(G2, G1, R12)),
   sep(15 + knob, proda(G1, G2, R12)),
+
+  sep(15 - knob, proda(G2, G1, R12)),
   sep(5 + knob, proda(R12, G2, G1)),
   sep(10, proda(G2, R12, G1)),
 
@@ -218,9 +219,63 @@ proof[5] = plusa(
 
   // prepare to synthesize G3...
   // move [011]
+  sep(20, lierule(L011, G3)),
+  sep(5, proda(lierule(L011, G2), G1)),
+  sep(5, proda(lierule(L011, G1), G2)),
+  sep(15, proda(G1, lierule(L011, G2))),
+  sep(15, proda(G2, lierule(L011, G1))),
+  sep(1, proda(lierule(L011, G1), G1, G1)),
+  sep(3, proda(G1, lierule(L011, G1), G1)),
+  sep(6, proda(G1, G1, lierule(L011, G1))),
+
   // move [12]
+  sep(5 - knob, proda(lierule(L12, G1), G2)),
+  sep(15 - knob, proda(G1, lierule(L12, G2))),
+  sep(5 + knob, proda(lierule(L12, G2), G1)),
+  sep(15 + knob, proda(G2, lierule(L12, G1))),
+  sep(1, proda(lierule(L12, G1), G1, G1)),
+  sep(3, proda(G1, lierule(L12, G1), G1)),
+  sep(6, proda(G1, G1, lierule(L12, G1))),
+
   // move [02]
-  // synthesize G3
+  sep(60, lierule(L02, G3)),
+  sep(20, proda(lierule(L02, G2), G1)),
+  sep(20, proda(lierule(L02, G1), G2)),
+  sep(40, proda(G1, lierule(L02, G2))),
+  sep(40, proda(G2, lierule(L02, G1))),
+  sep(5, proda(lierule(L02, G1), G1, G1)),
+  sep(10, proda(G1, lierule(L02, G1), G1)),
+  sep(15, proda(G1, G1, lierule(L02, G1))),
+
+  // synthesize some G3, but not the one that results in 33 yet
+  sep(30, proda(G2, G1, rule[3])),
+  sep(30, proda(G1, G2, rule[3])),
+  sep(10, proda(G1, G1, G1, rule[3])),
+
+  // there would be a degree of freedom in rebalancing (321), but
+  // I need 60 G_{3[12]} to work out correctly for G33 synthesis.
+  // this forces my hand to go the "long way around" the hexagon.
+  sep(60, prod(G3, lierule(G1, G2))),
+  sep(60, prod(lierule(G1, G3), G2)),
+  sep(60, prod(G1, lierule(G2, G3))),
+  sep(60, prod(G2, lierule(G1, G3))),
+
+  //// this is the other extremal solution (in principle there's an
+  //// interpolating knob between the two) but it doesn't generate the
+  //// required G_{3[12]}.
+  //
+  // sep(60, prod(G2, lierule(G1, G3))),
+  // sep(60, prod(G2, lierule(G1, G3))),
+  // sep(60, prod(lierule(G2, G3), G1)),
+  // sep(60, prod(lierule(G1, G2), G3)),
+
+  // now synthesize G33
+  sep(60, proda(G3, rule[3])),
+
+  // rebalance (311)
+  sep(10, proda(lierule(G1, G3), G1, G1)),
+  sep(20, proda(G1, lierule(G1, G3), G1)),
+  sep(30, proda(G1, G1, lierule(G1, G3))),
 )
 
 const N = 5;
