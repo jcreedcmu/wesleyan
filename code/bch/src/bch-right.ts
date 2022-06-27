@@ -161,7 +161,13 @@ proof[4] = plusa(
   sep(36, lierule(G1, G4)),
 );
 
-const knob = 5; // can be anywhere [-5, 5]
+// can be anywhere [-5, 5] and I see to get a valid solution.
+// ultimately I get
+// (5 + knob) G_{[1221]}
+// (5 - knob) G_{[1212]}
+// in rule[6], so I assume these are "numerically" equal Lie expressions?
+// Setting it to zero seems to make the most natural symmetric sense for now.
+const knob = 0;
 
 proof[5] = plusa(
   // move [01]
@@ -276,6 +282,84 @@ proof[5] = plusa(
   sep(10, proda(lierule(G1, G3), G1, G1)),
   sep(20, proda(G1, lierule(G1, G3), G1)),
   sep(30, proda(G1, G1, lierule(G1, G3))),
+
+  // now do some moves in preparation for G4 synthesis
+
+  // move [0,3]: yields 120, 60
+  sep(60, lierule(L03, G2)),
+  sep(20, proda(lierule(L03, G1), G1)),
+  sep(40, proda(G1, lierule(L03, G1))),
+
+  // move [[0,1],2]: yields 60, 30
+  sep(20, lierule(L012, G2)),
+  sep(5, proda(lierule(L012, G1), G1)),
+  sep(15, proda(G1, lierule(L012, G1))),
+
+  // move [[[0,1],1],1]: yields 20, 10
+  sep(5, lierule(L0111, G2)),
+  sep(1, proda(lierule(L0111, G1), G1)),
+  sep(4, proda(G1, lierule(L0111, G1))),
+
+  // move [[1,2],1]: yields 20, 10
+  sep(5 - knob, lierule(L121, G2)),
+  sep(1, proda(lierule(L121, G1), G1)),
+  sep(4, proda(G1, lierule(L121, G1))),
+
+  // move [[0,2],1]: yields 60, 30
+  sep(20, lierule(L021, G2)),
+  sep(5, proda(lierule(L021, G1), G1)),
+  sep(15, proda(G1, lierule(L021, G1))),
+
+  // move [1,3]: yields 120, 60
+  sep(60, lierule(L13, G2)),
+  sep(10, proda(lierule(L13, G1), G1)),
+  sep(30, proda(G1, lierule(L13, G1))),
+
+  // synthesize G4
+  sep(20, prod(G2, rule[4])),
+  sep(10, proda(G1, G1, rule[4])),
+
+  // rebalance (411)
+  sep(60, prod(lierule(G1, G4), G1)),
+  sep(120, prod(G1, lierule(G1, G4))),
+
+  // rebalance (42)
+  sep(120, lierule(G2, G4)),
+
+  // now do some moves in preparation for G5 synthesis
+  //  24G_{[0,4]}
+  sep(60, lierule(lie(G0, G4), G1)),
+  //  12G_{[[0,1],3]}
+  sep(20, lierule(lie(lie(G0, G1), G3), G1)),
+  //  4G_{[[[0,1],1],2]}
+  sep(5, lierule(lie(lie(lie(G0, G1), G1), G2), G1)),
+  //  4G_{[[1,2],2]}
+  sep(5 + knob, lierule(lie(L12, G2), G1)),
+  //  12G_{[[0,2],2]}
+  sep(20, lierule(lie(L02, G2), G1)),
+  //  12G_{[2,3]}
+  // We already miraculously have the right amount here already with
+  // no shifting? that's pretty weird.
+  //  12G_{[[0,3],1]}
+  sep(20, lierule(lie(L03, G1), G1)),
+  //  4G_{[[[0,1],2],1]}
+  sep(5, lierule(lie(lie(L01, G2), G1), G1)),
+  //  4G_{[[[0,2],1],1]}
+  sep(5, lierule(lie(lie(L02, G1), G1), G1)),
+  //  G_{[[[[0,1],1],1],1]}
+  sep(1, lierule(lie(lie(lie(L01, G1), G1), G1), G1)),
+  //  G_{[[[1,2],1],1]}
+  sep(1, lierule(lie(lie(L12, G1), G1), G1)),
+  //  8G_{[[1,3],1]}
+  sep(10, lierule(lie(L13, G1), G1)),
+  //  36G_{[1,4]}
+  sep(60, lierule(lie(G1, G4), G1)),
+
+  // synthesize G5
+  sep(5, prod(G1, rule[5])),
+
+  // rebalance (51)
+  sep(240, lierule(G1, G5)),
 )
 
 const N = 5;
