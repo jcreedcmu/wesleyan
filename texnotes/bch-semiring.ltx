@@ -272,32 +272,33 @@ Terrific. Continuing:
 \[[12111]:(2\cdot 5!/5!) - [21111]:(1\cdot 5!/5!) = 1\]
 
 This is nearly getting me to a statement of the theorem.
-\vfil\eject
-Let $C_n^k$ be the set of length-$k$ sequences $\lambda = \lambda(1),\ldots,\lambda(k)$
-of positive integers whose sum is $n$. Set $C = \bigcup_n \bigcup_{k=1}^n   C_n^k$.
-%% Let $D$ be the set of finite sequences of positive integers, except that the first item
-%% also allowed to be $0$.
-\begin{theorem}
-Let $R$ be a (not necessarily commutative) semiring.
- Suppose we're given $a, b \in R$,
-and two functions $(\lambda \mapsto L_{\lambda}), (\lambda \mapsto E_{\lambda}) : C \to R$. Assume that
-\begin{enumerate}
-\item $L_1 = a + b$
-\item  For every $n\ge 2$, \[n!L_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} E_{\lambda}\right) +
-  \left(\sum_{\lambda\in C^k_n} \lambda(2)L_{\lambda}\right)\right)\]
-(This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
-Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$)
-\item For every $\lambda \in C$ and $m \ge 1$,
-\[ L_{\lambda m} + L_{m} L_{\lambda}  =  L_{\lambda} L_{m}\]
-\[ E_{\lambda m} + L_{m} E_{\lambda}  =  E_{\lambda} L_{m}\]
-\[ E_{ m} + L_{m} a  =  a L_{m}\]
-%(i.e. ``$L_{\lambda m} \approx [L_\lambda, L_m]$'')
-\end{enumerate}
-Then for all $n \ge 1$,
-\[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k \ge 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}\prod_{i=1}^k L_{\lambda(i)}\]
 
-\end{theorem}
+%% Let $C_n^k$ be the set of length-$k$ sequences $\lambda = \lambda(1),\ldots,\lambda(k)$
+%% of positive integers whose sum is $n$. Set $C = \bigcup_n \bigcup_{k=1}^n   C_n^k$.
+%% %% Let $D$ be the set of finite sequences of positive integers, except that the first item
+%% %% also allowed to be $0$.
+%% \begin{theorem}
+%% Let $R$ be a (not necessarily commutative) semiring.
+%%  Suppose we're given $a, b \in R$,
+%% and two functions $(\lambda \mapsto L_{\lambda}), (\lambda \mapsto E_{\lambda}) : C \to R$. Assume that
+%% \begin{enumerate}
+%% \item $L_1 = a + b$
+%% \item  For every $n\ge 2$, \[n!L_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} E_{\lambda}\right) +
+%%   \left(\sum_{\lambda\in C^k_n} \lambda(2)L_{\lambda}\right)\right)\]
+%% (This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
+%% Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$)
+%% \item For every $\lambda \in C$ and $m \ge 1$,
+%% \[ L_{\lambda m} + L_{m} L_{\lambda}  =  L_{\lambda} L_{m}\]
+%% \[ E_{\lambda m} + L_{m} E_{\lambda}  =  E_{\lambda} L_{m}\]
+%% \[ E_{ m} + L_{m} a  =  a L_{m}\]
+%% %(i.e. ``$L_{\lambda m} \approx [L_\lambda, L_m]$'')
+%% \end{enumerate}
+%% Then for all $n \ge 1$,
+%% \[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k \ge 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}\prod_{i=1}^k L_{\lambda(i)}\]
+
+%% \end{theorem}
 \vfil\eject
+\section{Stating the Theorem}
 Let $C_n^k$ be the set of {\em compositions} of weight $n$ and $k$ parts, i.e. length-$k$
  sequences $\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers whose sum is $n$.
 Let $D$ be the set of finite sequences of positive integers, except that the first item
@@ -313,9 +314,9 @@ Assume that
 \item $G_0 = a$ and $G_1 = a + b$
 \item For every $\mu \in D$ and $m \ge 1$,
 \[ G_{[\mu m]} + G_{m} G_{[\mu]}  =  G_{[\mu]} G_{m}\]
-{\color{gray} If we weren't in a semiring, this would be equivalent to
-\[ G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]\]}
-\item \vskip-2em
+%% {\color{gray} If we weren't in a semiring, this would be equivalent to
+%% \[ G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]\]}
+\item %\vskip-2em
  For every $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
   \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
 (This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
@@ -324,14 +325,28 @@ Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when 
 
 Then for all $n \ge 1$,
 \[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k \ge 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\]
-{\color{gray} If we weren't in a semiring, this would be equivalent to
-\[\exp(at)\exp(bt) = \exp\left(\sum_{k \ge 1} G_kt^k \right)\]}
+%% {\color{gray} If we weren't in a semiring, this would be equivalent to
+%% \[\exp(at)\exp(bt) = \exp\left(\sum_{k \ge 1} G_kt^k \right)\]}
 \end{theorem}
 
-\begin{proof}
+%% \begin{proof}
+%% \cqed
+%% \end{proof}
+\begin{corollary}
+Let $A$ be an algebra over a vector space $V$. Suppose we're given $a,b \in A$.
+Define
+\begin{enumerate}
+\item $G_0 =a$
+\item $G_1 =a+b$
+\item For $n\ge 2$,
+\[G_{n} = {1\over n!}\sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
+  \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
+\item $G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]$ for any $\mu \in D$.
+\end{enumerate}
+Then
+\[\exp(a)\exp(b) = \exp\left(\sum_{k \ge 1} G_k \right)\]
+\end{corollary}
 
-\cqed
-\end{proof}
 
 
 \section{Proving Theorem}
