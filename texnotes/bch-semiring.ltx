@@ -82,12 +82,20 @@ so
 Notice that if we define $\Z[X] = AX + XB$,
 then this expression is just $\Z^n[1]$.
 
+\subsubsection{Compositions}
+A {\em composition} $\lambda \in C^k_n$ with weight $n$ and $k$ parts is a sequence
+$\lambda = \lambda(1),\ldots,\lambda(k)$ with every $\lambda(i) \ge 1$
+and $\sum_i \lambda(i) = n$.
+There is exactly one composition $\emptyset$ with weight $0$ and $0$ parts.
+We write $|\lambda|$ for the number of parts of a composition $\lambda$.
+
+Let $D^k_n$ be the set of `extended' compositions of weight $n$ and size $k$.
+\[D^k_n = C^k_n \cup \{(0,\lambda) \st \lambda \in C^{k-1}_{n-1}\}\]
+
+\[D^{\ge k}_n = \bigcup_{k' \ge k} D_n^{k'}  \qquad D^{\ge k} = \bigcup_{n} D_n^{\ge k} \]
+\[ C_n = \bigcup_{n} C_n^k \]
+
 \subsubsection{Right Side}
-A {\em composition} of $n$ with $k$ parts is a sequence
-$\lambda = \lambda(1),\ldots,\lambda(k)$ with every $\lambda(i) \ge 1$.
-We consider there to be exactly one composition $\emptyset$ of $0$, with $0$ parts.
-Let $C_n$ be the set of compositions of $n$. We write $|\lambda|$
-for the number of parts of $\lambda$.
 
 If we define
 \[G_\lambda = \prod_{i = 1}^{|\lambda|} G_{\lambda(i)}\]
@@ -121,16 +129,11 @@ if $c + ba = ab$.
 \end{definition}
 
 
-Let $C^+_n$ be the set extended compositions of $n$. An extended composition of weight
-$n$ can also be $0,\lambda$ where $\lambda$ is a composition of weight $n-1$.
-Let
-\[D^k_n = \{\lambda \in C^+_n \st |\lambda| \ge k\} \qquad D^k = \bigcup_{n} D^k_n\]
-
 
 
 \begin{definition}
  A {\em candidate} for $a,b$ is a sequence $(G_n \in R)_{n\in \N} $ and
-a map $G_{[\dash]}: D^1 \to R$, such that
+a map $G_{[\dash]}: D^{\ge 1} \to R$, such that
 \begin{enumerate}
 \item $G_0 = a$ and $G_1 = a + b$
 \item $G_{[n]} = G_n$ for every $n$
@@ -140,9 +143,9 @@ a map $G_{[\dash]}: D^1 \to R$, such that
 
 
 \begin{definition}
-A  map $c : D^2 \to \N$ {\em is a solution to the BCH problem} if
+A  map $c : D^{\ge 2} \to \N$ {\em is a solution to the BCH problem} if
 for every $a,b\in R$, we have that every candidate $G,f$ for $a,b$ that satisfies
-\[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^2_n} c(\lambda) G_{[\lambda]}\right)\]
+\[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^{\ge 2}_n} c(\lambda) G_{[\lambda]}\right)\]
 also satisfies
 \[\forall n .\left( \Z_{ab}^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\right)\]
 \end{definition}
