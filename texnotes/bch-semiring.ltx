@@ -218,9 +218,9 @@ element. Every coefficient is a multiple of 4, this is fine.
 Concretely what did my recipe from before suggest? For $k=4$ I got
 \[ \sum_{\lambda\in\Lambda} \lambda(4) G_{\lambda} = \]
 \[ {1\over 4} \sum_{\lambda\in\Lambda}\left( G_\lambda\left(\sum_i \lambda(i) \right)
-+ \left( G_{\lambda([12]34)} \lambda(2)\right)
-+ \left( G_{\lambda(1[23]4)} \lambda(3)\right)
-+ \left( G_{\lambda(12[34])} \lambda(4)\right)\right)\]
++ \left( \lambda(2)G_{\lambda([12]34)} \right)
++ \left( 2 \lambda(3)G_{\lambda(1[23]4)}\right)
++ \left( 3\lambda(4)G_{\lambda(12[34])} \right)\right)\]
 
 Ah! I can see why I'm  licensed to divide by $4$ here. My synthesis coefficient
 is always a multiple of $(n-1)!/(k-1)!$, and I'm just additionally dividing by $k$.
