@@ -39,6 +39,12 @@
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\sub{\subseteq}
+\newenvironment{nstabbing}
+  {\setlength{\topsep}{-\parskip}%
+   \setlength{\partopsep}{0pt}%
+   \vskip-2em\hphantom{.}%
+   \tabbing}
+  {\endtabbing}
 
 
 
@@ -150,4 +156,109 @@ also satisfies
 \[\forall n .\left( \Z_{ab}^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\right)\]
 \end{definition}
 
+\section{Finding Coefficients}
+\subsection{What I know about 0-coefficients}
+I believe I know the coefficients of all extended compositions that start with zero.
+For example,
+\[120G_5 = 24G_{[04]} + 12G_{[0(31)]}  + 12G_{[022]} + 4G_{[0(211)]} + G_{[01111]} + \cdots\]
+In general,
+\[n!G_n = \left(\sum_{\lambda \in C_{n-1}} {(n-1)!\over |\lambda|!}G_{[0\lambda]}\right) + \cdots\]
+\subsection{What I know about Synthesis Multiplicity}
+Suppose $\lambda \in C_n^k$.
+I believe the number of times that we do synthesis of $G_{m}$ in the environment $G_{\lambda m}$
+ is
+\[(n+m-1)!\over k!(m-1)!\]
+ Since the synthesis rule for $G_{m}$ involves an $m!$, this results in
+\[{m (n+m-1)!\over k!}G_{\lambda m}\]
+
+For example, $G_{[01]11} + G_{1[01]1} + G_{11[0]1}$ gets moved to
+$3G_{11[01]}$, and then we synthesize $G_2$ three times, yielding
+$6G_{112}$. Here $\lambda = (1,1)$ so $n=2$ and $k=2$ and $m = 2$, and
+we compute that synthesis occurs $3!\over 2!1! = 3$ times, and we get
+a result of $(2\cdot 3!/2!)G_{112} = 6G_{112}$.
+
+For another example, $5G_{[02]111} + 5G_{1[02]11} + 5G_{11[02]1} + 5G_{111[02]}$ gets moved to
+$20G_{111[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
+synthesize $10$ times, leading to $60G_{1113}$. And indeed we compute for $\lambda = (1,1,1)$ and $n=3$ and
+$k=3$ and $m=3$ that $5!/(3!2!) = 10$ and $3\cdot 5! / 3! = 60$.
+
+For another example, $20G_{[02]21} + 20G_{2[02]1} + 20G_{21[02]}$ gets moved to
+$60G_{21[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
+synthesize $30$ times, leading to $180G_{213}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
+$k=2$ and $m=3$ that $5!/(2!2!) = 30$ and $3\cdot 5! / 2! = 180$.
+
+For another example, $120G_{[03]21} + 120G_{2[03]1} + 120G_{21[03]}$ gets moved to
+$360G_{21[03]}$. We know that $G_{4}$ requires $6G_{[03]}$ to synthesize, so we should
+synthesize $60$ times, leading to $1440G_{214}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
+$k=2$ and $m=4$ that $6!/(2!3!) = 60$ and $4\cdot 6! / 2! = 1440$.
+
+\subsection{What I think I know about Rebalancing}
+Let's think about what happens in the $5\to 6$ case when we synthesize the various $G_{(321)}$.
+The expression $X_5$ contains $60G_{(32)} + 20G_{(221)} + 20G_{(311)}$.
+Therefore  $\Z[X_5]$ contains $60G_{(32)1} + 20G_{([02]21)} + 20G_{(3[01]1)}$.
+Pushing things to the right will yield
+$60G_{(32)1} + 60G_{(21)[02]} + 60G_{(31)[01]}$.
+Now we do synthesis of $G_2$ and $G_3$ and we obtain
+$60G_{(32)1} + 180G_{(21)3} + 120G_{(31)2}$.
+This is a general case of the post synthesis situation. Let's say we have a collection $\Lambda \subseteq C_n^k$
+closed under permutation. Then we have a collection of synthesis products
+\[ \sum_{\lambda \in \Lambda} {\lambda(k) (n-1)!\over (k-1)!}G_{\lambda}\]
+In our special case, we have $\Lambda = (321)$ so $n=6$ and $k=3$. In this case we know $3$ divides $(n-1)!/(k-1)!$,
+but why generally? Let's try some examples.
+\subsubsection{Rebalancing $(2111)$}
+ In the $4\to 5$ case of synthesizing $(2111)$, our post-synth products are
+\[4G_{(211)1} + 8G_{1112}\]
+There are four things I need to spread values across; each of these coefficients is a multiple of 4. Fine.
+\subsubsection{Rebalancing $(2211)$}
+ In the $5\to 6$ case of synthesizing $(2211)$, our post-synth products are
+\[ 20G_{(221)1} + 40G_{(211)2} \]
+for a total of $3\cdot 20 + 3 \cdot 40 = 180$. Each of these gets spread over the 4 rotations of its rightmost
+element. Every coefficient is a multiple of 4, this is fine.
+
+Concretely what did my recipe from before suggest? For $k=4$ I got
+\[ \sum_{\lambda\in\Lambda} \lambda(4) G_{\lambda} = \]
+\[ {1\over 4} \sum_{\lambda\in\Lambda}\left( G_\lambda\left(\sum_i \lambda(i) \right)
++ \left( G_{\lambda([12]34)} \lambda(2)\right)
++ \left( G_{\lambda(1[23]4)} \lambda(3)\right)
++ \left( G_{\lambda(12[34])} \lambda(4)\right)\right)\]
+
+Ah! I can see why I'm  licensed to divide by $4$ here. My synthesis coefficient
+is always a multiple of $(n-1)!/(k-1)!$, and I'm just additionally dividing by $k$.
+But $(n-1)!/k!$ is always an integer unless I'm dealing with the $11\cdots 11$ case, in which
+no rebalancing is necessary.
+\subsubsection{Rebalancing $(3211)$}
+In the $6\to 7$ (!) case of synthesizing $(3211)$, our post-synth products are
+\[ = 120G_{(321)1} + 240G_{(311)2} + 360G_{(211)3}\]
+Here there are 6+3+3 terms I need to spread across, and all coefficients are multiples of 12.
+The average is $(6 \cdot 120  + 3 \cdot 240 + 3 \cdot 360) / 12 = 210 = 7!/4!$ as required.
+
+
+\subsection{What I think I know about Synthesis Coefficients}
+ \begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$6G_3 $\>$=$\>$ \cdots +  G_{[12]} $\\
+$24G_4 $\>$=$\>$ \cdots + 6G_{[13]} + G_{[121]}  $\\
+$120G_5 $\>$=$\>$  \cdots + 36G_{[14]} + 12G_{[23]} + 8G_{[131]} + 4G_{[122]} +  G_{[1211]}$\\
+$720G_6 $\>$=$\>$  \cdots +  240G_{[15]} + 120G_{[24]} + 60G_{[141]} +  60G_{[132]} + {}$\\
+\>\> $\phantom{\cdots+}10G_{[1311]} + 5G_{[1221]} + 5G_{[1212]} + G_{[12111]}$
+\end{nstabbing}
+and what I'm finding so far as a refinement is
+\begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$6G_3 $\>$=$\>$ \cdots +  2G_{[12]} + G_{[21]} $\\
+$24G_4 $\>$=$\>$ \cdots + 9G_{[13]} + 3G_{[31]} + 2G_{[121]} + G_{[211]}  $\\
+\end{nstabbing}
+Can I guess more coefficients?
+\begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$120G_5 $\>$=$\>$ \cdots + (4\cdot 4!/2!)G_{[14]} + (1\cdot 4!/2!)G_{[41]} + (3\cdot 4!/2!)G_{[23]} +  (2\cdot 4!/2!)G_{[23]} + {} $\\
+\>\>$\phantom{\cdots+}(3\cdot 1\cdot 4!/3!)G_{131} + (1\cdot 1\cdot 4!/3!)G_{311} + {}$\\
+\>\>$\phantom{\cdots+} ({\color{red} 4?}\cdot 4!/3!)G_{[122]} +({\color{red} 3?}\cdot 4!/3!)G_{[212]} + \cdots$\\
+$120G_5 $\>$=$\>$ \cdots + 48G_{[14]} + 12G_{[41]} + 36G_{[23]} + 24G_{[32]} + {} $\\
+\>\>$\phantom{\cdots+}12G_{131} + 4G_{311} + {}$\\
+\>\>$\phantom{\cdots+}16G_{122} + 12G_{212} + \cdots$\\
+\end{nstabbing}
+Close, but not quite there.
+
+\section{Proving Theorem}
 \end{document}
