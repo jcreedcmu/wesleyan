@@ -121,8 +121,8 @@ if $c + ba = ab$.
 \end{definition}
 
 
-Let $C^+_n$ be the set extended compositions of $n$. An extended composition can
-also mention 0, but they count as weight 1.
+Let $C^+_n$ be the set extended compositions of $n$. An extended composition of weight
+$n$ can also be $0,\lambda$ where $\lambda$ is a composition of weight $n-1$.
 Let
 \[D^k_n = \{\lambda \in C^+_n \st |\lambda| \ge k\} \qquad D^k = \bigcup_{n} D^k_n\]
 
@@ -130,11 +130,11 @@ Let
 
 \begin{definition}
  A {\em candidate} for $a,b$ is a sequence $(G_n \in R)_{n\in \N} $ and
-a map $f : D^1 \to R$, such that
+a map $G_{[\dash]}: D^1 \to R$, such that
 \begin{enumerate}
 \item $G_0 = a$ and $G_1 = a + b$
-\item $f(n) = G_n$ for every $n$
-\item $ f(\lambda, n)$ is a Lie bracket of $f(\lambda), G_n$ for all $n\in \N,\lambda\in D^1$
+\item $G_{[n]} = G_n$ for every $n$
+\item $ G_{[\lambda, n]}$ is a Lie bracket of $G_{[\lambda]}, G_n$ for all $n\in \N,\lambda\in D^1$
 \end{enumerate}
 \end{definition}
 
@@ -142,7 +142,7 @@ a map $f : D^1 \to R$, such that
 \begin{definition}
 A  map $c : D^2 \to \N$ {\em is a solution to the BCH problem} if
 for every $a,b\in R$, we have that every candidate $G,f$ for $a,b$ that satisfies
-\[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^2} c(\lambda) f(\lambda)\right)\]
+\[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^2_n} c(\lambda) G_{[\lambda]}\right)\]
 also satisfies
 \[\forall n .\left( \Z_{ab}^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\right)\]
 \end{definition}
