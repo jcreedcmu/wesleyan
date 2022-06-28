@@ -62,13 +62,13 @@ in an arbitrary (not necessarily commutative) semiring, that is a set $R$ with $
 where $+$ is required to be commutative but $\cdot$ is not, with $\cdot$ distributing over $+$,
 and all the other usual laws.
 
-The Baker-Campbell-Hausdorff formula says that if we seek $G_1, G_2, \ldots$ such that
+The BCH formula says that if we seek $G_1, G_2, \ldots$ such that
 \[ e^{tA} e^{tB} = e^{tG_1 + t^2G_2 + t^3G_3 + \cdots}\]
 holds, we find that we must set $G_1 = A + B$, and $G_2 = [A,B]/2$, and $G_3 = [A,[A,B]]/12 + [B,[B,A]]/12$,
 and so on.
 
-The barriers to interpreting this in a semiring are the concepts of
-the exponentiation function, (which involves division in its coefficients, the division
+The barriers to interpreting this in a semiring are the divisions in the
+the exponential function's coefficients, the divisions
 in the coefficients of the Lie brackets occurring the right-hand side, and the
  subtractions occurring because of the Lie brackets themselves.
 
@@ -122,182 +122,7 @@ Note that already this equation by itself makes sense in an arbitrary semiring, 
 an integer. We now need to account for the fact that the {\em solution} to this problem,
 i.e. the sequence of values $G_1, G_2, \ldots$, necessarily involves division and subtraction in the
 usual formulation.
-%% \subsection{Subtraction and Division of Lie Brackets}
 
-%% Instead of using subtraction and division directly, we simply ask for solutions to particular equations
-%% in a semiring which imply subtraction and division indirectly. Much like how particular cartesian
-%% products may or may not exist in a category, we define what it means for a semiring element
-%% to `be a fractional Lie bracket' of two other semiring elements.
-
-%% \begin{definition}
-%% Suppose $a, b, c\in R$. We say $c$ a Lie bracket of $a,b$ (i.e. ``$c = [a,b]$'')
-%% if $c + ba = ab$.
-%% \end{definition}
-
-
-
-
-%% \begin{definition}
-%%  A {\em candidate} for $a,b$ is a sequence $(G_n \in R)_{n\in \N} $ and
-%% a map $G_{[\dash]}: D^{\ge 1} \to R$, such that
-%% \begin{enumerate}
-%% \item $G_0 = a$ and $G_1 = a + b$
-%% \item $G_{[n]} = G_n$ for every $n$
-%% \item $ G_{[\lambda, n]}$ is a Lie bracket of $G_{[\lambda]}, G_n$ for all $n\in \N,\lambda\in D^1$
-%% \end{enumerate}
-%% \end{definition}
-
-
-%% \begin{definition}
-%% A  map $c : D^{\ge 2} \to \N$ {\em is a solution to the BCH problem} if
-%% for every $a,b\in R$, we have that every candidate $G,f$ for $a,b$ that satisfies
-%% \[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^{\ge 2}_n} c(\lambda) G_{[\lambda]}\right)\]
-%% also satisfies
-%% \[\forall n .\left( \Z_{ab}^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\right)\]
-%% \end{definition}
-
-%% \section{Finding Coefficients}
-%% \subsection{What I know about 0-coefficients}
-%% I believe I know the coefficients of all extended compositions that start with zero.
-%% For example,
-%% \[120G_5 = 24G_{[04]} + 12G_{[0(31)]}  + 12G_{[022]} + 4G_{[0(211)]} + G_{[01111]} + \cdots\]
-%% In general,
-%% \[n!G_n = \left(\sum_{\lambda \in C_{n-1}} {(n-1)!\over |\lambda|!}G_{[0\lambda]}\right) + \cdots\]
-%% \subsection{What I know about Synthesis Multiplicity}
-%% Suppose $\lambda \in C_n^k$.
-%% I believe the number of times that we do synthesis of $G_{m}$ in the environment $G_{\lambda m}$
-%%  is
-%% \[(n+m-1)!\over k!(m-1)!\]
-%%  Since the synthesis rule for $G_{m}$ involves an $m!$, this results in
-%% \[{m (n+m-1)!\over k!}G_{\lambda m}\]
-
-%% For example, $G_{[01]11} + G_{1[01]1} + G_{11[0]1}$ gets moved to
-%% $3G_{11[01]}$, and then we synthesize $G_2$ three times, yielding
-%% $6G_{112}$. Here $\lambda = (1,1)$ so $n=2$ and $k=2$ and $m = 2$, and
-%% we compute that synthesis occurs $3!\over 2!1! = 3$ times, and we get
-%% a result of $(2\cdot 3!/2!)G_{112} = 6G_{112}$.
-
-%% For another example, $5G_{[02]111} + 5G_{1[02]11} + 5G_{11[02]1} + 5G_{111[02]}$ gets moved to
-%% $20G_{111[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
-%% synthesize $10$ times, leading to $60G_{1113}$. And indeed we compute for $\lambda = (1,1,1)$ and $n=3$ and
-%% $k=3$ and $m=3$ that $5!/(3!2!) = 10$ and $3\cdot 5! / 3! = 60$.
-
-%% For another example, $20G_{[02]21} + 20G_{2[02]1} + 20G_{21[02]}$ gets moved to
-%% $60G_{21[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
-%% synthesize $30$ times, leading to $180G_{213}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
-%% $k=2$ and $m=3$ that $5!/(2!2!) = 30$ and $3\cdot 5! / 2! = 180$.
-
-%% For another example, $120G_{[03]21} + 120G_{2[03]1} + 120G_{21[03]}$ gets moved to
-%% $360G_{21[03]}$. We know that $G_{4}$ requires $6G_{[03]}$ to synthesize, so we should
-%% synthesize $60$ times, leading to $1440G_{214}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
-%% $k=2$ and $m=4$ that $6!/(2!3!) = 60$ and $4\cdot 6! / 2! = 1440$.
-
-%% \subsection{What I think I know about Rebalancing}
-%% Let's think about what happens in the $5\to 6$ case when we synthesize the various $G_{(321)}$.
-%% The expression $X_5$ contains $60G_{(32)} + 20G_{(221)} + 20G_{(311)}$.
-%% Therefore  $\Z[X_5]$ contains $60G_{(32)1} + 20G_{([02]21)} + 20G_{(3[01]1)}$.
-%% Pushing things to the right will yield
-%% $60G_{(32)1} + 60G_{(21)[02]} + 60G_{(31)[01]}$.
-%% Now we do synthesis of $G_2$ and $G_3$ and we obtain
-%% $60G_{(32)1} + 180G_{(21)3} + 120G_{(31)2}$.
-%% This is a general case of the post synthesis situation. Let's say we have a collection $\Lambda \subseteq C_n^k$
-%% closed under permutation. Then we have a collection of synthesis products
-%% \[ \sum_{\lambda \in \Lambda} {\lambda(k) (n-1)!\over (k-1)!}G_{\lambda}\]
-%% In our special case, we have $\Lambda = (321)$ so $n=6$ and $k=3$. In this case we know $3$ divides $(n-1)!/(k-1)!$,
-%% but why generally? Let's try some examples.
-%% \subsubsection{Rebalancing $(2111)$}
-%%  In the $4\to 5$ case of synthesizing $(2111)$, our post-synth products are
-%% \[4G_{(211)1} + 8G_{1112}\]
-%% There are four things I need to spread values across; each of these coefficients is a multiple of 4. Fine.
-%% \subsubsection{Rebalancing $(2211)$}
-%%  In the $5\to 6$ case of synthesizing $(2211)$, our post-synth products are
-%% \[ 20G_{(221)1} + 40G_{(211)2} \]
-%% for a total of $3\cdot 20 + 3 \cdot 40 = 180$. Each of these gets spread over the 4 rotations of its rightmost
-%% element. Every coefficient is a multiple of 4, this is fine.
-
-%% Concretely what did my recipe from before suggest? For $k=4$ I got
-%% \[ \sum_{\lambda\in\Lambda} \lambda(4) G_{\lambda} = \]
-%% \[ {1\over 4} \sum_{\lambda\in\Lambda}\left( G_\lambda\left(\sum_i \lambda(i) \right)
-%% + \left( \lambda(2)G_{\lambda([12]34)} \right)
-%% + \left( 2 \lambda(3)G_{\lambda(1[23]4)}\right)
-%% + \left( 3\lambda(4)G_{\lambda(12[34])} \right)\right)\]
-
-%% Ah! I can see why I'm  licensed to divide by $4$ here. My synthesis coefficient
-%% is always a multiple of $(n-1)!/(k-1)!$, and I'm just additionally dividing by $k$.
-%% But $(n-1)!/k!$ is always an integer unless I'm dealing with the $11\cdots 11$ case, in which
-%% no rebalancing is necessary.
-%% \subsubsection{Rebalancing $(3211)$}
-%% In the $6\to 7$ (!) case of synthesizing $(3211)$, our post-synth products are
-%% \[ = 120G_{(321)1} + 240G_{(311)2} + 360G_{(211)3}\]
-%% Here there are 6+3+3 terms I need to spread across, and all coefficients are multiples of 12.
-%% The average is $(6 \cdot 120  + 3 \cdot 240 + 3 \cdot 360) / 12 = 210 = 7!/4!$ as required.
-
-
-%% \subsection{What I think I know about Synthesis Coefficients}
-%%  \begin{nstabbing}
-%% \hspace{0.5in}\=$=\ $ \=\kill\\
-%% $6G_3 $\>$=$\>$ \cdots +  G_{[12]} $\\
-%% $24G_4 $\>$=$\>$ \cdots + 6G_{[13]} + G_{[121]}  $\\
-%% $120G_5 $\>$=$\>$  \cdots + 36G_{[14]} + 12G_{[23]} + 8G_{[131]} + 4G_{[122]} +  G_{[1211]}$\\
-%% $720G_6 $\>$=$\>$  \cdots +  240G_{[15]} + 120G_{[24]} + 60G_{[141]} +  60G_{[132]} + {}$\\
-%% \>\> $\phantom{\cdots+}10G_{[1311]} + 5G_{[1221]} + 5G_{[1212]} + G_{[12111]}$
-%% \end{nstabbing}
-%% and what I'm finding so far as a refinement is
-%% \begin{nstabbing}
-%% \hspace{0.5in}\=$=\ $ \=\kill\\
-%% $6G_3 $\>$=$\>$ \cdots +  2G_{[12]} + G_{[21]} $\\
-%% $24G_4 $\>$=$\>$ \cdots + 9G_{[13]} + 3G_{[31]} + 2G_{[121]} + G_{[211]}  $\\
-%% \end{nstabbing}
-%% Can I guess more coefficients?
-%% \begin{nstabbing}
-%% \hspace{0.5in}\=$=\ $ \=\kill\\
-%% $120G_5 $\>$=$\>$ \cdots + (4\cdot 4!/2!)G_{[14]} + (1\cdot 4!/2!)G_{[41]} + (3\cdot 4!/2!)G_{[23]} +  (2\cdot 4!/2!)G_{[23]} + {} $\\
-%% \>\>$\phantom{\cdots+}(3\cdot 1\cdot 4!/3!)G_{[131]} + (1\cdot 1\cdot 4!/3!)G_{[311]} + {}$\\
-%% \>\>$\phantom{\cdots+} (2\cdot 4!/3!)G_{[122]} +(1\cdot 4!/3!)G_{[212]} + \cdots$\\
-%% $120G_5 $\>$=$\>$ \cdots + 48G_{[14]} + 12G_{[41]} + 36G_{[23]} + 24G_{[32]} + {} $\\
-%% \>\>$\phantom{\cdots+}12G_{131} + 4G_{311} + {}$\\
-%% \>\>$\phantom{\cdots+}8G_{122} + 4G_{212} + \cdots$\\
-%% \end{nstabbing}
-%% Now for $n=6$ I see
-%% \[[15]:(5\cdot 5!/2!) - [51]:(1\cdot 5!/2!) = 240\]
-%% \[[24]:(4\cdot 5!/2!) - [42]:(2\cdot 5!/2!) = 120\]
-%% \[[141]:(4\cdot 5!/3!) - [411]:(1\cdot 5!/3!) = 60\]
-%% \[[132]:(3\cdot 5!/3!) - [312]:(1\cdot 5!/3!) = 40\]
-%% This seems wrong at first... But I can use the Jacobi identity to show that
-%% \[20G_{[312]} + 20G_{[213]} + 40G_{[321]} + 40G_{[123]} + 60G_{[231]} + 60G_{[132]} = 60G_{[132]}\]
-%% Terrific. Continuing:
-%% \[[1311]:(3\cdot 5!/4!) - [3111]:(1\cdot 5!/4!) = 10\]
-%% \[[1221]:(2\cdot 5!/4!) - [2121]:(1\cdot 5!/4!) = 5\]
-%% \[[1212]:(2\cdot 5!/4!) - [2112]:(1\cdot 5!/4!) = 5\]
-%% \[[12111]:(2\cdot 5!/5!) - [21111]:(1\cdot 5!/5!) = 1\]
-
-%% This is nearly getting me to a statement of the theorem.
-
-%% %% Let $C_n^k$ be the set of length-$k$ sequences $\lambda = \lambda(1),\ldots,\lambda(k)$
-%% %% of positive integers whose sum is $n$. Set $C = \bigcup_n \bigcup_{k=1}^n   C_n^k$.
-%% %% %% Let $D$ be the set of finite sequences of positive integers, except that the first item
-%% %% %% also allowed to be $0$.
-%% %% \begin{theorem}
-%% %% Let $R$ be a (not necessarily commutative) semiring.
-%% %%  Suppose we're given $a, b \in R$,
-%% %% and two functions $(\lambda \mapsto L_{\lambda}), (\lambda \mapsto E_{\lambda}) : C \to R$. Assume that
-%% %% \begin{enumerate}
-%% %% \item $L_1 = a + b$
-%% %% \item  For every $n\ge 2$, \[n!L_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} E_{\lambda}\right) +
-%% %%   \left(\sum_{\lambda\in C^k_n} \lambda(2)L_{\lambda}\right)\right)\]
-%% %% (This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
-%% %% Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$)
-%% %% \item For every $\lambda \in C$ and $m \ge 1$,
-%% %% \[ L_{\lambda m} + L_{m} L_{\lambda}  =  L_{\lambda} L_{m}\]
-%% %% \[ E_{\lambda m} + L_{m} E_{\lambda}  =  E_{\lambda} L_{m}\]
-%% %% \[ E_{ m} + L_{m} a  =  a L_{m}\]
-%% %% %(i.e. ``$L_{\lambda m} \approx [L_\lambda, L_m]$'')
-%% %% \end{enumerate}
-%% %% Then for all $n \ge 1$,
-%% %% \[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k \ge 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}\prod_{i=1}^k L_{\lambda(i)}\]
-
-%% %% \end{theorem}
-%% \vfil\eject
 \section{Stating the Theorem}
 Let $C_n^k$ be the set of {\em compositions} of weight $n$ and $k$ parts, i.e. length-$k$
  sequences $\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers whose sum is $n$.
@@ -421,4 +246,182 @@ Expanding definitions and using distributivity,
 
 So let's analyze what $\Z[G_\lambda]$ is like.
 \subsection{Finishing}
+
+\section{Trash Heap}
+\subsection{Subtraction and Division of Lie Brackets}
+
+Instead of using subtraction and division directly, we simply ask for solutions to particular equations
+in a semiring which imply subtraction and division indirectly. Much like how particular cartesian
+products may or may not exist in a category, we define what it means for a semiring element
+to `be a fractional Lie bracket' of two other semiring elements.
+
+\begin{definition}
+Suppose $a, b, c\in R$. We say $c$ a Lie bracket of $a,b$ (i.e. ``$c = [a,b]$'')
+if $c + ba = ab$.
+\end{definition}
+
+
+
+
+\begin{definition}
+ A {\em candidate} for $a,b$ is a sequence $(G_n \in R)_{n\in \N} $ and
+a map $G_{[\dash]}: D^{\ge 1} \to R$, such that
+\begin{enumerate}
+\item $G_0 = a$ and $G_1 = a + b$
+\item $G_{[n]} = G_n$ for every $n$
+\item $ G_{[\lambda, n]}$ is a Lie bracket of $G_{[\lambda]}, G_n$ for all $n\in \N,\lambda\in D^1$
+\end{enumerate}
+\end{definition}
+
+
+\begin{definition}
+A  map $c : D^{\ge 2} \to \N$ {\em is a solution to the BCH problem} if
+for every $a,b\in R$, we have that every candidate $G,f$ for $a,b$ that satisfies
+\[\forall n\ge 2 .\left( n! G_n = \sum_{\lambda\in D^{\ge 2}_n} c(\lambda) G_{[\lambda]}\right)\]
+also satisfies
+\[\forall n .\left( \Z_{ab}^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\right)\]
+\end{definition}
+
+\section{Finding Coefficients}
+\subsection{What I know about 0-coefficients}
+I believe I know the coefficients of all extended compositions that start with zero.
+For example,
+\[120G_5 = 24G_{[04]} + 12G_{[0(31)]}  + 12G_{[022]} + 4G_{[0(211)]} + G_{[01111]} + \cdots\]
+In general,
+\[n!G_n = \left(\sum_{\lambda \in C_{n-1}} {(n-1)!\over |\lambda|!}G_{[0\lambda]}\right) + \cdots\]
+\subsection{What I know about Synthesis Multiplicity}
+Suppose $\lambda \in C_n^k$.
+I believe the number of times that we do synthesis of $G_{m}$ in the environment $G_{\lambda m}$
+ is
+\[(n+m-1)!\over k!(m-1)!\]
+ Since the synthesis rule for $G_{m}$ involves an $m!$, this results in
+\[{m (n+m-1)!\over k!}G_{\lambda m}\]
+
+For example, $G_{[01]11} + G_{1[01]1} + G_{11[0]1}$ gets moved to
+$3G_{11[01]}$, and then we synthesize $G_2$ three times, yielding
+$6G_{112}$. Here $\lambda = (1,1)$ so $n=2$ and $k=2$ and $m = 2$, and
+we compute that synthesis occurs $3!\over 2!1! = 3$ times, and we get
+a result of $(2\cdot 3!/2!)G_{112} = 6G_{112}$.
+
+For another example, $5G_{[02]111} + 5G_{1[02]11} + 5G_{11[02]1} + 5G_{111[02]}$ gets moved to
+$20G_{111[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
+synthesize $10$ times, leading to $60G_{1113}$. And indeed we compute for $\lambda = (1,1,1)$ and $n=3$ and
+$k=3$ and $m=3$ that $5!/(3!2!) = 10$ and $3\cdot 5! / 3! = 60$.
+
+For another example, $20G_{[02]21} + 20G_{2[02]1} + 20G_{21[02]}$ gets moved to
+$60G_{21[02]}$. We know that $G_{3}$ requires $2G_{[02]}$ to synthesize, so we should
+synthesize $30$ times, leading to $180G_{213}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
+$k=2$ and $m=3$ that $5!/(2!2!) = 30$ and $3\cdot 5! / 2! = 180$.
+
+For another example, $120G_{[03]21} + 120G_{2[03]1} + 120G_{21[03]}$ gets moved to
+$360G_{21[03]}$. We know that $G_{4}$ requires $6G_{[03]}$ to synthesize, so we should
+synthesize $60$ times, leading to $1440G_{214}$. And indeed we compute for $\lambda = (2,1)$ and $n=3$ and
+$k=2$ and $m=4$ that $6!/(2!3!) = 60$ and $4\cdot 6! / 2! = 1440$.
+
+\subsection{What I think I know about Rebalancing}
+Let's think about what happens in the $5\to 6$ case when we synthesize the various $G_{(321)}$.
+The expression $X_5$ contains $60G_{(32)} + 20G_{(221)} + 20G_{(311)}$.
+Therefore  $\Z[X_5]$ contains $60G_{(32)1} + 20G_{([02]21)} + 20G_{(3[01]1)}$.
+Pushing things to the right will yield
+$60G_{(32)1} + 60G_{(21)[02]} + 60G_{(31)[01]}$.
+Now we do synthesis of $G_2$ and $G_3$ and we obtain
+$60G_{(32)1} + 180G_{(21)3} + 120G_{(31)2}$.
+This is a general case of the post synthesis situation. Let's say we have a collection $\Lambda \subseteq C_n^k$
+closed under permutation. Then we have a collection of synthesis products
+\[ \sum_{\lambda \in \Lambda} {\lambda(k) (n-1)!\over (k-1)!}G_{\lambda}\]
+In our special case, we have $\Lambda = (321)$ so $n=6$ and $k=3$. In this case we know $3$ divides $(n-1)!/(k-1)!$,
+but why generally? Let's try some examples.
+\subsubsection{Rebalancing $(2111)$}
+ In the $4\to 5$ case of synthesizing $(2111)$, our post-synth products are
+\[4G_{(211)1} + 8G_{1112}\]
+There are four things I need to spread values across; each of these coefficients is a multiple of 4. Fine.
+\subsubsection{Rebalancing $(2211)$}
+ In the $5\to 6$ case of synthesizing $(2211)$, our post-synth products are
+\[ 20G_{(221)1} + 40G_{(211)2} \]
+for a total of $3\cdot 20 + 3 \cdot 40 = 180$. Each of these gets spread over the 4 rotations of its rightmost
+element. Every coefficient is a multiple of 4, this is fine.
+
+Concretely what did my recipe from before suggest? For $k=4$ I got
+\[ \sum_{\lambda\in\Lambda} \lambda(4) G_{\lambda} = \]
+\[ {1\over 4} \sum_{\lambda\in\Lambda}\left( G_\lambda\left(\sum_i \lambda(i) \right)
++ \left( \lambda(2)G_{\lambda([12]34)} \right)
++ \left( 2 \lambda(3)G_{\lambda(1[23]4)}\right)
++ \left( 3\lambda(4)G_{\lambda(12[34])} \right)\right)\]
+
+Ah! I can see why I'm  licensed to divide by $4$ here. My synthesis coefficient
+is always a multiple of $(n-1)!/(k-1)!$, and I'm just additionally dividing by $k$.
+But $(n-1)!/k!$ is always an integer unless I'm dealing with the $11\cdots 11$ case, in which
+no rebalancing is necessary.
+\subsubsection{Rebalancing $(3211)$}
+In the $6\to 7$ (!) case of synthesizing $(3211)$, our post-synth products are
+\[ = 120G_{(321)1} + 240G_{(311)2} + 360G_{(211)3}\]
+Here there are 6+3+3 terms I need to spread across, and all coefficients are multiples of 12.
+The average is $(6 \cdot 120  + 3 \cdot 240 + 3 \cdot 360) / 12 = 210 = 7!/4!$ as required.
+
+
+\subsection{What I think I know about Synthesis Coefficients}
+ \begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$6G_3 $\>$=$\>$ \cdots +  G_{[12]} $\\
+$24G_4 $\>$=$\>$ \cdots + 6G_{[13]} + G_{[121]}  $\\
+$120G_5 $\>$=$\>$  \cdots + 36G_{[14]} + 12G_{[23]} + 8G_{[131]} + 4G_{[122]} +  G_{[1211]}$\\
+$720G_6 $\>$=$\>$  \cdots +  240G_{[15]} + 120G_{[24]} + 60G_{[141]} +  60G_{[132]} + {}$\\
+\>\> $\phantom{\cdots+}10G_{[1311]} + 5G_{[1221]} + 5G_{[1212]} + G_{[12111]}$
+\end{nstabbing}
+and what I'm finding so far as a refinement is
+\begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$6G_3 $\>$=$\>$ \cdots +  2G_{[12]} + G_{[21]} $\\
+$24G_4 $\>$=$\>$ \cdots + 9G_{[13]} + 3G_{[31]} + 2G_{[121]} + G_{[211]}  $\\
+\end{nstabbing}
+Can I guess more coefficients?
+\begin{nstabbing}
+\hspace{0.5in}\=$=\ $ \=\kill\\
+$120G_5 $\>$=$\>$ \cdots + (4\cdot 4!/2!)G_{[14]} + (1\cdot 4!/2!)G_{[41]} + (3\cdot 4!/2!)G_{[23]} +  (2\cdot 4!/2!)G_{[23]} + {} $\\
+\>\>$\phantom{\cdots+}(3\cdot 1\cdot 4!/3!)G_{[131]} + (1\cdot 1\cdot 4!/3!)G_{[311]} + {}$\\
+\>\>$\phantom{\cdots+} (2\cdot 4!/3!)G_{[122]} +(1\cdot 4!/3!)G_{[212]} + \cdots$\\
+$120G_5 $\>$=$\>$ \cdots + 48G_{[14]} + 12G_{[41]} + 36G_{[23]} + 24G_{[32]} + {} $\\
+\>\>$\phantom{\cdots+}12G_{131} + 4G_{311} + {}$\\
+\>\>$\phantom{\cdots+}8G_{122} + 4G_{212} + \cdots$\\
+\end{nstabbing}
+Now for $n=6$ I see
+\[[15]:(5\cdot 5!/2!) - [51]:(1\cdot 5!/2!) = 240\]
+\[[24]:(4\cdot 5!/2!) - [42]:(2\cdot 5!/2!) = 120\]
+\[[141]:(4\cdot 5!/3!) - [411]:(1\cdot 5!/3!) = 60\]
+\[[132]:(3\cdot 5!/3!) - [312]:(1\cdot 5!/3!) = 40\]
+This seems wrong at first... But I can use the Jacobi identity to show that
+\[20G_{[312]} + 20G_{[213]} + 40G_{[321]} + 40G_{[123]} + 60G_{[231]} + 60G_{[132]} = 60G_{[132]}\]
+Terrific. Continuing:
+\[[1311]:(3\cdot 5!/4!) - [3111]:(1\cdot 5!/4!) = 10\]
+\[[1221]:(2\cdot 5!/4!) - [2121]:(1\cdot 5!/4!) = 5\]
+\[[1212]:(2\cdot 5!/4!) - [2112]:(1\cdot 5!/4!) = 5\]
+\[[12111]:(2\cdot 5!/5!) - [21111]:(1\cdot 5!/5!) = 1\]
+
+This is nearly getting me to a statement of the theorem.
+
+%% Let $C_n^k$ be the set of length-$k$ sequences $\lambda = \lambda(1),\ldots,\lambda(k)$
+%% of positive integers whose sum is $n$. Set $C = \bigcup_n \bigcup_{k=1}^n   C_n^k$.
+%% %% Let $D$ be the set of finite sequences of positive integers, except that the first item
+%% %% also allowed to be $0$.
+%% \begin{theorem}
+%% Let $R$ be a (not necessarily commutative) semiring.
+%%  Suppose we're given $a, b \in R$,
+%% and two functions $(\lambda \mapsto L_{\lambda}), (\lambda \mapsto E_{\lambda}) : C \to R$. Assume that
+%% \begin{enumerate}
+%% \item $L_1 = a + b$
+%% \item  For every $n\ge 2$, \[n!L_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} E_{\lambda}\right) +
+%%   \left(\sum_{\lambda\in C^k_n} \lambda(2)L_{\lambda}\right)\right)\]
+%% (This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
+%% Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$)
+%% \item For every $\lambda \in C$ and $m \ge 1$,
+%% \[ L_{\lambda m} + L_{m} L_{\lambda}  =  L_{\lambda} L_{m}\]
+%% \[ E_{\lambda m} + L_{m} E_{\lambda}  =  E_{\lambda} L_{m}\]
+%% \[ E_{ m} + L_{m} a  =  a L_{m}\]
+%% %(i.e. ``$L_{\lambda m} \approx [L_\lambda, L_m]$'')
+%% \end{enumerate}
+%% Then for all $n \ge 1$,
+%% \[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k \ge 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}\prod_{i=1}^k L_{\lambda(i)}\]
+
+%% \end{theorem}
+
 \end{document}
