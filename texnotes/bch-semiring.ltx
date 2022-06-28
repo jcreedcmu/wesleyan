@@ -1,0 +1,158 @@
+\documentclass{article}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\definecolor{green}{HTML}{007f00}
+\definecolor{cyan}{HTML}{007f7f}
+\definecolor{purple}{HTML}{af00af}
+\def\rr#1{{\color{red}\mathbf {#1}}}
+\def\bb#1{{\color{blue}\mathbf{#1}}}
+\def\Z{\mathcal Z}
+\def\adjust{\big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\op{\mathsf{op}}
+\def\P{\mathbf{P}}
+\def\dash{\hbox{---}}
+\def\deg{\mathop{\mathsf{deg}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\sub{\subseteq}
+
+
+
+\title{Categorifying the BCH Formula}
+\begin{document}
+\maketitle
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\section{Baker-Campbell-Hausdorff in a Semiring}
+
+The goal of this note is to state and prove a version of the Baker-Campbell-Hausdorff formula
+in an arbitrary (not necessarily commutative) semiring, that is a set $R$ with $(+,0,\cdot,1)$,
+where $+$ is required to be commutative but $\cdot$ is not, with $\cdot$ distributing over $+$,
+and all the other usual laws.
+
+The Baker-Campbell-Hausdorff formula says that if we seek $G_1, G_2, \ldots$ such that
+\[ e^{tA} e^{tB} = e^{tG_1 + t^2G_2 + t^3G_3 + \cdots}\]
+holds, we find that we must set $G_1 = A + B$, and $G_2 = [A,B]/2$, and $G_3 = [A,[A,B]]/12 + [B,[B,A]]/12$,
+and so on.
+
+The barriers to interpreting this in a semiring are the concepts of
+the exponentiation function, (which involves division in its coefficients, the division
+in the coefficients of the Lie brackets occurring the right-hand side, and the
+ subtractions occurring because of the Lie brackets themselves.
+
+\subsection{Exponentials}
+To deal with the exponentials we differentiate both sides $n$ times by $t$, and set $t = 0$.
+\subsubsection{Left Side}
+On the left, we see
+\[ e^{tA} e^{tB}
+=  \sum_{m=0}^{\infty} \sum_{p = 0}^\infty {t^mA^m\over m!}{t^pB^p\over p!}\]
+\[=  \sum_{m=0}^{\infty} \sum_{p = 0}^\infty t^{m+p}{A^mB^p\over m!p!}\]
+\[=  \sum_{m=0}^{\infty} t^{m} \sum_{p = 0}^m {A^pB^{m-p}\over p!(m-p)!}\]
+so
+\[\left(\partial \over \partial t\right)^n e^{tA} e^{tB}\Bigg|_{t=0}
+=  \left(\sum_{m=n}^{\infty} t^{m-n}{m!\over (m-n)!}\sum_{p = 0}^m {A^pB^{m-p}\over p!(m-p)!}\right)\Bigg|_{t=0}\]
+\[= \sum_{p = 0}^n {n\choose p} A^pB^{n-p} \]
+
+Notice that if we define $\Z[X] = AX + XB$,
+then this expression is just $\Z^n[1]$.
+
+\subsubsection{Right Side}
+A {\em composition} of $n$ with $k$ parts is a sequence
+$\lambda = \lambda(1),\ldots,\lambda(k)$ with every $\lambda(i) \ge 1$.
+We consider there to be exactly one composition $\emptyset$ of $0$, with $0$ parts.
+Let $C_n$ be the set of compositions of $n$. We write $|\lambda|$
+for the number of parts of $\lambda$.
+
+If we define
+\[G_\lambda = \prod_{i = 1}^{|\lambda|} G_{\lambda(i)}\]
+(noting that $G_\emptyset = 1$) then we can reason
+\[ \exp\left(\sum_{m = 1}^\infty t^mG_m \right) = \sum_{k=0}^\infty {1\over k!}\left(\sum_{m = 1}^\infty t^mG_m \right)^k\]
+\[= \sum_{m=0}^\infty \sum_{\lambda \in C_m}{t^m\over |\lambda|!}G_\lambda\]
+so
+\[\left(\partial \over \partial t\right)^n \exp\left(\sum_{m = 1}^\infty t^mG_m \right)\Bigg|_{t=0} =
+\left( \sum_{m=n}^\infty \sum_{\lambda \in C_m}{t^{m-n}m!\over (m-n)!|\lambda|!}G_\lambda\right)\Bigg|_{t=0}
+\]
+\[=  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
+
+\subsubsection{Together}
+Define \[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
+The problem BCH poses is to find $G_i$ such that, for every $n \ge 0$,
+\[\Z^n[1] = X_n\]
+Note that already this equation by itself makes sense in an arbitrary semiring, since ${n!/|\lambda|!}$ is always
+an integer. We now need to account for the fact that the {\em solution} to this problem,
+i.e. the sequence of values $G_1, G_2, \ldots$, necessarily involves division and subtraction in the
+usual formulation.
+\subsection{Subtraction and Division of Lie Brackets}
+
+Instead of using subtraction and division directly, we simply ask for solutions to particular equations
+in a semiring which imply subtraction and division indirectly. Much like how particular cartesian
+products may or may not exist in a category, we define what it means for a semiring element
+to `be a fractional Lie bracket' of two other semiring elements.
+
+\begin{definition}
+Suppose $a, b, c\in R$. We say $c$ a Lie bracket of $a,b$ (i.e. ``$c = [a,b]$'')
+if $c + ba = ab$.
+\end{definition}
+
+We also want left-nested Lie brackets.
+
+\begin{definition}
+Suppose $a_1, \ldots, a_n, c_1, \ldots, c_n\in R$. We say $c_1,\ldots, c_n$ are Lie brackets of $a_1,\ldots,a_n$
+(i.e. ``$c = [[\cdots[a_1,a_2],\cdots],a_n]$'')
+if $c_1 = a_1$, and $c_{n+1} + a_{n+1}c_n  = c_n a_{n+1} $ for all $n \ge 1$.
+\end{definition}
+
+
+\[2G_2 = G_{[01]}\]
+\[6G_3  = 2G_{[02]} + G_{[21]}\]
+\[24G_4 = 6G_{[03]} + G_{[021]}\]
+\[120G_5 = 24G_{[04]} + 12G_{[41]} + 2G_{[131]} + 2G_{[122]}\]
+
+Let $R$ be a semiring. For $a,b\in R$, define $\Z[\dash] : R \to R$ by $\Z_{ab}[x] = ax + xb$.
+Define $G_0 = a$.
+\begin{definition}
+ A {\em candidate solution} is
+\begin{enumerate}
+\item for every $n$, a semiring element $G_n \in R$
+\item for every $n$,
+\item for every $n$, for every $j\in J_n$, a number $k_{nj} \in \N$.
+
+
+\item for every $n$, for every $\lambda :(k,n)$, a number $c_{n\lambda} \in \N$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+A candidate solution is {\em good} if for every $n$
+\[n! G_n = \sum_{\lambda:(k,n)} c_{n\lambda} G_{[\lambda]}\]
+and for every $n$ and every $j \in J_n$, we have
+\[L_{nj} = [G_{\lambda_{nj}(1)}, \ldots, G_{\lambda_{nj}(k_{nj})}]\]
+\end{definition}
+
+\end{document}
