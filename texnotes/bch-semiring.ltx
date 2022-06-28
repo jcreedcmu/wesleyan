@@ -120,39 +120,50 @@ Suppose $a, b, c\in R$. We say $c$ a Lie bracket of $a,b$ (i.e. ``$c = [a,b]$'')
 if $c + ba = ab$.
 \end{definition}
 
-We also want left-nested Lie brackets.
+We also want a notion of left-nested Lie brackets.
+Let $C^+_n$ be the set extended compositions of $n$. An extended composition can
+also mention 0, but they count as weight 1.
+Let
+\[D^k_n = \{\lambda \in C^+_n \st |\lambda| \ge k\} \qquad D^k = \bigcup_{n} D^k_n\]
+
 
 \begin{definition}
-Suppose $a_1, \ldots, a_n, c_1, \ldots, c_n\in R$. We say $c_1,\ldots, c_n$ are Lie brackets of $a_1,\ldots,a_n$
-(i.e. ``$c = [[\cdots[a_1,a_2],\cdots],a_n]$'')
-if $c_1 = a_1$, and $c_{n+1} + a_{n+1}c_n  = c_n a_{n+1} $ for all $n \ge 1$.
+Let $G_0,G_1,G_2,\ldots \in R$ be given. We say $f : C^+ \to  R$ is a {\em $G$-realization} if
+\begin{enumerate}
+\item $f(\emptyset) = 1$
+\item $f(n) = G_n$ for every $n$
+\item $ f(\lambda, n)$ is a Lie bracket of $f(\lambda), G_n$ for all $n\in \N,\lambda\in D^1$
+
+\end{enumerate}
+
+
 \end{definition}
 
+Intuitively $f$ shows how we can find elements that can express any expression
+\[g_1, [g_1,g_2], [[g_1,g_2],g_3], [[[g_1,g_2],g_3],g_4],\ldots\]
 
-\[2G_2 = G_{[01]}\]
-\[6G_3  = 2G_{[02]} + G_{[21]}\]
-\[24G_4 = 6G_{[03]} + G_{[021]}\]
-\[120G_5 = 24G_{[04]} + 12G_{[41]} + 2G_{[131]} + 2G_{[122]}\]
+%% \[2G_2 = G_{[01]}\]
+%% \[6G_3  = 2G_{[02]} + G_{[21]}\]
+%% \[24G_4 = 6G_{[03]} + G_{[021]}\]
+%% \[120G_5 = 24G_{[04]} + 12G_{[41]} + 2G_{[131]} + 2G_{[122]}\]
 
-Let $R$ be a semiring. For $a,b\in R$, define $\Z[\dash] : R \to R$ by $\Z_{ab}[x] = ax + xb$.
-Define $G_0 = a$.
+%% Let $R$ be a semiring. For $a,b\in R$, define $\Z[\dash] : R \to R$ by $\Z_{ab}[x] = ax + xb$.
+%% Define $G_0 = a$.
 \begin{definition}
- A {\em candidate solution} is
+ A {\em candidate solution} for $a,b$ is
 \begin{enumerate}
-\item for every $n$, a semiring element $G_n \in R$
-\item for every $n$,
-\item for every $n$, for every $j\in J_n$, a number $k_{nj} \in \N$.
-
-
-\item for every $n$, for every $\lambda :(k,n)$, a number $c_{n\lambda} \in \N$.
+\item a sequence $G = (G_0,G_1,G_2,G_3,\ldots) \in R$ with $G_0 = a$ and $G_1 = a + b$.
+\item a $G$-realization $f$
 \end{enumerate}
 \end{definition}
 
 \begin{definition}
-A candidate solution is {\em good} if for every $n$
-\[n! G_n = \sum_{\lambda:(k,n)} c_{n\lambda} G_{[\lambda]}\]
-and for every $n$ and every $j \in J_n$, we have
-\[L_{nj} = [G_{\lambda_{nj}(1)}, \ldots, G_{\lambda_{nj}(k_{nj})}]\]
+A candidate solution $G, f$ {\em has coefficients} $c : D^2 \to \N$  if for every $n$
+\[n! G_n = \sum_{\lambda\in D^2} c(\lambda) f(\lambda)\]
 \end{definition}
+
+A coefficient map $c : D^2 \to \N$ {\em is a solution to the BCH problem} if every candidate
+solution $G,f$ that has the coefficients $c$ also satisfies
+\[\Z^n[1] = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 
 \end{document}
