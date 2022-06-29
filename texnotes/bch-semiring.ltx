@@ -189,7 +189,45 @@ Now define $\Z[x] = ax + xb$ and
 Notice that $X_1 = G_1 = \Z[1]$. Therefore if we can show $\Z[X_n] = X_{n+1}$, then we have
 \[ \sum_{m=0}^n {n\choose m}a^mb^{n-m} = \Z^n[1] = X_n\]
 as required.
+\subsection{Sketch of Proof}
+Here's the general shape of the proof.
+\begin{enumerate}
+\item Deal with $G_0$:
+\begin{enumerate}
+\item Start with $\Z[X_n]$.
+\item Push all copies of $a$ all the way to the right, creating many $G_{[0m]}$.
+\item Push all $G_{[0m]}$ to the right, creating {\em all} $G_{[0\lambda]}$.
+\end{enumerate}
+\item Deal with $G_1$:
+\begin{enumerate}
+\item Synthesize $G_1$ on the right.
+\item Spread $G_1$ to the left, creating many $G_{[m1]}$.
+\item Push $G_{[m1]}$ to the right, creating {\em all} $G_{[m1\lambda]}$.
+\end{enumerate}
+\item Deal with $G_2$:
+\begin{enumerate}
+\item Synthesize $G_2$ on the right. (because we have all $[01]$)
+\item Spread $G_2$ to the left, creating many $G_{[m2]}$.
+\item Push $G_{[m2]}$ to the right, creating {\em all} $G_{m2\lambda}$.
+\end{enumerate}
+\item Deal with $G_3$:
+\begin{enumerate}
+\item Synthesize $G_3$ on the right. (because we have all $[02],[011],[12],[21]$)
+\item Spread $G_3$ to the left, creating many $G_{[m3]}$.
+\item Push $G_{[m3]}$ to the right, creating {\em all} $G_{m3\lambda}$.
+\end{enumerate}
+\item Deal with $G_4$:
+\begin{enumerate}
+\item Synthesize $G_4$ on the right. (because we have required ingredients)
+\item Spread $G_4$ to the left, creating many $G_{[m4]}$.
+\item Push $G_{[m4]}$ to the right, creating {\em all} $G_{m4\lambda}$.
+\end{enumerate}
+\item $\cdots$
+\end{enumerate}
+
 \subsection{Lemmas}
+
+
 %% Suppose $\lambda \in C^k$. When $1 \le i < j\le k$,
 %% define \def\bby{\quad\hbox{by}\quad}
 %% \[\begin{tabular}{lcl}
