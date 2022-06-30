@@ -15,7 +15,7 @@
 \definecolor{purple}{HTML}{af00af}
 \def\rr#1{{\color{red}\mathbf {#1}}}
 \def\bb#1{{\color{blue}\mathbf{#1}}}
-\def\Z{\mathcal Z}
+\def\Z{\mathcal A}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
@@ -197,11 +197,23 @@ Here's the general shape of the proof.
 \item Start with $\Z[X_n]$.
 \item Push all copies of $a$ all the way to the right, creating many $G_{[0m]}$.
 \item Push all $G_{[0m]}$ to the right, creating {\em all} $G_{[0\lambda]}$.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_\lambda (a+b)\right)\]
 \end{enumerate}
 \item Deal with $G_1$:
 \begin{enumerate}
 \item Synthesize $G_1$ on the right.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_{\lambda 1}\right)\]
 \item Spread $G_1$ to the left, creating many $G_{[m1]}$.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
+\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} (k+1)G_{\lambda 1}\right) + G_{1^{n+1}}\]
+\[= \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[m1\lambda_2]}\right) + {}\]
+\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} G_{\lambda \sim 1}\right) + G_{1^{n+1}}\]
 \item Push $G_{[m1]}$ to the right, creating {\em all} $G_{[m1\lambda]}$.
 \end{enumerate}
 \item Deal with $G_2$:
@@ -224,7 +236,39 @@ Here's the general shape of the proof.
 \end{enumerate}
 \item $\cdots$
 \end{enumerate}
+\vfil\eject
+\subsection{Sketch of Proof, 2}
+Recall the synthesis recipe is
+\[n!G_{n} = \left(\sum_{\lambda\in C_{n-1}}{(n-1)!\over |\lambda|! } G_{[0\lambda]}\right) +
+  \left(\sum_{\substack{\lambda\in C_n\\ 2 \le |\lambda| \le n-1 }} \lambda(2){(n-1)!\over |\lambda|! }G_{[\lambda]}\right)
+\eqno(\ddagger)\]
+\subsubsection{Definitions}
+\[S_p = \sum_{\lambda \in C_{n+1-p} } p{n!\over |\lambda|! }G_{\lambda p}\]
+\[S'_p = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over |\lambda|! }G_{\lambda p}
+ = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over (|\lambda|+1)! }(|\lambda| + 1)G_{\lambda p}\]
+\[B_p = \sum_{\substack{n_1,n_2 \\n_1+n_2 = n+1-p }}
+\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n_2} \\ |\lambda_1| + |\lambda_2| + 1 \le n}}
+ p{n!\over(|\lambda_1| + |\lambda_2| + 1)! }G_{\lambda_1 p \lambda_2}\]
+\[W_p^\ell = \sum_{\substack{m, n_1,n_2 \\ m+n_2=\ell-p \\ n_1 + n_2 = n}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}} p{n!\over |\lambda_1|! (|\lambda_2 |+2)! }G_{\lambda_1 [mp \lambda_2]}\]
+\[\bar Z = \sum_{\substack{m,n_1,n_2\\n_1 + n_2 + 1 = n  }} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
+{n!\over (|\lambda_1| + |\lambda_2| + 1)!}G_{\lambda_1 [0 m] \lambda_2}\]
+\[Z^\ell = \sum_{\substack{n_1,n_2\\n_1 + n_2 = n  \\ 1 + n_2 = \ell}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
+{n!\over |\lambda_1|! |\lambda_2 |! }G_{\lambda_1 [0  \lambda_2]}\]
+\subsubsection{$n=3$ Reasoning}
+\[\Z[X_3] = (6G_{31} + 3G_{211} + 3G_{121} + G_{1111}) + {}\]
+\[(6G_{[03]} + 3G_{[02]1} + 3G_{1[02]} + 3G_{[01]2} + 3G_{2[01]} + {} \]
+\[G_{[01]11} + G_{1[01]1} + G_{11[01]})\]
+\[ = (6G_{31} + 3G_{211} + 3G_{121}) + {}\]
+\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
+\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
 
+\[ = (6G_{31} + 2G_{(211)} + G_{[11]2} + G_{[21]1} + 2G_{1[21]}) + {}\]
+\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
+\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
+\subsubsection{Reasoning}
+\[\Z[X_n] = S_1 + \bar Z = S'_1 + \bar Z + G_{1^{n+1}}\]
+\[= S'_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
+\[= \sum_{\ell = 2}^{n+1} W^\ell_1 + B_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
 \subsection{Lemmas}
 
 
