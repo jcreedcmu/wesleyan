@@ -91,11 +91,14 @@ function rebalance(n: number, lam: number[]) {
   const tail = lam[lam.length - 1];
 
   return sep(n / lam.length, plusa(
-    ...lam.slice(1).map((x, i) => sep((i + 1), proda(
-      ...prefix.slice(0, i).map(x => G(x)),
-      lierule(G(prefix[i]), G(tail)),
-      ...prefix.slice(i + 1).map(x => G(x))
-    )))));
+    ...lam.slice(1)
+      .map((x, i) => i)
+      .filter(i => prefix[i] != tail)
+      .map(i => sep((i + 1), proda(
+        ...prefix.slice(0, i).map(x => G(x)),
+        lierule(G(prefix[i]), G(tail)),
+        ...prefix.slice(i + 1).map(x => G(x))
+      )))));
 }
 
 assert.equal(spretty(rebalance(5, [8, 9, 7, 2, 4])),
@@ -110,31 +113,49 @@ assert.equal(spretty(rebalance(5, [8, 9, 7, 2, 4])),
  G_{[8,4]972}`
 );
 
-// const proof3: Story = {
-//   size: 3,
-//   phases: [
-//     ["move [0,-]",
-//       // [01]
-//       sep(3, lierule(glie(0, 1), G2)),
-//       sep(1, proda(lierule(glie(0, 1), G1), G1)),
-//       sep(2, proda(G1, lierule(glie(0, 1), G1))),
-//       // [02]
-//       sep(3, lierule(glie(0, 2), G1)),
-//       // [011]
-//       sep(1, lierule(nestedLie([0, 1, 1]), G1)),
-//     ],
-//     ["rebalance ...1",
-//       rebalance(6, [3, 1]),
-//       rebalance(3, [2, 1, 1]),
-//       rebalance(3, [1, 2, 1]),
-//     ],
-//     ["synthesize G2",
-//       sep(6, prod(G2, rule(2))),
-//       sep(3, proda(G1, G1, rule(2)))
-//     ],
-//     // ["synthesize G3",
-//     //   rule(3)]
-//   ]
-// };
+const proof3: Story = {
+  size: 3,
+  phases: [
+    ["move [0,-]",
+      // [01]
+      sep(3, lierule(glie(0, 1), G2)),
+      sep(1, proda(lierule(glie(0, 1), G1), G1)),
+      sep(2, proda(G1, lierule(glie(0, 1), G1))),
+      // [02]
+      sep(3, lierule(glie(0, 2), G1)),
+      // [011]
+      sep(1, lierule(nestedLie([0, 1, 1]), G1)),
+    ],
+    ["rebalance ...1",
+      rebalance(6, [3, 1]),
+      rebalance(3, [2, 1, 1]),
+      rebalance(3, [1, 2, 1]),
+    ],
+    ["move [-,1]",
+      // [21]
+      sep(1, lierule(nestedLie([2, 1]), G1)),
+    ],
+    ["synthesize G2",
+      sep(6, prod(G2, rule(2))),
+      sep(3, proda(G1, G1, rule(2)))
+    ],
+    ["rebalance ...2",
+      rebalance(6, [1, 1, 2]),
+    ],
+    ["move [-,2]",
+      // [12]
+      sep(2, lierule(nestedLie([1, 2]), G1)),
+    ],
+    ["synthesize G3",
+      sep(3, proda(G1, rule(3))),
+    ],
+    ["rebalance ...3",
+      rebalance(18, [1, 3]),
+    ],
+    ["synthesize G4",
+      sep(1, rule(4)),
+    ],
+  ]
+};
 
-// tellStory(proof3);
+tellStory(proof3);
