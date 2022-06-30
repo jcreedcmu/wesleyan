@@ -254,6 +254,16 @@ Recall the synthesis recipe is
 {n!\over (|\lambda_1| + |\lambda_2| + 1)!}G_{\lambda_1 [0 m] \lambda_2}\]
 \[Z^\ell = \sum_{\substack{n_1,n_2\\n_1 + n_2 = n  \\ 1 + n_2 = \ell}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
 {n!\over |\lambda_1|! |\lambda_2 |! }G_{\lambda_1 [0  \lambda_2]}\]
+\subsubsection{Hard}
+\[S_{p;k} = p{n!\over k!} \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = k }} }G_{\lambda p}\]
+\[S_p = \sum_{k = 1}^{n} S_{p;k}\]
+\[S'_p = \sum_{k = 1}^{n-1} S_{p;k}\]
+\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over |\lambda|! }G_{\lambda p}\]
+Suppose $5 \le n -1 $. Then $n \ge 6$ and $n! \ge 6!$ and
+\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 5! }G_{\lambda p}\]
+\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } 6G_{\lambda p}\]
+\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } (G_{p\lambda} + \cdots + G_{\lambda p}) + p{n!\over 6!}(G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
+\[S_{p;5} = p{n!\over 6! }\sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }}  (G_{p\lambda} + \cdots + G_{\lambda p}) + (G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
 \subsubsection{$n=3$ Reasoning}
 \[\Z[X_3] = (6G_{31} + 3G_{211} + 3G_{121} + G_{1111}) + {}\]
 \[(6G_{[03]} + 3G_{[02]1} + 3G_{1[02]} + 3G_{[01]2} + 3G_{2[01]} + {} \]
