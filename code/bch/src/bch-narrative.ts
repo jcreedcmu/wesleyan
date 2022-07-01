@@ -113,6 +113,10 @@ assert.equal(spretty(rebalance(5, [8, 9, 7, 2, 4])),
  G_{[8,4]972}`
 );
 
+function move0(piece: number[], rem: number) {
+
+}
+
 const proof3: Story = {
   size: 3,
   phases: [
@@ -158,4 +162,35 @@ const proof3: Story = {
   ]
 };
 
-tellStory(proof3);
+const proof4: Story = {
+  size: 4,
+  phases: [
+    ["move [0,-]",
+      // [01]
+      sep(12, lierule(glie(0, 1), G3)),
+      sep(4, proda(lierule(glie(0, 1), G1), G2)),
+      sep(4, proda(lierule(glie(0, 1), G2), G1)),
+      sep(8, proda(G2, lierule(glie(0, 1), G1))),
+      sep(8, proda(G1, lierule(glie(0, 1), G2))),
+      sep(1, proda(lierule(glie(0, 1), G1), G1, G1)),
+      sep(2, proda(G1, lierule(glie(0, 1), G1), G1)),
+      sep(3, proda(G1, G1, lierule(glie(0, 1), G1))),
+      // [02]
+      sep(12, lierule(glie(0, 2), G2)),
+      sep(4, proda(lierule(glie(0, 2), G1), G1)),
+      sep(8, proda(G1, lierule(glie(0, 2), G1))),
+      // [03]
+      sep(12, lierule(glie(0, 3), G1)),
+      // [021]
+      sep(4, lierule(nestedLie([0, 2, 1]), G1)),
+      sep(4, lierule(nestedLie([0, 1, 2]), G1)),
+      // [011]
+      sep(4, lierule(nestedLie([0, 1, 1]), G2)),
+      sep(1, proda(lierule(nestedLie([0, 1, 1]), G1), G1)),
+      sep(3, proda(G1, lierule(nestedLie([0, 1, 1]), G1))),
+      // [0111]
+      sep(1, proda(lierule(nestedLie([0, 1, 1, 1]), G1))),
+    ],
+  ]
+};
+tellStory(proof4);
