@@ -38,10 +38,11 @@ function tellStory(story: Story) {
   console.log(spretty(state));
   story.phases.forEach(phase => {
     const [text, ...steps] = phase;
-    console.log('----', text, '---');
+    console.log('----', text, '----');
     state = plus(state, plusa(...steps));
     console.log(spretty(state));
   });
+  if ('0' == epretty(sub(state, target(N + 1)))) console.log('---- done! ----');
 }
 
 const proof2: Story = {
@@ -90,14 +91,7 @@ const proof3: Story = {
   size: 3,
   phases: [
     ["move [0,-]",
-      // [01]
-      sep(3, lierule(glie(0, 1), G2)),
-      sep(1, proda(lierule(glie(0, 1), G1), G1)),
-      sep(2, proda(G1, lierule(glie(0, 1), G1))),
-      // [02]
-      sep(3, lierule(glie(0, 2), G1)),
-      // [011]
-      sep(1, lierule(nestedLie([0, 1, 1]), G1)),
+      zeroMotion(3),
     ],
     ["rebalance ...1",
       rebalance(6, [3, 1]),
@@ -139,11 +133,5 @@ const proof4: Story = {
     ],
   ]
 };
-tellStory(proof4);
 
-// const z = part3(4).map(({ mu, lam1, lam2, b, n1, n2, s }) => {
-//   const coeff = choose(lam1.length + mu.length, mu.length) * factorial(n1 + n2 + s + b)
-//     / factorial(lam1.length + lam2.length + mu.length + 1);
-//   return `${coeff} ${lam1.join('')}[0${mu.join('')},${b}]${lam2.join('')}`
-// }).join('\n');
-// console.log(z);
+tellStory(proof4);
