@@ -93,10 +93,38 @@ const proof3: Story = {
 const proof4: Story = {
   size: 4,
   phases: [
-    ["move [0,-]",
-      zeroMotion(4),
+    ["move [0,-]", zeroMotion(4)],
+    ["rebalance ...1", rebalance(4, 1)],
+    ["move [-,1]",
+      // [31]
+      sep(4, lierule(nestedLie([3, 1]), G1)),
+      // [21]
+      sep(4, lierule(nestedLie([2, 1]), G2)),
+      sep(1, proda(lierule(nestedLie([2, 1]), G1), G1)),
+      sep(3, proda(G1, lierule(nestedLie([2, 1]), G1))),
+      // [211]
+      sep(1, lierule(nestedLie([2, 1, 1]), G1)),
     ],
+    ["synthesize G2", synthAll(4, 2)],
+    ["rebalance ...2", rebalance(4, 2)],
+    ["move [-,2]",
+      // [12]
+      sep(2, proda(lierule(nestedLie([1, 2]), G1), G1)),
+      sep(6, proda(G1, lierule(nestedLie([1, 2]), G1))),
+      sep(8, lierule(nestedLie([1, 2]), G2)),
+      // [121]
+      sep(2, lierule(nestedLie([1, 2, 1]), G1)),
+    ],
+    ["synthesize G3", synthAll(4, 3)],
+    ["rebalance ...3", rebalance(4, 3)],
+    ["move [-,3]",
+      // [13]
+      sep(12, lierule(nestedLie([1, 3]), G1)),
+    ],
+    ["synthesize G4", synthAll(4, 4)],
+    ["rebalance ...3", rebalance(4, 4)],
+    ["synthesize G5", synthAll(4, 5)],
   ]
 };
 
-tellStory(proof3);
+tellStory(proof4);
