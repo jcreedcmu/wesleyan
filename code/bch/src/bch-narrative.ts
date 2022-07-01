@@ -1,9 +1,9 @@
 import { Exp, mkexp, Term, termOfTree, Tree, treeOfTerm, G, Item } from './basics';
 import assert from 'assert';
-import { epretty, lie, plusa, spretty, sub, sep, glie, target, plus, prod, proda, lierule, Z, extract, comps, factorial } from './lib';
+import { epretty, lie, plusa, spretty, sub, sep, glie, target, plus, prod, proda, lierule, Z, extract, comps, factorial, choose, nestedLie, rule } from './lib';
+import { zeroMotion } from './zero-motion';
 
 // This is me trying to deliberately collect some coefficients from medium-sized examples.
-
 
 const G0 = G(0);
 const G1 = G(1);
@@ -28,33 +28,6 @@ const R12 = lierule(G1, G2);
 const R13 = lierule(G1, G3);
 const R013 = lierule(L01, G3);
 const R012 = lierule(L01, G2);
-
-function nestedLie(x: number[]): Exp {
-  if (x.length < 1) throw new Error(`Two few elements in ${x}`);
-  if (x.length == 1)
-    return G(x[0]);
-  else
-    return x.slice(1).reduce<Exp>((x: Exp, y: number) => lie(x, G(y)), G(x[0]));
-}
-assert.equal(epretty(sub(nestedLie([4]), G4)), '0');
-assert.equal(epretty(sub(nestedLie([4, 5, 3, 1]), lie(lie(lie(G4, G5), G3), G1))), '0');
-
-function rule(n: number) {
-  if (n == 2) {
-    return sub(sep(2, G(2)), lie(G0, G1));
-  }
-
-  const fnmo = factorial(n - 1);
-  const nonzeroTerms: Exp = plusa(
-    ...comps(n).filter(c => c.length > 1).filter(c => c[0] != c[1]).map(c =>
-      sep(fnmo * c[1] / factorial(c.length), nestedLie(c))
-    )
-  );
-  const zeroTerms = plusa(...comps(n - 1).map(c =>
-    sep(fnmo / factorial(c.length), nestedLie([0, ...c]))
-  ));
-  return sub(sep(factorial(n), G(n)), plus(zeroTerms, nonzeroTerms));
-}
 
 type Phase = [string, ...Exp[]];
 type Story = { size: number, phases: Phase[] };
@@ -113,10 +86,6 @@ assert.equal(spretty(rebalance(5, [8, 9, 7, 2, 4])),
  G_{[8,4]972}`
 );
 
-function move0(piece: number[], rem: number) {
-
-}
-
 const proof3: Story = {
   size: 3,
   phases: [
@@ -166,31 +135,15 @@ const proof4: Story = {
   size: 4,
   phases: [
     ["move [0,-]",
-      // [01]
-      sep(12, lierule(glie(0, 1), G3)),
-      sep(4, proda(lierule(glie(0, 1), G1), G2)),
-      sep(4, proda(lierule(glie(0, 1), G2), G1)),
-      sep(8, proda(G2, lierule(glie(0, 1), G1))),
-      sep(8, proda(G1, lierule(glie(0, 1), G2))),
-      sep(1, proda(lierule(glie(0, 1), G1), G1, G1)),
-      sep(2, proda(G1, lierule(glie(0, 1), G1), G1)),
-      sep(3, proda(G1, G1, lierule(glie(0, 1), G1))),
-      // [02]
-      sep(12, lierule(glie(0, 2), G2)),
-      sep(4, proda(lierule(glie(0, 2), G1), G1)),
-      sep(8, proda(G1, lierule(glie(0, 2), G1))),
-      // [03]
-      sep(12, lierule(glie(0, 3), G1)),
-      // [021]
-      sep(4, lierule(nestedLie([0, 2, 1]), G1)),
-      sep(4, lierule(nestedLie([0, 1, 2]), G1)),
-      // [011]
-      sep(4, lierule(nestedLie([0, 1, 1]), G2)),
-      sep(1, proda(lierule(nestedLie([0, 1, 1]), G1), G1)),
-      sep(3, proda(G1, lierule(nestedLie([0, 1, 1]), G1))),
-      // [0111]
-      sep(1, proda(lierule(nestedLie([0, 1, 1, 1]), G1))),
+      zeroMotion(4),
     ],
   ]
 };
 tellStory(proof4);
+
+// const z = part3(4).map(({ mu, lam1, lam2, b, n1, n2, s }) => {
+//   const coeff = choose(lam1.length + mu.length, mu.length) * factorial(n1 + n2 + s + b)
+//     / factorial(lam1.length + lam2.length + mu.length + 1);
+//   return `${coeff} ${lam1.join('')}[0${mu.join('')},${b}]${lam2.join('')}`
+// }).join('\n');
+// console.log(z);

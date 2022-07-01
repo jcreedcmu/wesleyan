@@ -242,3 +242,30 @@ export function extract(e: Exp, n: number): string {
   );
   return `rule[${n + 1}] = sub(sep(${fn1}, G${n + 1}), ${rpretty(ruleContent)});`;
 }
+
+export function nestedLie(x: number[]): Exp {
+  if (x.length < 1) throw new Error(`Two few elements in ${x}`);
+  if (x.length == 1)
+    return G(x[0]);
+  else
+    return x.slice(1).reduce<Exp>((x: Exp, y: number) => lie(x, G(y)), G(x[0]));
+}
+assert.equal(epretty(sub(nestedLie([4]), G(4))), '0');
+assert.equal(epretty(sub(nestedLie([4, 5, 3, 1]), lie(lie(lie(G(4), G(5)), G(3)), G(1)))), '0');
+
+export function rule(n: number) {
+  if (n == 2) {
+    return sub(sep(2, G(2)), lie(G(0), G(1)));
+  }
+
+  const fnmo = factorial(n - 1);
+  const nonzeroTerms: Exp = plusa(
+    ...comps(n).filter(c => c.length > 1).filter(c => c[0] != c[1]).map(c =>
+      sep(fnmo * c[1] / factorial(c.length), nestedLie(c))
+    )
+  );
+  const zeroTerms = plusa(...comps(n - 1).map(c =>
+    sep(fnmo / factorial(c.length), nestedLie([0, ...c]))
+  ));
+  return sub(sep(factorial(n), G(n)), plus(zeroTerms, nonzeroTerms));
+}
