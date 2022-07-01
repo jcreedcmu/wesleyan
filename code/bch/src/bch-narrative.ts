@@ -122,9 +122,88 @@ const proof4: Story = {
       sep(12, lierule(nestedLie([1, 3]), G1)),
     ],
     ["synthesize G4", synthAll(4, 4)],
-    ["rebalance ...3", rebalance(4, 4)],
+    ["rebalance ...4", rebalance(4, 4)],
     ["synthesize G5", synthAll(4, 5)],
   ]
 };
 
-tellStory(proof4);
+const proof5: Story = {
+  size: 5,
+  phases: [
+    ["move [0,-]", zeroMotion(5)],
+    ["rebalance ...1", rebalance(5, 1)],
+    ["move [-,1]",
+      // [41]
+      sep(20, lierule(nestedLie([4, 1]), G1)),
+      // [31]
+      sep(20, lierule(nestedLie([3, 1]), G2)),
+      // [21]
+      sep(20, lierule(nestedLie([2, 1]), G3)),
+      sep(1, proda(lierule(nestedLie([2, 1]), G1), G1, G1)),
+      sep(3, proda(G1, lierule(nestedLie([2, 1]), G1), G1)),
+      sep(6, proda(G1, G1, lierule(nestedLie([2, 1]), G1))),
+      sep(5, proda(lierule(nestedLie([2, 1]), G2), G1)),
+      sep(5, proda(lierule(nestedLie([2, 1]), G1), G2)),
+      sep(15, proda(G1, lierule(nestedLie([2, 1]), G2))),
+      sep(15, proda(G2, lierule(nestedLie([2, 1]), G1))),
+      // [211]
+      sep(5, lierule(nestedLie([2, 1, 1]), G2)),
+      sep(1, proda(lierule(nestedLie([2, 1, 1]), G1), G1)),
+      sep(4, proda(G1, lierule(nestedLie([2, 1, 1]), G1))),
+      // [212]
+      sep(5, lierule(nestedLie([2, 1, 2]), G1)),
+      // [2111]
+      sep(1, lierule(nestedLie([2, 1, 1, 1]), G1)),
+      // [31]
+      sep(5, proda(lierule(nestedLie([3, 1]), G1), G1)),
+      sep(15, proda(G1, lierule(nestedLie([3, 1]), G1))),
+      // [311]
+      sep(5, lierule(nestedLie([3, 1, 1]), G1)),
+    ],
+    ["synthesize G2", synthAll(5, 2)],
+    ["rebalance ...2", rebalance(5, 2)],
+    ["move [-,2]",
+      // [32]
+      sep(40, lierule(nestedLie([3, 2]), G1)),
+      // [12]
+      sep(40, lierule(nestedLie([1, 2]), G3)),
+      sep(10, proda(lierule(nestedLie([1, 2]), G2), G1)),
+      sep(10, proda(lierule(nestedLie([1, 2]), G1), G2)),
+      sep(30, proda(G1, lierule(nestedLie([1, 2]), G2))),
+      sep(30, proda(G2, lierule(nestedLie([1, 2]), G1))),
+      sep(2, proda(lierule(nestedLie([1, 2]), G1), G1, G1)),
+      sep(6, proda(G1, lierule(nestedLie([1, 2]), G1), G1)),
+      sep(12, proda(G1, G1, lierule(nestedLie([1, 2]), G1))),
+      // [122]
+      sep(10, proda(lierule(nestedLie([1, 2, 2]), G1))),
+      // [121]
+      sep(10, proda(lierule(nestedLie([1, 2, 1]), G2))),
+      sep(2, proda(lierule(nestedLie([1, 2, 1]), G1), G1)),
+      sep(8, proda(G1, lierule(nestedLie([1, 2, 1]), G1))),
+      // [1211]
+      sep(2, proda(lierule(nestedLie([1, 2, 1, 1]), G1))),
+    ],
+    ["synthesize G3", synthAll(5, 3)],
+    ["rebalance ...3", rebalance(5, 3)],
+    ["move [-,3]",
+      // [13]
+      sep(60, lierule(nestedLie([1, 3]), G2)),
+      sep(60, lierule(nestedLie([2, 3]), G1)),
+      sep(15, proda(lierule(nestedLie([1, 3]), G1), G1)),
+      sep(45, proda(G1, lierule(nestedLie([1, 3]), G1))),
+      // [131]
+      sep(15, proda(lierule(nestedLie([1, 3, 1]), G1))),
+    ],
+    ["synthesize G4", synthAll(5, 4)],
+    ["rebalance ...4", rebalance(5, 4)],
+    ["move [-,4]",
+      // [14]
+      sep(80, lierule(nestedLie([1, 4]), G1)),
+    ],
+    ["synthesize G5", synthAll(5, 5)],
+    ["rebalance ...5", rebalance(5, 5)],
+    ["synthesize G6", synthAll(5, 6)],
+  ]
+};
+
+tellStory(proof5);
