@@ -113,28 +113,31 @@ function balanced2(n: number): Exp {
   return G(0, 0);
 }
 
-// Returns all the pairwise swaps that arise from rebalancing 1
-function swaps1(n: number): Exp {
-  return esum(2, n, b => {
-    return esum(0, n - b, n1 => {
-      const n2 = n - b - n1;
-      return plusa(
-        ...cartprod(comps(n1), comps(n2))
-          .map(([lam1, lam2]) => {
-            return sep(
-              (lam1.length + 1) *
-              factorial(n) / factorial(lam1.length + lam2.length + 2),
-              proda(...Gp(lam1), lie(G(b), G(1)), ...Gp(lam2))
-            );
-          })
-      );
-    });
+// Returns all the pairwise swaps that arise from rebalancing s
+// they look like
+// λ₁[b,s]λ₂
+// where b ranges from 1 to (n+1)-s, but not equalling s, because
+// we have a total of (n+1)-s-b to spread around λ₁ and λ₂
+function swapss(n: number, s: number): Exp {
+  return esum(1, (n + 1) - s, b => {
+    if (b == s)
+      return G(0, 0);
+    else
+      return esum(0, (n + 1) - s - b, n1 => {
+        const n2 = (n + 1) - s - b - n1;
+        return plusa(
+          ...cartprod(comps(n1), comps(n2))
+            .map(([lam1, lam2]) => {
+              return sep(
+                s *
+                (lam1.length + 1) *
+                factorial(n) / factorial(lam1.length + lam2.length + 2),
+                proda(...Gp(lam1), lie(G(b), G(s)), ...Gp(lam2))
+              );
+            })
+        );
+      });
   });
-}
-
-// Returns all the pairwise swaps that arise from rebalancing 2
-function swaps2(n: number): Exp {
-  return G(0, 0);
 }
 
 // Returns all the right-aligned swaps that arise from rebalancing 1, which
@@ -187,7 +190,7 @@ export function postZeroState(n: number): Exp {
 export function postRebalance1State(n: number): Exp {
   return plusa(
     balanced1(n),
-    swaps1(n),
+    swapss(n, 1),
     esum(2, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
@@ -216,7 +219,7 @@ export function postRebalance2State(n: number): Exp {
   return plusa(
     balanced2(n),
     balanced1(n),
-    swaps2(n),
+    swapss(n, 2),
     esum(3, n + 1, m => rightSwaps1(n, m)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
