@@ -44,24 +44,20 @@ function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
   return rv;
 }
 
-function spart(n: number, m: number): CompPair[] {
-  return cartprod(comps(n - m + 1), comps(m - 1))
-    .map(([lam1, lam2]) => ({ lam1, lam2 }));
-}
-
 // This captures all the zero-swap expressions in the n→n+1 proof,
 // which are going to be used for m-synthesis. For example:
 // - G_{23[022]} has n=(2+3)+(2+2)=9, and m=(2+2)+1=5.
 // - G_{4[01]} has n=(4)+(1)=5, and m=(1)+1=2.
 function zeroSwaps(n: number, m: number) {
-  return plusa(...spart(n, m).map(({ lam1, lam2 }) => {
-    const coeff =
-      factorial(n)
-      / factorial(lam1.length) / factorial(lam2.length);
-    return sep(coeff,
-      proda(...Gp(lam1), nestedLie([0, ...lam2])));
-  }
-  ));
+  return plusa(
+    ...cartprod(comps(n - m + 1), comps(m - 1)).map(([lam1, lam2]) => {
+      const coeff =
+        factorial(n)
+        / factorial(lam1.length) / factorial(lam2.length);
+      return sep(coeff,
+        proda(...Gp(lam1), nestedLie([0, ...lam2])));
+    }
+    ));
 }
 
 assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
