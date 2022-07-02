@@ -1,6 +1,10 @@
 import * as assert from 'assert';
 import { Exp, G } from './basics';
-import { comps, factorial, nestedLie, plus, plusa, proda, sep, spretty, sub } from './lib';
+import { comps, factorial, nestedLie, plus, plusa, prod, proda, sep, spretty, sub } from './lib';
+
+// -------------------------------------------------------------------------
+// 1. Basic helper functions
+// -------------------------------------------------------------------------
 
 type CompPair = { lam1: number[], lam2: number[] };
 
@@ -44,6 +48,10 @@ function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
   return rv;
 }
 
+// -------------------------------------------------------------------------
+// 2. Major chunks of proof state
+// -------------------------------------------------------------------------
+
 // This captures all the zero-swap expressions in the n→n+1 proof,
 // which are going to be used for m-synthesis. For example:
 // - G_{23[022]} has n=(2+3)+(2+2)=9, and m=(2+2)+1=5.
@@ -63,6 +71,29 @@ function zeroSwaps(n: number, m: number) {
 assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
 assert.ok(spretty(zeroSwaps(5, 2)).includes('120G_{4[0,1]}'));
 
+// returns G_{1⋯1} with n 1's
+function fullySplit(n: number) {
+  let rv = G(1);
+  for (let i = 0; i < n - 1; i++) {
+    rv = prod(rv, G(1));
+  }
+  return rv;
+}
+
+// Returns all the fully stable no-swap expressions that arise from rebalancing 1
+function balanced1(n: number): Exp {
+  return sep(0, G(0));
+}
+
+// Returns all the pairwise swaps that arise from rebalancing 1
+function swaps1(n: number): Exp {
+  return sep(0, G(0));
+}
+
+// -------------------------------------------------------------------------
+// 3. Functions that return full states
+// -------------------------------------------------------------------------
+
 export function postZeroState(n: number): Exp {
   return plusa(
     synth1(n),
@@ -72,7 +103,9 @@ export function postZeroState(n: number): Exp {
 
 export function postRebalance1State(n: number): Exp {
   return plusa(
-    synth1(n),
+    fullySplit(n + 1),
+    balanced1(n),
+    swaps1(n),
     esum(2, n + 1, m => zeroSwaps(n, m)),
   );
 }
