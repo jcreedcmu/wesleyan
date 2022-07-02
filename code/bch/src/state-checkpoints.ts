@@ -91,26 +91,26 @@ function zeroSwaps(n: number, m: number) {
 assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
 assert.ok(spretty(zeroSwaps(5, 2)).includes('120G_{4[0,1]}'));
 
-// Returns all the fully stable no-swap expressions that arise from rebalancing 1
-function balanced1(n: number): Exp {
-  return esum(0, n, n1 => {
-    const n2 = n - n1;
+// Returns all the fully stable no-swap expressions that arise from rebalancing s
+// they look like
+// λ₁ s λ₂
+// so n₁ = Σλ₁ is going to range from 0 to n+1-s
+// and n₂ = n + 1 - s - n₁
+function balanceds(n: number, s: number): Exp {
+  return esum(0, n + 1 - s, n1 => {
+    const n2 = n + 1 - s - n1;
     return plusa(
       ...cartprod(comps(n1), comps(n2))
         .filter(([lam1, lam2]) => lam1.length + lam2.length != n)
         .map(([lam1, lam2]) => {
           return sep(
+            s *
             factorial(n) / factorial(lam1.length + lam2.length + 1),
-            proda(...Gp(lam1), G(1), ...Gp(lam2))
+            proda(...Gp(lam1), G(s), ...Gp(lam2))
           );
         })
     );
   });
-}
-
-// Returns all the fully stable no-swap expressions that arise from rebalancing 2
-function balanced2(n: number): Exp {
-  return G(0, 0);
 }
 
 // Returns all the pairwise swaps that arise from rebalancing s
@@ -189,7 +189,7 @@ export function postZeroState(n: number): Exp {
 
 export function postRebalance1State(n: number): Exp {
   return plusa(
-    balanced1(n),
+    balanceds(n, 1),
     swapss(n, 1),
     esum(2, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
@@ -198,7 +198,7 @@ export function postRebalance1State(n: number): Exp {
 
 export function postMotion1State(n: number): Exp {
   return plusa(
-    balanced1(n),
+    balanceds(n, 1),
     esum(2, n + 1, m => rightSwaps1(n, m)),
     esum(2, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
@@ -207,7 +207,7 @@ export function postMotion1State(n: number): Exp {
 
 export function postSynth2State(n: number): Exp {
   return plusa(
-    balanced1(n),
+    balanceds(n, 1),
     synth2(n),
     esum(3, n + 1, m => rightSwaps1(n, m)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
@@ -217,8 +217,8 @@ export function postSynth2State(n: number): Exp {
 
 export function postRebalance2State(n: number): Exp {
   return plusa(
-    balanced2(n),
-    balanced1(n),
+    balanceds(n, 2),
+    balanceds(n, 1),
     swapss(n, 2),
     esum(3, n + 1, m => rightSwaps1(n, m)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
