@@ -29,6 +29,7 @@ const proof5: Story = {
         }
         else {
           console.log('*** not yet! ***');
+          console.log(spretty(sub(state, have)));
         }
       }
     },
