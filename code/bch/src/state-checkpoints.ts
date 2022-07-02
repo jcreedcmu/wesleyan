@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Exp, G } from './basics';
-import { choose, comps, factorial, lie, nestedLie, plus, plusa, prod, proda, sep, spretty, sub } from './lib';
+import { choose, comps, factorial, lie, nestedLie, plus, plusa, prod, proda, sep, spretty, sub, target } from './lib';
 
 // -------------------------------------------------------------------------
 // 1. Basic helper functions
@@ -202,13 +202,12 @@ export function postMotion1State(n: number): Exp {
   );
 }
 
-export function postMotion2State(n: number): Exp {
+export function postMotionState(n: number, s: number): Exp {
   return plusa(
-    balanceds(n, 2),
-    balanceds(n, 1),
-    esum(3, n + 1, m => rightSwapss(n, m, 2)),
-    esum(3, n + 1, m => rightSwapss(n, m, 1)),
-    esum(3, n + 1, m => zeroSwaps(n, m)),
+    esum(1, s, i => balanceds(n, i)),
+    esum(1, s, i =>
+      esum(s + 1, n + 1, m => rightSwapss(n, m, i))),
+    esum(s + 1, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
 }
@@ -233,4 +232,8 @@ export function postRebalanceState(n: number, s: number): Exp {
     esum(s + 1, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
+}
+
+export function finalState(n: number): Exp {
+  return target(n + 1);
 }
