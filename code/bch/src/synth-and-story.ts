@@ -27,10 +27,10 @@ export function tellStory(story: Story, opts: Opts = {}) {
     }
   });
   if ('0' == epretty(sub(state, target(N + 1))))
-    console.log('---- done! ----');
+    console.log('---- achieved success! ----');
   else {
     if (reqDone) {
-      throw new Error(`not done!`);
+      throw new Error(`not done yet!`);
     }
   }
 }
