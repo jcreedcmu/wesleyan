@@ -4,47 +4,11 @@ import { epretty, lie, plusa, spretty, sub, sep, glie, target, plus, prod, proda
 import { zeroMotion } from './zero-motion';
 import { rebalance } from './rebalance';
 import { positiveMotion } from './positive-motion';
-
-// This is me trying to deliberately collect some coefficients from medium-sized examples.
+import { Opts, Story, synthAll, tellStory } from './synth-and-story';
 
 const G0 = G(0);
 const G1 = G(1);
 const G2 = G(2);
-
-type Phase = [string, ...Exp[]];
-type Story = { size: number, phases: Phase[] };
-
-function tellStory(story: Story, req: boolean = false) {
-  const N = story.size;
-  let state = Z(target(N));
-  console.log(spretty(state));
-  story.phases.forEach(phase => {
-    const [text, ...steps] = phase;
-    console.log('----', text, '----');
-    state = plus(state, plusa(...steps));
-    console.log(spretty(state));
-    assert(Object.values(state).every(x => x >= 0));
-  });
-  if ('0' == epretty(sub(state, target(N + 1))))
-    console.log('---- done! ----');
-  else {
-    if (req) {
-      throw new Error(`not done!`);
-    }
-  }
-}
-
-function synthAll(n: number, m: number): Exp {
-  if (m == 1) {
-    return zeroMotion(n);
-  }
-  const r = rule(m);
-  return plusa(...comps(n + 1 - m).map(c => {
-    const coeff = factorial(n) / (factorial(m - 1) * factorial(c.length));
-    return sep(coeff, proda(...c.map(x => G(x)), r));
-  }));
-}
-
 
 const proof2: Story = {
   size: 2,
@@ -62,7 +26,7 @@ const proof2: Story = {
 };
 
 // empirically works for n = {3,4,5,6,7,8,9}
-function tellStoryN(n: number) {
+function tellStoryN(n: number, opts: Opts) {
   const proof: Story = {
     size: n,
     phases: []
@@ -76,9 +40,13 @@ function tellStoryN(n: number) {
     if (i <= n - 1)
       proof.phases.push([`move [-,${i}]`, positiveMotion(n, i)]);
   }
-  tellStory(proof, true);
+  tellStory(proof, opts);
 }
 
 for (let i = 3; i < 10; i++) {
-  tellStoryN(i);
+  tellStoryN(i, {
+    reqPos: true,
+    reqDone: true,
+    verbose: true
+  });
 }
