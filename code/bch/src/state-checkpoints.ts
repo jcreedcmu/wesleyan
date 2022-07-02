@@ -47,6 +47,15 @@ function synth2(n: number) {
   ));
 }
 
+// This captures all the expressions that have freshly synthesized s's
+// in the n→n+1 proof.
+function synths(n: number, s: number) {
+  return plusa(...comps(n + 1 - s).map(c =>
+    sep(s * factorial(n) / factorial(c.length),
+      proda(...[...c, s].map(x => G(x))))
+  ));
+}
+
 function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
   let rv: [T, U][] = [];
   ts.forEach(t => {
@@ -230,6 +239,31 @@ export function postMotion2State(n: number): Exp {
     esum(3, n + 1, m => rightSwapss(n, m, 2)),
     esum(3, n + 1, m => rightSwapss(n, m, 1)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
+    fullySplit(n + 1),
+  );
+}
+
+export function postSynth3State(n: number): Exp {
+  return plusa(
+    balanceds(n, 2),
+    balanceds(n, 1),
+    synths(n, 3),
+    esum(4, n + 1, m => rightSwapss(n, m, 2)),
+    esum(4, n + 1, m => rightSwapss(n, m, 1)),
+    esum(4, n + 1, m => zeroSwaps(n, m)),
+    fullySplit(n + 1),
+  );
+}
+
+export function postRebalance3State(n: number): Exp {
+  return plusa(
+    balanceds(n, 3),
+    balanceds(n, 2),
+    balanceds(n, 1),
+    swapss(n, 3),
+    esum(4, n + 1, m => rightSwapss(n, m, 2)),
+    esum(4, n + 1, m => rightSwapss(n, m, 1)),
+    esum(4, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
 }
