@@ -6,7 +6,7 @@ import { postRebalance1State, postZeroState } from './state-checkpoints';
 import { Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
-const N = 6;
+const N = 5;
 const proofN: Story = {
   size: N,
   phases: [

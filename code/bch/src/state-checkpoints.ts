@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Exp, G } from './basics';
-import { comps, factorial, nestedLie, plus, plusa, prod, proda, sep, spretty, sub } from './lib';
+import { choose, comps, factorial, lie, nestedLie, plus, plusa, prod, proda, sep, spretty, sub } from './lib';
 
 // -------------------------------------------------------------------------
 // 1. Basic helper functions
@@ -101,7 +101,21 @@ function balanced1(n: number): Exp {
 
 // Returns all the pairwise swaps that arise from rebalancing 1
 function swaps1(n: number): Exp {
-  return G(0, 0);
+  return esum(2, n, b => {
+    return esum(0, n - b, n1 => {
+      const n2 = n - b - n1;
+      return plusa(
+        ...cartprod(comps(n1), comps(n2))
+          .map(([lam1, lam2]) => {
+            return sep(
+              (lam1.length + 1) *
+              factorial(n) / factorial(lam1.length + lam2.length + 2),
+              proda(...Gp(lam1), lie(G(b), G(1)), ...Gp(lam2))
+            );
+          })
+      );
+    });
+  });
 }
 
 // -------------------------------------------------------------------------
