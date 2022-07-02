@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { postMotion1State, postRebalance1State, postZeroState } from './state-checkpoints';
+import { postMotion1State, postRebalance1State, postSynth2State, postZeroState } from './state-checkpoints';
 import { Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
@@ -25,7 +25,14 @@ const proofN: Story = {
     ["move [-,1]", positiveMotion(N, 1)],
     {
       t: 'check', f: state => {
+        assert.equal('0', spretty(sub(state, postMotion1State(N))));
         const have = postMotion1State(N);
+      }
+    },
+    ["synthesize G2", synthAll(N, 2)],
+    {
+      t: 'check', f: state => {
+        const have = postSynth2State(N);
         const need = state;
         console.log('*** have ***');
         console.log(spretty(have));
@@ -40,7 +47,6 @@ const proofN: Story = {
         }
       }
     },
-    // ["synthesize G2", synthAll(N, 2)],
     // ["rebalance ...2", rebalance(N, 2)],
     // ["move [-,2]", positiveMotion(N, 2)],
     // ["synthesize G3", synthAll(N, 3)],
