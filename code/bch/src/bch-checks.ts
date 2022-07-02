@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { postZeroState } from './state-checkpoints';
+import { postRebalance1State, postZeroState } from './state-checkpoints';
 import { Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
@@ -16,6 +16,22 @@ const proof5: Story = {
       }
     },
     ["rebalance ...1", rebalance(5, 1)],
+    {
+      t: 'check', f: state => {
+        const have = postRebalance1State(5);
+        const need = state;
+        console.log('*** have ***');
+        console.log(spretty(have));
+        console.log('*** need ***');
+        console.log(spretty(need));
+        if ('0' == spretty(sub(state, have))) {
+          console.log('*** success! ***');
+        }
+        else {
+          console.log('*** not yet! ***');
+        }
+      }
+    },
     ["move [-,1]", positiveMotion(5, 1)],
     ["synthesize G2", synthAll(5, 2)],
     ["rebalance ...2", rebalance(5, 2)],
