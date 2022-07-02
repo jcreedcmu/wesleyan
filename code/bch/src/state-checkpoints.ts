@@ -193,15 +193,6 @@ export function postZeroState(n: number): Exp {
   );
 }
 
-export function postRebalance1State(n: number): Exp {
-  return plusa(
-    balanceds(n, 1),
-    swapss(n, 1),
-    esum(2, n + 1, m => zeroSwaps(n, m)),
-    fullySplit(n + 1),
-  );
-}
-
 export function postMotion1State(n: number): Exp {
   return plusa(
     balanceds(n, 1),
@@ -215,17 +206,6 @@ export function postSynth2State(n: number): Exp {
   return plusa(
     balanceds(n, 1),
     synth2(n),
-    esum(3, n + 1, m => rightSwapss(n, m, 1)),
-    esum(3, n + 1, m => zeroSwaps(n, m)),
-    fullySplit(n + 1),
-  );
-}
-
-export function postRebalance2State(n: number): Exp {
-  return plusa(
-    balanceds(n, 2),
-    balanceds(n, 1),
-    swapss(n, 2),
     esum(3, n + 1, m => rightSwapss(n, m, 1)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
@@ -255,15 +235,13 @@ export function postSynth3State(n: number): Exp {
   );
 }
 
-export function postRebalance3State(n: number): Exp {
+export function postRebalanceState(n: number, s: number): Exp {
   return plusa(
-    balanceds(n, 3),
-    balanceds(n, 2),
-    balanceds(n, 1),
-    swapss(n, 3),
-    esum(4, n + 1, m => rightSwapss(n, m, 2)),
-    esum(4, n + 1, m => rightSwapss(n, m, 1)),
-    esum(4, n + 1, m => zeroSwaps(n, m)),
+    esum(1, s, i => balanceds(n, i)),
+    swapss(n, s),
+    esum(1, s - 1, i =>
+      esum(s + 1, n + 1, m => rightSwapss(n, m, i))),
+    esum(s + 1, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
 }
