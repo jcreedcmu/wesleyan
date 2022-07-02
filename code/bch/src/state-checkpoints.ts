@@ -202,16 +202,6 @@ export function postMotion1State(n: number): Exp {
   );
 }
 
-export function postSynth2State(n: number): Exp {
-  return plusa(
-    balanceds(n, 1),
-    synth2(n),
-    esum(3, n + 1, m => rightSwapss(n, m, 1)),
-    esum(3, n + 1, m => zeroSwaps(n, m)),
-    fullySplit(n + 1),
-  );
-}
-
 export function postMotion2State(n: number): Exp {
   return plusa(
     balanceds(n, 2),
@@ -223,14 +213,13 @@ export function postMotion2State(n: number): Exp {
   );
 }
 
-export function postSynth3State(n: number): Exp {
+export function postSynthState(n: number, s: number): Exp {
   return plusa(
-    balanceds(n, 2),
-    balanceds(n, 1),
-    synths(n, 3),
-    esum(4, n + 1, m => rightSwapss(n, m, 2)),
-    esum(4, n + 1, m => rightSwapss(n, m, 1)),
-    esum(4, n + 1, m => zeroSwaps(n, m)),
+    esum(1, s - 1, i => balanceds(n, i)),
+    synths(n, s),
+    esum(1, s - 1, i =>
+      esum(s + 1, n + 1, m => rightSwapss(n, m, i))),
+    esum(s + 1, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
 }
