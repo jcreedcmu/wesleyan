@@ -38,6 +38,15 @@ function synth1(n: number) {
   ));
 }
 
+// This captures all the expressions that have freshly synthesized 2's
+// in the n→n+1 proof.
+function synth2(n: number) {
+  return plusa(...comps(n - 1).map(c =>
+    sep(2 * factorial(n) / factorial(c.length),
+      proda(...[...c, 2].map(x => G(x))))
+  ));
+}
+
 function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
   let rv: [T, U][] = [];
   ts.forEach(t => {
@@ -174,5 +183,15 @@ export function postMotion1State(n: number): Exp {
     balanced1(n),
     fullySplit(n + 1),
     esum(2, n + 1, m => zeroSwaps(n, m)),
+  );
+}
+
+export function postSynth2State(n: number): Exp {
+  return plusa(
+    synth2(n),
+    esum(3, n + 1, m => rightSwaps1(n, m)),
+    balanced1(n),
+    fullySplit(n + 1),
+    esum(3, n + 1, m => zeroSwaps(n, m)),
   );
 }
