@@ -48,6 +48,17 @@ function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
   return rv;
 }
 
+// returns G_{1⋯1} with n 1's
+function fullySplit(n: number) {
+  let rv = G(1);
+  for (let i = 0; i < n - 1; i++) {
+    rv = prod(rv, G(1));
+  }
+  return rv;
+}
+
+assert.equal('G_{11111}', spretty(fullySplit(5)));
+
 // -------------------------------------------------------------------------
 // 2. Major chunks of proof state
 // -------------------------------------------------------------------------
@@ -71,23 +82,26 @@ function zeroSwaps(n: number, m: number) {
 assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
 assert.ok(spretty(zeroSwaps(5, 2)).includes('120G_{4[0,1]}'));
 
-// returns G_{1⋯1} with n 1's
-function fullySplit(n: number) {
-  let rv = G(1);
-  for (let i = 0; i < n - 1; i++) {
-    rv = prod(rv, G(1));
-  }
-  return rv;
-}
-
 // Returns all the fully stable no-swap expressions that arise from rebalancing 1
 function balanced1(n: number): Exp {
-  return sep(0, G(0));
+  return esum(0, n, n1 => {
+    const n2 = n - n1;
+    return plusa(
+      ...cartprod(comps(n1), comps(n2))
+        .filter(([lam1, lam2]) => lam1.length + lam2.length != n)
+        .map(([lam1, lam2]) => {
+          return sep(
+            factorial(n) / factorial(lam1.length + lam2.length + 1),
+            proda(...Gp(lam1), G(1), ...Gp(lam2))
+          );
+        })
+    );
+  });
 }
 
 // Returns all the pairwise swaps that arise from rebalancing 1
 function swaps1(n: number): Exp {
-  return sep(0, G(0));
+  return G(0, 0);
 }
 
 // -------------------------------------------------------------------------
