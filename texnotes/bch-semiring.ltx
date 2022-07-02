@@ -158,7 +158,7 @@ recipe for how to compute all coefficients.
 \begin{theorem}
 Let $R$ be a (not necessarily commutative) semiring.
  Suppose we're given $A, B \in R$,
- two functions $(\mu \mapsto G_{[\mu]})$ and $(\mu \mapsto G_{[0\mu]})$
+ two functions $(\lambda \mapsto G_{[\lambda]})$ and $(\lambda \mapsto G_{[0\lambda]})$
 both of which are $C^+ \to R$.
 For every $m\ge 1$, define $G_m = G_{[m]}$.
 Define
@@ -171,7 +171,7 @@ Assume that
 \[ G_{[0 \lambda m]} + G_{m} G_{[0 \lambda]}  =  G_{[0 \lambda]} G_{m} \eqno(\dagger_{0\lambda m})\]
 \[ G_{[0  m]} + G_{m} A  =  A G_{m} \eqno(\dagger_{0 m})\]
 %% {\color{gray} If we weren't in a semiring, this would be equivalent to
-%% \[ G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]\]}
+%% \[ G_{[\lambda]} = [[\cdots [G_{\lambda(1)}, G_{\lambda(2)}], \cdots], G_{\lambda(k)}]\]}
 \item %\vskip-2em
  For every $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
   \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
@@ -189,7 +189,7 @@ Then for all $n \ge 1$,
 We carry out the proof `top-down', showing how various lemmas are
 used, and then proving them afterwards.
 
-Let $R, A, B, (\mu \mapsto G_{[\mu]}), (\mu \mapsto G_{[0\mu]})$ be given,
+Let $R, A, B, (\lambda \mapsto G_{[\lambda]}), (\lambda \mapsto G_{[0\lambda]})$ be given,
 satisfying the assumptions of the theorem as stated.
 
 We proceed by induction on $n$. The base case is trivial: $X_1 = G_1 = \Z[1]$.
@@ -274,7 +274,7 @@ We compute
 %% \item For $n\ge 2$,
 %% \[G_{n} = {1\over n!}\sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
 %%   \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
-%% \item $G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]$ for any $\mu \in D$.
+%% \item $G_{[\lambda]} = [[\cdots [G_{\lambda(1)}, G_{\lambda(2)}], \cdots], G_{\lambda(k)}]$ for any $\lambda \in D$.
 %% \end{enumerate}
 %% Then
 %% \[\exp(a)\exp(b) = \exp\left(\sum_{k \ge 1} G_k \right)\]
