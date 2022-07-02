@@ -34,16 +34,19 @@ function synth1(n: number) {
   ));
 }
 
-function spart(n: number, m: number): CompPair[] {
-  let rv: CompPair[] = [];
-  let n2 = m - 1;
-  let n1 = n - n2;
-  comps(n1).forEach(lam1 => {
-    comps(n2).forEach(lam2 => {
-      rv.push({ lam1, lam2 });
+function cartprod<T, U>(ts: T[], us: U[]): [T, U][] {
+  let rv: [T, U][] = [];
+  ts.forEach(t => {
+    us.forEach(u => {
+      rv.push([t, u]);
     });
   });
   return rv;
+}
+
+function spart(n: number, m: number): CompPair[] {
+  return cartprod(comps(n - m + 1), comps(m - 1))
+    .map(([lam1, lam2]) => ({ lam1, lam2 }));
 }
 
 // This captures all the zero-swap expressions in the n→n+1 proof,
@@ -65,6 +68,13 @@ assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
 assert.ok(spretty(zeroSwaps(5, 2)).includes('120G_{4[0,1]}'));
 
 export function postZeroState(n: number): Exp {
+  return plusa(
+    synth1(n),
+    esum(2, n + 1, m => zeroSwaps(n, m)),
+  );
+}
+
+export function postRebalance1State(n: number): Exp {
   return plusa(
     synth1(n),
     esum(2, n + 1, m => zeroSwaps(n, m)),
