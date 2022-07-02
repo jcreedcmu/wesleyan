@@ -63,17 +63,60 @@ where $+$ is required to be commutative but $\cdot$ is not, with $\cdot$ distrib
 and all the other usual laws.
 
 The BCH formula says that if we seek $G_1, G_2, \ldots$ such that
-\[ e^{tA} e^{tB} = e^{tG_1 + t^2G_2 + t^3G_3 + \cdots}\]
+\[ e^{tA} e^{tB} = e^{tG_1 + t^2G_2 + t^3G_3 + \cdots} \eqno(*)\]
 holds, we find that we must set $G_1 = A + B$, and $G_2 = [A,B]/2$, and $G_3 = [A,[A,B]]/12 + [B,[B,A]]/12$,
-and so on.
+and so on. The main nonobvious fact is that all of the $G_2, G_3, \ldots$ can be represented solely
+as iterated commutators of the $A$ and $B$.
 
-The barriers to interpreting this in a semiring are the divisions in the
-the exponential function's coefficients, the divisions
-in the coefficients of the Lie brackets occurring the right-hand side, and the
- subtractions occurring because of the Lie brackets themselves.
+The barriers to interpreting this theorem in a semiring are
+\begin{enumerate}
+\item the divisions in the  the exponential function's coefficients,
+\item the divisions in the coefficients of the commutators occurring the right-hand side, and
+\item the subtractions occurring because of the commutators themselves.
+\end{enumerate}
+The first of these issues can be by addressed by considering both sides of $(*)$ as exponential generating functions in $t$,
+and observe that their coefficients are nonnegative integers. The second two can then be solved
+by describing constraints on $G_2, G_3, \ldots$ which, in a field, would be identical to requiring
+that they are particular rational coefficients multiplied by commutator expressions, but which
+can be stated in an arbitrary semiring.
+
+The theorem then takes the form: supposing that we have a collection of semiring
+elements $G_n$ that satisfiy certain conditions with respect to $A$ and $B$, then
+a certain infinite family of equations is guaranteed to hold in the semiring, one equation
+for each exponential generating function coefficient.
+
+An interesting consequence (other than this being simply another route
+towards a proof of BCH itself) is that, in univalent homotopy type
+theory, relations and relation composition form a semiring. This means
+that we obtain a family of ``BCH isomorphisms'' between
+relations.
 
 \subsection{Exponentials}
-To deal with the exponentials we differentiate both sides $n$ times by $t$, and set $t = 0$.
+Here we calculate the exponential generating function coefficients of both sides of $(*)$,
+by differentiating  $n$ times by $t$, and setting $t = 0$. First, a few definitions that
+will prove convenient.
+\subsubsection{Definitions}
+Fix a (not necessarily commutative) semiring $R$, and $A, B \in R$.
+When $X \in R$, define $\Z[X] = AX + XB$.
+
+A {\em composition} with weight $n$ and $k$ parts is a sequence
+$\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers, with $\sum_i \lambda(i) = n$.
+Write the set of composition with weight $n$ and $k$ parts as $C^k_n$.
+We say
+ \[ C_n = \bigcup_{k\ge 0} C_n^k \qquad  C = \bigcup_{n\ge 0} C_n \qquad   C^+ = \bigcup_{n\ge 1} C_n \]
+and  write $|\lambda|$ for the number of parts of a composition $\lambda$.
+There is exactly one composition $\emptyset$ in $C_0$, and $|\emptyset| = 0$.
+
+If $\lambda$ is a composition, then define
+\[G_\lambda = \prod_{i = 1}^{|\lambda|} G_{\lambda(i)}\]
+noting that $G_\emptyset = 1$.
+
+%% Let $D^k_n$ be the set of `extended' compositions of weight $n$ and size $k$.
+%% \[D^k_n = C^k_n \cup \{(0,\lambda) \st \lambda \in C^{k-1}_{n-1}\}\]
+
+%% \[D^{\ge k}_n = \bigcup_{k' \ge k} D_n^{k'}  \qquad D^{\ge k} = \bigcup_{n} D_n^{\ge k} \]
+
+
 \subsubsection{Left Side}
 On the left, we see
 \[ e^{tA} e^{tB}
@@ -84,28 +127,11 @@ so
 \[\left(\partial \over \partial t\right)^n e^{tA} e^{tB}\Bigg|_{t=0}
 =  \left(\sum_{m=n}^{\infty} t^{m-n}{m!\over (m-n)!}\sum_{p = 0}^m {A^pB^{m-p}\over p!(m-p)!}\right)\Bigg|_{t=0}\]
 \[= \sum_{p = 0}^n {n\choose p} A^pB^{n-p} \]
-
-Notice that if we define $\Z[X] = AX + XB$,
-then this expression is just $\Z^n[1]$.
-
-\subsubsection{Compositions}
-A {\em composition} $\lambda \in C^k_n$ with weight $n$ and $k$ parts is a sequence
-$\lambda = \lambda(1),\ldots,\lambda(k)$ with every $\lambda(i) \ge 1$
-and $\sum_i \lambda(i) = n$.
-There is exactly one composition $\emptyset$ with weight $0$ and $0$ parts.
-We write $|\lambda|$ for the number of parts of a composition $\lambda$.
-
-Let $D^k_n$ be the set of `extended' compositions of weight $n$ and size $k$.
-\[D^k_n = C^k_n \cup \{(0,\lambda) \st \lambda \in C^{k-1}_{n-1}\}\]
-
-\[D^{\ge k}_n = \bigcup_{k' \ge k} D_n^{k'}  \qquad D^{\ge k} = \bigcup_{n} D_n^{\ge k} \]
-\[ C_n = \bigcup_{n} C_n^k \]
+\[= \Z^n[1] \]
 
 \subsubsection{Right Side}
 
-If we define
-\[G_\lambda = \prod_{i = 1}^{|\lambda|} G_{\lambda(i)}\]
-(noting that $G_\emptyset = 1$) then we can reason
+
 \[ \exp\left(\sum_{m = 1}^\infty t^mG_m \right) = \sum_{k=0}^\infty {1\over k!}\left(\sum_{m = 1}^\infty t^mG_m \right)^k\]
 \[= \sum_{m=0}^\infty \sum_{\lambda \in C_m}{t^m\over |\lambda|!}G_\lambda\]
 so
@@ -115,30 +141,35 @@ so
 \[=  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 
 \subsubsection{Together}
-Define \[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
-The problem BCH poses is to find $G_i$ such that, for every $n \ge 0$,
-\[\Z^n[1] = X_n\]
+%Define \[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
+The problem BCH poses is to find $G_i$ (as nested commutators of $A$ and $B$) such that, for every $n \ge 0$,
+\[\Z^n[1] =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 Note that already this equation by itself makes sense in an arbitrary semiring, since ${n!/|\lambda|!}$ is always
-an integer. We now need to account for the fact that the {\em solution} to this problem,
-i.e. the sequence of values $G_1, G_2, \ldots$, necessarily involves division and subtraction in the
-usual formulation.
+an integer.
 
-\section{Stating the Theorem}
-Let $C_n^k$ be the set of {\em compositions} of weight $n$ and $k$ parts, i.e. length-$k$
- sequences $\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers whose sum is $n$.
-Let $D$ be the set of finite sequences of positive integers, except that the first item
-also allowed to be $0$.
+We need to account for the fact that the {\em solution} to this
+problem, i.e. the sequence of values $G_1, G_2, \ldots$, necessarily
+involves division and subtraction in the usual formulation. We will do
+this at the same time as spelling out precisely which constraints all
+of the $G_i$ need to satisfy, i.e. effectively giving an explicit
+recipe for how to compute all coefficients.
+
+\section{Theorem}
 \begin{theorem}
 Let $R$ be a (not necessarily commutative) semiring.
- Suppose we're given $a, b \in R$,
-and a function $(\mu \mapsto G_{[\mu]}) : D \to R$.
-For $m\ge 0$, define $G_m = G_{[m]}$, and for $\lambda \in C_n^k$, define
-$G_\lambda = \prod_{i=1}^k G_{\lambda(i)}$.
+ Suppose we're given $A, B \in R$,
+ two functions $(\mu \mapsto G_{[\mu]})$ and $(\mu \mapsto G_{[0\mu]})$
+both of which are $C^+ \to R$.
+For every $m\ge 1$, define $G_m = G_{[m]}$.
+Define
+\[X_n =  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\]
 Assume that
 \begin{enumerate}
-\item $G_0 = a$ and $G_1 = a + b$
-\item For every $\mu \in D$ and $m \ge 1$,
-\[ G_{[\mu m]} + G_{m} G_{[\mu]}  =  G_{[\mu]} G_{m}\]
+\item  $G_1 = A + B$
+\item For every $\lambda \in C^+$ and $m \ge 1$,
+\[ G_{[\lambda m]} + G_{m} G_{[\lambda]}  =  G_{[\lambda]} G_{m} \eqno(\dagger_{\lambda m})\]
+\[ G_{[0 \lambda m]} + G_{m} G_{[0 \lambda]}  =  G_{[0 \lambda]} G_{m} \eqno(\dagger_{0\lambda m})\]
+\[ G_{[0  m]} + G_{m} A  =  A G_{m} \eqno(\dagger_{0 m})\]
 %% {\color{gray} If we weren't in a semiring, this would be equivalent to
 %% \[ G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]\]}
 \item %\vskip-2em
@@ -149,196 +180,121 @@ Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when 
 \end{enumerate}
 
 Then for all $n \ge 1$,
-\[ \sum_{m = 0}^n {n\choose m} a^mb^{n-m} = \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\]
+\[ \Z^n[1] = X_n\]
 %% {\color{gray} If we weren't in a semiring, this would be equivalent to
 %% \[\exp(at)\exp(bt) = \exp\left(\sum_{k \ge 1} G_kt^k \right)\]}
 \label{big}
 \end{theorem}
+\begin{proof}
+We carry out the proof `top-down', showing how various lemmas are
+used, and then proving them afterwards.
 
-%% \begin{proof}
-%% \cqed
-%% \end{proof}
-\begin{corollary}
-Let $A$ be an algebra over a vector space $V$. Suppose we're given $a,b \in A$.
-Define
-\begin{enumerate}
-\item $G_0 =a$
-\item $G_1 =a+b$
-\item For $n\ge 2$,
-\[G_{n} = {1\over n!}\sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
-  \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
-\item $G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]$ for any $\mu \in D$.
-\end{enumerate}
-Then
-\[\exp(a)\exp(b) = \exp\left(\sum_{k \ge 1} G_k \right)\]
-\end{corollary}
+Let $R, A, B, (\mu \mapsto G_{[\mu]}), (\mu \mapsto G_{[0\mu]})$ be given,
+satisfying the assumptions of the theorem as stated.
 
+We proceed by induction on $n$. The base case is trivial: $X_1 = G_1 = \Z[1]$.
+In the induction step, it suffices to show that Lemma~\ref{induction.step},
+for then $\Z^{n+1}[1] = \Z[\Z^n[1]] = \Z[X_{n}] = X_{n+1}$. \cqed
+\end{proof}
 
 
 \section{Proof}
-In this section we prove Theorem~\ref{big}. Let $R, a, b, (\mu \mapsto G_{[\mu]})$ be given.
-Assume $G_0 = a$ and $G_1 = a + b$.
-Assume for every $\mu \in D$ and $m \ge 1$, that
-\[ G_{[\mu m]} + G_{m} G_{[\mu]}  =  G_{[\mu]} G_{m}\eqno(\dagger)\]
-Assume for every $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
-  \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)
-\eqno(\ddagger)\]
+In this section our goal is to prove Lemma~\ref{induction.step}, which
+is where most of the interesting work of Theorem~\ref{big} is.
 
-Now define $\Z[x] = ax + xb$ and
-\[X_n =  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\]
-Notice that $X_1 = G_1 = \Z[1]$. Therefore if we can show $\Z[X_n] = X_{n+1}$, then we have
-\[ \sum_{m=0}^n {n\choose m}a^mb^{n-m} = \Z^n[1] = X_n\]
-as required.
-\subsection{Sketch of Proof}
-Here's the general shape of the proof.
-\begin{enumerate}
-\item Deal with $G_0$:
-\begin{enumerate}
-\item Start with $\Z[X_n]$.
-\item Push all copies of $a$ all the way to the right, creating many $G_{[0m]}$.
-\item Push all $G_{[0m]}$ to the right, creating {\em all} $G_{[0\lambda]}$.
-\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
-{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_\lambda (a+b)\right)\]
-\end{enumerate}
-\item Deal with $G_1$:
-\begin{enumerate}
-\item Synthesize $G_1$ on the right.
-\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
-{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_{\lambda 1}\right)\]
-\item Spread $G_1$ to the left, creating many $G_{[m1]}$.
-\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
-{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
-\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} (k+1)G_{\lambda 1}\right) + G_{1^{n+1}}\]
-\[= \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
-{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
-\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
-{n!\over k!}(k_1+1)G_{\lambda_1}G_{[m1\lambda_2]}\right) + {}\]
-\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} G_{\lambda \sim 1}\right) + G_{1^{n+1}}\]
-\item Push $G_{[m1]}$ to the right, creating {\em all} $G_{[m1\lambda]}$.
-\end{enumerate}
-\item Deal with $G_2$:
-\begin{enumerate}
-\item Synthesize $G_2$ on the right. (because we have all $[01]$)
-\item Spread $G_2$ to the left, creating many $G_{[m2]}$.
-\item Push $G_{[m2]}$ to the right, creating {\em all} $G_{m2\lambda}$.
-\end{enumerate}
-\item Deal with $G_3$:
-\begin{enumerate}
-\item Synthesize $G_3$ on the right. (because we have all $[02],[011],[12],[21]$)
-\item Spread $G_3$ to the left, creating many $G_{[m3]}$.
-\item Push $G_{[m3]}$ to the right, creating {\em all} $G_{m3\lambda}$.
-\end{enumerate}
-\item Deal with $G_4$:
-\begin{enumerate}
-\item Synthesize $G_4$ on the right. (because we have required ingredients)
-\item Spread $G_4$ to the left, creating many $G_{[m4]}$.
-\item Push $G_{[m4]}$ to the right, creating {\em all} $G_{m4\lambda}$.
-\end{enumerate}
-\item $\cdots$
-\end{enumerate}
-\vfil\eject
-\subsection{Sketch of Proof, 2}
-Recall the synthesis recipe is
-\[n!G_{n} = \left(\sum_{\lambda\in C_{n-1}}{(n-1)!\over |\lambda|! } G_{[0\lambda]}\right) +
-  \left(\sum_{\substack{\lambda\in C_n\\ 2 \le |\lambda| \le n-1 }} \lambda(2){(n-1)!\over |\lambda|! }G_{[\lambda]}\right)
-\eqno(\ddagger)\]
-\subsubsection{Definitions}
-\[S_p = \sum_{\lambda \in C_{n+1-p} } p{n!\over |\lambda|! }G_{\lambda p}\]
-\[S'_p = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over |\lambda|! }G_{\lambda p}
- = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over (|\lambda|+1)! }(|\lambda| + 1)G_{\lambda p}\]
-\[B_p = \sum_{\substack{n_1,n_2 \\n_1+n_2 = n+1-p }}
-\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n_2} \\ |\lambda_1| + |\lambda_2| + 1 \le n}}
- p{n!\over(|\lambda_1| + |\lambda_2| + 1)! }G_{\lambda_1 p \lambda_2}\]
-\[W_p^\ell = \sum_{\substack{m, n_1,n_2 \\ m+n_2=\ell-p \\ n_1 + n_2 = n}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}} p{n!\over |\lambda_1|! (|\lambda_2 |+2)! }G_{\lambda_1 [mp \lambda_2]}\]
-\[\bar Z = \sum_{\substack{m,n_1,n_2\\n_1 + n_2 + 1 = n  }} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
-{n!\over (|\lambda_1| + |\lambda_2| + 1)!}G_{\lambda_1 [0 m] \lambda_2}\]
-\[Z^\ell = \sum_{\substack{n_1,n_2\\n_1 + n_2 = n  \\ 1 + n_2 = \ell}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
-{n!\over |\lambda_1|! |\lambda_2 |! }G_{\lambda_1 [0  \lambda_2]}\]
-\subsubsection{Hard}
-\[S_{p;k} = p{n!\over k!} \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = k }} }G_{\lambda p}\]
-\[S_p = \sum_{k = 1}^{n} S_{p;k}\]
-\[S'_p = \sum_{k = 1}^{n-1} S_{p;k}\]
-\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over |\lambda|! }G_{\lambda p}\]
-Suppose $5 \le n -1 $. Then $n \ge 6$ and $n! \ge 6!$ and
-\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 5! }G_{\lambda p}\]
-\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } 6G_{\lambda p}\]
-\[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } (G_{p\lambda} + \cdots + G_{\lambda p}) + p{n!\over 6!}(G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
-\[S_{p;5} = p{n!\over 6! }\sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }}  (G_{p\lambda} + \cdots + G_{\lambda p}) + (G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
-\subsubsection{$n=3$ Reasoning}
-\[\Z[X_3] = (6G_{31} + 3G_{211} + 3G_{121} + G_{1111}) + {}\]
-\[(6G_{[03]} + 3G_{[02]1} + 3G_{1[02]} + 3G_{[01]2} + 3G_{2[01]} + {} \]
-\[G_{[01]11} + G_{1[01]1} + G_{11[01]})\]
-\[ = (6G_{31} + 3G_{211} + 3G_{121}) + {}\]
-\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
-\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
+\subsection{Definitions}
+First  we make a few definitions.
 
-\[ = (6G_{31} + 2G_{(211)} + G_{[11]2} + G_{[21]1} + 2G_{1[21]}) + {}\]
-\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
-\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
-\subsubsection{Reasoning}
-\[\Z[X_n] = S_1 + \bar Z = S'_1 + \bar Z + G_{1^{n+1}}\]
-\[= S'_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
-\[= \sum_{\ell = 2}^{n+1} W^\ell_1 + B_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
-\subsection{Lemmas}
-
-
-%% Suppose $\lambda \in C^k$. When $1 \le i < j\le k$,
-%% define \def\bby{\quad\hbox{by}\quad}
-%% \[\begin{tabular}{lcl}
-%% $\lambda(\cdot, i) \in  C^{i-1}$&$\bby$&$\lambda(\cdot, i) = \lambda(1),\ldots,\lambda(i-1)$\\
-%% $\lambda(i, j) \in  C^{j-i-1} $&$\bby$&$ \lambda(i, j) = \lambda(i+1),\ldots,\lambda(j-1) $\\
-%% $\lambda(j, \cdot) \in  C^{k-j} $&$\bby$&$\lambda(j, \cdot) = \lambda(j+1),\ldots,\lambda(k) $
-%% \end{tabular}\]
 
 For $\lambda \in C$, define
-\[L_{0,\lambda} = \sum_{\rho_1,\rho_2\in C, m\in \N\atop \rho_1 m \rho_2 = \lambda} G_{\rho_1}G_{[0m]}G_{\rho_2} \]
+\[\Delta_{\lambda} = \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2} \]
+For $n\ge 1,m \ge 1$, define
+%%% zeroSwaps(n, m)
+\[ Z_n^m = \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+
+\subsection{Induction Step}
+
 \begin{lemma}
-Suppose $\lambda,\mu \in C$. Then
-\[aG_{\lambda} = G_{\lambda} a + L_{0,\lambda}  \]
+For all $n \ge 1$, we have $\Z[X_n] = X_{n+1}$.
+\label{induction.step}
+\end{lemma}
+
+\begin{proof}
+We compute
+\begin{align*}
+ \Z[X_n] &= \Z\left[  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\right]  \\
+&=\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} \Z[G_\lambda]\\
+&=\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} (G_{\lambda 1} + \Delta_{\lambda})&\hbox{(by Lemma~\ref{zero.init})}\\
+&=\left(\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} G_{\lambda 1}\right) + \left(\sum_{m=2}^{n+1} Z_n^m\right)&\hbox{(by Lemma~\ref{zero.motion})}\\
+  \end{align*}
+\cqed
+\end{proof}
+
+
+
+
+
+%% \begin{corollary}
+%% Let $A$ be an algebra over a vector space $V$. Suppose we're given $a,b \in A$.
+%% Define
+%% \begin{enumerate}
+%% \item $G_0 =a$
+%% \item $G_1 =a+b$
+%% \item For $n\ge 2$,
+%% \[G_{n} = {1\over n!}\sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
+%%   \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
+%% \item $G_{[\mu]} = [[\cdots [G_{\mu(1)}, G_{\mu(2)}], \cdots], G_{\mu(k)}]$ for any $\mu \in D$.
+%% \end{enumerate}
+%% Then
+%% \[\exp(a)\exp(b) = \exp\left(\sum_{k \ge 1} G_k \right)\]
+%% \end{corollary}
+
+\section{More Lemmas}
+
+\begin{lemma}
+Suppose $\lambda \in C$. Then
+\[AG_{\lambda} = G_{\lambda} A + \Delta_{\lambda}  \]
 \end{lemma}
 \begin{proof}
-By induction on the length of $\lambda$. If $\lambda$ is empty, then the sum defining $L_{0,\lambda}$ is
+By induction on the length of $\lambda$. If $\lambda$ is empty, then the sum defining $\Delta_{\lambda}$ is
 empty, and the equation trivially holds.
 
 Otherwise, we are trying to show
-\[aG_{\lambda}G_p = G_{\lambda}G_p a + L_{0,\lambda p}  \]
+\[AG_{\lambda}G_p = G_{\lambda}G_p A + \Delta_{\lambda p}  \]
 for some $p \ge 1$. By i.h. it suffices to show
-\[(G_{\lambda} a + L_{0,\lambda})G_p = G_{\lambda}G_p a + L_{0,\lambda p}  \]
-\[G_{\lambda} aG_p + L_{0,\lambda}G_p = G_{\lambda}G_p a + L_{0,\lambda p}  \]
-By  $(\dagger)$ we have that $aG_p = G_{[0p]} + G_pa $, so now we need merely
-\[G_{\lambda} G_{[0p]} + L_{0,\lambda}G_p = L_{0,\lambda p}  \]
-But this is true by definition of $L$. \cqed
+\[(G_{\lambda} A + \Delta_{\lambda})G_p = G_{\lambda}G_p A + \Delta_{\lambda p}  \]
+or in other words
+\[G_{\lambda} AG_p + \Delta_{\lambda}G_p = G_{\lambda}G_p A + \Delta_{\lambda p}  \]
+By  $(\dagger_{0 p})$ we have that $AG_p = G_{[0p]} + G_pA $, so now we need merely
+\[G_{\lambda} G_{[0p]} + \Delta_{\lambda}G_p = \Delta_{\lambda p}  \]
+But this easily follows from the definition of $\Delta$. \cqed
 \end{proof}
 
-
-\begin{corollary}
-Suppose $\lambda \in C_n^k$. Then
-%\[\Z[G_\lambda] = G_{\lambda 1} + \sum_{i=1}^k G_{\lambda(\cdot,i)}G_{[0\lambda(i)]}G_{\lambda(i,\cdot)}b\]
-\[\Z[G_\lambda] = G_{\lambda 1} + L_{0,\lambda}\]
-\end{corollary}
-
-\begin{proof}
-\[\Z[G_\lambda] = aG_\lambda + G_\lambda b\]
-\[= G_\lambda a + L_{0,\lambda}+ G_\lambda b \]
-\[= G_\lambda(a +b) + L_{0,\lambda}\]
-\[= G_{\lambda 1} + L_{0,\lambda}\]
-\cqed
-\end{proof}
 
 \begin{lemma}
-For all $n\ge 1$, $\Z[X_n] = X_{n+1}$.
+Suppose $\lambda \in C_n^k$. Then
+\[\Z[G_\lambda] = G_{\lambda 1} + \Delta_{\lambda}\]
+\label{zero.init}
 \end{lemma}
 
 \begin{proof}
-Expanding definitions and using distributivity,
-\[\Z[X_n] = \Z\left[  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda \right]\]
-\[=   \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}\Z\left[G_\lambda \right]\]
+\[\Z[G_\lambda] = AG_\lambda + G_\lambda B\]
+\[= G_\lambda A + \Delta_{\lambda}+ G_\lambda B \]
+\[= G_\lambda(A +B) + \Delta_{\lambda}\]
+\[= G_{\lambda 1} + \Delta_{\lambda}\]
 \cqed
 \end{proof}
 
-So let's analyze what $\Z[G_\lambda]$ is like.
 
-%\subsection{Finishing}
+\begin{lemma} For all $n \ge 1$,
+\[\sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda} = \sum_{m=2}^{n+1} Z_n^m\]
+\label{zero.motion}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
 
 \appendix
 \section{Misc Obsolete Material}
@@ -518,4 +474,99 @@ This is nearly getting me to a statement of the theorem.
 
 %% \end{theorem}
 
+\section{Proof}
+In this section we prove Theorem~\ref{big}.
+ Therefore if we can show $\Z[X_n] = X_{n+1}$, then we have
+\[ \sum_{m=0}^n {n\choose m}a^mb^{n-m} = \Z^n[1] = X_n\]
+as required.
+\subsection{Sketch of Proof}
+Here's the general shape of the proof.
+\begin{enumerate}
+\item Deal with $G_0$:
+\begin{enumerate}
+\item Start with $\Z[X_n]$.
+\item Push all copies of $a$ all the way to the right, creating many $G_{[0m]}$.
+\item Push all $G_{[0m]}$ to the right, creating {\em all} $G_{[0\lambda]}$.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_\lambda (a+b)\right)\]
+\end{enumerate}
+\item Deal with $G_1$:
+\begin{enumerate}
+\item Synthesize $G_1$ on the right.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + \left(\sum_{k = 1}^n \sum_{\lambda\in {C_n^k}}{n!\over k!} G_{\lambda 1}\right)\]
+\item Spread $G_1$ to the left, creating many $G_{[m1]}$.
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
+\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} (k+1)G_{\lambda 1}\right) + G_{1^{n+1}}\]
+\[= \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[0\lambda_2]}\right) + {}\]
+\[ \left(\sum_{k = 1}^n \sum_{n_1+n_2 = n\atop k_1+k_2=k}\sum_{\lambda_1\in {C_{n_1}^{k_1}}\atop \lambda_2\in C_{n_2}^{k_2}}
+{n!\over k!}(k_1+1)G_{\lambda_1}G_{[m1\lambda_2]}\right) + {}\]
+\[\left(\sum_{k = 1}^{n-1} \sum_{\lambda\in {C_n^k}}{n!\over (k+1)!} G_{\lambda \sim 1}\right) + G_{1^{n+1}}\]
+\item Push $G_{[m1]}$ to the right, creating {\em all} $G_{[m1\lambda]}$.
+\end{enumerate}
+\item Deal with $G_2$:
+\begin{enumerate}
+\item Synthesize $G_2$ on the right. (because we have all $[01]$)
+\item Spread $G_2$ to the left, creating many $G_{[m2]}$.
+\item Push $G_{[m2]}$ to the right, creating {\em all} $G_{m2\lambda}$.
+\end{enumerate}
+\item Deal with $G_3$:
+\begin{enumerate}
+\item Synthesize $G_3$ on the right. (because we have all $[02],[011],[12],[21]$)
+\item Spread $G_3$ to the left, creating many $G_{[m3]}$.
+\item Push $G_{[m3]}$ to the right, creating {\em all} $G_{m3\lambda}$.
+\end{enumerate}
+\item Deal with $G_4$:
+\begin{enumerate}
+\item Synthesize $G_4$ on the right. (because we have required ingredients)
+\item Spread $G_4$ to the left, creating many $G_{[m4]}$.
+\item Push $G_{[m4]}$ to the right, creating {\em all} $G_{m4\lambda}$.
+\end{enumerate}
+\item $\cdots$
+\end{enumerate}
+\vfil\eject
+\subsection{Sketch of Proof, 2}
+Recall the synthesis recipe is
+\[n!G_{n} = \left(\sum_{\lambda\in C_{n-1}}{(n-1)!\over |\lambda|! } G_{[0\lambda]}\right) +
+  \left(\sum_{\substack{\lambda\in C_n\\ 2 \le |\lambda| \le n-1 }} \lambda(2){(n-1)!\over |\lambda|! }G_{[\lambda]}\right)
+\eqno(\ddagger)\]
+\subsubsection{Definitions}
+\[S_p = \sum_{\lambda \in C_{n+1-p} } p{n!\over |\lambda|! }G_{\lambda p}\]
+\[S'_p = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over |\lambda|! }G_{\lambda p}
+ = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| +1\le n} } p{n!\over (|\lambda|+1)! }(|\lambda| + 1)G_{\lambda p}\]
+\[B_p = \sum_{\substack{n_1,n_2 \\n_1+n_2 = n+1-p }}
+\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n_2} \\ |\lambda_1| + |\lambda_2| + 1 \le n}}
+ p{n!\over(|\lambda_1| + |\lambda_2| + 1)! }G_{\lambda_1 p \lambda_2}\]
+\[W_p^\ell = \sum_{\substack{m, n_1,n_2 \\ m+n_2=\ell-p \\ n_1 + n_2 = n}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}} p{n!\over |\lambda_1|! (|\lambda_2 |+2)! }G_{\lambda_1 [mp \lambda_2]}\]
+\[\bar Z = \sum_{\substack{m,n_1,n_2\\n_1 + n_2 + 1 = n  }} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
+{n!\over (|\lambda_1| + |\lambda_2| + 1)!}G_{\lambda_1 [0 m] \lambda_2}\]
+\[Z^\ell = \sum_{\substack{n_1,n_2\\n_1 + n_2 = n  \\ 1 + n_2 = \ell}} \sum_{\lambda_1 \in C_{n_1} \atop \lambda_2 \in C_{n_2}}
+{n!\over |\lambda_1|! |\lambda_2 |! }G_{\lambda_1 [0  \lambda_2]}\]
+\subsubsection{Hard}
+%% \[S_{p;k} = p{n!\over k!} \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = k }} }G_{\lambda p}\]
+%% \[S_p = \sum_{k = 1}^{n} S_{p;k}\]
+%% \[S'_p = \sum_{k = 1}^{n-1} S_{p;k}\]
+%% \[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over |\lambda|! }G_{\lambda p}\]
+%% Suppose $5 \le n -1 $. Then $n \ge 6$ and $n! \ge 6!$ and
+%% \[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 5! }G_{\lambda p}\]
+%% \[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } 6G_{\lambda p}\]
+%% \[S_{p;5} = \sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }} p{n!\over 6! } (G_{p\lambda} + \cdots + G_{\lambda p}) + p{n!\over 6!}(G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
+%% \[S_{p;5} = p{n!\over 6! }\sum_{\substack{\lambda \in C_{n+1-p} \\ |\lambda| = 5 }}  (G_{p\lambda} + \cdots + G_{\lambda p}) + (G_{[\lambda_1p]\lambda_2\lambda_3\lambda_4 \lambda_5 } + \cdots + 5G_{\lambda_1\lambda_2\lambda_3\lambda_4[\lambda_5 p]})\]
+\subsubsection{$n=3$ Reasoning}
+\[\Z[X_3] = (6G_{31} + 3G_{211} + 3G_{121} + G_{1111}) + {}\]
+\[(6G_{[03]} + 3G_{[02]1} + 3G_{1[02]} + 3G_{[01]2} + 3G_{2[01]} + {} \]
+\[G_{[01]11} + G_{1[01]1} + G_{11[01]})\]
+\[ = (6G_{31} + 3G_{211} + 3G_{121}) + {}\]
+\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
+\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
+
+\[ = (6G_{31} + 2G_{(211)} + G_{[11]2} + G_{[21]1} + 2G_{1[21]}) + {}\]
+\[(6G_{[03]} + 3G_{[021]} + 6G_{1[02]} + 3G_{[012]} + 6G_{2[01]} + {} \]
+\[G_{[0111]} + 3G_{1[011]} + 3G_{11[01]}) + G_{1111}\]
+\subsubsection{Reasoning}
+\[\Z[X_n] = S_1 + \bar Z = S'_1 + \bar Z + G_{1^{n+1}}\]
+\[= S'_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
+\[= \sum_{\ell = 2}^{n+1} W^\ell_1 + B_1 + \sum_{\ell= 2}^{n+1} Z^\ell + G_{1^{n+1}}\]
 \end{document}
