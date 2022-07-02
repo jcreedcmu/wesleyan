@@ -3,11 +3,11 @@ import { Exp } from './basics';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { postMotion1State, postMotion2State, postRebalance1State, postRebalance2State, postSynth2State, postZeroState } from './state-checkpoints';
+import { postMotion1State, postMotion2State, postRebalance1State, postRebalance2State, postRebalance3State, postSynth2State, postSynth3State, postZeroState } from './state-checkpoints';
 import { Phase, Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
-const N = 6;
+const N = 5;
 
 
 function makeStep(msg: string, trans: Exp, have: Exp): Phase[] {
@@ -41,10 +41,9 @@ const proofN: Story = {
     ...makeStep("move [-,1]", positiveMotion(N, 1), postMotion1State(N)),
     ...makeStep("synthesize G2", synthAll(N, 2), postSynth2State(N)),
     ...makeStep("rebalance ...2", rebalance(N, 2), postRebalance2State(N)),
-    ...tryStep("move [-,2]", positiveMotion(N, 2), postMotion2State(N)),
-
-    // ["move [-,2]", positiveMotion(N, 2)],
-    // ["synthesize G3", synthAll(N, 3)],
+    ...makeStep("move [-,2]", positiveMotion(N, 2), postMotion2State(N)),
+    ...makeStep("synthesize G3", synthAll(N, 3), postSynth3State(N)),
+    ...makeStep("rebalance ...3", rebalance(N, 3), postRebalance3State(N)),
     // ["rebalance ...3", rebalance(N, 3)],
     // ["move [-,3]", positiveMotion(N, 3)],
     // ["synthesize G4", synthAll(N, 4)],
