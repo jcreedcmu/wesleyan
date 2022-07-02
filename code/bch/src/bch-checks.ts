@@ -6,19 +6,20 @@ import { postRebalance1State, postZeroState } from './state-checkpoints';
 import { Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
-const proof5: Story = {
-  size: 5,
+const N = 6;
+const proofN: Story = {
+  size: N,
   phases: [
-    ["move [0,-]", zeroMotion(5)],
+    ["move [0,-]", zeroMotion(N)],
     {
       t: 'check', f: state => {
-        assert.equal('0', spretty(sub(state, postZeroState(5))));
+        assert.equal('0', spretty(sub(state, postZeroState(N))));
       }
     },
-    ["rebalance ...1", rebalance(5, 1)],
+    ["rebalance ...1", rebalance(N, 1)],
     {
       t: 'check', f: state => {
-        const have = postRebalance1State(5);
+        const have = postRebalance1State(N);
         const need = state;
         console.log('*** have ***');
         console.log(spretty(have));
@@ -33,20 +34,20 @@ const proof5: Story = {
         }
       }
     },
-    ["move [-,1]", positiveMotion(5, 1)],
-    ["synthesize G2", synthAll(5, 2)],
-    ["rebalance ...2", rebalance(5, 2)],
-    ["move [-,2]", positiveMotion(5, 2)],
-    ["synthesize G3", synthAll(5, 3)],
-    ["rebalance ...3", rebalance(5, 3)],
-    ["move [-,3]", positiveMotion(5, 3)],
-    ["synthesize G4", synthAll(5, 4)],
-    ["rebalance ...4", rebalance(5, 4)],
-    ["move [-,4]", positiveMotion(5, 4)],
-    ["synthesize G5", synthAll(5, 5)],
-    ["rebalance ...5", rebalance(5, 5)],
-    ["synthesize G6", synthAll(5, 6)],
+    // ["move [-,1]", positiveMotion(N, 1)],
+    // ["synthesize G2", synthAll(N, 2)],
+    // ["rebalance ...2", rebalance(N, 2)],
+    // ["move [-,2]", positiveMotion(N, 2)],
+    // ["synthesize G3", synthAll(N, 3)],
+    // ["rebalance ...3", rebalance(N, 3)],
+    // ["move [-,3]", positiveMotion(N, 3)],
+    // ["synthesize G4", synthAll(N, 4)],
+    // ["rebalance ...4", rebalance(N, 4)],
+    // ["move [-,4]", positiveMotion(N, 4)],
+    // ["synthesize G5", synthAll(N, 5)],
+    // ["rebalance ...5", rebalance(N, 5)],
+    // ["synthesize G6", synthAll(N, 6)],
   ]
 };
 
-tellStory(proof5, { verbose: false, reqDone: false, reqPos: true });
+tellStory(proofN, { verbose: false, reqDone: false, reqPos: true });
