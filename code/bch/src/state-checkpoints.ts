@@ -1,31 +1,57 @@
+import * as assert from 'assert';
 import { Exp, G } from './basics';
-import { choose, comps, factorial, nestedLie, plus, plusa, prod, proda, sep, spretty } from './lib';
+import { comps, factorial, nestedLie, plus, plusa, proda, sep, spretty, sub } from './lib';
 
 type CompPair = { lam1: number[], lam2: number[] };
-
-function part(n: number): CompPair[] {
-  let rv: CompPair[] = [];
-  for (let n1 = 0; n1 <= n - 1; n1++) {
-    const n2 = n - n1;
-    comps(n1).forEach(lam1 => {
-      comps(n2).forEach(lam2 => {
-        rv.push({ lam1, lam2 });
-      });
-    });
-  }
-  return rv;
-}
 
 function Gp(c: number[]): Exp[] {
   return c.map(x => G(x));
 }
 
-export function postZeroState(n: number): Exp {
-  const positives = plusa(...comps(n).map(c =>
+//// dunno if I'm going to need this
+// function sum(a: number, b: number, f: (i: number) => number): number {
+//   let rv = 0;
+//   for (let i = a; i <= b; i++) {
+//     rv += f(i);
+//   }
+//   return rv;
+// }
+
+function esum(a: number, b: number, f: (i: number) => Exp): Exp {
+  let rv = sep(0, G(0));
+  for (let i = a; i <= b; i++) {
+    rv = plus(rv, f(i));
+  }
+  return rv;
+}
+
+// This captures all the expressions that have freshly synthesized 1's
+// in the n→n+1 proof.
+function synth1(n: number) {
+  return plusa(...comps(n).map(c =>
     sep(factorial(n) / factorial(c.length),
       proda(...[...c, 1].map(x => G(x))))
   ));
-  const zeroes = plusa(...part(n).map(({ lam1, lam2 }) => {
+}
+
+function spart(n: number, m: number): CompPair[] {
+  let rv: CompPair[] = [];
+  let n2 = m - 1;
+  let n1 = n - n2;
+  comps(n1).forEach(lam1 => {
+    comps(n2).forEach(lam2 => {
+      rv.push({ lam1, lam2 });
+    });
+  });
+  return rv;
+}
+
+// This captures all the zero-swap expressions in the n→n+1 proof,
+// which are going to be used for m-synthesis. For example:
+// - G_{23[022]} has n=(2+3)+(2+2)=9, and m=(2+2)+1=5.
+// - G_{4[01]} has n=(4)+(1)=5, and m=(1)+1=2.
+function zeroSwaps(n: number, m: number) {
+  return plusa(...spart(n, m).map(({ lam1, lam2 }) => {
     const coeff =
       factorial(n)
       / factorial(lam1.length) / factorial(lam2.length);
@@ -33,5 +59,14 @@ export function postZeroState(n: number): Exp {
       proda(...Gp(lam1), nestedLie([0, ...lam2])));
   }
   ));
-  return plus(zeroes, positives);
+}
+
+assert.ok(spretty(zeroSwaps(9, 5)).includes('90720G_{23[[0,2],2]}'));
+assert.ok(spretty(zeroSwaps(5, 2)).includes('120G_{4[0,1]}'));
+
+export function postZeroState(n: number): Exp {
+  return plusa(
+    synth1(n),
+    esum(2, n + 1, m => zeroSwaps(n, m)),
+  );
 }
