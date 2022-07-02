@@ -203,14 +203,40 @@ In this section our goal is to prove Lemma~\ref{induction.step}, which
 is where most of the interesting work of Theorem~\ref{big} is.
 
 \subsection{Definitions}
-First  we make a few definitions.
+Fix a particular $n$, and make a few definitions.
 
 
 For $\lambda \in C$, define
 \[\Delta_{\lambda} = \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2} \]
-For $n\ge 1,m \ge 1$, define
+
 %%% zeroSwaps(n, m)
-\[ Z_n^m = \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+`Right-aligned Zero-swaps' are
+\[ Z_m = \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+%%% balanceds(n, m)
+`Balanced products' are
+\[ B_m = \sum_{n_1 = 0}^{n+1-m}\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-n_1} \\ |\lambda_1| + |\lambda_2| \ne n}}
+m {n! \over (|\lambda_1| + |\lambda_2| + 1)!} G_{\lambda_1}G_m G_{\lambda_2}
+ \]
+Alternatively, I think this is equivalent:
+\[ B_m = \sum_{\lambda \in C_{n+1-m}} \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda \\ |\lambda|  \ne n}}
+m {n! \over (|\lambda| + 1)!} G_{\lambda_1}G_m G_{\lambda_2}
+ \]
+%%% swapss(n, m)
+`Swaps' are
+\[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{n_1 = 0}^{n+1-m-b}
+\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-b-n_1} }} m (|\lambda_1| + 1) {n!\over (|\lambda_1| + |\lambda_2| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
+or alternatively
+\[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{\lambda \in C_{n+1-m-b}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda }}  m (|\lambda_1| + 1) {n!\over (|\lambda| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
+%%% rightSwaps(n, m, s)
+`Right-aligned swaps' are
+\[ R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
+\sum_{\substack{\lambda_1 \in C_{n+1-m} \\ \lambda_2 \in C_{m-b-s} }} s  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bs \lambda_2]} \]
+`Synthesis Products' are
+\[ S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
+
+Define
+\[H_s = G_1^{n+1} + \left(\sum_{i = 1}^{s-1} B_i\right) +  \left(\sum_{m = s}^{n+1}\sum_{i = 1}^{s-1} R_m^i\right) + \left(\sum_{m=s}^{n+1} Z_{m}\right)\]
 
 \subsection{Induction Step}
 
@@ -225,12 +251,17 @@ We compute
  \Z[X_n] &= \Z\left[  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\right]  \\
 &=\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} \Z[G_\lambda]\\
 &=\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} (G_{\lambda 1} + \Delta_{\lambda})&\hbox{(by Lemma~\ref{zero.init})}\\
-&=\left(\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} G_{\lambda 1}\right) + \left(\sum_{m=2}^{n+1} Z_n^m\right)&\hbox{(by Lemma~\ref{zero.motion})}\\
-  \end{align*}
+&=\left(\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} G_{\lambda 1}\right) + \left(\sum_{m=2}^{n+1} Z_m\right)&\hbox{(by Lemma~\ref{zero.motion})}\\
+&=G_{1}^{n+1} + S_1 + \left(\sum_{m=2}^{n+1} Z_m\right)\\
+&=G_{1}^{n+1} + B_1 + W_1 + \left(\sum_{m=2}^{n+1} Z_m\right)&\hbox{(by Lemma~\ref{rebalance})}\\
+&=G_{1}^{n+1} + B_1 + \left(\sum_{m = 2}^{n+1} R_m^1\right) + \left(\sum_{m=2}^{n+1} Z_m\right)&\hbox{(by Lemma~\ref{motion})}\\
+&=H_2 = \cdots = H_{n+1} & \hbox{(by Lemma~\ref{h.step})}\\
+&= G_1^{n+1} + \left(\sum_{i = 1}^{n} B_i\right) +  \left(\sum_{i = 1}^{n} R_{n+1}^i\right) + Z_{n+1}\\
+&= G_1^{n+1} + \left(\sum_{i = 1}^{n} B_i\right) + S_{n+1} &\hbox{(by Lemma~\ref{synth})}\\
+&= X_{n+1} &\hbox{(by Lemma~\ref{finalize})}\\
+\end{align*}
 \cqed
 \end{proof}
-
-
 
 
 
@@ -250,6 +281,7 @@ We compute
 %% \end{corollary}
 
 \section{More Lemmas}
+
 
 \begin{lemma}
 Suppose $\lambda \in C$. Then
@@ -286,9 +318,67 @@ Suppose $\lambda \in C_n^k$. Then
 \end{proof}
 
 
-\begin{lemma} For all $n \ge 1$,
-\[\sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda} = \sum_{m=2}^{n+1} Z_n^m\]
+\begin{lemma}[Zero-Motion]
+\[\sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda} = \sum_{m=2}^{n+1} Z_m\]
 \label{zero.motion}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+
+\begin{lemma}[Synthesis]
+\[ \left(\sum_{i=1}^{s-1} R^i_s\right) + Z_s = S_s \]
+\label{synth}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}[Rebalancing]
+\[S_s = B_s + W_s \]
+\label{rebalance}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}[Motion]
+\[W_s = \sum_{m=s+1}^{n+1} R_m^s\]
+\label{motion}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+$H_s = H_{s+1}$ {\color{red} modulo some conditions on $s$ with respect to $n$}
+\label{h.step}
+\end{lemma}
+
+\begin{proof}
+\begin{align*}
+H_s&= G_1^{n+1} + \left(\sum_{i = 1}^{s-1} B_i\right) +  \left(\sum_{m = s}^{n+1}\sum_{i = 1}^{s-1} R_m^i\right) + \left(\sum_{m=s}^{n+1} Z_{m}\right)&\\
+&= G_1^{n+1} + \left(\sum_{i = 1}^{s-1} B_i\right) + S_s + \left(\sum_{m = s+1}^{n+1}\sum_{i = 1}^{s-1} R_m^i\right) + \left(\sum_{m=s+1}^{n+1} Z_{m}\right)&\hbox{(by Lemma~\ref{synth})}\\
+&= G_1^{n+1} + \left(\sum_{i = 1}^s B_i\right) + W_s + \left(\sum_{m = s+1}^{n+1}\sum_{i = 1}^{s-1} R_m^i\right) + \left(\sum_{m=s+1}^{n+1} Z_{m}\right)&\hbox{(by Lemma~\ref{rebalance})}\\
+&= G_1^{n+1} + \left(\sum_{i = 1}^s B_i\right) +  \left(\sum_{m = s+1}^{n+1}\sum_{i = 1}^{s} R_m^i\right) + \left(\sum_{m=s+1}^{n+1} Z_{m}\right)&\hbox{(by Lemma~\ref{motion})}\\
+&= H_{s+1}
+  \end{align*}
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+\[G_1^{n+1} + \left(\sum_{i = 1}^{n} B_i\right) + S_{n+1} = X_{n+1}\]
+\label{finalize}
 \end{lemma}
 
 \begin{proof}
