@@ -1,53 +1,48 @@
 import * as assert from 'assert';
+import { Exp } from './basics';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { postMotion1State, postRebalance1State, postSynth2State, postZeroState } from './state-checkpoints';
-import { Story, synthAll, tellStory } from './synth-and-story';
+import { postMotion1State, postRebalance1State, postRebalance2State, postSynth2State, postZeroState } from './state-checkpoints';
+import { Phase, Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
 const N = 6;
+
+
+function makeStep(msg: string, trans: Exp, have: Exp): Phase[] {
+  return [[msg, trans], { t: 'check', f: state => assert.equal('0', spretty(sub(state, have))) }];
+}
+
+function tryStep(msg: string, trans: Exp, have: Exp): Phase[] {
+  return [[msg, trans], {
+    t: 'check', f: state => {
+      const need = state;
+      console.log('*** have ***');
+      console.log(spretty(have));
+      console.log('*** need ***');
+      console.log(spretty(need));
+      if ('0' == spretty(sub(state, have))) {
+        console.log('*** success! ***');
+      }
+      else {
+        console.log('*** not yet! ***');
+        console.log(spretty(sub(state, have)));
+      }
+    }
+  }]
+}
+
 const proofN: Story = {
   size: N,
   phases: [
-    ["move [0,-]", zeroMotion(N)],
-    {
-      t: 'check', f: state => {
-        assert.equal('0', spretty(sub(state, postZeroState(N))));
-      }
-    },
-    ["rebalance ...1", rebalance(N, 1)],
-    {
-      t: 'check', f: state => {
-        assert.equal('0', spretty(sub(state, postRebalance1State(N))));
-      }
-    },
-    ["move [-,1]", positiveMotion(N, 1)],
-    {
-      t: 'check', f: state => {
-        assert.equal('0', spretty(sub(state, postMotion1State(N))));
-        const have = postMotion1State(N);
-      }
-    },
-    ["synthesize G2", synthAll(N, 2)],
-    {
-      t: 'check', f: state => {
-        const have = postSynth2State(N);
-        const need = state;
-        console.log('*** have ***');
-        console.log(spretty(have));
-        console.log('*** need ***');
-        console.log(spretty(need));
-        if ('0' == spretty(sub(state, have))) {
-          console.log('*** success! ***');
-        }
-        else {
-          console.log('*** not yet! ***');
-          console.log(spretty(sub(state, have)));
-        }
-      }
-    },
-    // ["rebalance ...2", rebalance(N, 2)],
+    ...makeStep("move [0,-]", zeroMotion(N), postZeroState(N)),
+    ...makeStep("rebalance ...1", rebalance(N, 1), postRebalance1State(N)),
+    ...makeStep("move [-,1]", positiveMotion(N, 1), postMotion1State(N)),
+    ...makeStep("synthesize G2", synthAll(N, 2), postSynth2State(N)),
+    ...tryStep("rebalance ...2", rebalance(N, 2), postRebalance2State(N)),
+
+
     // ["move [-,2]", positiveMotion(N, 2)],
     // ["synthesize G3", synthAll(N, 3)],
     // ["rebalance ...3", rebalance(N, 3)],

@@ -108,6 +108,11 @@ function balanced1(n: number): Exp {
   });
 }
 
+// Returns all the fully stable no-swap expressions that arise from rebalancing 2
+function balanced2(n: number): Exp {
+  return G(0, 0);
+}
+
 // Returns all the pairwise swaps that arise from rebalancing 1
 function swaps1(n: number): Exp {
   return esum(2, n, b => {
@@ -157,6 +162,12 @@ function rightSwaps1(n: number, m: number): Exp {
   return rv;
 }
 
+// Returns all the right-aligned swaps that arise from rebalancing 2, which
+// are used for m-synthesis
+function rightSwaps2(n: number, m: number): Exp {
+  return G(0, 0);
+}
+
 // -------------------------------------------------------------------------
 // 3. Functions that return full states
 // -------------------------------------------------------------------------
@@ -193,5 +204,16 @@ export function postSynth2State(n: number): Exp {
     balanced1(n),
     fullySplit(n + 1),
     esum(3, n + 1, m => zeroSwaps(n, m)),
+  );
+}
+
+export function postRebalance2State(n: number): Exp {
+  return plusa(
+    balanced2(n),
+    balanced1(n),
+    esum(3, n + 1, m => rightSwaps2(n, m)),
+    esum(3, n + 1, m => rightSwaps1(n, m)),
+    esum(3, n + 1, m => zeroSwaps(n, m)),
+    fullySplit(n + 1),
   );
 }
