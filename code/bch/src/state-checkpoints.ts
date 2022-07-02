@@ -140,40 +140,37 @@ function swapss(n: number, s: number): Exp {
   });
 }
 
-// Returns all the right-aligned swaps that arise from rebalancing 1, which
+// Returns all the right-aligned swaps that arise from rebalancing s, which
 // are used for m-synthesis
-function rightSwaps1(n: number, m: number): Exp {
-  let n1 = n + 1 - m;
+function rightSwapss(n: number, m: number, s: number): Exp {
   // the structure of the swap is going to be
-  // λ₁ [b, 1, λ₂]
+  // λ₁ [b, s, λ₂]
   // where Σλ₁ = n₁, Σλ₂ = n₂
 
   // n₁ + m = n ∴ n₁ = n - m
-  // b + 1 + n₂ = m ∴
+  // b + s + n₂ = m
 
-  // b is at least 2, and at most whatever would cause
-  // n₂ to be zero, in which case b = m - 1.
-  const rv = esum(2, m - 1, b => {
-    const n2 = m - b - 1;
+  // b is at least 1, and not equal to s, and at most whatever would cause
+  // n₂ to be zero, in which case b = m - s.
+  let n1 = n + 1 - m;
+
+  const rv = esum(1, m - s, b => {
+    if (b == s)
+      return G(0, 0);
+
+    const n2 = m - b - s;
     return plusa(
       ...cartprod(comps(n1), comps(n2))
         .map(([lam1, lam2]) => {
           return sep(
+            s *
             factorial(n) / (factorial(lam1.length) * factorial(lam2.length + 2)),
-            // (lam1.length + 1) *
-            // factorial(n) / factorial(lam1.length + lam2.length + 2),
-            proda(...Gp(lam1), nestedLie([b, 1, ...lam2]))
+            proda(...Gp(lam1), nestedLie([b, s, ...lam2]))
           );
         })
     );
   });
   return rv;
-}
-
-// Returns all the right-aligned swaps that arise from rebalancing 2, which
-// are used for m-synthesis
-function rightSwaps2(n: number, m: number): Exp {
-  return G(0, 0);
 }
 
 // -------------------------------------------------------------------------
@@ -199,7 +196,7 @@ export function postRebalance1State(n: number): Exp {
 export function postMotion1State(n: number): Exp {
   return plusa(
     balanceds(n, 1),
-    esum(2, n + 1, m => rightSwaps1(n, m)),
+    esum(2, n + 1, m => rightSwapss(n, m, 1)),
     esum(2, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
@@ -209,7 +206,7 @@ export function postSynth2State(n: number): Exp {
   return plusa(
     balanceds(n, 1),
     synth2(n),
-    esum(3, n + 1, m => rightSwaps1(n, m)),
+    esum(3, n + 1, m => rightSwapss(n, m, 1)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );
@@ -220,7 +217,18 @@ export function postRebalance2State(n: number): Exp {
     balanceds(n, 2),
     balanceds(n, 1),
     swapss(n, 2),
-    esum(3, n + 1, m => rightSwaps1(n, m)),
+    esum(3, n + 1, m => rightSwapss(n, m, 1)),
+    esum(3, n + 1, m => zeroSwaps(n, m)),
+    fullySplit(n + 1),
+  );
+}
+
+export function postMotion2State(n: number): Exp {
+  return plusa(
+    balanceds(n, 2),
+    balanceds(n, 1),
+    esum(3, n + 1, m => rightSwapss(n, m, 2)),
+    esum(3, n + 1, m => rightSwapss(n, m, 1)),
     esum(3, n + 1, m => zeroSwaps(n, m)),
     fullySplit(n + 1),
   );

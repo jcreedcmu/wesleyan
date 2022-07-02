@@ -3,7 +3,7 @@ import { Exp } from './basics';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { postMotion1State, postRebalance1State, postRebalance2State, postSynth2State, postZeroState } from './state-checkpoints';
+import { postMotion1State, postMotion2State, postRebalance1State, postRebalance2State, postSynth2State, postZeroState } from './state-checkpoints';
 import { Phase, Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
@@ -40,8 +40,8 @@ const proofN: Story = {
     ...makeStep("rebalance ...1", rebalance(N, 1), postRebalance1State(N)),
     ...makeStep("move [-,1]", positiveMotion(N, 1), postMotion1State(N)),
     ...makeStep("synthesize G2", synthAll(N, 2), postSynth2State(N)),
-    ...tryStep("rebalance ...2", rebalance(N, 2), postRebalance2State(N)),
-
+    ...makeStep("rebalance ...2", rebalance(N, 2), postRebalance2State(N)),
+    ...tryStep("move [-,2]", positiveMotion(N, 2), postMotion2State(N)),
 
     // ["move [-,2]", positiveMotion(N, 2)],
     // ["synthesize G3", synthAll(N, 3)],
