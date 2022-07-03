@@ -143,18 +143,231 @@ so
 \subsubsection{Together}
 %Define \[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 The problem BCH poses is to find $G_i$ (as nested commutators of $A$ and $B$) such that, for every $n \ge 0$,
-\[\Z^n[1] =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
+\[\Z^n[1] =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda \eqno(**)\]
 Note that already this equation by itself makes sense in an arbitrary semiring, since ${n!/|\lambda|!}$ is always
 an integer.
 
 We need to account for the fact that the {\em solution} to this
 problem, i.e. the sequence of values $G_1, G_2, \ldots$, necessarily
-involves division and subtraction in the usual formulation. We will do
+involves division and subtraction in the usual formulation. In Section~\ref{section.theorem}, we will do
 this at the same time as spelling out precisely which constraints all
 of the $G_i$ need to satisfy, i.e. effectively giving an explicit
 recipe for how to compute all coefficients.
 
+\section{A Taste of the Theorem}
+First, to provide some guide-rails through technicalities that follow, we
+walk through a few small examples to see how the statement of
+Theorem~\ref{big} arises, and how its proof works.
+\subsection{Sorting with Swaps}
+First of all, observe that if $n=1$, the equation $(**)$ becomes
+\[\Z[1] = \sum_{\lambda \in {C_1}} {1!\over |\lambda|!} G_{\lambda}\]
+in other words
+\[ A + B = G_1 \]
+So the value of $G_1$ is determined for us immediately.
+
+Let's next set $n=2$ and see what we have to show. Equation $(**)$ becomes
+\[\Z^2[1] = \sum_{\lambda \in {C_2}} {2!\over |\lambda|!} G_{\lambda}\]
+The left hand side is
+\[\Z[\Z[1]] = \Z[A + B] = A(A + B) + (A + B)B = AA + 2AB + BB\]
+In the right-hand side, there are two compositions of weight 2: they are $1,1$ and $2$.
+So it becomes
+\[\sum_{\lambda\in \{(1,1),(2)\}} {2!\over |\lambda|!} G_{\lambda}\]
+\[= {2!\over 2!} G_{1}G_{1} + {2!\over 1!}G_{2}\]
+\[= G_{1}G_{1} + 2G_{2}\]
+\[= (A + B)(A + B) + 2G_{2}\]
+\[= AA + AB + BA + BB + 2G_{2}\]
+So we are trying to show
+\[AA + 2AB + BB = AA + AB + BA + BB + 2G_{2}\]
+The salient difference between the two sides of this equation (which will be the case for higher $n$ as well)
+is that on the left, the occurrences of $A$ and $B$ are sorted, with the $A$s coming first, while on the right,
+they occur unsorted. On the left we have an copy of $AB$ which corresponds to a $BA$ on the right,
+and we additionally have $2G_2$ on the right.
+
+If we were working in a field, we would set $G_2 = [A,B]/2$ and be done; but since we're working in a semiring,
+we instead take as an assumption that $2G_2 + BA = AB$: which is to say, a correct, complete special-case
+theorem that we are able to state for $n=2$ specifically is:
+\begin{theorem}
+Let $R$ be a (not necessarily commutative) semiring.
+ Suppose we're given $A, B,G_1,G_2 \in R$  such that
+ \begin{enumerate}
+\item $G_1 = A + B$
+\item $2G_2 + BA = AB$.
+ \end{enumerate}
+Then
+\[\Z^n[1] = \sum_{\lambda \in {C_n}} {n!\over |\lambda|!} G_{\lambda}\]
+for $n=1,2$.
+\end{theorem}
+
+No problem so far. Let's look at $n=3$. Here we must show
+\[\Z^3[1] = \sum_{\lambda \in {C_3}} {3!\over |\lambda|!} G_{\lambda}\]
+or in other words
+\[AAA + 3AAB + 3ABB + BBB = (A+B)^3 + 3G_1 G_2 + 3G_2 G_1 + 6G_3\]
+Here the situation is a little less simple --- but let us state what tools seem to be available to us so far.
+ We have a ``definition'' of $G_2$ in the form of the constraint
+$2G_2 + BA = AB$. This tells us that any $2G_2$ we have lying around can be `spent'
+to convert an `unsorted' copy of $BA$ into a more properly `sorted' $AB$, towards the goal of
+turning the `unsorted'
+\[(A + B)^3 = AAA + AAB + ABA + ABB + BAA + BAB + BBA + BBB\]
+into
+\[AAA + 3AAB + 3ABB + BBB\]
+There are a variety of embedded $BA$s that we need to `flip'. For example, we'd like to turn $ABA$ into $AAB$,
+and so for that we'd need $2AG_2$; because, multiplying both sides of the `definition of $G_2$' on the left by $A$,
+we find that
+\[2AG_2 + ABA = AAB\]
+What else do we need to flip? We'd want to turn $BAA$ into $ABA$ (using $2G_2A$) and then turn $ABA$ into
+$AAB$ (using another $2AG_2$). We'd want to turn $BAB$ into $ABB$ (using $2G_2B$). And finally
+we'd want to turn $BBA$ into $BAB$, and then subsequently into $ABB$, spending a total of $2G_2B + 2BG_2$.
+
+Our total budget for all of these flips is $2G_2A + 4AG_2 + 4G_2B + 2BG_2$. However, what we {\em have} on the
+right-hand side of our goal for $n=3$ is
+\[3G_1 G_2 + 3G_2 G_1 + 6G_3 = 3(A+B) G_2 + 3G_2(A+B) + 6G_3\]
+\[ = 3G_2A + 3AG_2 + 3G_2B + 3BG_2 + 6G_3\]
+Therefore we suppose the required role of $6G_3$ is that we can use it to reconcile the difference
+between $3(A+B) G_2$ and $2G_2A + 4AG_2 + 4G_2B + 2BG_2$. One condition on $G_3$ that would suffice is
+\[ 6G_3 + G_2A + BG_2 = AG_2 + G_2B \]
+That is to say, it does hold that
+\begin{theorem}
+Let $R$ be a (not necessarily commutative) semiring.
+ Suppose we're given $A, B,G_1,G_2,G_3 \in R$  such that
+ \begin{enumerate}
+\item $G_1 = A + B$
+\item $2G_2 + BA = AB$.
+\item $6G_3 + G_2A + BG_2 = AG_2 + G_2B$.
+ \end{enumerate}
+Then
+\[\Z^n[1] = \sum_{\lambda \in {C_n}} {n!\over |\lambda|!} G_{\lambda}\]
+for $n=1,2,3$.
+\end{theorem}
+
+So we observe that the general flavor of the theorem is going to be
+finding a systematic way of stating constraints on the $G_n$ that
+permit them to `swap' smaller $G_n$, so that we have just enough of
+them to swap yet smaller $G_n$, and so on, until at the very end we
+have just the right tools to sort $(A+B)^n$ into $\Z^n[1]$.
+
+\subsection{The Inductive Proof}
+
+What actually happens in the below proof has a somewhat different flavor, so that we can
+achieve an inductive proof. We define
+\[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
+and show that $\Z[X_n] = X_{n+1}$, from which it easily follows that $\Z^n[1] = X_n$.
+This lets us `reuse' some of the work in sorting all the $A,B$ that are sorted in the inductively previous
+steps, and focus more on how the $G_n$ interact with one another.
+
+Let's look at how the $n=2$ case of this version of the theorem works.
+We want to show that
+\[\Z\left[ \sum_{\lambda \in C_2}{2!\over |\lambda|!}G_\lambda\right] =  \sum_{\lambda \in C_3}{3!\over |\lambda|!}G_\lambda\]
+or in other words we're trying to show
+\[\Z\left[ G_{11} + 2G_2 \right] = \]
+\[ AG_{11} + G_{11}B + 2AG_2 + 2G_2B =  G_{111} + 3G_{21} + 3G_{12} + 6G_{3}\]
+We can in some sense reverse the reasoning we did about sorting in the previous section,
+by manipulating the left-hand side of this equation to resemble the right,
+postulating the existence of commutator-like  semiring elements as necessary.
+
+There will be several phases to solving this particular case where $n=3$.
+We name them as follows, hoping the names make sense in light of their detailed description:
+\begin{enumerate}
+\item Moving $A$ to the right
+\item Moving $[0 \dash]$ to the right
+\item Synthesizing $G_1$
+\item Rebalancing synthesized $G_1$s
+\item Moving $[\dash 1]$ to the right
+\item Synthesizing $G_2$
+\item Rebalancing synthesized $G_2$s
+\item Synthesizing $G_3$
+\end{enumerate}
+
+\subsubsection{Move $A$ to the right}
+We start with
+\[\Z[X_2] =  AG_{11} + G_{11}B + 2AG_2 + 2G_2B\]
+In the reasoning that follows, we highlight the parts of expressions in {\color{blue} blue}
+to show what has recently changed.
+If we suppose that
+\begin{enumerate}
+\item there exists $G_{[01]} \in R$ with the property that $G_{[01]} + G_1A = AG_1$
+\item there exists $G_{[02]} \in R$ with the property that $G_{[02]} + G_2A = AG_2$
+\end{enumerate}
+then
+\[AG_{11} = G_{[01]}G_1 + G_{1}AG_1 = G_{[01]}G_1 + G_1G_{[01]} + G_{11}A\]
+\[2AG_{2} = 2G_{[02]} + 2G_2A\]
+and then we note that
+\[ \Z[X_2] = G_{11}({\color{blue} A} + B) + 2G_2({\color{blue} A} + B) + {\color{blue}G_{[01]}G_1 + G_1G_{[01]} + 2G_{[02]}}\]
+We've moved all the $A$s to the right, creating some extra `swap requirement terms'
+$G_{[01]}G_1 + G_1G_{[01]} + 2G_{[02]}$.
+\subsubsection{Move $[0\dash]$ to the right}
+Suppose there exists $G_{[011]} \in R$ such that $G_{[011]} + G_1G_{[01]} = G_{[01]}G_1$.
+Then we have
+\[ \Z[X_2] = G_{11}(A+B) + 2G_{2}(A+B) + {\color{blue} G_{[011]} + 2G_1G_{[01]}} + 2G_{[02]}\]
+\subsubsection{Synthesize $G_1$}
+From before, we know that $G_1 = A+ B$, so we've shown that
+\[ \Z[X_2] = {\color{blue} G_{111} + 2G_{21}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
+This is pretty good progress. We already have the $G_{111}$ that's required in the final
+$X_3$.
+\subsubsection{Rebalancing synthesized $G_1$s}
+We have a lopsided amount of $G_{21}$s versus $G_{12}$s, however. To make the general case of the proof work out more uniformly,
+we `rebalance' terms after every synthesis. In this case, it means supposing that there exists a $G_{[21]} \in R$ such
+that $G_{[21]} + G_{12} = G_{21}$, and observing that that
+\[ \Z[X_2] = G_{111} + {\color{blue} G_{21} + G_{12} + G_{[21]}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
+
+\subsubsection{Synthesize $G_2$}
+Suppose that $2G_2 = G_{[01]}$. This is fairly close to our earlier assumption that $2G_2 + BA = AB$ ---
+because of our assumption on $G_{[01]}$, we're effectively assuming that $2G_2 + G_1A = AG_1$, which
+is the same as $2G_2 + AA + BA = AA + AB$. So it still allows a swap of $BA \to AB$, it just requires
+the presence of a copy of $AA$ as well. It turns out this extra requirement is not a problem.
+
+In any case, with the assumption that $2G_2 = G_{[01]}$, we have
+\[ \Z[X_2] = G_{111} + G_{21} + G_{12} + G_{[21]} + G_{[011]} + {\color{blue}4G_{12}} + 2G_{[02]}\]
+
+\subsubsection{Rebalancing synthesized $G_2$s}
+Now we want to do a similar rebalancing to the $G_2$s we just synthesized. Suppose
+$G_{[12]} \in R$ such that $G_{[12]} + G_{21} = G_{12}$, and find
+\[ \Z[X_2] = G_{111} + {\color{blue}3G_{21} + 3G_{12}} + G_{[21]} + {\color{blue} 2G_{[12]}} + G_{[011]}  + 2G_{[02]}\]
+
+\subsubsection{Synthesize $G_3$}
+Finally, we assume that
+\[ 6G_3 = G_{[21]} +  2G_{[12]} + G_{[011]}  + 2G_{[02]}\]
+so that we have
+\[ \Z[X_2] = G_{111} + 3G_{21} + 3G_{12} +{\color{blue} 6G_{3}} = X_3\]
+as required.
+
+This means we've effectively proven
+\begin{theorem}
+Let $R$ be a (not necessarily commutative) semiring.
+ Suppose we're given $A, B,G_1,G_2,G_3, G_{[01]}, G_{[21]}, G_{[12]}, G_{[011]}, G_{[02]} \in R$  such that
+\begin{enumerate}
+\item
+ \begin{enumerate}
+\item $G_{[01]} + G_{1}A = AG_{1}$.
+\item $G_{[21]} + G_{12} = G_{21}$.
+\item $G_{[12]} + G_{21} = G_{12}$.
+\item $G_{[011]} + G_{1}G_{01} = G_{[01]}G_{1}$.
+\item $G_{[02]} + G_{2}A = AG_{2}$.
+ \end{enumerate}
+\item
+ \begin{enumerate}
+\item $G_1 = A + B$
+\item $2G_2 = G_{[01]}$.
+\item $6G_3 = G_{[21]} +  2G_{[12]} + G_{[011]}  + 2G_{[02]}$.
+ \end{enumerate}
+\end{enumerate}
+Then
+\[\Z^n[1] = \sum_{\lambda \in {C_n}} {n!\over |\lambda|!} G_{\lambda}\]
+for $n=1,2,3$.
+\end{theorem}
+
+Note that this appears more complicated than the previous theorem,
+even though we're still only reaching up to the $n=3$ case --- but
+this longer list of assumptions more accurately reflects the structure
+of the theorem below, which uniformly works for all $n$.
+
+Note that the assumptions come in two types, the first class being the `commutator assumptions'
+such as $G_{[011]} + G_{1}G_{01} = G_{[01]}G_{1} $ which asserts that $G_{[011]}$ behaves as if it
+is the commutator $[G_{[01]}, G_1]$, and the second class being `synthesis recipes', which tell
+us how $n!G_n$ is equivalent to a sum of certain commutators.
+
 \section{Theorem}
+Finally is the general theorem we aim to show.
+\label{section.theorem}
 \begin{theorem}
 Let $R$ be a (not necessarily commutative) semiring.
  Suppose we're given $A, B \in R$,
@@ -162,21 +375,20 @@ Let $R$ be a (not necessarily commutative) semiring.
 both of which are $C^+ \to R$.
 For every $m\ge 1$, define $G_m = G_{[m]}$.
 Define
-\[X_n =  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\]
+\[X_n = \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 Assume that
 \begin{enumerate}
-\item  $G_1 = A + B$
-\item For every $\lambda \in C^+$ and $m \ge 1$,
+\item (`Commutator Assumptions') For every $\lambda \in C^+$ and $m \ge 1$,
 \[ G_{[\lambda m]} + G_{m} G_{[\lambda]}  =  G_{[\lambda]} G_{m} \eqno(\dagger_{\lambda m})\]
 \[ G_{[0 \lambda m]} + G_{m} G_{[0 \lambda]}  =  G_{[0 \lambda]} G_{m} \eqno(\dagger_{0\lambda m})\]
 \[ G_{[0  m]} + G_{m} A  =  A G_{m} \eqno(\dagger_{0 m})\]
 %% {\color{gray} If we weren't in a semiring, this would be equivalent to
 %% \[ G_{[\lambda]} = [[\cdots [G_{\lambda(1)}, G_{\lambda(2)}], \cdots], G_{\lambda(k)}]\]}
-\item %\vskip-2em
- For every $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
+\item (`Synthesis Recipes') %\vskip-2em
+  $G_1 = A + B$, and for $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
   \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
-(This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
-Also, we assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$)
+This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
+We assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$.
 \end{enumerate}
 
 Then for all $n \ge 1$,
