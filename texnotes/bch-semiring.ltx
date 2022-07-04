@@ -584,18 +584,34 @@ Suppose $\lambda \in C_n^k$. Then
 \end{lemma}
 
 \begin{proof}
+Define
+\[ \zeta_{m,k_2,k_3} = \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  \|\lambda_2\| + \|\lambda_3\| = n\\ |\lambda_2| =k_2 \\  |\lambda_3| = k_3 }} {n! \over (|\lambda_1|+|\lambda_2|+|\lambda_3|)! }
+{\color{red}???}
+% {|\lambda_1| + |\lambda_2| \choose |\lambda_1|, |\lambda_2| }
+G_{\lambda_1} G_{[0\lambda_2]} G_{\lambda_3}\]
+\[ Z_{m,j,\ell} = \sum_{k_2 = 1}^{j} \sum_{k_3 =0}^{n-\ell} \zeta_{m,k_2,k_3}\]
+
+\[ Z_{m,1,1} =  \sum_{k_3 =0}^{n-1} \zeta_{m,1,k_3}\]
+\[  =  \zeta_{m,1,n-1} + \left( \sum_{k_3 =0}^{n-2} \zeta_{m,1,k_3}\right)\]
+\[  =  \zeta_{m,1,n-1} + Z_{m,1,2}\]
+\[  = \left( \sum_{p\ge1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + \|\lambda_3\| = n\\   |\lambda_3| = n-1 }} {n! \over (|\lambda_1|+1+|\lambda_3|)! } G_{\lambda_1} G_{[0p]} G_{\lambda_3}\right) + Z_{m,1,2}\]
+
+\[  = \left( \sum_{p\ge1}\sum_{q\ge 1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + q +  \|\lambda_3\| = n\\   |\lambda_3| = n-2 }} {n! \over (|\lambda_1|+2+|\lambda_3|)! } G_{\lambda_1} G_{[0p]} G_qG_{\lambda_3}\right) + Z_{m,1,2}\]
+
+\[  = \left( \sum_{p\ge1}\sum_{q\ge 1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + q +  \|\lambda_3\| = n\\   |\lambda_3| = n-2 }} {n! \over (|\lambda_1|+2+|\lambda_3|)! } G_{\lambda_1} (G_{[0pq]} + G_qG_{[0p]})G_{\lambda_3}\right) + Z_{m,1,2}\]
+
+\[ =   \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hrule
+
+
+
+
 By definition of $\Delta$, we know
 \[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
  = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{p \ge 1} \sum_{\lambda_1,\lambda_2\in C \atop \lambda_1 p \lambda_2 = \lambda} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
 \[ =   \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
-By Lemma~\ref{little.movement}, we know this is
-\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}\left(\sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[0p(\lambda_2)_S]}\right)\]
-\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} \sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1} G_{(\lambda_2)_{\bar S}}G_{[0p(\lambda_2)_S]}\]
-and using Lemma~\ref{subset.rearrange}:
-\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\|  + \|\lambda_3\| = n}}
-{n! \over (|\lambda_1| + 1 + |\lambda_2| + |\lambda_3|)!}
-{|\lambda_2| + |\lambda_3| \choose |\lambda_2|, |\lambda_3|}
-G_{\lambda_1} G_{\lambda_2}G_{[0p\lambda_3]}\]
 
 
 %% \hrule
@@ -695,7 +711,6 @@ as required. \cqed
 \end{proof}
 
 \begin{lemma}[Subset Rearrangement]
-{\color {red} NOT QUITE RIGHT}
 \label{subset.rearrange}
 \[\sum_{\lambda\in C_n} \sum_{S \subseteq \{1,\ldots,|\lambda|\}} f(G_{\lambda_{\bar S}}, G_{\lambda_{S}}) = \sum_{\lambda_1, \lambda_2 \in C} {|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|} [\|\lambda_1\| + \| \lambda_2 \| = n] f(\lambda_1, \lambda_2)\]
 

@@ -8,7 +8,7 @@ import { choose, comps, factorial, lie, nestedLie, plus, plusa, prod, proda, sep
 
 type CompPair = { lam1: number[], lam2: number[] };
 
-function Gp(c: number[]): Exp[] {
+export function Gp(c: number[]): Exp[] {
   return c.map(x => G(x));
 }
 

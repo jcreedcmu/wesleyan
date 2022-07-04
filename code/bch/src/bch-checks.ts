@@ -3,7 +3,7 @@ import { Exp } from './basics';
 import { spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { finalState, postMotion1State, postMotionState, postRebalanceState, postSynthState, postZeroState } from './state-checkpoints';
+import { finalState, postMotionState, postRebalanceState, postSynthState, postZeroState } from './state-checkpoints';
 import { Phase, Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
