@@ -586,6 +586,7 @@ where the $s \in S$ are taken in sorted order. For example, suppose $\lambda = 4
 and $S = \{1,3,4\} \subseteq {1,2,3,4,5}$. Then $\lambda_S = 411$ and $\lambda_{\bar S} = 32$.
 % This definition goes with
 \begin{lemma}[Little Movement Lemma]
+\label{little.movement}
 Let $a \ge 0, b \ge 1$ be given. Then
 \[G_{[ab]}G_\lambda = \sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}\]
 \end{lemma}
@@ -608,8 +609,17 @@ as required. \cqed
 \end{lemma}
 
 \begin{proof}
-We need to show
-\[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}\]
+By definition of $\Delta$, we know
+\[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
+ = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
+\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
+By Lemma~\ref{little.movement}, know this is
+
+\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}\left(\sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\right)\]
+\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} \sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{\lambda_1} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\]
+
+so...
+
 \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over (|\lambda_1| + |\lambda_2|)!} {|\lambda_1|+|\lambda_2| \choose |\lambda_1|,|\lambda_2|}G_{\lambda_1} G_{[0\lambda_2]} \]
 \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
 
