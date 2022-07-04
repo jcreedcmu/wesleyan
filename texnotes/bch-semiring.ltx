@@ -542,7 +542,6 @@ Finally observe that this is the definition of $H_{s+1}$, as required.\cqed
 
 \section{More Lemmas}
 
-
 \begin{lemma}
 Suppose $\lambda \in C$. Then
 \[AG_{\lambda} = G_{\lambda} A + \Delta_{\lambda}  \]
@@ -578,30 +577,6 @@ Suppose $\lambda \in C_n^k$. Then
 \end{proof}
 
 
-If $\lambda$ is a composition, and $S\subseteq \{1,\ldots,|\lambda|\}$,
-then write
-\[\lambda_S = (\lambda(s) \st s \in S)\]
-\[\lambda_{\bar S} = (\lambda(s) \st s \not \in S)\]
-where the $s \in S$ are taken in sorted order. For example, suppose $\lambda = 43112$,
-and $S = \{1,3,4\} \subseteq {1,2,3,4,5}$. Then $\lambda_S = 411$ and $\lambda_{\bar S} = 32$.
-% This definition goes with
-\begin{lemma}[Little Movement Lemma]
-\label{little.movement}
-Let $a \ge 0, b \ge 1$ be given. Then
-\[G_{[ab]}G_\lambda = \sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}\]
-\end{lemma}
-\begin{proof}
-By induction on the length of $\lambda$. If $\lambda$ is the empty composition, then
-the equality holds trivially. Otherwise $\lambda = \lambda p$, and we reason that
-\[G_{[ab]}G_{\lambda p} = G_{[ab]} G_\lambda G_p\]
-and by the i.h. this is
-\[ \left(\sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}\right) G_p \]
-\[= \sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}G_p  \]
-But by $(\dagger_{ab\lambda_S})$ we know this is
-\[= \sum_{S \subseteq \{1,\ldots,|\lambda|\}}\left( G_{\lambda_{\bar S}}G_pG_{[ab\lambda_S]} + G_{\lambda_{\bar S}}G_{[ab\lambda_S p]}\right)  \]
-\[= \sum_{S \subseteq \{1,\ldots,|\lambda p|\}} G_{(\lambda p)_{\bar S}}G_{[ab(\lambda p)_S]}   \]
-as required. \cqed
-\end{proof}
 
 \begin{lemma}[Zero-Movement]
 \[\sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda} = \sum_{m=2}^{n+1} Z_m\]
@@ -613,15 +588,29 @@ By definition of $\Delta$, we know
 \[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
  = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
 \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
-By Lemma~\ref{little.movement}, know this is
+By Lemma~\ref{little.movement}, we know this is
 
 \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}\left(\sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\right)\]
 \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} \sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{\lambda_1} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\]
+and using Lemma~\ref{subset.rearrange}:
+\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
+and using Lemma~\ref{merge.sums}:
+\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
 
 so...
 
 \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over (|\lambda_1| + |\lambda_2|)!} {|\lambda_1|+|\lambda_2| \choose |\lambda_1|,|\lambda_2|}G_{\lambda_1} G_{[0\lambda_2]} \]
+
+\[\color{green} \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
+
+\hrule
+
+\[= \sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_2,\lambda_3 \in C \\ \|\lambda_1\| + \|\lambda_2\| + \|\lambda_3\| + p = n \\ \|\lambda_3\| + p \ge 1} } {n! \over (|\lambda_1| + |\lambda_2| + 1)!(|\lambda_3| + 1)! }G_{\lambda_1}G_{\lambda_2} G_{[0p\lambda_3]} \]
+\[= \sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_3 \in C \\ \|\lambda_1\| + \|\lambda_3\| + p = n \\ \|\lambda_3\| + p \ge 1} } {n! \over |\lambda_1|!(|\lambda_3| + 1)! }G_{\lambda_1} G_{[0p\lambda_3]} \]
+\[=  \sum_{\substack{\lambda_1,\lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|= n \\ \|\lambda_2\| \ge 1} } {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
 \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+
+
 
 
 
@@ -670,6 +659,64 @@ so...
 
 \cqed
 \end{proof}
+
+\section{Little Lemmas}
+If $\lambda$ is a composition, and $S\subseteq \{1,\ldots,|\lambda|\}$,
+then write
+\[\lambda_S = (\lambda(s) \st s \in S)\]
+\[\lambda_{\bar S} = (\lambda(s) \st s \not \in S)\]
+where the $s \in S$ are taken in sorted order. For example, suppose $\lambda = 43112$,
+and $S = \{1,3,4\} \subseteq {1,2,3,4,5}$. Then $\lambda_S = 411$ and $\lambda_{\bar S} = 32$.
+% This definition goes with
+\begin{lemma}[Little Movement Lemma]
+\label{little.movement}
+Let $a \ge 0, b \ge 1$ be given. Then
+\[G_{[ab]}G_\lambda = \sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}\]
+\end{lemma}
+\begin{proof}
+By induction on the length of $\lambda$. If $\lambda$ is the empty composition, then
+the equality holds trivially. Otherwise $\lambda = \lambda p$, and we reason that
+\[G_{[ab]}G_{\lambda p} = G_{[ab]} G_\lambda G_p\]
+and by the i.h. this is
+\[ \left(\sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}\right) G_p \]
+\[= \sum_{S \subseteq \{1,\ldots,|\lambda|\}} G_{\lambda_{\bar S}}G_{[ab\lambda_S]}G_p  \]
+But by $(\dagger_{ab\lambda_S})$ we know this is
+\[= \sum_{S \subseteq \{1,\ldots,|\lambda|\}}\left( G_{\lambda_{\bar S}}G_pG_{[ab\lambda_S]} + G_{\lambda_{\bar S}}G_{[ab\lambda_S p]}\right)  \]
+\[= \sum_{S \subseteq \{1,\ldots,|\lambda p|\}} G_{(\lambda p)_{\bar S}}G_{[ab(\lambda p)_S]}   \]
+as required. \cqed
+\end{proof}
+
+\begin{lemma}[Subset Rearrangement]
+\label{subset.rearrange}
+\[\sum_{\lambda\in C_n} \sum_{S \subseteq \{1,\ldots,|\lambda|\}} f(G_{\lambda_{\bar S}}, G_{\lambda_{S}}) = \sum_{\lambda_1, \lambda_2 \in C} {|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|} [\|\lambda_1\| + \| \lambda_2 \| = n] f(\lambda_1, \lambda_2)\]
+
+\end{lemma}
+
+\begin{proof}
+Given a $\lambda \in C_n$, and an $S \subseteq 1, \ldots, |\lambda|$, we compute
+$\lambda_1 := \lambda_{\bar S}$ and $\lambda_2 := \lambda_S$, and an element of the
+set of size ${|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|}$ simply by reading off the subset $S$.
+This process is clearly invertible, so the two sums are equal.
+\cqed
+\end{proof}
+
+\begin{lemma}[Merge Composition Sums]
+\label{merge.sums}
+\[\sum_{\substack{\lambda \in C \\ \|\lambda\| = n}} (|\lambda| + 1) f(\lambda) = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}}   f(\lambda_1 \lambda_2)\]
+
+\end{lemma}
+
+\begin{proof}
+There are $|\lambda|+1$ ways to divide $\lambda$ into two subsequences.
+\cqed
+\end{proof}
+
+\begin{lemma}[Merge Composition with Numeric Sum]
+\label{merge.sums}
+\[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
+
+\end{lemma}
+
 
 %% \appendix
 %% \section{Misc Obsolete Material}
