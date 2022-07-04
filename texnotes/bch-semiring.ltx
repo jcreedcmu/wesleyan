@@ -3,6 +3,14 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={blue!90!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 \input{theorem}
 \allowdisplaybreaks
 
@@ -46,16 +54,19 @@
    \vskip-2em\hphantom{.}%
    \tabbing}
   {\endtabbing}
-
+% LOL https://tex.stackexchange.com/questions/598862/adding-the-hyperref-packages-causes-errors
+\def\MakeUppercaseUnsupportedInPdfStrings{\scshape}
 
 
 \title{Baker-Campbell-Hausdorff in a Semiring}
+\author{Jason Reed}
 \begin{document}
 \maketitle
 \tikzset{
    commutative diagrams/.cd,
    arrow style=tikz,
    diagrams={>=stealth}}
+
 \section{Introduction}
 
 The goal of this note is to state and prove a version of the Baker-Campbell-Hausdorff formula
@@ -93,11 +104,8 @@ theory, relations and relation composition do in fact form a
 noncommutative semiring. This means that we obtain a family of ``BCH
 isomorphisms'' between relations.
 
-\subsection{Exponentials}
-Here we calculate the exponential generating function coefficients of both sides of $(*)$,
-by differentiating  $n$ times by $t$, and setting $t = 0$. First, a few definitions that
-will prove convenient.
-\subsubsection{Definitions}
+\subsection{ Definitions}
+
 Fix a (not necessarily commutative) semiring $R$, and $A, B \in R$.
 When $X \in R$, define $\Z[X] = AX + XB$.
 
@@ -106,17 +114,18 @@ $\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers, with $\sum_i \lam
 Write the set of composition with weight $n$ and $k$ parts as $C^k_n$.
 We say
  \[ C_n = \bigcup_{k\ge 0} C_n^k \qquad  C = \bigcup_{n\ge 0} C_n \qquad   C^+ = \bigcup_{n\ge 1} C_n \]
-and  write $|\lambda|$ for the number of parts of a composition $\lambda$ and $\|\lambda\|$ for the weight of $\lambda$.
-There is exactly one composition $\emptyset$ in $C_0$, and $|\emptyset| = 0$.
+Given a composition $\lambda$, we $|\lambda|$ for the number of parts in it, and $\|\lambda\|$ for its weight.
+For example, $|{2311}| = 4$ and $\|{2311}\| = 2 + 3 + 1 + 1 = 7$.
+There is exactly one empty composition $\emptyset$, with  $|\emptyset| = 0$ and $\|\emptyset\| = 0$.
 
 If $\lambda$ is a composition, then define
 \[G_\lambda = \prod_{i = 1}^{|\lambda|} G_{\lambda(i)}\]
 noting that $G_\emptyset = 1$. For example, $G_{2311} = G_2G_3G_1^2$.
 
-%% Let $D^k_n$ be the set of `extended' compositions of weight $n$ and size $k$.
-%% \[D^k_n = C^k_n \cup \{(0,\lambda) \st \lambda \in C^{k-1}_{n-1}\}\]
-
-%% \[D^{\ge k}_n = \bigcup_{k' \ge k} D_n^{k'}  \qquad D^{\ge k} = \bigcup_{n} D_n^{\ge k} \]
+\subsection{Exponential Generating Function Coefficients}
+Now we calculate the exponential generating function coefficients of both sides of $(*)$,
+by differentiating  $n$ times by $t$, and setting $t = 0$. First, a few definitions that
+will prove convenient.
 
 
 \subsubsection{Left Side}
@@ -142,9 +151,9 @@ so
 \]
 \[=  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
 
-\subsubsection{Together}
+
 %Define \[X_n =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda\]
-Our task is to find a characterization of $(G_i)_{n  \ge 1}$ as nested commutators of $A$ and $B$ such that, for every $n \ge 1$,
+Our task is to find a characterization of $(G_n)_{n  \ge 1}$ as nested commutators of $A$ and $B$ such that, for every $n \ge 1$,
 \[\Z^n[1] =  \sum_{\lambda \in C_n}{n!\over |\lambda|!}G_\lambda \eqno(**)\]
 Note that this equation makes sense in a semiring despite the apparent division, since always $n \ge |\lambda|$
 and therefore  ${n!/|\lambda|!}$ is  an integer.
@@ -299,26 +308,26 @@ If we suppose that
 then
 \[AG_{11} = G_{[01]}G_1 + G_{1}AG_1 = G_{[01]}G_1 + G_1G_{[01]} + G_{11}A\]
 \[2AG_{2} = 2G_{[02]} + 2G_2A\]
-and then we note that (highlighting parts of expressions in {\color{blue} blue}
+and then we note that (highlighting parts of expressions in {\color{green} green}
 to show what has recently changed)
 
-\[ \Z[X_2] = G_{11}({\color{blue} A} + B) + 2G_2({\color{blue} A} + B) + {\color{blue}G_{[01]}G_1 + G_1G_{[01]} + 2G_{[02]}}\]
+\[ \Z[X_2] = G_{11}({\color{green} A} + B) + 2G_2({\color{green} A} + B) + {\color{green}G_{[01]}G_1 + G_1G_{[01]} + 2G_{[02]}}\]
 We've moved all the $A$s to the right, creating the swap tokens
 $G_{[01]}G_1 + G_1G_{[01]} + 2G_{[02]}$.
 \subsubsection{Move $[0\dash]$ to the right}
 Suppose there exists $G_{[011]} \in R$ such that $G_{[011]} + G_1G_{[01]} = G_{[01]}G_1$.
 Then we have
-\[ \Z[X_2] = G_{11}(A+B) + 2G_{2}(A+B) + {\color{blue} G_{[011]} + 2G_1G_{[01]}} + 2G_{[02]}\]
+\[ \Z[X_2] = G_{11}(A+B) + 2G_{2}(A+B) + {\color{green} G_{[011]} + 2G_1G_{[01]}} + 2G_{[02]}\]
 \subsubsection{Synthesize $G_1$}
 From before, we know that $G_1 = A+ B$, so we've shown that
-\[ \Z[X_2] = {\color{blue} G_{111} + 2G_{21}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
+\[ \Z[X_2] = {\color{green} G_{111} + 2G_{21}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
 This is pretty good progress. We already have the $G_{111}$ that's required in the final
 $X_3$.
 \subsubsection{Rebalancing synthesized $G_1$s}
 We have a lopsided amount of $G_{21}$s versus $G_{12}$s, however. To make the general case of the proof work out more uniformly,
 we `rebalance' terms after every synthesis. In this case, it means supposing that there exists a $G_{[21]} \in R$ such
 that $G_{[21]} + G_{12} = G_{21}$, and observing that that
-\[ \Z[X_2] = G_{111} + {\color{blue} G_{21} + G_{12} + G_{[21]}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
+\[ \Z[X_2] = G_{111} + {\color{green} G_{21} + G_{12} + G_{[21]}} + G_{[011]} + 2G_1G_{[01]} + 2G_{[02]}\]
 
 \subsubsection{Synthesize $G_2$}
 Suppose that $2G_2 = G_{[01]}$. This is fairly close to our earlier assumption that $2G_2 + BA = AB$ ---
@@ -328,18 +337,18 @@ the presence of a copy of $AA$ as well. It turns out this extra requirement is n
 makes the structure of the proof simpler.
 
 In any case, with the assumption that $2G_2 = G_{[01]}$, we have
-\[ \Z[X_2] = G_{111} + G_{21} + G_{12} + G_{[21]} + G_{[011]} + {\color{blue}4G_{12}} + 2G_{[02]}\]
+\[ \Z[X_2] = G_{111} + G_{21} + G_{12} + G_{[21]} + G_{[011]} + {\color{green}4G_{12}} + 2G_{[02]}\]
 
 \subsubsection{Rebalancing synthesized $G_2$s}
 Now we want to do a similar rebalancing to the $G_2$s we just synthesized. Suppose
 $G_{[12]} \in R$ such that $G_{[12]} + G_{21} = G_{12}$, and find
-\[ \Z[X_2] = G_{111} + {\color{blue}3G_{21} + 3G_{12}} + G_{[21]} + {\color{blue} 2G_{[12]}} + G_{[011]}  + 2G_{[02]}\]
+\[ \Z[X_2] = G_{111} + {\color{green}3G_{21} + 3G_{12}} + G_{[21]} + {\color{green} 2G_{[12]}} + G_{[011]}  + 2G_{[02]}\]
 Now we have exactly the correct number of $G_{21}$ and $G_{12}$ that we need in $X_3$.
 \subsubsection{Synthesize $G_3$}
 Finally, we assume that
 \[ 6G_3 = G_{[21]} +  2G_{[12]} + G_{[011]}  + 2G_{[02]}\]
 so that we have
-\[ \Z[X_2] = G_{111} + 3G_{21} + 3G_{12} +{\color{blue} 6G_{3}} = X_3\]
+\[ \Z[X_2] = G_{111} + 3G_{21} + 3G_{12} +{\color{green} 6G_{3}} = X_3\]
 as required.
 
 This means we've effectively proven
@@ -397,10 +406,13 @@ Assume that
 %% {\color{gray} If we weren't in a semiring, this would be equivalent to
 %% \[ G_{[\lambda]} = [[\cdots [G_{\lambda(1)}, G_{\lambda(2)}], \cdots], G_{\lambda(k)}]\]}
 \item (Synthesis Recipes) %\vskip-2em
-  $G_1 = A + B$, and for $n\ge 2$, \[n!G_{n} = \sum_{k = 1}^{n-1}{(n-1)!\over k! }\left(\left(\sum_{\lambda\in C^k_{n-1}} G_{[0\lambda]}\right) +
-  \left(\sum_{\lambda\in C^k_n} \lambda(2)G_{[\lambda]}\right)\right)\]
-This is meaningful in a semiring because $(n-1)!/k!$ is an integer.
-We assume for the sake of the above expression that $\lambda(2) = 0$ when $k=1$.
+  $G_1 = A + B$, and for $n\ge 2$,
+\[n!G_{n} =  \left(\sum_{\substack{\lambda\in C_n \\ 2 \le |\lambda| \le n-1 \\ \lambda(1) \ne \lambda(2)}}  \lambda(2){(n-1)!\over |\lambda|!} G_{[\lambda]}\right)
++ \left(\sum_{\lambda\in C_{n-1}} {(n-1)!\over |\lambda|!} G_{[0\lambda]}\right)
+ \eqno(\ddagger)\]
+
+
+
 \end{enumerate}
 
 Then for all $n \ge 1$,
@@ -435,10 +447,11 @@ and after taking such steps.
 
 For $\lambda \in C$, define
 \[\Delta_{\lambda} = \sum_{m\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \lambda_1 p \lambda_2 = \lambda}} G_{\lambda_1}G_{[0p]}G_{\lambda_2} \]
-These are all of the swap tokens that exist immediately after we do the {\em Move $A$ to the right} step.
+These are the the swap tokens created when we apply the {\em Move $A$ to the right} step to the composition $\lambda$.
 
 %%% zeroSwaps(n, m)
-The `right-aligned {\bf Z}ero-swaps' (which exist after the {\em Move $[0\dash]$ to the right} step) is given by
+We will want an expression to collect together the
+`right-aligned {\bf Z}ero-swaps', which are created by the {\em Move $[0\dash]$ to the right} step. We define
 \[ Z_m = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  m - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
 for all $m\ge 2$, where $Z_m$ specifically is the subset of them that will eventually be used for $G_m$-synthesis.
 
@@ -448,11 +461,13 @@ for all $m\ge 2$, where $Z_m$ specifically is the subset of them that will event
 %%  \]
 
 
-The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis step are
-\[ S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
+The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis step is defined to be
+\[\color{gray} S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
+
+\[ S_m = \sum_{\substack{\lambda \in C \\ \|\lambda\| + m = n + 1 \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
 
 %%% swapss(n, m)
-There is a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ to the right} step, which is given by
+We define a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ to the right} step, by
 \[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{n_1 = 0}^{n+1-m-b}
 \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-b-n_1} }} m (|\lambda_1| + 1) {n!\over (|\lambda_1| + |\lambda_2| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
 %% or alternatively
@@ -461,16 +476,22 @@ There is a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ t
 
 
 %%% balanceds(n, m)
-The sum of all `{\bf B}alanced synthesis products' (which exist after rebalancing steps) are
+The sum of all `{\bf B}alanced synthesis products', which exist after rebalancing steps, is
 \[ B_m = \sum_{n_1 = 0}^{n+1-m}\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-n_1} \\ |\lambda_1| + |\lambda_2| \ne n}}
 m {n! \over (|\lambda_1| + |\lambda_2| + 1)!} G_{\lambda_1}G_m G_{\lambda_2}
  \]
 and the `{\bf R}ight-aligned swaps', also created during rebalancing, are
 %%% rightSwaps(n, m, s)
-\[ R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
+\[ \color{gray} R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
 \sum_{\substack{\lambda_1 \in C_{n+1-m} \\ \lambda_2 \in C_{m-b-s} }} s  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bs \lambda_2]} \]
 
-Finally, we can define a semiring expression which captures the state we want to be in just before $s$-synthesis,
+
+
+\[ R_s^i = \sum_{\substack{b \ge 1\\ b \ne i}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1  \\  b + i + \|\lambda_2\|  = s}}
+ i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \]
+
+Finally, we  define an expression which captures the state of the proof we are in just before $s$-synthesis,
 for $s \ge 2$. We define
 \[H_s = G_1^{n+1} + \left(\sum_{i = 1}^{s-1} B_i\right) +  \left(\sum_{m = s}^{n+1}\sum_{i = 1}^{s-1} R_m^i\right) + \left(\sum_{m=s}^{n+1} Z_{m}\right)\]
 
@@ -482,7 +503,7 @@ For all $n \ge 1$, we have $\Z[X_n] = X_{n+1}$.
 \end{lemma}
 
 \begin{proof}
-We observe
+We compute
 \[ \Z[X_n] = \Z\left[  \sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!}G_\lambda\right]  \]
 \[=\sum_{k = 1}^n\sum_{\lambda \in C^k_n}{n!\over k!} \Z[G_\lambda]\]
 Move $A$ to the right, by Lemma~\ref{zero.init}:
@@ -664,9 +685,37 @@ as required.\cqed
 \end{lemma}
 
 \begin{proof}
+\[ \left(\sum_{i=1}^{s-1} R^i_s\right) + Z_s  = \left(\sum_{i=1}^{s-1} \sum_{\substack{b \ge 1\\ b \ne i}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1\\  b + i + \|\lambda_2\|  = s}}
+ i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \right)
++ {}\]
+\[ \left( \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  s - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \right)\]
+which by Lemma~\ref{merge.sum.n} twice is
+\[ = \left(
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|  = n+1 \\   \|\lambda_2\|  = s \\ \lambda_2(1) \ne \lambda_2(2)}}
+ \lambda_2(2)  {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]} \right)
++ \left( \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  s - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \right)\]
+Rearranging we get
+\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s = n+1}} G_{\lambda_1}\left(\left(
+\sum_{\substack{\lambda_2 \in C_s \\ \lambda_2(1) \ne \lambda_2(2)}}
+ \lambda_2(2)  {n!\over |\lambda_1|!  |\lambda_2 | !}  G_{[ \lambda_2]} \right)
++ \left( \sum_{\substack{ \lambda_2 \in C_{s-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{[0\lambda_2]} \right)\right)\]
+\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + (s-1) = n}} {n!\over (s-1)!|\lambda_1|!} G_{\lambda_1}\left(\left(
+\sum_{\substack{\lambda_2 \in C_s \\ \lambda_2(1) \ne \lambda_2(2)}}
+ \lambda_2(2)  {(s-1)!\over  |\lambda_2 | !}  G_{[ \lambda_2]} \right)
++ \left( \sum_{\substack{ \lambda_2 \in C_{s-1}}} {(s-1)! \over |\lambda_2|! }G_{[0\lambda_2]} \right)\right)\]
 
+which by $(\ddagger)$ means
+\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + (s-1) = n}} {n!\over (s-1)!|\lambda_1|!} G_{\lambda_1}(s!G_s)\]
+\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s  = n+1}} G_{\lambda_1}
+s {n! \over |\lambda_1|! }G_s \]
+{\color{red} something just a little fishy about the $|\lambda| \ne n$ here}
+%\[  = \sum_{\substack{\lambda \in C \\ \|\lambda\| + s = n+1 \\ |\lambda|  \ne n}}s{n!\over k!} G_{\lambda s}\]
+\[ = S_s\]
 \cqed
 \end{proof}
+
+
 
 \begin{lemma}[Rebalancing]
 \[S_s = B_s + W_s \]
