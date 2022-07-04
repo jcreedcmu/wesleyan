@@ -106,7 +106,7 @@ $\lambda = \lambda(1),\ldots,\lambda(k)$ of positive integers, with $\sum_i \lam
 Write the set of composition with weight $n$ and $k$ parts as $C^k_n$.
 We say
  \[ C_n = \bigcup_{k\ge 0} C_n^k \qquad  C = \bigcup_{n\ge 0} C_n \qquad   C^+ = \bigcup_{n\ge 1} C_n \]
-and  write $|\lambda|$ for the number of parts of a composition $\lambda$.
+and  write $|\lambda|$ for the number of parts of a composition $\lambda$ and $\|\lambda\|$ for the weight of $\lambda$.
 There is exactly one composition $\emptyset$ in $C_0$, and $|\emptyset| = 0$.
 
 If $\lambda$ is a composition, then define
@@ -434,7 +434,7 @@ and after taking such steps.
 
 
 For $\lambda \in C$, define
-\[\Delta_{\lambda} = \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2} \]
+\[\Delta_{\lambda} = \sum_{m\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \lambda_1 p \lambda_2 = \lambda}} G_{\lambda_1}G_{[0p]}G_{\lambda_2} \]
 These are all of the swap tokens that exist immediately after we do the {\em Move $A$ to the right} step.
 
 %%% zeroSwaps(n, m)
@@ -584,6 +584,28 @@ Suppose $\lambda \in C_n^k$. Then
 \end{lemma}
 
 \begin{proof}
+
+First expand the definition of $\Delta_\lambda$:
+\[\sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
+=
+\sum_{\lambda \in C_n} {n! \over |\lambda|!}
+\sum_{p\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \lambda_1 p \lambda_2 = \lambda}} G_{\lambda_1}G_{[0p]}G_{\lambda_2}
+\]
+\[
+=
+\sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| = n}} {n! \over (|\lambda_1|+1+|\lambda_2|)!}
+ G_{\lambda_1}G_{[0p]}G_{\lambda_2}
+\]
+Then apply Lemma~\ref{little.movement}:
+\[
+=
+\sum_{p\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| = n}} {n! \over (|\lambda_1|+1+|\lambda_2|)!}
+ G_{\lambda_1}\sum_{S \subseteq \{1,\ldots,|{\lambda_2}|\}} G_{{\lambda_2}_{\bar S}}G_{[0p{\lambda_2}_S]}
+\]
+
+
+
+\hrule
 Define
 \[ \zeta_{m,k_2,k_3} = \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  \|\lambda_2\| + \|\lambda_3\| = n\\ |\lambda_2| =k_2 \\  |\lambda_3| = k_3 }} {n! \over (|\lambda_1|+|\lambda_2|+|\lambda_3|)! }
 {\color{red}???}
