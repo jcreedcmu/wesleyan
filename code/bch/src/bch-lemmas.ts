@@ -95,6 +95,24 @@ function zeroMovementLemmaEqn3(N: number) {
   assert.equal(0, spretty(sub(e, goal)));
 }
 
+function zeroMovementLemmaEqn4(N: number) {
+  const goal = sumZeroSwaps(N);
+  const e =
+    esum(0, N, n1 =>
+      esum(1, N - n1, n3 => {
+        let n2 = N - n1 - n3;
+        return csum(n1, λ1 => csum(n2, λ2 => csum(n3, λ3 =>
+          sep(
+            (factorial(N) / factorial(λ1.length + λ2.length + λ3.length)) *
+            (factorial(λ2.length + λ3.length - 1) / (factorial(λ2.length) * factorial(λ3.length - 1))),
+            proda(...Gp(λ1), ...Gp(λ2), nestedLie([0, ...λ3]))
+          )
+        )));
+      })
+    );
+  assert.equal(0, spretty(sub(e, goal)));
+}
+
 // run some tests
 {
   const N = 5;
@@ -102,4 +120,5 @@ function zeroMovementLemmaEqn3(N: number) {
   zeroMovementLemmaEqn1(N);
   zeroMovementLemmaEqn2(N);
   zeroMovementLemmaEqn3(N);
+  zeroMovementLemmaEqn4(N);
 }

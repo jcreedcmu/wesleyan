@@ -604,13 +604,32 @@ Then apply Lemma~\ref{little.movement}:
  G_{\lambda_1}\sum_{S \subseteq \{1,\ldots,|{\lambda_2}|\}} G_{{\lambda_2}_{\bar S}}G_{[0p{\lambda_2}_S]}
 \eqno(2)\]
 Then apply Lemma~\ref{subset.rearrange}:
-\[\small
+\[
 =
-\sum_{p\ge 1}\sum_{\substack{\lambda_1,\lambda_2,\lambda_3\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| + \|\lambda_3\|= n}}
+\hskip-1em
+\sum_{ \substack{p\ge 1 \\ \lambda_1,\lambda_2,\lambda_3\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| + \|\lambda_3\|= n}}
+\hskip-1em
 {n! \over (|\lambda_1|+1+|\lambda_2| + |\lambda_3|)!}
-{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!  |\lambda_3|!}
+{|\lambda_2| + |\lambda_3| \choose |\lambda_2|}
  G_{\lambda_1} G_{{\lambda_2}}G_{[0p{\lambda_3}]}
 \eqno(3)\]
+Then apply Lemma~\ref{merge.sum.n}:
+\[
+=
+\hskip-1em
+\sum_{ \substack{ \lambda_1,\lambda_2,\lambda_3\in C \\ \|\lambda_1\| +  \|\lambda_2\| + \|\lambda_3\|= n \\ |\lambda_3| \ge 1}}
+\hskip-1em
+{n! \over (|\lambda_1|+|\lambda_2| + |\lambda_3|)!}
+{|\lambda_2| + |\lambda_3| - 1\choose |\lambda_2|}
+ G_{\lambda_1} G_{{\lambda_2}}G_{[0{\lambda_3}]}
+\eqno(4)\]
+
+
+\[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
+
+
+
+%\[\sum_{\substack{\lambda \in C \\ \|\lambda\| = n}} (|\lambda| + 1) f(\lambda) = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}}   f(\lambda_1 \lambda_2)\]
 
 
 \hrule
@@ -766,7 +785,7 @@ There are $|\lambda|+1$ ways to divide $\lambda$ into two subsequences.
 \end{proof}
 
 \begin{lemma}[Merge Composition with Numeric Sum]
-\label{merge.sums}
+\label{merge.sum.n}
 \[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
 
 \end{lemma}
