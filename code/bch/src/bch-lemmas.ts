@@ -1,9 +1,9 @@
 import * as assert from 'assert';
 import { Exp, G } from './basics';
-import { lie, plus, proda, spretty, sub } from './lib';
+import { factorial, lie, plus, proda, sep, spretty, sub } from './lib';
 import { positiveMotion } from './positive-motion';
 import { rebalance } from './rebalance';
-import { Gp, finalState, postMotionState, postRebalanceState, postSynthState, postZeroState } from './state-checkpoints';
+import { Gp, finalState, postMotionState, postRebalanceState, postSynthState, postZeroState, zeroSwaps, csum, esum } from './state-checkpoints';
 import { Phase, Story, synthAll, tellStory } from './synth-and-story';
 import { zeroMotion } from './zero-motion';
 
@@ -23,3 +23,14 @@ assert.equal(spretty(Δ([3, 4, 5])),
   `G_{34[0,5]} +
  G_{3[0,4]5} +
  G_{[0,3]45}`);
+
+function zeroMovementLemma(N: number) {
+  const left = plus(
+    zeroMotion(N),
+    csum(N, λ => sep(factorial(N) / factorial(λ.length), Δ(λ)))
+  );
+  const right = esum(2, N + 1, m => zeroSwaps(N, m));
+  assert.equal('0', spretty(sub(left, right)));
+}
+
+zeroMovementLemma(5);
