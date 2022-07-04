@@ -438,8 +438,9 @@ For $\lambda \in C$, define
 These are all of the swap tokens that exist immediately after we do the {\em Move $A$ to the right} step.
 
 %%% zeroSwaps(n, m)
-The sum of all `right-aligned {\bf Z}ero-swaps' (which exist after the {\em Move $[0\dash]$ to the right} step) is given by
-\[ Z_m = \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+The `right-aligned {\bf Z}ero-swaps' (which exist after the {\em Move $[0\dash]$ to the right} step) is given by
+\[ Z_m = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  m - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
+for all $m\ge 2$, where $Z_m$ specifically is the subset of them that will eventually be used for $G_m$-synthesis.
 
 %% Alternatively, I think this is equivalent:
 %% \[ B_m = \sum_{\lambda \in C_{n+1-m}} \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda \\ |\lambda|  \ne n}}
@@ -447,7 +448,7 @@ The sum of all `right-aligned {\bf Z}ero-swaps' (which exist after the {\em Move
 %%  \]
 
 
-The `{\bf S}ynthesis products' created during synthesis steps are
+The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis step are
 \[ S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
 
 %%% swapss(n, m)
@@ -542,7 +543,7 @@ Finally observe that this is the definition of $H_{s+1}$, as required.\cqed
 
 \section{More Lemmas}
 
-\begin{lemma}
+\begin{lemma}[Move $A$ to the Right]
 Suppose $\lambda \in C$. Then
 \[AG_{\lambda} = G_{\lambda} A + \Delta_{\lambda}  \]
 \end{lemma}
@@ -562,7 +563,7 @@ But this easily follows from the definition of $\Delta$. \cqed
 \end{proof}
 
 
-\begin{lemma}
+\begin{lemma}[Synthesize $G_1$]
 Suppose $\lambda \in C_n^k$. Then
 \[\Z[G_\lambda] = G_{\lambda 1} + \Delta_{\lambda}\]
 \label{zero.init}
@@ -623,71 +624,38 @@ Then apply Lemma~\ref{merge.sum.n}:
 {|\lambda_2| + |\lambda_3| - 1\choose |\lambda_2|}
  G_{\lambda_1} G_{{\lambda_2}}G_{[0{\lambda_3}]}
 \eqno(4)\]
-
-
-\[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
-
-
-
-%\[\sum_{\substack{\lambda \in C \\ \|\lambda\| = n}} (|\lambda| + 1) f(\lambda) = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}}   f(\lambda_1 \lambda_2)\]
-
-
-\hrule
-Define
-\[ \zeta_{m,k_2,k_3} = \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  \|\lambda_2\| + \|\lambda_3\| = n\\ |\lambda_2| =k_2 \\  |\lambda_3| = k_3 }} {n! \over (|\lambda_1|+|\lambda_2|+|\lambda_3|)! }
-{\color{red}???}
-% {|\lambda_1| + |\lambda_2| \choose |\lambda_1|, |\lambda_2| }
-G_{\lambda_1} G_{[0\lambda_2]} G_{\lambda_3}\]
-\[ Z_{m,j,\ell} = \sum_{k_2 = 1}^{j} \sum_{k_3 =0}^{n-\ell} \zeta_{m,k_2,k_3}\]
-
-\[ Z_{m,1,1} =  \sum_{k_3 =0}^{n-1} \zeta_{m,1,k_3}\]
-\[  =  \zeta_{m,1,n-1} + \left( \sum_{k_3 =0}^{n-2} \zeta_{m,1,k_3}\right)\]
-\[  =  \zeta_{m,1,n-1} + Z_{m,1,2}\]
-\[  = \left( \sum_{p\ge1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + \|\lambda_3\| = n\\   |\lambda_3| = n-1 }} {n! \over (|\lambda_1|+1+|\lambda_3|)! } G_{\lambda_1} G_{[0p]} G_{\lambda_3}\right) + Z_{m,1,2}\]
-
-\[  = \left( \sum_{p\ge1}\sum_{q\ge 1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + q +  \|\lambda_3\| = n\\   |\lambda_3| = n-2 }} {n! \over (|\lambda_1|+2+|\lambda_3|)! } G_{\lambda_1} G_{[0p]} G_qG_{\lambda_3}\right) + Z_{m,1,2}\]
-
-\[  = \left( \sum_{p\ge1}\sum_{q\ge 1} \sum_{\substack{\lambda_1, \lambda_2, \lambda_3 \in C \\\|\lambda_1\| +  p + q +  \|\lambda_3\| = n\\   |\lambda_3| = n-2 }} {n! \over (|\lambda_1|+2+|\lambda_3|)! } G_{\lambda_1} (G_{[0pq]} + G_qG_{[0p]})G_{\lambda_3}\right) + Z_{m,1,2}\]
-
-\[ =   \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\hrule
-
-
-
-
-By definition of $\Delta$, we know
-\[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
- = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{p \ge 1} \sum_{\lambda_1,\lambda_2\in C \atop \lambda_1 p \lambda_2 = \lambda} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
-\[ =   \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
-
-
-%% \hrule
-
-
-%% \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
-%% and using Lemma~\ref{merge.sums}:
-%% \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
-
-%% so...
-
-%% \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over (|\lambda_1| + |\lambda_2|)!} {|\lambda_1|+|\lambda_2| \choose |\lambda_1|,|\lambda_2|}G_{\lambda_1} G_{[0\lambda_2]} \]
-
-%% \[\color{green} \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
-
-\hrule
-
-\[= \sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_2,\lambda_3 \in C \\ \|\lambda_1\| + \|\lambda_2\| + \|\lambda_3\| + p = n \\ \|\lambda_3\| + p \ge 1} } {n! \over (|\lambda_1| + |\lambda_2| + 1)!(|\lambda_3| + 1)! }G_{\lambda_1}G_{\lambda_2} G_{[0p\lambda_3]} \]
-\[= \sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_3 \in C \\ \|\lambda_1\| + \|\lambda_3\| + p = n \\ \|\lambda_3\| + p \ge 1} } {n! \over |\lambda_1|!(|\lambda_3| + 1)! }G_{\lambda_1} G_{[0p\lambda_3]} \]
-\[=  \sum_{\substack{\lambda_1,\lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|= n \\ \|\lambda_2\| \ge 1} } {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
-\[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \]
-
-
-
-
-
-\cqed
+Then apply Lemma~\ref{merge.sums}:
+\[
+=
+\hskip-1em
+\sum_{ \substack{ \lambda,\lambda_3\in C \\ \|\lambda\|  + \|\lambda_3\|= n \\ |\lambda_3| \ge 1}}
+\hskip-1em
+{n! \over (|\lambda|+ |\lambda_3|)!}
+\sum_{k_2 = 0}^{|\lambda|}
+{k_2 + |\lambda_3| - 1\choose k_2}
+ G_{\lambda}G_{[0{\lambda_3}]}
+\eqno(5)\]
+Then apply biomial coefficient identities:
+\[
+=
+\hskip-1em
+\sum_{ \substack{ \lambda,\lambda_3\in C \\ \|\lambda\|  + \|\lambda_3\|= n \\ |\lambda_3| \ge 1}}
+\hskip-1em
+{n! \over (|\lambda|+ |\lambda_3|)!}
+{|\lambda| + |\lambda_3| \choose |\lambda|}
+ G_{\lambda}G_{[0{\lambda_3}]}
+\]
+\[
+=
+\hskip-1em
+\sum_{ \substack{ \lambda,\lambda_3\in C \\ \|\lambda\|  + \|\lambda_3\|= n \\ |\lambda_3| \ge 1}}
+\hskip-1em
+{n! \over |\lambda|! |\lambda_3|!}
+ G_{\lambda}G_{[0{\lambda_3}]}
+\]
+Observing that $|\lambda_3| \ge 1$ is equivalent to $\|\lambda_3\| \ge 1$, we find this is equal to
+\[ = \sum_{m=2}^{n+1} Z_m \]
+as required.\cqed
 \end{proof}
 
 
@@ -723,7 +691,7 @@ By definition of $\Delta$, we know
 
 
 
-\begin{lemma}
+\begin{lemma}[Finalize]
 \[G_1^{n+1} + \left(\sum_{i = 1}^{n} B_i\right) + S_{n+1} = X_{n+1}\]
 \label{finalize}
 \end{lemma}
@@ -760,27 +728,18 @@ as required. \cqed
 \end{proof}
 
 \begin{lemma}[Subset Rearrangement]
+For any function $f : C \x C \to R$, we have
 \label{subset.rearrange}
-\[\sum_{\lambda\in C_n} \sum_{S \subseteq \{1,\ldots,|\lambda|\}} f(G_{\lambda_{\bar S}}, G_{\lambda_{S}}) = \sum_{\lambda_1, \lambda_2 \in C} {|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|} [\|\lambda_1\| + \| \lambda_2 \| = n] f(\lambda_1, \lambda_2)\]
+\[\sum_{\lambda\in C_n} \sum_{S \subseteq \{1,\ldots,|\lambda|\}} f({\lambda_{\bar S}}, {\lambda_{S}})
+ = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}} {|\lambda_1| + |\lambda_2| \choose |\lambda_1|}  f(\lambda_1, \lambda_2)\]
 
 \end{lemma}
 
 \begin{proof}
 Given a $\lambda \in C_n$, and an $S \subseteq 1, \ldots, |\lambda|$, we compute
 $\lambda_1 := \lambda_{\bar S}$ and $\lambda_2 := \lambda_S$, and an element of the
-set of size ${|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|}$ simply by reading off the subset $S$.
+set of size ${|\lambda_1| + |\lambda_2| \choose |\lambda_1|}$ simply by reading off the subset $S$.
 This process is clearly invertible, so the two sums are equal.
-\cqed
-\end{proof}
-
-\begin{lemma}[Merge Composition Sums]
-\label{merge.sums}
-\[\sum_{\substack{\lambda \in C \\ \|\lambda\| = n}} (|\lambda| + 1) f(\lambda) = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}}   f(\lambda_1 \lambda_2)\]
-
-\end{lemma}
-
-\begin{proof}
-There are $|\lambda|+1$ ways to divide $\lambda$ into two subsequences.
 \cqed
 \end{proof}
 
@@ -789,6 +748,19 @@ There are $|\lambda|+1$ ways to divide $\lambda$ into two subsequences.
 \[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
 
 \end{lemma}
+
+\begin{lemma}[Merge Composition Sums]
+For any function $f : C \x \N \to R$, we have
+\label{merge.sums}
+\[\sum_{\substack{\lambda \in C \\ \|\lambda\| = n}} \sum_{k_2 = 0}^{|\lambda|} f(k_2, \lambda) = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \| \lambda_2 \| = n}}   f(|\lambda_2|, \lambda_1 \lambda_2)\]
+
+\end{lemma}
+
+\begin{proof}
+Consider the $|\lambda|+1$ ways to divide $\lambda$ into two parts.
+\cqed
+\end{proof}
+
 
 
 %% \appendix
