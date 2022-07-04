@@ -586,22 +586,30 @@ Suppose $\lambda \in C_n^k$. Then
 \begin{proof}
 By definition of $\Delta$, we know
 \[ \sum_{\lambda \in C_n} {n! \over |\lambda|!} \Delta_{\lambda}
- = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{\lambda_1,\lambda_2\in C, m\in \N\atop \lambda_1 m \lambda_2 = \lambda} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
-\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}G_{[0m]}G_{\lambda_2}\]
+ = \sum_{\lambda \in C_n} {n! \over |\lambda|!} \sum_{p \ge 1} \sum_{\lambda_1,\lambda_2\in C \atop \lambda_1 p \lambda_2 = \lambda} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
+\[ =   \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}G_{[0p]}G_{\lambda_2}\]
 By Lemma~\ref{little.movement}, we know this is
-
-\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} G_{\lambda_1}\left(\sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\right)\]
-\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n-m - n_1}  \\}} {n! \over (|\lambda_1| + |\lambda_2|)!} \sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{\lambda_1} G_{(\lambda_2)_{\bar S}}G_{[0m(\lambda_2)_S]}\]
+\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1}\left(\sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[0p(\lambda_2)_S]}\right)\]
+\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\| = n}} \sum_{S \subseteq \{1,\ldots,|\lambda_2|\}} {n! \over (|\lambda_1| + 1 + |\lambda_2|)!} G_{\lambda_1} G_{(\lambda_2)_{\bar S}}G_{[0p(\lambda_2)_S]}\]
 and using Lemma~\ref{subset.rearrange}:
-\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
-and using Lemma~\ref{merge.sums}:
-\[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
+\[ = \sum_{p \ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p + \|\lambda_2\|  + \|\lambda_3\| = n}}
+{n! \over (|\lambda_1| + 1 + |\lambda_2| + |\lambda_3|)!}
+{|\lambda_2| + |\lambda_3| \choose |\lambda_2|, |\lambda_3|}
+G_{\lambda_1} G_{\lambda_2}G_{[0p\lambda_3]}\]
 
-so...
 
-\[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over (|\lambda_1| + |\lambda_2|)!} {|\lambda_1|+|\lambda_2| \choose |\lambda_1|,|\lambda_2|}G_{\lambda_1} G_{[0\lambda_2]} \]
+%% \hrule
 
-\[\color{green} \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
+
+%% \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
+%% and using Lemma~\ref{merge.sums}:
+%% \[ = \sum_{m = 1}^{n} \sum_{n_1 = 0}^{n-m}\sum_{n_2 = 0}^{n-m-m_1} \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2\in C_{n_2}  \\ \lambda_3 \in C_{n-m - n_1-n_2}}} {n! \over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}{(|\lambda_2| + |\lambda_3|)! \over |\lambda_2|!|\lambda_3|!}  G_{\lambda_1} G_{\lambda_2}G_{[0m\lambda_3]}\]
+
+%% so...
+
+%% \[= \sum_{m=2}^{n+1} \sum_{\substack{\lambda_1 \in C_{n-m+1} \\ \lambda_2 \in C_{m-1}}} {n! \over (|\lambda_1| + |\lambda_2|)!} {|\lambda_1|+|\lambda_2| \choose |\lambda_1|,|\lambda_2|}G_{\lambda_1} G_{[0\lambda_2]} \]
+
+%% \[\color{green} \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
 
 \hrule
 
@@ -687,6 +695,7 @@ as required. \cqed
 \end{proof}
 
 \begin{lemma}[Subset Rearrangement]
+{\color {red} NOT QUITE RIGHT}
 \label{subset.rearrange}
 \[\sum_{\lambda\in C_n} \sum_{S \subseteq \{1,\ldots,|\lambda|\}} f(G_{\lambda_{\bar S}}, G_{\lambda_{S}}) = \sum_{\lambda_1, \lambda_2 \in C} {|\lambda_1| + |\lambda_2| \choose |\lambda_1|,|\lambda_2|} [\|\lambda_1\| + \| \lambda_2 \| = n] f(\lambda_1, \lambda_2)\]
 
