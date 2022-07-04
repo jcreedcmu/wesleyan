@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { Exp, G } from './basics';
 import { choose, comps, factorial, lie, nestedLie, plus, plusa, prod, proda, sep, spretty, sub, target } from './lib';
+import { esum } from './sums';
 
 // -------------------------------------------------------------------------
 // 1. Basic helper functions
@@ -10,31 +11,6 @@ type CompPair = { lam1: number[], lam2: number[] };
 
 export function Gp(c: number[]): Exp[] {
   return c.map(x => G(x));
-}
-
-//// dunno if I'm going to need this
-// function sum(a: number, b: number, f: (i: number) => number): number {
-//   let rv = 0;
-//   for (let i = a; i <= b; i++) {
-//     rv += f(i);
-//   }
-//   return rv;
-// }
-
-export function csum(n: number, f: (c: number[]) => Exp): Exp {
-  let rv = G(0, 0);
-  comps(n).forEach(c => {
-    rv = plus(rv, f(c));
-  });
-  return rv;
-}
-
-export function esum(a: number, b: number, f: (i: number) => Exp): Exp {
-  let rv = sep(0, G(0));
-  for (let i = a; i <= b; i++) {
-    rv = plus(rv, f(i));
-  }
-  return rv;
 }
 
 // This captures all the expressions that have freshly synthesized G_s's
