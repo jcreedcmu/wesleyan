@@ -25,20 +25,27 @@ assert.equal(spretty(Δ([3, 4, 5])),
  G_{3[0,4]5} +
  G_{[0,3]45}`);
 
+function primZeroSwaps(N: number): Exp {
+  return csum(N, λ => sep(factorial(N) / factorial(λ.length), Δ(λ)));
+}
+
+function sumZeroSwaps(N: number): Exp {
+  return esum(2, N + 1, m => zeroSwaps(N, m));
+}
+
 function zeroMovementLemma(N: number) {
   const left = plus(
     zeroMotion(N),
-    csum(N, λ => sep(factorial(N) / factorial(λ.length), Δ(λ)))
+    primZeroSwaps(N)
   );
-  const right = esum(2, N + 1, m => zeroSwaps(N, m));
+  const right = sumZeroSwaps(N);
   assert.equal('0', spretty(sub(left, right)));
 }
 
-zeroMovementLemma(5);
 
 
 function zeroMovementLemmaEqn1(N: number) {
-  const goal = csum(N, λ => sep(factorial(N) / factorial(λ.length), Δ(λ)));
+  const goal = primZeroSwaps(N);
   const e = esum(1, N, p =>
     esum(0, N - p, n1 => {
       let n2 = N - p - n1;
@@ -51,10 +58,9 @@ function zeroMovementLemmaEqn1(N: number) {
     }));
   assert.equal(0, spretty(sub(e, goal)));
 }
-zeroMovementLemmaEqn1(5);
 
 function zeroMovementLemmaEqn2(N: number) {
-  const goal = esum(2, N + 1, m => zeroSwaps(N, m));
+  const goal = sumZeroSwaps(N);
   const e = esum(1, N, p =>
     esum(0, N - p, n1 => {
       let n2 = N - p - n1;
@@ -68,4 +74,32 @@ function zeroMovementLemmaEqn2(N: number) {
     }));
   assert.equal(0, spretty(sub(e, goal)));
 }
-zeroMovementLemmaEqn2(5);
+
+
+function zeroMovementLemmaEqn3(N: number) {
+  const goal = sumZeroSwaps(N);
+  const e = esum(1, N, p =>
+    esum(0, N - p, n1 =>
+      esum(0, N - p - n1, n2 => {
+        let n3 = N - p - n1 - n2;
+        return csum(n1, λ1 => csum(n2, λ2 => csum(n3, λ3 =>
+          sep(
+            (factorial(N) / factorial(λ1.length + 1 + λ2.length + λ3.length)) *
+            (factorial(λ2.length + λ3.length) / (factorial(λ2.length) * factorial(λ3.length))),
+            proda(...Gp(λ1), ...Gp(λ2), nestedLie([0, p, ...λ3]))
+          )
+        )));
+      })
+    )
+  );
+  assert.equal(0, spretty(sub(e, goal)));
+}
+
+// run some tests
+{
+  const N = 5;
+  zeroMovementLemma(N);
+  zeroMovementLemmaEqn1(N);
+  zeroMovementLemmaEqn2(N);
+  zeroMovementLemmaEqn3(N);
+}
