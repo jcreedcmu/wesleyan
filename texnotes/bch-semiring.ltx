@@ -485,11 +485,12 @@ and the `{\bf R}ight-aligned swaps', also created during rebalancing, are
 \[ \color{gray} R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
 \sum_{\substack{\lambda_1 \in C_{n+1-m} \\ \lambda_2 \in C_{m-b-s} }} s  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bs \lambda_2]} \]
 
-
-
-\[ R_s^i = \sum_{\substack{b \ge 1\\ b \ne i}}
+\[\color{gray} R_s^i = \sum_{\substack{b \ge 1\\ b \ne i}}
 \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1  \\  b + i + \|\lambda_2\|  = s}}
  i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \]
+
+\[ R_s^i =\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|  = n+1 \\   \|\lambda_2\|  = s \\ \lambda_2(1) \ne i \\ \lambda_2(2) = i}}
+i {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]}\]
 
 Finally, we  define an expression which captures the state of the proof we are in just before $s$-synthesis,
 for $s \ge 2$. We define
