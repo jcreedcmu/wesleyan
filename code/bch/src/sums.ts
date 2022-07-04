@@ -60,6 +60,6 @@ assert.deepEqual(
 // "splitting sum" specialized to Exp
 // return the sum of f(λ1, λ2) for all possible ways that λ can be
 // constructed as an interleaving of λ1, λ2
-function ssum<T>(λ: number[], f: (λ1: number[], λ2: number[]) => Exp): Exp {
+export function ssum<T>(λ: number[], f: (λ1: number[], λ2: number[]) => Exp): Exp {
   return gssum(λ, f, plus);
 }
