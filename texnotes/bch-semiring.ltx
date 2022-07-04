@@ -596,14 +596,13 @@ First expand the definition of $\Delta_\lambda$:
 =
 \sum_{p\ge 1} \sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| = n}} {n! \over (|\lambda_1|+1+|\lambda_2|)!}
  G_{\lambda_1}G_{[0p]}G_{\lambda_2}
-\eqno(1)
 \]
 Then apply Lemma~\ref{little.movement}:
 \[
 =
 \sum_{p\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| = n}} {n! \over (|\lambda_1|+1+|\lambda_2|)!}
  G_{\lambda_1}\sum_{S \subseteq \{1,\ldots,|{\lambda_2}|\}} G_{{\lambda_2}_{\bar S}}G_{[0p{\lambda_2}_S]}
-\eqno(2)\]
+\]
 Then apply Lemma~\ref{subset.rearrange}:
 \[
 =
@@ -613,7 +612,7 @@ Then apply Lemma~\ref{subset.rearrange}:
 {n! \over (|\lambda_1|+1+|\lambda_2| + |\lambda_3|)!}
 {|\lambda_2| + |\lambda_3| \choose |\lambda_2|}
  G_{\lambda_1} G_{{\lambda_2}}G_{[0p{\lambda_3}]}
-\eqno(3)\]
+\]
 Then apply Lemma~\ref{merge.sum.n}:
 \[
 =
@@ -623,7 +622,7 @@ Then apply Lemma~\ref{merge.sum.n}:
 {n! \over (|\lambda_1|+|\lambda_2| + |\lambda_3|)!}
 {|\lambda_2| + |\lambda_3| - 1\choose |\lambda_2|}
  G_{\lambda_1} G_{{\lambda_2}}G_{[0{\lambda_3}]}
-\eqno(4)\]
+\]
 Then apply Lemma~\ref{merge.sums}:
 \[
 =
@@ -634,7 +633,7 @@ Then apply Lemma~\ref{merge.sums}:
 \sum_{k_2 = 0}^{|\lambda|}
 {k_2 + |\lambda_3| - 1\choose k_2}
  G_{\lambda}G_{[0{\lambda_3}]}
-\eqno(5)\]
+\]
 Then apply biomial coefficient identities:
 \[
 =
