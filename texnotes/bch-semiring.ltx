@@ -462,9 +462,9 @@ for all $m\ge 2$, where $Z_m$ specifically is the subset of them that will event
 
 
 The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis step is defined to be
-\[\color{gray} S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
-
-\[ S_m = \sum_{\substack{\lambda \in C \\ \|\lambda\| + m = n + 1 \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
+%\[\color{gray} S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
+\[ S_1 = \sum_{\substack{\lambda \in C \\ \|\lambda\|  = n  \\ |\lambda|  \ne n}}{n!\over |\lambda|!} G_{\lambda 1}\]
+\[ S_m = \sum_{\substack{\lambda \in C \\ \|\lambda\| + m = n + 1 }}m{n!\over |\lambda|!} G_{\lambda m} \eqno{(m\ge 2)}\]
 
 %%% swapss(n, m)
 We define a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ to the right} step, by
@@ -482,12 +482,12 @@ m {n! \over (|\lambda_1| + |\lambda_2| + 1)!} G_{\lambda_1}G_m G_{\lambda_2}
  \]
 and the `{\bf R}ight-aligned swaps', also created during rebalancing, are
 %%% rightSwaps(n, m, s)
-\[ \color{gray} R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
-\sum_{\substack{\lambda_1 \in C_{n+1-m} \\ \lambda_2 \in C_{m-b-s} }} s  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bs \lambda_2]} \]
+%\[ \color{gray} R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
+%\sum_{\substack{\lambda_1 \in C_{n+1-m} \\ \lambda_2 \in C_{m-b-s} }} s  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bs \lambda_2]} \]
 
-\[\color{gray} R_s^i = \sum_{\substack{b \ge 1\\ b \ne i}}
-\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1  \\  b + i + \|\lambda_2\|  = s}}
- i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \]
+%\[\color{gray} R_s^i = \sum_{\substack{b \ge 1\\ b \ne i}}
+%\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1  \\  b + i + \|\lambda_2\|  = s}}
+% i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \]
 
 \[ R_s^i =\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|  = n+1 \\   \|\lambda_2\|  = s \\ \lambda_2(1) \ne i \\ \lambda_2(2) = i}}
 i {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]}\]
@@ -681,22 +681,17 @@ as required.\cqed
 
 
 \begin{lemma}[Synthesis]
+For all $s \ge 2$, we have
 \[ \left(\sum_{i=1}^{s-1} R^i_s\right) + Z_s = S_s \]
 \label{synth}
 \end{lemma}
 
 \begin{proof}
-\[ \left(\sum_{i=1}^{s-1} R^i_s\right) + Z_s  = \left(\sum_{i=1}^{s-1} \sum_{\substack{b \ge 1\\ b \ne i}}
-\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + i + \|\lambda_2\|  = n+1\\  b + i + \|\lambda_2\|  = s}}
- i  {n!\over |\lambda_1|!  |\lambda_2 +2| !} G_{\lambda_1} G_{[bi \lambda_2]} \right)
-+ {}\]
-\[ \left( \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  s - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \right)\]
-which by Lemma~\ref{merge.sum.n} twice is
-\[ = \left(
-\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|  = n+1 \\   \|\lambda_2\|  = s \\ \lambda_2(1) \ne \lambda_2(2)}}
- \lambda_2(2)  {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]} \right)
-+ \left( \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  s - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \right)\]
-Rearranging we get
+Reason that
+\[ \left(\sum_{i=1}^{s-1} R^i_s\right) + Z_s \]
+\[= \left(\sum_{i=1}^{s-1}\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\|  = n+1 \\   \|\lambda_2\|  = s \\ \lambda_2(1) \ne i \\ \lambda_2(2) = i}}
+i {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]} \right)
++  \left( \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ \|\lambda_2\| =  s - 1}} {n! \over |\lambda_1|!|\lambda_2|! }G_{\lambda_1} G_{[0\lambda_2]} \right)\]
 \[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s = n+1}} G_{\lambda_1}\left(\left(
 \sum_{\substack{\lambda_2 \in C_s \\ \lambda_2(1) \ne \lambda_2(2)}}
  \lambda_2(2)  {n!\over |\lambda_1|!  |\lambda_2 | !}  G_{[ \lambda_2]} \right)
@@ -710,8 +705,6 @@ which by $(\ddagger)$ means
 \[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + (s-1) = n}} {n!\over (s-1)!|\lambda_1|!} G_{\lambda_1}(s!G_s)\]
 \[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s  = n+1}} G_{\lambda_1}
 s {n! \over |\lambda_1|! }G_s \]
-{\color{red} something just a little fishy about the $|\lambda| \ne n$ here}
-%\[  = \sum_{\substack{\lambda \in C \\ \|\lambda\| + s = n+1 \\ |\lambda|  \ne n}}s{n!\over k!} G_{\lambda s}\]
 \[ = S_s\]
 \cqed
 \end{proof}
