@@ -468,18 +468,23 @@ The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis ste
 
 %%% swapss(n, m)
 We define a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ to the right} step, by
-\[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{n_1 = 0}^{n+1-m-b}
-\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-b-n_1} }} m (|\lambda_1| + 1) {n!\over (|\lambda_1| + |\lambda_2| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
+%% \[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{n_1 = 0}^{n+1-m-b}
+%% \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-b-n_1} }} m (|\lambda_1| + 1) {n!\over (|\lambda_1| + |\lambda_2| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
 %% or alternatively
-%% \[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{\lambda \in C_{n+1-m-b}}
-%% \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda }}  m (|\lambda_1| + 1) {n!\over (|\lambda| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
+\[ W_m =  \sum_{\substack{b \ge 1\\(b \ne m)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + m +  \|\lambda_2\| = n + 1 }}  m (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
 
 
 %%% balanceds(n, m)
 The sum of all `{\bf B}alanced synthesis products', which exist after rebalancing steps, is
-\[ B_m = \sum_{n_1 = 0}^{n+1-m}\sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-n_1} \\ |\lambda_1| + |\lambda_2| \ne n}}
-m {n! \over (|\lambda_1| + |\lambda_2| + 1)!} G_{\lambda_1}G_m G_{\lambda_2}
+\[ B_1 = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ |\lambda_1| + |\lambda_2| \ne n}}
+{n! \over (|\lambda_1| + 1 +  |\lambda_2|)!} G_{\lambda_1 1 \lambda_2}
  \]
+
+\[ B_m = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n + m - 1}}
+m{n! \over (|\lambda_1| + 1 +  |\lambda_2|)!} G_{\lambda_1 m \lambda_2}
+ \eqno(m \ge 2)\]
+
 and the `{\bf R}ight-aligned swaps', also created during rebalancing, are
 %%% rightSwaps(n, m, s)
 %\[ \color{gray} R_m^s = \sum_{\substack{b= 1\\(b \ne s)}}^{m-s} \sum_{n_1 = 0}^{n+1-s-b}
@@ -703,8 +708,7 @@ i {n!\over |\lambda_1|!  |\lambda_2 | !} G_{\lambda_1} G_{[ \lambda_2]} \right)
 
 which by $(\ddagger)$ means
 \[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + (s-1) = n}} {n!\over (s-1)!|\lambda_1|!} G_{\lambda_1}(s!G_s)\]
-\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s  = n+1}} G_{\lambda_1}
-s {n! \over |\lambda_1|! }G_s \]
+\[ = \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + s  = n+1}} s {n! \over |\lambda_1|! } G_{\lambda_1s} \]
 \[ = S_s\]
 \cqed
 \end{proof}
@@ -717,6 +721,25 @@ s {n! \over |\lambda_1|! }G_s \]
 \end{lemma}
 
 \begin{proof}
+First we deal with the $s=1$ case. We must show
+\[\sum_{\substack{\lambda \in C \\ \|\lambda\|  = n  \\ |\lambda|  \ne n}}{n!\over |\lambda|!} G_{\lambda 1} =
+\left(\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n \\ |\lambda_1| + |\lambda_2| \ne n}}
+{n! \over (|\lambda_1| + 1 +  |\lambda_2|)!} G_{\lambda_1 1 \lambda_2}\right)+{}\]
+\[
+\left(
+ \sum_{\substack{b \ge 1\\(b \ne m)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + m +  \|\lambda_2\| = n + 1 }}  m (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}
+\right)
+\]
+\hrule
+\[ B_m = \sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + \|\lambda_2\| = n + m - 1}}
+m{n! \over (|\lambda_1| + 1 +  |\lambda_2|)!} G_{\lambda_1 m \lambda_2}
+ \]
+\[ W_m =  \sum_{\substack{b \ge 1\\(b \ne m)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + m +  \|\lambda_2\| = n + 1 }}  m (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
+
+
+\[ S_m = \sum_{\substack{\lambda \in C \\ \|\lambda\| + m = n + 1 }}m{n!\over |\lambda|!} G_{\lambda m} \eqno{(m\ge 2)}\]
 
 \cqed
 \end{proof}
@@ -803,7 +826,65 @@ Consider the $|\lambda|+1$ ways to divide $\lambda$ into two parts.
 \cqed
 \end{proof}
 
+\begin{lemma}[Tiny Rebalancing Lemma]
+\label{tiny.rebalancing}
+For any $\lambda, \in C$ and $m \ge 1$, we have
+\[G_{\lambda m} = G_{m \lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = \lambda \\  b\ne m}} G_{\lambda_1}G_{[bm]}G_{\lambda_2}\]
+\end{lemma}
 
+\begin{proof}
+By induction on $|\lambda|$. If $\lambda = \emptyset$, simply $G_m = G_m$.
+Otherwise, $\lambda = p\lambda $ for some $p \ge 1$,
+and we are trying to show
+\[G_{p\lambda m} = G_{m p\lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = p\lambda \\  b\ne m}} G_{\lambda_1}G_{[bm]}G_{\lambda_2}\]
+By i.h., we know
+\[G_{p\lambda m} = G_{pm\lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = \lambda \\  b\ne m}} G_pG_{\lambda_1}G_{[bm]}G_{\lambda_2}\]
+so it suffices to show
+\[G_{pm\lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = \lambda \\  b\ne m}} G_pG_{\lambda_1}G_{[bm]}G_{\lambda_2} =
+G_{m p\lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = p\lambda \\  b\ne m}} G_{\lambda_1}G_{[bm]}G_{\lambda_2}\]
+In the right-hand side, either $\lambda_1$ is empty --- in which case $b = p$ --- or $\lambda_1 = p\lambda_0$,
+Let $[m\ne p]$ equal 1 if $m\ne p$, 0 otherwise. We are trying to show
+\[G_{pm\lambda} + \sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = \lambda \\  b\ne m}} G_pG_{\lambda_1}G_{[bm]}G_{\lambda_2} =\]
+\[G_{m p\lambda} +
+ [m\ne p]G_{[pm]}G_{\lambda} + \sum_{\substack{\lambda_0,\lambda_2 \in C\\ p\lambda_0 b\lambda_2 = p\lambda \\  b\ne m }} G_pG_{\lambda_0}G_{[bm]}G_{\lambda_2}\]
+or equivalently
+\[G_{pm\lambda}  = G_{m p\lambda} + [m\ne p]G_{[pm]}G_{\lambda}\]
+If $m = p$, then we need only observe $G_{pm\lambda} = G_{mp\lambda}$, otherwise, we note that
+\[G_{pm}  = G_{m p} + G_{[pm]}\]
+and multiply both sides on the right by $G_\lambda$.
+\cqed
+\end{proof}
+
+\begin{lemma}[Little Rebalancing Lemma]
+For any $\lambda \in C$ and $m \ge 1$, we have
+\[(|\lambda| + 1)G_{\lambda m} =
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda}} G_{\lambda_1 m \lambda_2}\right) +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1 b\lambda_2 = \lambda \\ b \ne m}} |\lambda_1| G_{\lambda_1 [bm] \lambda_2}\right)
+\]
+\end{lemma}
+
+\begin{proof}
+By induction on $|\lambda|$. If $\lambda = \emptyset$, then
+$G_{m} = G_m$ as required.
+Otherwise, $\lambda = p\lambda $ for some $p \ge 1$,
+and we first reason by induction hypothesis that
+\[(|\lambda| + 2)G_{p\lambda m} =
+G_{p\lambda m} +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda}} G_{p \lambda_1 m \lambda_2}\right) +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1 b\lambda_2 = \lambda \\ b \ne m}} |\lambda_1| G_{p\lambda_1 [bm] \lambda_2}\right)
+\]
+and by Lemma~\ref{tiny.rebalancing} this is
+\[ = G_{mp\lambda } +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C\\ \lambda_1 b\lambda_2 = p \lambda \\  b\ne m}} G_{\lambda_1}G_{[bm]}G_{\lambda_2}\right)+
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1\lambda_2 = \lambda}} G_{p\lambda_1 m \lambda_2}\right) +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1 b\lambda_2 = \lambda \\ b \ne m}} |\lambda_1| G_{p\lambda_1 [bm] \lambda_2}\right)
+\]
+\[ =
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1\lambda_2 = p\lambda}} G_{\lambda_1 m \lambda_2}\right) +
+\left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1 b\lambda_2 = p\lambda \\ b \ne m}} |\lambda_1| G_{\lambda_1 [bm] \lambda_2}\right)
+\]
+as required. \cqed
+\end{proof}
 
 %% \appendix
 %% \section{Misc Obsolete Material}
