@@ -464,16 +464,16 @@ for all $m\ge 2$, where $Z_m$ specifically is the subset of them that will event
 The sum of all `{\bf S}ynthesis products' created during the $G_m$-synthesis step is defined to be
 %\[\color{gray} S_m = \sum_{\substack{\lambda \in C_{n+1-m} \\ |\lambda|  \ne n}}m{n!\over k!} G_{\lambda m}\]
 \[ S_1 = \sum_{\substack{\lambda \in C \\ \|\lambda\|  = n  \\ |\lambda|  \ne n}}{n!\over |\lambda|!} G_{\lambda 1}\]
-\[ S_m = \sum_{\substack{\lambda \in C \\ \|\lambda\| + m = n + 1 }}m{n!\over |\lambda|!} G_{\lambda m} \eqno{(m\ge 2)}\]
+\[ S_s = \sum_{\substack{\lambda \in C \\ \|\lambda\| + s = n + 1 }}s{n!\over |\lambda|!} G_{\lambda s} \eqno{(s\ge 2)}\]
 
 %%% swapss(n, m)
 We define a collection of s{\bf W}aps created during each {\em Move $[\dash i]$ to the right} step, by
 %% \[ W_m = \sum_{\substack{b= 1\\(b \ne m)}}^{n+1-m} \sum_{n_1 = 0}^{n+1-m-b}
 %% \sum_{\substack{\lambda_1 \in C_{n_1} \\ \lambda_2 \in C_{n+1-m-b-n_1} }} m (|\lambda_1| + 1) {n!\over (|\lambda_1| + |\lambda_2| + 2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
 %% or alternatively
-\[ W_m =  \sum_{\substack{b \ge 1\\(b \ne m)}}
-\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + m +  \|\lambda_2\| = n + 1 }}  m (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bm]} G_{\lambda_2}\]
-
+\[ W_s =  \sum_{\substack{b \ge 1\\(b \ne s)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + s +  \|\lambda_2\| = n + 1 }}  s (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bs]} G_{\lambda_2}\]
+for all $s\ge 1$.
 
 %%% balanceds(n, m)
 The sum of all `{\bf B}alanced synthesis products', which exist after rebalancing steps, is
@@ -568,7 +568,7 @@ Finally observe that this is the definition of $H_{s+1}$, as required.\cqed
 %% \[\exp(a)\exp(b) = \exp\left(\sum_{k \ge 1} G_k \right)\]
 %% \end{corollary}
 
-\section{More Lemmas}
+\section{Main Lemmas}
 
 \begin{lemma}[Move $A$ to the Right]
 Suppose $\lambda \in C$. Then
@@ -628,7 +628,7 @@ Then apply Lemma~\ref{little.movement}:
 \[
 =
 \sum_{p\ge 1}\sum_{\substack{\lambda_1,\lambda_2\in C \\ \|\lambda_1\| +  p  + \|\lambda_2\| = n}} {n! \over (|\lambda_1|+1+|\lambda_2|)!}
- G_{\lambda_1}\sum_{S \subseteq \{1,\ldots,|{\lambda_2}|\}} G_{{\lambda_2}_{\bar S}}G_{[0p{\lambda_2}_S]}
+ G_{\lambda_1}\sum_{S \subseteq \{1,\ldots,|{\lambda_2}|\}} G_{(\lambda_2)_{\bar S}}G_{[0p(\lambda_2)_S]}
 \]
 Then apply Lemma~\ref{subset.rearrange}:
 \[
@@ -661,7 +661,7 @@ Then apply Lemma~\ref{merge.sums}:
 {k_2 + |\lambda_3| - 1\choose k_2}
  G_{\lambda}G_{[0{\lambda_3}]}
 \]
-Then apply biomial coefficient identities:
+Then apply binomial coefficient identities:
 \[
 =
 \hskip-1em
@@ -766,7 +766,38 @@ as required.
 \end{lemma}
 
 \begin{proof}
-
+Start with
+\[ W_s =  \sum_{\substack{b \ge 1\\(b \ne s)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + s +  \|\lambda_2\| = n + 1 }}  s (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} G_{[bs]} G_{\lambda_2}\]
+Then apply Lemma~\ref{little.movement}:
+\[=\sum_{\substack{b \ge 1\\(b \ne s)}}
+\sum_{\substack{\lambda_1, \lambda_2 \in C \\ \|\lambda_1\| + b + s +  \|\lambda_2\| = n + 1 }}  s (|\lambda_1| + 1) {n!\over (|\lambda_1| + 2 + |\lambda_2|)!} G_{\lambda_1} \sum_{S\subseteq \{1,\ldots,|\lambda_2|\}} G_{(\lambda_2)_{\bar S}}G_{[bs (\lambda_2)_S]} \]
+Then apply Lemma~\ref{subset.rearrange}:
+\[=\sum_{\substack{b \ge 1\\(b \ne s)}}
+\sum_{\substack{\lambda_1, \lambda_2,\lambda_3 \in C \\ \|\lambda_1\| +\|\lambda_2\| + b + s + \|\lambda_3\| = n + 1 }}  s
+(|\lambda_1| + 1)
+ {n!\over (|\lambda_1| + 2 + |\lambda_2| + |\lambda_3|)!}
+{|\lambda_2| + |\lambda_3| \choose |\lambda_2|}
+G_{\lambda_1} G_{\lambda_2}G_{[bs \lambda_3]} \]
+Then apply Lemma~\ref{merge.sum.n}:
+\[= \sum_{\substack{\lambda_1, \lambda_2,\lambda_3 \in C \\ \|\lambda_1\| +\|\lambda_2\| +  \|\lambda_3\| = n + 1 \\ \|\lambda_3\| \ge s + 1 \\ \lambda_3(1) \ne s \\ \lambda_3(2) =s }}  s
+(|\lambda_1| + 1)
+ {n!\over (|\lambda_1| + |\lambda_2| + |\lambda_3|)!}
+{|\lambda_2| + |\lambda_3| - 2 \choose |\lambda_2|}
+G_{\lambda_1} G_{\lambda_2}G_{[\lambda_3]} \]
+Then apply Lemma~\ref{merge.sums}:
+\[= \sum_{\substack{\lambda,\lambda_3 \in C \\ \|\lambda\| +  \|\lambda_3\| = n + 1 \\ \|\lambda_3\| \ge s + 1 \\ \lambda_3(1) \ne s \\ \lambda_3(2) =s }}  s
+ {n!\over (|\lambda| + |\lambda_3|)!}
+\sum_{k_2 = 0}^{|\lambda|}
+(|\lambda| - k_2 + 1)
+{k_2 + |\lambda_3| - 2 \choose k_2}
+G_{\lambda}G_{[\lambda_3]} \]
+Finally by \ref{binomial} (setting $\ell = |\lambda|$ and $m = |\lambda_3| - 2$)  this is
+\[= \sum_{\substack{\lambda,\lambda_3 \in C \\ \|\lambda\| +  \|\lambda_3\| = n + 1 \\\|\lambda_3\| \ge s + 1 \\ \lambda_3(1) \ne s \\ \lambda_3(2) =s }}  s
+ {n!\over |\lambda|!|\lambda_3|!}
+G_{\lambda}G_{[\lambda_3]}
+ = \sum_{m=s+1}^{n+1} R_m^s\]
+as required.
 \cqed
 \end{proof}
 
@@ -782,7 +813,7 @@ as required.
 \cqed
 \end{proof}
 
-\section{Little Lemmas}
+\section{Smaller Lemmas}
 If $\lambda$ is a composition, and $S\subseteq \{1,\ldots,|\lambda|\}$,
 then write
 \[\lambda_S = (\lambda(s) \st s \in S)\]
@@ -825,10 +856,15 @@ This process is clearly invertible, so the two sums are equal.
 \end{proof}
 
 \begin{lemma}[Merge Composition with Numeric Sum]
+For any function $f : C^+ \to R$,
 \label{merge.sum.n}
 \[ \sum_{\substack{\lambda \in C \\ \|\lambda\| = n \\ |\lambda| \ge 1}} f(\lambda) = \sum_m \sum_{\substack{\lambda_1 \in C \\ \|\lambda_1\| + m = n}}   f(m\lambda_1 )\]
 
 \end{lemma}
+\begin{proof}
+Follows easily from definitions.
+\cqed
+\end{proof}
 
 \begin{lemma}[Merge Composition Sums]
 For any function $f : C \x \N \to R$, we have
@@ -900,6 +936,27 @@ and by Lemma~\ref{tiny.rebalancing} this is
 \left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1\lambda_2 = p\lambda}} G_{\lambda_1 m \lambda_2}\right) +
 \left(\sum_{\substack{\lambda_1,\lambda_2 \in C \\ \lambda_1 b\lambda_2 = p\lambda \\ b \ne m}} (|\lambda_1|+1) G_{\lambda_1 [bm] \lambda_2}\right)
 \]
+as required. \cqed
+\end{proof}
+
+\begin{lemma}[A Small Binomial Identity]
+\label{binomial}
+\[\sum_{k = 0}^{\ell}\left(
+(\ell - k + 1)
+{k + m \choose m}\right)
+= { \ell + m + 2 \choose \ell}\]
+\end{lemma}
+\begin{proof}
+By induction on $\ell$. If $\ell = 0$ then we show $1 = 1$.
+Otherwise reason that
+\[\sum_{k = 0}^{\ell+1}(\ell - k + 2){k + m \choose m}\]
+\[= \left((\ell - (\ell+1) + 2){(\ell+1) + m \choose m}\right) + \left(\sum_{k = 0}^{\ell}(\ell - k + 2){k + m \choose m}\right)\]
+\[=  {\ell+1 + m \choose m} + \left(\sum_{k = 0}^{\ell}(\ell - k + 2){k + m \choose m}\right)\]
+\[=  {\ell+1 + m \choose m} + \left(\sum_{k = 0}^{\ell}{k + m \choose m} \right) + \left(\sum_{k = 0}^{\ell}(\ell - k + 1){k + m \choose m}\right)\]
+which by i.h.
+\[=  {\ell+1 + m \choose m} + \left(\sum_{k = 0}^{\ell}{k + m \choose m} \right) +  {\ell+2 + m \choose m}\]
+\[=   \left(\sum_{k = 0}^{\ell+2}{k + m \choose m} \right) \]
+\[=   {\ell + 3 + m \choose m} \]
 as required. \cqed
 \end{proof}
 
