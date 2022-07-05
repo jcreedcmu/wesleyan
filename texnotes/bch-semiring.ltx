@@ -802,15 +802,33 @@ as required.
 \end{proof}
 
 
-
 \begin{lemma}[Finalize]
 \[G_1^{n+1} + \left(\sum_{i = 1}^{n} B_i\right) + S_{n+1} = X_{n+1}\]
 \label{finalize}
 \end{lemma}
 
 \begin{proof}
-
-\cqed
+For $\lambda \in C_{n+1}$, consider the term
+\[t_\lambda = {(n+1)!\over |\lambda|!}G_\lambda\]
+ which appears in the sum
+\[X_{n+1} = \sum_{\lambda \in C_{n+1}}{(n+1)!\over |\lambda|!}G_\lambda\]
+If $|\lambda| = 1$, then $t_\lambda = S_{n+1} = (n+1)!G_{(n+1)}$, and it is accounted for on the
+left-hand side of our goal.
+If $|\lambda| = n+1$, then $t_\lambda = G_1^{n+1}$,
+ and it is accounted for on the left-hand side of our goal.
+Otherwise, $G_\lambda$ will occur throughout the sum.
+\[\sum_{i = 1}^{n} B_i\]
+For each $j \in \{1, \ldots, |\lambda|\}$, we can find an occurrence of $G_\lambda$ in $B_{\lambda(j)}$.
+Specifically, if we inspect the definition of $B$, we find that
+for each $j$ there will be a contribution of
+\[\lambda(j) {n! \over |\lambda|!}G_{\lambda} \]
+coming from $\sum_{i = 1}^{n} B_i$, for a total of
+\[\sum_{j \in \{1,\ldots, |\lambda|\}}\lambda(j) {n! \over |\lambda|!}G_{\lambda} \]
+\[= \left(\sum_{j \in \{1,\ldots, |\lambda|\}}\lambda(j)\right) {n! \over |\lambda|!}G_{\lambda} \]
+\[= \|\lambda\| {n! \over |\lambda|!}G_{\lambda} \]
+\[= (n+1) {n! \over |\lambda|!}G_{\lambda} \]
+\[=  {(n+1)! \over |\lambda|!}G_{\lambda} \]
+as required. \cqed
 \end{proof}
 
 \section{Smaller Lemmas}
