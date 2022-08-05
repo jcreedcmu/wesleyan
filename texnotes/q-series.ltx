@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{environ}
 \usepackage{ytableau}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -28,7 +29,6 @@
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
-\def\int{\square}
 \def\bd{\partial}
 \def\prov{\vdash}
 \def\prequiv{\dashv\vdash}
@@ -48,6 +48,7 @@
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\sub{\subseteq}
+
 \newenvironment{nstabbing}
   {\setlength{\topsep}{-\parskip}%
    \setlength{\partopsep}{0pt}%
@@ -58,6 +59,7 @@
 \def\MakeUppercaseUnsupportedInPdfStrings{\scshape}
 \def\poch#1#2{\left(#1;#2\right)_\infty}
 \def\pochn#1#2{\left(#1;#2\right)}
+\def\tick{{\vphantom{\sum}}'}
 
 \title{$q$-Series Notes}
 \author{Jason Reed}
@@ -68,12 +70,21 @@
    arrow style=tikz,
    diagrams={>=stealth}}
 
+
+\newif\ifshowall
+
+% Decide whether to hide everything
+%\showalltrue
+
+\NewEnviron{hide}{\ifshowall\expandafter\BODY\else {\color{gray} $\cdots$ hidden $\cdots$ } \fi}
+
+
 \section{Introduction}
-
+\begin{hide}
 This is a little \LaTeX sandbox for learning about $q$-series.
-
+\end{hide}
 \section{Jacobi Triple Product}
-
+\begin{hide}
 I understand it to be the case that
 
 \[\poch{-a}{ab}\poch{-b}{ab}\poch{ab}{ab} = \sum_{n=-\infty}^{\infty} a^{n(n+1)\over 2}b^{n(n-1)\over 2}\]
@@ -190,8 +201,13 @@ From this we deduce
 
 \[ \poch{-a}{ab} \poch{-b}{ab} = \left(\sum_{n=-\infty}^\infty a^{n(n+1)\over 2}b^{n(n-1)\over 2}\right){1\over \poch{ab}{ab} }\]
 \vfil\eject
-\section*{Stirling Numbers}
+\end{hide}
 
+
+
+
+\section*{Stirling Numbers}
+\begin{hide}
 % Here's a recipe for how to get the stirling numbers.
 
 If we generalize the $q$-Pochhammer symbol to $(a;q)_\infty$ to allow $a$ to
@@ -261,6 +277,85 @@ $(n=2) \, 1 \pp 3t \pp 2t^2$\\
 $(n=3) \, 1 \pp 6t \pp  11t^2 \pp 6t^3$\\
 \end{tabular}\]
 i.e. the Stirling numbers of the first kind.
+\end{hide}
 
 
+\section{Trying To Understand Modular Forms a Bit}
+
+So we start with
+\[\wp(z,\Lambda) = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick \left({1\over (z-\lambda)^2} - {1\over \lambda^2}\right)\]
+and we try to figure out its Laurent series.
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick \left({{1\over \lambda^2}\over (1-{z\over\lambda})^2} - {1\over \lambda^2}\right)\]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick \left({1\over \lambda^2}{1\over (1-{z\over\lambda})^2} - {1\over \lambda^2}\right)\]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick \left({1\over \lambda^2}\left(\sum_{n=0}^\infty {z^n\over\lambda^n}\right)^2 - {1\over \lambda^2}\right)\]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick {1\over \lambda^2}\left(-1 + \left(\sum_{n=0}^\infty {z^n\over\lambda^n}\right)^2 \right)\]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick {1\over \lambda^2}\left(-1 + \left(\sum_{n=0}^\infty (n+1){z^n\over\lambda^n}\right) \right)\]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick {1\over \lambda^2} \left(\sum_{n=1}^\infty (n+1){z^n\over\lambda^n}\right) \]
+\[ = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick  \left(\sum_{n=1}^\infty (n+1){z^n\over\lambda^{n+2}}\right) \]
+\[ = {1\over z^2} + \sum_{n=1}^\infty (n+1)z^n \sum_{\lambda \in \Lambda}\tick   {1\over\lambda^{n+2}} \]
+\[ = {1\over z^2} + \sum_{n=1}^\infty (n+1) G_{n+2}z^n \]
+And observe that every lattice $\Lambda$ is symmetric about the origin, so we have pairs of $\lambda$ and $-\lambda$,
+and for odd $n$ we have $G_n = 0$, because every $\lambda^{-n}$ and $(-\lambda)^{-n}$ cancel. So
+\[\wp= {1\over z^2} + \sum_{n=1}^\infty (2n+1) G_{2n+2}z^{2n}\]
+And I can consider the derivative
+\[\wp'= {-2\over z^3} + \sum_{n=1}^\infty (4n^2-2n) G_{2n+2}z^{2n-1}\]
+And now I can try to cancel out those poles. Let $T = \wp - z^{-2}$ and $T' = \wp' + 2 z^{-3}$.
+\[\wp^3=  z^{-6} + 3 z^{-4} T + 3 z^{-2} T^2 + T^3\]
+\[(\wp')^2=  4z^{-6} + 3 z^{-3} T' + (T')^2\]
+Ok so now I observe that
+\[4\wp^3 - (\wp')^2  = 12 z^{-4} T + 12 z^{-2} T^2 + 4T^3 - 3 z^{-3} T' - (T')^2\]
+eliminates the order 6 pole. What other poles do we still have? Since $T = 3G_{4}z^2 + \cdots$, we
+find $12z^{-4}T$ starts $36G_4z^{-2} + \cdots$. So I want to subtract off a copy of $36G_4\wp$.
+Oof, getting confused. Let's make some more definitions.
+Since I see $G_6$ is eventually used, let's say
+
+\[U = \sum_{n=3}^\infty (2n+1) G_{2n+2}z^{2n}\]
+\[\wp= z^{-2} + 3G_4z^2 + 5G_6z^4 + U\]
+\[\wp'= -2z^{-3} + 2G_4z + 20G_6z^3 + U'\]
+\[(\wp')^2= 4z^{-6} -8G_4z^{-2} + \cdots \]
+\[\wp^3= z^{-6} + 9G_4z^{-2} + \cdots\]
+\section{Cauchy Integral Formula}
+
+Let's try to do a little integral around the origin:
+\[\oint z^n dz\]
+Want to substitute $z = k e^{2\pi i t}$. Therefore $dz = 2\pi i k e^{2\pi i t} dt$.
+So we're trying to compute
+\[2\pi i \int_0^{1}  k^n e^{2\pi i tn} k e^{2\pi i t} dt \]
+\[= 2\pi ik^{n+1} \int_0^{1}  e^{2\pi i t(n+1)}  dt \]
+\[= 2\pi ik^{n+1} \int_0^{1}  e^{2\pi i t(n+1)}  dt \]
+\[= \begin{cases}
+\displaystyle 2\pi ik^{n+1} \int_0^{1}  dt & \hbox{if $n=-1$;}\\
+\displaystyle2\pi ik^{n+1} \int_0^{1}  e^{2\pi i t(n+1)}  dt & \hbox{ow.}
+\end{cases} \]
+\[= \begin{cases}
+\displaystyle 2\pi i   & \hbox{if $n=-1$;}\\
+\displaystyle {k^{n+1}\over n+1} (  e^{2\pi i t(n+1)})\bigg|_0^{1} & \hbox{ow.}
+\end{cases} \]
+\[= \begin{cases}
+\displaystyle 2\pi i   & \hbox{if $n=-1$;}\\
+\displaystyle 0 & \hbox{ow.}
+\end{cases} \]
+How could I think of this with respect to a DFT?
+Change $\int_0^1$ to something like $\sum_{t = 0}^{N-1}$.
+Substitute $e^{2\pi i t/ N}$ for $z$, turning  $z^n$ into $e^{2\pi i t n/ N}$. We do find that
+\[= \sum_{t=0}^{N-1} e^{2\pi i tn / N} = \begin{cases}
+\displaystyle N   & \hbox{if $n=0\pmod N$;}\\
+\displaystyle 0 & \hbox{ow.}
+\end{cases} \]
+
+\section{Lagrange Interpolation}
+
+If I want to make a polynomial $f(x)$ that is 1 at $x = a_i$ and $0$ for $x=a_j$ for $j\ne i$,
+then what I want is:
+\[ \prod_{j\ne i} \left(x-a_j\over a_i - a_j\right)\]
+So if I want a polynomial that is 1 everywhere, I can sum all these basis functions:
+\[1 = \sum_i \prod_{j\ne i} \left(x-a_j\over a_i - a_j\right)\]
+What is this telling me combinatorially? Let me do some manipulations.
+\[1 = \sum_i \prod_{j\ne i} \left(x/a_j-1\over a_i/a_j - 1\right)\]
+\[1 = \sum_i \prod_{j\ne i} \left(1 - x/a_j\over 1 - a_i/a_j \right)\]
+Let's say $A = \prod_j a_j$ and $A_i= \prod_{j \ne i} a_j$.
+Suppose $i,j$ range over $1,\ldots,n$. Then
+\[A^{n-1} = \sum_i \prod_{j\ne i} \left(A - A_jx\over 1 - a_i/a_j \right)\]
+\[A^{n-1} = \sum_i \prod_{j\ne i} (A - A_jx) L[a_i/a_j]\]
+Nope I'm stuck here.
 \end{document}
