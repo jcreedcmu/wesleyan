@@ -656,6 +656,31 @@ So actually I only need to confirm that
 \[ q(1 + qz - (1-qz^2)(1-q)(q^2z^3 - 3qz^2 + 4z)) = (1-qz)^2(1 + qz - (1-qz^2)(1-q)(1-qz))\]
 But hm sage checking that fails.
 
+This works:
+\begin{verbatim}
+var('q z')
+def f(q,z):
+    return (1 + q * z) / ((1 - q * z^2)*(1-q)*((1-q*z)^3))
+def d(x):
+    return (x^2 - 3 * x + 4 ) / (1 - x)^3
+def delta(q,z):
+    return z * d(q * z)
+#def sigma(q,z):
+#    return  (1 + q*z) / ((1-q*z^2) * (1-q) *(1-q*z))
+def sigma(q,z):
+    return (q^2*z^3 - q*z^3 - q*z^2 - q*z + z^2 + 2*z + 1) / ((1-q*z^2) * (1-q) *(1-q*z))
+def disp(pp, N):
+    def coe(m,n):
+        return (diff(diff(pp, q, n), z, m).subs(z=0,q=0) /
+                (factorial(n) * factorial(m)))
+    return Matrix([[z^m * q^n * coe(m,n)
+             for m in range(N)] for n in range(N)])
+#print(disp(f(q,z), 5))
+#print(disp(delta(q,z), 5))
+#print(disp(sigma(q,z), 5))
+#print(disp(f(q,z) * (1-z)^2 - sigma(q,z) + delta(q,z), 5))
+print ((f(q,z) * (1-z)^2 - sigma(q,z) + delta(q,z)).subs(q=0.123, z=0.4976))
+\end{verbatim}
 %% P.<q, z> = QQ[]
 %% q*(1+q*z - (1-q*z^2)*(1-q)*(q^2*z^3 - 3*q*z^2 + 4*z)) - (1-q*z)^2 *(1 + q*z - (1-q*z^2)*(1-q)*(1-q*z))
 
