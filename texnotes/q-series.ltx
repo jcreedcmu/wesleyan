@@ -350,12 +350,188 @@ then what I want is:
 \[ \prod_{j\ne i} \left(x-a_j\over a_i - a_j\right)\]
 So if I want a polynomial that is 1 everywhere, I can sum all these basis functions:
 \[1 = \sum_i \prod_{j\ne i} \left(x-a_j\over a_i - a_j\right)\]
-What is this telling me combinatorially? Let me do some manipulations.
-\[1 = \sum_i \prod_{j\ne i} \left(x/a_j-1\over a_i/a_j - 1\right)\]
-\[1 = \sum_i \prod_{j\ne i} \left(1 - x/a_j\over 1 - a_i/a_j \right)\]
-Let's say $A = \prod_j a_j$ and $A_i= \prod_{j \ne i} a_j$.
-Suppose $i,j$ range over $1,\ldots,n$. Then
-\[A^{n-1} = \sum_i \prod_{j\ne i} \left(A - A_jx\over 1 - a_i/a_j \right)\]
-\[A^{n-1} = \sum_i \prod_{j\ne i} (A - A_jx) L[a_i/a_j]\]
-Nope I'm stuck here.
+
+
+\[ = \sum_i \left(\prod_{j< i} \left(x-a_j\over a_i - a_j\right)\right)\left(\prod_{j> i} \left(x-a_j\over a_i - a_j\right)\right)\]
+\[ = \sum_i \left(\prod_{j< i} \left(a_j - x\over a_j - a_i \right)\right)\left(\prod_{j> i} \left(x-a_j\over a_i - a_j\right)\right)\]
+\[\prod_{i < j}(a_i - a_j) = \sum_i \left(\prod_{j< i} \left(a_j - x \right)\right)\left(\prod_{j> i} \left(x-a_j\right)\right)\]
+\[f(\bar a) = \sum_i f([x/i]\bar a)\]
+
+
+
+
+Define
+\[f(\bar a) = \prod_{i < j} a_i - a_j\]
+and claim:
+\[f(\bar a) = \sum_i f([x/i]\bar a)\]
+Try to prove by induction. For the base case we observe
+\[a_1- a_2 = x - a_2 + a_1-  x\]
+therefore
+\[f(a_1, a_2) = f(x, a_2) + f(a_1, x)\]
+In the step case suppose every $\sum_i$ means $\sum_{i=1}^{|\bar a|}$ and we're trying to show
+\[f(\bar a, b) = f(\bar a, x) + \sum_i f([x/i]\bar a, b)\]
+By definition of $f$ we have
+\[f(\bar a, b) = f(\bar a)\prod_j (a_j - b)\]
+and so
+\[f([x/i]\bar a, b) = f([x/i]\bar a)\left(x-b \right)\prod_{j\ne i} (a_j - b)\]
+
+So our goal is now
+\[f(\bar a)\prod_j (a_j - b) = f(\bar a)\prod_j (a_j - x) + \sum_i f([x/i]\bar a)\left(x-b  \right)\prod_{j\ne i} (a_j - b)\]
+Equivalently
+\[f(\bar a)\prod_j (a_j - b) = f(\bar a)\prod_j (a_j - x) + \sum_i f([x/i]\bar a)\left((x-a_i)+(a_i-b)  \right)\prod_{j\ne i} (a_j - b)\]
+Or
+\[f(\bar a)\prod_j (a_j - b) = f(\bar a)\prod_j (a_j - x) \]
+\[{} + \sum_i f([x/i]\bar a)\left(x-a_i  \right)\prod_{j\ne i} (a_j - b)\]
+\[{} + \sum_i f([x/i]\bar a)\left(a_i-b  \right)\prod_{j\ne i} (a_j - b)\]
+Or
+\[f(\bar a)\prod_j (a_j - b) = f(\bar a)\prod_j (a_j - x) \]
+\[{} + \sum_i f([x/i]\bar a)\left(x-a_i  \right)\prod_{j\ne i} (a_j - b)\]
+\[{} + \sum_i f([x/i]\bar a)\prod_{j} (a_j - b)\]
+And with the induction hypothesis we see this is
+\[f(\bar a)\prod_j (a_j - b) = f(\bar a)\prod_j (a_j - x) \]
+\[{} + \sum_i f([x/i]\bar a)\left(x-a_i  \right)\prod_{j\ne i} (a_j - b)\]
+\[{} +  f(\bar a)\prod_{j} (a_j - b)\]
+So
+\[0 = f(\bar a)\prod_j (a_j - x)+ \sum_i f([x/i]\bar a)\left(x-a_i  \right)\prod_{j\ne i} (a_j - b)\]
+and
+\[ \sum_i f([x/i]\bar a)\left(a_i-x  \right)\prod_{j\ne i} (a_j - b) = f(\bar a)\prod_j (a_j - x)\]
+now
+\[ \sum_i f([x/i]\bar a)\left((a_i-b)+(b-x)  \right)\prod_{j\ne i} (a_j - b) = f(\bar a)\prod_j (a_j - x)\]
+\[ \left(\sum_i f([x/i]\bar a)(a_i-b)\prod_{j\ne i} (a_j - b)\right) +
+\left(\sum_i f([x/i]\bar a)(b-x) \prod_{j\ne i} (a_j - b)\right) = f(\bar a)\prod_j (a_j - x)\]
+\[ \left(\sum_i f([x/i]\bar a)\prod_{j} (a_j - b)\right) +
+\left(\sum_i f([x/i]\bar a)(b-x) \prod_{j\ne i} (a_j - b)\right) = f(\bar a)\prod_j (a_j - x)\]
+\[ f(\bar a)\prod_{j} (a_j - b) +
+\left(\sum_i f([x/i]\bar a)(b-x) \prod_{j\ne i} (a_j - b)\right) = f(\bar a)\prod_j (a_j - x)\]
+
+\section{Fresh}
+Define
+\[f(\bar a) = \prod_{i < j} a_i - a_j\]
+\[\bar a = (a_1,\ldots, a_n) \rightarrow  [i]\bar a = (a_1, \ldots, a_{i-1}, 0, a_{i+1},\ldots, a_n)\]
+We want to show the recurrence:
+\[f(\bar a) = \sum_i f([i]\bar a)\]
+The $n=2$ case is easy: $a - b = -b + a$.
+
+Notice that
+\[f(\bar a, c) = f(\bar a)\prod_j (a_j - c) \]
+%% and
+%% \[f([i]\bar a, c) = f( [i]\bar a) (-c)\prod_{j\ne i} (a_j - c)\]
+%% The step case requires
+%% \[f(\bar a, c) = f(\bar a, 0) + \sum_i f([i]\bar a, c)\eqno(*)\]
+
+I want to expand out
+\[\prod_j (a_j - c)\]
+in powers of $-c$.
+\[\prod_j (a_j - c) = \sum_{m} (-c)^m \sum_{J \subseteq n \atop |J| = n-m} \prod_{j\in J} a_j\]
+Therefore
+\[f(\bar a, c) = f(\bar a)\sum_{m} (-c)^m \sum_{J \subseteq n \atop |J| = n-m} a_J \]
+where $a_J = \prod_{j\in J} a_j$.
+Now the step case of the induction requires
+\[f(\bar a, c) = f(\bar a, 0) + \sum_i f([i]\bar a, c)\eqno(*)\]
+hence
+\[f(\bar a)\sum_{m} (-c)^m \sum_{J \subseteq n \atop |J| = n-m} a_J = f(\bar a)\prod_j a_j + \sum_i f([i]\bar a, c)\]
+hence what we need is
+\[f(\bar a)\sum_{m\ge 1} (-c)^m \sum_{J \subseteq n \atop |J| = n-m} a_J =  \sum_i f([i]\bar a, c)\]
+\[f(\bar a)\sum_{m\ge 1} (-c)^m \sum_{J \subseteq n \atop |J| = n-m} a_J =
+\sum_i f([i]\bar a)\sum_{m\ge 1} (-c)^m \sum_{J \subseteq n\setminus i \atop |J| = n-m} a_J\]
+So I think what this is telling me that at any $m \ge 1$ we need
+\[f(\bar a) \sum_{J \subseteq n \atop |J| = n-m} a_J =
+\sum_i f([i]\bar a) \sum_{J \subseteq n\setminus i \atop |J| = n-m} a_J\]
+i.e. by i.h.
+\[\sum_i f([i]\bar a) \sum_{J \subseteq n \atop |J| = n-m} a_J =
+\sum_i f([i]\bar a) \sum_{J \subseteq n\setminus i \atop |J| = n-m} a_J\]
+
+\[\sum_i f([i]\bar a) \sum_{\substack{J \subseteq n \\ |J| = n-m \\ i \in J}} a_J = 0\]
+\[\sum_i f([i]\bar a)a_i \sum_{\substack{J \subseteq n\setminus i \\ |J| = n-m-1 }} a_J = 0\]
+
+I guess try to show this by induction on $\bar a$ now? For $n=2$, I have
+$ab - ba = 0$, because $m \ge 1$ and $n = 2$ means $|J|=0$.
+
+In the step case, let $b = a_{n+1}$ and try to show
+\[\left(f(\bar a, 0)b \sum_{\substack{J \subseteq n \\ |J| = n-m }} a_J\right) + \sum_i f([i]\bar a, b)a_i \sum_{\substack{J \subseteq (n+1)\setminus i \\ |J| = n-m }} a_J = 0\]
+
+\section{Divergent Sums}
+
+Suppose $\zeta$ is an $n^{th}$ root of unity. Let
+\[b(q) = {q\over (1-q)^2} = q + 2q^2 + 3q^3 + 4q^4 + \cdots\]
+
+Then it's pretty easy to see by inspecting the power series that
+\[\sum_{i=0}^{n-1}  b(\zeta^i q) = n^2 b(q^n)\]
+If I define
+\[Q = \prod_{i=1}^{n-1}(1-\zeta^i q) \qquad Q_j = Q / (1-\zeta^j q)\]
+then I should be able to reason that
+\[b(q) + \sum_{i=1}^{n-1}  b(\zeta^i q) = n^2 b(q^n)\]
+\[b(q) Q^2 + \sum_{i=1}^{n-1}  b(\zeta^i q)Q^2 = n^2 b(q^n) Q^2\]
+\[b(q) Q^2 + \sum_{i=1}^{n-1}  {\zeta^i q\over (1-\zeta^i q)^2}Q^2 = n^2 b(q^n) Q^2\]
+\[b(q) Q^2 + \sum_{i=1}^{n-1}  \zeta^i q Q_i^2 = n^2 b(q^n) Q^2\]
+
+\begin{lemma}
+\[Q = \sum_{k=0}^{n-1} q^k\]
+\end{lemma}
+
+\begin{proof}
+It should be sufficiently clear that
+\[\prod_{i=0}^{n-1}(q-\zeta^i) = q^n - 1\]
+That is the unique polynomial that has precisely those roots. Replace $q$ with $q^{-1}$:
+\[\prod_{i=0}^{n-1}(q^{-1}-\zeta^i) = q^{-n} - 1\]
+Multiply by $q^n$:
+\[\prod_{i=0}^{n-1}(1-\zeta^iq) = 1 - q^n = \left(\sum_{k=0}^{n-1} q^k\right) - \left(\sum_{k=1}^{n} q^k\right)\]
+Divide by $(1-q)$:
+\[\prod_{i=1}^{n-1}(1-\zeta^iq) = \sum_{k=0}^{n-1} q^k\]
+as required. \cqed
+\end{proof}
+
+Define
+\[p(u) = \prod_{i = 1}^{n-1} (1-\zeta^i uq)\]
+\begin{lemma}
+$Q_j(1-q) = p(\zeta^j)$
+\end{lemma}
+
+\begin{proof}
+\[ Q_j(1-q) = (1-\zeta^j q)^{-1} Q(1-q) \]
+\[ = {(1-q)(1-\zeta^j q)^{-1}\prod_{i=1}^{n-1}(1-\zeta^i q)} \]
+\[ = (1-\zeta^j q)^{-1}{\prod_{i=0}^{n-1}(1-\zeta^i q)} \]
+\[ = (1-\zeta^j q)^{-1}{\prod_{i=j}^{n+j-1}(1-\zeta^i q)} \]
+\[ = {\prod_{i=j+1}^{n+j-1}(1-\zeta^i q)} \]
+\[ = {\prod_{i=1}^{n-1}(1-\zeta^i \zeta^j q)} = p(\zeta^j)\]
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+\[\sum_{i=0}^{n-1} \zeta^i p(\zeta^i)^2 = n^2 q^{n-1}\]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+\[p(1) = \left(\sum_{t = 0}^{n-1} q^t\right)^2\]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+\[\sum_{i=1}^{n-1}  \zeta^i q Q_i^2 = -\sum_{t=0}^{2t-4} {t+3\choose t} q^t\]
+% 3 → 2
+% 4 → 4
+% 5 → 6
+% -q^6 - 4*q^5 - 10*q^4 - 20*q^3 - 10*q^2 - 4*q - 1
+\end{lemma}
+
+\begin{proof}
+\[\sum_{i=1}^{n-1}  \zeta^i q Q_i^2 = \sum_{i=1}^{n-1} {\zeta^i p(\zeta^i)^2\over(1-q)^2}\]
+\[= {-p(1) + \sum_{i=0}^{n-1} \zeta^i p(\zeta^i)^2\over(1-q)^2}\]
+\[= {-p(1) + n^2 q^{n-1} \over (1-q)^2}\]
+\[= {-\left(\sum_{t = 0}^{n-1} q^t\right)^2 + n^2 q^{n-1} \over (1-q)^2}\]
+Now I need to show that
+\[\left(\sum_{t = 0}^{n-1} q^t\right)^2 = n^2 q^{n-1} + \left(\sum_{t=0}^{2t-3} {t+3\choose t} q^t\right)(1-q)^2\]
+\cqed
+\end{proof}
+
 \end{document}
