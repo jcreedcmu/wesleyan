@@ -25,7 +25,7 @@
 \definecolor{purple}{HTML}{af00af}
 \def\rr#1{{\color{red}\mathbf {#1}}}
 \def\bb#1{{\color{blue}\mathbf{#1}}}
-\def\Z{\mathcal A}
+\def\Z{\mathbb Z}
 \def\adjust{\big|}
 \def\O{\mathcal{O}}
 \def\rid{\mathsf{id}}
@@ -59,6 +59,7 @@
 \def\MakeUppercaseUnsupportedInPdfStrings{\scshape}
 \def\poch#1#2{\left(#1;#2\right)_\infty}
 \def\pochn#1#2{\left(#1;#2\right)}
+\def\si{_\infty}
 \def\tick{{\vphantom{\sum}}'}
 
 \title{$q$-Series Notes}
@@ -281,7 +282,7 @@ i.e. the Stirling numbers of the first kind.
 
 
 \section{Trying To Understand Modular Forms a Bit}
-
+\begin{hide}
 So we start with
 \[\wp(z,\Lambda) = {1\over z^2} + \sum_{\lambda \in \Lambda}\tick \left({1\over (z-\lambda)^2} - {1\over \lambda^2}\right)\]
 and we try to figure out its Laurent series.
@@ -314,8 +315,9 @@ Since I see $G_6$ is eventually used, let's say
 \[\wp'= -2z^{-3} + 2G_4z + 20G_6z^3 + U'\]
 \[(\wp')^2= 4z^{-6} -8G_4z^{-2} + \cdots \]
 \[\wp^3= z^{-6} + 9G_4z^{-2} + \cdots\]
+\end{hide}
 \section{Cauchy Integral Formula}
-
+\begin{hide}
 Let's try to do a little integral around the origin:
 \[\oint z^n dz\]
 Want to substitute $z = k e^{2\pi i t}$. Therefore $dz = 2\pi i k e^{2\pi i t} dt$.
@@ -342,9 +344,9 @@ Substitute $e^{2\pi i t/ N}$ for $z$, turning  $z^n$ into $e^{2\pi i t n/ N}$. W
 \displaystyle N   & \hbox{if $n=0\pmod N$;}\\
 \displaystyle 0 & \hbox{ow.}
 \end{cases} \]
-
+\end{hide}
 \section{Lagrange Interpolation}
-
+\begin{hide}
 If I want to make a polynomial $f(x)$ that is 1 at $x = a_i$ and $0$ for $x=a_j$ for $j\ne i$,
 then what I want is:
 \[ \prod_{j\ne i} \left(x-a_j\over a_i - a_j\right)\]
@@ -403,8 +405,7 @@ now
 \left(\sum_i f([x/i]\bar a)(b-x) \prod_{j\ne i} (a_j - b)\right) = f(\bar a)\prod_j (a_j - x)\]
 \[ f(\bar a)\prod_{j} (a_j - b) +
 \left(\sum_i f([x/i]\bar a)(b-x) \prod_{j\ne i} (a_j - b)\right) = f(\bar a)\prod_j (a_j - x)\]
-
-\section{Fresh}
+\subsection{Fresh}
 Define
 \[f(\bar a) = \prod_{i < j} a_i - a_j\]
 \[\bar a = (a_1,\ldots, a_n) \rightarrow  [i]\bar a = (a_1, \ldots, a_{i-1}, 0, a_{i+1},\ldots, a_n)\]
@@ -449,9 +450,10 @@ $ab - ba = 0$, because $m \ge 1$ and $n = 2$ means $|J|=0$.
 
 In the step case, let $b = a_{n+1}$ and try to show
 \[\left(f(\bar a, 0)b \sum_{\substack{J \subseteq n \\ |J| = n-m }} a_J\right) + \sum_i f([i]\bar a, b)a_i \sum_{\substack{J \subseteq (n+1)\setminus i \\ |J| = n-m }} a_J = 0\]
+\end{hide}
 
 \section{Divergent Sums}
-
+\begin{hide}
 Suppose $\zeta$ is an $n^{th}$ root of unity. Let
 \[b(q) = {q\over (1-q)^2} = q + 2q^2 + 3q^3 + 4q^4 + \cdots\]
 
@@ -681,6 +683,7 @@ def disp(pp, N):
 #print(disp(f(q,z) * (1-z)^2 - sigma(q,z) + delta(q,z), 5))
 print ((f(q,z) * (1-z)^2 - sigma(q,z) + delta(q,z)).subs(q=0.123, z=0.4976))
 \end{verbatim}
+\end{hide}
 %% P.<q, z> = QQ[]
 %% q*(1+q*z - (1-q*z^2)*(1-q)*(q^2*z^3 - 3*q*z^2 + 4*z)) - (1-q*z)^2 *(1 + q*z - (1-q*z^2)*(1-q)*(1-q*z))
 
@@ -692,4 +695,74 @@ print ((f(q,z) * (1-z)^2 - sigma(q,z) + delta(q,z)).subs(q=0.123, z=0.4976))
 %% def sigma(q,z):
 %%     return (1/q) * ((1 + q*z) / ((1-q*z^2) * (1-q) *(1-q*z)) - 1)
 %% (f(q,z) - delta(q,z) - (1-z)^2 * sigma(q,z)).subs(q=0.1,z=0.06)
+
+\section{Reflection Groups}
+\begin{hide}
+Suppose we have a twice contravariant tensor $A_{ij}$. Suppose it's symmetric, $A_{ij} = A_{ji}$, and it has
+2's along the diagonal: $A_{ii} = 1$. We view this as a quadratic form on vectors by defining
+\[Define $z = A_{nj}v^j\]
+\[ Q(v) = A_{ij}v^iv^j\]
+We claim that for any $n$,
+\[(\sigma_n)^i_j = \delta^i_j - 2\delta^i_n A_{nj}\]
+is a reflection that preserves $Q$.  Then calculate:
+\[Q(\sigma v) = Q\left(\sigma^i_j v^j\right)\]
+\[ = Q\left((\delta^i_j - 2\delta^i_n A_{nj}) v^j\right)\]
+\[ = Q\left( v^i - 2\delta^i_n  A_{nj} v^j\right)\]
+\[ = Q\left( v^i - 2\delta^i_n  z \right)\]
+\[ = A_{ii'}\left(v^i - 2\delta^i_n  z\right)\left(v^{i'} - 2\delta^{i'}_n  z\right)\]
+\[ = A_{ii'}\left( v^iv^{i'} - 2(\delta^i_n v^{i'} + \delta^{i'}_n v^i)z + 4\delta^i_n\delta^{i'}_nz^2\right)\]
+\[ =  Q(v) - 2(A_{ni'} v^{i'} + A_{in} v^i)z + 4A_{nn}z^2\]
+\[ =  Q(v) - 4 z^2 + 4z^2\]
+\[ = Q(v)\]
+\end{hide}
+\section{Quintuple Product}
+From ``An elementary approach to
+the macdonald identities'' I have the claim that the $ A_{n-1}$ identity is
+\[ (q)^{n-1}_\infty\prod_{1\le i < j \le n} (x_j/x_i)_\infty (qx_i/x_j)_\infty =\]
+\[ \sum_\mu x_1^{nm_1}\cdots x_n^{nm_n} q^{{1\over 2}\sum_{i=1}^n nm_i^2 + m_i(n+1)-2i}
+\prod_{1 \le i < j \le n}(1-x_jq^{m_j-m_i}/x_i)
+\]
+where $\mu = \{(m_1, \ldots, m_n) \in \Z^n \st \sum_i m_i = 0\}$.
+
+The $BC_n$ identity is something complicated. I'm going to try to write the product side at least.
+\[ F(x_1, \ldots,x_n) = (q)\si^n \left(\prod_{i=1}^n (1/x_i)\si (qx_i)\si(qx^2_i;q^2)\si(q/x^2_i;q^2)\si\right)\]
+\[\left(\prod_{1\le i < j \le n} (1/x_ix_j)\si(qx_ix_j)\si(x_j/x_i)\si(qx_i/x_j)\si\right)\]
+
+Shaun Cooper writes the quintuple product identity in (1.7) as
+
+\[\sum_{n=-\infty}^{\infty} p^{n(3n+1)/2}(x^{3n}-x^{-3n-1}) \]
+\[= \prod_{n=1}^\infty (xp;p)\si(x^{-1};p)\si(p;p)\si(x^2p;p^2)\si(x^{-2}p;p^2)\si\]
+which I can further work on by substituting $p \leftarrow \sqrt{q}$:
+\[= \prod_{n=1}^\infty (x\sqrt{q};\sqrt{q})\si(x^{-1};\sqrt{q})\si(\sqrt{q};\sqrt{q})\si(x^2\sqrt{q})\si(x^{-2}\sqrt{q})\si\]
+\[= \prod_{n=1}^\infty (x\sqrt{q})\si(xq)\si(x^{-1}\sqrt{q})\si(x^{-1})\si(\sqrt{q})\si(q)\si(x^2\sqrt{q})\si(x^{-2}\sqrt{q})\si\]
+
+This is starting to look like the $A_2$ case. I could consider the change of basis:
+\[(x_1,x_2,x_3) = ( ax^2q^{-1/2}, ax, a)\]
+
+But Cooper insists the quintuple product is a special case of $BC_1$,
+rather than $A_2$. I'm going to try to understand that, then. Cooper writes the $BC_n$ identity as
+
+\[ (q)\si^n \prod_{i=1}^n (qx_i,x_i^{-1};q)\si(qx_i^2,x_i^{-2};q^2)\si
+\prod_{1\le i < j\le n} (qx_ix_j,x_i^{-1}x_j^{-1},x_i^{-1}x_j,qx_ix_j^{-1};q)\si\]
+\[ = \sum_{m_1,\ldots,m_n=-\infty}^\infty q^{\sum_{i=1}^n (2n+1){m_i + 1\choose 2}-im_i}x_1^{(2n+1)m_1}\cdots x_n^{(2n+1)m_n}\]
+\[ \x \prod_{i=1}^n (1-x_i^{-1} q^{-m_i}) \prod_{1 \le i < j \le n} (1-x_i^{-1}x_j^{-1}q^{-m_i-m_j})(1-x_i^{-1}x_jq^{m_j-m_i})\]
+
+when $n = 1$ this is
+
+\[ (q)\si  (qx,x^{-1};q)\si(qx^2,x^{-2};q^2)\si\]
+\[ = \sum_{m=-\infty}^\infty q^{ 3m(m+1)/2-m}x^{3m} (1-x^{-1} q^{-m})\]
+
+which turns out to be closer to Cooper's (1.11) than (1.7), but they're still all equivalent.
+
+\subsection{Massaging This}
+Let's just look at the product side:
+\[(q;q)\si (qx;q)\si(x^{-1};q)\si(qx^2;q^2)\si(x^{-2};q^2)\si\]
+I can `normalize' this to $q^2$ increments. Let's write $[a]$ for $(a;q^2)\si$.
+\[[q][q^2] [qx][q^2x][x^{-1}][x^{-1}q][qx^2][x^{-2}]\]
+
+And for comparison, let's look at forms of the triple product:
+\[(pE^{1/2};E)\si(p^{-1}E^{1/2};E)\si(E;E)\si \]
+Let's say $q^2 = E$ and $p=x$: then this is
+\[(xq;q^2)\si(x^{-1}q;q^2)\si(q^2;q^2)\si \]
+\[ = [qx][x^{-1}q][q^2] \]
 \end{document}
