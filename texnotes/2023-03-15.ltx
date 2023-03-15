@@ -1,0 +1,319 @@
+\documentclass{article}
+\usepackage{amssymb}
+\input{theorem}
+
+\input{prooftree}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\pair#1#2{\langle #1 , #2 \rangle}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{calc}
+\definecolor{morange}{rgb}{1,0.56,0}
+\definecolor{lorange}{rgb}{1,0.95,0.8}
+\definecolor{mgreen}{rgb}{0,0.56,0}
+\definecolor{lgreen}{rgb}{0.5,0.76,0.5}
+\definecolor{mblue2}{rgb}{0,0.2,1.0}
+\definecolor{lblue}{rgb}{0.8,0.95,1}
+\definecolor{lred}{rgb}{0.9,0.5,0.5}
+\definecolor{mred}{rgb}{0.9,0.25,0.25}
+\definecolor{mgreen}{rgb}{0.1,0.5,0.1}
+\definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
+\def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
+\def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
+\def\bitfg#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0,-2) }}
+\def\binj{\mathbf{inj}}
+\def\blet{\mathrel\mathbf{let}}
+\def\bin{\mathrel\mathbf{in}}
+\def\bmatch{\mathrel\mathbf{match}}
+\def\bwith{\mathrel\mathbf{with}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\pdbck{\ar[ddr, phantom, pos=0, "\lrcorner"]}
+\def\ups{{\uparrow}}
+\def\dns{{\downarrow}}
+\def\Adjust{\Bigg|}
+\def\adjust{\Big|}
+\def\O{\mathcal{O}}
+\def\rid{\mathsf{id}}
+\def\ridp{\mathsf{idp}}
+\def\rcoe{\mathsf{coe}}
+\def\rtype{\mathsf{type}}
+\def\int{\square}
+\def\bd{\partial}
+\def\prov{\vdash}
+\def\pprov{\vdash\!\!\!\vdash}
+\def\prequiv{\dashv\vdash}
+\def\imp{\Rightarrow}
+\def\cqed{\hskip2mm{\vrule width .5em height .5em depth 0em}} % at the end of a |P.
+\def\o{\circ}
+\def\lx{\bigcirc}
+\def\B{\mathbb{B}}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\E{\mathbf{E}}
+\def\R{\mathbb{R}}
+\def\two{\mathbf{2}}
+\def\S{\mathbb{S}}
+\def\M{\mathbb{M}}
+\def\X{\mathbf{X}}
+\def\Y{\mathcal{Y}}
+\def\x{\times}
+\def\st{\mathrel|}
+\def\rset{\mathbf{Set}}
+\def\rcat{\mathbf{Cat}}
+\def\op{\mathsf{op}}
+\def\P{\mathbb{P}}
+\def\I{\mathbb{I}}
+\def\U{\mathbb{U}}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\tw{\mathbf{2}}
+\def\dash{\hbox{---}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\cod{\mathop{\mathrm{cod}}}
+\def\celse{\mathrel{|}}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\llam#1{\langle {#1} \rangle}
+\def\hf{{\odot}}
+
+\begin{document}
+\tikzset{>=stealth}
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+\section{Main}
+
+\subsection{Polynomials Again}
+I want to describe a higher-dimensional category. An $n$-cell of this category is
+\begin{itemize}
+\item A choice of box $B = [a_1, b_1] \x \cdots \x [a_n,b_n] \subseteq \R^n$
+\item A map $f: B\to \R$ defined by a polynomial over $n$ variables $x_1, \ldots, x_n$,
+which we also write sometimes as $x,y,z,w,\ldots$.
+\end{itemize}
+subject to some restrictions on zeroes of that polynomial and its derivatives.
+Let $f_0$ be a synonym for $f$, and for $i > 0$ say
+\[f_i = {\partial\over\partial x_i} f\]
+
+The {\em positional dimension} of a point $x\in B$ is defined as
+\[ |x|_k = \min (\{i-1 \st x_i \in \{a_i,b_i\}\} \cup \{n-k\})\]
+Here's a picture of $|x|_{1/2}$ for a 2-cell:
+
+\[\begin{tikzpicture}
+\fill[lred] (0,0)--(0,2)--(2,2)--(2,0)--cycle;
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\node at (0,1)[left, mblue] {$0$};
+\node at (2,1)[right, mblue] {$0$};
+
+\draw[line width=2pt, mgreen] (0,0)--(2,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (1,0)[below, mgreen] {$1$};
+\node at (1,2)[above, mgreen] {$1$};
+\node at (1,1)[white] {$3/2$};
+
+\fill[mblue] (0,2) circle (2pt);
+\fill[mblue] (2,2) circle (2pt);
+\fill[mblue] (2,0) circle (2pt);
+\fill[mblue] (0,0) circle (2pt);
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_1$};
+\node (y) at (0,-.5)[below] {$x_2$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+
+We define a three-place relation on $f,x,i$ for integer $i$ by saying
+\[f^i[x] \iff \exists j \le i.f_j(x) \ne 0\]
+This could be pronounced ``$f$ is $i$-stable at $x$''.
+
+We define a three-place relation on $f,x,i$ for half-integer $i+1/2$ by saying
+\[f^{i+1/2}[x] \iff f_{i+1}(x)>0 \lor f^{i}[x]\]
+This could be pronounced ``$f$ is monotone $i$-stable at $x$''.
+
+These are related by
+\[{ i \le j \over  f^i[x] \imp f^j[x] }\]
+A box-map $f : B \to \R$ is $k$-good if
+\[\forall x \in B. f^{|x|_k}[x]  \]
+To be $0$-good is to be something like a relation. To be a function-like morphism is to be $1/2$-good.
+To be an invertible morphism is to be $1$-good.
+
+\subsection{Multiple Categories}
+
+Here's a different idea that is, for example, for $n=2$, more like a double category than a 2-category.
+Let $p_i$ be the predicate that $f_i \ne 0$. I might try requiring merely:
+
+\[\begin{tikzpicture}
+\fill[lred] (0,0)--(0,3)--(3,3)--(3,0)--cycle;
+\draw[line width=2pt, mgreen] (0,0)--(0,3);
+\draw[line width=2pt, mgreen] (3,0)--(3,3);
+\node at (0,1.5)[left, mgreen] {$p_0 \lor p_2$};
+\node at (3,1.5)[right, mgreen] {$p_0 \lor p_2$};
+
+\draw[line width=2pt, mgreen] (0,0)--(3,0);
+\draw[line width=2pt, mgreen] (0,3)--(3,3);
+\node at (1.5,0)[below, mgreen] {$p_0 \lor p_1$};
+\node at (1.5,3)[above, mgreen] {$p_0 \lor p_1$};
+\node at (1.5,1.5)[white] {$p_0 \lor p_1 \lor p_2$};
+
+\fill[mblue] (0,3) circle (2pt) node[above left] {$p_0$};
+\fill[mblue] (3,3) circle (2pt) node[above right] {$p_0$};
+\fill[mblue] (3,0) circle (2pt) node[below right] {$p_0$};
+\fill[mblue] (0,0) circle (2pt) node[below left] {$p_0$};
+
+\begin{scope}[shift={(-1.25,4.25)}]
+\node (x) at (.5,0)[right] {$x_1$};
+\node (y) at (0,-.5)[below] {$x_2$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+
+This is particularly pleasing when I realize that it's effectively
+saying: considering all the derivatives {\em that I can actually take}
+given how I might be situated on a boundary of the cell, at least one
+of them is nonzero.
+
+So, formally, an $n$-cell is
+\begin{itemize}
+\item A choice of box $B = [a_1, b_1] \x \cdots \x [a_n,b_n] \subseteq \R^n$
+\item A map $f: B\to \R$ defined by a polynomial over $n$ variables $x_1, \ldots, x_n$.
+\item Such that $\forall x \in B. \exists i \in [0,n]. f_i(x) \ne 0$.
+\end{itemize}
+
+Where I think of $f_i$ being undefined when $i > 0$ and $x_i \in \{a_i,b_i\}$,
+so I cannot satisfy $f_i(x) \ne 0$ in that case. $f_0(x) \ne 0$
+is always an option, and is therefore required at the vertices.
+\subsubsection{Equivalence}
+I still have a viable notion of equivalence of two cells.
+If $B$ is a box in $\R^{n+1}$, we say $f : B \to \R $ is an equivalence between $f(\dash, 0)$ and
+$f(\dash, 1)$ if in fact $\forall x \in B. \exists i \in [0,n]. f_i(x) \ne 0$.
+Notice that we explicitly {\em didn't} allow $f_{n+1}(x) \ne 0$ as a possibility in the $\exists$. That's what
+makes this $f$ an equivalence cell and not a general $(n+1)$-cell.
+
+An equivalence of two $1$-cells would look like dropping all the $p_2$s from the above, to get
+\[\begin{tikzpicture}
+\fill[lgreen] (0,0)--(0,3)--(3,3)--(3,0)--cycle;
+\draw[line width=2pt, mblue] (0,0)--(0,3);
+\draw[line width=2pt, mblue] (3,0)--(3,3);
+\node at (0,1.5)[left, mblue] {$p_0 $};
+\node at (3,1.5)[right, mblue] {$p_0 $};
+
+\draw[line width=2pt, mgreen] (0,0)--(3,0);
+\draw[line width=2pt, mgreen] (0,3)--(3,3);
+\node at (1.5,0)[below, mgreen] {$p_0 \lor p_1$};
+\node at (1.5,3)[above, mgreen] {$p_0 \lor p_1$};
+\node at (1.5,1.5)[white] {$p_0 \lor p_1$};
+
+\fill[mblue] (0,3) circle (2pt);
+\fill[mblue] (3,3) circle (2pt);
+\fill[mblue] (3,0) circle (2pt);
+\fill[mblue] (0,0) circle (2pt);
+
+\begin{scope}[shift={(-1.25,4.25)}]
+\node (x) at (.5,0)[right] {$x_1$};
+\node (y) at (0,-.5)[below] {$x_2$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+
+\subsection{More Abstractly}
+
+Say $\I$ is the collection of all closed intervals in $\R$. Say $S$ is a set.
+We could have a record of intervals $r : S \to \I$. The data of an $S$-cell is
+\[(r : S \to \I) \x (f : \Pi r \to \R) \]
+where $\Pi r$ is $(s : S) \to r s$.
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% END DOCUMENT, THE REST OF THIS STUFF IS HERE AS A CONVENIENCE FOR TIKZ COPY PASTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection*{Composition as Filling}
+
+I think I can get a reasonable stab at composition of morphisms by filling a snake-like deformation retract of a cube.
+If we have $n$-cells $f,g$ that we want to compose along the $x_m$-dimension, we ask for a filler of the following diagram:
+
+\[\begin{tikzpicture}
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\draw[line width=2pt, mblue] (4,0)--(4,2);
+
+
+\draw[line width=2pt, mgreen] (2,0)--(4,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (3,0)[below, mgreen] {$g$};
+\node at (1,2)[above, mgreen] {$f$};
+
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_m$};
+\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+\end{scope}
+\end{tikzpicture}\]
+\[\dns\]
+\[\begin{tikzpicture}
+ \fill[lblue] (0,0)--(0,2)--(4,2)--(4,0)--cycle;
+
+\draw[line width=2pt, mblue] (0,0)--(0,2);
+\draw[line width=2pt, mblue] (2,0)--(2,2);
+\draw[line width=2pt, mblue] (4,0)--(4,2);
+
+
+\draw[line width=2pt, mgreen] (2,0)--(4,0);
+\draw[line width=2pt, mgreen] (0,2)--(2,2);
+\node at (3,0)[below, mgreen] {$g$};
+\node at (1,2)[above, mgreen] {$f$};
+
+
+\begin{scope}[shift={(-.5,2.5)}]
+\node (x) at (.5,0)[right] {$x_m$};
+\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[->] (0,0)--(x);
+\draw[->] (0,0)--(y);
+
+\end{scope}
+\draw[line width=2pt, mred, dashed] (0,1)--(4,1);
+\node at (4,1)[right, mred] {$f \o_m g$};
+\end{tikzpicture}\]
+
+\noindent This presumes that we {\em can} find a trivial cell to mediate between $f$'s codomain and $g$'s codomain,
+and allows us to be clever and choose the outer cells to be exactly $[0/x_m]f$ and $[1/x_m]g$ and be irrelevant in $x_{n+1}$.
+This means that
+\[[0/x_m](f \o_m g) = [0/x_m]f \qquad [1/x_m](f \o_m g) = [1/x_m]g\]
+ on the nose.
+
+I think the general Kan filling principle smells like: suppose $X$ is a deformation retract of $Y$. Any stable
+function $f$ on $X$ extends to a stable function $f^*$ on $Y$, and if $f$ was globally $n$-stable, then $f^*$ is $n$-stable too.
+This means that even though the shape of the composition filler would permit mere $n+1$-stability,
+as long as $f$ and $g$ were $n$-stable to start with, we promise not to introduce new $(n+1)$-critical points in the course of filling.
+
+\subsubsection*{Consequences of Inferring Stability from Geometry of Domain}
+
+If I have a curvy line for the domain of some putative cell, rather than boxes and cubes,
+it seems like I'd be allowed to relax to $1$ stability at its extrema:
+
+\[
+\begin{tikzpicture}
+\draw[line width=2,mblue] (0,0) .. controls (0.5,0.1) and (0.5,1) .. (1,1)
+    .. controls (1.5,1) and (1.2,-1) .. (2,-1)
+    .. controls (2.1,-1) and (2.9,-0.75) .. (3,-0.5);
+ \node[mblue] at (0,0)[left] {$0$};
+ \node[mblue] at (3,-0.5)[above right] {$0$};
+ \fill[mgreen] (1,1) circle (2pt) node[above] {$1$};
+ \fill[mgreen] (2,-1) circle (2pt) node[below] {$1$};
+\end{tikzpicture}
+\]
+So those are the places I'd be {\em permitted} to let $f =0$, and I'd be forbidden from allowing $f_x = 0$ there, which is a meaningful
+thing to ask for since the path itself looks horizontal enough to ask about $f_x$.
+
+In fact, the integral of the function itself (if mapped to the $y$ coordinate) would produce such a curve!
+And as long as the original function was 1-stable, the remapped one would be also.
