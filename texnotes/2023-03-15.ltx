@@ -19,6 +19,7 @@
 \definecolor{mred}{rgb}{0.9,0.25,0.25}
 \definecolor{mgreen}{rgb}{0.1,0.5,0.1}
 \definecolor{mblue}{rgb}{0.3,0.3,0.9}
+\definecolor{gray}{rgb}{0.3,0.3,0.3}
 \def\bitf#1{#1 [smooth, tension=0.8] coordinates {(-1.6,2) (-1,1) (0,0)}}
 \def\bitg#1{#1 [smooth, tension=0.8] coordinates {(1,2) (0.55,1) (0,0)}}
 \def\bitgrev#1{#1 [smooth, tension=0.8] coordinates {(0,0) (0.55,1) (1,2)}}
@@ -39,7 +40,6 @@
 \def\ridp{\mathsf{idp}}
 \def\rcoe{\mathsf{coe}}
 \def\rtype{\mathsf{type}}
-\def\int{\square}
 \def\bd{\partial}
 \def\prov{\vdash}
 \def\pprov{\vdash\!\!\!\vdash}
@@ -71,12 +71,13 @@
 \def\tw{\mathbf{2}}
 \def\dash{\hbox{---}}
 \def\dom{\mathop{\mathrm{dom}}}
+\def\erf{{\mathrm{erf}}}
 \def\cod{\mathop{\mathrm{cod}}}
 \def\celse{\mathrel{|}}
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\llam#1{\langle {#1} \rangle}
-\def\hf{{\odot}}
+\def\grad{{\nabla}}
 
 \begin{document}
 \tikzset{>=stealth}
@@ -85,9 +86,7 @@
    arrow style=tikz,
    diagrams={>=stealth}}
 
-\section{Main}
-
-\subsection{Polynomials Again}
+\section{Categorical Polynomials Again}
 I want to describe a higher-dimensional category. An $n$-cell of this category is
 \begin{itemize}
 \item A choice of box $B = [a_1, b_1] \x \cdots \x [a_n,b_n] \subseteq \R^n$
@@ -223,97 +222,330 @@ An equivalence of two $1$-cells would look like dropping all the $p_2$s from the
 \end{scope}
 \end{tikzpicture}\]
 
-\subsection{More Abstractly}
+For a set of variables $V = \{x_1, x_2, \ldots\}$, we
+say that a polynomial $f$ is $V$-stable at a point $\vec x$ if
+\[(f(\vec x)\ne 0) \lor \exists v \in V . \left(\partial \over \partial v\right) f(\vec x) \ne 0\]
 
-Say $\I$ is the collection of all closed intervals in $\R$. Say $S$ is a set.
-We could have a record of intervals $r : S \to \I$. The data of an $S$-cell is
-\[(r : S \to \I) \x (f : \Pi r \to \R) \]
-where $\Pi r$ is $(s : S) \to r s$.
-\end{document}
+\subsection{Composition \& Interpolation}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% END DOCUMENT, THE REST OF THIS STUFF IS HERE AS A CONVENIENCE FOR TIKZ COPY PASTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Suppose I have two cells $f_1(\vec x, y)$ and $f_2(\vec x, y)$
+and I want to compose them along the $y$ dimension. Assume wlog
+that $f_1$'s interval for $y$ is $[-1,0]$ and $f_2$'s is $[0,1]$.
+Assume $f_1(\vec x, 0) = f_2(\vec x, 0)$. I want to build some cells
+\[h(\vec x, y\in [-1,1])\]
+\[h_1(\vec x, y \in [-1,0], t \in [0,1])\]
+\[h_2(\vec x, y\in[0,1], t\in[0,1])\]
+such that $h_1, h_2, h$ are $(\vec x, y)$-stable everywhere, and
+\[ h_1(\vec x, y, 0) = f_1(\vec x, y)\]
+\[ h_2(\vec x, y, 0) = f_2(\vec x, y)\]
+\[ h_1(\vec x, y, 1) = h(\vec x, y)\]
+\[ h_2(\vec x, y, 1) = h(\vec x, y)\]
+when both sides are well-defined.
 
-\subsubsection*{Composition as Filling}
-
-I think I can get a reasonable stab at composition of morphisms by filling a snake-like deformation retract of a cube.
-If we have $n$-cells $f,g$ that we want to compose along the $x_m$-dimension, we ask for a filler of the following diagram:
-
-\[\begin{tikzpicture}
-\draw[line width=2pt, mblue] (0,0)--(0,2);
-\draw[line width=2pt, mblue] (2,0)--(2,2);
-\draw[line width=2pt, mblue] (4,0)--(4,2);
-
-
-\draw[line width=2pt, mgreen] (2,0)--(4,0);
-\draw[line width=2pt, mgreen] (0,2)--(2,2);
-\node at (3,0)[below, mgreen] {$g$};
-\node at (1,2)[above, mgreen] {$f$};
+Let's start with the definition of $h$. It's going to involve
+an interpolation function $\ell$ that looks roughly like the following:
+\[\begin{tikzpicture}[yscale=-1]
+ \fill[lblue] (0,3)--(0,0)--(6,0)--(6,3)--cycle;
+ \fill[lgreen] (2.7,0)--(3.3,0)--(3.3,3)--(2.7,3)--cycle;
+ \fill[lred] (0,2.7)--(2.7,2.7)--(2.7,3)--(0,3)--cycle;
+ \fill[lred] (3.3,0)--(6,0)--(6,0.3)--(3.3,0.3)--cycle;
 
 
-\begin{scope}[shift={(-.5,2.5)}]
-\node (x) at (.5,0)[right] {$x_m$};
-\node (y) at (0,-.5)[below] {$x_{n+1}$};
+\draw[black] (0,3.2)--(6,3.2); % axis line
+\draw[black] (0,3.2)--(0,3.4) node[below] {$-1$};
+\draw[black] (3,3.2)--(3,3.4) node[below] {$0$};
+\draw[black] (2.7,3.2)--(2.7,3.4) node[yshift=-0.25cm,xshift=-0.22cm] {$-\epsilon$};
+\draw[black] (3.3,3.2)--(3.3,3.4) node[yshift=-0.26cm,xshift=0.1cm] {$\epsilon$};
+\draw[black] (6,3.2)--(6,3.4)  node[below] {$1$};
+
+
+\draw[black] (-0.2,0)--(-0.2,3); % axis line
+\draw[black] (-0.2,0)--(-0.4,0) node[left] {$1$};
+\draw[black] (-0.2,0.3)--(-0.4,0.3) node[left,yshift=-0.1cm] {$1-\delta$};
+\draw[black] (-0.2,2.7)--(-0.4,2.7) node[left,yshift=+0.1cm] {$\delta$};
+\draw[black] (-0.2,3)--(-0.4,3) node[left] {$0$};
+
+% grid lines
+\draw[black, draw opacity=0.2] (0,0.3)--(6,0.3);
+\draw[black, draw opacity=0.2] (0,2.7)--(6,2.7);
+\draw[black, draw opacity=0.2] (3,0)--(3,3);
+
+% interpolant line
+\draw[line width=2pt, black] (0,3)--(2.7,3)--(3.3,0)--(6,0);
+
+\begin{scope}[shift={(-2.5,1.5)}]
+\node (x) at (.5,0)[right] {$y$};
+\node (y) at (0,-0.5)[above] {$\ell(y)$};
 \draw[->] (0,0)--(x);
 \draw[->] (0,0)--(y);
 \end{scope}
-\end{tikzpicture}\]
-\[\dns\]
-\[\begin{tikzpicture}
- \fill[lblue] (0,0)--(0,2)--(4,2)--(4,0)--cycle;
 
-\draw[line width=2pt, mblue] (0,0)--(0,2);
-\draw[line width=2pt, mblue] (2,0)--(2,2);
-\draw[line width=2pt, mblue] (4,0)--(4,2);
-
-
-\draw[line width=2pt, mgreen] (2,0)--(4,0);
-\draw[line width=2pt, mgreen] (0,2)--(2,2);
-\node at (3,0)[below, mgreen] {$g$};
-\node at (1,2)[above, mgreen] {$f$};
-
-
-\begin{scope}[shift={(-.5,2.5)}]
-\node (x) at (.5,0)[right] {$x_m$};
-\node (y) at (0,-.5)[below] {$x_{n+1}$};
-\draw[->] (0,0)--(x);
-\draw[->] (0,0)--(y);
-
-\end{scope}
-\draw[line width=2pt, mred, dashed] (0,1)--(4,1);
-\node at (4,1)[right, mred] {$f \o_m g$};
-\end{tikzpicture}\]
-
-\noindent This presumes that we {\em can} find a trivial cell to mediate between $f$'s codomain and $g$'s codomain,
-and allows us to be clever and choose the outer cells to be exactly $[0/x_m]f$ and $[1/x_m]g$ and be irrelevant in $x_{n+1}$.
-This means that
-\[[0/x_m](f \o_m g) = [0/x_m]f \qquad [1/x_m](f \o_m g) = [1/x_m]g\]
- on the nose.
-
-I think the general Kan filling principle smells like: suppose $X$ is a deformation retract of $Y$. Any stable
-function $f$ on $X$ extends to a stable function $f^*$ on $Y$, and if $f$ was globally $n$-stable, then $f^*$ is $n$-stable too.
-This means that even though the shape of the composition filler would permit mere $n+1$-stability,
-as long as $f$ and $g$ were $n$-stable to start with, we promise not to introduce new $(n+1)$-critical points in the course of filling.
-
-\subsubsection*{Consequences of Inferring Stability from Geometry of Domain}
-
-If I have a curvy line for the domain of some putative cell, rather than boxes and cubes,
-it seems like I'd be allowed to relax to $1$ stability at its extrema:
-
-\[
-\begin{tikzpicture}
-\draw[line width=2,mblue] (0,0) .. controls (0.5,0.1) and (0.5,1) .. (1,1)
-    .. controls (1.5,1) and (1.2,-1) .. (2,-1)
-    .. controls (2.1,-1) and (2.9,-0.75) .. (3,-0.5);
- \node[mblue] at (0,0)[left] {$0$};
- \node[mblue] at (3,-0.5)[above right] {$0$};
- \fill[mgreen] (1,1) circle (2pt) node[above] {$1$};
- \fill[mgreen] (2,-1) circle (2pt) node[below] {$1$};
+% \node at (4,1)[right, mred] {$f \o_m g$};
 \end{tikzpicture}
 \]
-So those are the places I'd be {\em permitted} to let $f =0$, and I'd be forbidden from allowing $f_x = 0$ there, which is a meaningful
-thing to ask for since the path itself looks horizontal enough to ask about $f_x$.
+The parameters $\epsilon,\delta$ will be determined later.
+We can use Stone-Weierstrass to ensure that $\ell$ is a polynomial
+and approximates the piecewise linear function depicted to within $\delta$.
 
-In fact, the integral of the function itself (if mapped to the $y$ coordinate) would produce such a curve!
-And as long as the original function was 1-stable, the remapped one would be also.
+We say that $h$ is straightforwardly the interpolation of $f_1$ and $f_2$
+along $y$ according to $\ell$:
+\[h(\vec x, y) = (1-\ell(y)) f_1(\vec x, y) + \ell(y) f_2(\vec x, y)\]
+
+Now $f_1$ and $f_2$, over their entire domain, are at some minimum
+distance from violating whatever constraints they don't violate in the
+intervals $y = [-1,0]$ and $y=[0,1]$, respectively. Say these
+distances are $d_1$ and $d_2$. Also $f_1$ and $f_2$ have maximum
+magnitudes over those intervals, call these $m_1$ and $m_2$. I claim
+that if I have some error $E$, and $\|E\| < d_1$, then $f_1 + E$ still
+satisfies whatever constraints. And moreover $\|f_2\| \le m_2$, and
+$\|f_1\| \le m_1$, so $\alpha\|f_2\| \le \alpha m_2$, and
+$\alpha\|f_1\| \le \alpha m_1$. The absolute difference between $f_1$
+and $(1-\alpha)f_1 + \alpha f_2$ is no more than
+\[\alpha \|f_1\| + \alpha \|f_2\| \le \alpha(m_1 + m_2)\]
+
+ So if $\alpha < d_1 / (m_1 + m_2)$, we're safe and $f_1$ still
+ satisfies its constraints. Indeed if
+\[ \left(\alpha < {d_1\over m_1 + m_2}\right) \lor \left( 1 - \alpha < {d_2\over m_1 + m_2}\right) \]
+then we have whatever constraints are still satisfied by $f_1$ or $f_2$.
+That means if
+\[ \delta < {\min(d_1,d_2)\over m_1 + m_2}\]
+we're safe everywhere outside the transitional range $y \in (-\epsilon, \epsilon)$.
+
+But {\em inside} that interval we're very close to having the same
+values as $f_1(\vec x, 0) = f_2(\vec x, 0)$. We know that any constraints
+it needs to satisfy don't come from $y$-derivatives, so we can lean just
+on continuity, and continuity of higher derivatives with respect to $\vec x$ only.
+
+So I think that's a sketch of a proof --- the reason we get $h_1$ and $h_2$
+is the only thing we're doing with respect to $f_1$ and $f_2$ is, at worst,
+ going some short distance towards hazards, but we've guaranteed that we
+wont reach the hazards. So anything in the interior of $h_1$ and $h_2$
+is also safe. Specifically, we define
+\[ h_1(\vec x, y, t) = (1-t)f_1(\vec x, y) + th(\vec x, y)\]
+\[ h_2(\vec x, y, t) = (1-t)f_2(\vec x, y) + th(\vec x, y)\]
+
+\section{Less Differentiability}
+
+Do I actually need fully smooth polynomials?
+Suppose I say that a cell is a continuous function
+\[f(x_1, \ldots, x_n) : \prod_{i=1}^n [a_i,b_i] \to \R\]
+that for every point $x \in   \prod_{i=1}^n [a_i,b_i]$, we have that either $f(x) \ne 0$ or there
+exists an $i$ such that $f_i(x) \ne 0$. Partial derivatives with respect to  $x_i$
+at the boundaries --- when $x_i = a_i$ or $x_i = b_i$ --- are considered to never exist, and therefore
+are not eligible to be witnesses to some partial derivative being nonzero.
+
+How can I show that if I have an $f(\vec x, t)$ and I have the extra
+strong assumption that $f$ is stable everywhere only considering
+partial derivatives of $\vec x$ to be eligible, that if I have a point
+$x \in B$ with $f(x) = 0$ that I can `uniquely' move it in the $t$
+direction. Like, it may not be literally unique, but the set of solutions for each $t \pm \Delta t$ slice
+should be contractible.
+
+Wait, no, this whole plan is shaky. Consider a function like
+\[y= x^2 \sin(1/x)\]
+that is differentiable everywhere, but not continuously so. Moreover,
+it has infinitely many oscillations. I want to rule that out, so I
+need more than just once-differentiable.
+
+\section{Boltzmann Trick}
+
+\subsection{A Special Case}
+What are solutions to
+\[ y' = e^{\beta (y-x^2)} \]
+for a parameter $\beta$? For $\beta = 3,5,6$, sage tells me
+\[{\sqrt 3\over 18} (3\sqrt\pi \erf(x \sqrt 3)e^{3y} - 2\sqrt 3)e^{-3y} = C\]
+\[{\sqrt 5\over 50} (5\sqrt\pi \erf(x \sqrt 5)e^{5y} - 2\sqrt 5)e^{-5y} = C\]
+\[{\sqrt 7\over 98} (7\sqrt\pi \erf(x \sqrt 7)e^{7y} - 2\sqrt 7)e^{-7y} = C\]
+So clearly the general solution is
+\[{\sqrt \beta \over 2\beta^2} (\beta \sqrt\pi \erf(x \sqrt \beta)e^{\beta y} - 2\sqrt \beta)e^{-\beta y} = C\]
+Simplifying this we get
+\[{\sqrt \beta \over 2\beta^2} (\beta \sqrt\pi \erf(x \sqrt \beta) - 2\sqrt \beta e^{-\beta y}) = C\]
+
+\[  {\sqrt\pi \erf(\sqrt \beta x ) \over 2\sqrt \beta}- { e^{-\beta y} \over \beta} = C\]
+
+\[  {\sqrt\pi \erf(\sqrt \beta x ) \over 2\sqrt \beta} - C =  { e^{-\beta y} \over \beta}\]
+
+\[  {\sqrt{\beta \pi} \erf(\sqrt \beta x ) \over 2} - \beta C =  { e^{-\beta y} }\]
+
+\[ y = {\ln\left( {\sqrt{\beta \pi}  \over 2} \erf(\sqrt \beta x ) -\beta C \right) \over -\beta } \]
+
+Trying this out in desmos seems to give the desired result.
+
+Can I reason that this is the correct solution?
+
+\[ \erf(z) = {2\over\sqrt \pi}\int_0^z e^{-t^2} dt\]
+\[ \erf'(z) = {2\over\sqrt \pi} e^{-z^2} \]
+
+\[  \sqrt{\beta \pi} \erf(\sqrt \beta x ) - 2{ e^{-\beta y} } = C\]
+\[  2\beta  e^{-\beta x^2} + 2{\beta y' e^{-\beta y} } = 0\]
+\[    e^{-\beta x^2} + y' e^{-\beta y}  = 0\]
+\[    y'  = -e^{\beta(y- x^2)}\]
+
+\subsection{General Form}
+
+A {\em monotone shape} (or just {\em shape}) is defined to be a
+smooth function $f(\vec x, t) : \R^n \x \R \to \R$, together with a choice of $K$ a compact subset of $\R^n$,
+such that for any $(\vec x, t) \in K \x [0,1]$ we have at least one of
+\begin{enumerate}
+\item $f \ne 0$
+\item $\grad f \ne 0$
+\item $f_t > 0$
+\end{enumerate}
+and in particular when $\vec x$ is on the boundary of $K$ we have $f < 0$.
+By $\grad f$ we mean the vector of partial derivatives with respect to all the variables $\vec x$.
+
+A monotone shape is a {\em bijective shape} if everywhere in $K \x \R$ we have in fact either
+(1) or (2).
+
+The {\em support} of a shape $f$ at time $t \in [0,1]$ is the set $S_t(f) = \{ \vec x \st f(\vec x, t) \ge 0\}$.
+
+The main theorem I want to show is
+\begin{theorem}
+For any monotone shape $f$ there exists a continuous map
+$ \Phi (\vec x, t) : S_0(f) \x [0,1] \to \R$
+such that
+\begin{enumerate}
+\item $\Phi(\vec x, 0) = \vec x$.
+\item $\Phi(\vec x, t) \in S_t(f)$.
+\end{enumerate}
+\end{theorem}
+This will have some corollaries about homotopy equivalence.
+First let's sketch the proof. We'll need to build up some lemmas.
+
+Fix a particular $\vec x \in S_0(f)$. For a parameter $\beta > 0$, consider finding a $\phi(t) : [0,1] \to \R^n$ to solve
+the initial value problem
+\[ \phi(0) = \vec x \qquad {d\phi \over dt} =  e^{-\beta f} \nabla f\]
+where $f$ and $\grad f$ are both evaluated at $\vec x = \phi(t)$.
+
+There is an intended intuition that, especially for large $\beta$,
+that the specified derivative means something like:
+
+\begin{center}
+  ``$\phi$ tries, with least effort, to maintain the invariant that $f(\phi(t), t) \ge 0$''
+\end{center}
+
+Here's an explanation of the intuition: when `$\phi$ violates the
+invariant', then $f$ is negative, and $-\beta f$ is positive, and
+$e^{-\beta f}$ is large, and so $d\phi/dt$ points strongly in the
+direction of increasing $f$, in order to correct the error and satisfy
+the invariant again. Conversely, when `$\phi$ satisfies the
+invariant', then $f$ is positive, and $-\beta f$ is negative, and
+$e^{-\beta f}$ is small, so $d\phi/dt$ is very small in magnitude. In
+this case $\phi$ doesn't need to change to maintain the invariant, so
+it in fact doesn't change appreciably.
+
+The first lemma establishes we can make $\phi$
+{\em approximately} satisfy the invariant as closely as we wish: for any
+tolerance $\epsilon$, we can find a $\beta$ big enough that $f$ never
+dips below $-\epsilon$.
+
+\begin{lemma}
+If $f$ is a monotone shape, and $\vec x \in S_0(f)$, and $\epsilon > 0$,
+then there exists a $\beta$ such that
+if $\phi$ is the unique solution to
+\[ \phi(0) = \vec x \qquad {d\phi \over dt} = (\nabla f) e^{-\beta f}\]
+then $\forall t \in [0,1]. f(\phi(t), t) \ge -\epsilon$.
+\end{lemma}
+
+\begin{proof}
+Let's give the recipe for $\beta$ first of all:
+By compactness, find a $c$ such that $-f_t < c$ everywhere on $K \x [0,1]$. Similarly observe that
+in that region we always know $f^2 + \nabla^2 f  + f_t > 0$, so let $\delta > 0$ be such that
+$f^2 + \nabla^2 f  + f_t > \delta$. If necessary, revise $\epsilon$ even smaller
+so that $\epsilon < \min( \sqrt{\delta}, \min_{\partial K} (-f))$.
+Now pick $\beta$ big enough so that
+\[ \beta  > {2\over \epsilon} \ln \left({c \over \delta - \epsilon^2}\right)\]
+
+We're going to show that if we have any point inside $K$ where $f$'s value is in the interval $(-\epsilon, -\epsilon/2)$,
+then the time derivative of $f(\phi(t), t)$ there has to be positive.
+That is, that interval serves a `barrier' that $f$ can't get through to reach the value $-\epsilon$ ---
+at least not within the compact region $K \x [0,1]$. But also we can't ever find a $\phi$-path
+that exits the region $K$, because of how we revised down our $\epsilon$ to be below $\min_{\partial K}(-f)$.
+Consider the first time $\phi$ tries to exit $K$: because of the `barrier' argument,
+we have $f > -\epsilon$, but then $-f < \epsilon < \min_{\partial K}(-f)$, which is impossible.
+
+Now let's proceed: assume $f \in (-\epsilon, -\epsilon/2)$ and try to show $df/dt$ is positive.
+First of all, use the chain rule to expand it to
+
+
+If $f_t > 0$, we're already done. But if $f_t \le 0$, then we can
+stare at $f \in (-\epsilon, -\epsilon/2)$ and realize that $f^2 < \epsilon^2$,
+and therefore for $f^2 + \nabla^2 f  + f_t > \delta$ to still be true, we'd have
+to have $\nabla^2 f > \delta - \epsilon^2$.
+
+But now deduce
+\[ {2\over \epsilon} \ln \left({c \over \delta - \epsilon^2}\right) <  \beta  \]
+\[ \ln \left({c \over \delta - \epsilon^2}\right) <  \beta \epsilon/2 <  -\beta f \]
+\[ {c \over \delta - \epsilon^2 } <  e^{-\beta f} \]
+\[ -f_t < c <  (\delta - \epsilon^2) e^{-\beta f}<  (\nabla^2 f) e^{-\beta f} \]
+\[ 0 <  (\nabla^2 f) e^{-\beta f} + f_t \]
+\[ =  \nabla f \cdot (e^{-\beta f} \nabla f) + f_t \]
+\[ = \nabla f \cdot (d\phi/dt) + f_t \]
+\[ =  (d/dt)f(\phi(t), t) \]
+
+\cqed
+\end{proof}
+
+
+%% Where $f$ and $\nabla f$ are both evaluated at $\vec x = \phi(t)$.
+%% So we observe $\phi$ is always pushed around in the direction of $f$'s gradient, but if we let $\beta \to \infty$, then
+%% it's hardly influenced at all when $f$ is positive, and influenced a tremendous amount when $f$ is negative:
+%% in that case $\phi$ is pushed up back towards where $f$ is positive.
+
+%% We should find that
+%% \[ \phi(t) = \phi(0) + \int_0^t (\nabla f(\phi(s), s)) e^{-\beta f(\phi(s), s)} ds\]
+
+%% Now I believe that, in the limit of large $\beta$, this forward
+%% time-evolution of $\phi$ is continuous with respect to small
+%% perturbations of the initial condition $\phi(0)$, so long as we never
+%% have $f = 0 \land \nabla f = 0$ simultaneously over the domain of integration of $\phi$.
+
+%% Let's think about some other things that we can bound given the assumption that everything is taking
+%% place in a compact subset $K$ of possible $\vec x$, and maybe let's suppose $f < 0$ on the boundary
+%% of $K$.
+
+%% What can we say about $df/dt$, evaluated at $\phi$? We have
+%% \[ (d/dt)f(\phi(t), t) = \nabla f \cdot (d\phi/dt) + f_t \]
+%% \[= \nabla f \cdot ((\nabla f)e^{-\beta f}) + f_t \]
+%% \[= (\nabla^2 f) e^{-\beta f} + f_t \]
+
+%% Now $K$ is compact, so we can put some limits on various things. Let's pick constants such that
+%% \[f_t > -c_1\]
+%% \[\nabla^2 f  > c_2\]
+
+%% Let's first observe that our assumption that we never have $f = 0 \land \nabla f = 0$
+%% means that there exists some $\delta$ such that $f^2 + \nabla^2 f > \delta$.
+
+
+%% We'd like to prove that we can choose a $\beta$ big enough that $f$ never gets too negative
+%% along the $\phi$ path. Let's assume an adversary gives us some small positive $0 < \epsilon < \sqrt{\delta}$
+%% and we're going to try to pick a $\beta$ big enough that ensures $f < -\epsilon$.
+
+
+%% So imagine $f$ is in the range $(-\epsilon,-\epsilon/2)$. That means it's pretty close to zero.
+%% So $\nabla^2 f$ consequently has to be sufficiently big.
+%% Specifically $f^2 < \epsilon^2$.
+%% So $f^2 + \nabla^2 f < \epsilon^2 + \nabla^2 f$ hence $\delta < \epsilon^2 + \nabla^2 f$
+%% hence $\nabla^2 f > \delta - \epsilon^2$. Set
+%% \[c_1=\max_K (-f_t)\]
+
+%% Observe that $f < -\epsilon/2$ so $-f > \epsilon/2$. Observe that $c_1 \ge -f_t$,
+%% so $f_t \ge -c_1$.
+
+%% Then set $\beta$ big enough so that
+%% \[ \beta  > {2\over \epsilon} \ln \left({c_1 \over \delta - \epsilon^2}\right)\]
+%% from this we can deduce
+
+%% \[ \beta \epsilon/2 > \ln \left({c_1 \over \delta - \epsilon^2}\right)\]
+%% \[ -\beta f > \ln \left({c_1 \over \delta - \epsilon^2}\right)\]
+%% \[ e^{-\beta f} > {c_1 \over \delta - \epsilon^2 }\]
+%% \[ (\delta - \epsilon^2) e^{-\beta f} > c_1\]
+%% \[ (\nabla^2 f) e^{-\beta f} > c_1\]
+%% \[ (\nabla^2 f) e^{-\beta f} - c_1 > 0\]
+%% \[ (\nabla^2 f) e^{-\beta f} + f_t > 0\]
+%% \[ (d/dt)f > 0\]
+
+\end{document}
+
+
+% get more diagrams from 2020-01-05 maybe?
