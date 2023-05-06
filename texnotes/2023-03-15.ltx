@@ -53,6 +53,7 @@
 \def\D{\mathbf{D}}
 \def\E{\mathbf{E}}
 \def\R{\mathbb{R}}
+\def\Q{\mathbb{Q}}
 \def\two{\mathbf{2}}
 \def\S{\mathbb{S}}
 \def\M{\mathbb{M}}
@@ -440,6 +441,18 @@ tolerance $\epsilon$, we can find a $\beta$ big enough that $f$ never
 dips below $-\epsilon$.
 
 \begin{lemma}
+Suppose $a \ne 0 \lor b \ne 0 \lor c > 0$. Define
+\[ z(a,b,c) = \cases{{-c \over a^2 + b^2}&if $c \le 0$\cr 0& otherwise.}\]
+Then for any $w > z(a,b,c)$, we have $c + w(a^2 + b^2) > 0$.
+\end{lemma}
+\begin{proof}
+If $c > 0$, we're already done. Otherwise, we have $c \le 0$, and
+therefore $a\ne 0$ or $b\ne 0$, so $a^2 + b^2 > 0$.
+Then $c + w(a^2 + b^2) > c + z(a,b,c)(a^2 + b^2) = c + -c = 0$.
+  \cqed
+\end{proof}
+
+\begin{lemma}
 If $f$ is a monotone shape, and $\vec x \in S_0(f)$, and $\epsilon > 0$,
 then there exists a $\beta$ such that
 if $\phi$ is the unique solution to
@@ -449,9 +462,13 @@ then $\forall t \in [0,1]. f(\phi(t), t) \ge -\epsilon$.
 
 \begin{proof}
 Let's give the recipe for $\beta$ first of all:
-By compactness, find a $c$ such that $-f_t < c$ everywhere on $K \x [0,1]$. Similarly observe that
-in that region we always know $f^2 + \nabla^2 f  + f_t > 0$, so let $\delta > 0$ be such that
-$f^2 + \nabla^2 f  + f_t > \delta$. If necessary, revise $\epsilon$ even smaller
+By compactness, find a $c$ such that $-f_t < c$ everywhere on $K \x [0,1]$. Put
+\[w = 1+ \max_K z(f, \grad f, f_t)\]
+Observe that throughout $K$, we know $f_t + w(f^2 + \grad ^2 f) > 0$.
+Equivalently,  $f_t/w + f^2 + \grad ^2 f > 0$.
+ Now put
+\[\delta = {1\over 2} \min_K (f_t/w + f^2 + \nabla^2 f) \]
+Now we know $f_t/w + f^2 + \nabla^2 f > \delta > 0$. If necessary, revise $\epsilon$ even smaller
 so that $\epsilon < \min( \sqrt{\delta}, \min_{\partial K} (-f))$.
 Now pick $\beta$ big enough so that
 \[ \beta  > {2\over \epsilon} \ln \left({c \over \delta - \epsilon^2}\right)\]
@@ -465,12 +482,13 @@ Consider the first time $\phi$ tries to exit $K$: because of the `barrier' argum
 we have $f > -\epsilon$, but then $-f < \epsilon < \min_{\partial K}(-f)$, which is impossible.
 
 Now let's proceed: assume $f \in (-\epsilon, -\epsilon/2)$ and try to show $df/dt$ is positive.
-First of all, use the chain rule to expand it to
 
+By the chain rule we have
+ \[{d\over dt} f(\phi(t), t) =  e^{-\beta f} \nabla^2 f + f_t\]
 
 If $f_t > 0$, we're already done. But if $f_t \le 0$, then we can
 stare at $f \in (-\epsilon, -\epsilon/2)$ and realize that $f^2 < \epsilon^2$,
-and therefore for $f^2 + \nabla^2 f  + f_t > \delta$ to still be true, we'd have
+and therefore for $f_t/w  + f^2 + \nabla^2 f  > \delta$ to still be true, we'd have
 to have $\nabla^2 f > \delta - \epsilon^2$.
 
 But now deduce
@@ -479,8 +497,8 @@ But now deduce
 \[ {c \over \delta - \epsilon^2 } <  e^{-\beta f} \]
 \[ -f_t < c <  (\delta - \epsilon^2) e^{-\beta f}<  (\nabla^2 f) e^{-\beta f} \]
 \[ 0 <  (\nabla^2 f) e^{-\beta f} + f_t \]
-\[ =  \nabla f \cdot (e^{-\beta f} \nabla f) + f_t \]
-\[ = \nabla f \cdot (d\phi/dt) + f_t \]
+%\[ =  \nabla f \cdot (e^{-\beta f} \nabla f) + f_t \]
+% \[ = \nabla f \cdot (d\phi/dt) + f_t \]
 \[ =  (d/dt)f(\phi(t), t) \]
 
 \cqed
@@ -544,6 +562,128 @@ But now deduce
 %% \[ (\nabla^2 f) e^{-\beta f} - c_1 > 0\]
 %% \[ (\nabla^2 f) e^{-\beta f} + f_t > 0\]
 %% \[ (d/dt)f > 0\]
+
+\section{Multiple Outputs}
+
+Ok, so I've returned to some of the thoughts from Jan 2020 that have to do with thinking about
+maps $\R^n \to \R^p$. The picture of such a thing is something like a venn diagram of overlapping colored blobs.
+Let's picture in particular the example of $n=2$, so that the `arena' that we're coloring is the 2-dimensional plane
+and $p=2$, so that we have two `colors'. Let's say we have functions $r : \R^2 \to \R$ and $b: \R^2 \to \R$ that
+together make up a function $\R^2 \to \R^2$. When $r \ge 0$ we color a point red, when $b \ge 0$, it's blue, and
+when both hold it's purple.
+
+We could do this in higher dimensions as well. If we have a putative homotopy $\R^n \x \R \to \R^p$, when
+does it `preserve' the structure of one slice?
+
+\vfil\eject
+\section{Digression}
+Got nerd-sniped by dwrensha asking if $\R^3 \setminus \Q^3$ is simply
+connected, and trying to understand a proof he found on twitter that
+it is.
+
+
+Say a sequence $x_1, x_2, x_3, \ldots$ is {\em $\epsilon$-stable} if
+for all $i, j$ we have $d(x_i, x_j) < \epsilon$. We say a sequence is
+{\em eventually $\epsilon$-stable} if $x_N, x_{N+1}, \ldots$ is
+$\epsilon$-stable for some $N$. A Cauchy sequence is a sequence that
+is eventually $\epsilon$-stable for every $\epsilon > 0$.
+
+A complete metric space is one for which every Cauchy sequence has a
+limit point.
+
+\begin{lemma}
+If a Cauchy sequence $x_1, x_2, \ldots$ in a complete metric space is $\epsilon$-stable,
+then $\forall i . d(x_i, x) \le \epsilon$, where $x$ is the limit point of the Cauchy sequence.
+\end{lemma}
+
+\begin{proof}
+Suppose otherwise, that $d(x_i, x) > \epsilon$. Say $d(x_i, x) = \epsilon + \delta$.
+Since $x$ is a limit point, there exists $j$ such that $d(x_j, x) < \delta$. But $d(x_i, x_j) < \epsilon$
+by assumption. So we have $d(x_i, x_j) + d(x_j, x) < \epsilon + \delta = d(x_i, x)$, contradicting the triangle
+inequality.
+\cqed
+\end{proof}
+
+Define $H := [0,1] \x S^1$ and let $C$ be the space of continuous functions $H \to \R^3 $.
+Because $H$ is compact, and $\R^3$ has an obvious metric, we can put a metric on $C$. We say
+\[ d_C(f, g) = \sup \{ d_{\R^3}(f(x), g(x)) \st x \in H \}\]
+
+\begin{lemma}
+$C$ is a complete metric space with this metric.
+\end{lemma}
+
+\begin{proof}
+Suppose we have a Cauchy sequence of functions $(f_i)_{i\in \N}$; so we have
+\[ \forall \epsilon > 0 . \exists N . \forall i, j \ge N . d_C(f_i, f_j) < \epsilon \]
+Immediately we know that this converges pointwise, because by
+reasoning about the supremum we see that
+\[ \forall x \in H . d_{\R^3}(f_i(x), f_{j}(x)) \le d_C(f_i, f_{j}) \]
+and therefore
+\[\forall x.  \forall \epsilon > 0 . \exists N . \forall i, j \ge N . d_{\R^3}(f_i(x), f_j(x)) < \epsilon \]
+
+Since $\R^3$ is complete, this determines the value that $f(x)$ converges to if $f$ is to be the function that $f_i$ converge to.
+We know that for all $\epsilon > 0$, there exists an $N$ such that for all $i \ge N$ we have
+\[d_{\R^3}(f_i(x), f(x)) < \epsilon\]
+
+We must still show that this $f$ is actually in $C$, i.e. that it is continuous. So let $x \in H$ and $\epsilon > 0$ be given.
+
+By the fact that $(f_i)_{i\in \N}$ is Cauchy, pick an $N$ big enough that
+\[  \forall i, j \ge N . d_C(f_i, f_j) < \epsilon/3 \]
+We note that for any $z\in H$, the sequence of points $f_N(z), f_{N+1}(z), \ldots$ is $\epsilon/3$-stable.
+By lemma, we have
+\[ \forall z \in H. d(f_N(z), f(z)) \le \epsilon / 3 \]
+
+Now observe that $f_N$ is continuous, so find an open neighborhood $U \subseteq H$ containing $x$ such that
+for any $y \in U$ we have $d(f_N(x), f_N(y)) < \epsilon / 3$. Notice the triangle inequality gives us that,
+for any $y \in U$,
+
+\[ d(f(x), f(y)) \le d(f(x), f_N(x)) + d(f_N(x), f_N(y)) + d(f_N(y), f(y)) \]
+\[ < \epsilon/3 + \epsilon/3 +\epsilon/3 = \epsilon\]
+
+So we've found an open neighborhood of $x$ inside $H$ where $f$ varies as little as we like, and so $f$ is indeed continuous.
+\cqed
+\end{proof}
+
+\begin{theorem}[Baire Category Theorem, Sort Of]
+Let $C$ be a complete metric space. Then the intersection of countably many dense open subsets of $C$
+is again dense in $C$.
+\end{theorem}
+
+\begin{proof}
+Let subsets $U_1, U_2, \ldots$ be given. A set is dense if every nonempty open set intersects it. Let some open $W\subseteq C$ be given. We want to show that there is a point $x \in W$ such that $\forall i . x \in U_i$.
+
+Define $W_1 = W$. Since $U_1$ is dense, it must intersect $W_1$ at a
+point $x_1$, and since $U_1, W_1$ are open, we can in fact find a
+whole ball $B(x_1, r_1) \subseteq U_1 \cap W_1$. Set $s_1 = r_1/2$ and observe
+that $\bar B(x_1, s_1) \subseteq U_1 \cap W_1$.
+
+In general, reason inductively like so:
+
+Define $W_{n} = B(x_{n-1}, r_{n-1})$. Now reason that since $U_{n}$ is dense, it
+must intersect $W_{n}$ at a point $x_{n}$, and since $U_{n}, W_{n}$ are open,
+we can in fact find a whole ball $B(x_{n}, r_{n}) \subseteq U_{n} \cap W_{n}$.
+Set $s_{n} = r_{n} / 2$ and observe that $\bar B(x_n, s_n) \subseteq U_n \cap W_n$.
+
+This yields a sequence of nested closed balls, $\bar B(x_1, s_1), \ldots$, whose intersection is nonempty,
+because their centers form a Cauchy sequence.
+
+\cqed
+\end{proof}
+
+\begin{theorem}
+$\R^3 \setminus X$ is simply connected for any countable $X$.
+\end{theorem}
+
+\begin{proof}
+Suppose we have a loop $\ell : S^1 \to \R^3\setminus X$. We need to come up with a homotopy
+$h : [0,1] \x S^1 \to \R^3\setminus X$ such that $h(0, \dash) = \ell$ and $h(1, \dash)$ is constantly
+some point $p$.
+
+First pick an arbitrary contraction homotopy $h_0 : H \to \R^3$ that is allowed to
+freely pass through all of $\R^3$. Then start thinking about the structure of the space
+\[ C = H \to \R^3 \]
+\cqed
+\end{proof}
 
 \end{document}
 
