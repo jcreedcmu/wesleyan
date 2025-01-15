@@ -521,7 +521,7 @@ It's straightforward to give a reasonable meaning to
 \[  \Delta \to A\]
 For example, if $\Delta = (b : B) (c : C)$ and we have some $A(b, c)$
 that is meaningful in that context, then
-\[\Pi \Delta. A = (b : B) (c : C) \to A(b, c)\]
+\[ \Delta \to  A = (b : B) (c : C) \to A(b, c)\]
 We then define
 \[\phi(\rset, \Delta.A) = ( \Delta\to  A) \to \rset\]
 \subsection{Pi}
@@ -547,5 +547,55 @@ So let's define
 \[\phi((b : B) \to C; \Delta.N) =  \]
 \[(\bar b : \Delta \to \theta B)  (q : \phi(B, \Delta.\bar b)) \to (\phi[q/b])(C; \Delta . (N\ \bar b))\]
 
+
+\subsection{Application}
+
+What we're working with is
+\[
+\begin{prooftree}
+\[
+\Gamma \prov f : (b : B) \to C \qquad \Gamma \prov M : B
+\justifies
+ \Gamma \prov f\ M : [M/b]C
+\]
+\Delta \prov \phi \tri \theta : \Gamma
+\justifies
+\phi (f\ M) : \phi ([M/b]C;  \Delta. \theta (f\ M))
+\end{prooftree}
+\]
+and we want to define $\phi (f\ M)$.
+
+By i.h. we know
+\[\phi f : \phi((b : B) \to C; \Delta .\theta f)\]
+\[\phi M : \phi(B; \Delta.\theta M)\]
+
+hence
+
+\[\phi f : (\bar b : \Delta \to \theta B)  (q : \phi(B, \Delta.\bar b)) \to (\phi[q/b])(C; \Delta . (\theta f\ \bar b))\]
+and
+\[\phi f\ (\Delta.\theta M) :   (q : \phi(B, \Delta.\theta M)) \to (\phi[q/b])(C; \Delta . (\theta f\ \theta M))\]
+and
+\[\phi f\ (\Delta.\theta M)\ (\phi M) : (\phi[\phi M/b])(C; \Delta . (\theta f\ \theta M))\]
+What we need is
+\[\phi (f\ M) : \phi ([M/b]C;  \Delta. \theta (f\ M))\]
+so assuming the coherence of substitution, we're done. We define
+\[\phi (f\ M) = \phi f\ (\Delta.\theta M)\ (\phi M) \]
+
+\subsection{Lambda}
+\[
+\Gamma, y : B\prov  M :  C
+\over
+\Gamma \prov \lambda y . M : (b : B) \to C
+\]
+What we need is
+\[\phi(\lambda y . M) : (\phi \bullet (b:B) \to C)\ (\lambda y .\theta_1 M)\ (\lambda y .\theta_2 M)\]
+in other words it should have type
+\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ ([b_1/y]\theta_1 M)\ ([b_2/y]\theta_2 M)\]
+From the induction hypothesis, for any $\phi' : \bd_{\Gamma, y : B}(\theta'_1, \theta'_2)$ we have
+\[\phi' M : (\phi' \bullet C)\ (\theta_1' M)\ (\theta_2' M)\]
+So let's choose in particular (in the environment where $b_1, b_2, q$ have been abstracted)
+\[\phi' = \phi[q/b] \qquad \theta_1' = \theta_1 [b_1/y] \qquad \theta_2' = \theta_2[b_2/y]\]
+and we're done.
+\[\phi(\lambda y . M) = \lambda b_1 b_2 q . (\phi [q/b]) M\]
 
 \end{document}
