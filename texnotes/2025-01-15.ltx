@@ -509,7 +509,26 @@ Regular boundaries and refls are defined in terms of empty substitutions:
 \[\bd_A(\Delta.a) = \cdot (A; \Delta.a) \]
 \[\mathsf{refl_M} = \cdot M  \]
 
-\subsection{Variable}
+\subsection{Type Variable}
+We handle the case of
+\[  \Gamma \prov \alpha : \rset \qquad \Delta \prov \phi \tri \theta : \Gamma
+\qquad \Delta \prov N : \theta \alpha
+\over \phi (\alpha; \Delta.N) :  \rset\]
+when $\Gamma \prov \alpha : \rset$ is really $\alpha: \rset \in \Gamma', \alpha : \rset, \Gamma''$.
+In this case, $\phi = \phi'[p/\alpha]\phi''$ and $\theta = \theta' [B/\alpha] \theta''$.
+At the moment we're judging $\phi$ to be well-typed, and we add the variable $x$, things look like
+\[ {
+ \Delta \prov \phi' \tri \theta' : \Gamma'
+\qquad \Delta \prov B :  \rset
+\qquad p : \phi'(\rset;\Delta.B)
+\over
+\Delta \prov (\phi'[p/\alpha]) \tri (\theta'[B/\alpha]) : \Gamma, x :\rset
+}\]
+
+So we will have that $p : \phi' (\rset; \Delta. B) = (\Delta \to B) \to \rset $. And notice that we know $\theta\alpha = B$, so $\Delta \prov N : B$.
+So we define \[\phi(\alpha; \Delta. N) = p\ (\Delta.N)\]
+
+\subsection{Term Variable}
 Suppose $\Gamma = \Gamma', x : A, \Gamma''$.
 Then $\phi$ will break down as $\phi'[p/x]\phi''$.
 We'll have $p : \phi'(A, \Delta.N)$.
@@ -582,20 +601,66 @@ so assuming the coherence of substitution, we're done. We define
 \[\phi (f\ M) = \phi f\ (\Delta.\theta M)\ (\phi M) \]
 
 \subsection{Lambda}
+What we're working with is
+
 \[
-\Gamma, y : B\prov  M :  C
-\over
-\Gamma \prov \lambda y . M : (b : B) \to C
+\begin{prooftree}
+\[
+\Gamma, b : B\prov  M :  C
+\justifies
+ \Gamma \prov \lambda b . M : (b : B) \to C
 \]
-What we need is
-\[\phi(\lambda y . M) : (\phi \bullet (b:B) \to C)\ (\lambda y .\theta_1 M)\ (\lambda y .\theta_2 M)\]
-in other words it should have type
-\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ ([b_1/y]\theta_1 M)\ ([b_2/y]\theta_2 M)\]
-From the induction hypothesis, for any $\phi' : \bd_{\Gamma, y : B}(\theta'_1, \theta'_2)$ we have
-\[\phi' M : (\phi' \bullet C)\ (\theta_1' M)\ (\theta_2' M)\]
-So let's choose in particular (in the environment where $b_1, b_2, q$ have been abstracted)
-\[\phi' = \phi[q/b] \qquad \theta_1' = \theta_1 [b_1/y] \qquad \theta_2' = \theta_2[b_2/y]\]
-and we're done.
-\[\phi(\lambda y . M) = \lambda b_1 b_2 q . (\phi [q/b]) M\]
+\qquad
+\Delta \prov \phi \tri \theta : \Gamma
+\justifies
+ \phi (\lambda b . M) : \phi ((b : B) \to C;  \Delta. \lambda b . \theta  M)
+\end{prooftree}
+\]
+
+
+What we need expands to
+\[(\bar b : \Delta \to \theta B)  (q : \phi(B, \Delta.\bar b)) \to (\phi[q/b])(C; \Delta . (  [\bar b / b]\theta  M))\]
+From the induction hypothesis, in the environment where $\bar b$ and $q$ are bound, we can construct
+
+
+
+\[
+\begin{prooftree}
+\Gamma, b : B \prov M : C
+\ %
+\[
+\Gamma \prov B : \rset
+\qquad \Delta \prov \phi \tri \theta : \Gamma
+\qquad \Delta \prov \bar b : \theta B
+\qquad q : \phi(B;\Delta.\bar b)
+\justifies
+ \Delta \prov (\phi[q/b]) \tri (\theta[\bar b/b]) : \Gamma, b :B
+\]
+\justifies
+(\phi[q/b]) M : (\phi[q/b]) (C;  \Delta. \theta[\bar b / b] M)
+\end{prooftree}
+\]
+
+
+So we can define
+\[\phi(\lambda b . M) = \lambda \bar b q . (\phi [q/b]) M\]
+
+\subsection{Parametricity}
+Suppose we have $m : (X : \rset) \to X \to X$.
+Let's look at the type of
+ $\mathsf{refl}^\Delta_m : \bd_{(X:\rset) \to X \to X}(\Delta . m)$.
+That's equal to
+\[\cdot ((X:\rset) \to X \to X; \Delta . m)\]
+The definition of substitution at $\Pi$ and $\rset$ lets us expand to
+\[(\bar X : \Delta \to  \rset)  (R : (\Delta\to \bar X) \to \rset) \to ([R/X])(X \to X; \Delta . (m\ \bar X))\]
+and
+\[(\bar X : \Delta \to  \rset)  (R : (\Delta\to \bar X) \to \rset) \]
+\[(\bar x : \Delta \to \bar X)  (q : [R/X](X, \Delta.\bar x)) \to ([R/X][q/b])(X; \Delta . (m\ \bar X\ \bar x))\]
+and
+\[(\bar X : \Delta \to  \rset)  (R : (\Delta\to \bar X) \to \rset) (\bar x : \Delta \to \bar X)\]
+\[  \to  R\ (\Delta.\bar x) \to  R\ (\Delta . (m\ \bar X\ \bar x))\]
+
+which is the expected free theorem.
+
 
 \end{document}
