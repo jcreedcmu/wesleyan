@@ -692,4 +692,26 @@ Pi case:
 \phi[p/x] : \bd_{\Gamma, x : A}(s.\theta[N/x])
 }\]
 
+\section{Completely Different Thought}
+Is there any sense in the idea
+\[\bd_A(a, a') \equiv (C : A \to \rset) \to C\ a \to C\ a' \to \rset\]
+?
+\[\mathsf{refl}_A : \bd_A(a, a) = (C : A \to \rset) \to C\ a \to C\ a \to \rset\]
+\[\mathsf{refl}_A\ C\ c_1\ c_2 = c_1 \equiv c_2?\]
+Can I do $\mathsf{ap}$? Suppose I have a function $f : A \to B$.
+Can I get sensibly from
+\[\beta : (D : A \to \rset) \to D\ a \to D\ a' \to \rset\]
+to
+\[(C : B \to \rset) \to C\ (f\ a) \to C\ (f\ a') \to \rset\]
+?
+I have $(C : B \to \rset) (c : f\ a) (c' : f\ a')$.
+Indeed, $\beta\  (\lambda a . C\ (f\ a))\ c\ c' : \rset$.
+%% What is the free theorem for this type? If I have a
+%% \[\beta : (C : A \to \rset) \to C\ a \to C\ a' \to \rset\]
+%% then I should find I have some canonically derived
+%% \[(C_1 : A \to \rset) (C_2 : A \to \rset) (R : (a : A) \to C_1\ a \to C_2\ a \to \rset)\]
+%% \[(c_1 : C_1\ a) (c_2 : C_2\ a) (r : R\ a\ c_1\ c_2)\]
+%% \[(c_1' : C_1\ a') (c_2' : C_2\ a') (r' : R\ a'\ c_1'\ c_2')\]
+%% \[\to \beta\ C_1\ c_1\ c_1' \to \beta\ C_2\ c_2\ c_2' \to \rset\]
+%% but I don't know what good that does me.
 \end{document}
