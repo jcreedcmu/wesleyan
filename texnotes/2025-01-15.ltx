@@ -473,36 +473,57 @@ which is the expected free theorem.
 
 Our judgment is now
 
-\[\phi : \bd_\Gamma(s.\theta)\]
+\[\Delta \prov \phi \tri \theta : \Gamma \]
+which presupposes $\Delta \prov \theta:\Gamma$.
 
-The substitution $\theta$ exists in the context
-of some binder $s : S$. Set $S = 2$ to recover the binary case.
+$\Delta = (x:2)$ to recover the binary case.
 
 There are again two substitution principles that apply to these $\phi$:
 
-\[s : S \prov \theta : \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(s.\theta) \over \phi \bullet A : ((s : S) \to \theta A) \to \rset\]
+\[  \Gamma \prov A : \rset \qquad \Delta \prov \phi \tri \theta : \Gamma
+\qquad \Delta \prov N : \theta A
+\over \phi (A; \Delta.N) :  \rset\]
 
-\[s : S \prov \theta : \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(s.\theta) \over \phi M : (\phi \bullet A)\ (\lambda s.\theta M)\]
+\[  \Gamma \prov M : A \qquad \Delta \prov \phi \tri \theta : \Gamma
+\over \phi M : \phi (A;  \Delta. \theta M)\]
 
-I think if I absorb the argument $(s : S) \to \theta A$ into the substitution principle as an argument with binder, I might be able to accommodate more general contexts than singletons.
+
+The judgment $\Delta \prov \phi \tri \theta : \Gamma$ is defined by
+the two rules
+
+
+
+\[{\over \Delta \prov \cdot \tri \cdot : \cdot}\]
+\[ {
+\Gamma \prov A : \rset
+\qquad \Delta \prov \phi \tri \theta : \Gamma
+\qquad \Delta \prov N : \theta A
+\qquad p : \phi(A;\Delta.N)
+\over
+\Delta \prov (\phi[p/x]) \tri (\theta[N/x]) : \Gamma, x :A
+}\]
+
 
 \subsection{Abbreviations}
 Regular boundaries and refls are defined in terms of empty substitutions:
-\[\bd_A(a, a') = \cdot \bullet A\ a\ a' \]
+\[\bd_A(\Delta.a) = \cdot (A; \Delta.a) \]
 \[\mathsf{refl_M} = \cdot M  \]
 
 \subsection{Variable}
 Suppose $\Gamma = \Gamma', x : A, \Gamma''$.
 Then $\phi$ will break down as $\phi'[p/x]\phi''$.
-Also $\theta_i$ will as $\theta_i'[M_i/x]\theta_i''$.
-We'll have $M_i : \theta_i' A$ and
-$p : (\phi_1 \bullet A)\ M_1\ M_2$.
+We'll have $p : \phi'(A, \Delta.N)$.
 The substitution principle says that we should have
-\[\phi x : (\phi_1 \bullet A)\ M_1\ M_2\]
+\[\phi x :\phi'(A, \Delta.N)\]
 So we simply set $\phi x = p$.
 \subsection{Universe}
-We define
-\[(\phi \bullet \rset)\ A\ B = A \to B \to U\]
+It's straightforward to give a reasonable meaning to
+\[\Pi  \Delta. A\]
+For example, if $\Delta = (b : B) (c : C)$ and we have some $A(b, c)$
+that is meaningful in that context, then
+\[\Pi \Delta. A = (b : B) (c : C) \to A(b, c)\]
+We then define
+\[\phi(\rset, \Delta.A) = (\Pi \Delta. A) \to \rset\]
 \subsection{Pi}
 
 \[\Gamma,  b : B \prov C : \rset\over
