@@ -1,0 +1,341 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{relsize}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\zed{\emptyset}
+\def\lint{{\textstyle\int}}
+\def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
+\def\isok{\textcolor{green}{\mathlarger{\mathlarger{\mathlarger{\checkmark}}}}}
+\def\isbad{\textcolor{red}{\mathlarger{\mathlarger{\mathlarger{\x}}}}}
+
+\def\mhave{\textcolor{blue}{\hbox{have}}}
+\def\mwant{\textcolor{orange}{\hbox{want}}}
+
+\def\chave{\eqno\mhave}
+\def\cset{\eqno \textcolor{green}{\hbox{set}}}
+\def\cwant{\eqno\mwant}
+\def\gol{\sqsubset}
+\def\gor{\sqsupset}
+
+\def\sp{\bullet}
+\def\ot{\leftarrow}
+\def\prequiv{\dashv\vdash}
+\def\fdom{{\mathbf{d}f}}
+\def\fcod{{\mathbf{e}f}}
+\def\fidom{\mathbf{\bar d}f}
+\def\ficod{\mathbf{\bar e}f}
+
+\def\thn{\mathrel|}
+\def\coe{\mathsf{coe}}
+\def\bpush{\mathbf{push}}
+\def\bpull{\mathbf{pull}}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\wo{\setminus}
+\def\fA{\mathsf{A}}
+\def\fC{\mathsf{C}}
+\def\fX{\mathsf{X}}
+\def\ff{\mathsf{f}}
+\def\fm{\mathsf{m}}
+\def\rspan{\mathsf{Span}}
+% \def\El#1{\mathsf{El}({#1})}
+\def\El#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+\def\mor#1#2{#1 \to \underline{#2}}
+
+\def\ridp{\mathsf{idp}}
+\def\ssem#1{\langle\!\langle{#1}\rangle\!\rangle}
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{\mathbin{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathsf{Tw}}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rid{\mathsf{id}}
+\def\rtrue{\mathrel\mathrm{true}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\newarrow {Equiv} =====
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbf{B}}
+\def\C{\mathbf{C}}
+\def\G{\mathbf{G}}
+\def\D{\mathbf{D}}
+\def\DD{\mathbb{D}}
+\def\E{\mathbf{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\ll{{<}}
+\def\rr{{>}}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+%% \def\njudge#1{\fcolorbox{opfib}{white}{#1}}
+%% \def\nrule#1{\fcolorbox{white}{opfibl}{#1}}
+%% \def\neqn#1{\fcolorbox{white}{redl}{#1}}
+
+
+
+%% \def\judge#1{\vskip 2em\noindent \njudge{$#1$}\vskip 0.5em\noindent}
+%% \def\rule#1{\vskip 2em \noindent \nrule{$#1$}\vskip 0.5em\noindent}
+%% \def\eqn#1{\vskip 2em \noindent \neqn{$#1$}\vskip 0.5em\noindent}
+%% \def\prof{\nrightarrow}
+%% \def\tensor{\otimes}
+%% \def\htensor{\mathrel{\hat\otimes}}
+%% \def\lol{\multimap}
+%% \def\hlol{\mathrel{\hat\multimap}}
+%% \def\wtf{{\color{red}???}}
+
+%% \def\re{\mathbf{E}}
+%% \def\sh{\sharp}
+%% \def\shp{\mathrel{\sharp}}
+%% \def\zero{\texttt{0}}
+\def\bd{\mathsf{Bd}}
+\def\bdd{\mathsf{Bdd}}
+\def\rset{\mathsf{U}}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+
+
+
+\section{Relational Higher OTT}
+This is an exercise to see how bridges look as substitutable objects.
+Let's start with binary relations as a warmup. I'll ignore universe level issues.
+
+First of all, bridges in a type with specified endpoints form a type.
+
+\[A : \rset \qquad a\ a' : A \over \bd_A(a, a') : \rset\]
+
+There is some kind of equality between bridges in the universe and relations.
+Assuming definitional equality seems {\em prima facie} the most convenient.
+
+\[\bd_U(A, B) \equiv A \to B \to \rset\]
+
+We expect bridges at function types to do exhibit the expected parametricity behavior.
+
+\[\bd_{A \to B}(f, f') \equiv (a\ a' : A) (p : \bd_{A}(a, a')) \to \bd_{B}(f\ a , f'\ a')\]
+
+Then we ask: how do we deal with $\Pi$? The definition for nondependent functions
+cannot be immediately adapted, because we need a heterogeneous bridge.
+
+\[\bd_{(a : A) \to B}(f, f') \equiv (a\ a' : A) (p : \bd_{A}(a, a')) \to \bd_{\color{red}{B a?\ B a'?}}(f\ a , f'\ a')\]
+
+We have a bridge $p$ between $a$ and $a'$, and we want {\em some relation} between $B\ a$ and $B\ a'$ to assert
+of $f\ a$ and $f'\ a'$. This seems like it should arise from letting $p$ interact with $B$.
+So we define a substitution operation
+
+\[ p : \bd_{A}(a, a') \qquad x : A \prov M : B \over [p/x] M : \bd_{B}([a/x]M , [a'/x]M)\]
+
+so we have in particular
+\[ p : \bd_{A}(a, a') \qquad x : A \prov B : \rset \over [p/x] B : \bd_{\rset}([a/x]B , [a'/x]B)\]
+
+which means we can define dependent bridges
+\[x : A \prov B : \rset \qquad p : \bd_{A}(a, a') \qquad b : [a/x]B \qquad b' : [a'/x]B \over \bdd^p_{x.B}(b, b') : \rset \]
+\[\bdd^p_{x.B}(b, b') \equiv ([p/x]B)\ b\ b' \]
+
+So now we can define bridges in dependent functions like
+\[\bd_{(a : A) \to B}(f, f') \equiv (a\ a' : A) (p : \bd_{A}(a, a')) \to \bdd^p_{x.B}(f\ a , f'\ a')\]
+
+Let's investigate some cases of substitution principle. Let's assume we have
+\[x : A \prov f : B \to C \qquad x : A \prov M : B \qquad p : \bd_A(a, a')\]
+What is $[p/x](f\ M) : \bd_C([a/x](f\ M), [a'/x](f / M))$? Well, we do have already
+\[[p/x]f : \bd_{B \to C}([a/x]f, [a'/x]f) \qquad [p/x]M : \bd_{ C}([a/x]M, [a'/x]M)\]
+and that first one is really
+\[[p/x]f : (b\ b' : B) (q : \bd_B(b, b')) \to \bd_{C}([a/x]f\ b, [a'/x]f\ b') \]
+So we need only pick $b = [a/x]M$ and $b' = [a'/x]M$ and we get
+\[[p/x]f\ ([a/x]M)\ ([a'/x]M)\ ([p/x]M) : \bd_{C}([a/x]f\ [a/x]M, [a'/x]f\ [a'/x]M)\]
+as required. So we define
+\[p : \bd_A(a, a') \over [p/x](f\ M) \equiv [p/x]f\ ([a/x]M)\ ([a'/x]M)\ ([p/x]M)\]
+Next let's think about lambdas.
+\[{x : A,  y :B \prov M : C \over x : A \prov \lambda y . M : B \to C } \]
+If we have $p : \bd_A(a, a')$ then we have $y : B \prov [p/x]M : \bd_C([a/x]M, [a'/x]M)$
+and our goal is to find a bridge term $N$ such that
+\[ x : A \prov N : \bd_{B \to C} (\lambda y . [a/x]M, \lambda y . [a'/x]M)\]
+but that goal is the same as
+\[ x : A \prov N : (b\ b' : B) (q : \bd_B(b, b')) \to \bd_C([b/y][a/x]M, [b'/y][a'/x]M)\]
+If we directly substitute $q$ for $y$, then we're trying to make
+\[N\ b\ b'\ q = [q/y][p/x]M : \bd_{\bd_C([a/x]M, [a'/x]M)}([b/y][p/x]M, [b'/y][p/x]M)\]
+This seems complicated and there doesn't seem to be an obvious reduction path. The approach
+that seems more promising is to allow {\em simultaneous} substitutions, which only
+create one layer of $\bd$.
+
+So how does this look for dependently typed lambdas? (Still retaining
+nondependency of $x$ in any types) As before,
+\[{x : A,  y :B \prov M : C \over x : A \prov \lambda y . M : B \to C } \]
+only now we imagine $y$ can occur in $C$. Our goal is now to find an $N$ with
+\[ x : A \prov N : (b\ b' : B) (q : \bd_B(b, b')) \to \bdd^q_{y.C}([b/y][a/x]M, [b'/y][a'/x]M)\]
+So we're going to need some kind of substitution principle more like
+\[
+\theta\ \theta' : \Gamma \qquad \phi : \bd_{\Gamma}(\theta, \theta') \qquad \Gamma \prov M : A
+\over
+\phi M : \bd_{A}(\theta M, \theta' M)
+\]
+That's if $A$ doesn't depend on $\Gamma$. If it does, I think I need
+\[
+\theta\ \theta' : \Gamma \qquad \phi : \bd_{\Gamma}(\theta, \theta') \qquad \Gamma \prov M : A
+\over
+\phi M : \bdd^\phi_{\Gamma.A}(\theta M, \theta' M)
+\]
+Ok, what are contexts and substitutions?
+\[ {\over \cdot \rctx} \qquad {\Gamma \rctx \qquad \Gamma \prov A : \rset \over  \Gamma, x : A \rctx}\]
+\[ {\over  \cdot : \cdot} \qquad { \theta : \Gamma \qquad  M : \theta A \over   \theta[M/x] : \Gamma, x : A} \]
+Standard stuff. What's a nondependent bridge between two substitutions? It's going to look syntactically like a substitution.
+\[ {\over \cdot : \bd_{\cdot}(\cdot, \cdot)} \]
+\[ {
+ %%  \qquad \qquad  \qquad M_2 :\theta_2 A \qquad
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&\Gamma \prov A : \rset
+&M_1 : \theta_1 A
+\\
+\theta_1\ \theta_2 : \Gamma
+&  \phi : \bd_\Gamma(\theta_1, \theta_2)
+&M_2 : \theta_2 A
+&p : \bdd^\phi_{\Gamma.A}(M_1, M_2)
+\end{array}
+\over
+\phi[p/x] : \bd_{\Gamma, x:A}(\theta_1[M_1/x], \theta_2[M_2/x])
+}\]
+This depends mututally recursively on dependent bridges. How do we define that?
+Its signature is
+\[x : A \prov B : \rset \qquad p : \bd_{A}(a, a') \qquad b : [a/x]B \qquad b' : [a'/x]B \over \bdd^p_{x.B}(b, b') : \rset \]
+\[\Gamma \prov A : \rset \qquad \phi : \bd_{\Gamma}(\theta_1, \theta_2) \qquad M_i : \theta_iA  \over \bdd^\phi_{\Gamma.A}(M_1, M_2) : \rset \]
+
+\[\bdd^\phi_{\Gamma.A}(M_1, M_2) \equiv (\phi A)\ M_1\ M_2 \]
+
+For this to work I need to know how to apply substitution bridges. The principle
+is
+\[\theta_i \prov \Gamma \qquad \quuad \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : \bdd_{\Gamma.A}^\phi(\theta_1 M, \theta_2 M)\]
+\end{document}
