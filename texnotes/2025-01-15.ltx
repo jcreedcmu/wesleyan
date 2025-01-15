@@ -662,5 +662,34 @@ and
 
 which is the expected free theorem.
 
+\section{Single-Variable Shapes}
+
+Bridge Judgment
+\[\phi : \bd_\Gamma(s.\theta)\]
+Bridge Substitution principle
+\[
+\Gamma \prov M : A \qquad \phi : \bd_\Gamma(s.\theta)
+\over
+\phi M : \phi A\ (\lambda s . \theta M)
+\]
+\subsection{Bridge Substitution}
+Universe case:
+\[\phi \rset \equiv \lambda A . ((s : S) \to A\ s) \to \rset \]
+Variable case:
+\[ [p/x] \in \phi\over \phi x \equiv p\]
+Pi case:
+\[\phi((b : B) \to C)  =  \]
+\[\lambda f . (\bar b : S \to \theta B)  (q : \phi B\  \bar b) \to (\phi[q/b])(C)\ (\lambda s. (f\ s) (\bar b\ s))\]
+
+\subsection{Bridge Formation}
+\[{\over \cdot : \bd_\Gamma(s.\cdot)}\]
+\[ {
+\Gamma \prov A : \rset
+\qquad \phi : \bd_\Gamma(s.\theta)
+\qquad s:S \prov N : \theta A
+\qquad p : \phi A\ (\lambda s.N)
+\over
+\phi[p/x] : \bd_{\Gamma, x : A}(s.\theta[N/x])
+}\]
 
 \end{document}
