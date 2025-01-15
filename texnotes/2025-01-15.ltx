@@ -330,12 +330,142 @@ Standard stuff. What's a nondependent bridge between two substitutions? It's goi
 }\]
 This depends mututally recursively on dependent bridges. How do we define that?
 Its signature is
-\[x : A \prov B : \rset \qquad p : \bd_{A}(a, a') \qquad b : [a/x]B \qquad b' : [a'/x]B \over \bdd^p_{x.B}(b, b') : \rset \]
 \[\Gamma \prov A : \rset \qquad \phi : \bd_{\Gamma}(\theta_1, \theta_2) \qquad M_i : \theta_iA  \over \bdd^\phi_{\Gamma.A}(M_1, M_2) : \rset \]
 
 \[\bdd^\phi_{\Gamma.A}(M_1, M_2) \equiv (\phi A)\ M_1\ M_2 \]
 
 For this to work I need to know how to apply substitution bridges. The principle
 is
-\[\theta_i \prov \Gamma \qquad \quuad \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : \bdd_{\Gamma.A}^\phi(\theta_1 M, \theta_2 M)\]
+\[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : \bdd_{\Gamma.A}^\phi(\theta_1 M, \theta_2 M)\]
+
+This seems close to nonerminatingly recursive. But the version that the definition of $\bdd$ needs is just the special-case of $\rset$. I could even write them syntactically differently as
+
+\[\theta_i \prov \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
+
+\[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : (\phi \bullet A)\ (\theta_1 M)\ ( \theta_2 M)\]
+
+And then I can rewrite the cons case of substitution-bridges as
+\[ {
+ %%  \qquad \qquad  \qquad M_2 :\theta_2 A \qquad
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&\Gamma \prov A : \rset
+&M_1 : \theta_1 A
+\\
+\theta_1\ \theta_2 : \Gamma
+&  \phi : \bd_\Gamma(\theta_1, \theta_2)
+&M_2 : \theta_2 A
+&p : (\phi \bullet A)\ M_1\ M_2
+\end{array}
+\over
+\phi[p/x] : \bd_{\Gamma, x:A}(\theta_1[M_1/x], \theta_2[M_2/x])
+}\]
+
+So I must {\em define} the substitution operators $\phi \bullet A$
+and $\phi M$.
+\section{From Scratch}
+What exists? We have the usual terms, contexts, substitutions, typing judgments.
+We introduce a notion of simultaneous bridge substitutions, described by a judgment
+\[\phi : \bd_\Gamma(\theta_1, \theta_2)\]
+Syntactically, $\phi$ look just like substitutions.
+There are two substitution principles that apply to these $\phi$:
+
+\[\theta_i \prov \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
+
+\[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : (\phi \bullet A)\ (\theta_1 M)\ ( \theta_2 M)\]
+
+
+
+
+The judgment $\phi : \bd_\Gamma(\theta_1, \theta_2)$ is defined by
+the two rules
+\[{\over \cdot : \cdot}\]
+\[ {
+ %%  \qquad \qquad  \qquad M_2 :\theta_2 A \qquad
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&\Gamma \prov A : \rset
+&M_1 : \theta_1 A
+\\
+\theta_1\ \theta_2 : \Gamma
+&  \phi : \bd_\Gamma(\theta_1, \theta_2)
+&M_2 : \theta_2 A
+&p : (\phi \bullet A)\ M_1\ M_2
+\end{array}
+\over
+\phi[p/x] : \bd_{\Gamma, x:A}(\theta_1[M_1/x], \theta_2[M_2/x])
+}\]
+
+\subsection{Abbreviations}
+Regular boundaries and refls are defined in terms of empty substitutions:
+\[\bd_A(a, a') = \cdot \bullet A\ a\ a' \]
+\[\mathsf{refl_M} = \cdot M  \]
+
+\subsection{Variable}
+Suppose $\Gamma = \Gamma', x : A, \Gamma''$.
+Then $\phi$ will break down as $\phi'[p/x]\phi''$.
+Also $\theta_i$ will as $\theta_i'[M_i/x]\theta_i''$.
+We'll have $M_i : \theta_i' A$ and
+$p : (\phi_1 \bullet A)\ M_1\ M_2$.
+The substitution principle says that we should have
+\[\phi x : (\phi_1 \bullet A)\ M_1\ M_2\]
+So we simply set $\phi x = p$.
+\subsection{Universe}
+We define
+\[(\phi \bullet \rset)\ A\ B = A \to B \to U\]
+\subsection{Pi}
+
+\[\Gamma,  b : B \prov C : \rset\over
+ \Gamma \prov (b : B) \to C : \rset\]
+
+We aim to define $\phi \bullet (b : B) \to C$,
+which is supposed to have type
+\[((b : \theta_1 B) \to \theta_1 C) \to ((b : \theta_2 B) \to \theta_2 C) \to \rset\]
+So let's define
+\[(\phi \bullet (b : B) \to C)\ f_1\ f_2 = \]
+\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ (f_1\ b_1)\ (f_2\ b_2)\]
+
+
+\subsection{Application}
+\[\Gamma \prov f : (b : B) \to C \qquad \Gamma \prov M : B
+\over \Gamma \prov f\ M : [M/b]C\]
+
+By i.h. we know
+\[\phi f : (\phi \bullet (b : B) \to C)\ (\theta_1 f)\ (\theta_2 f) \]
+\[\phi M : (\phi \bullet B)\ (\theta_1 M)\ (\theta_2 M) \]
+
+hence
+\[\phi f :  (b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ (\theta_1 f\ b_1)\ (\theta_2f\ b_2)\]
+and
+\[\phi f\ (\theta_1 M)\ (\theta_2 M) :(\phi[\phi M/b] \bullet C)\ (\theta_1(f\ M))\ (\theta_2(f\ M))\]
+What we need is
+\[\phi(f\ M)  : (\phi \bullet [M/b]C)\ (\theta_1(f\ M))\ (\theta_2(f\ M)\]
+so assuming the coherence of substitution, we're done. We define
+\[\phi (f\ M) = \phi f\ (\theta_1 M)\ (\theta_2 M)\]
+
+\subsection{Lambda}
+\[
+\Gamma, y : B\prov  M :  C
+\over
+\Gamma \prov \lambda y . M : (b : B) \to C
+\]
+What we need is
+\[\phi(\lambda y . M) : (\phi \bullet (b:B) \to C)\ (\lambda y .\theta_1 M)\ (\lambda y .\theta_2 M)\]
+in other words it should have type
+\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ ([b_1/y]\theta_1 M)\ ([b_2/y]\theta_2 M)\]
+From the induction hypothesis, for any $\phi' : \bd_{\Gamma, y : B}(\theta'_1, \theta'_2)$ we have
+\[\phi' M : (\phi' \bullet C)\ (\theta_1' M)\ (\theta_2' M)\]
+So let's choose in particular (in the environment where $b_1, b_2, q$ have been abstracted)
+\[\phi' = \phi[q/b] \qquad \theta_1' = \theta_1 [b_1/y] \qquad \theta_2' = \theta_2[b_2/y]\]
+and we're done.
+\[\phi(\lambda y . M) = \lambda b_1 b_2 q . (\phi [q/b]) M\]
+
+\subsection{Parametricity}
+Suppose we have $m : (X : \rset) \to X \to X$.
+Let's just look at the type of
+ $\mathsf{refl}_m : \bd_{(X:\rset) \to X \to X}(m, m)$.
+The definition of substitution into types at $X$ gives
+\[\bd_{(X:\rset) \to X \to X}(m, m) = (\cdot \bullet (X : U) \to X \to X)\ m\ m  \]
+\[=(A :  U) (B :  U) (R : A \to  B \to \rset) \to ([R/X] \bullet (X \to X))\ (m\ A)\ (m\ B)\]
+\[= (A :  U) (B :  U) (R : A \to  B \to \rset) (a : A) (b :  B) (q : R\ a\ b) \to R\ (m\ A\ a)\ (m\ B\ b)\]
+
+which is the expected free theorem.
 \end{document}
