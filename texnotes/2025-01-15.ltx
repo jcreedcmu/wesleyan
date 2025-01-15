@@ -336,13 +336,13 @@ Its signature is
 
 For this to work I need to know how to apply substitution bridges. The principle
 is
-\[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : \bdd_{\Gamma.A}^\phi(\theta_1 M, \theta_2 M)\]
+\[\theta_i : \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : \bdd_{\Gamma.A}^\phi(\theta_1 M, \theta_2 M)\]
 
 This seems close to nonerminatingly recursive. But the version that the definition of $\bdd$ needs is just the special-case of $\rset$. I could even write them syntactically differently as
 
-\[\theta_i \prov \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
+\[\theta_i : \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
 
-\[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : (\phi \bullet A)\ (\theta_1 M)\ ( \theta_2 M)\]
+\[\theta_i : \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : (\phi \bullet A)\ (\theta_1 M)\ ( \theta_2 M)\]
 
 And then I can rewrite the cons case of substitution-bridges as
 \[ {
@@ -369,7 +369,7 @@ We introduce a notion of simultaneous bridge substitutions, described by a judgm
 Syntactically, $\phi$ look just like substitutions.
 There are two substitution principles that apply to these $\phi$:
 
-\[\theta_i \prov \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
+\[\theta_i : \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi \bullet A : \theta_1 A \to  \theta_2 A \to \rset\]
 
 \[\theta_i \prov \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(\theta_1, \theta_2) \over \phi M : (\phi \bullet A)\ (\theta_1 M)\ ( \theta_2 M)\]
 
@@ -468,4 +468,52 @@ The definition of substitution into types at $X$ gives
 \[= (A :  U) (B :  U) (R : A \to  B \to \rset) (a : A) (b :  B) (q : R\ a\ b) \to R\ (m\ A\ a)\ (m\ B\ b)\]
 
 which is the expected free theorem.
+
+\section{Generalizing To Shapes}
+
+Our judgment is now
+
+\[\phi : \bd_\Gamma(s.\theta)\]
+
+The substitution $\theta$ exists in the context
+of some binder $s : S$. Set $S = 2$ to recover the binary case.
+
+There are again two substitution principles that apply to these $\phi$:
+
+\[s : S \prov \theta : \Gamma \qquad  \Gamma \prov A : \rset \qquad \phi : \bd_\Gamma(s.\theta) \over \phi \bullet A : ((s : S) \to \theta A) \to \rset\]
+
+\[s : S \prov \theta : \Gamma \qquad  \Gamma \prov M : A \qquad \phi : \bd_\Gamma(s.\theta) \over \phi M : (\phi \bullet A)\ (\lambda s.\theta M)\]
+
+I think if I absorb the argument $(s : S) \to \theta A$ into the substitution principle as an argument with binder, I might be able to accommodate more general contexts than singletons.
+
+\subsection{Abbreviations}
+Regular boundaries and refls are defined in terms of empty substitutions:
+\[\bd_A(a, a') = \cdot \bullet A\ a\ a' \]
+\[\mathsf{refl_M} = \cdot M  \]
+
+\subsection{Variable}
+Suppose $\Gamma = \Gamma', x : A, \Gamma''$.
+Then $\phi$ will break down as $\phi'[p/x]\phi''$.
+Also $\theta_i$ will as $\theta_i'[M_i/x]\theta_i''$.
+We'll have $M_i : \theta_i' A$ and
+$p : (\phi_1 \bullet A)\ M_1\ M_2$.
+The substitution principle says that we should have
+\[\phi x : (\phi_1 \bullet A)\ M_1\ M_2\]
+So we simply set $\phi x = p$.
+\subsection{Universe}
+We define
+\[(\phi \bullet \rset)\ A\ B = A \to B \to U\]
+\subsection{Pi}
+
+\[\Gamma,  b : B \prov C : \rset\over
+ \Gamma \prov (b : B) \to C : \rset\]
+
+We aim to define $\phi \bullet (b : B) \to C$,
+which is supposed to have type
+\[((b : \theta_1 B) \to \theta_1 C) \to ((b : \theta_2 B) \to \theta_2 C) \to \rset\]
+So let's define
+\[(\phi \bullet (b : B) \to C)\ f_1\ f_2 = \]
+\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ (f_1\ b_1)\ (f_2\ b_2)\]
+
+
 \end{document}
