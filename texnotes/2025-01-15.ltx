@@ -518,23 +518,34 @@ The substitution principle says that we should have
 So we simply set $\phi x = p$.
 \subsection{Universe}
 It's straightforward to give a reasonable meaning to
-\[\Pi  \Delta. A\]
+\[  \Delta \to A\]
 For example, if $\Delta = (b : B) (c : C)$ and we have some $A(b, c)$
 that is meaningful in that context, then
 \[\Pi \Delta. A = (b : B) (c : C) \to A(b, c)\]
 We then define
-\[\phi(\rset, \Delta.A) = (\Pi \Delta. A) \to \rset\]
+\[\phi(\rset, \Delta.A) = ( \Delta\to  A) \to \rset\]
 \subsection{Pi}
 
-\[\Gamma,  b : B \prov C : \rset\over
- \Gamma \prov (b : B) \to C : \rset\]
 
-We aim to define $\phi \bullet (b : B) \to C$,
-which is supposed to have type
-\[((b : \theta_1 B) \to \theta_1 C) \to ((b : \theta_2 B) \to \theta_2 C) \to \rset\]
+We aim to define $\phi((b : B) \to C; \Delta.N)$. It should satisfy
+
+\[
+\begin{prooftree}
+\[\Gamma,  b : B \prov C : \rset
+\justifies
+ \Gamma \prov (b : B) \to C : \rset\] \qquad \Delta \prov \phi \tri \theta : \Gamma
+\qquad \Delta \prov N :  (b : \theta B) \to \theta C
+\justifies
+\phi ((b : B) \to C; \Delta.N) :  \rset
+\end{prooftree}
+\]
+
+
+
+
 So let's define
-\[(\phi \bullet (b : B) \to C)\ f_1\ f_2 = \]
-\[(b_1 : \theta_1 B) (b_2 : \theta_2 B) (q : (\phi \bullet B)\ b_1\ b_2) \to (\phi[q/b] \bullet C)\ (f_1\ b_1)\ (f_2\ b_2)\]
+\[\phi((b : B) \to C; \Delta.N) =  \]
+\[(\bar b : \Delta \to \theta B)  (q : \phi(B, \Delta.\bar b)) \to (\phi[q/b])(C; \Delta . (N\ \bar b))\]
 
 
 \end{document}
