@@ -14,6 +14,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\I{\mathbb{I}}
 \def\zed{\emptyset}
 \def\lint{{\textstyle\int}}
 \def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
@@ -695,9 +696,10 @@ Pi case:
 \section{Completely Different Thought}
 Is there any sense in the idea
 \[\bd_A(a, a') \equiv (C : A \to \rset) \to C\ a \to C\ a' \to \rset\]
-?
+? Probably not, there's way too many such pseudobridges. Could one imagine
+separating out the true ones?
 \[\mathsf{refl}_A : \bd_A(a, a) = (C : A \to \rset) \to C\ a \to C\ a \to \rset\]
-\[\mathsf{refl}_A\ C\ c_1\ c_2 = c_1 \equiv c_2?\]
+\[\mathsf{refl}_A(a)\ C\ c_1\ c_2 = \bd_{Ca}(c_1, c_2)?\]
 Can I do $\mathsf{ap}$? Suppose I have a function $f : A \to B$.
 Can I get sensibly from
 \[\beta : (D : A \to \rset) \to D\ a \to D\ a' \to \rset\]
@@ -706,12 +708,73 @@ to
 ?
 I have $(C : B \to \rset) (c : f\ a) (c' : f\ a')$.
 Indeed, $\beta\  (\lambda a . C\ (f\ a))\ c\ c' : \rset$.
-%% What is the free theorem for this type? If I have a
-%% \[\beta : (C : A \to \rset) \to C\ a \to C\ a' \to \rset\]
-%% then I should find I have some canonically derived
-%% \[(C_1 : A \to \rset) (C_2 : A \to \rset) (R : (a : A) \to C_1\ a \to C_2\ a \to \rset)\]
-%% \[(c_1 : C_1\ a) (c_2 : C_2\ a) (r : R\ a\ c_1\ c_2)\]
-%% \[(c_1' : C_1\ a') (c_2' : C_2\ a') (r' : R\ a'\ c_1'\ c_2')\]
-%% \[\to \beta\ C_1\ c_1\ c_1' \to \beta\ C_2\ c_2\ c_2' \to \rset\]
-%% but I don't know what good that does me.
+
+Is there any relationship for function types?
+
+\[\bd_{A \to B}(f, f') \equiv (C : (A \to B) \to \rset) \to C\ f \to C\ f' \to \rset\]
+\[\bd_{A}(a, a') \equiv (C_1 : A \to \rset) \to C_1\ a \to C\ a' \to \rset\]
+\[\bd_{B}(b, b') \equiv (C_2 : B \to \rset) \to C_2\ b \to C_2\ b' \to \rset\]
+Ideally we'd have
+\[\bd_{A \to B}(f, f') \equiv (a\ a' : A) \to \bd_{A}(a, a') \to \bd_{B}(f\ a, f\ a')\]
+That would mean \[\tau_1 \equiv \tau_2\] for
+\[\tau_1 = ((C : (A \to B) \to \rset) \to C\ f \to C\ f' \to \rset) \]
+\[ \tau_2 = (a\ a' : A) (r : (C_1 : A \to \rset) \to C_1\ a \to C\ a' \to \rset) \]
+\[ (C_2 : B \to \rset) (c : C_2\ (f\ a)) (c' :  C_2\ (f'\ a')) \to \rset\]
+Suppose I have $f : \tau_1$. Then
+\[\lambda a a' r C_2 c c' . ?\]
+No, I don't know what to do.
+\subsection{Preservation}
+Does this definition of $\bd$ preserve anything interesting?
+\[p : \bd_A(a, a') \qquad x:A \prov C : \rset \over \mathsf{ap}_{x.C}(p) : [a/x]C \to [a'/x]C \to \rset\]
+
+\[q : \bd_B(b, b') \qquad y:B \prov M : A \over \mathsf{ap}_{y.M}(q) : \bd_A([b/y]A, [b'/y]A)\]
+
+\section{More General Shapes}
+
+I think it was a mistake to think of contexts $\Delta$ as representing single bridge-formation substitutions.
+I should be thinking in terms of multiple consecutive substitutions. Or: I can easily picture shapes that are not cubes.
+For example, tetrahedra. What hapenns with these?
+
+I'll write substitution as $[\phi]^S$ for a shape $S$. I have some operation of $\partial S$ that gives
+the boundary of a shape. I think the empty substitution at $\rset$ looks like
+\[[]^S\rset_i = \lambda \beta :(\partial S \to \rset_i).((x : \partial S) \to \beta\ x) \to \rset_i\]
+\[[]^S\rset_i : []^S \rset_{i+1}(\lambda \_ . \rset_i)\]
+
+The empty substitution gives me bridges indexed over their boundary, but I think the `function space'
+$\partial S \to \dash$ is actually talking about bridges with arbitrary boundary. So could I say something like
+
+\[S \to  \rset_i =  (\beta :(\partial S \to \rset_i)) \x ((x : \partial S) \to \beta\ x) \to \rset_i\]
+\[S \to \rset_i :  \rset_{i+1}\]
+
+For example
+
+\[\I_2 \to \rset_0 = (\beta: 2 \to \rset_0) \x ((x : 2) \to \beta\ x) \to \rset_0\]
+
+And composition with the inclusion $\partial S \to S$ should be the same as projecting out the first component $\beta$.
+
+Hm, I really should be writing $\to$ as $\lol$.
+\[S \lol  \rset_i =  (\beta :(\partial S \lol \rset_i)) \x ((x : \partial S) \lol \beta\ x) \to \rset_i\]
+\[S \lol \rset_i :  \rset_{i+1}\]
+
+That dependent $\lol$ scares me a bit.
+The boundary of the tensor product of shapes should be a pushout, I think:
+\[
+\begin{tikzcd}
+\partial (S_1 \otimes S_2)\ar[from=r]\pbck\ar[from=d]&\partial S_1 \times S_2\ar[from=d,"{\partial S_1 \x \iota}",swap]\\
+ S_1 \times \partial S_2 \ar[from=r,"{\iota \x \partial S_2}"]& \partial S_1 \times \partial S_2
+%%  \ar[d,      "F"{name=F1,swap}, shift right, bend right=10]
+%%  \ar[from=d, "U"{name=U1,swap}, shift right, bend right=10]
+%%  \ar[r, "\Delta"]&[2em]
+%% \D'
+%%  \ar[d,      "F'"{name=F2,swap}, shift right, bend right=10]
+%%  \ar[from=d, "U'"{name=U2,swap}, shift right, bend right=10]
+%% \\[2em]
+%% \C  \ar[r, "\Gamma" swap] &\C'
+%% \ar[from=F1,to=U1,phantom,"\dashv"]
+%% \ar[from=F2,to=U2,phantom,"\dashv"]
+\end{tikzcd}
+\]
+
+For example,
+\[\partial(\I \otimes \I) = (\I \x 2) +_{2\x2} (2 \x \I)\]
 \end{document}
