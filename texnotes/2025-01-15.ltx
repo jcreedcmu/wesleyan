@@ -777,4 +777,43 @@ The boundary of the tensor product of shapes should be a pushout, I think:
 
 For example,
 \[\partial(\I \otimes \I) = (\I \x 2) +_{2\x2} (2 \x \I)\]
+\subsection{Reinventing Substitutions}
+Ok, so I still expect substitutions to arise again when I treat $\lambda$. Let's try to guess the syntax.
+The well-formed substitution judgment probably looks something like like
+\[\phi : (S \prov  \theta : \Gamma) \]
+The substitution principle might look like
+\[
+\Gamma \prov M : A \qquad \phi : (S \prov  \theta : \Gamma)
+\over
+\phi M : \phi A\ [ s . \theta M]
+\]
+
+Hm, this is making me want to first carefully invent the notion of substitution for the 2-case just to make sure I can
+coherently talk about bridges without boundary.
+\subsection{2-bridges without boundary}
+The well-formed bridge substitution  judgment looks like
+\[\phi : [\cdot]\Gamma \]
+We claim substitution and endpoint principles
+\[
+\Gamma \prov M : A \qquad \phi : [\cdot]\Gamma
+\over
+[\phi] M : [\phi] A
+\]
+\[ \phi : [\cdot]\Gamma \qquad t \in \{0, 1\}  \over \phi^t : \Gamma \]
+\[ \phi : [\cdot]\Gamma \qquad \Gamma \prov A : \rset \qquad p : [\phi] A \qquad t \in \{0, 1\}  \over p^t : \phi^t A \]
+and substitution formation works like
+\[ {
+\phi : [\cdot]\Gamma
+\qquad \Gamma \prov A : \rset
+\qquad p : [\phi] A
+\over
+ (\phi[p/x]) : [\cdot](\Gamma, x : A)
+}\]
+We have some coherences
+\[ ([\phi] M)^t \equiv \phi^t M \]
+\[(\phi[p/x])^t \equiv (\phi^t)[p^t/x] \]
+The universe:
+\[[\phi]\rset_i = (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
+
+\[[\phi]\rset_i = \langle \rset_i , \rset_i, \lambda A_0\ A_1 . A_0 \to A_1 \to \rset_i\rangle\]
 \end{document}
