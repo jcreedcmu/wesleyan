@@ -18,6 +18,7 @@
 \def\dec{\mathsf{\downarrow}}
 \def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
+\def\bget{\mathop\mathbf{get}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\zed{\emptyset}
 \def\lint{{\textstyle\int}}
@@ -994,10 +995,10 @@ Actually, I think I need an intro form for the intro form!
 
 \[\Delta \prov e : A
 \over
-\cdot \prov \bsnd e : A \star ([\iota] e)
+\cdot \prov \bget \Delta. e : A \star ([\iota] e)
 \]
 
-\[\bsnd \langle b, c\rangle \equiv c\]
+\[\bget \langle b, c\rangle \equiv c\]
 \subsection{Substitutions}
 Perhaps all other substitutions are boring. This is a strong claim
 and needs to be checked.
@@ -1029,7 +1030,7 @@ Hence if we define
 then
 \[ t:{\bf 2} \prov q : X_0 \]
 and now we can extract
-\[\cdot \prov \bsnd q : X_0 \star ([\iota] q)\]
+\[\cdot \prov \bget t.q : X_0 \star ([\iota] q)\]
 And let's start computing $X_0 \star ([\iota] q)$. It's
 \[( \lambda f . R\ (f\ i_0)\ (f\ i_1) )([\iota]q)\]
 \[= R\ ([\iota]q\ i_0)\ ([\iota]q\ i_1) \]
@@ -1048,16 +1049,35 @@ it the binary displayed type
 \[B^d\ \langle A_1, a_1\rangle\ \langle A_2, a_2\rangle = \{A^d : A_1 \to A_2 \to \rset, a^d : A^d\ a_1\ a_2\}\]
 
 
-\[x : 2 \prov B : \rset_i
-\qquad
-\cdot \prov B^d : (x : 2 \to B(x)) \to \rset_i
+I'm pretty sure the thing I want is $\bget((t : {\bf 1}).B)$
+but that doesn't reduce!
+
+I guess I need to be able to reduce $\star$ and $\bget$ for types that aren't intro forms at $\rset$.
+
+\[\Delta \prov e : A
 \over
-{\bf 2} \prov \langle B,  C \rangle : \rset_i\]
+\cdot \prov \bget \Delta.e : A \star ([\iota] e)
+\]
+
+\[\Delta \prov A : [\_]\rset_i
+\qquad
+\cdot \prov M : \partial \Delta \to [\iota]A
+\over \cdot \prov A\star M : \rset_i\]
 
 
-\[B^d := \langle B ,  \]
+\[\Delta \prov ((a : A) \x B) : \rset
+\over
+\cdot \prov \bget \Delta.((a : A) \x B) : \rset \star ([\iota] ((a : A) \x B))
+\]
 
+\[\Delta \prov A : [\_]\rset_i
+\qquad
+\cdot \prov M : \partial \Delta \to [\iota]A
+\over \cdot \prov A\star M : \rset_i\]
 
+Let's think of the 2-case.
 
-
+\[t:{\bf 2} \prov \Sigma (a : A) . B : \rset\]
+\[ \prov \bget ((t:{\bf 2}).\Sigma (a : A) . B) : \rset\]
+\[ \prov \Sigma (a : (\bget t.A)) .  (\bget t. B)) : \rset\]
 \end{document}
