@@ -813,7 +813,17 @@ We have some coherences
 \[ ([\phi] M)^t \equiv \phi^t M \]
 \[(\phi[p/x])^t \equiv (\phi^t)[p^t/x] \]
 The universe:
-\[[\phi]\rset_i = (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
-
-\[[\phi]\rset_i = \langle \rset_i , \rset_i, \lambda A_0\ A_1 . A_0 \to A_1 \to \rset_i\rangle\]
+\[[\phi]\rset_i \approx (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
+But I'm just going to invent a new type and call it $R_i$ and say
+\[[\phi]\rset_i \equiv R_i \]
+and have $R_i : R_{i+1}$. We have endpoints
+\[ r : R_i \qquad t \in \{0,1\} \over r^t : \rset_i\]
+and the underlying relation
+\[ r : R_i \over r^* : r^0 \to r^1 \to \rset_i\]
+and since I said $R_i : R_{i+1}$ I need to specify
+\[R_i^0 \equiv \rset_i\qquad R_i^1 \equiv \rset_i\qquad R_i^* \equiv \lambda A_0A_1. (A_0 \to A_1 \to \rset_i)\]
+If I need an introduction form for $R_i$ it's this:
+\[ A_0 : \rset_i \qquad A_1 : \rset_i \qquad A_* : A_0 \to A_1 \to \rset_i \over
+\langle A_0, A_1, A_* \rangle : R_{i}\]
+Hm, this is quite tangled. Maybe I'm seeing why Mike Shulman didn't have $\eta$ for universes.
 \end{document}
