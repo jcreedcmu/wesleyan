@@ -14,7 +14,11 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+
+\def\dec{\mathsf{\downarrow}}
+\def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\zed{\emptyset}
 \def\lint{{\textstyle\int}}
 \def\isopen{\textcolor{orange}{\mathlarger{\mathlarger{\mathlarger{\textbf ?}}}}}
@@ -812,18 +816,170 @@ and substitution formation works like
 We have some coherences
 \[ ([\phi] M)^t \equiv \phi^t M \]
 \[(\phi[p/x])^t \equiv (\phi^t)[p^t/x] \]
-The universe:
-\[[\phi]\rset_i \approx (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
-But I'm just going to invent a new type and call it $R_i$ and say
-\[[\phi]\rset_i \equiv R_i \]
-and have $R_i : R_{i+1}$. We have endpoints
-\[ r : R_i \qquad t \in \{0,1\} \over r^t : \rset_i\]
-and the underlying relation
-\[ r : R_i \over r^* : r^0 \to r^1 \to \rset_i\]
-and since I said $R_i : R_{i+1}$ I need to specify
-\[R_i^0 \equiv \rset_i\qquad R_i^1 \equiv \rset_i\qquad R_i^* \equiv \lambda A_0A_1. (A_0 \to A_1 \to \rset_i)\]
-If I need an introduction form for $R_i$ it's this:
-\[ A_0 : \rset_i \qquad A_1 : \rset_i \qquad A_* : A_0 \to A_1 \to \rset_i \over
-\langle A_0, A_1, A_* \rangle : R_{i}\]
-Hm, this is quite tangled. Maybe I'm seeing why Mike Shulman didn't have $\eta$ for universes.
+The universe: (I don't care about $\phi$ anywhere here)
+I can't seem to {\em set}
+\[[\_]\rset_i \equiv (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
+because then I won't have
+\[[\_]\rset_i  : [\_]\rset_{i+1}\]
+I think this is the phenomenon Mike Shulman mentioned in one of his talks.
+But I can require
+\[\dec : [\_]\rset_i \to (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
+\[\enc : ((A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i) \to [\_]\rset_i  \]
+\[\dec \o \enc \equiv \mathsf{id}\]
+Then since I've made a new intro form for $[\_]U_i$ I need to say
+\[(\enc\langle A_0, A_1, R\rangle)^t \equiv A_t \]
+which entails as a corollary that
+\[(\dec R) . A_t \equiv R^t \]
+\subsection{Can I Define $\lambda$}
+The real question I'm worried about is: can I define substitution across a lambda
+without needing to introduce a notion of substitution that pins down boundaries
+up to definitional equality. I guess I have to define substitution across $\Pi$ first.
+\subsubsection{Pi}
+I'm working with
+\[
+\begin{prooftree}
+\[
+\Gamma, b : B \prov C : \rset
+\justifies
+\Gamma \prov ((b : B) \to C) : \rset
+\]
+\justifies
+\Gamma \prov [\phi]((b : B) \to C) : [\_]\rset
+\end{prooftree}
+\]
+Induction hypothesis tells me
+\[
+\phi : [\cdot]\Gamma
+\qquad b' : [\phi] B
+\over [\phi][b'/b] C : [\_]\rset \]
+So I want to set like
+\[[\phi]((b : B) \to C) \equiv (b' : [\phi]B) \to [\phi][b'/b] C\]
+But this seems potentially to contain too many functions! I want
+to have the property that
+\[(f : [\phi]((b : B) \to C)) (b' : [\phi]B) \to f^t \ b^t \equiv (f\ b)^t\]
+Maybe this is somehow ok? And we can never construct badly shaped functions?
+\subsubsection{Lambda}
+We're working with
+\[
+\begin{prooftree}
+\[
+\Gamma, b : B \prov M : C
+\justifies
+\Gamma, (\lambda b . M) :  (b : B) \to C
+\]
+\justifies
+\Gamma \prov [\phi](\lambda b . M) :  [\phi]((b : B) \to C)
+\end{prooftree}
+\]
+Induction hypothesis gives us
+\[
+\phi : [\cdot]\Gamma
+\qquad b' : [\phi] B
+\over [\phi][b'/b] M :  [\phi][b'/b]C\]
+So I can type
+\[
+\begin{prooftree}
+\[
+\justifies
+\]
+  b' :[\phi]B \prov  [\phi][b'/b] M :  [\phi][b'/b] C
+\justifies
+\lambda  b' . [\phi][b'/b] M : (b' : [\phi]B) \to [\phi][b'/b] C
+\end{prooftree}
+\]
+
+So maybe we can just set
+\[[\phi](\lambda b .M) \equiv \lambda  b' . [\phi][b'/b] M \]
+\[(\lambda b' . M)^t \equiv \lambda b' . (M^t)\]
+
+\subsection{Back to General Shapes}
+The well-formed bridge substitution  judgment looks like
+\[\Delta \prov \phi : \Gamma \]
+but $\Delta$ is not an ordinary context. Rather, it is a `shape'. For example
+$\Delta$ can be two points, or a line, or a cube, or a tetrahedron.
+We have well-formed `substitutions' between $\Delta$ `contexts'
+$\Delta' \prov \zeta : \Delta$. There is an operation
+of taking boundaries $\partial \Delta$ of shapes $\Delta$.
+There is an inclusion substitution $\partial\Delta \prov \iota : \Delta$.
+I could write the single vertex as the empty context $\cdot$
+and the line is maybe $\bf 2$, so that
+For shapes that have vertices I expect degeneracy substitutions like
+\[ \cdot \prov [i_0/\ell] : (\ell : {\bf 2})\]
+but really this is a special case of the inclusion
+\[ t : 2 \prov \iota : (\ell : {\bf 2})\]
+because $2 \equiv \partial {\bf 2}$.
+
+We claim substitution principles
+\[
+ \Delta \prov \phi : \Gamma \qquad \Gamma \prov M : A
+\over
+\Delta \prov [\phi] M : [\phi] A
+\]
+\[ \Delta' \prov \zeta : \Delta \qquad \Delta \prov \phi : \Gamma  \over \Delta' \prov [\zeta]\phi : \Gamma \]
+\[\Delta' \prov \zeta : \Delta \qquad  \Delta \prov B : [\_]\rset \qquad \Delta \prov p : B
+ \over\Delta' \prov  [\zeta]p : [\zeta]B \]
+Then substitution formation works like
+\[ {
+\Delta \prov \phi : \Gamma
+\qquad \Gamma \prov A : \rset
+\qquad \Delta \prov p : [\phi] A
+\over
+ \Delta \prov (\phi[p/x]) : (\Gamma, x : A)
+}\]
+We expect some coherences
+\[[\zeta](\phi[p/x]) \equiv ([\zeta]\phi)[[\zeta]p/x] \]
+\[[\zeta]([\phi]A) \equiv [\zeta[\phi]]A\]
+the latter which means we get a derived principle
+
+\[\Delta' \prov \zeta : \Delta \qquad   \Delta \prov \phi : \Gamma \qquad \Gamma \prov A : \rset \qquad \Delta \prov p : [\phi]A
+ \over\Delta' \prov  [\zeta]p : [[\zeta]\phi ]A \]
+
+\subsection{The Universe}
+\[\Delta \prov [\_]\rset_i : [\_]\rset_{i+1}\]
+I'm going to write $[\phi]$ as $[\_]^\Delta$ here to emphasize I know what $\Delta$ is.
+I'll write $\approx$ for the relevant $\enc/\dec$ retract.
+\[[\_]^\Delta\rset_i \approx (\beta: \dec ([\_]^{\partial \Delta} \rset_i)) \x (x : \beta) \to \rset_i\]
+
+I need to set up a function type abstracting over $\Delta$s.
+\[
+{
+\Delta \prov A : [\_]\rset_i
+\over
+\cdot \prov \Delta \to A : \rset_i
+}
+\qquad
+{
+\Delta \prov M :  A
+\over
+\cdot \prov \lambda \Delta. M : \Delta \to A
+}
+\qquad
+{
+\cdot \prov M : \Delta \to A \qquad \Delta' \prov \zeta : \Delta
+\over
+\Delta' \prov M\ \zeta : [\zeta]A
+}
+\]
+\[(\lambda \Delta.M)\ \zeta \equiv [\zeta]M\]
+
+An explicit elim form for $[\_]^\Delta\rset_i$ is
+
+\[\Delta \prov A : [\_]\rset_i
+\qquad
+\cdot \prov M : \partial \Delta \to [\iota]A
+\over \cdot \prov A\star M : \rset_i\]
+
+$M$ is the argument to the second component of the dependent pair. The first component is
+given by applying the inclusion substitution $\partial \Delta \prov \iota : \Delta$.
+For the intro form,
+
+\[\partial \Delta \prov B : [\_]\rset_i
+\qquad
+\cdot \prov C : (\partial \Delta \to B) \to \rset_i
+\over
+\Delta \prov \langle  C \rangle :  [\_]\rset_i\]
+The $\beta$ laws are
+\[[\iota]\langle B, C \rangle \equiv B\]
+\[\langle B, C \rangle \star M \equiv C\ M\]
+
 \end{document}
