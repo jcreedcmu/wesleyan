@@ -1039,4 +1039,25 @@ as required.
 Maybe I need to have as a general principle that all substitutions into $\Delta$ must
 factor through $\partial \Delta \prov \iota : \Delta$. That will make
 substitutions on $\langle B, C\rangle$ unconditionally well-defined.
+
+\subsection{Displayed Types}
+
+Suppose I have the record type $B = \{A : \rset, a : A\}$ and I want to compute from
+it the binary displayed type
+\[B^d : B \to B  \to \rset\]
+\[B^d\ \langle A_1, a_1\rangle\ \langle A_2, a_2\rangle = \{A^d : A_1 \to A_2 \to \rset, a^d : A^d\ a_1\ a_2\}\]
+
+
+\[x : 2 \prov B : \rset_i
+\qquad
+\cdot \prov B^d : (x : 2 \to B(x)) \to \rset_i
+\over
+{\bf 2} \prov \langle B,  C \rangle : \rset_i\]
+
+
+\[B^d := \langle B ,  \]
+
+
+
+
 \end{document}
