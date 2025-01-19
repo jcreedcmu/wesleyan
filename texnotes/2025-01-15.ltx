@@ -1259,6 +1259,110 @@ I should be able to get into this type by pairing.
 \Delta \prov x' =  \langle \partial \Delta . \langle a|b \rangle, r \rangle :  X'\]
 Then
 \[\Delta \prov \langle X', x' \rangle : \Sigma(A : \rset_0).A\]
+i.e.
+\[\Delta \prov \langle X', x' \rangle : P\]
 \[ \prov \bget \Delta . (\langle X', x' \rangle) : (\Sigma(A : \rset_0).A) \star [\iota]\langle X', x' \rangle\]
 That isn't quite what I wanted.
+\subsection{Back a Step}
+
+No, I am very confused and want to go back to explicit notation for constructing types.
+\def\ll{\langle\!\langle}
+\def\rr{\rangle\!\rangle}
+Let it be distinct notation even. Here's how I make $\Delta$-types out of relations:
+
+\[\partial \Delta \prov B : \rset_i
+\qquad
+\cdot \prov C : \dap{\partial \Delta}{ B} \to \rset_i
+\over
+\Delta \prov \ll \partial\Delta . B,  C \rr :  \rset_i\]
+
+Here's how I make types with specified boundaries:
+\[\Delta \prov A : \rset_i
+\qquad
+\partial\Delta \prov M : [\iota] A
+\over \cdot \prov A\star \partial \Delta . M : \rset_i\]
+
+
+Here's how I inhabit a $\Delta$-type:
+\[\begin{array}{c@{\quad}c}
+\Delta \prov D : \rset_i\\
+\partial \Delta \prov d_1 : [\iota]D & \cdot \prov d_2 :  D \star (\partial \Delta . d_1)
+\end{array}
+\over
+\Delta \prov  \langle \partial \Delta .d_1, d_2 \rangle :  D\]
+
+Here's how I get out of a $\Delta$-type:
+\[\Delta \prov e : A
+\over
+\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
+\]
+
+$\beta/\eta$ for $\langle\_,\_\rangle/\bget$:
+\[
+\langle \partial\Delta.[\iota]e , \bget \Delta .e\rangle \equiv e
+\qquad
+\bget \Delta. \langle \partial\Delta . M, N \rangle \equiv N
+\]
+\[\langle M, N\rangle[\iota] \equiv M\]
+$\beta$ for $\ll\_,\_\rr$:
+\[
+[\iota]\ll \partial\Delta . B, C \rr \equiv B
+\qquad
+\ll \partial\Delta . B, C \rr \star \partial \Delta . M \equiv C\ (\lambda \partial\Delta . M)\]
+
+
+of which there is a special case
+\[\begin{array}{c@{\quad}c}
+\partial \Delta \prov B : \rset_i&\cdot \prov C : \dap{\partial \Delta} B \to \rset_i
+\\
+\partial \Delta \prov b : B & \cdot \prov c :  C\ (\lambda\partial \Delta . b)
+\end{array}
+\over
+\Delta \prov  \langle \partial \Delta .b, c \rangle :  \ll \partial\Delta . B,  C \rr\]
+\subsection{Displayed Types Again}
+Suppose I consider
+\[P :\rset_1\]
+\[P = \Sigma (A : \rset_0) . A\]
+I want to derive the binary displayed version of this,
+\[P^d : P \to P \to \rset_1\]
+\[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
+I claim that if I set $\Delta = (t : {\bf 2})$ I can say
+\[ P^d \cong \bget(\Delta. P)\]
+Let's consider the typing first
+\[\Delta \prov P : \rset_1
+\over
+\cdot \prov \bget \Delta. P : \rset_1 \star (\partial\Delta . [\iota] P)
+\]
+If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$, then
+I should be able to get into something. Remember my notion that
+\[\rset_i \star (\partial\Delta.A) \approx \dap{\partial\Delta}{A} \to \rset_i\]
+and given the non-$\eta$ principle that
+\[A \approx \ll \partial \Delta. [\iota]A, \lambda M . A \star M \rr\]
+I can imagine that
+\[\rset_i \approx \ll \partial \Delta. \rset_i, \lambda f . \rset_i \star f \rr\]
+\[\rset_i \approx \ll \partial \Delta. \rset_i, \lambda f .  \dap \Delta f \to \rset_i \rr\]
+
+
+
+
+\[\Delta \prov P : \rset_1
+\over
+\cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)
+\]
+
+%% \[X' = \Delta \prov \langle\partial\Delta.\langle A|B\rangle, \lambda f . R\ (f\ t_0)\ (f\ t_1)\rangle : \rset_0\]
+%% \[
+%% \partial \Delta \prov \langle a|b\rangle : \partial\Delta.\langle A|B\rangle \qquad \cdot \prov r : R\ a\ b
+%% \over
+%% \Delta \prov x' =  \langle \partial \Delta . \langle a|b \rangle, r \rangle :  X'\]
+%% Then
+%% \[\Delta \prov \langle X', x' \rangle : \Sigma(A : \rset_0).A\]
+%% i.e.
+%% \[\Delta \prov \langle X', x' \rangle : P\]
+%% \[ \prov \bget \Delta . (\langle X', x' \rangle) : (\Sigma(A : \rset_0).A) \star [\iota]\langle X', x' \rangle\]
+%% That isn't quite what I wanted.
+
+
+
+
 \end{document}
