@@ -1236,4 +1236,29 @@ and so
 \[\Delta \prov M\ X'\ x' : X'\]
 \[ \prov \bget (\partial\Delta . M\ X'\ x') : X' \star (\partial \Delta.[\iota](M\ X'\ x'))\]
 \[ \prov \bget (\partial\Delta . M\ X'\ x') : R\ (M\ A\ a)\ (M\ B\ b)\]
+\subsection{Displayed Sets}
+Suppose I consider
+\[P :\rset_1\]
+\[P = \Sigma (A : \rset_0) . A\]
+I want to derive the binary displayed version of this,
+\[P^d : P \to P \to \rset_1\]
+\[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
+I claim
+\[ P^d \cong \bget((t : {\bf 2}). P)\]
+Let's consider the typing first
+\[\Delta \prov P : \rset_1
+\over
+\cdot \prov \bget \Delta. P : \rset_1 \star (\partial\Delta . [\iota] P) \equiv \dap{\partial \Delta}{[\iota]P} \to \rset_1
+\]
+If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$, then
+I should be able to get into this type by pairing.
+\[X' = \Delta \prov \langle\partial\Delta.\langle A|B\rangle, \lambda f . R\ (f\ t_0)\ (f\ t_1)\rangle : \rset_0\]
+\[
+\partial \Delta \prov \langle a|b\rangle : \partial\Delta.\langle A|B\rangle \qquad \cdot \prov r : R\ a\ b
+\over
+\Delta \prov x' =  \langle \partial \Delta . \langle a|b \rangle, r \rangle :  X'\]
+Then
+\[\Delta \prov \langle X', x' \rangle : \Sigma(A : \rset_0).A\]
+\[ \prov \bget \Delta . (\langle X', x' \rangle) : (\Sigma(A : \rset_0).A) \star [\iota]\langle X', x' \rangle\]
+That isn't quite what I wanted.
 \end{document}
