@@ -1397,13 +1397,13 @@ As a consequence I'd get something like (but I'll take these as axiomatic)
 \]
 And I'd like to impose $\dec \Delta. \enc(\partial\Delta .A, B) \equiv B$ and $[\iota]\enc(\partial\Delta.A, B) \equiv A$.
 
-
-\subsection{Identity Free Theorem Again}
-If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$.
-$R$ can be turned into a $\Delta$ type by
-\[
-\Delta \prov {\enc} (\partial\Delta.\langle A|B \rangle, \lambda f . R\ ([t_0]f)\ ([t_1]f)) : \rset_0
-\]
+Hm, I'm not yet sure how this is any different. $\enc$ seems a lot like $\ll \_,\_\rr$ and $\dec$ seems a lot like $\star$.
+Yeah, the typing rules line up pretty well.
+\[(\dec \Delta . A) (\lambda \partial\Delta. M) \equiv  \Delta.A \star \partial\Delta.M\]
+\[(\partial\Delta.A, B) \equiv  \ll \partial\Delta.A, B \rr\]
+How do I inhabit this new $\rset_i$ that now exists at the empty shape? Maybe I want operations that witness
+\[\dec \Delta. \enc(\partial\Delta .A, B) \cong B\]
+rather than identity on the nose there.
 \subsection{Displayed Types Again}
 Suppose I consider
 \[P :\rset_1\]
@@ -1411,9 +1411,10 @@ Suppose I consider
 I want to derive the binary displayed version of this,
 \[P^d : P \to P \to \rset_1\]
 \[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
-I claim that if I set $\Delta = (t : {\bf 2})$ I can say
-\[ P^d \cong \bget(\Delta. P)\]
-Let's consider the typing first
+I'd like to hope that
+\[ P^d \cong \dec(\Delta. P)\]
+Hmm this seems to be telling me that actually
+\[ P^d \cong \rset_1 \star (\partial\Delta . P)\]
 \[\Delta \prov P : \rset_1
 \over
 \cdot \prov \bget \Delta. P : \rset_1 \star (\partial\Delta . [\iota] P)
