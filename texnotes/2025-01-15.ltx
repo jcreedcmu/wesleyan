@@ -1107,41 +1107,59 @@ Informally, I'm going to rewrite
 
 
 \[
-{\Delta \,\mathsf{shape}
-\over
-\cdot \prov \dapt \Delta {\rset_i} : \rset_{i+1}}
-\qquad
-{\Delta \,\mathsf{shape} \qquad \cdot \prov A : \dapt \Delta {\rset_i}
+{\Delta \,\mathsf{shape} \qquad  \Delta \prov A : \rset_i
 \over
 \cdot \prov \dap \Delta A : \rset_i}
+\qquad
+{\Delta \,\mathsf{shape} \qquad  \Delta \prov M : A
+\over
+\cdot \prov \lambda \Delta . M :  \dap \Delta A }
 \]
 
 
 
-For example, if $\Delta = {\bf 2}$ and $p : \rset_i \x \rset_i$, we say
+For example, if $\Delta = {(t : 2)}$ and $t :  2 \prov A : \rset_i $, we say
 \begin{itemize}
-\item $\dapt\Delta {\rset_i} \equiv \rset_i \x \rset_i$
-\item $\dap \Delta{\langle A_0, A_1\rangle} \equiv A_0 \x A_1$
+\item $\dap {\Delta}{A} \equiv [t_0]A \x [t_1]A$
 \end{itemize}
 
 Hence to give $\Delta \prov A : \rset_i$ should be approximately the same as giving
 \begin{itemize}
-\item its boundary $\cdot \prov \partial A : \dapt \Delta {\rset_i}$.
-\item its content, $\cdot \prov  \lambda M . A \star M  : \dap{\Delta}{\partial A} \to \rset_i$.
+\item its boundary $\partial \Delta \prov [\iota] A : \rset_i$.
+\item its content, $\cdot \prov  \lambda M . A \star M  : \dap{\partial\Delta}{[\iota] A} \to \rset_i$.
 \end{itemize}
 
+Intro:
+\[\color{gray}\partial \Delta \prov B : \rset_i
+\qquad
+\cdot \prov C : \dap{\partial \Delta}{ B} \to \rset_i
+\over
+\Delta \prov \langle B,  C \rangle :  \rset_i\]
+Elim:
 \[\Delta \prov A : \rset_i
 \qquad
-\cdot \prov M : \dap \Delta A
+\cdot \prov M : \dap {\partial\Delta}{[\iota] A}
 \over \cdot \prov A\star M : \rset_i\]
+$\beta$:
+\[\color{gray}[\iota]\langle B, C \rangle \equiv B\]
+\[\color{gray}\langle B, C \rangle \star M \equiv C\ M\]
 
-\[\begin{array}{c@{\quad}c}
-\partial \Delta \prov B : [\_]\rset_i&\cdot \prov C : (\partial \Delta \to B) \to \rset_i
+Intro:
+\[\color{gray}\begin{array}{c@{\quad}c}
+\partial \Delta \prov B : \rset_i&\cdot \prov C : \dap{\partial \Delta} B \to \rset_i
 \\
 \partial \Delta \prov b : B & \cdot \prov c :  C\ \lambda \Delta . b
 \end{array}
 \over
 \Delta \prov  \langle b, c \rangle :  \langle B,  C \rangle\]
+
+
+\[
+\partial \Delta \prov b : [\iota]A \qquad \cdot \prov c :  A\star \lambda \Delta . b
+\over
+\Delta \prov  \langle b, c \rangle :  A\]
+
+
 \[[\iota]\langle b, c\rangle \equiv b\]
 
 \[\Delta \prov e : A
@@ -1149,10 +1167,6 @@ Hence to give $\Delta \prov A : \rset_i$ should be approximately the same as giv
 \cdot \prov \bget \Delta. e : A \star ([\iota] e)
 \]
 
-\[\Delta \prov A : \rset_i
-\over
-\cdot \prov \partial A : \dapt \Delta {\rset_i}
-\]
 
 \[\bget \langle b, c\rangle \equiv c\]
 
