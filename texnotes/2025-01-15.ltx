@@ -1379,7 +1379,7 @@ What if I go back and instead aim for something like
 \]
 maybe more like $\dec \Delta.A = \Downarrow\bget \Delta .  A$ and
 $\enc B = \langle \partial\Delta . A, \Uparrow B \rangle$.
-As a consequence I'd get
+As a consequence I'd get something like (but I'll take these as axiomatic)
 \[
 {
 \Delta \prov A : \rset_i
@@ -1388,14 +1388,22 @@ As a consequence I'd get
 }
 \qquad
 {
+\partial\Delta \prov A : \rset_i
+\qquad
  \prov  B  :\dap {\partial\Delta} A \to \rset_i
 \over
-\Delta \prov {\enc} B : \rset_i
+\Delta \prov {\enc} (\partial\Delta.A, B) : \rset_i
 }
 \]
-And I'd like to impose $\dec \enc B \equiv B$.
+And I'd like to impose $\dec \Delta. \enc(\partial\Delta .A, B) \equiv B$ and $[\iota]\enc(\partial\Delta.A, B) \equiv A$.
 
 
+\subsection{Identity Free Theorem Again}
+If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$.
+$R$ can be turned into a $\Delta$ type by
+\[
+\Delta \prov {\enc} (\partial\Delta.\langle A|B \rangle, \lambda f . R\ ([t_0]f)\ ([t_1]f)) : \rset_0
+\]
 \subsection{Displayed Types Again}
 Suppose I consider
 \[P :\rset_1\]
