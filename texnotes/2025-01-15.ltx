@@ -1319,6 +1319,83 @@ of which there is a special case
 \end{array}
 \over
 \Delta \prov  \langle \partial \Delta .b, c \rangle :  \ll \partial\Delta . B,  C \rr\]
+\subsection{Every $\Delta$-Type Is Isomorphic to a Relation}
+If I have $\Delta \prov A : \rset_i$, there is another expression $K$, not definitionally
+equal, that denotes an isomorphic type. It is
+\[
+\partial \Delta \prov [\iota]A : \rset_i
+\qquad
+\cdot \prov \lambda M . A\star \partial\Delta. M[\partial\Delta] : \dap{\partial \Delta}{ [\iota]A} \to \rset_i
+\over
+\Delta \prov K := \ll\partial\Delta. [\iota]A, \lambda M . A\star \partial\Delta. M[\partial\Delta]\rr : \rset_i
+\]
+This by itself doesn't help us understand $A$, since $K\star M \equiv A \star M$ and $[\iota]K = [\iota]A$.
+However, maybe it's the case that if we set $A = \rset_i$, we can use another expression for what
+we secretly know $\rset \star M$ `ought to' reduce to. We conjecture that $\Delta \prov \rset_i : \rset_{i+1}$ behaves
+somewhat like
+\[\partial \Delta \prov \rset_i : \rset_{i+1}
+\qquad
+\cdot \prov C : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
+\over
+\Delta \prov \ll \partial\Delta . \rset_i,  C \rr :  \rset_{i+1}\]
+
+guess:\[\rset_i \star (\partial\Delta.A) \equiv \dap{\partial\Delta}{A} \to \rset_i\]
+
+\[
+\begin{prooftree}
+\partial \Delta \prov \rset_i : \rset_{i+1}
+\qquad
+\[
+\[
+\[
+\justifies
+M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\}   :  \rset_{i}
+\]
+\justifies
+M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  :  \rset_{i+1}
+\]
+\justifies
+ \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
+\]
+\justifies
+\Delta \prov \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr :  \rset_{i+1}
+\end{prooftree}
+\]
+Ok, now to substantiate the claim that if we define $K = \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$ then $K$ is somewhat like $\rset_i$ at $\Delta$. ... Not sure how to do this.
+\subsection{Simple $\enc$ and $\dec$}
+What if I go back and instead aim for something like
+\[
+{
+\cdot \prov B : \rset_i \star (\partial\Delta . A)
+\over
+ \prov \Downarrow B  :\dap {\partial\Delta} A \to \rset_i
+}
+\qquad
+{
+ \prov  B  :\dap {\partial\Delta} A \to \rset_i
+\over
+\cdot \prov \Uparrow B : \rset_i \star (\partial\Delta . A)
+}
+\]
+maybe more like $\dec \Delta.A = \Downarrow\bget \Delta .  A$ and
+$\enc B = \langle \partial\Delta . A, \Uparrow B \rangle$.
+As a consequence I'd get
+\[
+{
+\Delta \prov A : \rset_i
+\over
+ \prov \dec \Delta.A  :\dap {\partial\Delta} {[\iota]A} \to \rset_i
+}
+\qquad
+{
+ \prov  B  :\dap {\partial\Delta} A \to \rset_i
+\over
+\Delta \prov {\enc} B : \rset_i
+}
+\]
+And I'd like to impose $\dec \enc B \equiv B$.
+
+
 \subsection{Displayed Types Again}
 Suppose I consider
 \[P :\rset_1\]
