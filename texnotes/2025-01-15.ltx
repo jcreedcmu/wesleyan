@@ -1203,11 +1203,37 @@ We first need to get into $\rset_0$.
 \over
 \Delta \prov  \langle \partial \Delta . \langle A | B\rangle, N \rangle :  \rset_0\]
 Ok, now we need to make $\rset_0\star \partial \Delta .  \langle A | B\rangle$.
-I think I need the information that
-\[\rset_0\star \partial \Delta .  \langle A | B\rangle \equiv A \to B \to \rset_0\]
-\[\Delta \prov e : A
-\over
-\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
-\]
+Oh no, the only way I know how to get into that is $\Delta \prov e : \rset_0$!
+That's going around in circles.
 
+I'm afraid of going down the road of letting $\star$ be a defined operation because
+that smells like where I started, recursively defining bridge types at a boundary.
+But let's take a guess that
+\[\rset_i \star (\partial\Delta.A) \equiv \dap{\partial\Delta}{A} \to \rset_i\]
+And then we can have
+\[ \lambda f . R\ (f\ t_0)\ (f\ t_1) : \rset_0\star \partial \Delta .  \langle A | B\rangle\]
+and let's define
+\[X' = \Delta \prov \langle\partial\Delta.\langle A|B\rangle, \lambda f . R\ (f\ t_0)\ (f\ t_1)\rangle : \rset_0\]
+Now how do I get a term of type $X'$ at $\Delta$?
+\[
+\partial \Delta \prov M : [\iota]X' \qquad \cdot \prov N :  X'\star \partial \Delta . M
+\over
+\Delta \prov  \langle \partial \Delta . M, N \rangle :  X'\]
+Here I may need to bring back my other $\beta$ and $\eta$ principles that
+\[\langle \partial \Delta . B, C \rangle[\iota] \equiv B\]
+\[\langle B, C \rangle \star M \equiv C\ M\]
+to reduce my goal to
+\[
+\partial \Delta \prov M : \partial\Delta.\langle A|B\rangle \qquad \cdot \prov N : R\ ([t_0/t]M)\ ([t_1/t]M)
+\over
+\Delta \prov  \langle \partial \Delta . M, N \rangle :  X'\]
+but now I can definitely say
+\[
+\partial \Delta \prov \langle a|b\rangle : \partial\Delta.\langle A|B\rangle \qquad \cdot \prov r : R\ a\ b
+\over
+\Delta \prov x' =  \langle \partial \Delta . \langle a|b \rangle, r \rangle :  X'\]
+and so
+\[\Delta \prov M\ X'\ x' : X'\]
+\[ \prov \bget (\partial\Delta . M\ X'\ x') : X' \star (\partial \Delta.[\iota](M\ X'\ x'))\]
+\[ \prov \bget (\partial\Delta . M\ X'\ x') : R\ (M\ A\ a)\ (M\ B\ b)\]
 \end{document}
