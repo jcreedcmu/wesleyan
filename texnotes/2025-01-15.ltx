@@ -1167,7 +1167,47 @@ Intro:
 \cdot \prov \bget \Delta. e : A \star ([\iota] e)
 \]
 
-
 \[\bget \langle b, c\rangle \equiv c\]
+\subsection{Maybe A Different Idea}
+I'm starting to think I might not need extra descriptions of types $\langle B, C\rangle  $ at all?
+\[\Delta \prov A : \rset_i
+\qquad
+\partial\Delta \prov M : {[\iota] A}
+\over \cdot \prov A\star \partial\Delta . M : \rset_i\]
+
+\[
+\partial \Delta \prov M : [\iota]A \qquad \cdot \prov N :  A\star \partial \Delta . M
+\over
+\Delta \prov  \langle \partial \Delta . M, N \rangle :  A\]
+
+\[\Delta \prov e : A
+\over
+\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
+\]
+$\beta$:
+\[\langle \partial\Delta.[\iota]e , \bget \Delta .e\rangle \equiv e\]
+$\eta$:
+\[\bget \Delta. \langle \partial\Delta . M, N \rangle \equiv N \]
+\subsection{Identity Free Theorem}
+We're given $A\ B : \rset$ and $R : A \to B \to \rset$ and $f : (X : \rset) \to X \to X$
+and $a : A$ and $b : B$.
+Assume
+\[t : 2 \prov A : \rset_i \qquad \cdot \prov x_0 : [t_0/t]A \qquad \prov x_1 : [t_1/t]A
+\over
+t : 2 \prov \langle x_0 | x_1 \rangle : A\]
+\[t : {\bf 2} \prov f : (X : \rset_0) \to X \to X\]
+
+We first need to get into $\rset_0$.
+\[
+\partial \Delta \prov \langle A | B\rangle : \rset_0 \qquad \cdot \prov N :  \rset_0\star \partial \Delta .  \langle A | B\rangle
+\over
+\Delta \prov  \langle \partial \Delta . \langle A | B\rangle, N \rangle :  \rset_0\]
+Ok, now we need to make $\rset_0\star \partial \Delta .  \langle A | B\rangle$.
+I think I need the information that
+\[\rset_0\star \partial \Delta .  \langle A | B\rangle \equiv A \to B \to \rset_0\]
+\[\Delta \prov e : A
+\over
+\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
+\]
 
 \end{document}
