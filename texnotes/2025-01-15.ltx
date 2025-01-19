@@ -248,7 +248,7 @@ First of all, bridges in a type with specified endpoints form a type.
 There is some kind of equality between bridges in the universe and relations.
 Assuming definitional equality seems {\em prima facie} the most convenient.
 
-\[\bd_U(A, B) \equiv A \to B \to \rset\]
+\[\bd_\rset(A, B) \equiv A \to B \to \rset\]
 
 We expect bridges at function types to do exhibit the expected parametricity behavior.
 
@@ -416,7 +416,7 @@ The substitution principle says that we should have
 So we simply set $\phi x = p$.
 \subsection{Universe}
 We define
-\[(\phi \bullet \rset)\ A\ B = A \to B \to U\]
+\[(\phi \bullet \rset)\ A\ B = A \to B \to \rset\]
 \subsection{Pi}
 
 \[\Gamma,  b : B \prov C : \rset\over
@@ -469,9 +469,9 @@ Suppose we have $m : (X : \rset) \to X \to X$.
 Let's just look at the type of
  $\mathsf{refl}_m : \bd_{(X:\rset) \to X \to X}(m, m)$.
 The definition of substitution into types at $X$ gives
-\[\bd_{(X:\rset) \to X \to X}(m, m) = (\cdot \bullet (X : U) \to X \to X)\ m\ m  \]
-\[=(A :  U) (B :  U) (R : A \to  B \to \rset) \to ([R/X] \bullet (X \to X))\ (m\ A)\ (m\ B)\]
-\[= (A :  U) (B :  U) (R : A \to  B \to \rset) (a : A) (b :  B) (q : R\ a\ b) \to R\ (m\ A\ a)\ (m\ B\ b)\]
+\[\bd_{(X:\rset) \to X \to X}(m, m) = (\cdot \bullet (X : \rset) \to X \to X)\ m\ m  \]
+\[=(A :  \rset) (B :  \rset) (R : A \to  B \to \rset) \to ([R/X] \bullet (X \to X))\ (m\ A)\ (m\ B)\]
+\[= (A :  \rset) (B :  \rset) (R : A \to  B \to \rset) (a : A) (b :  B) (q : R\ a\ b) \to R\ (m\ A\ a)\ (m\ B\ b)\]
 
 which is the expected free theorem.
 
@@ -827,7 +827,7 @@ But I can require
 \[\dec : [\_]\rset_i \to (A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i\]
 \[\enc : ((A_0\ A_1: \rset_i) \x A_0 \to A_1 \to \rset_i) \to [\_]\rset_i  \]
 \[\dec \o \enc \equiv \mathsf{id}\]
-Then since I've made a new intro form for $[\_]U_i$ I need to say
+Then since I've made a new intro form for $[\_]\rset_i$ I need to say
 \[(\enc\langle A_0, A_1, R\rangle)^t \equiv A_t \]
 which entails as a corollary that
 \[(\dec R) . A_t \equiv R^t \]
@@ -1078,6 +1078,82 @@ I guess I need to be able to reduce $\star$ and $\bget$ for types that aren't in
 Let's think of the 2-case.
 
 \[t:{\bf 2} \prov \Sigma (a : A) . B : \rset\]
-\[ \prov \bget ((t:{\bf 2}).\Sigma (a : A) . B) : \rset\]
-\[ \prov \Sigma (a : (\bget t.A)) .  (\bget t. B)) : \rset\]
+\[ \prov \bget ((t:{\bf 2}).\Sigma (a : A) . B) : \rset  \star ([\iota] ((a : A) \x B))\]
+
+Somehow I think
+\[\rset  \star ([\iota] ((a : A) \x B)) \approx (A : \rset) (B : \rset) \x A \to B \to \rset\]
+
+\section{Stepping Back}
+The central mysteries for me right now have to do with the nature of $\rset$.
+Let's drop the weakening substitution notation from the syntax.
+The main thing I think I believe is that if $A$ names a type in the context
+of some shape, i.e. $\Delta \prov A : \rset_i$, then
+$A$ can be described in terms of
+\begin{itemize}
+\item its boundary $\partial \Delta \prov [\iota]A : \rset_i$.
+\item its content, which is something notionally of the type $(\partial \Delta \to [\iota]A) \to  \rset_i$.
+\end{itemize}
+To avoid questions of double-boundaries being zero, I'm thinking that perhaps it's the responsibility
+of a shape $\Delta$ to explain, up to definitional equality, what the above types look like.
+Informally, I'm going to rewrite
+\def\dapt#1#2{#1[\![#2]\!]}
+\def\dap#1#2{#1\{#2\}}
+\begin{itemize}
+\item  $\partial\Delta \to \rset_i$ as $\dapt \Delta {\rset_i}$.
+\item  $\partial\Delta \to [\iota]A$ as $\dap \Delta A$.
+\end{itemize}
+
+
+
+
+\[
+{\Delta \,\mathsf{shape}
+\over
+\cdot \prov \dapt \Delta {\rset_i} : \rset_{i+1}}
+\qquad
+{\Delta \,\mathsf{shape} \qquad \cdot \prov A : \dapt \Delta {\rset_i}
+\over
+\cdot \prov \dap \Delta A : \rset_i}
+\]
+
+
+
+For example, if $\Delta = {\bf 2}$ and $p : \rset_i \x \rset_i$, we say
+\begin{itemize}
+\item $\dapt\Delta {\rset_i} \equiv \rset_i \x \rset_i$
+\item $\dap \Delta{\langle A_0, A_1\rangle} \equiv A_0 \x A_1$
+\end{itemize}
+
+Hence to give $\Delta \prov A : \rset_i$ should be approximately the same as giving
+\begin{itemize}
+\item its boundary $\cdot \prov \partial A : \dapt \Delta {\rset_i}$.
+\item its content, $\cdot \prov  \lambda M . A \star M  : \dap{\Delta}{\partial A} \to \rset_i$.
+\end{itemize}
+
+\[\Delta \prov A : \rset_i
+\qquad
+\cdot \prov M : \dap \Delta A
+\over \cdot \prov A\star M : \rset_i\]
+
+\[\begin{array}{c@{\quad}c}
+\partial \Delta \prov B : [\_]\rset_i&\cdot \prov C : (\partial \Delta \to B) \to \rset_i
+\\
+\partial \Delta \prov b : B & \cdot \prov c :  C\ \lambda \Delta . b
+\end{array}
+\over
+\Delta \prov  \langle b, c \rangle :  \langle B,  C \rangle\]
+\[[\iota]\langle b, c\rangle \equiv b\]
+
+\[\Delta \prov e : A
+\over
+\cdot \prov \bget \Delta. e : A \star ([\iota] e)
+\]
+
+\[\Delta \prov A : \rset_i
+\over
+\cdot \prov \partial A : \dapt \Delta {\rset_i}
+\]
+
+\[\bget \langle b, c\rangle \equiv c\]
+
 \end{document}
