@@ -96,7 +96,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\sprov{\Vdash}
 \def\signat{{\color{red}\Sigma}}
 \def\ep#1{\underline{#1}}
-\def\wat{\mathbin{@}}
+\def\wat{{@}}
 \def\wwat{\mathbin{\underline\wat}}
 \def\cn{{:}}
 \def\dv{{\div}}
@@ -738,7 +738,7 @@ Does this definition of $\bd$ preserve anything interesting?
 
 I think it was a mistake to think of contexts $\Delta$ as representing single bridge-formation substitutions.
 I should be thinking in terms of multiple consecutive substitutions. Or: I can easily picture shapes that are not cubes.
-For example, tetrahedra. What hapenns with these?
+For example, tetrahedra. What happens with these?
 
 I'll write substitution as $[\phi]^S$ for a shape $S$. I have some operation of $\partial S$ that gives
 the boundary of a shape. I think the empty substitution at $\rset$ looks like
@@ -1083,7 +1083,7 @@ Let's think of the 2-case.
 Somehow I think
 \[\rset  \star ([\iota] ((a : A) \x B)) \approx (A : \rset) (B : \rset) \x A \to B \to \rset\]
 
-\section{Stepping Back}
+\section{Analysing $\rset$}
 The central mysteries for me right now have to do with the nature of $\rset$.
 Let's drop the weakening substitution notation from the syntax.
 The main thing I think I believe is that if $A$ names a type in the context
@@ -1605,4 +1605,82 @@ which again by (function) $\eta$-law is
 which by $\bget$-$\beta$ is
 \[= f_c\]
 as required.
+\section{Formulating a Plan}
+So I see that the primitives I'm thinking about are decently expressive, enough to give
+identity theorem and displayed types more or less. The infelicities I'd still like to correct
+are
+\begin{enumerate}
+\item  gel-pair formation should allow non-shape contexts somehow
+\item  I should be able to show some kind of isomorphism between starred $\Pi$ and $\Pi$ of stars,
+similarly between starred $\Sigma$ and $\Sigma$ of stars.
+\item I should have some example that shows how taking iterated bridges yields a tensor product
+of shapes.
+\item I should resolve the question about why $\bget$ and $\star$ seem to reduce at types.
+Maybe they should be mere isomorphisms, or else maybe $\bget$ and $\star$ should always reduce.
+\end{enumerate}
+
+\subsection{Gel Intro}
+The previous rule is
+\[\begin{array}{c@{\quad}c}
+\Delta \prov D : \rset_i\\
+\partial \Delta \prov d_1 : [\iota]D & \cdot \prov d_2 :  D \star (\partial \Delta . d_1)
+\end{array}
+\over
+\Delta \prov  \langle \partial \Delta .d_1, d_2 \rangle :  D\]
+What I want is something like the following.
+Let $\Omega = \Delta;\Gamma$ stand for the combination of two contexts.
+\[\partial\Omega = \partial\Delta;[\iota]\Gamma\]
+\[\Delta\,\mathsf{shape} \qquad \Delta \prov \Gamma \rctx
+\over
+\prov (\Delta;\Gamma)\,\checkmark\]
+Given $\Omega \prov A : \rset_i$,
+define
+\[\Omega^\star \prov A^\star :  \rset_i\]
+\[A^\star \approx \Sigma (x_0 : \dap{\partial\Omega}{[\iota]A}). A \star x_0\]
+and simultaneously define $\Omega^\star$ by
+\[(\Delta;\cdot)^\star = \cdot\]
+\[(\Omega, x:A)^\star = (\Omega^\star), x : A^\star \]
+Now we have rules like
+\[\Omega \prov A : \rset_i
+\qquad
+\partial\Omega \prov M : [\iota] A
+\over
+\Omega^\star  \prov A\star  M : \rset_i\]
+
+\[\begin{array}{c@{\quad}c}
+\Omega : \rctx&\Omega \prov A : \rset_i\\
+\partial \Omega \prov M_1 : [\iota]A &  \Omega^\star \prov  M_2 :  A \star M_1
+\end{array}
+\over
+\Omega \prov  \langle M_1, M_2 \rangle :  A\]
+Wait a minute! Why don't I simply ask for some back and forth operators like $\enc$ and $\dec$ interchanging
+between $\Omega^\star\prov \dash : A^\star$ and $\Omega\prov \dash : A$. This simplifies things.
+\subsection{Simplified Pairing}
+Under the assumptions
+\[\Omega : \rctx\qquad\Omega \prov A : \rset_i\]
+the following three rules
+\[
+\partial \Omega \prov M_1 : [\iota]A &  \Omega^\star \prov  M_2 :  A \star M_1
+\over
+\Omega^\star \prov  \langle M_1, M_2 \rangle :  A^\star\]
+\[
+{\Omega^\star \prov  M :  A^\star
+\over
+\partial\Omega \prov  \bfst\ M :  [\iota]A}
+\qquad
+{\Omega^\star \prov  M :  A^\star
+\over
+\Omega^\star \prov  \bsnd\ M :  A \star M}
+\]
+with the expected $\eta/\beta$, and
+\[
+{\Omega^\star\prov M : A^\star \over
+\Omega\prov \dec M : A }
+\qquad
+{\Omega\prov M : A \over
+\Omega^\star\prov \enc M : A^\star }
+\]
+with equalities saying they're inverses of each other.
+
+
 \end{document}
