@@ -1361,7 +1361,24 @@ M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\} \
 \Delta \prov \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr :  \rset_{i+1}
 \end{prooftree}
 \]
-Ok, now to substantiate the claim that if we define $K = \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$ then $K$ is somewhat like $\rset_i$ at $\Delta$. ... Not sure how to do this.
+Ok, now to substantiate the claim that if we define $K = \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$ then $K$ is somewhat like $\rset_i$ at $\Delta$. Suppose we have $\Delta \prov A : \rset_i$. Then I can construct
+\[
+\Delta \prov \langle [\iota]A , \lambda M . A \star \partial\Delta. M[\partial\Delta]\rangle : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
+\]
+Conversely, suppose I have $\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$.
+I guess I can
+\[\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
+\over
+\cdot \prov \bget  \Delta. N :   \partial\Delta\{[\iota]N\} \to \rset_{i}
+\]
+
+\[\Delta \prov e : A
+\over
+\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
+\]
+
+
+%%%% VERDICT: The following section doesn't accomplish anything but change notation
 \subsection{Simple $\enc$ and $\dec$}
 What if I go back and instead aim for something like
 \[
@@ -1404,6 +1421,7 @@ Yeah, the typing rules line up pretty well.
 How do I inhabit this new $\rset_i$ that now exists at the empty shape? Maybe I want operations that witness
 \[\dec \Delta. \enc(\partial\Delta .A, B) \cong B\]
 rather than identity on the nose there.
+
 \subsection{Displayed Types Again}
 Suppose I consider
 \[P :\rset_1\]
@@ -1413,28 +1431,20 @@ I want to derive the binary displayed version of this,
 \[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
 I'd like to hope that
 \[ P^d \cong \dec(\Delta. P)\]
-Hmm this seems to be telling me that actually
-\[ P^d \cong \rset_1 \star (\partial\Delta . P)\]
-\[\Delta \prov P : \rset_1
-\over
-\cdot \prov \bget \Delta. P : \rset_1 \star (\partial\Delta . [\iota] P)
-\]
+therefore
+\[ P^d : \partial\Delta\{P\} \to \rset_1\]
+\[ P^d\ x = (\Delta.P) \star x\]
+
 If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$, then
-I should be able to get into something. Remember my notion that
-\[\rset_i \star (\partial\Delta.A) \approx \dap{\partial\Delta}{A} \to \rset_i\]
-and given the non-$\eta$ principle that
-\[A \approx \ll \partial \Delta. [\iota]A, \lambda M . A \star M \rr\]
-I can imagine that
-\[\rset_i \approx \ll \partial \Delta. \rset_i, \lambda f . \rset_i \star f \rr\]
-\[\rset_i \approx \ll \partial \Delta. \rset_i, \lambda f .  \dap \Delta f \to \rset_i \rr\]
+I should be able to get into this type.
+%% \[\rset_i \star (\partial\Delta.A) \approx \dap{\partial\Delta}{A} \to \rset_i\]
+%% and given the non-$\eta$ principle that
 
 
-
-
-\[\Delta \prov P : \rset_1
-\over
-\cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)
-\]
+%% \[\Delta \prov P : \rset_1
+%% \over
+%% \cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)
+%% \]
 
 %% \[X' = \Delta \prov \langle\partial\Delta.\langle A|B\rangle, \lambda f . R\ (f\ t_0)\ (f\ t_1)\rangle : \rset_0\]
 %% \[
