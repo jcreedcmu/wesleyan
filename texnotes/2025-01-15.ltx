@@ -1507,7 +1507,7 @@ Can I prove an isomorphism? What would it be in general? Maybe
 \[\cong (x : \dap{\partial\Delta}A)(x' : A \star (\partial \Delta . x)) \to ((\Delta(x:A).B)\star (\partial \Delta(x:[\iota]A).f\ x\ x'))\]
 ?
 Hm, this doesn't seem right. I'm just wildly guessing that I can apply $f$ to two arguments.
-
+\subsection{Understanding $\Pi$ ``reduction'' under $\star$}
 What can I actually accomplish? If I had
 $\Delta \prov f : (x : A) \to B$ then I would have
 \[\bget \Delta.f : (\Delta.(x : A) \to B) \star (\partial \Delta .[\iota]f)\]
@@ -1576,6 +1576,7 @@ so that
 Ok so to summarize, the directions $\tau_1 \to \tau_2$ and  $\tau_2 \to \tau_1$ are
 \[ \mathbf{fore}\ f_c = \lambda x_0.\lambda. x_c . \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta .x_0, x_c \rangle)\]
 \[\mathbf{back}\ g_2 = \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle\]
+\subsubsection{Section}
 So let's try a round trip.
 \[\mathbf{fore}(\mathbf{back}\ g_2)  \]
 \[= \lambda x_0.\lambda. x_c . \bget (\Delta.\langle \partial \Delta .f_0, (\mathbf{back}\ g_2) \rangle\ \langle \partial \Delta .x_0, x_c \rangle)\]
@@ -1587,7 +1588,21 @@ and we do a $\beta$-reduction for $x$ to get
 \[= \lambda x_0.\lambda. x_c . \bget (\Delta.  \langle \partial\Delta.f_0\ [\iota]\langle \partial \Delta .x_0, x_c \rangle ,  g_2\ ([\iota]\langle \partial \Delta .x_0, x_c \rangle)\ (\bget (\Delta.\langle \partial \Delta .x_0, x_c \rangle)) \rangle  )\]
 Do some $\beta$-reductions for $\iota$ and $\bget$ to obtain
 \[= \lambda x_0.\lambda. x_c . \bget (\Delta.  \langle \partial\Delta.f_0\ x_0 ,  g_2\ x_0\ x_c \rangle  )\]
-and finally a $\bget$ $\beta$-reductiona and functional $\eta$-reductions to see
+and finally a $\bget$ $\beta$-reduction and functional $\eta$-reductions to see
 \[= g_2\]
+as required.
+\subsubsection{Retraction}
+\[\mathbf{back}(\mathbf{fore}\ f_c)\]
+\[= \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  (\mathbf{fore}\ f_c)\ ([\iota]x)\ (\bget (\Delta.x)) \rangle\]
+Then we can $\beta$ reduce into the definition of $\mathbf{fore}\ f_c$ to get
+\[= \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  ( \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta . [\iota]x, \bget (\Delta.x) \rangle)) \rangle\]
+which by $\eta$-law is
+\[= \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,   \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\  x) \rangle\]
+which again by $\eta$-law is
+\[= \bget  \Delta.\lambda x. \langle \partial \Delta .f_0, f_c \rangle\  x \]
+which again by (function) $\eta$-law is
+\[= \bget  \Delta. \langle \partial \Delta .f_0, f_c \rangle \]
+which by $\bget$-$\beta$ is
+\[= f_c\]
 as required.
 \end{document}
