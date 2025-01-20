@@ -1653,6 +1653,10 @@ all the $\Gamma$ variables into $\Sigma$ types.
 {\partial \Omega \prov M : B
 \over
 \Omega^\star \prov \lambda M :  \Pi B }
+\qquad
+{\Omega^\star \prov M :  \Pi B
+\over
+\partial \Omega \prov M^\bullet : B }
 \]
 \[\partial \Omega \prov B : \rset_i
 \qquad
@@ -1681,7 +1685,8 @@ all the $\Gamma$ variables into $\Sigma$ types.
 But maybe merely instead of writing the thing on the left, prefer to write the thing on the right.
 \subsection{Or: Making Them Iso}
 I'd like to have defined operations
-\[\Omega^\star \prov M : \rset_i \star B
+\[
+\Omega^\star \prov M : \rset_i \star B
 \over
 \Omega^\star \prov \enc M : \Pi B \to \rset_i\]
 
@@ -1689,7 +1694,7 @@ I'd like to have defined operations
 \over
 \Omega^\star \prov \dec N : \rset_i \star B\]
 
-such that at least maybe $(a : \Pi B) \to \enc\dec N\ a \cong N\ a$ and $\dec\enc M \cong M$.
+such that at least maybe $(b : \Pi B) \to \enc\dec N\ b \cong N\ b$ and $\dec\enc M \cong M$.
 
 Let's suppose we're given $\Omega^\star \prov N : \Pi B \to \rset_i$.
 then
@@ -1709,8 +1714,37 @@ then
  \Omega^\star \prov \bget\ll  B,  s.N s\rr :  \rset_i \star B
 \end{prooftree}
 \]
+Conversely, suppose $\Omega^\star \prov M : \rset_i \star B$. Then
 
-
+\[
+\begin{prooftree}
+\[
+\[
+\partial \Omega \prov B : \rset_i \qquad  \Omega^\star \prov  M :  \rset_i \star B
+\justifies
+\Omega \prov \langle B, M\rangle : \rset_i\]
+\[
+\Omega^\star, x :  \Pi B  \prov x :  \Pi B
+\justifies
+\partial\Omega, x :  \Pi B \prov x^\bullet :  B
+\]
+\justifies
+\Omega^\star, x : \Pi B \prov \langle B, M \rangle \star x^\bullet :  \rset_i
+\]
+\justifies
+\Omega^\star \prov \lambda x. \langle B, M\rangle \star x^\bullet: \Pi B \to \rset_i
+\end{prooftree}
+\]
+I might be committing some variable crimes but the basic shape of it is there.
+We've defined
+\[\dec N = \bget\ll  B,  s.N s\rr\]
+\[\enc M = \lambda x. \langle B, M\rangle \star x^\bullet\]
+As a consequence, for some $(b : \Pi B)$, we find
+\[\dec\enc M \equiv \bget\ll B,  s. \langle B, M\rangle \star s^\bullet\rr\]
+\[\enc\dec N\ b =  \langle B, \bget\ll  B,  s.N s\rr\rangle \star b^\bullet\]
+\[ \equiv  \ll  B,  s.N s\rr \star b^\bullet\]
+\[ \equiv  N\ b \]
+So one direction is taken care of by definitional equality, and the other one I could ponder.
 \subsection{Displayed Types}
 Suppose I consider
 \[P :\rset_1\]
