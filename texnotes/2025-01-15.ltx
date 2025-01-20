@@ -1269,21 +1269,21 @@ No, I am very confused and want to go back to explicit notation for constructing
 \def\ll{\langle\!\langle}
 \def\rr{\rangle\!\rangle}
 Let it be distinct notation even. Here's how I make $\Delta$-types out of relations:
-
+(``Gel type'')
 \[\partial \Delta \prov B : \rset_i
 \qquad
 \cdot \prov C : \dap{\partial \Delta}{ B} \to \rset_i
 \over
 \Delta \prov \ll \partial\Delta . B,  C \rr :  \rset_i\]
-
 Here's how I make types with specified boundaries:
+(``Bridge types'')
 \[\Delta \prov A : \rset_i
 \qquad
 \partial\Delta \prov M : [\iota] A
 \over \cdot \prov A\star \partial \Delta . M : \rset_i\]
 
 
-Here's how I inhabit a $\Delta$-type:
+Here's how I inhabit a $\Delta$-type: (``gel constructor'')
 \[\begin{array}{c@{\quad}c}
 \Delta \prov D : \rset_i\\
 \partial \Delta \prov d_1 : [\iota]D & \cdot \prov d_2 :  D \star (\partial \Delta . d_1)
@@ -1291,7 +1291,7 @@ Here's how I inhabit a $\Delta$-type:
 \over
 \Delta \prov  \langle \partial \Delta .d_1, d_2 \rangle :  D\]
 
-Here's how I get out of a $\Delta$-type:
+Here's how I get out of a $\Delta$-type: (``ungel eliminator'')
 \[\Delta \prov e : A
 \over
 \cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
@@ -1311,7 +1311,7 @@ $\beta$ for $\ll\_,\_\rr$:
 \ll \partial\Delta . B, C \rr \star \partial \Delta . M \equiv C\ (\lambda \partial\Delta . M)\]
 
 
-of which there is a special case
+A useful special case:
 \[\begin{array}{c@{\quad}c}
 \partial \Delta \prov B : \rset_i&\cdot \prov C : \dap{\partial \Delta} B \to \rset_i
 \\
@@ -1319,108 +1319,109 @@ of which there is a special case
 \end{array}
 \over
 \Delta \prov  \langle \partial \Delta .b, c \rangle :  \ll \partial\Delta . B,  C \rr\]
-\subsection{Every $\Delta$-Type Is Isomorphic to a Relation}
-If I have $\Delta \prov A : \rset_i$, there is another expression $K$, not definitionally
-equal, that denotes an isomorphic type. It is
-\[
-\partial \Delta \prov [\iota]A : \rset_i
-\qquad
-\cdot \prov \lambda M . A\star \partial\Delta. M[\partial\Delta] : \dap{\partial \Delta}{ [\iota]A} \to \rset_i
-\over
-\Delta \prov K := \ll\partial\Delta. [\iota]A, \lambda M . A\star \partial\Delta. M[\partial\Delta]\rr : \rset_i
-\]
-This by itself doesn't help us understand $A$, since $K\star M \equiv A \star M$ and $[\iota]K = [\iota]A$.
-However, maybe it's the case that if we set $A = \rset_i$, we can use another expression for what
-we secretly know $\rset \star M$ `ought to' reduce to. We conjecture that $\Delta \prov \rset_i : \rset_{i+1}$ behaves
-somewhat like
-\[\partial \Delta \prov \rset_i : \rset_{i+1}
-\qquad
-\cdot \prov C : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
-\over
-\Delta \prov \ll \partial\Delta . \rset_i,  C \rr :  \rset_{i+1}\]
 
-guess:\[\rset_i \star (\partial\Delta.A) \equiv \dap{\partial\Delta}{A} \to \rset_i\]
+%% IGNORED SECTION: I don't think this is usefully true
 
-\[
-\begin{prooftree}
-\partial \Delta \prov \rset_i : \rset_{i+1}
-\qquad
-\[
-\[
-\[
-\justifies
-M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\}   :  \rset_{i}
-\]
-\justifies
-M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  :  \rset_{i+1}
-\]
-\justifies
- \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
-\]
-\justifies
-\Delta \prov \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr :  \rset_{i+1}
-\end{prooftree}
-\]
-Ok, now to substantiate the claim that if we define $K = \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$ then $K$ is somewhat like $\rset_i$ at $\Delta$. Suppose we have $\Delta \prov A : \rset_i$. Then I can construct
-\[
-\Delta \prov \langle [\iota]A , \lambda M . A \star \partial\Delta. M[\partial\Delta]\rangle : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
-\]
-Conversely, suppose I have $\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$.
-I guess I can
-\[\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
-\over
-\cdot \prov \bget  \Delta. N :   \partial\Delta\{[\iota]N\} \to \rset_{i}
-\]
+%% \subsection{Every $\Delta$-Type Is Isomorphic to a Relation}
+%% If I have $\Delta \prov A : \rset_i$, there is another expression $K$, not definitionally
+%% equal, that denotes an isomorphic type. It is
+%% \[
+%% \partial \Delta \prov [\iota]A : \rset_i
+%% \qquad
+%% \cdot \prov \lambda M . A\star \partial\Delta. M[\partial\Delta] : \dap{\partial \Delta}{ [\iota]A} \to \rset_i
+%% \over
+%% \Delta \prov K := \ll\partial\Delta. [\iota]A, \lambda M . A\star \partial\Delta. M[\partial\Delta]\rr : \rset_i
+%% \]
+%% This by itself doesn't help us understand $A$, since $K\star M \equiv A \star M$ and $[\iota]K = [\iota]A$.
+%% However, maybe it's the case that if we set $A = \rset_i$, we can use another expression for what
+%% we secretly know $\rset \star M$ `ought to' reduce to. We conjecture that $\Delta \prov \rset_i : \rset_{i+1}$ behaves
+%% somewhat like
+%% \[\partial \Delta \prov \rset_i : \rset_{i+1}
+%% \qquad
+%% \cdot \prov C : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
+%% \over
+%% \Delta \prov \ll \partial\Delta . \rset_i,  C \rr :  \rset_{i+1}\]
 
-\[\Delta \prov e : A
-\over
-\cdot \prov \bget  \Delta. e : A \star (\partial \Delta . [\iota] e)
-\]
+%% guess:\[\rset_i \star (\partial\Delta.A) \equiv \dap{\partial\Delta}{A} \to \rset_i\]
+
+%% \[
+%% \begin{prooftree}
+%% \partial \Delta \prov \rset_i : \rset_{i+1}
+%% \qquad
+%% \[
+%% \[
+%% \[
+%% \justifies
+%% M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\}   :  \rset_{i}
+%% \]
+%% \justifies
+%% M :\dap{\partial \Delta}{ \rset_i}   \prov \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  :  \rset_{i+1}
+%% \]
+%% \justifies
+%%  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  : \dap{\partial \Delta}{ \rset_i} \to \rset_{i+1}
+%% \]
+%% \justifies
+%% \Delta \prov \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr :  \rset_{i+1}
+%% \end{prooftree}
+%% \]
+%% Ok, now to substantiate the claim that if we define $K = \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$ then $K$ is somewhat like $\rset_i$ at $\Delta$. Suppose we have $\Delta \prov A : \rset_i$. Then I can construct
+%% \[
+%% \Delta \prov \langle [\iota]A , \lambda M . A \star \partial\Delta. M[\partial\Delta]\rangle : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
+%% \]
+%% Conversely, suppose I have $\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr$.
+%% I guess I can
+%% \[\Delta \prov N : \ll \partial\Delta . \rset_i,  \lambda M . \partial\Delta\{M[\partial\Delta]\} \to \rset_{i}  \rr
+%% \over
+%% \cdot \prov \bget  \Delta. N :   \partial\Delta\{[\iota]N\} \to \rset_{i}
+%% \]
 
 
-%%%% VERDICT: The following section doesn't accomplish anything but change notation
-\subsection{Simple $\enc$ and $\dec$}
-What if I go back and instead aim for something like
-\[
-{
-\cdot \prov B : \rset_i \star (\partial\Delta . A)
-\over
- \prov \Downarrow B  :\dap {\partial\Delta} A \to \rset_i
-}
-\qquad
-{
- \prov  B  :\dap {\partial\Delta} A \to \rset_i
-\over
-\cdot \prov \Uparrow B : \rset_i \star (\partial\Delta . A)
-}
-\]
-maybe more like $\dec \Delta.A = \Downarrow\bget \Delta .  A$ and
-$\enc B = \langle \partial\Delta . A, \Uparrow B \rangle$.
-As a consequence I'd get something like (but I'll take these as axiomatic)
-\[
-{
-\Delta \prov A : \rset_i
-\over
- \prov \dec \Delta.A  :\dap {\partial\Delta} {[\iota]A} \to \rset_i
-}
-\qquad
-{
-\partial\Delta \prov A : \rset_i
-\qquad
- \prov  B  :\dap {\partial\Delta} A \to \rset_i
-\over
-\Delta \prov {\enc} (\partial\Delta.A, B) : \rset_i
-}
-\]
-And I'd like to impose $\dec \Delta. \enc(\partial\Delta .A, B) \equiv B$ and $[\iota]\enc(\partial\Delta.A, B) \equiv A$.
 
-Hm, I'm not yet sure how this is any different. $\enc$ seems a lot like $\ll \_,\_\rr$ and $\dec$ seems a lot like $\star$.
-Yeah, the typing rules line up pretty well.
-\[(\dec \Delta . A) (\lambda \partial\Delta. M) \equiv  \Delta.A \star \partial\Delta.M\]
-\[(\partial\Delta.A, B) \equiv  \ll \partial\Delta.A, B \rr\]
-How do I inhabit this new $\rset_i$ that now exists at the empty shape? Maybe I want operations that witness
-\[\dec \Delta. \enc(\partial\Delta .A, B) \cong B\]
-rather than identity on the nose there.
+
+%%%% IGNORED SECTION: I think this doesn't accomplish anything but change notation
+
+%% \subsection{Simple $\enc$ and $\dec$}
+%% What if I go back and instead aim for something like
+%% \[
+%% {
+%% \cdot \prov B : \rset_i \star (\partial\Delta . A)
+%% \over
+%%  \prov \Downarrow B  :\dap {\partial\Delta} A \to \rset_i
+%% }
+%% \qquad
+%% {
+%%  \prov  B  :\dap {\partial\Delta} A \to \rset_i
+%% \over
+%% \cdot \prov \Uparrow B : \rset_i \star (\partial\Delta . A)
+%% }
+%% \]
+%% maybe more like $\dec \Delta.A = \Downarrow\bget \Delta .  A$ and
+%% $\enc B = \langle \partial\Delta . A, \Uparrow B \rangle$.
+%% As a consequence I'd get something like (but I'll take these as axiomatic)
+%% \[
+%% {
+%% \Delta \prov A : \rset_i
+%% \over
+%%  \prov \dec \Delta.A  :\dap {\partial\Delta} {[\iota]A} \to \rset_i
+%% }
+%% \qquad
+%% {
+%% \partial\Delta \prov A : \rset_i
+%% \qquad
+%%  \prov  B  :\dap {\partial\Delta} A \to \rset_i
+%% \over
+%% \Delta \prov {\enc} (\partial\Delta.A, B) : \rset_i
+%% }
+%% \]
+%% And I'd like to impose $\dec \Delta. \enc(\partial\Delta .A, B) \equiv B$ and $[\iota]\enc(\partial\Delta.A, B) \equiv A$.
+
+%% Hm, I'm not yet sure how this is any different. $\enc$ seems a lot like $\ll \_,\_\rr$ and $\dec$ seems a lot like $\star$.
+%% Yeah, the typing rules line up pretty well.
+%% \[(\dec \Delta . A) (\lambda \partial\Delta. M) \equiv  \Delta.A \star \partial\Delta.M\]
+%% \[(\partial\Delta.A, B) \equiv  \ll \partial\Delta.A, B \rr\]
+%% How do I inhabit this new $\rset_i$ that now exists at the empty shape? Maybe I want operations that witness
+%% \[\dec \Delta. \enc(\partial\Delta .A, B) \cong B\]
+%% rather than identity on the nose there.
 
 \subsection{Displayed Types Again}
 Suppose I consider
@@ -1429,35 +1430,65 @@ Suppose I consider
 I want to derive the binary displayed version of this,
 \[P^d : P \to P \to \rset_1\]
 \[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
-I'd like to hope that
-\[ P^d \cong \dec(\Delta. P)\]
-therefore
-\[ P^d : \partial\Delta\{P\} \to \rset_1\]
-\[ P^d\ x = (\Delta.P) \star x\]
+I'd like to define $P^d : \bget \Delta .P$. I see the typings
+\[{\Delta \prov P : \rset_1
+\over
+\cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)}
+\qquad
+{\Delta \prov \rset_1 : \rset_2
+\qquad
+\partial\Delta \prov [\iota]P : [\iota] \rset_1
+\over \cdot \prov \rset_1\star (\partial \Delta . [\iota]P) : \rset_2}
+\]
+I'm going to suppose there are some definitional reductions
+\[\Delta \prov A : \rset_i \over \bget \Delta.A \equiv \lambda x . (\Delta.A) \star x\]
+\[\rset_i\star (\partial \Delta . [\iota]A) \equiv \dap{\partial\Delta}{[\iota]A} \to \rset_i\]
+So that I get out the typing
 
-If I have $A\ B : \rset_0$ and $R : A \to B \to \rset_0$ and $a : A$ and $b : B$ and $r : R\ a\ b$, then
-I should be able to get into this type.
-%% \[\rset_i \star (\partial\Delta.A) \approx \dap{\partial\Delta}{A} \to \rset_i\]
-%% and given the non-$\eta$ principle that
+\[
+\begin{prooftree}
+\[
+\Delta \prov P : \rset_1
+\justifies
+x : \dap{\partial \Delta}{ [\iota] P} \prov   (\Delta.P) \star x :   \rset_1
+\]
+\justifies
+\cdot \prov   \lambda x . (\Delta.P) \star x : \dap{\partial \Delta}{ [\iota] P} \to \rset_1
+\end{prooftree}
+\]
 
 
-%% \[\Delta \prov P : \rset_1
-%% \over
-%% \cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)
-%% \]
+Now can I inhabit $P^d\ p_0\ p_1$ for $p_0\ p_1 : P$?
 
-%% \[X' = \Delta \prov \langle\partial\Delta.\langle A|B\rangle, \lambda f . R\ (f\ t_0)\ (f\ t_1)\rangle : \rset_0\]
-%% \[
-%% \partial \Delta \prov \langle a|b\rangle : \partial\Delta.\langle A|B\rangle \qquad \cdot \prov r : R\ a\ b
-%% \over
-%% \Delta \prov x' =  \langle \partial \Delta . \langle a|b \rangle, r \rangle :  X'\]
-%% Then
-%% \[\Delta \prov \langle X', x' \rangle : \Sigma(A : \rset_0).A\]
-%% i.e.
-%% \[\Delta \prov \langle X', x' \rangle : P\]
-%% \[ \prov \bget \Delta . (\langle X', x' \rangle) : (\Sigma(A : \rset_0).A) \star [\iota]\langle X', x' \rangle\]
-%% That isn't quite what I wanted.
+If I have $A_0\ A_1 : \rset_0$ and $R : A_0 \to A_1 \to \rset_0$ and $a_0 : A_0$ and $a_1 : A_1$ and $r : R\ a_0\ a_1$,
+Then $p_0 = \langle A_0, a_0\rangle$ and $p_1 = \langle A_1, a_1\rangle$.
+First I want to make the argument to $P^d$. It needs to be of type $\partial\Delta\{[\iota]P\}$.
+That's simple. It's $\langle p_0 | p_1 \rangle$. Next, I want to inhabit
+\[(\Delta.P) \star \partial\Delta.\langle p_0|p_1 \rangle\]
+To do this I need to inhabit $P$ at $\Delta$ with an appropriate boundary, and do a $\bget$.
+For that, I'm going to make a $\Delta \prov A : \rset_0$ and $\Delta \prov a : A$. Then I can form their
+$\Sigma$-pair under $\Delta$.
 
+Constructing a $\Delta$-type out of a relation proceeds as before:
+\[\partial \Delta \prov \langle A_0|A_1 \rangle : \rset_0
+\qquad
+\cdot \prov \lambda f . R\ ([t_0]f)\ ([t_1]f) : \dap{\partial \Delta}{ \langle A_0|A_1 \rangle} \to \rset_0
+\over
+\Delta \prov \ll \partial\Delta . \langle A_0|A_1 \rangle,  \lambda f . R\ ([t_0]f)\ ([t_1]f) \rr :  \rset_0\]
+We set
+\[A = \ll \partial\Delta . \langle A_0|A_1 \rangle,  \lambda f . R\ ([t_0]f)\ ([t_1]f) \rr\]
+and then I inhabit that type as before:
+\[\partial \Delta \prov \langle a_0|a_1 \rangle  : [\iota]A \qquad \cdot \prov r :  A \star (\partial \Delta . \langle a_0|a_1 \rangle)
+\over
+\Delta \prov  \langle \partial \Delta .\langle a_0|a_1 \rangle, r \rangle :  A\]
+So we set
+\[a = \langle \partial \Delta .\langle a_0|a_1 \rangle, r \rangle\]
+And we observe
+\[\Delta \prov \langle A, a\rangle : P\]
+hence
+\[\bget \Delta.\langle A, a\rangle : (\Delta.P) \star \partial\Delta.[\iota]\langle A, a\rangle\]
+which should be definitionally equal to
+\[\bget \Delta.\langle A, a\rangle : (\Delta.P) \star \partial\Delta.\langle p_0|p_1 \rangle\]
 
 
 
