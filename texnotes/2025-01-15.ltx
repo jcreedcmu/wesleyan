@@ -1619,48 +1619,32 @@ of shapes.
 Maybe they should be mere isomorphisms, or else maybe $\bget$ and $\star$ should always reduce.
 \end{enumerate}
 
-\subsection{Gel Intro}
-The previous rule is
-\[\begin{array}{c@{\quad}c}
-\Delta \prov D : \rset_i\\
-\partial \Delta \prov d_1 : [\iota]D & \cdot \prov d_2 :  D \star (\partial \Delta . d_1)
-\end{array}
-\over
-\Delta \prov  \langle \partial \Delta .d_1, d_2 \rangle :  D\]
-What I want is something like the following.
+\subsection{Generalized Gel}
 Let $\Omega = \Delta;\Gamma$ stand for the combination of two contexts.
 \[\partial\Omega = \partial\Delta;[\iota]\Gamma\]
 \[\Delta\,\mathsf{shape} \qquad \Delta \prov \Gamma \rctx
 \over
-\prov (\Delta;\Gamma)\,\checkmark\]
-Given $\Omega \prov A : \rset_i$,
-define
-\[\Omega^\star \prov A^\star :  \rset_i\]
-\[A^\star \approx \Sigma (x_0 : \dap{\partial\Omega}{[\iota]A}). A \star x_0\]
+\prov (\Delta;\Gamma)\rctx\]
+
+We have a notion of star type:
+\[\Omega \prov A :  \rset_i
+\over
+\Omega^\star \prov A^\star :  \rset_i\]
 and simultaneously define $\Omega^\star$ by
 \[(\Delta;\cdot)^\star = \cdot\]
-\[(\Omega, x:A)^\star = (\Omega^\star), x : A^\star \]
-Now we have rules like
-\[\Omega \prov A : \rset_i
-\qquad
-\partial\Omega \prov M : [\iota] A
-\over
-\Omega^\star  \prov A\star  M : \rset_i\]
+\[(\Omega, x:A)^\star = \Omega^\star, x : A^\star \]
 
-\[\begin{array}{c@{\quad}c}
-\Omega : \rctx&\Omega \prov A : \rset_i\\
-\partial \Omega \prov M_1 : [\iota]A &  \Omega^\star \prov  M_2 :  A \star M_1
-\end{array}
-\over
-\Omega \prov  \langle M_1, M_2 \rangle :  A\]
-Wait a minute! Why don't I simply ask for some back and forth operators like $\enc$ and $\dec$ interchanging
-between $\Omega^\star\prov \dash : A^\star$ and $\Omega\prov \dash : A$. This simplifies things.
-\subsection{Simplified Pairing}
-Under the assumptions
+\subsection{Star Type}
+The star type is a sort of $\Sigma$. It is the total space of bridges in a relationally defined type
+when the boundary is
+ unspecified. Under the assumptions
 \[\Omega : \rctx\qquad\Omega \prov A : \rset_i\]
-the following three rules
+the following rules
 \[
-\partial \Omega \prov M_1 : [\iota]A &  \Omega^\star \prov  M_2 :  A \star M_1
+\partial\Omega \prov M : [\iota] A
+\over \Omega^\star \prov A\star  M : \rset_i\]
+\[
+\partial \Omega \prov M_1 : [\iota]A \qquad  \Omega^\star \prov  M_2 :  A \star M_1
 \over
 \Omega^\star \prov  \langle M_1, M_2 \rangle :  A^\star\]
 \[
@@ -1670,7 +1654,7 @@ the following three rules
 \qquad
 {\Omega^\star \prov  M :  A^\star
 \over
-\Omega^\star \prov  \bsnd\ M :  A \star M}
+\Omega^\star \prov  \bsnd\ M :  A \star (\bfst M)}
 \]
 with the expected $\eta/\beta$, and
 \[
@@ -1681,6 +1665,30 @@ with the expected $\eta/\beta$, and
 \Omega^\star\prov \enc M : A^\star }
 \]
 with equalities saying they're inverses of each other.
-
+\subsection{A Possible Alternative}
+Without encode/decode, I might try simply
+\[
+\Omega \prov A : \rset_i \qquad \partial\Omega \prov M : [\iota] A
+\over \Omega^\star \prov A\star  M : \rset_i\]
+\[
+\partial \Omega \prov M_1 : [\iota]A \qquad  \Omega^\star \prov  M_2 :  A \star M_1
+\over
+\Omega \prov  \langle M_1, M_2 \rangle :  A\]
+because then $\bfst$ and $\bsnd$ just become $[\iota]$ and $\bget$, I think?
+\subsection{Remaining Primitives}
+\[\Omega \prov e : A
+\over
+\Omega^\star \prov \bget   e : A \star ([\iota] e)
+\]
+\[
+\partial \Omega \prov B : \rset_i
+\over
+\Omega^* \prov \Pi B : \rset_i
+\]
+\[\partial \Omega \prov B : \rset_i
+\qquad
+\Omega^\star \prov C : \Pi B \to \rset_i
+\over
+\Omega \prov \ll  B,  C \rr :  \rset_i\]
 
 \end{document}
