@@ -19,6 +19,7 @@
 \def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
 \def\bget{\mathop\mathbf{get}}
+\def\bGet{\mathop\mathbf{Get}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\zed{\emptyset}
 \def\lint{{\textstyle\int}}
@@ -1626,47 +1627,13 @@ Let $\Omega = \Delta;\Gamma$ stand for the combination of two contexts.
 \over
 \prov (\Delta;\Gamma)\rctx\]
 
-We have a notion of star type:
-\[\Omega \prov A :  \rset_i
-\over
-\Omega^\star \prov A^\star :  \rset_i\]
-and simultaneously define $\Omega^\star$ by
-\[(\Delta;\cdot)^\star = \cdot\]
-\[(\Omega, x:A)^\star = \Omega^\star, x : A^\star \]
+I have some notion of $\star$-judgment, or mapping from $\Omega$ to mere $\Gamma$ contexts,
+which is meant to stand
+for eliminating all the shape variables and translating away
+all the $\Gamma$ variables into $\Sigma$ types.
 
-\subsection{Star Type}
-The star type is a sort of $\Sigma$. It is the total space of bridges in a relationally defined type
-when the boundary is
- unspecified. Under the assumptions
-\[\Omega : \rctx\qquad\Omega \prov A : \rset_i\]
-the following rules
-\[
-\partial\Omega \prov M : [\iota] A
-\over \Omega^\star \prov A\star  M : \rset_i\]
-\[
-\partial \Omega \prov M_1 : [\iota]A \qquad  \Omega^\star \prov  M_2 :  A \star M_1
-\over
-\Omega^\star \prov  \langle M_1, M_2 \rangle :  A^\star\]
-\[
-{\Omega^\star \prov  M :  A^\star
-\over
-\partial\Omega \prov  \bfst\ M :  [\iota]A}
-\qquad
-{\Omega^\star \prov  M :  A^\star
-\over
-\Omega^\star \prov  \bsnd\ M :  A \star (\bfst M)}
-\]
-with the expected $\eta/\beta$, and
-\[
-{\Omega^\star\prov M : A^\star \over
-\Omega\prov \dec M : A }
-\qquad
-{\Omega\prov M : A \over
-\Omega^\star\prov \enc M : A^\star }
-\]
-with equalities saying they're inverses of each other.
-\subsection{A Possible Alternative}
-Without encode/decode, I might try simply
+\subsection{Rules}
+
 \[
 \Omega \prov A : \rset_i \qquad \partial\Omega \prov M : [\iota] A
 \over \Omega^\star \prov A\star  M : \rset_i\]
@@ -1674,21 +1641,85 @@ Without encode/decode, I might try simply
 \partial \Omega \prov M_1 : [\iota]A \qquad  \Omega^\star \prov  M_2 :  A \star M_1
 \over
 \Omega \prov  \langle M_1, M_2 \rangle :  A\]
-because then $\bfst$ and $\bsnd$ just become $[\iota]$ and $\bget$, I think?
-\subsection{Remaining Primitives}
 \[\Omega \prov e : A
 \over
 \Omega^\star \prov \bget   e : A \star ([\iota] e)
 \]
 \[
-\partial \Omega \prov B : \rset_i
+{\partial \Omega \prov B : \rset_i
 \over
-\Omega^* \prov \Pi B : \rset_i
+\Omega^\star \prov \Pi B : \rset_i}
+\qquad
+{\partial \Omega \prov M : B
+\over
+\Omega^\star \prov \lambda M :  \Pi B }
 \]
 \[\partial \Omega \prov B : \rset_i
 \qquad
-\Omega^\star \prov C : \Pi B \to \rset_i
+\Omega^\star, s : \Pi B \prov C :  \rset_i
 \over
-\Omega \prov \ll  B,  C \rr :  \rset_i\]
+\Omega \prov \ll  B,  s.C \rr :  \rset_i\]
+
+\subsection{Reductions}
+\[
+\langle [\iota]e , \bget e\rangle \equiv e
+\]
+\[
+\begin{array}{c@{\qquad}c}
+{[\iota]}\langle M, N\rangle \equiv M
+&
+\bget \langle M, N \rangle \equiv N\\
+{[\iota]}\ll  B, s.C \rr \equiv B
+&
+\ll  B, s.C \rr \star M \equiv [\lambda M/s]C
+\end{array}
+\]
+\subsection{Imagined Reductions}
+\[\rset_i\star A \equiv \Pi A \to \rset_i\]
+\[\Delta \prov A : \rset_i \over \bget A \equiv \lambda x . A \star x\]
+
+But maybe merely instead of writing the thing on the left, prefer to write the thing on the right.
+\subsection{Or: Making Them Iso}
+I'd like to have defined operations
+\[\Omega^\star \prov M : \rset_i \star B
+\over
+\Omega^\star \prov \enc M : \Pi B \to \rset_i\]
+
+\[\Omega^\star \prov N : \Pi B \to \rset_i
+\over
+\Omega^\star \prov \dec N : \rset_i \star B\]
+
+such that at least maybe $(a : \Pi B) \to \enc\dec N\ a \cong N\ a$ and $\dec\enc M \cong M$.
+
+Let's suppose we're given $\Omega^\star \prov N : \Pi B \to \rset_i$.
+then
+\[
+\begin{prooftree}
+\[
+\partial \Omega \prov B : \rset_i \qquad
+\[
+\Omega^\star \prov N : \Pi B \to \rset_i
+\justifies
+\Omega^\star, s : \Pi B \prov N\ s :  \rset_i
+\]
+\justifies
+\Omega \prov \ll  B,  s.N s\rr :  \rset_i
+\]
+\justifies
+ \Omega^\star \prov \bget\ll  B,  s.N s\rr :  \rset_i \star B
+\end{prooftree}
+\]
+
+
+\subsection{Displayed Types}
+Suppose I consider
+\[P :\rset_1\]
+\[P = \Sigma (A : \rset_0) . A\]
+I want to derive the binary displayed version of this,
+\[P^d : P \to P \to \rset_1\]
+\[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
+Define
+\[P^d : \Pi P \to \rset_1\]
+\[P^d\ p = P \star p\]
 
 \end{document}
