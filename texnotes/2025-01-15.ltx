@@ -1739,12 +1739,15 @@ I might be committing some variable crimes but the basic shape of it is there.
 We've defined
 \[\dec N = \bget\ll  B,  s.N s\rr\]
 \[\enc M = \lambda x. \langle B, M\rangle \star x^\bullet\]
-As a consequence, for some $(b : \Pi B)$, we find
+As a consequence, we find
 \[\dec\enc M \equiv \bget\ll B,  s. \langle B, M\rangle \star s^\bullet\rr\]
+and for any $(b : \Pi B)$, we have
 \[\enc\dec N\ b =  \langle B, \bget\ll  B,  s.N s\rr\rangle \star b^\bullet\]
 \[ \equiv  \ll  B,  s.N s\rr \star b^\bullet\]
 \[ \equiv  N\ b \]
 So one direction is taken care of by definitional equality, and the other one I could ponder.
+
+
 \subsection{Displayed Types}
 Suppose I consider
 \[P :\rset_1\]
