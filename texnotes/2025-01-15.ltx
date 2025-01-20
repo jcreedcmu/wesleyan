@@ -1430,7 +1430,7 @@ Suppose I consider
 I want to derive the binary displayed version of this,
 \[P^d : P \to P \to \rset_1\]
 \[P^d\  \langle A_1, a_1 \rangle\  \langle A_2, a_2 \rangle  = \Sigma(A^d : A_1 \to A_2 \to  \rset_0). A^d\ a_1\ a_2 \]
-I'd like to define $P^d : \bget \Delta .P$. I see the typings
+I'd like to define $P^d = \bget \Delta .P$. I see the typings
 \[{\Delta \prov P : \rset_1
 \over
 \cdot \prov \bget  \Delta. P : \rset_1 \star (\partial \Delta . [\iota] P)}
@@ -1490,6 +1490,104 @@ hence
 which should be definitionally equal to
 \[\bget \Delta.\langle A, a\rangle : (\Delta.P) \star \partial\Delta.\langle p_0|p_1 \rangle\]
 
+\subsection{Identity Theorem}
+If we have $M : (X : \rset) \to X \to X$ can we squeeze something out of
+\[\bget (\Delta.M) : ((X : \rset) \to X \to X) \star (\partial\Delta . M)\]
+? We could try to find something for the right side of the colon to reduce to.
+But it's weird that it seems like I don't need reduce $\star$ to for $\Pi$,
+ even though I do seem to need to for $\rset$.
+
+Can I prove an isomorphism? What would it be in general? Maybe
+\[\Delta \prov  (x : A) \to B : \rset_i
+\qquad
+\partial\Delta \prov f : [\iota]  (x : A) \to B
+\over \cdot \prov  (x : A) \to B\star \partial \Delta . f : \rset_i\]
+
+\[ (\Delta.(x : A) \to B) \star (\partial \Delta . f) \]
+\[\cong (x : \dap{\partial\Delta}A)(x' : A \star (\partial \Delta . x)) \to ((\Delta(x:A).B)\star (\partial \Delta(x:[\iota]A).f\ x\ x'))\]
+?
+Hm, this doesn't seem right. I'm just wildly guessing that I can apply $f$ to two arguments.
+
+What can I actually accomplish? If I had
+$\Delta \prov f : (x : A) \to B$ then I would have
+\[\bget \Delta.f : (\Delta.(x : A) \to B) \star (\partial \Delta .[\iota]f)\]
+So suppose more generally I have
+\[\partial \Delta \prov f_0 :  [\iota](x :A) \to B\]
+\[f_c : (\Delta.(x : A) \to B) \star (\partial \Delta .f_0)\]
+Suppose now that I have
+\[\partial \Delta \prov x_0 : [\iota]A\]
+\[ \prov x_c : A \star (\partial\Delta.x_0)\]
+Then I can form
+\[\Delta \prov  \langle \partial \Delta .f_0, f_c \rangle : (x:A) \to B\]
+\[\Delta \prov  \langle \partial \Delta .x_0, x_c \rangle :  A\]
+Thus
 
 
+\[\Delta \prov \langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta .x_0, x_c \rangle :[\langle \partial \Delta .x_0, x_c/x] B\]
+
+\[ \prov \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta .x_0, x_c \rangle) :(\Delta.[\langle \partial \Delta .x_0, x_c\rangle/x] B) \star (\partial\Delta.f_0\ x_0)\]
+So the claim is perhaps for any function boundary
+\[\partial \Delta \prov f_0 :  [\iota](x :A) \to B\]
+the type of functions with that boundary
+\[\tau_1 := (\Delta.(x : A) \to B) \star (\partial \Delta .f_0) \]
+is isomorphic to the type
+\[ \tau_2 := (x_0 : \dap{\partial\Delta}{[\iota]A})(x_c : (\Delta.A)\star (\partial\Delta.x_0)) \to
+(\Delta.[\langle \partial \Delta .x_0, x_c\rangle/x] B) \star (\partial\Delta.f_0\ x_0) \]
+We have already given one direction of this alleged isomorphism: the function $\tau_1 \to \tau_2$ is
+\[ f_c \mapsto \lambda x_0.\lambda. x_c . \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta .x_0, x_c \rangle)\]
+Now we contemplate the reverse direction.
+Given $g_2 : \tau_2$, we'd like to make a $\tau_1$. Since before we did a function application
+inside a $\bget$, now we expect to do a function abstraction inside a $\bget$. We seek
+an $e$ such that we can finish with
+\[
+\begin{prooftree}
+\[
+\Delta; x : A \prov e :  B
+\justifies
+\Delta \prov \lambda x . e : (x : A) \to   B
+\]
+\justifies
+\cdot \prov \bget  \Delta.\lambda x. e : (\Delta.(x : A) \to B) \star (\partial \Delta . [\iota] \lambda x . e)
+\end{prooftree}
+\]
+and so we want $[\iota]\lambda x . e$ to unify with $f_0$.
+I think now we're going to use $g_2$ as
+\[g_2\ ([\iota]x)\ (\bget (\Delta.x))\]
+and the $\eta$ principle for $\bget/\langle\_,\_\rangle$ will mean that we end up substituting
+$[x/x]B$ in the result type of $g_2$. So we get something like
+\[\Delta; x:A \prov g_2\ ([\iota]x)\ (\bget (\Delta.x)) :  (\Delta.B) \star(\partial\Delta.f_0\ x_0)\]
+So we need to do some kind of gel-pairing, but my existing pair rule needs to be generalized to handle
+$\Gamma$ somehow. Not sure what to do there. I should obtain something like
+\[\Delta; x : A \prov \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle : B\]
+
+so that
+\[
+\begin{prooftree}
+\[
+\Delta; x : A \prov \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle :  B
+\justifies
+\Delta \prov \lambda x . \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle : (x : A) \to   B
+\]
+\justifies
+\cdot \prov \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle : (\Delta.(x : A) \to B) \star (\partial \Delta . f_0)
+\end{prooftree}
+\]
+
+Ok so to summarize, the directions $\tau_1 \to \tau_2$ and  $\tau_2 \to \tau_1$ are
+\[ \mathbf{fore}\ f_c = \lambda x_0.\lambda. x_c . \bget (\Delta.\langle \partial \Delta .f_0, f_c \rangle\ \langle \partial \Delta .x_0, x_c \rangle)\]
+\[\mathbf{back}\ g_2 = \bget  \Delta.\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle\]
+So let's try a round trip.
+\[\mathbf{fore}(\mathbf{back}\ g_2)  \]
+\[= \lambda x_0.\lambda. x_c . \bget (\Delta.\langle \partial \Delta .f_0, (\mathbf{back}\ g_2) \rangle\ \langle \partial \Delta .x_0, x_c \rangle)\]
+which, by the $\eta$-law
+\[\langle \partial\Delta.[\iota]e , \bget \Delta .e\rangle \equiv e\]
+noticing that $\mathbf{back}\ g_2$ is an appropriately-boundaried $\bget$, we can reduce to
+\[= \lambda x_0.\lambda. x_c . \bget (\Delta. (\lambda x. \langle \partial\Delta.f_0\ [\iota]x ,  g_2\ ([\iota]x)\ (\bget (\Delta.x)) \rangle)  \ \langle \partial \Delta .x_0, x_c \rangle)\]
+and we do a $\beta$-reduction for $x$ to get
+\[= \lambda x_0.\lambda. x_c . \bget (\Delta.  \langle \partial\Delta.f_0\ [\iota]\langle \partial \Delta .x_0, x_c \rangle ,  g_2\ ([\iota]\langle \partial \Delta .x_0, x_c \rangle)\ (\bget (\Delta.\langle \partial \Delta .x_0, x_c \rangle)) \rangle  )\]
+Do some $\beta$-reductions for $\iota$ and $\bget$ to obtain
+\[= \lambda x_0.\lambda. x_c . \bget (\Delta.  \langle \partial\Delta.f_0\ x_0 ,  g_2\ x_0\ x_c \rangle  )\]
+and finally a $\bget$ $\beta$-reductiona and functional $\eta$-reductions to see
+\[= g_2\]
+as required.
 \end{document}
