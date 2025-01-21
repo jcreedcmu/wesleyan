@@ -1895,32 +1895,64 @@ $[\phi]((x : A) \to B)$ to fit in
 \]
 Hm, for this, I want $\Sigma$ of the $x$ and its relation to exist in one variable.
 \section{Minimal Beliefs}
+\subsection{Shapes}
 \def\rshape{\ {\mathsf{shape}}}
 \def\rrefl{{\mathsf{refl}}}
 
-I think at least these should exist:
+To give the definition of a shape $\Delta$, one must provide definitions
+of:
+\begin{itemize}
+\item A notion of what it means to map the boundary of that shape into a type:
 \[
-\Delta \rshape \qquad \prov A : \rset_i \qquad
+\prov A : \rset_i \qquad
 \over
 \prov \partial\Delta \lol A : \rset_i
 \]
+\item A constant boundary:
+\[K : \{\Delta : \rshape\}\{A : \rset_i\}(a : A) \to (\partial\Delta \lol A)\]
+\item Given a mapping of a boundary into a universe, what it means to have
+a global element of that boundary:
+\[
+\prov A : \partial\Delta \lol \rset_i
+\over
+\prov \Pi^\Delta A : \rset_{i}
+\]
+\item What it means to apply a function under $\partial\Delta \lol \em$:
+\[
+f : \partial\Delta \lol (A \to B) \qquad a : \partial\Delta \lol A
+\over
+f\cdot a : \partial\Delta \lol B
+\]
+\end{itemize}
 
+For example, for the line ${\bf 2} : \rshape$, I would define
+
+\begin{itemize}
+\item $\partial {\bf 2} \lol A \equiv A \x A$
+\item $K\ \{{\bf 2}\}\ a = \langle a, a\rangle$
+\item $ \Pi^{\bf 2} \langle A_0, A_1\rangle  = A_0 \x A_1$
+\item $\langle f_0, f_1\rangle\ \langle x_0, x_1\rangle = \langle f_0\ x_0, f_1\ x_1\rangle$
+\end{itemize}
+
+
+
+
+
+Given that, there is a type family
 \[
 \prov A : \rset_i
 \over
 \prov \bd^\Delta_A : (\partial\Delta \lol A) \to \rset_i
 \]
-I expect to define $\partial\Delta \lol A$ by analyzing what $\Delta$ is,
-and I expect to define $\bd^\Delta_A$ by analzying what $A$ is.
+which we will uniformly for any $\Delta$, by
+recursing over $A$ is.
 
-For any shape $\Delta$, there should be at least a constant element
-\[K : \{\Delta : \rshape\}\{A : \rset_i\}(a : A) \to (\partial\Delta \lol A)\]
-For example, for the line ${\bf 2} : \rshape$, I expect $\partial {\bf 2} \lol A \equiv A \x A$.
-For any discrete type $A$, the boundary type family $\bd^\Delta_A$ should be isomorphic to an
-inductive type with one constructor:
+As a trivial example, we expect for any discrete type $A$, that the
+family $\bd^\Delta_A$ should be isomorphic to an inductive type with
+one constructor:
 \[\rrefl : (a : A) \to \bd_A^\Delta(K\ a)\]
 
-From these we could make a defined thing
+We make a definition of a type which is a $\Sigma$ of the bridge family:
 \[
 \Delta \rshape \qquad \prov A : \rset_i \qquad
 \over
@@ -1930,36 +1962,20 @@ From these we could make a defined thing
 
 
 
-Next I want to explain what $\bd^\Delta_{\rset_i}$ is.
-\[
-\prov \rset_i : \rset_{i+1}
-\over
-\prov \bd^\Delta_{\rset_i} : (\partial\Delta \lol \rset_i) \to \rset_{i+1}
-\]
-For this I think I need to introduce one more concept.
-\[
-\prov A : \partial\Delta \lol \rset_i
-\over
-\prov \Pi^\Delta A : \rset_{i}
-\]
-I should be able to define $\Pi^\Delta$ by analyzing $\Delta$.
-For example, for $\Delta = {\bf 2}$, we have
-\[
-\prov A :  \rset_i \x \rset_i
-\over
-\prov \Pi^\Delta \langle A_0, A_1\rangle  = A_0 \x A_1
-\]
+
+
 \subsection{Defining Boundaries}
 \subsubsection{Universe}
-\[\prov \bd^\Delta_{\rset_i}\ A \equiv \Pi^\Delta A \to \rset_i\]
+%% \[
+%% \prov \rset_i : \rset_{i+1}
+%% \over
+%% \prov \bd^\Delta_{\rset_i} : (\partial\Delta \lol \rset_i) \to \rset_{i+1}
+%% \]
+\[ \bd^\Delta_{\rset_i}\ A \equiv \Pi^\Delta A \to \rset_i\]
 
 \subsubsection{Non-Dependent Functions}
 We need to first invent application lifted to $\partial\Delta\lol\dash$.
-\[
-f : \partial\Delta \lol (A \to B) \qquad a : \partial\Delta \lol A
-\over
-f\cdot a : \partial\Delta \lol B
-\]
+
 This can be defined by analysis of $\Delta$. In the $\bf 2$ case:
 \[
 f : (A \to B) \x (A \to B) \qquad a :  A \x A
