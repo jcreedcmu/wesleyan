@@ -1946,7 +1946,8 @@ g\cdot a : \Pi^\Delta[a/x] B
 \end{itemize}
 $\partial\Delta \lol A$ should wind up being equivalent to $\Pi^\Delta KA$, but to define
 it that way would lead to a lot more mutual recursion. Likewise the substitutions should line up,
-and function application shouldn't care about dependency.
+and function application shouldn't care about dependency. Also, to define function application
+is redundant with substitution.
 
 For example, for the line ${\bf 2} : \rshape$, I would define
 
@@ -2023,18 +2024,19 @@ x : A \prov B  : \rset_i
 So we want to say something approximating
 \[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bd^\Delta_B(f\ x )\]
 But in the example case of $\Delta = {\bf 2}$, we don't have the two $f\ x$ at the same type.
-We need a dependent notion of boundary. Let's invent first and tie the knot later.
-\[
- A : \rset_i
-\qquad x : A \prov B : \rset_i
-\qquad  a : \partial \Delta \lol A
-\qquad p : \bd_A^\Delta(a)
-\over
-\prov \bdd^{\Delta;p}_{x.B} : (\Pi^\Delta ([a/x]B) ) \to \rset_i
-\]
+We need a dependent notion of boundary.
+%% Notice that by the induction hypothesis we can obtain
+%% \[
+%% K (\lambda x .B) : \partial\Delta \lol (A \to \rset_i) \qquad a : \partial\Delta \lol A
+%% \over
+%% K (\lambda x . B)\cdot a : \partial\Delta \lol \rset_i
+%% \]
 
-We could simplify the definition of $\bdd$ by using the sigmas we defined earlier,
-writing $\partial$ for first projection:
+
+
+%% \vfil\eject
+
+using the sigmas we defined earlier, writing $\partial$ for first projection:
 \[
  A : \rset_i
 \qquad x : A \prov B : \rset_i
@@ -2044,25 +2046,20 @@ writing $\partial$ for first projection:
 \]
 with this we can almost define boundaries for non-dependent functions:
 \[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bdd^{\Delta;x}_{x.B}(f\cdot \partial x )\]
-but we need $\cdot$, a way of lifting function application to $\partial\Delta \lol \dash$.
-\[
-f : \partial\Delta \lol (x : A) \to B \qquad a : \partial\Delta \lol A
-\over
-f\cdot a : [a/x]B
-\]
-This can be defined by analysis of $\Delta$. In the $\bf 2$ case:
-\[
-f : ((x : A) \to B) \x ((x : A) \to B) \qquad a :  A \x A
-\over
-f\cdot x = \langle f.0\ a.0, f.1\ a.1\rangle: [a/x]B
-\]
+
 Ok, but now let's look closely at $B : A \to \rset_i$. We infer
 \[K\ B : \partial\Delta \lol (A \to \rset_i)\]
 and
 \[
-(K\ B) : \partial\Delta \lol (x : A) \to \rset_i \qquad a : \partial\Delta \lol A
+(K\ B) : \partial\Delta \lol A \to \rset_i \qquad a : \partial\Delta \lol A
 \over
-(K\ B)\cdot a : \rset_i
+(K\ B)\cdot a : \partial\Delta \lol \rset_i
+\]
+
+\[
+(K\ B) : \partial\Delta \lol A \to \rset_i \qquad a : \partial\Delta \lol A
+\over
+[a/x]B : \partial\Delta \lol \rset_i
 \]
 
 \end{document}
