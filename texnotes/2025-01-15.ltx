@@ -1637,6 +1637,7 @@ all the $\Gamma$ variables into $\Sigma$ types.
 \[
 \Omega \prov A : \rset_i \qquad \partial\Omega \prov M : [\iota] A
 \over \Omega^\star \prov A\star  M : \rset_i\]
+%
 \[
 \partial \Omega \prov M_1 : [\iota]A \qquad  \Omega^\star \prov  M_2 :  A \star M_1
 \over
@@ -1790,5 +1791,258 @@ I want to derive the binary displayed version of this,
 Define
 \[P^d : \Pi P \to \rset_1\]
 \[P^d\ p = P \star p\]
+
+\section{Iterated Bridges}
+Suppose we have $\cdot \prov A$ and $\partial\Delta \prov a : A$.
+We can weaken $A$ to $\Delta$, and let's annotate the $\star$ with $\Delta$ to be clear:
+\[
+\Delta \prov A : \rset_i \qquad \partial\Delta \prov a :  A
+\over  \prov A\star_\Delta  a : \rset_i\]
+We can then repeat this:
+\[
+\begin{prooftree}
+\[
+\Delta \prov A : \rset_i \qquad \partial\Delta \prov a :  A
+\justifies
+\Delta \prov A\star_\Delta  a : \rset_i
+\]
+\qquad \partial\Delta \prov a' :  A\star_\Delta  a
+\justifies
+\prov (A\star_\Delta  a)\star_\Delta  a' : \rset_i
+\end{prooftree}
+\]
+Hmm I'm not getting any insight from this.
+\section{Revisiting Bridges With Boundary}
+Assuming $\partial\Delta \prov \theta : \Gamma$, we have a judgment
+\[
+\Delta \prov \phi :  \theta : \Gamma
+\]
+Substitution principles are
+\[
+\begin{prooftree}
+\Gamma \prov M : A \qquad \partial\Delta \prov \theta : \Gamma
+\using {\theta\mathsf{Subst}}\justifies
+\partial\Delta \prov [\theta]M : [\theta]A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\Gamma \prov M : A \qquad \Delta \prov \phi : \theta : \Gamma
+\using {\phi\mathsf{Subst}}\justifies
+ \prov [\phi]M : [\phi]A \bullet  \partial\Delta.[\theta] M
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\Gamma \prov A : \rset_i \qquad \Delta \prov \phi : \theta : \Gamma
+\qquad \partial\Delta \prov M  : [\theta] A
+\using {\phi\mathsf{TpSubst}}\justifies
+ \prov [\phi]A\bullet \partial\Delta.M : \rset_i
+\end{prooftree}
+\]
+Substitutions are formed by
+\[ {
+\Gamma \prov A : \rset_i
+\qquad \partial\Delta \prov N : [\theta] A
+\over
+\partial\Delta \prov  (\theta[N/x]) : \Gamma, x :A
+}\]
+\[ {
+\Gamma \prov A : \rset_i
+\qquad \partial\Delta \prov N : [\theta] A
+\qquad \Delta \prov \phi : \theta : \Gamma
+\qquad   \prov p : [\phi]A\ \partial\Delta.N
+\over
+\Delta \prov (\phi[p/x]) : (\theta[N/x]) : (\Gamma, x :A)
+}\]
+
+\subsection{Substitution}
+\subsubsection{Types}
+
+Suppose $A = \rset_i$ in $\phi\mathsf{Subst}$. Then we're facing,
+using the definition of universe substitution below,
+\[
+\begin{prooftree}
+\Gamma \prov A : \rset_i \qquad \Delta \prov \phi : \theta : \Gamma
+\using {\phi\mathsf{Subst}}\justifies
+ \prov [\phi]A :  \Pi( \partial\Delta.[\theta] A) \to \rset_i
+\end{prooftree}
+\]
+So we define
+\[[\phi] A \equiv\lambda k . [\phi]A\bullet k\]
+
+\subsubsection{Universe}
+
+\[[\phi]\rset_i\bullet B  \equiv \Pi B \to \rset_i \]
+
+\subsubsection{Pi}
+
+We have $\Delta \prov \phi : \theta : \Gamma$ and
+we must define
+$[\phi]((x : A) \to B)$ to fit in
+\[
+\begin{prooftree}
+\[
+\Gamma \prov A : \rset_i\quad
+\Gamma , x : A  \prov B : \rset_i
+\justifies
+\Gamma\prov (x : A) \to B : \rset_i
+\]
+\quad \partial\Delta \prov M  : [\theta] (x : A) \to B
+\using {\phi\mathsf{TpSubst}}\justifies
+ \prov [\phi]((x : A) \to B)\bullet \partial\Delta.M : \rset_i
+\end{prooftree}
+\]
+Hm, for this, I want $\Sigma$ of the $x$ and its relation to exist in one variable.
+\section{Minimal Beliefs}
+\def\rshape{\ {\mathsf{shape}}}
+\def\rrefl{{\mathsf{refl}}}
+
+I think at least these should exist:
+\[
+\Delta \rshape \qquad \prov A : \rset_i \qquad
+\over
+\prov \partial\Delta \lol A : \rset_i
+\]
+
+\[
+\prov A : \rset_i
+\over
+\prov \bd^\Delta_A : (\partial\Delta \lol A) \to \rset_i
+\]
+I expect to define $\partial\Delta \lol A$ by analyzing what $\Delta$ is,
+and I expect to define $\bd^\Delta_A$ by analzying what $A$ is.
+
+For any shape $\Delta$, there should be at least a constant element
+\[K : \{\Delta : \rshape\}\{A : \rset_i\}(a : A) \to (\partial\Delta \lol A)\]
+For example, for the line ${\bf 2} : \rshape$, I expect $\partial {\bf 2} \lol A \equiv A \x A$.
+For any discrete type $A$, the boundary type family $\bd^\Delta_A$ should be isomorphic to an
+inductive type with one constructor:
+\[\rrefl : (a : A) \to \bd_A^\Delta(K\ a)\]
+
+From these we could make a defined thing
+\[
+\Delta \rshape \qquad \prov A : \rset_i \qquad
+\over
+\prov \Delta \lol A : \rset_i
+\]
+\[ (\Delta \lol A) \equiv ((d : \partial\Delta \lol A) \to \bd^\Delta_A\ d)\]
+
+
+
+Next I want to explain what $\bd^\Delta_{\rset_i}$ is.
+\[
+\prov \rset_i : \rset_{i+1}
+\over
+\prov \bd^\Delta_{\rset_i} : (\partial\Delta \lol \rset_i) \to \rset_{i+1}
+\]
+For this I think I need to introduce one more concept.
+\[
+\prov A : \partial\Delta \lol \rset_i
+\over
+\prov \Pi^\Delta A : \rset_{i}
+\]
+I should be able to define $\Pi^\Delta$ by analyzing $\Delta$.
+For example, for $\Delta = {\bf 2}$, we have
+\[
+\prov A :  \rset_i \x \rset_i
+\over
+\prov \Pi^\Delta \langle A_0, A_1\rangle  = A_0 \x A_1
+\]
+\subsection{Defining Boundaries}
+\subsubsection{Universe}
+\[\prov \bd^\Delta_{\rset_i}\ A \equiv \Pi^\Delta A \to \rset_i\]
+
+\subsubsection{Non-Dependent Functions}
+We need to first invent application lifted to $\partial\Delta\lol\dash$.
+\[
+f : \partial\Delta \lol (A \to B) \qquad a : \partial\Delta \lol A
+\over
+f\cdot a : \partial\Delta \lol B
+\]
+This can be defined by analysis of $\Delta$. In the $\bf 2$ case:
+\[
+f : (A \to B) \x (A \to B) \qquad a :  A \x A
+\over
+f\cdot x = \langle f.0\ a.0, f.1\ a.1\rangle: \partial\Delta \lol B
+\]
+
+\[ \bd^\Delta_{A \to B}\ f = (x : \Delta \lol A) \to \bd^{\Delta}_{B}(f \cdot \partial x )\]
+Note that it's not possible to turn an arbitrary function
+$(\partial \Delta \lol A) \to (\partial \Delta \lol B)$ back into $\partial \Delta \lol (A \to B)$.
+I don't think I should expect
+\[
+( \Delta \lol A) \to ( \Delta \lol B)
+\over
+ \Delta \lol (A \to B)
+\]
+to work in general.
+\subsubsection{Dependent Functions}
+
+Now let's try to define $\bd^\Delta_{(x:A) \to B}$. We need
+\[
+x : A \prov B  : \rset_i
+\over
+\prov \bd^\Delta_{(x:A) \to B} : (\partial\Delta \lol (x:A) \to B) \to \rset_i
+\]
+So we want to say something approximating
+\[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bd^\Delta_B(f\ x )\]
+But in the example case of $\Delta = {\bf 2}$, we don't have the two $f\ x$ at the same type.
+We need a dependent notion of boundary. Let's invent first and tie the knot later.
+\[
+ A : \rset_i
+\qquad x : A \prov B : \rset_i
+\qquad  a : \partial \Delta \lol A
+\qquad p : \bd_A^\Delta(a)
+\over
+\prov \bdd^{\Delta;p}_{x.B} : (\Pi^\Delta ([a/x]B) ) \to \rset_i
+\]
+For this we seem to need an operation
+\[
+x : A \prov B : \rset_i
+\qquad  a : \partial \Delta \lol A
+\over
+[a/x]B : \partial\Delta \lol \rset_i
+\]
+For example, for $\Delta = {\bf 2}$ as usual, we define
+\[
+x : A \prov B : \rset_i
+\qquad  a : A \x A
+\over
+[a/x]B : \rset_i \x \rset_i
+\]
+by saying $[\langle a_0, a_1 \rangle/x]B  \equiv \langle [a_0/x]B , [a_1/x]B \rangle$.
+
+We could simplify the definition of $\bdd$ by using the sigmas we defined earlier,
+writing $\partial$ for first projection:
+\[
+ A : \rset_i
+\qquad x : A \prov B : \rset_i
+\qquad p : \Delta \lol A
+\over
+\prov \bdd^{\Delta;p}_{x.B} : (\Pi^\Delta ([\partial p/x]B) ) \to \rset_i
+\]
+with this we can almost define boundaries for non-dependent functions:
+\[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bdd^{\Delta;x}_{x.B}(f\cdot \partial x )\]
+but we need $\cdot$, a way of lifting function application to $\partial\Delta \lol \dash$.
+\[
+f : \partial\Delta \lol (x : A) \to B \qquad a : \partial\Delta \lol A
+\over
+f\cdot a : [a/x]B
+\]
+This can be defined by analysis of $\Delta$. In the $\bf 2$ case:
+\[
+f : ((x : A) \to B) \x ((x : A) \to B) \qquad a :  A \x A
+\over
+f\cdot x = \langle f.0\ a.0, f.1\ a.1\rangle: [a/x]B
+\]
+Ok, but now let's look closely at $B : A \to \rset_i$. We infer
+\[K\ B : \partial\Delta \lol (A \to \rset_i)\]
+and
+\[
+(K\ B) : \partial\Delta \lol (x : A) \to \rset_i \qquad a : \partial\Delta \lol A
+\over
+(K\ B)\cdot a : \rset_i
+\]
 
 \end{document}
