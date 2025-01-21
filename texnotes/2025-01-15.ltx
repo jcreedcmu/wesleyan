@@ -1910,12 +1910,26 @@ of:
 \]
 \item A constant boundary:
 \[K : \{\Delta : \rshape\}\{A : \rset_i\}(a : A) \to (\partial\Delta \lol A)\]
-\item Given a mapping of a boundary into a universe, what it means to have
+\item Given a mapping of a boundary into a type, what it means to have
 a global element of that boundary:
 \[
 \prov A : \partial\Delta \lol \rset_i
 \over
-\prov \Pi^\Delta A : \rset_{i}
+\prov \Pi^\Delta A : \rset_i
+\]
+\item What it means to substitute a boundary into a type expression:
+\[
+x : A \prov B : \rset_i
+\qquad  a : \partial \Delta \lol A
+\over
+[a/x]B : \partial\Delta \lol \rset_i
+\]
+\item What it means to substitute a boundary into an ordinary expression:
+\[
+x : A \prov M : B
+\qquad  a : \partial \Delta \lol A
+\over
+[a/x]M : \Pi^\Delta [a/x]B
 \]
 \item What it means to apply a function under $\partial\Delta \lol \em$:
 \[
@@ -1923,7 +1937,16 @@ f : \partial\Delta \lol (A \to B) \qquad a : \partial\Delta \lol A
 \over
 f\cdot a : \partial\Delta \lol B
 \]
+\item What it means to apply a dependent function under $\partial\Delta \lol \em$:
+\[
+g : \partial\Delta \lol ((x : A) \to B) \qquad a : \partial\Delta \lol A
+\over
+g\cdot a : \Pi^\Delta[a/x] B
+\]
 \end{itemize}
+$\partial\Delta \lol A$ should wind up being equivalent to $\Pi^\Delta KA$, but to define
+it that way would lead to a lot more mutual recursion. Likewise the substitutions should line up,
+and function application shouldn't care about dependency.
 
 For example, for the line ${\bf 2} : \rshape$, I would define
 
@@ -1931,7 +1954,10 @@ For example, for the line ${\bf 2} : \rshape$, I would define
 \item $\partial {\bf 2} \lol A \equiv A \x A$
 \item $K\ \{{\bf 2}\}\ a = \langle a, a\rangle$
 \item $ \Pi^{\bf 2} \langle A_0, A_1\rangle  = A_0 \x A_1$
-\item $\langle f_0, f_1\rangle\ \langle x_0, x_1\rangle = \langle f_0\ x_0, f_1\ x_1\rangle$
+\item $[\langle a_0, a_1\rangle / x]B = \langle [a_0/x]B, [a_1/x]B\rangle$
+\item $[\langle a_0, a_1\rangle / x]M = \langle [a_0/x]M, [a_1/x]M\rangle$
+\item $\langle f_0, f_1\rangle\cdot \langle x_0, x_1\rangle = \langle f_0\ x_0, f_1\ x_1\rangle$
+\item $\langle g_0, g_1\rangle\cdot \langle x_0, x_1\rangle = \langle g_0\ x_0, g_1\ x_1\rangle$
 \end{itemize}
 
 
@@ -1974,25 +2000,18 @@ We make a definition of a type which is a $\Sigma$ of the bridge family:
 \[ \bd^\Delta_{\rset_i}\ A \equiv \Pi^\Delta A \to \rset_i\]
 
 \subsubsection{Non-Dependent Functions}
-We need to first invent application lifted to $\partial\Delta\lol\dash$.
 
-This can be defined by analysis of $\Delta$. In the $\bf 2$ case:
-\[
-f : (A \to B) \x (A \to B) \qquad a :  A \x A
-\over
-f\cdot x = \langle f.0\ a.0, f.1\ a.1\rangle: \partial\Delta \lol B
-\]
 
 \[ \bd^\Delta_{A \to B}\ f = (x : \Delta \lol A) \to \bd^{\Delta}_{B}(f \cdot \partial x )\]
-Note that it's not possible to turn an arbitrary function
-$(\partial \Delta \lol A) \to (\partial \Delta \lol B)$ back into $\partial \Delta \lol (A \to B)$.
-I don't think I should expect
-\[
-( \Delta \lol A) \to ( \Delta \lol B)
-\over
- \Delta \lol (A \to B)
-\]
-to work in general.
+%% Note that it's not possible to turn an arbitrary function
+%% $(\partial \Delta \lol A) \to (\partial \Delta \lol B)$ back into $\partial \Delta \lol (A \to B)$.
+%% I don't think I should expect
+%% \[
+%% ( \Delta \lol A) \to ( \Delta \lol B)
+%% \over
+%%  \Delta \lol (A \to B)
+%% \]
+%% to work in general.
 \subsubsection{Dependent Functions}
 
 Now let's try to define $\bd^\Delta_{(x:A) \to B}$. We need
@@ -2013,21 +2032,6 @@ We need a dependent notion of boundary. Let's invent first and tie the knot late
 \over
 \prov \bdd^{\Delta;p}_{x.B} : (\Pi^\Delta ([a/x]B) ) \to \rset_i
 \]
-For this we seem to need an operation
-\[
-x : A \prov B : \rset_i
-\qquad  a : \partial \Delta \lol A
-\over
-[a/x]B : \partial\Delta \lol \rset_i
-\]
-For example, for $\Delta = {\bf 2}$ as usual, we define
-\[
-x : A \prov B : \rset_i
-\qquad  a : A \x A
-\over
-[a/x]B : \rset_i \x \rset_i
-\]
-by saying $[\langle a_0, a_1 \rangle/x]B  \equiv \langle [a_0/x]B , [a_1/x]B \rangle$.
 
 We could simplify the definition of $\bdd$ by using the sigmas we defined earlier,
 writing $\partial$ for first projection:
