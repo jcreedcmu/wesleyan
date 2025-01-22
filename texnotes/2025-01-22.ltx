@@ -302,4 +302,39 @@ Imagine we have first of all a pair of teles.
 Then we have a pair of suitable types defined over those teles.
 \[(t : F(\tel_i n)) \to \mathsf{map}F\ \sem\_\ t : F\rset_i\]
 
+\subsection{Defining Telescopes Better}
+I may not need to apply $F$ to the type of teles. I notice I only ever deal in one $\Gamma$
+at a time, but multiple $\theta$. So I may not need to nat-index teles.
+\[\begin{array}{l}\mathbf{data}\ \tel_i :   \rset_{i+1}\ \mathbf{where}\\
+\qquad \mathsf{nil} : \tel_i\\
+\qquad \mathsf{\_,\_} : (t : \tel_i) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j}\\
+\\
+\sem{\_} :  \tel_i \to \rset_i\\
+ \sem{\mathsf{nil}} = \top\\
+ \sem{\mathsf{t\ ,\ A}} = \Sigma \sem t A\\
+\end{array}\]
+
+So in order to do ``$\phi$ substitution'', I might need only
+
+
+\[
+t : \tel_i \qquad \theta : F\sem{t} \qquad   A : \sem t \to  \rset_i\qquad \phi : \bd_{\sem t}(\theta)
+\over
+\phi \bullet A : \Gamma(\eta A \cdot \theta ) \to \rset_i
+\]
+
+\[
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&&  A : \sem t \to  \rset_i \\
+t : \tel_i & \theta : F\sem{t} &   M : (x : \sem t) \to A\ x  & \phi : \bd_{\sem t}(\theta)
+\end{array}
+\over
+\phi M : ( \phi \bullet A)\ (\eta M \odot \theta)
+\]
+To check that this latter claim is well-typed, examine
+\[{\_\odot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} (M' : F((x : A) \to B\ x)) (N' : FA) \to
+ \Gamma (\eta B \cdot N')\]
+in the special case $A = \sem t$, $B = A$, $M' = \eta M$, $N' = \theta$ and we find
+\[{\eta M \odot \theta} :   \Gamma (\eta A \cdot \theta)\]
+
 \end{document}
