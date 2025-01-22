@@ -257,24 +257,43 @@ Then maybe
 Maybe this is where the substitution generalization also needs to happen.
 \subsection{Dependent Pairing}
 For substitutions below, I think I want some compatibility between $F/\Gamma$ and dependent pairing.
-To the signature of a ``dependent applicative functor'' I add the requirement:
+To the signature of a ``dependent applicative functor'' I add the requirements:
+whenever $A : \rset_i$ and $B : A \to \rset_i$, we have dependent pairing under $F$:
 \[
-A : \rset_i \qquad B : A \to \rset_i \qquad N : FA \qquad M : \Gamma(\eta B \cdot N)
+N : FA \qquad M : \Gamma(\eta B \cdot N)
 \over
 \ll N, M \rr : F(\Sigma A B)
 \]
-The example for $\Delta = \btwo$ goes like this:
+and also first and second projection:
 \[
-A : \rset_i \qquad B : A \to \rset_i \qquad \langle a_0, a_1\rangle : A \x A \qquad \langle M_0, M_1\rangle: (B\ a_0) \x (B\ a_1)
+{M : F(\Sigma A B)
 \over
-\langle\langle a_0, M_0\rangle,\langle a_1, M_1\rangle\rangle  : (\Sigma A B) \x (\Sigma A B)
+\pi_1 M : F A}
+\qquad
+{M : F(\Sigma A B)
+\over
+\pi_2 M : \Gamma (\eta B \cdot \pi_1 M)}
 \]
-The example for $\Delta = {\bf S}$ goes like this:
+
+
+For the example of $\Delta = {\bf S}$, nothing surprising happens with pairing:
 \[
 A : \rset_i \qquad B : A \to \rset_i \qquad N : S \to A \qquad M : (s :S) \to B (N\ s)
 \over
 \lambda s . \langle N s, M\ s\rangle  : S \to (\Sigma A B)
 \]
+Or projections:
+\[
+{M : S \to (\Sigma A B)
+\over
+\lambda s . \pi_1 (M\ s) : S \to A}
+\qquad
+{M : S \to (\Sigma A B)
+\over
+\lambda s .\pi_2 (M\ s) : (s : S) \to  B  (\pi_1 (M\ s))}
+\]
+The projections I can probably just obtain from functoriality. Pairing might be a genuinely new requirement.
+
 \subsection{Trying To Imagine Substitutions}
 In binary parametricity:
 
@@ -332,11 +351,23 @@ at a time, but multiple $\theta$. So I may not need to nat-index teles.
  \sem{\mathsf{t} :: A} = \Sigma \sem t A\\
 \end{array}\]
 
-So in order to do ``$\phi$ substitution'', I might need only define
-
-
+Using tools I already have, I can build up ``tuples of substitutions'' that live in $F \sem t$:
 \[
-t : \tel_i \qquad \theta : F\sem{t} \qquad   A : \sem t \to  \rset_i\qquad \phi : \bd_{\sem t}(\theta)
+t : \tel_i \qquad  \theta : F\sem{t} \qquad M : \Gamma(\eta A \cdot \theta)
+\over
+\ll \theta, M\rr : F\sem {t :: A}
+\]
+
+To capture bridge-substitutions, I'm going to simultaneously define
+a type
+\[
+t : \tel_i
+\over
+\bd_t : F\sem t \to \rset_i
+\]
+and two operations
+\[
+t : \tel_i \qquad \theta : F\sem{t} \qquad   A : \sem t \to  \rset_i\qquad \phi : \bd_t(\theta)
 \over
 \phi \bullet A : \Gamma(\eta A \cdot \theta ) \to \rset_i
 \]
@@ -344,28 +375,24 @@ t : \tel_i \qquad \theta : F\sem{t} \qquad   A : \sem t \to  \rset_i\qquad \phi 
 \[
 \begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
 &&  A : \sem t \to  \rset_i \\
-t : \tel_i & \theta : F\sem{t} &   M : (x : \sem t) \to A\ x  & \phi : \bd_{\sem t}(\theta)
+t : \tel_i & \theta : F\sem{t} &   M : (x : \sem t) \to A\ x  & \phi : \bd_{t}(\theta)
 \end{array}
 \over
 \phi M : ( \phi \bullet A)\ (\eta M \odot \theta)
 \]
 
-
-and now I can explain how to build up ``tuples of substitutions'' that live in $F \sem t$:
-\[
-t : \tel_i \qquad  \theta : F\sem{t} \qquad M : \Gamma(\eta A \cdot \theta)
-\over
-\ll \theta, M\rr : F\sem {t :: A}
-\]
-\[F\sem {t :: A} = F(\Sigma\sem t A)\]
-
-$\ldots$ and ``substitutions'' that live in $\bd_{\sem t}(\theta)$.
+I could think of bridge substitutions as having the intro rule:
 \[
 \begin{array}{c@{\qquad}c@{\qquad}c}
 t : \tel_i &  \theta : F\sem{t} & M : \Gamma(\eta A \cdot \theta) \\
-A: \sem t \to \rset_i &    \phi : \bd_{\sem t}(\theta) & p : (\phi \bullet A)\ (\eta M \odot \theta)
+A: \sem t \to \rset_i &    \phi : \bd_{t}(\theta) & p : (\phi \bullet A)\ (\eta M \odot \theta)
 \end{array}
 \over
- \langle\phi , p\rangle  : \bd_{\sem{t :: A}}
+ \langle\phi , p\rangle  : \bd_{t :: A} \ll \theta, M\rr
 \]
+But this is the same as saying
+\[ \bd_{t::A}\ N = \Sigma (\phi : \bd_{t}(\pi_1 N) ).(\phi \bullet A)\ (\eta ( \pi_2 N) \odot \pi_1 N)\]
+
+
+
 \end{document}
