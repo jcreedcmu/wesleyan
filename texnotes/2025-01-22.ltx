@@ -14,7 +14,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-
+\def\bdot{\mathrel{\bar\cdot}}
+\def\bodot{\mathrel{\bar\odot}}
 \def\dec{\mathsf{\downarrow}}
 \def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
@@ -214,27 +215,31 @@ An example is the reader applicative for input type $S$,
 \[\eta\ a = \lambda\_ . a\]
 \[f \cdot x = \lambda s . (f\ s)\ (x\ s)\]
 \[f \odot x = \lambda s . (f\ s)\ (x\ s)\]
-Then from this data I aim to construct another such object,
+Then from this data we aim to construct another such object,
 \[\bar F : \rset_i \to \rset_i\]
 \[\bar \Gamma : \bar F\rset_i \to \rset_i\]
 \[\bar \eta : A \to \bar FA\]
-\[{\_\bar\cdot\_} : \bar F(A \to B) \to \bar FA \to \bar FB\]
-\[{\_\bar\odot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} \to \bar F((x : A) \to  B(x)) \to (a : \bar FA) \to \bar\Gamma (\eta B \cdot a)\]
-which lies over $F$ in the sense that there's a map
-\[\partial : \{A : \rset_i\} \to \bar F A \to F A\]
-which commutes appropriately with all the operations above.
-In particular, $\partial (\bar\eta\ a) \equiv \eta $.
-We express this by describing $\bar F$ as a record type:
-\[\bar F A = \{\partial : F A, \beta : \bd_A(\partial) \}\]
-with the fibers named $\bd$.
-
-We want to require {\em relativity}: that bridges in the universe are relations,
-and the inclusion $\eta$ gives bridges.
-\[\bd_{\rset_i}(A : F\rset_i) \equiv \Gamma A \to \rset_i\]
-\[\bar\eta(A : \rset_i) : \bar F \rset_i \]
-\[\bar\eta(A : \rset_i).\beta : \bd_{\rset_i}(\bar\eta(A : \rset_i).\partial) \]
-\[\bar\eta(A : \rset_i).\beta : \bd_{\rset_i}((\bar\eta A).\partial) \]
-\[\bar\eta(A : \rset_i).\beta : \Gamma \partial (\bar\eta A) \to \rset_i \]
-\[\bar\eta(A : \rset_i).\beta : \Gamma  (\eta A) \to \rset_i \]
-\[\bar\eta(\rset_i : \rset_{i+1}).\beta : \Gamma  (\eta \rset_i) \to \rset_{i+1} \]
+\[{\_\bdot\_} : \bar F(A \to B) \to \bar FA \to \bar FB\]
+\[{\_\bodot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} \to \bar F((x : A) \to  B(x)) \to (a : \bar FA) \to \bar\Gamma (\bar \eta B \bdot a)\]
+%% which lies over $F$ in the sense that there's a map
+%% \[\partial : \{A : \rset_i\} \to \bar F A \to F A\]
+%% which commutes appropriately with all the operations above.
+%% In particular, $\partial (\bar\eta\ a) \equiv \eta $.
+Where it will turn out that we choose to define $\bar F$ and $\bar \Gamma$ as record types:
+\[\bar F A \equiv \{\partial : F A, \beta : \bd_A(\partial) \}\]
+\[\bar \Gamma (C : \bar F \rset_i) \equiv \{\partial : \Gamma(\partial C), \beta : \bdd_{\partial C}(\partial) \}\]
+It is our job to define
+\[
+{A: \rset_i  \over \bd_A : FA \to \rset_i}
+\qquad
+{C: F \rset_i  \over  \bdd_C : \Gamma C \to  \rset_i}
+\]
+This will satisfy various nice properties. A central one is
+ {\em relativity}, that bridges in the universe are relations:
+\[\bd_{\rset_i}(A ) \equiv \Gamma A \to \rset_i\]
+Some compatibilities that will be need to be satisfied are
+%\[\partial(\bar \Gamma C) \equiv \Gamma (\partial C)\]
+\[\partial (\bar \eta a) \equiv \eta a\]
+\[\partial(f \mathrel{\bdot} x) \equiv \partial f \cdot \partial x\]
+\[\partial(f \bodot x) \equiv \partial f \cdot \partial x\]
 \end{document}
