@@ -429,9 +429,22 @@ t : \tel_i \qquad \theta : F\sem{t}
 \]
 \qquad \phi : \bd_t(\theta)
 \justifies
-\phi \bullet (\lambda t . (x : A) \to B) : \Gamma(\eta (\lambda t . (x : A) \to B) \cdot \theta ) \to \rset_i
+\phi \bullet (\lambda \tau . (x : A) \to B) : \Gamma(\eta (\lambda \tau . (x : A) \to B) \cdot \theta ) \to \rset_i
 \end{prooftree}
 \]
 
+Here I'm stuck. I don't know how to apply anything from $\Gamma$. Or wait, maybe I do? Might need dependent pairing.
+
+We start by $\Pi$'ing up $(x : S)$...
+\section{What are Dependent Applicative Functors?}
+I believe I should have
+\[F : \rset_i \to \rset_i\]
+\[\Gamma : F\rset_i \to \rset_i\]
+\[\eta : A \to FA\]
+\[{\_\cdot\_} : F(A \to B) \to FA \to FB\]
+\[{\_\odot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} \to F((x : A) \to B(x)) \to (a : FA) \to \Gamma (\eta B \cdot a)\]
+\[
+\ll\_,\_\rr : (N : FA) \to \Gamma(\eta B \cdot N)\to  F(\Sigma A B)
+\]
 
 \end{document}
