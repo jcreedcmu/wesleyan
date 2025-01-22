@@ -278,14 +278,28 @@ Let $\tel_i$ be the type of telescopes of maximum universe level $i$.
  \sem{\mathsf{t\ ,\ A}} = \Sigma \sem t A\\
 \end{array}\]
 \[F : \rset_i \to  \rset_i\]
+\[G : F \rset_i \to  \rset_i\]
 \[\zeta : \{n : \N\} \to F (\tel_i\ n) \to  \tel_i\ n\]
-\[Z : \{n : \N\} (x : F (\tel_i\ n)) \to  \sem{\zeta x} \to ?\]
+\[\mathsf{map}F : (A \to B) \to FA \to FB\]
+\[Z : \{n : \N\} (x : F (\tel_i\ n)) \to  \sem{\zeta\ x} \cong G(\mathsf{map}F\ \sem\_\ x)\]
 
-For $FA = A \x A$ we have
-\[\zeta {\langle \mathsf{nil}, \mathsf{nil}\rangle} \equiv \mathsf{nil}\]
+Example:
+\[\begin{array}{l}
+FA = A \x A\\
+G\langle A_0, A_1 \rangle = A_0 \x A_1\\
+\zeta : \{n : \N\} \to (\tel_i\ n \x \tel_i\ n) \to  \tel_i\ n\\
+Z : \{n : \N\} (x : \tel_i\ n \x \tel_i\ n) \to  \sem{\zeta\ x} \cong \sem{x.0} \x \sem{x.1}\\
+\zeta {\langle \mathsf{nil}, \mathsf{nil}\rangle} \equiv \mathsf{nil}\\
+\zeta \langle (T, A),  (T', A')\rangle \equiv \langle \zeta \langle T, T'\rangle ,  \lambda z : \sem{\zeta \langle T, T'\rangle}.\\
+\qquad A ((Z\  \langle T,T'\rangle\ z) .0) \x A' ((Z\  \langle T,T'\rangle\ z) .1)
+\rangle
+\end{array}\]
 In general if $\eta : A \to FA$, then we should expect
 \[\zeta (\eta  (\mathsf{nil})) = \mathsf{nil}\]
-Then we have
-\[\zeta \langle (T, A),  (T', A')\rangle \equiv \zeta \langle T, T'\rangle,  \]
+Then we have something for conses. Let's try to explain the pair case generally.
+Imagine we have first of all a pair of teles.
+\[T : F(\tel_i n)\]
+Then we have a pair of suitable types defined over those teles.
+\[(t : F(\tel_i n)) \to \mathsf{map}F\ \sem\_\ t : F\rset_i\]
 
 \end{document}
