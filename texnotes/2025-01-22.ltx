@@ -226,12 +226,12 @@ Then from this data we aim to construct another such object,
 %% In particular, $\partial (\bar\eta\ a) \equiv \eta $.
 Where it will turn out that we choose to define $\bar F$ and $\bar \Gamma$ as record types:
 \[\bar F A \equiv \{\partial : F A, \beta : \bd_A(\partial) \}\]
-\[\bar \Gamma (C : \bar F \rset_i) \equiv \{\partial : \Gamma(\partial C), \beta : \bdd_{\partial C}(\partial) \}\]
+\[\bar \Gamma (C : \bar F \rset_i) \equiv \{\partial : \Gamma(\partial C), \beta : \bdd_{ C}(\partial) \}\]
 It is our job to define
 \[
 {A: \rset_i  \over \bd_A : FA \to \rset_i}
 \qquad
-{C: F \rset_i  \over  \bdd_C : \Gamma C \to  \rset_i}
+{C: \bar F \rset_i  \over  \bdd_C : \Gamma(\partial C) \to  \rset_i}
 \]
 This will satisfy various nice properties. A central one is
  {\em relativity}, that bridges in the universe are relations:
@@ -254,6 +254,8 @@ If
 \[\eta : \{A : \rset_i\} \to A \to F A\]
 Then maybe
 \[\theta : \{C : F\rset_i\} (c : \Gamma C) \to ?\]
+
+\[\bd_C \equiv \beta(\bar? C)\]
 Maybe this is where the substitution generalization also needs to happen.
 \subsection{Dependent Pairing}
 For substitutions below, I think I want some compatibility between $F/\Gamma$ and dependent pairing.
