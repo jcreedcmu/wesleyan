@@ -391,8 +391,47 @@ A: \sem t \to \rset_i &    \phi : \bd_{t}(\theta) & p : (\phi \bullet A)\ (\eta 
  \langle\phi , p\rangle  : \bd_{t :: A} \ll \theta, M\rr
 \]
 But this is the same as saying
+\[ \bd_\cdot (*) = \top\]
 \[ \bd_{t::A}\ N = \Sigma (\phi : \bd_{t}(\pi_1 N) ).(\phi \bullet A)\ (\eta ( \pi_2 N) \odot \pi_1 N)\]
 
+
+What happens when $t = \mathsf{nil}$? I'm going to assert $F \top \equiv \top$ is part
+of $F$ preserving products.
+\[
+  A :   \rset_i
+\over
+* \bullet A : F A \to \rset_i
+\]
+
+\[
+  A :  \rset_i \qquad  M :  A
+\over
+*  M : (* \bullet A)(\eta M)
+\]
+As expected, these reduce to having the type of $\bd$ and $\rrefl$.
+\subsection{Substitution}
+\subsubsection{The Universe}
+\[
+t : \tel_{i+1} \qquad    \rset_i :   \rset_{i+1}\qquad \phi : \bd_t(\theta)
+\over
+\phi \bullet \rset_i : F\rset_i  \to \rset_{i+1}
+\]
+\[(\phi \bullet \rset_i ) A\equiv \Gamma A \to \rset_i\]
+\subsubsection{Pi}
+\[
+\begin{prooftree}
+t : \tel_i \qquad \theta : F\sem{t}
+\qquad
+\[
+\tau : \sem t \prov A : \rset_i  \qquad \tau : \sem t, x : A \prov B:  \rset_i
+\justifies
+(\lambda \tau . (x : A) \to B) : \sem t \to  \rset_i
+\]
+\qquad \phi : \bd_t(\theta)
+\justifies
+\phi \bullet (\lambda t . (x : A) \to B) : \Gamma(\eta (\lambda t . (x : A) \to B) \cdot \theta ) \to \rset_i
+\end{prooftree}
+\]
 
 
 \end{document}
