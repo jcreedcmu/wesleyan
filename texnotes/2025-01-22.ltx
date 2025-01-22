@@ -14,6 +14,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\tel{\mathsf{T}}
 \def\bdot{\mathrel{\bar\cdot}}
 \def\bodot{\mathrel{\bar\odot}}
 \def\dec{\mathsf{\downarrow}}
@@ -256,4 +257,27 @@ If
 Then maybe
 \[\theta : \{C : F\rset_i\} (c : \Gamma C) \to ?\]
 Maybe this is where the substitution generalization also needs to happen.
+\subsection{Trying To Imagine Substitutions}
+In binary parametricity:
+
+\begin{itemize}
+\item  $F$ takes a type $A$ to the type $A \x A$.
+\item  $\Gamma$ takes something that lives in $F\rset_i$, e.g.
+a pair of types  $\langle A_0,A_1\rangle$ to the type of global sections $A_0 \x A_1$.
+\item In general, if we have two telescopes $\Gamma_0, \Gamma_1$, we should
+have a way of computing the type of pairs of substitutions $\theta_0 : \Gamma_0, \theta_1 : \Gamma_1$.
+\end{itemize}
+
+Let $\tel_i$ be the type of telescopes of maximum universe level $i$.
+\[\begin{array}{l}\mathbf{data}\ \tel_i : \rset_{i+1}\ \mathbf{where}\\
+\qquad \mathsf{nil} : \tel_i\\
+\qquad \mathsf{\_,\_} : (t : \tel_i) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j}\\
+\\
+\sem{\_} : \tel_i \to \rset_i\\
+ \sem{\mathsf{nil}} = \top\\
+ \sem{\mathsf{t\ ,\ A}} = \Sigma \sem t A\\
+\end{array}\]
+\[F : \rset_i \to  \rset_i\]
+\[\Gamma : F \tel_i \to  \tel_i\]
+Let's think through the example of $FA = A \x A$.
 \end{document}
