@@ -140,8 +140,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ltri{{\lhd}}
 \def\rtri{{\rhd}}
 \def\tri{\rhd}
-\def\ll{{<}}
-\def\rr{{>}}
 \def\cc{\mathsf{c}}
 \def\dd{\mathsf{d}}
 \def\o{\circ}
@@ -257,6 +255,26 @@ If
 Then maybe
 \[\theta : \{C : F\rset_i\} (c : \Gamma C) \to ?\]
 Maybe this is where the substitution generalization also needs to happen.
+\subsection{Dependent Pairing}
+For substitutions below, I think I want some compatibility between $F/\Gamma$ and dependent pairing.
+To the signature of a ``dependent applicative functor'' I add the requirement:
+\[
+A : \rset_i \qquad B : A \to \rset_i \qquad N : FA \qquad M : \Gamma(\eta B \cdot N)
+\over
+\ll N, M \rr : F(\Sigma A B)
+\]
+The example for $\Delta = \btwo$ goes like this:
+\[
+A : \rset_i \qquad B : A \to \rset_i \qquad \langle a_0, a_1\rangle : A \x A \qquad \langle M_0, M_1\rangle: (B\ a_0) \x (B\ a_1)
+\over
+\langle\langle a_0, M_0\rangle,\langle a_1, M_1\rangle\rangle  : (\Sigma A B) \x (\Sigma A B)
+\]
+The example for $\Delta = {\bf S}$ goes like this:
+\[
+A : \rset_i \qquad B : A \to \rset_i \qquad N : S \to A \qquad M : (s :S) \to B (N\ s)
+\over
+\lambda s . \langle N s, M\ s\rangle  : S \to (\Sigma A B)
+\]
 \subsection{Trying To Imagine Substitutions}
 In binary parametricity:
 
@@ -307,14 +325,14 @@ I may not need to apply $F$ to the type of teles. I notice I only ever deal in o
 at a time, but multiple $\theta$. So I may not need to nat-index teles.
 \[\begin{array}{l}\mathbf{data}\ \tel_i :   \rset_{i+1}\ \mathbf{where}\\
 \qquad \mathsf{nil} : \tel_i\\
-\qquad \mathsf{\_,\_} : (t : \tel_i) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j}\\
+\qquad \mathsf{\_::\_} : (t : \tel_i) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j}\\
 \\
 \sem{\_} :  \tel_i \to \rset_i\\
  \sem{\mathsf{nil}} = \top\\
- \sem{\mathsf{t\ ,\ A}} = \Sigma \sem t A\\
+ \sem{\mathsf{t} :: A} = \Sigma \sem t A\\
 \end{array}\]
 
-So in order to do ``$\phi$ substitution'', I might need only
+So in order to do ``$\phi$ substitution'', I might need only define
 
 
 \[
@@ -331,10 +349,23 @@ t : \tel_i & \theta : F\sem{t} &   M : (x : \sem t) \to A\ x  & \phi : \bd_{\sem
 \over
 \phi M : ( \phi \bullet A)\ (\eta M \odot \theta)
 \]
-To check that this latter claim is well-typed, examine
-\[{\_\odot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} (M' : F((x : A) \to B\ x)) (N' : FA) \to
- \Gamma (\eta B \cdot N')\]
-in the special case $A = \sem t$, $B = A$, $M' = \eta M$, $N' = \theta$ and we find
-\[{\eta M \odot \theta} :   \Gamma (\eta A \cdot \theta)\]
 
+
+and now I can explain how to build up ``tuples of substitutions'' that live in $F \sem t$:
+\[
+t : \tel_i \qquad  \theta : F\sem{t} \qquad M : \Gamma(\eta A \cdot \theta)
+\over
+\ll \theta, M\rr : F\sem {t :: A}
+\]
+\[F\sem {t :: A} = F(\Sigma\sem t A)\]
+
+$\ldots$ and ``substitutions'' that live in $\bd_{\sem t}(\theta)$.
+\[
+\begin{array}{c@{\qquad}c@{\qquad}c}
+t : \tel_i &  \theta : F\sem{t} & M : \Gamma(\eta A \cdot \theta) \\
+A: \sem t \to \rset_i &    \phi : \bd_{\sem t}(\theta) & p : (\phi \bullet A)\ (\eta M \odot \theta)
+\end{array}
+\over
+ \langle\phi , p\rangle  : \bd_{\sem{t :: A}}
+\]
 \end{document}
