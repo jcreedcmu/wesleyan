@@ -1917,20 +1917,6 @@ a global element of that boundary:
 \over
 \prov \Pi^\Delta A : \rset_i
 \]
-\item What it means to substitute a boundary into a type expression:
-\[
-x : A \prov B : \rset_i
-\qquad  a : \partial \Delta \lol A
-\over
-[a/x]B : \partial\Delta \lol \rset_i
-\]
-\item What it means to substitute a boundary into an ordinary expression:
-\[
-x : A \prov M : B
-\qquad  a : \partial \Delta \lol A
-\over
-[a/x]M : \Pi^\Delta [a/x]B
-\]
 \item What it means to apply a function under $\partial\Delta \lol \em$:
 \[
 f : \partial\Delta \lol (A \to B) \qquad a : \partial\Delta \lol A
@@ -1945,9 +1931,17 @@ g\cdot a : \Pi^\Delta[a/x] B
 \]
 \end{itemize}
 $\partial\Delta \lol A$ should wind up being equivalent to $\Pi^\Delta KA$, but to define
-it that way would lead to a lot more mutual recursion. Likewise the substitutions should line up,
-and function application shouldn't care about dependency. Also, to define function application
-is redundant with substitution.
+it that way would lead to a lot more mutual recursion. Function application shouldn't really
+care about dependency.
+
+We can define substitutions in terms of functions:
+\[
+x : A \prov M : B
+\qquad  a : \partial \Delta \lol A
+\over
+[a/x]M : \Pi^\Delta [a/x]B
+\]
+We set $[a/x]M = K( \lambda x.M) \cdot a$.
 
 For example, for the line ${\bf 2} : \rshape$, I would define
 
@@ -1955,8 +1949,6 @@ For example, for the line ${\bf 2} : \rshape$, I would define
 \item $\partial {\bf 2} \lol A \equiv A \x A$
 \item $K\ \{{\bf 2}\}\ a = \langle a, a\rangle$
 \item $ \Pi^{\bf 2} \langle A_0, A_1\rangle  = A_0 \x A_1$
-\item $[\langle a_0, a_1\rangle / x]B = \langle [a_0/x]B, [a_1/x]B\rangle$
-\item $[\langle a_0, a_1\rangle / x]M = \langle [a_0/x]M, [a_1/x]M\rangle$
 \item $\langle f_0, f_1\rangle\cdot \langle x_0, x_1\rangle = \langle f_0\ x_0, f_1\ x_1\rangle$
 \item $\langle g_0, g_1\rangle\cdot \langle x_0, x_1\rangle = \langle g_0\ x_0, g_1\ x_1\rangle$
 \end{itemize}
@@ -1987,9 +1979,67 @@ We make a definition of a type which is a $\Sigma$ of the bridge family:
 \]
 \[ (\Delta \lol A) \equiv ((d : \partial\Delta \lol A) \to \bd^\Delta_A\ d)\]
 
+We'll write first projection for this $\Sigma$ as $\partial$, second projection as $\beta$.
 
 
-
+\subsection{Prep for Dependent Functions}
+The main thing we do in this section is lift a few operations
+from $\partial \Delta \lol \dash$ to $\Delta \lol \dash$. Some of this forward-depends on
+the definition of function boundaries below.
+\subsubsection{Enhanced Refl}
+Given $ \prov M : A$ I have $K M : \partial \Delta \lol A$ but I'd also like
+$\Delta \lol A$. Then notice $\rrefl M : \bd_A^\Delta(K\ a)$.
+So define $\rrefl^+ M = \langle K M, \rrefl M\rangle$ and we have
+\[\prov M : A \over \rrefl^+ M : \Delta \lol A\]
+\subsubsection{Enhanced Function Application}
+I can define
+\[
+f : \Delta \lol (A \to B) \qquad M : \Delta \lol A
+\over
+f \bullet M : \Delta \lol B
+\]
+by
+\[f\bullet M = \langle \partial f \cdot \partial M,  \beta f\ M\rangle\]
+because
+\[
+\partial f : \partial\Delta \lol (A \to B) \qquad \beta f : \bd_{A\to B}^\Delta(\partial f) \qquad M : \Delta \lol A
+\over
+ \langle \partial f \cdot \partial M,  \beta f\ M\rangle : \Delta \lol B
+\]
+\subsubsection{Enhanced Substitution}
+This means I can do substitutions into $\Delta \lol \dash$ also, at least for $B$ not mentioning $a$.
+\[
+x : A \prov M : B
+\qquad  a :  \Delta \lol A
+\over
+\rrefl^+ (\lambda x .M) \bullet a : \Delta \lol  B
+\]
+So define $[a/x]M = \rrefl^+ (\lambda x .M) \bullet a$ in this typing situation.
+\subsubsection{What Happens to Type Families}
+In particular,
+\[
+x :A \prov  B : \rset_i \qquad a : \Delta \lol A
+\over
+[a/x]B : \Delta \lol \rset_i
+\]
+which means if we take the second projection we get
+\[
+\beta([a/x]B) : \bd_{\rset_i}^\Delta(\partial [a/x]B)
+\]
+and by definition of bridges in the universe
+\[
+\beta([a/x]B) : \Pi^\Delta(\partial [a/x]B) \to \rset_i
+\]
+and if we unpack some definitions, we find
+\[ \partial[a/x]B = \partial (\rrefl^+ (\lambda x . B) \bullet a)\]
+\[= \partial \langle \partial (\rrefl^+ (\lambda x . B)) \cdot \partial a, \beta (\rrefl^+ (\lambda x . B))\ a\rangle\]
+\[=  \partial (\rrefl^+ (\lambda x . B)) \cdot \partial a\]
+\[=  K (\lambda x . B) \cdot \partial a\]
+\[=  [\partial a/x] B\]
+this means
+\[
+\beta([a/x]B) : \Pi^\Delta( [\partial a/x]B) \to \rset_i
+\]
 
 \subsection{Defining Boundaries}
 \subsubsection{Universe}
@@ -2013,6 +2063,8 @@ We make a definition of a type which is a $\Sigma$ of the bridge family:
 %%  \Delta \lol (A \to B)
 %% \]
 %% to work in general.
+
+
 \subsubsection{Dependent Functions}
 
 Now let's try to define $\bd^\Delta_{(x:A) \to B}$. We need
@@ -2024,42 +2076,27 @@ x : A \prov B  : \rset_i
 So we want to say something approximating
 \[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bd^\Delta_B(f\ x )\]
 But in the example case of $\Delta = {\bf 2}$, we don't have the two $f\ x$ at the same type.
-We need a dependent notion of boundary.
-%% Notice that by the induction hypothesis we can obtain
-%% \[
-%% K (\lambda x .B) : \partial\Delta \lol (A \to \rset_i) \qquad a : \partial\Delta \lol A
-%% \over
-%% K (\lambda x . B)\cdot a : \partial\Delta \lol \rset_i
-%% \]
-
-
-
-%% \vfil\eject
-
-using the sigmas we defined earlier, writing $\partial$ for first projection:
+We'd like a dependent notion of boundary, something like
 \[
  A : \rset_i
 \qquad x : A \prov B : \rset_i
-\qquad p : \Delta \lol A
+\qquad a : \Delta \lol A
 \over
-\prov \bdd^{\Delta;p}_{x.B} : (\Pi^\Delta ([\partial p/x]B) ) \to \rset_i
+\prov \bdd^{\Delta;a}_{x.B} : \Pi^\Delta ([\partial a/x]B)  \to \rset_i
 \]
-with this we can almost define boundaries for non-dependent functions:
-\[ \bd^\Delta_{(x:A) \to B}\ f = (x : \Delta \lol A) \to \bdd^{\Delta;x}_{x.B}(f\cdot \partial x )\]
-
-Ok, but now let's look closely at $B : A \to \rset_i$. We infer
-\[K\ B : \partial\Delta \lol (A \to \rset_i)\]
-and
+But we just found this in the above section! We have
 \[
-(K\ B) : \partial\Delta \lol A \to \rset_i \qquad a : \partial\Delta \lol A
-\over
-(K\ B)\cdot a : \partial\Delta \lol \rset_i
+\beta([a/x]B) : \Pi^\Delta( [\partial a/x]B) \to \rset_i
 \]
 
+So we define:
+\[ \bd^\Delta_{(x:A) \to B}\ f = (x' : \Delta \lol A) \to \beta ([x'/x]B)\ (f\cdot \partial x' )\]
+
+\subsection{Defining Refl}
+We still have an obligation to show
 \[
-(K\ B) : \partial\Delta \lol A \to \rset_i \qquad a : \partial\Delta \lol A
+M : A
 \over
-[a/x]B : \partial\Delta \lol \rset_i
+\rrefl M : \bd_A^\Delta(K\ M)
 \]
-
 \end{document}
