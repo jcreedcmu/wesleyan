@@ -269,15 +269,23 @@ have a way of computing the type of pairs of substitutions $\theta_0 : \Gamma_0,
 \end{itemize}
 
 Let $\tel_i$ be the type of telescopes of maximum universe level $i$.
-\[\begin{array}{l}\mathbf{data}\ \tel_i : \rset_{i+1}\ \mathbf{where}\\
-\qquad \mathsf{nil} : \tel_i\\
-\qquad \mathsf{\_,\_} : (t : \tel_i) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j}\\
+\[\begin{array}{l}\mathbf{data}\ \tel_i : \N \to  \rset_{i+1}\ \mathbf{where}\\
+\qquad \mathsf{nil} : \tel_i\ 0\\
+\qquad \mathsf{\_,\_} : (t : \tel_i\ n) \to (\sem{t} \to \rset_j) \to \tel_{i\sqcup j} (n+1)\\
 \\
-\sem{\_} : \tel_i \to \rset_i\\
+\sem{\_} : \{ n : \N\} \to \tel_i\ n \to \rset_i\\
  \sem{\mathsf{nil}} = \top\\
  \sem{\mathsf{t\ ,\ A}} = \Sigma \sem t A\\
 \end{array}\]
 \[F : \rset_i \to  \rset_i\]
-\[\Gamma : F \tel_i \to  \tel_i\]
-Let's think through the example of $FA = A \x A$.
+\[\zeta : \{n : \N\} \to F (\tel_i\ n) \to  \tel_i\ n\]
+\[Z : \{n : \N\} (x : F (\tel_i\ n)) \to  \sem{\zeta x} \to ?\]
+
+For $FA = A \x A$ we have
+\[\zeta {\langle \mathsf{nil}, \mathsf{nil}\rangle} \equiv \mathsf{nil}\]
+In general if $\eta : A \to FA$, then we should expect
+\[\zeta (\eta  (\mathsf{nil})) = \mathsf{nil}\]
+Then we have
+\[\zeta \langle (T, A),  (T', A')\rangle \equiv \zeta \langle T, T'\rangle,  \]
+
 \end{document}
