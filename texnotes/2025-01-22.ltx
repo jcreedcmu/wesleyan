@@ -447,4 +447,64 @@ I believe I should have
 \ll\_,\_\rr : (N : FA) \to \Gamma(\eta B \cdot N)\to  F(\Sigma A B)
 \]
 
+\section{Different Substitutions}
+We can wrap up a $\theta: F\sem t$ and a $\phi:\bd_t(\theta)$ as a tuple
+$\psi: \bar F \sem t$. The substitution principles then look like
+\def\ss{/\!/}
+\[
+t : \tel_i \qquad \psi : \bar F\sem{t} \qquad   A : \sem t \to  \rset_i
+\over
+\psi \ss A : F \rset_i
+\]
+\[\langle \theta,\phi\rangle \ss A = \eta A \cdot \theta \]
+\[
+t : \tel_i \qquad \psi : \bar F\sem{t} \qquad   A : \sem t \to  \rset_i
+\over
+\psi \bullet A : \Gamma(\psi \ss A ) \to \rset_i
+\]
+
+\[
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&&  A : \sem t \to  \rset_i \\
+t : \tel_i & \psi : \bar F\sem{t} &   M : (x : \sem t) \to A\ x
+\end{array}
+\over
+\psi / M : \psi \ss A
+\]
+
+\[\langle \theta,\phi\rangle / M = \eta M \odot \theta\]
+\[
+\begin{array}{c@{\qquad}c@{\qquad}c@{\qquad}c}
+&&  A : \sem t \to  \rset_i \\
+t : \tel_i & \psi : \bar F\sem{t} &   M : (x : \sem t) \to A\ x
+\end{array}
+\over
+\psi M : ( \psi \bullet A)\ (\psi / M)
+\]
+\section{Just Postulate It}
+Can we get any mileage out of asserting that for any dependent
+applicative functor $F$, there exists a $\bar F$ and an appropriately
+nice natural transformation $\partial : \bar F \to F$ whose fibers on $\rset$ are
+the appropriate relational thing?
+
+I expect `appropriately nice' includes preserving the function application structure
+of the applicative functors. So
+\[\_\bdot\_ : \bar F(A \to B) \to \bar FA \to \bar FB \]
+\[\_\cdot\_ : F(A \to B) \to FA \to FB \]
+
+\[
+\begin{tikzcd}
+ \bar F(A \to B) \x \bar FA\ar[r]\ar[d,"{\partial\x\partial}",swap]& \bar FB\ar[d]\\
+ F(A \to B)\x FA\ar[r]&   FB
+\end{tikzcd}
+\]
+Hm, the diagram commuting is enough to push forward, but I expect more of a UMP. Are
+products any easier to think about?
+
+What do I know about $FA \x FB$ versus $F(A \x B)$? They're not necessarily iso.
+Consider the list monad to see why not.
+
+If I have an element $\bar F A$ and an element $\bar F B$, then I should have an
+element $\bar F(A \x B)$.
+
 \end{document}
