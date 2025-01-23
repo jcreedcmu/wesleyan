@@ -646,4 +646,59 @@ we should get
 \[a' : G(\lambda s.A), b' : G(\lambda s . B\ (a'\ s)) \prov \lambda s . M\ (a' s)\ (b' s) : G(\lambda s.C\ (a\ s)\ (b\ s))\]
 i.e.
 \[a' : G([]A), b' : G([a'/a]B) \prov [a'/a][b'/b]M : G([a'/a][b'/b]C)\]
+\section{Simpler}
+\subsection{Substitutions}
+Given a dependent applicative functor $F, G, \ldots$, we define a notion of substitution
+and what it means to apply it. These definitions are mutually recursive.
+
+The substitution well-formedness judgment is
+\[ \Gamma' \prov_F \theta : \Gamma \]
+The substitution principles are
+\[ \Gamma' \prov_F \theta : \Gamma \qquad \Gamma \prov B : \rset \over \Gamma' \prov \theta B : F\rset_i\]
+\[ \Gamma' \prov_F \theta : \Gamma \qquad \Gamma \prov M : B \over \Gamma' \prov \theta M : G(\theta B)\]
+Substitution well-formedness is defined by
+\[\cdot \prov_F \cdot : \cdot\]
+\[\Gamma' \prov_F \theta : \Gamma \qquad \Gamma' \prov M :  G\theta A
+\over
+\Gamma' \prov_F \theta[M/x] : (\Gamma, x :A )\]
+
+\subsection{Applying $F$ to contexts}
+We simultaneously define what it means to apply $F$ to a context, and what the `identity' substitution is.
+Note that applying the identity substitution is not a no-op! It uses the $\eta$ of the applicative functor.
+\[F\Gamma \prov \rid_\Gamma : \Gamma \qquad {\Gamma:\rctx \over F\Gamma :\rctx}\]
+\[F(\Gamma, x : A) = F\Gamma, x : G(\rid_\Gamma A)\]
+\[\rid_{\Gamma, x:A} = \rid_\Gamma[x/x]\]
+
+\subsection{Cases of Substitution}
+\subsubsection{Variable Case}
+\[(\theta_1[M/x]\theta_2)x\]
+\[ \Gamma' \prov_F (\theta_1[M/x]\theta_2) : \Gamma \qquad \Gamma \prov x : A \over \Gamma' \prov (\theta_1[M/x]\theta_2) x : G(\theta_1 A)\]
+By inversion, we know $\Gamma = \Gamma_1,x:A,\Gamma_2$ and
+ $\Gamma' \prov_F \theta_1 : \Gamma_1$ and $\Gamma' \prov M : G (\theta_1 A)$.
+So we define
+\[(\theta_1[M/x]\theta_2)x = M\]
+ and we're done.
+\subsubsection{Pi Case}
+\[
+\begin{prooftree}
+ \Gamma' \prov_F \theta : \Gamma \qquad
+\[
+ \Gamma, x : A \prov B : \rset_i
+\justifies
+ \Gamma \prov (x : A) \to B : \rset_i
+\]
+\justifies
+ \Gamma' \prov \theta (x : A) \to B : F\rset_i
+\end{prooftree}\]
+We can extend $\theta$ with an identity:
+\[\Gamma' \prov_F \theta : \Gamma \qquad \Gamma', x : G\theta A \prov x :  G\theta A
+\over
+\Gamma', x : G\theta A \prov_F \theta[x/x] : (\Gamma, x :A )\]
+So by induction hypothesis
+\[\Gamma', x : G\theta A \prov \theta[x/x] B : F \rset_i\]
+hence
+\[\Gamma', x : G\theta A \prov G(\theta[x/x] B) :  \rset_i\]
+and
+\[\Gamma' \prov (x : G\theta A) \to G(\theta[x/x] B) :  \rset_i\]
+Stuck!
 \end{document}
