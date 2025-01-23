@@ -623,4 +623,27 @@ F \Gamma, x : (A\ \Gamma.0) \x (A\ \Gamma_1) \prov  (B\ \Gamma.0\ x.0) \x (B\ \G
 \subsection{Example for $\btwo$}
 \[a : A \prov M\ a : B\ a\]
 \[a_0\ a_1 : A \prov \langle M\ a_0, M\ a_1\rangle : B\ a_0 \x B\ a_1\]
+
+\[a : A, b : B\ a, c : C\ a\ b \prov  M\ a\ b\ c : D\ a\ b\ c\]
+\[a : G(\lambda s.A), b : G(\lambda s . B\ (a\ s)), c : G(\lambda s. C\ (a\ s)\ (b\ s)) \prov \lambda s . M : G(\lambda s.D\ (a\ s)\ (b\ s)\ (c\ s))\]
+
+\[a' : F_\cdot A, b' : F_{a:A}(B\ a), c' : F_{a:A,b:B}(C\ a\ b) \prov  \eta_{a:A,b:B,c:C}(M\ a\ b\ c) : F_{a:A,b:B,c:C}(D\ a\ b\ c)\]
+Here $F_\cdot A = FA$ is truly a type operator. It takes $\cdot \prov A : \rset_i$ and returns $G(\lambda s . A) : \rset_i$.
+If we have
+\[ a : A\prov M : B\ a\]
+then what can we yield? We can yield
+\[ a' : A \x A \prov \langle [a'.0/a]M, [a'.1/a]M\rangle : (B\ a'.0) \x (B\ a'.1)\]
+which can be explained as
+\[ a' : FA \prov \lambda s . [a'\ s/a]M : G(\lambda s . [a'\ s/a]B)\]
+which, if we have substitution principles like
+\[ \Gamma \prov a' : FA \qquad a : A \prov B : \rset \over \Gamma \prov [a'/a]B : F\rset_i\]
+\[ \Gamma \prov a' : FA \qquad a : A \prov M : B\ a\over \Gamma \prov [a'/a]M : G([a'/a]B)\]
+can be expressed as
+\[ a' : FA \prov  [a'/a]M : G([a'/a]B)\]
+Ok so if we start with
+\[a : A, b : B\ a\prov  M\ a\ b : C\ a\ b\]
+we should get
+\[a' : G(\lambda s.A), b' : G(\lambda s . B\ (a'\ s)) \prov \lambda s . M\ (a' s)\ (b' s) : G(\lambda s.C\ (a\ s)\ (b\ s))\]
+i.e.
+\[a' : G([]A), b' : G([a'/a]B) \prov [a'/a][b'/b]M : G([a'/a][b'/b]C)\]
 \end{document}
