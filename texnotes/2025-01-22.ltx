@@ -511,4 +511,116 @@ Consider the list monad to see why not.
 If I have an element $\bar F A$ and an element $\bar F B$, then I should have an
 element $\bar F(A \x B)$.
 
+\section{What If I Zip Functor Along Substitutions}
+
+I'd like to retain more of the `syntactic' character of contexts and substitutions if possible.
+Instead of converting them to types and terms eagerly, maybe I can say, given a dependent applicative
+functor $F$, that $F$ applied to a context yields another context:
+
+We have:
+\[ \Gamma \prov A : \rset_i \over \Gamma \prov FA : \rset_i\]
+\[ \Gamma \prov A : F \rset_i \over \Gamma \prov G A : \rset_i\]
+\[ \eta : \{A : \rset_i\} \to A \to FA\]
+\[{\_\cdot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} \to F(A \to B) \to FA \to F B \]
+\[{\_\odot\_} : \{A : \rset_i\} \{B : A \to \rset_i\} \to F((x : A) \to B(x)) \to (a : FA) \to G (\eta B \cdot a)\]
+\[G\eta A \equiv A\]
+
+We simultaneously define
+\[{\prov \Gamma : \rctx
+\over
+\prov F \Gamma : \rctx}
+\qquad
+{\Gamma \prov M : A
+\over
+F \Gamma \prov \eta_\Gamma M :   F_\Gamma A}
+\qquad
+{\Gamma \prov  A : \rset_i
+\over
+F \Gamma \prov F_\Gamma A :   \rset_i}
+\qquad
+{F\Gamma \prov  A : F\rset_i
+\over
+F \Gamma \prov G_\Gamma A :  \rset_i}
+\]
+%% \[\color{gray}F\Gamma \prov M : F_\Gamma(A \to B) \qquad F\Gamma \prov N : F_\Gamma A
+%% \over
+%% F\Gamma \prov M \cdot N : F_\Gamma B\]
+\[F\Gamma \prov M : F_\Gamma((x : A) \to B) \qquad F\Gamma \prov N : F_\Gamma A
+\over
+F\Gamma \prov M \odot_\Gamma N : G_\Gamma([N/x]\eta_{\Gamma,x:A} B)\]
+\[
+F\Gamma \prov M : F_\Gamma A
+\over
+F\Gamma, x : F_\Gamma B \prov \enc M : F_{\Gamma,x :B} A
+\]
+by
+\[F\cdot = \cdot\]
+\[F(\Gamma, x : A) = F\Gamma, x : F_\Gamma A\]
+\[\eta_{\cdot}(M) = \eta M \]
+\[\eta_{\Gamma, x : A}(M) = \eta_\Gamma(\lambda x.M) \odot_{\Gamma,x:A} x\]
+%\[\theta_{\Gamma, x : A} = \theta_\Gamma[\eta_\Gamma(x)/x]\]
+\[F_{\cdot} B = F B\]
+\[F_{\Gamma, x : A} B = ?\]
+\[G_{\cdot} B = G B\]
+\[G_{\Gamma, x : A} B = ?\]
+\vskip1em
+\[F_{\Gamma} A \equiv G_\Gamma \eta_\Gamma A\]
+{\bf Proof}: We must show
+\begin{enumerate}
+\item
+  \[{\prov (\Gamma, x : A) : \rctx
+    \over
+    \prov  F\Gamma, x : F_\Gamma A : \rctx}
+  \]
+Follows by i.h. and appeal to (3)
+
+\item
+It suffices to show
+  \[
+    {\Gamma, y : A \prov M : B
+      \over
+      F\Gamma, x : F_\Gamma A \prov \eta_\Gamma(\lambda y.M) \odot x :   F_{\Gamma,x:A} [x/y] B}
+    \]
+We can apply weakening and function introduction to get
+\[\Gamma, x : A \prov \lambda y . M : (y : A) \to B\]
+Applying i.h. gives us
+\[F\Gamma, x : F_\Gamma A \prov \eta_{\Gamma, x: A}(\lambda y .M) : F_{\Gamma,x:A}((y : A) \to B)\]
+By variable use and weakening we have
+\[F\Gamma, x : F_\Gamma A \prov \enc x : F_{\Gamma, x:A} A\]
+
+Write $\bar \Gamma$ for $F(\Gamma, x : A) \equiv F\Gamma, x : F_\Gamma A$.
+Now we can derive
+\[\bar \Gamma \prov \eta_{\Gamma, x: A}(\lambda y . M) : F_{\Gamma, x : A}((y : A) \to B) \qquad \bar \Gamma \prov  \enc x : F_{\Gamma, x:A} A
+\over
+\bar \Gamma \prov \eta_{\Gamma, x: A}(\lambda y . M) \odot \enc x : G_{\Gamma, x : A}([\enc x/y] \eta_{\Gamma,x:A,y:A} B)\]
+Now as long as
+\[\eta_{\Gamma, x: A}(\lambda y . M) \odot \enc x \equiv \eta_\Gamma(\lambda y.M) \odot x\]
+\[G_{\Gamma, x : A}([\enc x/y] \eta_{\Gamma,x:A,y:A} B) \equiv   F_{\Gamma,x:A} [x/y] B\]
+which I expect, we're done.
+
+\item
+We must show
+\[\Gamma, x : A \prov  B : \rset_i
+\over
+F \Gamma, x : F_\Gamma A \prov F_{\Gamma, x:A} B :   \rset_i\]
+
+We have
+\[F\Gamma, x : \Gamma_F A \prov  \eta_{\Gamma, x:A} B : F_\Gamma \rset_i\]
+which should be the same by unproven lemma as
+\[F\Gamma, x : \Gamma_F A \prov  \eta_{\Gamma, x:A} B : F\rset_i\]
+\item
+We must show
+\[F\Gamma, x : F_A \prov  B :F_{\Gamma, x: A}\rset_i
+\over
+F \Gamma \prov G_{\Gamma, x: A} B :  \rset_i\]
+\end{enumerate}
+
+In the $\bf 2$ case:
+\[\Gamma, x : A \prov  B : \rset_i
+\over
+F \Gamma, x : (A\ \Gamma.0) \x (A\ \Gamma_1) \prov  (B\ \Gamma.0\ x.0) \x (B\ \Gamma.1\ x.1) :   \rset_i\]
+
+\subsection{Example for $\btwo$}
+\[a : A \prov M\ a : B\ a\]
+\[a_0\ a_1 : A \prov \langle M\ a_0, M\ a_1\rangle : B\ a_0 \x B\ a_1\]
 \end{document}
