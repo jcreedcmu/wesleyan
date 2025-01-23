@@ -695,9 +695,21 @@ We can extend $\theta$ with an identity:
 \Gamma', x : G\theta A \prov_F \theta[x/x] : (\Gamma, x :A )\]
 So by induction hypothesis
 \[\Gamma', x : G\theta A \prov \theta[x/x] B : F \rset_i\]
-hence
-\[\Gamma', x : G\theta A \prov G(\theta[x/x] B) :  \rset_i\]
-and
-\[\Gamma' \prov (x : G\theta A) \to G(\theta[x/x] B) :  \rset_i\]
-Stuck!
+and we want to get from here to
+\[\Gamma' \prov ? : F \rset_i\]
+
+
+I {\em can't} go in general from
+\[\qquad \Gamma, x : GA \prov B : F\rset_i\]
+to some $\Pi$-type comprehension, because there's nothing to say that $B$ can't
+illegally use the wrong parts of the global object $x$. The fact that I'm coordinating
+and using $\theta[x/x]$ is important.
+
+The $\btwo$ case would look like
+\[z' : G([]Z), a' : G([z'/z]A) \prov [z'/z][a'/a]B : F\rset_i\]
+What we have is
+\[z': Z \x Z, x' : (A\ z'.0 \x A\ z'.1)\prov  \langle B\ z'.0\ x'.0, B\ z'.1\ x'.1 \rangle : \rset_i \x \rset_i\]
+and what we want is
+\[z': Z \x Z \prov  \langle (x'.0 : A\ z'.0) \to B\ z'.0\ x'.0, (x'.1 : A\ z'.1) \to B\ z'.1\ x'.1 \rangle : \rset_i \x \rset_i\]
+
 \end{document}
