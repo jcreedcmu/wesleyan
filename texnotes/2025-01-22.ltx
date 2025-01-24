@@ -712,4 +712,41 @@ What we have is
 and what we want is
 \[z': Z \x Z \prov  \langle (x'.0 : A\ z'.0) \to B\ z'.0\ x'.0, (x'.1 : A\ z'.1) \to B\ z'.1\ x'.1 \rangle : \rset_i \x \rset_i\]
 
+\section{Thinking about Adjoints}
+
+Notice that I have exact agreement that
+\[S \to (A_1 \x A_2) \cong (S \to A_1) \x (S \to A_2)\]
+but merely
+\[S \to (A_1 \to A_2) \to (S \to A_1) \to (S \to A_2)\]
+and not the converse. The real meaning of
+\[\Gamma \prov M : A\]
+under $F = 2 \to \dash$ is not
+\[\Gamma_1, \Gamma_2 \prov \langle M_1, M_2\rangle : A_1 \x A_2\]
+but more like
+\[\langle \Gamma_1 \prov M_1 : A_1, \Gamma_2 \prov M_2 : A_2\rangle\]
+I.e. the subject of the judgment is not a map $(\Gamma_1 \x \Gamma_2)  \to (A_1 \x A_2)$
+but a map $(\Gamma_1 \to A_1) \x (\Gamma_2 \to A_2)$.
+\vfil\eject
+\section{Contexts}
+A contextual dependent applicative functor consists of
+\begin{enumerate}
+\item For every context $\Gamma$, a type $F(\Gamma . \rset_i)$.
+\item  For every  judgment $\Gamma \prov M : A$, a term $\prov F(\Gamma . M) : F(\Gamma . A) $.
+\end{enumerate}
+Suppose I have a regular dependent applicative functor $F, G, \ldots$.
+Define simultaneously
+\[{\Gamma : \rctx_i \over \prov \Sigma \Gamma : \rset_i}
+\qquad
+{\Gamma : \rctx_i \qquad \Gamma' \prov M : \Sigma\Gamma \over \Gamma'\prov [M/\Gamma]: \Gamma}\]
+
+\[\Sigma(\cdot) = \top\qquad
+\Sigma(\Gamma, x : A)  = (g : \Sigma\Gamma) \x [g/\Gamma] A\]
+\[[M/\cdot] = \cdot \qquad
+[M/(\Gamma,x:A)] = [M.1/\Gamma][M.2/x]\]
+We can also define
+\[{\Gamma \prov A : \rset \over \prov \Pi \Gamma.A : \Pi \Gamma \to \rset_i}\]
+Then we can define
+\[F(\Gamma . \rset_i) = F(\Sigma\Gamma \to \rset_i)\]
+and if $\Gamma \prov A : \rset_i$ then we need
+\[F(\Gamma . A) : F(\Gamma . \rset_i) = F(\Sigma\Gamma \to \rset_i)\]
 \end{document}
