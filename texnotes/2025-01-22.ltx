@@ -799,4 +799,22 @@ to a $\partial x : F(\Sigma\Gamma)$ to get $f \cdot x : F\rset_i$. Then $G(f \cd
 we want to assert
 \[\bd_{\Gamma.\rset_i}\ f = (x : \bar F(\Sigma \Gamma)) \to G(f \cdot x) \to \rset_i\]
 
+But should I have to define this this way? Shouldn't I get all the higher functions for free, out of the
+closed definitions of $\bar F, \bar \eta$? Not sure yet. Maybe I need them as induction hypotheses or something.
+I should dig into the $\Pi$ and $\lambda$ cases of reflexivity or $\bd$ or whatever.
+
+\subsubsection{Pi}
+In the closed case, we have
+\[\bd_A : FA \to \rset_i\]
+So we should have
+\[\bd_{(x:A)\to B} : F((x:A) \to B) \to \rset_i\]
+And I want to say that a tuple of functions are related if, for all related input tuples, their outputs are related.
+
+Recall that we have
+\[f : F((x : A) \to B(x)) \qquad x : FA \over f \odot x : G (\eta B \cdot x)\]
+and we get stuck at
+\[\bd_{(x:A)\to B\ x}\ f = (x : \bar FA) \to \bd_{?} (f \cdot \partial x) \]
+because there's no single type $\bd_B$ that accepts $FB$ as an argument. What we have is $G(\eta B \cdot x)$.
+So would $\bd_{x.B}$ do the trick? Well, $\bd_{x.B} : F_{x:A}B \to \rset_i$. Can we get
+from $G(\eta B \cdot x)$ to $F_{x:A} B$? We know $F_{x:A} B = F(\Pi(x:A).B)$. This is back where we started and doesn't let us make any progress.
 \end{document}
