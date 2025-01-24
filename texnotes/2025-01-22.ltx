@@ -728,13 +728,9 @@ I.e. the subject of the judgment is not a map $(\Gamma_1 \x \Gamma_2)  \to (A_1 
 but a map $(\Gamma_1 \to A_1) \x (\Gamma_2 \to A_2)$.
 \vfil\eject
 \section{Contexts}
-A contextual dependent applicative functor consists of
-\begin{enumerate}
-\item For every context $\Gamma$, a type $F(\Gamma . \rset_i)$.
-\item  For every  judgment $\Gamma \prov M : A$, a term $\prov F(\Gamma . M) : F(\Gamma . A) $.
-\end{enumerate}
+\subsection{Contextual Dependent Applicative Functors}
 Suppose I have a regular dependent applicative functor $F, G, \ldots$.
-Define simultaneously
+We can define simultaneously
 \[{\Gamma : \rctx_i \over \prov \Sigma \Gamma : \rset_i}
 \qquad
 {\Gamma : \rctx_i \qquad \Gamma' \prov M : \Sigma\Gamma \over \Gamma'\prov [M/\Gamma]: \Gamma}\]
@@ -743,10 +739,64 @@ Define simultaneously
 \Sigma(\Gamma, x : A)  = (g : \Sigma\Gamma) \x [g/\Gamma] A\]
 \[[M/\cdot] = \cdot \qquad
 [M/(\Gamma,x:A)] = [M.1/\Gamma][M.2/x]\]
-We can also define
-\[{\Gamma \prov A : \rset \over \prov \Pi \Gamma.A : \Pi \Gamma \to \rset_i}\]
-Then we can define
-\[F(\Gamma . \rset_i) = F(\Sigma\Gamma \to \rset_i)\]
-and if $\Gamma \prov A : \rset_i$ then we need
-\[F(\Gamma . A) : F(\Gamma . \rset_i) = F(\Sigma\Gamma \to \rset_i)\]
+We can then define some convenience syntax
+\[
+{\Gamma \prov A : \rset_i \over \prov \Gamma.A : \Sigma\Gamma \to \rset_i}
+\qquad
+{\Pi : (\Sigma\Gamma \to \rset_i) \to \rset_i}
+\qquad
+{\Gamma \prov M : A \over \prov \Gamma.M : \Pi \Gamma.A}
+\]
+By saying
+\[
+(\Gamma.A)\ g = [g/\Gamma]A
+\qquad
+\Pi\ k = (g : \Sigma\Gamma) \to k\ g
+\qquad
+(\Gamma.M)\ g :  [g/\Gamma] M
+\]
+Note that $\Pi\Gamma . A =  (g : \Sigma \Gamma) \to [g/\Gamma]A $, so we could retroactively say that
+\[
+{\Gamma \prov A : \rset_i \over \prov \Gamma.A : \Pi \Gamma. \rset_i}
+\]
+A contextual dependent applicative functor consists of
+\begin{enumerate}
+\item  For every  judgment $\Gamma \prov A : \rset_i$, a type $F_\Gamma A : \rset_i$
+\item  For every  judgment $\Gamma \prov M : A$, a term $ \eta_\Gamma M : F_\Gamma A$
+\end{enumerate}
+We can lift any dependent applicative functor to a contextual one.
+We define
+\[F_\Gamma A = F(\Pi\Gamma.A)\]
+\[\eta_\Gamma M = \eta(\Gamma.M)\]
+
+%% If  $\Gamma \prov A : \rset_i$, then $\Gamma . A : \Pi\Gamma.\rset_i$
+%% and $\eta(\Gamma.A) : F(\Pi\Gamma.\rset_i)$.
+
+
+%% If  $\Gamma \prov M : A$, then $\Gamma . M : \Pi \Gamma . A$
+%% and $\eta(\Gamma.M) : F(\Pi\Gamma.A)$.
+\subsection{Lifting}
+We want to claim that for every (contextual?) dependent applicative functor $F$ there exists
+an extension $\bar F$ that lies over it, such that the fiber of $\bar F$ does the appropriate
+thing at universes to give relations. We define it as a record type:
+\[\bar F A = \{ \partial : F A, \beta : \bd_{A}(\partial)\}\]
+with
+\[A : \rset_i \over \bd_A : FA \to \rset_i\]
+ to be defined later. Our target is that
+\[\bd_{\rset_i}(\phi) = G\phi \to \rset_i\]
+This is the closed version. For open terms, we hope
+\[\bar F_\Gamma A = \{ \partial : F_\Gamma A, \beta : \bd_{\Gamma.A}(\partial)\}\]
+and we know that
+\[\bd_{\Gamma.A} : F_\Gamma A \to \rset_i\]
+So what should we expect when $A = \rset_i$?
+\[\bd_{\Gamma.\rset_i} : F_\Gamma \rset_i \to \rset_{i+1}\]
+This is a predicate on tuples of types in context. $F_\Gamma\rset_i = F(\Pi \Gamma.\rset_i)$.
+So we have to think about how parametricity works for functions. We should require that
+for any related tuples at type $\Sigma\Gamma$, we get a relation among the types
+that arise from applying the functions in the tuple. So a collection of related tuples
+is something of type $\bar F(\Sigma\Gamma)$. If we have an $f : F(\Pi\Gamma.\rset_i)$, we can apply this
+to a $\partial x : F(\Sigma\Gamma)$ to get $f \cdot x : F\rset_i$. Then $G(f \cdot x) : \rset_i$. So I think
+we want to assert
+\[\bd_{\Gamma.\rset_i}\ f = (x : \bar F(\Sigma \Gamma)) \to G(f \cdot x) \to \rset_i\]
+
 \end{document}
