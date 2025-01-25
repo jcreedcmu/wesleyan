@@ -1044,7 +1044,7 @@ and substitution operations
 {\psi : \bar F \Gamma \qquad \Gamma \prov M : A
 \over
 [\psi] M : [\psi]^\bullet A\ ([\partial\psi] M)
- \]
+} \]
 We define
 \[{\psi:\bar F \Gamma \qquad \Gamma \prov A : \rset_i
 \over
@@ -1053,7 +1053,7 @@ We define
 {\psi : \bar F \Gamma \qquad \Gamma \prov M : A
 \over
 \sem\psi M : \sem\psi^\bullet A
- \]
+} \]
 
 \[
 \sem\psi^\bullet A = \{ \partial : G[\partial\psi]^\bullet A, \beta : [\psi]^\bullet A\ \partial\}
@@ -1066,22 +1066,27 @@ and now substitution-formation looks like
 \over
 \psi[M/x] : \bar F(\Gamma, x :A)
 \]
+%% If I wanted to take $\sem\psi^\bullet A$ and $\sem\psi M$ as the primitives, then I'd
+%% want to also establish that there is a map
+%% \[\partial_\psi : \sem\psi^\bullet A \to G[\partial \psi]^\bullet A\]
+%% (which generalizes $\partial : \bar FA \to FA$) which has the compatibility property that
+%% \[\partial_\psi (\sem\psi M) = [\partial \psi]M\]
+
 \subsubsection{The Universe}
 \[{\psi : \bar F \Gamma \qquad \Gamma \prov \rset_i : \rset_{i+1}
 \over
 [\psi]^\bullet \rset_i : G[\partial \psi]^\bullet \rset_i \to \rset_{i+1}}\]
 We must assume that we can show that $[\partial \psi]^\bullet \rset_i = \eta \rset_i$, hence
 we need
-\[[\psi]^\bullet \rset_i : F \rset_i \to \rset_{i+1}}\]
+\[[\psi]^\bullet \rset_i : F \rset_i \to \rset_{i+1}\]
 and so we define
 \[[\psi]^\bullet \rset_i\ x : G x \to \rset_i\]
 \subsubsection{Term-Type Transition}
-We consider the case of term substitution where the term happens to be a type.
-\[
+We consider the case of term substitution where the term happens to be a type.\[
 {\psi : \bar F \Gamma \qquad \Gamma \prov A : \rset_i
 \over
 [\psi] A : [\psi]^\bullet \rset_i\ ([\partial\psi] A)
- \]
+} \]
 This is the same as requiring
 \[[\psi] A : G ([\partial\psi] A) \to \rset_i\]
 and I think I can say $[\partial\psi] A = [\partial\psi]^\bullet A$ when $A$ has a classifier
@@ -1089,5 +1094,53 @@ like $\rset_i$ that is nondependent, so this is the same as
 \[[\psi] A : G ([\partial\psi]^\bullet A) \to \rset_i\]
 which is exactly the right type for us to be able to set
 \[[\psi] A = [\psi]^\bullet A\]
-\subsubsection{Arrow Types}
+
+
+\subsubsection{Pi Types}
+\[{\psi : \bar F \Gamma \qquad \Gamma \prov ((x:A)\to B) : \rset_i
+\over
+[\psi]^\bullet ((x:A)\to B) : G[\partial \psi]^\bullet ((x:A)\to B) \to \rset_i}
+\]
+We define
+\[[\psi]^\bullet ((x:A)\to B)\ f = (x : \sem\psi^\bullet A) \to [\psi[x/x]]^\bullet B\ (f \star \partial x)\]
+using the induction hypothesis on $B$ like
+\[
+x : \sem\psi^\bullet A \prov \psi[x/x] : \bar F (\Gamma,x:A) \qquad \Gamma,x:A \prov B : \rset_i
+\over
+x : \sem\psi^\bullet A \prov [\psi[x/x]]^\bullet B : G[\partial \psi[\partial x/x]]^\bullet B \to \rset_i
+\]
+assuming we can define some operation
+\[ f : G[\theta]^\bullet ((x:A)\to B) \qquad M : G[\theta]^\bullet A
+\over
+f \star x : G[\theta[M/x]]^\bullet B\]
+But fortunately that looks very plausible.
+
+\subsubsection{Lambdas}
+\[\psi : \bar F \Gamma \qquad \Gamma \prov \lambda x.M : (x:A) \to B
+\over
+[\psi] (\lambda x.M) : [\psi]^\bullet ((x:A) \to B)\ ([\partial\psi] (\lambda x.M))
+ \]
+This is equivalent by the previous definition to
+\[
+\begin{prooftree}
+  \psi : \bar F \Gamma \qquad
+\[
+ \Gamma,x:A \prov M : B
+  \justifies
+ \Gamma \prov \lambda x.M : (x:A) \to B
+\]
+  \justifies
+      [\psi] (\lambda x.M) : (x : \sem\psi^\bullet A) \to [\psi[x/x]]^\bullet B\ (([\partial\psi] (\lambda x.M)) \star \partial x)
+\end{prooftree}
+\]
+We want to apply the induction hypothesis to get
+\[
+x : \sem\psi^\bullet A\prov \psi[\partial x/x] : \bar F (\Gamma, x:A) \qquad \Gamma,x:A \prov  M :  B
+\over
+x : \sem\psi^\bullet A\prov [\psi[x/x]] M : [\psi[ x/x]]^\bullet  B\ ([\partial\psi[\partial x / x]] (M))
+ \]
+So we can set
+\[   [\psi] (\lambda x.M) = \lambda x . [\psi[x/x]]M \]
+as long as we have a compatibility lemma
+\[([\partial\psi] (\lambda x.M)) \star \partial x \equiv [\partial\psi[\partial x / x]] M\]
 \end{document}
