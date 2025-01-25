@@ -1026,7 +1026,68 @@ and
 \prov \lambda x . [\phi[\beta x/x]]M : (A^\phi) \to [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M)
 \]
 So as long as we can prove some kind of coherence lemma that
-\[ [\phi]^\bullet B\ (([\theta](\lambda x. M)) \star \partial x) \equiv [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M) \equiv \]
+\[ [\phi]^\bullet B\ (([\theta](\lambda x. M)) \star \partial x) \equiv [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M)  \]
 we can set
 \[[\phi](\lambda x . M) =  \lambda x . [\phi[\beta x/x]]M\]
+
+\subsection{More Inclusive Substitutions-Over}
+what if I want to bundle up the $\theta$s as data with the $\phi$s. I have a judgment
+that is simply
+\[\psi : \bar F \Gamma\]
+and a projection operation
+\[\psi : \bar F \Gamma \over \partial \psi : F(\Sigma \Gamma)\]
+and substitution operations
+\[{\psi : \bar F \Gamma \qquad \Gamma \prov A : \rset_i
+\over
+[\psi]^\bullet A : G[\partial \psi]^\bullet A \to \rset_i}
+\qquad
+{\psi : \bar F \Gamma \qquad \Gamma \prov M : A
+\over
+[\psi] M : [\psi]^\bullet A\ ([\partial\psi] M)
+ \]
+We define
+\[{\psi:\bar F \Gamma \qquad \Gamma \prov A : \rset_i
+\over
+\sem\psi^\bullet A : \rset_i}
+\qquad
+{\psi : \bar F \Gamma \qquad \Gamma \prov M : A
+\over
+\sem\psi M : \sem\psi^\bullet A
+ \]
+
+\[
+\sem\psi^\bullet A = \{ \partial : G[\partial\psi]^\bullet A, \beta : [\psi]^\bullet A\ \partial\}
+\qquad
+\sem\psi M = \langle \partial = [\partial\psi]M, \beta = [\psi]M \rangle
+\]
+and now substitution-formation looks like
+\[
+\psi : \bar F \Gamma \qquad \Gamma \prov A : \rset_i \qquad M : \sem\psi^\bullet A
+\over
+\psi[M/x] : \bar F(\Gamma, x :A)
+\]
+\subsubsection{The Universe}
+\[{\psi : \bar F \Gamma \qquad \Gamma \prov \rset_i : \rset_{i+1}
+\over
+[\psi]^\bullet \rset_i : G[\partial \psi]^\bullet \rset_i \to \rset_{i+1}}\]
+We must assume that we can show that $[\partial \psi]^\bullet \rset_i = \eta \rset_i$, hence
+we need
+\[[\psi]^\bullet \rset_i : F \rset_i \to \rset_{i+1}}\]
+and so we define
+\[[\psi]^\bullet \rset_i\ x : G x \to \rset_i\]
+\subsubsection{Term-Type Transition}
+We consider the case of term substitution where the term happens to be a type.
+\[
+{\psi : \bar F \Gamma \qquad \Gamma \prov A : \rset_i
+\over
+[\psi] A : [\psi]^\bullet \rset_i\ ([\partial\psi] A)
+ \]
+This is the same as requiring
+\[[\psi] A : G ([\partial\psi] A) \to \rset_i\]
+and I think I can say $[\partial\psi] A = [\partial\psi]^\bullet A$ when $A$ has a classifier
+like $\rset_i$ that is nondependent, so this is the same as
+\[[\psi] A : G ([\partial\psi]^\bullet A) \to \rset_i\]
+which is exactly the right type for us to be able to set
+\[[\psi] A = [\psi]^\bullet A\]
+\subsubsection{Arrow Types}
 \end{document}
