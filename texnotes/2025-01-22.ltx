@@ -835,18 +835,18 @@ First some convenience syntax for tuples of substitutions. First application:
 \[
 {\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
 \over
-[\theta/\Gamma]^\bullet A : F\rset_i}
+[\theta]^\bullet A : F\rset_i}
 \qquad
 {\theta : F(\Sigma\Gamma) \qquad \Gamma \prov M : A
 \over
-[\theta/\Gamma]M : G[\theta/\Gamma]^\bullet A}
+[\theta]M : G[\theta]^\bullet A}
 \]
-\[[\theta/\Gamma]^\bullet A = \eta(\Gamma.A) \cdot \theta
+\[[\theta]^\bullet A = \eta(\Gamma.A) \cdot \theta
 \qquad
-[\theta/\Gamma] M = \eta(\Gamma.M) \odot \theta\]
+[\theta] M = \eta(\Gamma.M) \odot \theta\]
 
 Then construction:
-\[\theta : F(\Sigma\Gamma) \qquad  M : G[\theta/\Gamma]^\bullet A
+\[\theta : F(\Sigma\Gamma) \qquad  M : G[\theta]^\bullet A
 \over
 \theta[M/x] : F(\Sigma(\Gamma,x:A))
 \]
@@ -870,21 +870,21 @@ Then construction:
 \qquad \phi:\bd_\Gamma(\theta)
 \qquad \Gamma \prov A : \rset_i
 \over
-[\phi/\Gamma]^\bullet A: G[\theta/\Gamma]^\bullet A \to \rset_i
+[\phi]^\bullet A: G[\theta]^\bullet A \to \rset_i
 \]
 \[
 \theta : F(\Sigma\Gamma)
 \qquad \phi:\bd_\Gamma(\theta)
 \qquad \Gamma \prov  M : A
 \over
-[\phi/\Gamma]M : [\phi/\Gamma]^\bullet A\ ([\theta/\Gamma]M)
+[\phi]M : [\phi]^\bullet A\ ([\theta]M)
 \]
 
 Substitution formation works like:
 \[
 \theta : F(\Sigma\Gamma)
 \qquad \phi:\bd_\Gamma(\theta)
-\qquad M : G[\theta/\Gamma]^\bullet A
+\qquad M : G[\theta]^\bullet A
 \over
 \phi[p/x] : \bd_{\Gamma,x:A}(\theta[M/x])
 \]
