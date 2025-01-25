@@ -929,9 +929,50 @@ We'd like to say the result is
 \[ [\phi]^\bullet (A \to B)(f) = (x : A^\phi) \to [\phi]^\bullet B\ (f \star \partial x)\]
 for the record type
 \[A^\phi = \{ \partial : G[\theta]^\bullet A, \beta : [\phi]^\bullet A\ \partial\}\]
-and
-\[f : G[\theta]^\bullet (A \to B) \qquad x : G[\theta]^\bullet A \over f \star x \]
-expanding definitions I see
-\[f : G(\eta(\lambda g . [g/\Gamma](A\to B)) \cdot \theta)  \qquad x : G(\eta(\lambda g . [g/\Gamma]A) \cdot \theta) \over f \star x \]
-I think I'm stuck without some way to pair up $G$-typed terms.
+and require the existence of some
+\[f : G[\theta]^\bullet (A \to B) \qquad x : G[\theta]^\bullet A \over f \star x : G[\theta]^\bullet B \]
+
+I think I could do this if I defined
+\[{A_0\ A_1 : F\rset_i
+\over
+ A_0 \x_F A_1 : F\rset_i}
+\qquad
+{A_0 \x_F A_1 = \langle A_0, A_1\rangle \cdot (\lambda x. x.0 \x x.1)}\]
+and required
+\[A_0\ A_1 : F\rset_i \qquad M_0 : GA_0\qquad M_1 : GA_1
+\over
+\langle M_0, M_1 \rangle_G : G(A_0 \x_F A_1)\]
+which of course should degenerate to regular pairing if $A_0$ and $A_1$ are both $\eta$ of something.
+Then suppose that we could prove somehow that
+\[[\theta]^\bullet (A \to B) \equiv \pair {[\theta]^\bullet A}{[\theta]^\bullet  B} \cdot (\lambda x. x.0 \to x.1)\]
+In this case, we'd have
+\[\langle f, x\rangle_G : G([\theta]^\bullet(A \to B) \x_F [\theta]^\bullet A)\]
+\[= G(\langle [\theta]^\bullet(A \to B), [\theta]^\bullet A\rangle \cdot (\lambda x . x.0 \x x.1))\]
+\[= G(\langle \pair {[\theta]^\bullet A}{[\theta]^\bullet  B} \cdot (\lambda x. x.0 \to x.1), [\theta]^\bullet A\rangle \cdot (\lambda x . x.0 \x x.1))\]
+and by some principle I haven't thought of yet probably
+\[= G( \pair {[\theta]^\bullet A}{[\theta]^\bullet  B}  \cdot (\lambda x . (x.0 \to x.1) \x  x.0))\]
+and probably by some mapping principle under $G$ I can obtain
+\[\to G( \pair {[\theta]^\bullet A}{[\theta]^\bullet  B}  \cdot (\lambda x .  x.1))\]
+\[= G( {[\theta]^\bullet  B} )\]
+
+%% Now from the $f, x$ above I should be able to obtain
+%% \[\langle f, x\rangle_G  : G((\eta(\lambda g . [g/\Gamma](A\to B)) \cdot \theta)  \x_F (\eta(\lambda g . [g/\Gamma]A) \cdot \theta))\]
+%% and some combination of theorems should probably let me get this down to
+%% \[?  : G(\eta(\lambda g . [g/\Gamma]((A\to B) \x A)) \cdot \theta) \]
+%% and from there I should be able to map application to obtain
+%% \[?  : G(\eta(\lambda g . [g/\Gamma](B) \cdot \theta) \]
+%% What principles should I assume or lemmas should I prove to get this?
+%% I think first of all that maybe application distributes across products somehow.
+%% I can see that
+
+%% \[f\ g : F(A \to \rset_i) \qquad M : FA
+%% \over
+%% (f \cdot M) \x_F (g \cdot M) \equiv \langle f, g\rangle \cdot \lambda x. (f\cdot M) \x (g \cdot M) \]
+%% Ok, how does $\eta$ distribute across products? I want to assert
+%% \[ M : A \qquad N : B
+%% \over
+%% \eta_{A \x B}\langle M, N\rangle \equiv \langle \eta_A M, \eta_B N \rangle_F  \]
+%% where I'm punning across regular and under-$F$ pairing. Gosh, this is messy. Let me postpone this optimistically
+%% hoping it will work out with sufficient lemmas and axioms, and pop back up a level.
+
 \end{document}
