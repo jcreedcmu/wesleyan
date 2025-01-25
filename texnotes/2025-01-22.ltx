@@ -975,4 +975,58 @@ and probably by some mapping principle under $G$ I can obtain
 %% where I'm punning across regular and under-$F$ pairing. Gosh, this is messy. Let me postpone this optimistically
 %% hoping it will work out with sufficient lemmas and axioms, and pop back up a level.
 
+\subsubsection{Lambda}
+\[
+\begin{prooftree}
+  \theta : F(\Sigma\Gamma)
+  \qquad \phi:\bd_\Gamma(\theta)
+  \qquad \[\Gamma, x:A \prov  M :  B \justifies \Gamma \prov  \lambda x. M : (A \to B)\]
+\justifies
+      [\phi](\lambda x . M) : (x : A^\phi) \to [\phi]^\bullet B\ (([\theta](\lambda x. M)) \star \partial x)
+\end{prooftree}
+\]
+The induction hypothesis on $x:A\prov M : B$ gives us
+\[
+\theta : F(\Sigma(\Gamma, x :A))
+\qquad \phi:\bd_{\Gamma,x:A}(\theta)
+\over
+[\phi]M : [\phi]^\bullet B\ ([\theta]M)
+\]
+but we have convenience syntax for building substitutions:
+\[\theta : F(\Sigma\Gamma) \qquad  M : G[\theta]^\bullet A
+\over
+\theta[M/x] : F(\Sigma(\Gamma,x:A))
+\]
+So what we really have is
+\[
+\theta : F(\Sigma\Gamma)
+\qquad N : G[\theta]^\bullet A
+\qquad \phi:\bd_{\Gamma,x:A}(\theta[N/x])
+\over
+[\phi]M : [\phi]^\bullet B\ ([\theta[N/x]]M)
+\]
+and using the $\theta$ that we have coming in, and a variable $x : A^\phi$ in context means
+\[
+\phi:\bd_{\Gamma,x:A}(\theta[\partial x/x])
+\over
+x : A^\phi \prov [\phi]M : [\phi]^\bullet B\ ([\theta[\partial x/x]]M)
+\]
+Now staring at substitution formation we can get
+\[
+\qquad \beta x : [\phi]^\bullet A\ \partial x
+\over
+\phi[\beta x/x] : \bd_{\Gamma,x:A}(\theta[\partial x/x])
+\]
+so we have
+\[
+x : A^\phi \prov [\phi[\beta x/x]]M : [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M)
+\]
+and
+\[
+\prov \lambda x . [\phi[\beta x/x]]M : (A^\phi) \to [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M)
+\]
+So as long as we can prove some kind of coherence lemma that
+\[ [\phi]^\bullet B\ (([\theta](\lambda x. M)) \star \partial x) \equiv [\phi[\beta x/x]]^\bullet B\ ([\theta[\partial x/x]]M) \equiv \]
+we can set
+\[[\phi](\lambda x . M) =  \lambda x . [\phi[\beta x/x]]M\]
 \end{document}
