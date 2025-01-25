@@ -862,9 +862,10 @@ Then construction:
 %% \]
 \subsection{Substitutions Over}
 
-
- We simultaneously define a relation and two substitution operations
-\[\Gamma : \rctx \over \bd_\Gamma : F(\Sigma\Gamma) \to \rset_i\]
+when $\Gamma : \rctx$ and $\theta : F(\Sigma\Gamma)$, we invent a syntactic
+class of {\em substitutions over} $\theta$. Their well-formedness judgment is
+\[ \phi : \bd_\Gamma (\theta) \]
+ We simultaneously define this judgment and two substitution operations
 \[
 \theta : F(\Sigma\Gamma)
 \qquad \phi:\bd_\Gamma(\theta)
@@ -880,7 +881,8 @@ Then construction:
 [\phi]M : [\phi]^\bullet A\ ([\theta]M)
 \]
 
-Substitution formation works like:
+Formation of substitutions-over works like:
+\[\over \cdot : \bd_{\cdot}{\cdot}\]
 \[
 \theta : F(\Sigma\Gamma)
 \qquad \phi:\bd_\Gamma(\theta)
@@ -889,4 +891,47 @@ Substitution formation works like:
 \over
 \phi[p/x] : \bd_{\Gamma,x:A}(\theta[M/x])
 \]
+%% \subsection{Spot Check}
+%% I expect $[\phi]^\bullet$ to reduce to something like $\bd$, and $[\phi]$ to reduce to something like $\eta$
+%% when the substitution and contexts are empty.
+
+%% For the first one,
+%% \[
+%% \qquad \cdot:\bd_\Gamma(\cdot)
+%% \qquad  \prov A : \rset_i
+%% \over
+%% [\cdot]^\bullet A: G[\cdot]^\bullet A \to \rset_i
+%% \]
+%% checks out, because $[\theta]^\bullet A = \eta A$ when $\theta = \cdot$, so this is concluding
+%% \[[\cdot]^\bullet A: G\eta A \to \rset_i = FA \to \rset_i\]
+%% which is the right type for $\bd_A$.
+%% For the second, we get
+%% \[
+%% \theta : F(\top)
+%% \qquad \cdot:\bd_{\cdot}(\theta)
+%% \qquad \Gamma \prov  M : A
+%% \over
+%% [\cdot]M : \bd_A (\eta M)
+%% \]
+%% which is appropriate for being able to construct the $\eta$ of the lifted dependent applicative functor.
+\subsection{Application of Substitutions Over}
+Actually defining substitution application is where all the excitement is. Let's warm up on
+non-dependent functions.
+\subsubsection{Arrow}
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad \Gamma \prov (A \to B) : \rset_i
+\over
+[\phi]^\bullet (A \to B): G[\theta]^\bullet (A \to B) \to \rset_i
+\]
+We'd like to say the result is
+\[ [\phi]^\bullet (A \to B)(f) = (x : A^\phi) \to [\phi]^\bullet B\ (f \star \partial x)\]
+for the record type
+\[A^\phi = \{ \partial : G[\theta]^\bullet A, \beta : [\phi]^\bullet A\ \partial\}\]
+and
+\[f : G[\theta]^\bullet (A \to B) \qquad x : G[\theta]^\bullet A \over f \star x \]
+expanding definitions I see
+\[f : G(\eta(\lambda g . [g/\Gamma](A\to B)) \cdot \theta)  \qquad x : G(\eta(\lambda g . [g/\Gamma]A) \cdot \theta) \over f \star x \]
+I think I'm stuck without some way to pair up $G$-typed terms.
 \end{document}
