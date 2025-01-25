@@ -726,7 +726,6 @@ but more like
 \[\langle \Gamma_1 \prov M_1 : A_1, \Gamma_2 \prov M_2 : A_2\rangle\]
 I.e. the subject of the judgment is not a map $(\Gamma_1 \x \Gamma_2)  \to (A_1 \x A_2)$
 but a map $(\Gamma_1 \to A_1) \x (\Gamma_2 \to A_2)$.
-\vfil\eject
 \section{Contexts}
 \subsection{Contextual Dependent Applicative Functors}
 Suppose I have a regular dependent applicative functor $F, G, \ldots$.
@@ -817,4 +816,76 @@ and we get stuck at
 because there's no single type $\bd_B$ that accepts $FB$ as an argument. What we have is $G(\eta B \cdot x)$.
 So would $\bd_{x.B}$ do the trick? Well, $\bd_{x.B} : F_{x:A}B \to \rset_i$. Can we get
 from $G(\eta B \cdot x)$ to $F_{x:A} B$? We know $F_{x:A} B = F(\Pi(x:A).B)$. This is back where we started and doesn't let us make any progress.
+\section{Understanding What I Did Wrong}
+
+I think I still need a separate notion of substitutions-over. Going
+all the way back and trying to imitate section 2 from
+\verb+2022-01-15.ltx+.
+
+We need dependent function application and pairing under $F$:
+\[f : F((x : A) \to B(x)) \qquad x : FA \over f \odot x : G (\eta B \cdot x)\]
+
+\[A: \rset_i \qquad B : A \to \rset_i \qquad M : FA \qquad N : G(\eta B \cdot M)
+\over
+\ll M, N\rr : F((x : A) \x B\ x)
+\]
+
+\subsection{Tuples of Substitutions}
+First some convenience syntax for tuples of substitutions. First application:
+\[
+{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
+\over
+[\theta/\Gamma]^\bullet A : F\rset_i}
+\qquad
+{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov M : A
+\over
+[\theta/\Gamma]M : G[\theta/\Gamma]^\bullet A}
+\]
+\[[\theta/\Gamma]^\bullet A = \eta(\Gamma.A) \cdot \theta
+\qquad
+[\theta/\Gamma] M = \eta(\Gamma.M) \odot \theta\]
+
+Then construction:
+\[\theta : F(\Sigma\Gamma) \qquad  M : G[\theta/\Gamma]^\bullet A
+\over
+\theta[M/x] : F(\Sigma(\Gamma,x:A))
+\]
+\[\theta[M/x] = \ll \theta, M\rr\]
+
+%%  We're using dependent pairing under $F$,
+
+%% The typing works out because $F(\Sigma(\Gamma,x:A)) = F((g : \Sigma \Gamma) \x [g/\Gamma]A)$ and
+%% the relevant instantiation of the rule is
+%% \[\Sigma\Gamma: \rset_i \qquad \Gamma.A : \Sigma\Gamma \to \rset_i \qquad \theta : F(\Sigma\Gamma) \qquad M : G(\eta (\Gamma.A) \cdot \theta)
+%% \over
+%% \ll \theta, M\rr : F((g : \Sigma\Gamma) \x [g/\Gamma]A)
+%% \]
+\subsection{Substitutions Over}
+
+
+ We simultaneously define a relation and two substitution operations
+\[\Gamma : \rctx \over \bd_\Gamma : F(\Sigma\Gamma) \to \rset_i\]
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad \Gamma \prov A : \rset_i
+\over
+[\phi/\Gamma]^\bullet A: G[\theta/\Gamma]^\bullet A \to \rset_i
+\]
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad \Gamma \prov  M : A
+\over
+[\phi/\Gamma]M : [\phi/\Gamma]^\bullet A\ ([\theta/\Gamma]M)
+\]
+
+Substitution formation works like:
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad M : G[\theta/\Gamma]^\bullet A
+\over
+\phi[p/x] : \bd_{\Gamma,x:A}(\theta[M/x])
+\]
 \end{document}
