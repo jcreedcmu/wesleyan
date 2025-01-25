@@ -1141,6 +1141,14 @@ x : \sem\psi^\bullet A\prov [\psi[x/x]] M : [\psi[ x/x]]^\bullet  B\ ([\partial\
  \]
 So we can set
 \[   [\psi] (\lambda x.M) = \lambda x . [\psi[x/x]]M \]
-as long as we have a compatibility lemma
+as long as we have a compatibility lemma that yields
 \[([\partial\psi] (\lambda x.M)) \star \partial x \equiv [\partial\psi[\partial x / x]] M\]
+In general I bet I could establish
+\[
+\theta : F(\Sigma \Gamma) \qquad \Gamma, x:A \prov M : B \qquad  N : G[\theta]^\bullet A
+\over
+([\theta] (\lambda x.M)) \star N \equiv [\theta [N / x]] M
+\]
+%% which is a well-typed equation at type $G[\theta[N/x]]^\bullet B$ because
+%% \[[\theta] (\lambda x.M) : G[\theta]^\bullet ((x:A) \to B)\]
 \end{document}
