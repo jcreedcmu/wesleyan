@@ -1171,6 +1171,43 @@ that comes just from that structure. It is the thing defined by
 [\theta] M = \eta(\Gamma.M) \odot \theta\]
 
 Given $F, G, \eta, \cdot, \odot$ we can compute these. Now let's consider what we have defined for the lifted functor.
+Let's change notation so it actually reflects $F, \eta$ etc.
+
+\subsection{Redefining Dependent Applicative Functors}
+Say an dependent applicative functor has to define $F, G, \eta, \cdot, \odot$ as before, but also
+\[\begin{array}{c@{\qquad}c@{\qquad}c@}
+\displaystyle{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
+\over
+\rho_\theta A : F \rset_i}
+&
+\displaystyle{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov M : A
+\over
+\eta_\theta M : F_\theta A}
+&
+\displaystyle{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
+\over
+F_\theta A :  \rset_i}
+\\ \\
+\rho_\theta A = \eta(\Gamma.A) \cdot \theta
+&
+\eta_\theta M = \eta(\Gamma.M) \odot \theta
+&
+F_\theta A = G \rho_\theta A
+\end{array}
+\]
+\subsection{Checking Similarities}
+Now what is $\phi : \bd_\Gamma(\theta)$? It is an element of $\bar F(\Sigma \Gamma)$ that, for the map $\partial$,
+ lies over $\theta: F(\Sigma\Gamma)$.
+What is $[\phi]^\bullet A$? It's a function, that given an element of $F_{\partial \phi} A$, gives us the set of elements of $\bar F_\phi A$ that lie
+over it. This is something I expect to define recursively by decomposition of $A$.
+
+What is $[\phi]M$? It's an element of $\bar F_{\phi} A$ lies over $\eta_{\partial\phi} M$.
+This is something I expect to define recursively by decomposition of $M$.
+
+Or I can try to just go about defining $\bar F_{\phi}$ directly.
+
+
+\section{Moot?}
 
 \[\bar FA = \sem{{\color{gray}\psi}}^\bullet A \]
 in particular
