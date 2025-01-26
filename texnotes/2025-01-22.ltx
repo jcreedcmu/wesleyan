@@ -1151,6 +1151,8 @@ In general I bet I could establish
 \]
 %% which is a well-typed equation at type $G[\theta[N/x]]^\bullet B$ because
 %% \[[\theta] (\lambda x.M) : G[\theta]^\bullet ((x:A) \to B)\]
+
+\vfil\eject
 \section{Looking at What I've Done}
 Given a particular dependent applicative functor $F$, there is a notion of `$F$-enhanced substitution for $\Gamma$',
 namely something of type $F(\Sigma \Gamma)$, and `applying a substitution to a term or type'
@@ -1167,5 +1169,57 @@ that comes just from that structure. It is the thing defined by
 \[[\theta]^\bullet A = \eta(\Gamma.A) \cdot \theta
 \qquad
 [\theta] M = \eta(\Gamma.M) \odot \theta\]
-What is the corresponding thing for $\bar F$?
+
+Given $F, G, \eta, \cdot, \odot$ we can compute these. Now let's consider what we have defined for the lifted functor.
+
+\[\bar FA = \sem{{\color{gray}\psi}}^\bullet A \]
+in particular
+\[\bar F \rset_i =  \{ \partial : F \rset_i, \beta : G\partial \to  \rset_i\ \}\]
+To define $\bar G$ for $A : \bar F \rset_i$, we set
+\[\bar GA = \{\partial :  G(\partial A)), \beta : (\beta A)(\partial) \}\]
+Now we define
+\[\bar \eta M = \sem {{\color{gray}\psi}} M\]
+
+Now we want to sort of backport the concepts of $[\psi]^\bullet A$ and $[\psi]M$ as taking fibers.
+If
+\[
+\sem\psi^\bullet A = \{ \partial : G[\partial\psi]^\bullet A, \beta : [\psi]^\bullet A\ \partial\}
+\qquad
+\sem\psi M = \langle \partial = [\partial\psi]M, \beta = [\psi]M \rangle
+\]
+Then
+\def\fiber{\mathop{\mathbf{fiber}}}
+\[{z : \bar F A \over \partial z : F A}
+%% \qquad
+%%   \begin{prooftree}
+%%     z : \bar F A \justifies  \beta z :  \fiber_\partial \partial z
+%%   \end{prooftree}
+\qquad
+\partial(\bar\eta M) \equiv \eta M\]
+% \[\beta(\bar\eta M) \equiv \eta M\]
+
+Let's stare at
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad \Gamma \prov A : \rset_i
+\over
+[\phi]^\bullet A: G[\theta]^\bullet A \to \rset_i
+\]
+\[
+\theta : F(\Sigma\Gamma)
+\qquad \phi:\bd_\Gamma(\theta)
+\qquad \Gamma \prov  M : A
+\over
+[\phi]M : [\phi]^\bullet A\ ([\theta]M)
+\]
+
+For $\psi : \bar F (\Sigma \Gamma)$, and $\Gamma \prov A : \rset_i$, we can define $\bar F_\psi A : \bar F \rset_i$ by
+\[\bar F_\psi A = \bar \eta(\Gamma . A) \bdot \psi\]
+The type $[\psi]^\bullet A x$ is something like `the elements of $\bar F A$ that descend to $x$ under $\partial$'.
+
+%% and then turn our attention to the task of defining
+%% \[f : \bar F(A \to B) \qquad x : \bar F A
+%% \over
+%% f \bdot x : FB\]
 \end{document}
