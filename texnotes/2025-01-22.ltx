@@ -1151,4 +1151,21 @@ In general I bet I could establish
 \]
 %% which is a well-typed equation at type $G[\theta[N/x]]^\bullet B$ because
 %% \[[\theta] (\lambda x.M) : G[\theta]^\bullet ((x:A) \to B)\]
+\section{Looking at What I've Done}
+Given a particular dependent applicative functor $F$, there is a notion of `$F$-enhanced substitution for $\Gamma$',
+namely something of type $F(\Sigma \Gamma)$, and `applying a substitution to a term or type'
+that comes just from that structure. It is the thing defined by
+\[
+{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
+\over
+[\theta]^\bullet A : F\rset_i}
+\qquad
+{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov M : A
+\over
+[\theta]M : G[\theta]^\bullet A}
+\]
+\[[\theta]^\bullet A = \eta(\Gamma.A) \cdot \theta
+\qquad
+[\theta] M = \eta(\Gamma.M) \odot \theta\]
+What is the corresponding thing for $\bar F$?
 \end{document}
