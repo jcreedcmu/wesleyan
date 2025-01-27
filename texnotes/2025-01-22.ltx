@@ -1152,7 +1152,6 @@ In general I bet I could establish
 %% which is a well-typed equation at type $G[\theta[N/x]]^\bullet B$ because
 %% \[[\theta] (\lambda x.M) : G[\theta]^\bullet ((x:A) \to B)\]
 
-\vfil\eject
 \section{Looking at What I've Done}
 Given a particular dependent applicative functor $F$, there is a notion of `$F$-enhanced substitution for $\Gamma$',
 namely something of type $F(\Sigma \Gamma)$, and `applying a substitution to a term or type'
@@ -1175,7 +1174,7 @@ Let's change notation so it actually reflects $F, \eta$ etc.
 
 \subsection{Redefining Dependent Applicative Functors}
 Say an dependent applicative functor has to define $F, G, \eta, \cdot, \odot$ as before, but also
-\[\begin{array}{c@{\qquad}c@{\qquad}c@}
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
 \displaystyle{\theta : F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i
 \over
 \rho_\theta A : F \rset_i}
@@ -1206,57 +1205,160 @@ This is something I expect to define recursively by decomposition of $M$.
 
 Or I can try to just go about defining $\bar F_{\phi}$ directly.
 
-
-\section{Moot?}
-
-\[\bar FA = \sem{{\color{gray}\psi}}^\bullet A \]
-in particular
-\[\bar F \rset_i =  \{ \partial : F \rset_i, \beta : G\partial \to  \rset_i\ \}\]
-To define $\bar G$ for $A : \bar F \rset_i$, we set
-\[\bar GA = \{\partial :  G(\partial A)), \beta : (\beta A)(\partial) \}\]
-Now we define
-\[\bar \eta M = \sem {{\color{gray}\psi}} M\]
-
-Now we want to sort of backport the concepts of $[\psi]^\bullet A$ and $[\psi]M$ as taking fibers.
-If
-\[
-\sem\psi^\bullet A = \{ \partial : G[\partial\psi]^\bullet A, \beta : [\psi]^\bullet A\ \partial\}
+\subsubsection{The Universe}
+We define
+\[\bar \rho_\phi \rset_i = \bar \eta_\phi \rset_i = \bar \eta \rset_i\]
+\[\bar F_\phi \rset_i = \{ \partial : F \rset_i , \beta: G\partial \to \rset_i \}\]
+Here we're tacitly assuming we can show that $F_{\partial\phi} \rset_i \equiv G\rho_{\partial\phi}\rset_i \equiv G\eta \rset_i \equiv F\rset_i$ because $\rset_i$ is closed.
+\subsubsection{Pi Types}
+\def\fiber{\mathbf{fiber}}
+We invent some type
+\[{\phi : \bar F(\Sigma\Gamma) \qquad \Gamma \prov A : \rset_i \qquad N : F_{\partial \phi} A
+ \over
+\fiber(\bar F_\phi A, N) : \rset_i}
 \qquad
-\sem\psi M = \langle \partial = [\partial\psi]M, \beta = [\psi]M \rangle
+{
+M : \bar F_\phi A
+\over
+[M] : \fiber(\bar F_\phi A, \partial M) : \rset_i
+}
 \]
-Then
-\def\fiber{\mathop{\mathbf{fiber}}}
-\[{z : \bar F A \over \partial z : F A}
-%% \qquad
-%%   \begin{prooftree}
-%%     z : \bar F A \justifies  \beta z :  \fiber_\partial \partial z
-%%   \end{prooftree}
+and some operation
+\[f : F_{\theta} ((x : A) \to B) \qquad M :  F_\theta A
+\over
+f \star x : F_{\theta[M/x]} B\]
+
+then we can set
+
+\[\bar F_\phi ((x : A) \to B) = \{ f : F_{\partial\phi} ((x : A) \to B) ,\]
+\[ \beta: (x : \bar F_\phi A) \to \fiber (\bar F_{\phi[x/x]}B, f \star \partial x) \}\]
+
+\vfil\eject
+\section{Syntax}
+An idea that can help constrain the definition of dependent applicative functor is: it should be enough data
+that we can interpret syntax ``under a variable''.
+
+It's easy to get myself confused about how dependencies on contexts
+work, so let's start with some closed examples.
+
+When we have a bundle of types, we can write equivalently either of
+\[\Delta ; \cdot \prov A : \rset_i\qquad \sim\qquad \sem A: F\rset_i  \]
+When we have a bundle of terms, it's
+\[\Delta ; \cdot \prov M : A \qquad \sim\qquad \sem M: G\sem A  \]
+The interpretation of an expression probably should be written to `bind the variable $\Delta$'
+but I'm going to leave it implicit for brevity for now.
+\subsection{Individual Constructs}
+\subsubsection{Arrow}
+\[\Delta ; \cdot \prov A \to B : \rset_i\qquad \sim\qquad \sem {A \to B}: F\rset_i  \]
+We need to construct a bundle of types out of two bundles. This seems easy enough; abstract
+over the bundle and join them by $\to$.
+\[\sem{A \to B} = \sem A \to_F \sem B = \langle \sem A, \sem B\rangle_F \cdot (\lambda x . (x.0) \to (x.1))\]
+
+\subsubsection{Lambda}
+Given \[\Delta ;x : A \prov M : B\] we need to somehow construct a term of type
+\[ G\sem{A \to B} = G(\langle A, B\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
+If $B$ is $\Delta$-closed, then $\sem B = \eta B_0$ and I think this should reduce to
+\[ G\sem{A \to B} = G(\langle \sem A, \eta B_0\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
+\[ = G( \sem A \mathrel{\mathbf{map}} (\lambda x . x \to B_0) )\]
+I don't think there's any operation I'm going to explicitly do to construct the lambda; it has to
+come from the more general statement of what it means to take the interpretation of
+\[\Delta;\Gamma \prov M : A\]
+\subsubsection{Contextual Types}
+Suppose $\Delta;\Gamma \prov A : \rset_i$. Then $\Delta; \prov \Gamma.A : \Sigma\Gamma \to \rset_i$ leads to
+\[\qquad\sem{\Gamma.A} : G\sem{\Sigma\Gamma \to \rset_i}\]
+\[= G(\sem{\Sigma\Gamma} \to_F \sem{\rset_i})\]
+\[= G(\sem{\Sigma\Gamma} \to_F \eta{\rset_i})\]
+\[\sem{\Gamma.A}: G(\sem{\Sigma\Gamma} \mathrel{\mathbf{map}} (\lambda x . x \to \rset_i))\]
+Suppose $\Delta;\Gamma \prov M : A$. Then we start with $\Delta; \prov \Gamma.M : (g : \Sigma\Gamma) \to (\Gamma.A)\ g$.
+Observe that $\sem{\Sigma\Gamma} : F\rset_i$. So $G\sem{\Sigma\Gamma}:\rset_i$.
+Let's carefully review the pairing principles that we expect. Defined concepts are in {\color{gray} gray}.
+The rest are axioms of a dependent applicative functor.
+
+\vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Application}\\
+\[{M: F(A \to B) \qquad N : FA
+\over
+ M\cdot N  : FB}
+\]
+
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $F$-Substitution}}\\
+\[{M : FA \qquad x : A \prov B : \rset_i
+\over
+[M/x]_FB : F \rset_i
+}
 \qquad
-\partial(\bar\eta M) \equiv \eta M\]
-% \[\beta(\bar\eta M) \equiv \eta M\]
+[M/x]B = \eta(\lambda x . B) \cdot M\]
 
-Let's stare at
-\[
-\theta : F(\Sigma\Gamma)
-\qquad \phi:\bd_\Gamma(\theta)
-\qquad \Gamma \prov A : \rset_i
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Application}\\
+\[{M: F((x : A) \to B) \qquad N : FA
 \over
-[\phi]^\bullet A: G[\theta]^\bullet A \to \rset_i
-\]
-\[
-\theta : F(\Sigma\Gamma)
-\qquad \phi:\bd_\Gamma(\theta)
-\qquad \Gamma \prov  M : A
+ M\odot N  : G([N/x]_FB)
+}\]
+
+\vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Pairing}\\
+\[{M: FA \qquad N : FB
 \over
-[\phi]M : [\phi]^\bullet A\ ([\theta]M)
+\langle M, N \rangle_F : F(A \x B)}
 \]
 
-For $\psi : \bar F (\Sigma \Gamma)$, and $\Gamma \prov A : \rset_i$, we can define $\bar F_\psi A : \bar F \rset_i$ by
-\[\bar F_\psi A = \bar \eta(\Gamma . A) \bdot \psi\]
-The type $[\psi]^\bullet A x$ is something like `the elements of $\bar F A$ that descend to $x$ under $\partial$'.
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Pairing}\\
+\[
+{ B: A \to \rset_i \qquad M: FA \qquad N : G(\eta B \cdot M)
+\over
+\ll M, N \rr_F : F((x :A) \x B\ x)
+}\]
 
-%% and then turn our attention to the task of defining
-%% \[f : \bar F(A \to B) \qquad x : \bar F A
-%% \over
-%% f \bdot x : FB\]
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf Product under $F$}}\\
+\[{A: F\rset_i \qquad B : F\rset_i
+\over
+A \x_F  B : F\rset_i}
+\qquad
+A \x_F B = [\langle A, B\rangle_F/x]_F(x.0 \x x.1)
+\]
+
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf Arrow under $F$}}\\
+\[{A: F\rset_i \qquad B : F\rset_i
+\over
+A \to_F  B : F\rset_i}
+\qquad
+A \to_F B = [\langle A, B\rangle_F/x]_F(x.0 \to x.1)
+\]
+
+\vskip0.5em\noindent$\bullet$ {\bf Ordinary $G$-Pairing}\\
+\[{A\ B : F\rset_i \qquad M: GA \qquad N : GB
+\over
+\langle M, N \rangle_G : G(A \x_F B)}
+\]
+
+\vskip0.5em\noindent$\bullet$ {\bf  Ordinary $G$-Application}\\
+\[
+{ A\ B : F\rset_i
+\qquad M : G(A \to_F B) \qquad N: GA
+\over
+M \cdot_G N  : GB}\]
+
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $\Sigma$ under $F$}}\\
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
+\over
+ \Sigma_F\ A\ B  : F\rset_i}
+\qquad
+\Sigma_F\ A\ B =  [ \ll A, B \rr_F/x](  \Sigma\ (x.0)\ (x.1))
+\]
+
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $G$-Pairing}\\
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i) \qquad M: GA \qquad N : G(B \cdot_G M)
+\over
+\ll M, N \rr_G : G(\Sigma_F\ A\ B)
+}\]
+
+
+
+
+\subsubsection{Pi}
+\[\Delta ; \cdot \prov (x : A) \to B : \rset_i\qquad \sim\qquad \sem {(x : A) \to B}: F\rset_i  \]
+We'll need dependent pairing to bundle up the two types. For sure $\sem A : F\rset_i$, and
+I can at least take $\Delta ;\cdot \prov \lambda x . B : A \to \rset_i$ to $\sem{\lambda x . B} : \sem A \to_F \sem{\rset_i}$.
+Now
+\[\langle \sem A, \sem{\lambda x.B} \rangle_F : F(\rset_i \x \rset_i)\]
+and
+\[\langle \sem A, \sem{\lambda x.B} \rangle_F \cdot \lambda p . ((x : p.0) \to  : F(\rset_i \x \rset_i)\]
 \end{document}
