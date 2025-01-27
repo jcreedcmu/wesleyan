@@ -1488,4 +1488,13 @@ If we had this, we could talk about what it meant to be a well-typed $\eta/G$ pa
 
 Given all that data, I can extract another $F$ via composition. I'd like this to be a fixedpoint. Don't see any clever way of doing that, hm.
 
+What if I thought more `typelessly' and said that there are types $E, V, L$
+with $\tau : E \to V$ and $\lambda : V \to L$.
+There is an encoding map $\epsilon : V \to E$ which takes a type name to its
+representative in $E$. There is a map $v : L \to V$ which takes a level to the universe
+at that level.
+Then $\eta$ is a map $E \to E$. And maybe $G$ is a partial map $E \to E$.
+They happen to have the properties that
+\[ \forall x \in E . \tau (\eta x) = G\eta\epsilon (\tau x) \]
+Ugh no this is still a mess.
 \end{document}
