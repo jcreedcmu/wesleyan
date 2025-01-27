@@ -1234,51 +1234,16 @@ then we can set
 \[ \beta: (x : \bar F_\phi A) \to \fiber (\bar F_{\phi[x/x]}B, f \star \partial x) \}\]
 
 \vfil\eject
-\section{Syntax}
-An idea that can help constrain the definition of dependent applicative functor is: it should be enough data
-that we can interpret syntax ``under a variable''.
-
-It's easy to get myself confused about how dependencies on contexts
-work, so let's start with some closed examples.
-
-When we have a bundle of types, we can write equivalently either of
-\[\Delta ; \cdot \prov A : \rset_i\qquad \sim\qquad \sem A: F\rset_i  \]
-When we have a bundle of terms, it's
-\[\Delta ; \cdot \prov M : A \qquad \sim\qquad \sem M: G\sem A  \]
-The interpretation of an expression probably should be written to `bind the variable $\Delta$'
-but I'm going to leave it implicit for brevity for now.
-\subsection{Individual Constructs}
-\subsubsection{Arrow}
-\[\Delta ; \cdot \prov A \to B : \rset_i\qquad \sim\qquad \sem {A \to B}: F\rset_i  \]
-We need to construct a bundle of types out of two bundles. This seems easy enough; abstract
-over the bundle and join them by $\to$.
-\[\sem{A \to B} = \sem A \to_F \sem B = \langle \sem A, \sem B\rangle_F \cdot (\lambda x . (x.0) \to (x.1))\]
-
-\subsubsection{Lambda}
-Given \[\Delta ;x : A \prov M : B\] we need to somehow construct a term of type
-\[ G\sem{A \to B} = G(\langle A, B\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
-If $B$ is $\Delta$-closed, then $\sem B = \eta B_0$ and I think this should reduce to
-\[ G\sem{A \to B} = G(\langle \sem A, \eta B_0\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
-\[ = G( \sem A \mathrel{\mathbf{map}} (\lambda x . x \to B_0) )\]
-I don't think there's any operation I'm going to explicitly do to construct the lambda; it has to
-come from the more general statement of what it means to take the interpretation of
-\[\Delta;\Gamma \prov M : A\]
-\subsubsection{Contextual Types}
-Suppose $\Delta;\Gamma \prov A : \rset_i$. Then $\Delta; \prov \Gamma.A : \Sigma\Gamma \to \rset_i$ leads to
-\[\qquad\sem{\Gamma.A} : G\sem{\Sigma\Gamma \to \rset_i}\]
-\[= G(\sem{\Sigma\Gamma} \to_F \sem{\rset_i})\]
-\[= G(\sem{\Sigma\Gamma} \to_F \eta{\rset_i})\]
-\[\sem{\Gamma.A}: G(\sem{\Sigma\Gamma} \mathrel{\mathbf{map}} (\lambda x . x \to \rset_i))\]
-Suppose $\Delta;\Gamma \prov M : A$. Then we start with $\Delta; \prov \Gamma.M : (g : \Sigma\Gamma) \to (\Gamma.A)\ g$.
-Observe that $\sem{\Sigma\Gamma} : F\rset_i$. So $G\sem{\Sigma\Gamma}:\rset_i$.
-Let's carefully review the pairing principles that we expect. Defined concepts are in {\color{gray} gray}.
-The rest are axioms of a dependent applicative functor.
-
-\vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Application}\\
-\[{M: F(A \to B) \qquad N : FA
-\over
- M\cdot N  : FB}
-\]
+\section{Dependent Applicative Functors}
+Some meditation on what operations ought to exist led me to the following slightly expanded notion.
+We should have, at a minimum,
+\[{A : \rset_i \over FA : \rset_i}
+\qquad {A : \rset_i \over \eta : A \to FA}
+\qquad {A : F \rset_i \over GA : \rset_i}\]
+I really ought to write $\cdot$ and $\cdot_F$ and $\odot$ as $\odot_F$ below, but I
+drop the $F$ for brevity.
+We expect $G\eta A \equiv A$. Probably a bunch of other compatibility axioms.
+Defined operations are in {\color{gray} gray}.
 
 \vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Pairing}\\
 \[{M: FA \qquad N : FB
@@ -1286,18 +1251,23 @@ The rest are axioms of a dependent applicative functor.
 \langle M, N \rangle_F : F(A \x B)}
 \]
 
-\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Application}\\
-\[{B : A \to \rset_i \qquad M: F((x : A) \to B\ x) \qquad N : FA
+\vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Application}\\
+\[{M: F(A \to B) \qquad N : FA
 \over
- M\odot N  : G(\eta B \cdot N)
-}\]
-
+ M\cdot N  : FB}
+\]
 
 \vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Pairing}\\
 \[
 { B: A \to \rset_i \qquad M: FA \qquad N : G(\eta B \cdot M)
 \over
 \ll M, N \rr_F : F((x :A) \x B\ x)
+}\]
+
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Application}\\
+\[{B : A \to \rset_i \qquad M: F((x : A) \to B\ x) \qquad N : FA
+\over
+ M\odot N  : G(\eta B \cdot N)
 }\]
 
 \vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $F$-Substitution}}\\
@@ -1368,6 +1338,44 @@ M \cdot_G N  : GB}\]
  M\odot_G N  : G(B \cdot_G N)
 }\]
 
+\section{Syntax}
+An idea that can help constrain the definition of dependent applicative functor is: it should be enough data
+that we can interpret syntax ``under a variable''.
+
+It's easy to get myself confused about how dependencies on contexts
+work, so let's start with some closed examples.
+
+When we have a bundle of types, we can write equivalently either of
+\[\Delta ; \cdot \prov A : \rset_i\qquad \sim\qquad \sem A: F\rset_i  \]
+When we have a bundle of terms, it's
+\[\Delta ; \cdot \prov M : A \qquad \sim\qquad \sem M: G\sem A  \]
+The interpretation of an expression probably should be written to `bind the variable $\Delta$'
+but I'm going to leave it implicit for brevity for now.
+\subsection{Individual Constructs}
+\subsubsection{Arrow}
+\[\Delta ; \cdot \prov A \to B : \rset_i\qquad \sim\qquad \sem {A \to B}: F\rset_i  \]
+We need to construct a bundle of types out of two bundles. This seems easy enough; abstract
+over the bundle and join them by $\to$.
+\[\sem{A \to B} = \sem A \to_F \sem B = \langle \sem A, \sem B\rangle_F \cdot (\lambda x . (x.0) \to (x.1))\]
+
+\subsubsection{Lambda}
+Given \[\Delta ;x : A \prov M : B\] we need to somehow construct a term of type
+\[ G\sem{A \to B} = G(\langle A, B\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
+If $B$ is $\Delta$-closed, then $\sem B = \eta B_0$ and I think this should reduce to
+\[ G\sem{A \to B} = G(\langle \sem A, \eta B_0\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
+\[ = G( \sem A \mathrel{\mathbf{map}} (\lambda x . x \to B_0) )\]
+I don't think there's any operation I'm going to explicitly do to construct the lambda; it has to
+come from the more general statement of what it means to take the interpretation of
+\[\Delta;\Gamma \prov M : A\]
+\subsubsection{Contextual Types}
+Suppose $\Delta;\Gamma \prov A : \rset_i$. Then $\Delta; \prov \Gamma.A : \Sigma\Gamma \to \rset_i$ leads to
+\[\qquad\sem{\Gamma.A} : G\sem{\Sigma\Gamma \to \rset_i}\]
+\[= G(\sem{\Sigma\Gamma} \to_F \sem{\rset_i})\]
+\[= G(\sem{\Sigma\Gamma} \to_F \eta{\rset_i})\]
+\[\sem{\Gamma.A}: G(\sem{\Sigma\Gamma} \mathrel{\mathbf{map}} (\lambda x . x \to \rset_i))\]
+Suppose $\Delta;\Gamma \prov M : A$. Then we start with $\Delta; \prov \Gamma.M : (g : \Sigma\Gamma) \to (\Gamma.A)\ g$.
+Observe that $\sem{\Sigma\Gamma} : F\rset_i$. So $G\sem{\Sigma\Gamma}:\rset_i$.
+
 
 
 \subsubsection{Pi}
@@ -1378,4 +1386,5 @@ Now
 \[\langle \sem A, \sem{\lambda x.B} \rangle_F : F(\rset_i \x \rset_i)\]
 and
 \[\langle \sem A, \sem{\lambda x.B} \rangle_F \cdot \lambda p . ((x : p.0) \to  : F(\rset_i \x \rset_i)\]
+
 \end{document}
