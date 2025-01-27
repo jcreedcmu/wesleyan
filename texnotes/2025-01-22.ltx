@@ -1280,25 +1280,18 @@ The rest are axioms of a dependent applicative functor.
  M\cdot N  : FB}
 \]
 
-\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $F$-Substitution}}\\
-\[{M : FA \qquad x : A \prov B : \rset_i
-\over
-[M/x]_FB : F \rset_i
-}
-\qquad
-[M/x]B = \eta(\lambda x . B) \cdot M\]
-
-\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Application}\\
-\[{M: F((x : A) \to B) \qquad N : FA
-\over
- M\odot N  : G([N/x]_FB)
-}\]
-
 \vskip0.5em\noindent$\bullet$ {\bf Ordinary $F$-Pairing}\\
 \[{M: FA \qquad N : FB
 \over
 \langle M, N \rangle_F : F(A \x B)}
 \]
+
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Application}\\
+\[{B : A \to \rset_i \qquad M: F((x : A) \to B\ x) \qquad N : FA
+\over
+ M\odot N  : G(\eta B \cdot N)
+}\]
+
 
 \vskip0.5em\noindent$\bullet$ {\bf Dependent $F$-Pairing}\\
 \[
@@ -1306,6 +1299,14 @@ The rest are axioms of a dependent applicative functor.
 \over
 \ll M, N \rr_F : F((x :A) \x B\ x)
 }\]
+
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $F$-Substitution}}\\
+\[{M : FA \qquad x : A \prov B : \rset_i
+\over
+[M/x]_FB : F \rset_i
+}
+\qquad
+[M/x]B = \eta(\lambda x . B) \cdot M\]
 
 \vskip0.5em\noindent{\color{gray} $\bullet$ {\bf Product under $F$}}\\
 \[{A: F\rset_i \qquad B : F\rset_i
@@ -1323,6 +1324,23 @@ A \to_F  B : F\rset_i}
 A \to_F B = [\langle A, B\rangle_F/x]_F(x.0 \to x.1)
 \]
 
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $\Sigma$ under $F$}}\\
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
+\over
+ \Sigma_F\ A\ B  : F\rset_i}
+\qquad
+\Sigma_F\ A\ B =  [ \ll A, B \rr_F/x](  \Sigma\ (x.0)\ (x.1))
+\]
+
+\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $\Pi$ under $F$}}\\
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
+\over
+ \Pi_F\ A\ B  : F\rset_i}
+\qquad
+\Pi_F\ A\ B =  [ \ll A, B \rr_F/x](  \Pi\ (x.0)\ (x.1))
+\]
+
+
 \vskip0.5em\noindent$\bullet$ {\bf Ordinary $G$-Pairing}\\
 \[{A\ B : F\rset_i \qquad M: GA \qquad N : GB
 \over
@@ -1336,13 +1354,6 @@ A \to_F B = [\langle A, B\rangle_F/x]_F(x.0 \to x.1)
 \over
 M \cdot_G N  : GB}\]
 
-\vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $\Sigma$ under $F$}}\\
-\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
-\over
- \Sigma_F\ A\ B  : F\rset_i}
-\qquad
-\Sigma_F\ A\ B =  [ \ll A, B \rr_F/x](  \Sigma\ (x.0)\ (x.1))
-\]
 
 \vskip0.5em\noindent$\bullet$ {\bf Dependent $G$-Pairing}\\
 \[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i) \qquad M: GA \qquad N : G(B \cdot_G M)
@@ -1350,6 +1361,12 @@ M \cdot_G N  : GB}\]
 \ll M, N \rr_G : G(\Sigma_F\ A\ B)
 }\]
 
+\vskip0.5em\noindent$\bullet$ {\bf Dependent $G$-Application}\\
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
+\qquad M: G(\Pi_F\ A\ B) \qquad N : GA
+\over
+ M\odot_G N  : G(B \cdot_G N)
+}\]
 
 
 
