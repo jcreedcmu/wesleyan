@@ -1299,7 +1299,7 @@ A \to_F B = [\langle A, B\rangle_F/x]_F(x.0 \to x.1)
 \over
  \Sigma_F\ A\ B  : F\rset_i}
 \qquad
-\Sigma_F\ A\ B =  [ \ll A, B \rr_F/x](  \Sigma\ (x.0)\ (x.1))
+\Sigma_F\ A\ B =  [ \ll A, B \rr_F/x]_F(  \Sigma\ (x.0)\ (x.1))
 \]
 
 \vskip0.5em\noindent{\color{gray} $\bullet$ {\bf $\Pi$ under $F$}}\\
@@ -1307,7 +1307,7 @@ A \to_F B = [\langle A, B\rangle_F/x]_F(x.0 \to x.1)
 \over
  \Pi_F\ A\ B  : F\rset_i}
 \qquad
-\Pi_F\ A\ B =  [ \ll A, B \rr_F/x](  \Pi\ (x.0)\ (x.1))
+\Pi_F\ A\ B =  [ \ll A, B \rr_F/x]_F(  \Pi\ (x.0)\ (x.1))
 \]
 
 
@@ -1363,7 +1363,7 @@ Given \[\Delta ;x : A \prov M : B\] we need to somehow construct a term of type
 \[ G\sem{A \to B} = G(\langle A, B\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
 If $B$ is $\Delta$-closed, then $\sem B = \eta B_0$ and I think this should reduce to
 \[ G\sem{A \to B} = G(\langle \sem A, \eta B_0\rangle_F \cdot (\lambda x . (x.0) \to (x.1)))\]
-\[ = G( \sem A \mathrel{\mathbf{map}} (\lambda x . x \to B_0) )\]
+\[ = G( [\sem A /x] ( x \to B_0) )\]
 I don't think there's any operation I'm going to explicitly do to construct the lambda; it has to
 come from the more general statement of what it means to take the interpretation of
 \[\Delta;\Gamma \prov M : A\]
@@ -1372,7 +1372,7 @@ Suppose $\Delta;\Gamma \prov A : \rset_i$. Then $\Delta; \prov \Gamma.A : \Sigma
 \[\qquad\sem{\Gamma.A} : G\sem{\Sigma\Gamma \to \rset_i}\]
 \[= G(\sem{\Sigma\Gamma} \to_F \sem{\rset_i})\]
 \[= G(\sem{\Sigma\Gamma} \to_F \eta{\rset_i})\]
-\[\sem{\Gamma.A}: G(\sem{\Sigma\Gamma} \mathrel{\mathbf{map}} (\lambda x . x \to \rset_i))\]
+\[\sem{\Gamma.A}: G([\sem{\Sigma\Gamma}/x]  (x \to \rset_i))\]
 Suppose $\Delta;\Gamma \prov M : A$. Then we start with $\Delta; \prov \Gamma.M : (g : \Sigma\Gamma) \to (\Gamma.A)\ g$.
 Observe that $\sem{\Sigma\Gamma} : F\rset_i$. So $G\sem{\Sigma\Gamma}:\rset_i$.
 
@@ -1381,10 +1381,21 @@ Observe that $\sem{\Sigma\Gamma} : F\rset_i$. So $G\sem{\Sigma\Gamma}:\rset_i$.
 \subsubsection{Pi}
 \[\Delta ; \cdot \prov (x : A) \to B : \rset_i\qquad \sim\qquad \sem {(x : A) \to B}: F\rset_i  \]
 We'll need dependent pairing to bundle up the two types. For sure $\sem A : F\rset_i$, and
-I can at least take $\Delta ;\cdot \prov \lambda x . B : A \to \rset_i$ to $\sem{\lambda x . B} : \sem A \to_F \sem{\rset_i}$.
-Now
-\[\langle \sem A, \sem{\lambda x.B} \rangle_F : F(\rset_i \x \rset_i)\]
-and
-\[\langle \sem A, \sem{\lambda x.B} \rangle_F \cdot \lambda p . ((x : p.0) \to  : F(\rset_i \x \rset_i)\]
+Let's assume  $\Delta ;\cdot \prov \lambda x . B : A \to \rset_i$
+gives us
+\[ \sem{ x . B} : G(\sem A \to_F \eta\rset_i)\]
+Then the above $\Pi$ under $F$ construction gives us what we want!
+\subsection{The Induction Hypothesis I Want}
+This is starting to be clearer with the primitives I now have.
+\[{\Delta \prov\Gamma : \rctx
+\over
+\sem\Gamma_\Delta : F \rset_i
+}\qquad{\Delta ; \Gamma \prov A : \rset_i
+\over
+\sem {\Gamma.A}_\Delta : G(\sem \Gamma_\Delta \to_F \eta\rset_i)}
+\qquad
+{\Delta ; \Gamma \prov M : A
+\over
+\sem {\Gamma.M}_\Delta : G(\Pi_F\ \sem\Gamma_\Delta\ \sem{\Gamma.A}_\Delta)}\]
 
 \end{document}
