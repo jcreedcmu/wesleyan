@@ -1398,4 +1398,94 @@ This is starting to be clearer with the primitives I now have.
 \over
 \sem {\Gamma.M}_\Delta : G(\Pi_F\ \sem\Gamma_\Delta\ \sem{\Gamma.A}_\Delta)}\]
 
+\section{A Recursion Excursion}
+What would I need to say to be able to inline the `definition' $F = G\o\eta$?
+
+I think something like
+\[{ A : \rset_i\qquad M : A
+\over \eta_iM : G_{i+\ell}(\eta_{i+1} A) }
+\qquad
+{ B : G_{i+k}(\eta_{i+2}\rset_i)
+\over G_i B : \rset_i }\]
+but I don't know $k$ and $\ell$.
+
+I expect: if the premises of a rule are well-typed, then its conclusion is.
+Let's apply that idea to the $\eta$ rule. From $A : \rset_i : \rset_{i+1}$ and $M : A : \rset_i$
+we should expect that $G_{i+\ell}(\eta_{i+1}A) : \rset_i$  holds, because we
+expect $\eta M$ to be at the same level as $M$. So this immediately tells us that $\ell = 0$, assuming $G_i$ is indexed by the level of the type it outputs. So we have
+\[{ A : \rset_i\qquad M : A
+\over \eta_iM : G_{i}(\eta_{i+1} A) }
+\qquad
+{ B : G_{i+k}(\eta_{i+2}\rset_i)
+\over G_i B : \rset_i }\]
+and we don't know $k$. We want to investigate why
+\[G_{i}(\eta_{i+1}A) : \rset_i\] holds. By $G$-rule, we need to show
+\[{ \eta_{i+1}A : G_{i+k}(\eta_{i+2}\rset_i)
+\over G_i (\eta_{i+1}A) : \rset_i }\]
+So by $\eta$-rule, we'd need to show
+\[{ \rset_{i} : \rset_{i+1}\qquad A : \rset_{i}
+\over \eta_{i+1}A : G_{i+1}(\eta_{i+2} \rset_{i}) }\]
+So we've discovered $k=1$. I think my rules are:
+\[{ A : \rset_i\qquad M : A
+\over \eta_iM : G_{i}(\eta_{i+1} A) }
+ \qquad
+{ B : G_{i+1}(\eta_{i+2}\rset_i)
+\over G_i B : \rset_i }\]
+Now to check that the premise of the $G$-rule makes sense?
+By the $\eta$-rule,
+\[{ \rset_{i+1} : \rset_{i+2}\qquad \rset_i : \rset_{i+1}
+\over \eta_{i+2}\rset_i : G_{i+2}(\eta_{i+3} \rset_{i+1}) }\]
+Hence by the $G$ rule, with $B = \eta_{i+2}\rset_i$, we see
+\[{ \eta_{i+2}\rset_i : G_{i+2}(\eta_{i+3}\rset_{i+1})
+\over G_i (\eta_{i+2}\rset_i) : \rset_{i+1} }\]
+So we have a kind of consistency that
+\[{ A : \rset_i : \rset_{i+1} \qquad M : A : \rset_i
+\over \eta_iM : G_{i}(\eta_{i+1} A) : \rset_i }
+ \qquad
+{ B : G_{i+1}(\eta_{i+2}\rset_i) : \rset_{i+1}
+\over G_i B : \rset_i : \rset_{i+1}}\]
+%% Do we want to reindex, then? I think I want
+%% \[ H_i : \cdots : \rset_i \]
+%% where
+%% \[G_i : \cdots : \rset_{i+1}\]
+%% So $H_{i+1} =G_i$. So the rules (rewriting $H$ immediately back to $G$) are
+%% \[{ A : \rset_i\qquad M : A
+%% \over \eta_iM : G_{i+1}(\eta_{i+1} A) }
+%%  \qquad
+%% { B : G_{i+2}(\eta_{i+2}\rset_i)
+%% \over G_{i+1} B : \rset_i }\]
+%% and if we set $F_i = G_{i+1}\eta_{i+1}$ then
+%% \[{ A : \rset_i\qquad M : A
+%% \over \eta_iM : F_i A }
+%%  \qquad
+%% { B : F_{i+1}\rset_i
+%% \over G_{i+1} B : \rset_i }\]
+%% huh but what if I reindex back and say
+I can make this more compact again by saying
+\[F_i = G_{i}\eta_{i+1}
+\qquad
+{ A : \rset_i
+\over F_iA : \rset_i }
+\qquad
+{ A : \rset_i\qquad M : A
+\over \eta_iM : F_i A }
+ \qquad
+{ B : F_{i+1}\rset_i
+\over G_{i} B : \rset_i }\]
+\subsection{Inner Universe}
+This is going to be very confusing if we're talking about actual levels,
+so let's have a little inner universe to make it more concrete.
+
+Let's suppose we have some type $L$ that's going to abstractly behave like levels,
+and a successor function $s : L \to L$, and $V  :  L \to \rset$ and $E : \{\ell : L\} \to V\ \ell \to \rset$ that gives us sets of elements provided a code from $V$.
+Suppose also we have codes for universes : $v : (\ell : L) \to V\ (s\ \ell)$
+with $E\ (v\ \ell) \equiv V\ \ell$.
+Now suppose we're given out of nowhere a $F : \{\ell : L\} \to V\ \ell \to V\ \ell$.
+If we had this, we could talk about what it meant to be a well-typed $\eta/G$ pair.
+
+\[ \eta : (\ell : L) (A : V\ \ell) \to  E\ A \to E\ (F\ A)\]
+\[ G : (\ell : L) : E\ (F\ (v\ \ell)) \to V\ \ell\]
+
+Given all that data, I can extract another $F$ via composition. I'd like this to be a fixedpoint.
+
 \end{document}
