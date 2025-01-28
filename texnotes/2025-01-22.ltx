@@ -1581,10 +1581,15 @@ From the induction hypothesis we have
 \[  \semd {(\Gamma,x:A).B} : G(\semd {\Gamma,x:A} \to_F \eta\rset_i)\]
 that latter one being equivalent to
 \[  \semd {(\Gamma,x:A).B} : G(\Sigma_F\ \semd {\Gamma}\ \semd{\Gamma.A} \to_F \eta\rset_i)\]
-So we need some principle that tells us how to do
+It would suffice if we had some principle like
 \[
-G(\Sigma_F\ \semd {\Gamma}\ \semd{\Gamma.A} \to_F \eta\rset_i)
-\qquad G(\semd \Gamma \to_F \eta\rset_i)
+C : F\rset_i
+\qquad
+A : G(C \to_F \eta\rset_i)
+\qquad
+B : G(\Sigma_F\ C\ A \to_F \eta\rset_i)
 \over
-G(\semd \Gamma \to_F \eta\rset_i)\]
+\Pi_G^C\ A\ B : G(C \to_F \eta\rset_i)\]
+Because then we could set
+\[ \semd {\Gamma.(x:A)\to B} = \Pi^{\semd \Gamma}_G\ \semd{\Gamma.A}\ \semd{(\Gamma,x:A).B}\]
 \end{document}
