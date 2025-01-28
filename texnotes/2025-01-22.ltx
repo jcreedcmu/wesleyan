@@ -1390,18 +1390,29 @@ This is starting to be clearer with the primitives I now have.
 The theorem is that we can define
 \[\sem\Gamma_\Delta \qquad \sem {\Gamma.A}_\Delta \qquad \sem {\Gamma.M}_\Delta\]
 such that, for all the familiar syntactic constructors with a $\Delta$ out front,
-\[{\Delta \prov\Gamma : \rctx_i
+\def\sto{\rightsquigarrow}
+\[
+{ B : G(\sem\Gamma_\Delta \sto \eta\rset_i)
+\over
+  \sem\Gamma_\Delta\sto B  : F\rset_i}
+\]
+\[{\color{gray}\Delta \prov\Gamma : \rctx_i
 \over
 \sem\Gamma_\Delta : F \rset_i
 }\qquad{\Delta ; \Gamma \prov A : \rset_i
 \over
-\sem {\Gamma.A}_\Delta : G(\sem \Gamma_\Delta \to_F \eta\rset_i)}
+\sem {\Gamma.A}_\Delta : G(\sem \Gamma_\Delta \sto \eta\rset_i)}
 \qquad
 {\Delta ; \Gamma \prov M : A
 \over
-\sem {\Gamma.M}_\Delta : G(\Pi_F\ \sem\Gamma_\Delta\ \sem{\Gamma.A}_\Delta)}\]
+\sem {\Gamma.M}_\Delta : G( \sem\Gamma_\Delta\sto' \sem{\Gamma.A}_\Delta)}\]
 
-\subsubsection{Context Extension}
+
+
+
+
+\subsubsection{Ordinary Context Abstration}
+\[\sem\cdot_\Delta B = B\]
 \[\Delta \prov \Gamma : \rctx_i \qquad \Delta ;\Gamma \prov A : \rset_i
 \over
 \Delta \prov (\Gamma, x : A) : \rctx
@@ -1409,10 +1420,8 @@ such that, for all the familiar syntactic constructors with a $\Delta$ out front
 %% The induction hypothesis gives us $\sem\Gamma_\Delta : F\rset_i$
 %% and $\sem {\Gamma.A}_\Delta : G(\sem \Gamma_\Delta \to_F \eta\rset_i)$.
 We set
-\[\sem{\Gamma, x : A}_\Delta =  \Sigma_F\ \sem\Gamma_\Delta\ \sem {\Gamma.A}_\Delta  : F\rset_i}\]
-{\color{red} Actually we might want to define
-$\sem \Gamma_\Delta \to_F \dash$ as one operation so that the empty context
-doesn't create spurious $\top \to \dash$ functions}
+\[\sem{\Gamma, x : A}_\Delta \sto B =  \sem{\Gamma} \sto (\sem A_\Delta \to_F B)\]
+
 
 
 \subsubsection{Pi Case}
