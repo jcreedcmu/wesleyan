@@ -1542,49 +1542,49 @@ Ugh no this is still a mess.
 
 \section{Another Crack at Syntax Interpretation}
 
-%% Let's do the curried abstraction in the base language. We define
-%% \[\Gamma : \rctx \qquad \Gamma \prov A : \rset_i \over \Gamma \sto A : \rset_i\]
-%% by
-%% \[\cdot \sto A = A \qquad (\Gamma, x:A) \sto B = \Gamma \sto ((x:A) \to B)\]
-The theorem to be proved is
-
-\[{\Delta \prov \Gamma : \rctx
+Let's try not having the nice currying after all. Going
+with my original attempt, namely:
+\def\semd#1{\sem{#1}_\Delta}
+\[{\Delta \prov\Gamma : \rctx_i
 \over
-\Gamma \sto \rset_i : F\rset_{i+1}}
-\qquad
-{\Delta \prov \Gamma : \rctx \qquad  B : G(\Gamma \sto  \rset_i)
+\semd\Gamma : F \rset_i
+}\qquad{\Delta ; \Gamma \prov A : \rset_i
 \over
-\Gamma \sto B : F\rset_i}\]
-
-
-%% {\Delta \prov\Gamma : \rctx_i
-%% \over
-%% \sem\Gamma_\Delta : F \rset_i
-%% }\qquad
-
-\[{\Delta ; \Gamma \prov A : \rset_i
-\over
-\sem {\Gamma.A}_\Delta : G( \Gamma \sto \rset_i)}
+\semd {\Gamma.A} : G(\semd \Gamma \to_F \eta\rset_i)}
 \qquad
 {\Delta ; \Gamma \prov M : A
 \over
-\sem {\Gamma.M}_\Delta : G( \Gamma\sto \sem{\Gamma.A}_\Delta)}\]
+\semd {\Gamma.M} : G( \Pi_F\ \semd\Gamma\ \semd{\Gamma.A})}\]
 
 \subsection{Proof}
+\subsubsection{Universe}
 \subsubsection{Empty Context}
-\[\cdot \sto \rset_i = \eta\rset_i\]
-\[\cdot \sto B = B\]
+\[\semd\cdot = \eta \top\]
 \subsubsection{Context Extension}
-\[(\Gamma,x:A) \sto B = ?\]
-
-\[{\Delta \prov \Gamma : \rctx \qquad  \Gamma \prov A : \rset_i \qquad
- B : G((\Gamma,x:A) \sto  \rset_i)
-\over
-(\Gamma,x:A) \sto B : F\rset_i}\]
-
-\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
-\over
- \Pi_F\ A\ B  : F\rset_i}
+\[\semd{\Gamma,x:A} = \Sigma_F\ \semd\Gamma\ \semd{\Gamma.A}\]
+\subsubsection{Pi}
+Our obligation is to construct
+\[
+\begin{prooftree}
+\[
+  \Delta ; \Gamma \prov  A : \rset_i\qquad
+  \Delta ; \Gamma, x:A \prov  B : \rset_i
+\justifies
+  \Delta ; \Gamma \prov (x:A)\to B : \rset_i
 \]
-
+  \justifies
+  \semd {\Gamma.(x:A)\to B} : G(\semd \Gamma \to_F \eta\rset_i)
+\end{prooftree}
+\]
+From the induction hypothesis we have
+\[  \semd {\Gamma.A} : G(\semd \Gamma \to_F \eta\rset_i)\]
+\[  \semd {(\Gamma,x:A).B} : G(\semd {\Gamma,x:A} \to_F \eta\rset_i)\]
+that latter one being equivalent to
+\[  \semd {(\Gamma,x:A).B} : G(\Sigma_F\ \semd {\Gamma}\ \semd{\Gamma.A} \to_F \eta\rset_i)\]
+So we need some principle that tells us how to do
+\[
+G(\Sigma_F\ \semd {\Gamma}\ \semd{\Gamma.A} \to_F \eta\rset_i)
+\qquad G(\semd \Gamma \to_F \eta\rset_i)
+\over
+G(\semd \Gamma \to_F \eta\rset_i)\]
 \end{document}
