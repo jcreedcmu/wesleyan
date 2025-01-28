@@ -1539,4 +1539,52 @@ Then $\eta$ is a map $E \to E$. And maybe $G$ is a partial map $E \to E$.
 They happen to have the properties that
 \[ \forall x \in E . \tau (\eta x) = G\eta\epsilon (\tau x) \]
 Ugh no this is still a mess.
+
+\section{Another Crack at Syntax Interpretation}
+
+%% Let's do the curried abstraction in the base language. We define
+%% \[\Gamma : \rctx \qquad \Gamma \prov A : \rset_i \over \Gamma \sto A : \rset_i\]
+%% by
+%% \[\cdot \sto A = A \qquad (\Gamma, x:A) \sto B = \Gamma \sto ((x:A) \to B)\]
+The theorem to be proved is
+
+\[{\Delta \prov \Gamma : \rctx
+\over
+\Gamma \sto \rset_i : F\rset_{i+1}}
+\qquad
+{\Delta \prov \Gamma : \rctx \qquad  B : G(\Gamma \sto  \rset_i)
+\over
+\Gamma \sto B : F\rset_i}\]
+
+
+%% {\Delta \prov\Gamma : \rctx_i
+%% \over
+%% \sem\Gamma_\Delta : F \rset_i
+%% }\qquad
+
+\[{\Delta ; \Gamma \prov A : \rset_i
+\over
+\sem {\Gamma.A}_\Delta : G( \Gamma \sto \rset_i)}
+\qquad
+{\Delta ; \Gamma \prov M : A
+\over
+\sem {\Gamma.M}_\Delta : G( \Gamma\sto \sem{\Gamma.A}_\Delta)}\]
+
+\subsection{Proof}
+\subsubsection{Empty Context}
+\[\cdot \sto \rset_i = \eta\rset_i\]
+\[\cdot \sto B = B\]
+\subsubsection{Context Extension}
+\[(\Gamma,x:A) \sto B = ?\]
+
+\[{\Delta \prov \Gamma : \rctx \qquad  \Gamma \prov A : \rset_i \qquad
+ B : G((\Gamma,x:A) \sto  \rset_i)
+\over
+(\Gamma,x:A) \sto B : F\rset_i}\]
+
+\[{A:F\rset_i\qquad B : G(A \to_F \eta\rset_i)
+\over
+ \Pi_F\ A\ B  : F\rset_i}
+\]
+
 \end{document}
