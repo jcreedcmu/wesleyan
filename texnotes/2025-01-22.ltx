@@ -1581,7 +1581,31 @@ From the induction hypothesis we have
 \[  \semd {(\Gamma,x:A).B} : G(\semd {\Gamma,x:A} \to_F \eta\rset_i)\]
 that latter one being equivalent to
 \[  \semd {(\Gamma,x:A).B} : G(\Sigma_F\ \semd {\Gamma}\ \semd{\Gamma.A} \to_F \eta\rset_i)\]
-It would suffice if we had some principle like
+So we set
+\[ \semd {\Gamma.(x:A)\to B} = \Pi^{\semd \Gamma}_G\ \semd{\Gamma.A}\ \semd{(\Gamma,x:A).B}\]
+\subsubsection{Lambda}
+\[
+\begin{prooftree}
+\[
+  \Delta ; \Gamma, x:A \prov M : B
+\justifies
+  \Delta ; \Gamma \prov \lambda x . M : (x:A)\to B
+\]
+\justifies
+    \semd {\Gamma.\lambda x. M} : G( \Pi_F\ \semd\Gamma\ \semd{\Gamma.(x:A)\to B})
+\end{prooftree}
+\]
+From the induction hypothesis we have
+\[    \semd {(\Gamma, x:A). M} : G( \Pi_F\ \semd{\Gamma,x:A}\ \semd{(\Gamma,x:A).B})\]
+So what we have is equivalent to
+\[     G( \Pi_F\ (\Sigma_F\ \semd\Gamma\ \semd{\Gamma.A})\ \semd{(\Gamma,x:A).B})\]
+and what we need is equivalent to
+\[G( \Pi_F\ \semd\Gamma\ (\Pi^{\semd \Gamma}_G\ \semd{\Gamma.A}\ \semd{(\Gamma,x:A).B})\]
+So we set
+\[ \semd {\Gamma.(\lambda x. M)} = \mathbf{Curry}_G\ \semd {(\Gamma, x:A). M}\]
+\subsection{Library Functions}
+
+\subsubsection{Contextual $\Pi$ under $G$}
 \[
 C : F\rset_i
 \qquad
@@ -1590,6 +1614,25 @@ A : G(C \to_F \eta\rset_i)
 B : G(\Sigma_F\ C\ A \to_F \eta\rset_i)
 \over
 \Pi_G^C\ A\ B : G(C \to_F \eta\rset_i)\]
-Because then we could set
-\[ \semd {\Gamma.(x:A)\to B} = \Pi^{\semd \Gamma}_G\ \semd{\Gamma.A}\ \semd{(\Gamma,x:A).B}\]
+
+\subsubsection{Currying under $G$}
+\[
+C : F\rset_i
+\qquad
+A : G(C \to_F \eta\rset_i)
+\qquad
+B : G(\Sigma_F\ C\ A \to_F \eta\rset_i)
+\qquad
+M : G(\Pi_F\ (\Sigma_F\ C\ A)\ B)
+\over
+\mathbf{Curry}_G\ M : G(\Pi_F\ C\  (\Pi_G^C\ A\ B))\]
+
+
+\subsubsection{Contextual $G$-Pairing}
+\[{A\ B\ C : F\rset_i \qquad M: G(C \to_F A) \qquad N : G(C \to_F B)
+\over
+\langle M, N \rangle^C_G : G(C \to_F A \x_F B)}
+\]
+
+
 \end{document}
