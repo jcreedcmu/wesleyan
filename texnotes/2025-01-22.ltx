@@ -1233,7 +1233,6 @@ then we can set
 \[\bar F_\phi ((x : A) \to B) = \{ f : F_{\partial\phi} ((x : A) \to B) ,\]
 \[ \beta: (x : \bar F_\phi A) \to \fiber (\bar F_{\phi[x/x]}B, f \star \partial x) \}\]
 
-\vfil\eject
 \section{Dependent Applicative Functors}
 Some meditation on what operations ought to exist led me to the following slightly expanded notion.
 We should have, at a minimum,
@@ -1634,5 +1633,97 @@ M : G(\Pi_F\ (\Sigma_F\ C\ A)\ B)
 \langle M, N \rangle^C_G : G(C \to_F A \x_F B)}
 \]
 
+\section{Programming is Hard}
+Doing all this specific programming with $F$s and $G$s is tedious. Is
+there some shortcut? The real thing I hope to be true is: For any
+dependent applicative functor $F$, there exists a dependent
+applicative functor $\bar F$ and a morphism $\partial : \bar F \to F$
+with nice enough properties that I get expected parametricity theorems
+out of it.
 
+What I care about with respect to a definition of daf is that
+I can interpret all syntax through it. So I do want that
+\def\semf#1{\sem{#1}_F}
+\[{\prov_F\Gamma : \rctx_i
+\over
+\semf\Gamma : F \rset_i
+}\qquad{ \Gamma \prov_F A : \rset_i
+\over
+\semf {\Gamma.A} : G(\semf \Gamma \to_F \eta\rset_i)}
+\qquad
+{ \Gamma \prov_F M : A
+\over
+\semf {\Gamma.M} : G( \Pi_F\ \semf\Gamma\ \semf{\Gamma.A})}\]
+And I note that these have, as consequences, thanks to application under $F$ or $G$,
+\[{ \Gamma \prov_F A : \rset_i \qquad \prov g : G(\semf \Gamma)
+\over
+\semf {\Gamma.A} \cdot_G g: F\rset_i}
+\qquad
+{ \Gamma \prov_F M : A\qquad \prov g : G(\semf \Gamma)
+\over
+\semf {\Gamma.M} \odot_G g : G( \semf{\Gamma.A} \cdot_G g)}\]
+\subsection{Defining Dep'd't. App. functors}
+I could imagine using this as a definition of a daf. A daf is a choice of
+\begin{itemize}
+\item For each level $i$, a type $V_i : \rset_{i+1}$. {\color{gray}(think: $V_i = F\rset_i$)}
+\item For each level $i$, a map $E : V_i \to \rset_i $. {\color{gray}(think: $E = G$)}
+\item For each context $\Gamma:\rctx_i$, a type $\sem \Gamma : V_i$. {\color{gray}(think: $\sem\Gamma = \semf\Gamma$)}
+\item For each $\Gamma\prov A : \rset_i$, an element  $\sem{\Gamma.A} : E\sem\Gamma \to V_i$. {\color{gray} (think: $\sem{\Gamma.A} = \lambda g. \semf{\Gamma.A} \cdot_G g $)}
+\item For each $\Gamma\prov M:A$, an element  $\sem{\Gamma.M} : (g : E\sem\Gamma) \to E(\sem A\ g)$. \\
+{\color{gray}(think: $\sem{\Gamma.M} = \lambda g. \semf{\Gamma.M} \odot_G g $)}
+\end{itemize}
+Subject to some as yet undetermined axioms. Probably some compatibility with substitutions at the very least.
+Also
+\begin{enumerate}
+\item $E \sem \cdot \equiv \top$
+\item $E \sem {\Gamma, x :A} \equiv \Sigma\ (E \sem \Gamma)\ (E \o \sem{\Gamma.A})$
+\item $E(\sem {\rset_i}\ *) \equiv V_i : \rset_{i+1}$
+\end{enumerate}
+
+We can recover $F, G, \eta$ like so:
+
+\[{A : \rset_i \over FA = E (\sem{ A}\ *) : \rset_i}
+\qquad {B : F\rset_i \over G\ B  = E\ B : \rset_i}
+\qquad {M : A \over \eta\ M = \sem M\ * : FA}\]
+
+\subsubsection{An Axiom for $\Pi$}
+I want to say something about what $\sem{\Gamma.(x:A)\to B}$ is constrained to be.
+On the one hand,
+\[\sem{\Gamma.(x:A)\to B} : E\sem\Gamma \to V_i\]
+\[g : E \sem\Gamma \prov \sem{\Gamma.(x:A)\to B}\ g :  V_i\]
+\[g : E \sem\Gamma \prov E(\sem{\Gamma.(x:A)\to B}\ g) :  \rset_i\]
+On the other hand, also
+\[g : E \sem\Gamma \prov E(\sem{\Gamma.A}\ g) :  \rset_i\]
+\[ \prov \sem{(\Gamma,x:A).B} : \sem{\Gamma,x:A} \to V_i\]
+\[ \prov \sem{(\Gamma,x:A).B} : \Sigma\ E\sem{\Gamma}\ (E \o \sem{\Gamma.A}) \to V_i\]
+\[g:E\sem\Gamma, a : E (\sem{\Gamma.A}\ g) \prov \sem{(\Gamma,x:A).B}\ \langle g, a\rangle :  V_i\]
+\[g:E\sem\Gamma, a : E (\sem{\Gamma.A}\ g) \prov E(\sem{(\Gamma,x:A).B}\ \langle g, a\rangle) :  \rset_i\]
+\[g:E\sem\Gamma \prov (a : E (\sem{\Gamma.A}\ g)) \to  E(\sem{(\Gamma,x:A).B}\ \langle g, a\rangle) :  \rset_i\]
+So my requirement seems to be
+\[(g:E\sem\Gamma) \to \]
+\[E(\sem{\Gamma.(x:A)\to B}\ g) \equiv (a : E (\sem{\Gamma.A}\ g)) \to  E(\sem{(\Gamma,x:A).B}\ \langle g, a\rangle)\]
+But this is {\color{red} wrong, wrong, wrong}. Check it for empty $\Gamma$ and the reader applicative and I see it claiming
+\[S \to (A \to B) \equiv (S \to A) \to (S\to B)\]
+and that's clearly not true.
+\subsection{Abstracting Away $E$}
+I'm not sure this is a good idea, but I could instead `bake $E$ into $\sem$` and say:
+
+\begin{itemize}
+\item For each context $\Gamma:\rctx_i$, a type $\sem \Gamma : \rset_i$.
+\item For each level $i$, a map $E : F\rset_i \to \rset_i $.
+\item For each $\Gamma\prov A : \rset_i$, an element  $\sem{\Gamma.A} : \sem\Gamma \to \rset_i$.
+\item For each $\Gamma\prov M:A$, an element  $\sem{\Gamma.M} : (g : \sem\Gamma) \to (\sem A\ g)$.
+\end{itemize}
+Subject to some as yet undetermined axioms. Probably some compatibility with substitutions at the very least.
+Also
+\begin{enumerate}
+\item $ \sem \cdot \equiv \top$
+\item $ \sem {\Gamma, x :A} \equiv \Sigma\ \sem \Gamma\ \sem{\Gamma.A}$
+\end{enumerate}
+
+We can recover $F, G, \eta$ like so:
+
+\[{A : \rset_i \over FA = \sem{ A}\ * : \rset_i}
+\qquad {B : F\rset_i \over G\ B  = E\ B : \rset_i}
+\qquad {M : A \over \eta\ M = \sem M\ * : FA}\]
 \end{document}
