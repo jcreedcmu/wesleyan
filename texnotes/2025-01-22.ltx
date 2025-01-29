@@ -1845,36 +1845,15 @@ A {\em boundary structure} on a functor $G : \D \to \C$ consists of:
   \[\kappa_{C_1,C_2} : FC_1 \x FC_2 \to F(C_1 \x C_2)\]
 \item  Some applicative-like axioms among these probably.
 \end{enumerate}
-Let's define a category $\D' := (\rid_\C,G)$. We get
-projections $G'$ and $\partial$ for free, and even a natural transformation $\rho$ in the following diagram:
+
+Given such a structure, we can define a category $\D' := (\rid_\C,G)$,
+which determines morphisms $G', \partial$ and $\rho$ in the following diagram:
 \[\begin{tikzcd}
   \D' \ar[d, "G'", swap]\ar[r,"\partial"]&  \D\ar[d, "G"]\\
 \C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow, "\rho"]&\C
 \end{tikzcd}\]
-We also have:
-\[\begin{tikzcd}
- \C \ar[d, equal]\ar[r,"H"]&  \D\ar[d, "G"]\\
-\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow,"\eta"]&\C
-\end{tikzcd}\]
 
-{\color{gray}We could construct a functor $H':\C \to \D'$ like so: given an object of $\C$, make the
-comma category object that is the morphism $\eta_C : C \to GHC$. We have the commutative diagrams
-\[\begin{tikzcd}
-&\C\ar[d, "H'"]\ar[dl,equal]\ar[dr,"H"]\\
-\C&\D'\ar[l,"G'"]\ar[r,"\partial",swap]&\D
-\end{tikzcd}\]
-Hmm. This actually seems too tidy. Then $G'H' = \rid$ and we want a lax cell there, not
-equality.}
 
-So let's instead say that a {\em parametricity structure} on top of a boundary structure
-has for some of its data:
+Say that a boundary structure {\em has parametricity} when there exists a boundary structure on $G'$.
 
-\begin{enumerate}
-\item  $H' : \C \to \D'$
-\item
-\[\begin{tikzcd}
-  \C \ar[d, equal]\ar[r,"H'"]&  \D'\ar[d, "G'"]\\
-\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow, "\eta'"]&\C
-\end{tikzcd}\]
-\end{enumerate}
 \end{document}
