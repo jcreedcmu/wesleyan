@@ -1903,37 +1903,36 @@ preserves exponentials, then $\eta' : A \imp B \to G'(H'A \imp H'B)$.
 \subsubsection{Products in the Comma Category}
 Surely the category $(\rid_\C, G)$ has products, assuming enough other things nearby have products.
 
-An object is in general a pair $(C, D, r : C \to GD)$. In my example, $(R, (A, B), r : R \to A \x B)$.
-So we're doing
-\[ (C_1, D_1, r_1 : C_1 \to GD_1) \imp (C_2, D_2, r_2 : C_2 \to GD_2) \eqno(*)\]
-Or in the special case,
-\[ (R_1, (A_1, B_1), r_1 : R_1 \to A_1 \x B_1) \imp (R_2, (A_2, B_2), r_2 : R_2 : A_2 \x B_2)\]
-
+An object is in general a pair $(C, D, r : C \to GD)$.
+% In my example, $(R, (A, B), r : R \to A \x B)$.
+So we need to find the product
+\[ (C_1, D_1, r_1 : C_1 \to GD_1) \x (C_2, D_2, r_2 : C_2 \to GD_2)\]
+%% Or in the special case,
+%% \[ (R_1, (A_1, B_1), r_1 : R_1 \to A_1 \x B_1) \x (R_2, (A_2, B_2), r_2 : R_2 : A_2 \x B_2)\]
+I'm pretty sure this is just
+\[ (C_1 \x C_2, D_1 \x D_2, p \o (r_1 \x r_2) : C_1 \x C_2 \to G(D_1 \x D_2))\]
+as long as there is a map $p : GD_1 \x GD_2 \to G(D_1 \x D_2)$. But it seems pretty reasonable
+to ask for this. This is an enhanced version of pairing.
 \subsubsection{Exponentials in the Comma Category}
 Surely the category $(\rid_\C, G)$ has exponentials, assuming enough other things nearby have exponentials.
+Let's construct them.
+We need
+\[ (C_1, D_1, r_1 : C_1 \to GD_1) \imp (C_2, D_2, r_2 : C_2 \to GD_2) \eqno(*)\]
 
-So I first want to construct an object $R \in \C$ that represents all the relation homomorphisms
+We can construct a map
+\[\gamma :=  \lambda (G \mathsf{ev}_\D \o p) : G(D_1 \imp D_2) \to (GD_1 \imp GD_2)\]
+that exhibits how $G$ distributes over exponentials.
+Here $\mathsf{ev}_\D$ is the exponential counit in $\D$,
+and $\lambda$ is the operation of taking the adjoint transpose for exponentials in $\C$.
+
+We construct $C$ as a pullback:
 \[\begin{tikzcd}
-A_1\ar[d]&R_1\ar[l]\ar[r]\ar[d]&B_1\ar[d]\\
-A_2&R_2\ar[l]\ar[r]&B_2
-\end{tikzcd}\]
-which is the pullback
-\[\begin{tikzcd}
-C \ar[r]\ar[d]\pbck&(A_1 \imp A_2) \x (B_1  \imp B_2) \ar[d]\\
-R_1 \imp R_2\ar[r]&R_1 \imp A_2  \x B_2
-\end{tikzcd}\]
-And more generally
-\[\begin{tikzcd}
-C \ar[r, "\pi_2"]\ar[d, "\pi_1",swap]\pbck&G(D_1 \imp D_2) \ar[d, "G(\dash) \o r_1"]\\
+C \ar[r, "\pi_2"]\ar[dd, "\pi_1",swap]\pbck&G(D_1 \imp D_2) \ar[d, "\gamma"]\\
+&GD_1 \imp GD_2\ar[d,"\dash\o r_1"]\\
 C_1 \imp C_2\ar[r, "r_2 \o \dash",swap]&C_1 \imp GD_2\\
 \end{tikzcd}\]
-I guess here we're assuming $G$ lax-preserves exponentials: we at least have a map
-\[G(D_1 \imp D_2) \to (GD_1 \imp GD_2)\]
-which checks out in the product adjunction example.
 
-Second, I think the boundary object is in fact $D_1 \imp D_2$.
-Therefore, the top projection of the pullback diagram is the relation morphism.
-We have enough well-typed data to claim that
+We claim
 \[(C, (D_1 \imp D_2), \pi_2)\]
 is the exponential desired in $(*)$.
 \end{document}
