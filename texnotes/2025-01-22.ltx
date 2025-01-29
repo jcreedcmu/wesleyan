@@ -10,6 +10,9 @@
 \usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{tcolorbox}
+\usepackage{stackengine}
+\newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
+
 \tcbuselibrary{breakable}
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
@@ -122,7 +125,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\btwo{\mathbf{2}}
 \def\bone{\mathbf{1}}
 
-\newarrow {Equiv} =====
 \def\FinSet{\mathbf{FinSet}}
 \def\x{\times}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
@@ -185,7 +187,7 @@ boxrule=0pt,boxsep=0pt,breakable}
    commutative diagrams/.cd,
    arrow style=tikz,
    diagrams={>=stealth}}
-
+\tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
 \section{Applicative Parametricity}
 I notice that the requirements of $\partial\Delta \lol \dash$
 and $\Delta \lol \dash$ look a lot like being a `dependent applicative functor'.
@@ -1726,4 +1728,111 @@ We can recover $F, G, \eta$ like so:
 \[{A : \rset_i \over FA = \sem{ A}\ * : \rset_i}
 \qquad {B : F\rset_i \over G\ B  = E\ B : \rset_i}
 \qquad {M : A \over \eta\ M = \sem M\ * : FA}\]
+
+\section{More Categories}
+Here's a different way of organizing these ideas:
+Suppose $F$ is an applicative functor $\rcat \to \rcat$.
+I'm thinking of as an example $F\C = \C^2$. Then the `dependent' part is a functor
+that is an algebra for this $F$. A functor $F\C \to \C$ takes a pair of objects
+and yields an object: so, for example, $\dash\x\dash : F\C \to \C$. Let's try to dream up
+what it would mean to have parametricity.
+
+It might sound like: Given an applicative
+\[F : \rcat \to \rcat \qquad \eta_\C : \C \to F\C
+\qquad \langle\_,\_\rangle : F\C \x F\D \to F(\C \x \D)\]
+ and given an algebra
+\[\C_0 : \rcat \qquad G:F \C_0 \to \C_0\]
+maybe under the right circumstances there exists another applicative
+\[F' : \rcat \to \rcat \qquad \eta'_\C : \C \to F'\C
+\qquad \langle\_,\_\rangle' : F'\C \x F'\D \to F'(\C \x \D)\]
+and another algebra
+\[\C_0' : \rcat \qquad G':F' \C_0' \to \C_0'\]
+and a natural transformation $d : F'\to F$, and a functor $\partial : \C_0' \to \C_0$,
+such that either of the following equivalent digrams commutes:
+\[
+\begin{tikzcd}
+F'\C_0'\ar[d,"G'",swap] \ar[r,"d_{\C_0'}"]&F\C_0' \ar[r,"F\partial"]&F\C_0 \ar[d,"G"]\\
+\C_0' \ar[rr,"\partial",swap]&& \C_0
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+F'\C_0'\ar[d,"G'",swap] \ar[r,"F'\partial"]&F'\C_0 \ar[r,"d_{\C_0}"]&F\C_0 \ar[d,"G"]\\
+\C_0' \ar[rr,"\partial",swap]&& \C_0
+\end{tikzcd}
+\]
+Let's suppose that $\Cat$ assumes nice structure in its objects;
+like lccc structure for dependent types, and even universes maybe.
+
+The main requirement I want for universes is that the fiber of $ F' \rset_i$
+over some element $x \in F\rset_i$ resembles the type of relations $G x \to \rset_i$.
+
+Here's something I didn't notice before: $G x \to \rset_i$ itself is the reader applicative
+for type $G x$, applied to $\rset_i$. I wonder if that's useful to know.
+
+Anyway, in my current categorical setup, what is `an element of $F\rset_i$'? It's an object
+of $F\C_0$.
+
+Hm, is the $\C_0/\C'_0$ distinction unnecessary? I think it might be.
+This is my ``home territory'' language of types. The applicatives are
+what extend it.
+
+Ok so maybe ``the fiber of $F'\rset_i$ over a point in $F\rset_i$'' is something like
+the set of objects in $F'\C_0$ that live over a chosen object in $F\C_0$ via the functor
+$d_{\C_0} : F'\C_0 \to F\C_0$.
+
+\subsection{Compress}
+Suppose we have an applicative $F:\rcat \to \rcat$ and a particular category $\C$
+and an $F$-algebra $G : F\C \to \C$. Then assuming whatever we might want to,
+we might conclude the existence of an applicative $F' : \rcat \to \rcat$
+with a natural transformation $\partial : F' \to F$ and an $F'$-algebra
+$G' : F'\C \to \C$ such that there is a lax cell
+\[\begin{tikzcd}
+  F'\C \ar[d, "G'", swap]\ar[r,"\partial_\C"]&  F\C\ar[d, "G"]\\
+\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow]&\C
+\end{tikzcd}\]
+That is: if we start with an object of $F'\C$, which is a tuple of objects of $\C$ together
+with a bridge, we can do two things with it. Compute, via $G'$ a genuine type that represents
+all that data in $\C$, or else erase the bridge data, then compute simply the product type
+of all the boundary types, and land in $\C$. The lax cell tells us that there is a map
+from the full encoded type to the erased encoded type.
+
+This is a natural transformation from the functor $G'$ to the functor $G \o \partial_\C$.
+
+Now an object $B\in F\C$ is like a tuple of types. So an object in $F'\C$ that lies over
+it should be a tuple of types together with a relation over them. A `relation over them'
+is like a map $GB \to \rset_i$.
+But that should be equivalent to a {\em choice} of object  $C \in \C$ together with a map
+$C \to GB$.
+
+So an object $X$ in $F'\C$ should be something like a choice of map $C \to G \partial_\C X$.
+$G'$ projects out the $C$.
+
+In particular, I can {\em define} $F'\C$ to be the comma category $(\rid_\C, G)$ whose
+objects consist of an object $X \in \C$, an object $Y \in F\C$, and a morphism $f : X \to GY$.
+The maps $G'$ and $\partial_\C$ simply project out the $X$ and $Y$. The lax cell comes from the
+data $f$.
+
+This doesn't really tell us how to conceive of $F'$ as a functor $\rcat \to \rcat$,
+although I can think of it as a functor $\rcat/C \to \rcat$:
+\[\begin{tikzcd}
+  (\zeta,G) \ar[d, "\pi_1", swap]\ar[r,"\pi_2"]&  F\C\ar[d, "G"]\\
+\D\ar[r,"\zeta",swap]\ar[ur,shorten <>=10pt,Rightarrow]&\C
+\end{tikzcd}\]
+What of the reflexive structure of $F$ and $G$? Remember the applicative structure on $F$
+gives us a natural transformation $\eta_\C : \C \to F\C$. To say that every term $M$ can be turned into
+$\langle M, M\rangle$ is to say that there is a natural transformation $\rid_\C \to G \o \eta_\C$.
+\[\begin{tikzcd}
+ \C \ar[d, equal]\ar[r,"\eta_\C"]&  F\C\ar[d, "G"]\\
+\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow,"\rho"]&\C
+\end{tikzcd}\]
+I want to state a corresponding property for $F'$, like
+\[\begin{tikzcd}
+ \C \ar[d, equal]\ar[r,"\eta'_\C"]&  F'\C\ar[d, "G'"]\\
+\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow,"\rho'"]&\C
+\end{tikzcd}\]
+but I don't know what $\eta'_\C$ is. Is there a canonical map
+\[ \C \to (\rid_\C, G)\]
+? Ah, sure there is. It comes directly from the previous cell.
+For an object $C\in \C$, we choose $C \in\C$, and $\eta C \in F\C$,
+and then the obligatory map $C \to G\eta C$ is exactly $\rho_C$.
 \end{document}
