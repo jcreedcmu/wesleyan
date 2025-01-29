@@ -1835,6 +1835,9 @@ but I don't know what $\eta'_\C$ is. Is there a canonical map
 ? Ah, sure there is. It comes directly from the previous cell.
 For an object $C\in \C$, we choose $C \in\C$, and $\eta C \in F\C$,
 and then the obligatory map $C \to G\eta C$ is exactly $\rho_C$.
+
+Hm, actually below I conclude I don't want to use this canonical map, and instead
+ask for another such one of the same type as data.
 \subsection{Reducing Scope}
 Maybe I don't need a whole applicative. Let's try:
 A {\em boundary structure} on a functor $G : \D \to \C$ consists of:
@@ -1854,6 +1857,28 @@ which determines morphisms $G', \partial$ and $\rho$ in the following diagram:
 \end{tikzcd}\]
 
 
-Say that a boundary structure {\em has parametricity} when there exists a boundary structure on $G'$.
+Say that a boundary structure {\em has parametricity} when there exists a boundary structure like
+ $(H', \eta', \kappa', \ldots)$ on $G'$,
+which satisfies some nice homomorphism-ish properties that I am going to try to determine. One might be
+\[\begin{tikzcd}
+  \D' \ar[from=d, "H'"]\ar[r,"\partial"]&  \D\ar[from=d, "H",swap]\\
+\C\ar[r,equal]&\C
+\end{tikzcd}\]
 
+\subsection{The Intended Example}
+The boundary structure I want to work with is a straightforward one
+ over $G := \_\x\_ : \rset_i^2 \to \rset_i$.
+I choose $H : \rset_i \to \rset_i^2 = \lambda A . ( A, A)$.
+I choose $\eta_A : A \to A \x A = \lambda a . ( a, a)$.
+
+Given that, $\D'$ is the category whose objects are relations with known boundaries
+ $(R, (A, B), p : R \to A \x B)$, where $R,A,B \in \rset_i$. The functor $G'$ takes
+such a thing to just the type $R$, and $\partial$ takes it to the tuple $(A,B)$.
+
+So to assume a boundary structure on $G'$ is first of all to say that there is a functor $H': \C \to \D'$.
+This should take any type to bridge relation in that type. We also have $\eta'$ which says that
+there are reflexivity bridges.
+
+Wait a boundary structure is just an adjunction missing the counit with some extra product-preservation
+structure. That's interesting.
 \end{document}
