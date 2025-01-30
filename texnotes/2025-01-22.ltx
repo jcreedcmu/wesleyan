@@ -2090,6 +2090,137 @@ Here's what the $f$ part of $H'(C_1 \x C_2)$ must be:
   G'(H'C_1 \x H'C_2)\ar[r,"p^{H'}"]&  G'H'(C_1 \x C_2)\ar[r,"\gamma"]& G\partial H'(C_1\x C_2)\ar[r, "\theta",equal]&GH(C_1 \x C_2)
 \end{tikzcd}
 \]
+\subsubsection{Exponentials in $\D'$}
+We'd like to construct
+\[ (C_1, D_1, r_1 : C_1 \to GD_1)\imp (C_2, D_2, r_2 : C_2 \to GD_2) \]
+in $\D'$. We claim it arises by means of a pullback. We first define
+some utilities. If $f : A \to B$, then
+\[\dash \bullet f : (B \imp C) \to (A \imp C) = \lambda (\mathsf{ev} \o (\rid_{B\imp C} \x f))\]
+\[ f \bullet \dash : (C \imp A) \to (C \imp B) = \lambda (f \o \mathsf{ev})\]
+\[\phi^G : G(D_1 \imp D_2) \to (GD_1 \imp GD_2)  = \lambda(G\mathsf{ev} \o p^G)\]
+Then we define $C$ by the pullback
+% https://q.uiver.app/#q=WzAsNSxbMCwwLCJDIl0sWzAsMiwiQ18xIFxcUmlnaHRhcnJvdyBDXzIiXSxbMSwwLCJHKERfMVxcUmlnaHRhcnJvdyBEXzIpIl0sWzEsMiwiQ18xIFxcUmlnaHRhcnJvdyBHRF8yIl0sWzEsMSwiKEdEXzEgXFxSaWdodGFycm93IEdEXzIpIl0sWzAsMSwiXFxwaV8xIiwyXSxbMCwyLCJcXHBpXzIiXSxbMSwzLCJmXzIgXFxidWxsZXQgXFxkYXNoIiwyXSxbMiw0LCJcXHBoaV5HIl0sWzQsMywiXFxkYXNoIFxcYnVsbGV0IGZfMSJdXQ==
+\[\begin{tikzcd}
+	C\pbck & {G(D_1\Rightarrow D_2)} \\
+	& {GD_1 \Rightarrow GD_2} \\
+	{C_1 \Rightarrow C_2} & {C_1 \Rightarrow GD_2}
+	\arrow["{\pi_2}", from=1-1, to=1-2]
+	\arrow["{\pi_1}"', from=1-1, to=3-1]
+	\arrow["{\phi^G}", from=1-2, to=2-2]
+	\arrow["{\dash \bullet f_1}", from=2-2, to=3-2]
+	\arrow["{f_2 \bullet \dash}"', from=3-1, to=3-2]
+\end{tikzcd}\]
+and define the exponential in $\D'$ as the tuple $(C, D_1 \imp D_2, \pi_2)$.
+The evaluation map is the pair of maps
+ \[(\mathsf{ev}_{\bf C} \o (\pi_1 \times \rid), \mathsf{ev}_{\bf D})\]
+where we can see that that actually constitutes a morphism $(D'_1 \imp D_2') \x D_1' \to D_2'$ via the diagram
+% https://q.uiver.app/#q=WzAsMTAsWzAsMCwiQ1xcdGltZXMgQ18xIl0sWzIsMCwiRyhEXzEgXFxSaWdodGFycm93IERfMilcXHRpbWVzIEdEXzEiXSxbMywwLCJHKChEXzEgXFxSaWdodGFycm93IERfMilcXHRpbWVzIERfMSkiXSxbMCwyLCIoQ18xIFxcUmlnaHRhcnJvdyBDXzIpXFx0aW1lcyBDXzEiXSxbMCwzLCJDXzIiXSxbMywzLCJHRF8yIl0sWzEsMCwiRyhEXzFcXFJpZ2h0YXJyb3cgRF8yKVxcdGltZXMgQ18xIl0sWzEsMiwiKENfMSBcXFJpZ2h0YXJyb3cgR0RfMikgXFx0aW1lcyBDXzEiXSxbMSwxLCIoR0RfMSBcXFJpZ2h0YXJyb3cgR0RfMikgXFx0aW1lcyBDXzEiXSxbMiwxLCIoR0RfMSBcXFJpZ2h0YXJyb3cgR0RfMikgXFx0aW1lcyBHRF8xIl0sWzAsMywiXFxwaV8xXFx0aW1lcyBDXzEiLDJdLFszLDQsImV2X3tcXGJmIEN9IiwyXSxbMSwyLCJwXkciXSxbNCw1LCJmXzIiLDJdLFswLDYsIlxccGlfMiBcXHRpbWVzIDEiXSxbNiwxLCIxIFxcdGltZXMgZl8xIl0sWzMsNywiZl8yIFxcYnVsbGV0IFxcZGFzaCBcXHRpbWVzIENfMSIsMl0sWzYsOCwiXFxwaGleRyBcXHRpbWVzIENfMSJdLFs4LDcsIlxcZGFzaCBcXGJ1bGxldCBmXzEgXFx0aW1lcyBDXzEiXSxbMiw1LCJHKGV2X3tcXGJmIER9KSIsMl0sWzcsNSwiZXZfe1xcYmYgQ30iLDJdLFsxLDksIlxccGhpXkdcXHRpbWVzIEdEXzEiXSxbOCw5LCIxXFx0aW1lcyBmXzEiXSxbOSw1LCJldl97XFxiZiBDfSJdXQ==
+\[\begin{tikzcd}
+	{C\times C_1} & {G(D_1\Rightarrow D_2)\times C_1} & {G(D_1 \Rightarrow D_2)\times GD_1} & {G((D_1 \Rightarrow D_2)\times D_1)} \\
+	& {(GD_1 \Rightarrow GD_2) \times C_1} & {(GD_1 \Rightarrow GD_2) \times GD_1} \\
+	{(C_1 \Rightarrow C_2)\times C_1} & {(C_1 \Rightarrow GD_2) \times C_1} \\
+	{C_2} &&& {GD_2}
+	\arrow["{\pi_2 \times\rid}", from=1-1, to=1-2]
+	\arrow["{\pi_1\times \rid}"', from=1-1, to=3-1]
+	\arrow["{\rid \times f_1}", from=1-2, to=1-3]
+	\arrow["{\phi^G \times \rid}", from=1-2, to=2-2]
+	\arrow["{p^G}", from=1-3, to=1-4]
+	\arrow["{\phi^G\times \rid}", from=1-3, to=2-3]
+	\arrow["{G(ev_{\bf D})}", from=1-4, to=4-4]
+	\arrow["{\rid\times f_1}", from=2-2, to=2-3]
+	\arrow["{\dash \bullet f_1 \times \rid}", from=2-2, to=3-2]
+	\arrow["{ev_{\bf C}}", from=2-3, to=4-4]
+	\arrow["{f_2 \bullet \dash \times \rid}"', from=3-1, to=3-2]
+	\arrow["{ev_{\bf C}}"', from=3-1, to=4-1]
+	\arrow["{ev_{\bf C}}"', from=3-2, to=4-4]
+	\arrow["{f_2}"', from=4-1, to=4-4]
+\end{tikzcd}\]
+We also need to show how lambda abstraction is possible. If we have
+a map
+\[D'_1 \x D'_2 \to D'_3\]
+We need to build a map
+\[D'_1 \to D'_2 \imp D'_3\]
+That is, we have
+% https://q.uiver.app/#q=WzAsNSxbMCwwLCJDXzFcXHRpbWVzIENfMiJdLFsxLDAsIkNfMyJdLFsxLDIsIkdEXzMiXSxbMCwyLCJHKERfMVxcdGltZXMgRF8yKSJdLFswLDEsIkdEXzFcXHRpbWVzIEdEXzIiXSxbMCwxLCJjIl0sWzEsMiwiZl8zIl0sWzMsMiwiZCIsMl0sWzAsNCwiZl8xXFx0aW1lcyBmXzIiLDJdLFs0LDMsInBeRyIsMl1d
+\[\begin{tikzcd}
+	{C_1\times C_2} & {C_3} \\
+	{GD_1\times GD_2} \\
+	{G(D_1\times D_2)} & {GD_3}
+	\arrow["c", from=1-1, to=1-2]
+	\arrow["{f_1\times f_2}"', from=1-1, to=2-1]
+	\arrow["{f_3}", from=1-2, to=3-2]
+	\arrow["{p^G}"', from=2-1, to=3-1]
+	\arrow["Gd"', from=3-1, to=3-2]
+\end{tikzcd}\]
+and we want to construct the dashed lines in
+% https://q.uiver.app/#q=WzAsNyxbMSwxLCJDIl0sWzEsMywiQ18yIFxcUmlnaHRhcnJvdyBDXzMiXSxbMiwxLCJHKERfMlxcUmlnaHRhcnJvdyBEXzMpIl0sWzIsMywiQ18yIFxcUmlnaHRhcnJvdyBHRF8zIl0sWzIsMiwiKEdEXzIgXFxSaWdodGFycm93IEdEXzMpIl0sWzAsMCwiQ18xIl0sWzIsMCwiR0RfMSJdLFswLDEsIlxccGlfMSIsMl0sWzAsMiwiXFxwaV8yIl0sWzEsMywiZl8zIFxcYnVsbGV0IFxcZGFzaCIsMl0sWzIsNCwiXFxwaGleRyJdLFs0LDMsIlxcZGFzaCBcXGJ1bGxldCBmXzIiXSxbNSw2LCJmXzEiLDJdLFs1LDAsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFs2LDIsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dXQ==
+\[\begin{tikzcd}
+	{C_1} && {GD_1} \\
+	& C\pbck & {G(D_2\Rightarrow D_3)} \\
+	&& {(GD_2 \Rightarrow GD_3)} \\
+	& {C_2 \Rightarrow C_3} & {C_2 \Rightarrow GD_3}
+	\arrow["{f_1}"', from=1-1, to=1-3]
+	\arrow[dashed, from=1-1, to=2-2]
+	\arrow[dashed, from=1-3, to=2-3]
+	\arrow["{\pi_2}", from=2-2, to=2-3]
+	\arrow["{\pi_1}"', from=2-2, to=4-2]
+	\arrow["{\phi^G}", from=2-3, to=3-3]
+	\arrow["{\dash \bullet f_2}", from=3-3, to=4-3]
+	\arrow["{f_3 \bullet \dash}"', from=4-2, to=4-3]
+\end{tikzcd}\]
+To do this we use the pullback property:
+% https://q.uiver.app/#q=WzAsNyxbMSwxLCJDIl0sWzAsMywiQ18yIFxcUmlnaHRhcnJvdyBDXzMiXSxbMiwxLCJHKERfMlxcUmlnaHRhcnJvdyBEXzMpIl0sWzIsMywiQ18yIFxcUmlnaHRhcnJvdyBHRF8zIl0sWzIsMiwiKEdEXzIgXFxSaWdodGFycm93IEdEXzMpIl0sWzAsMCwiQ18xIl0sWzIsMCwiR0RfMSJdLFswLDEsIlxccGlfMSIsMl0sWzAsMiwiXFxwaV8yIl0sWzEsMywiZl8zIFxcYnVsbGV0IFxcZGFzaCIsMl0sWzIsNCwiXFxwaGleRyJdLFs0LDMsIlxcZGFzaCBcXGJ1bGxldCBmXzIiXSxbNSw2LCJmXzEiXSxbNSwwLCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbNiwyLCJcXGxhbWJkYSBkIl0sWzUsMSwiXFxsYW1iZGEgYyIsMl1d
+\[\begin{tikzcd}
+	{C_1} && {GD_1} \\
+	& C & {G(D_2\Rightarrow D_3)} \\
+	&& {(GD_2 \Rightarrow GD_3)} \\
+	{C_2 \Rightarrow C_3} && {C_2 \Rightarrow GD_3}
+	\arrow["{f_1}", from=1-1, to=1-3]
+	\arrow[dashed, from=1-1, to=2-2]
+	\arrow["{\lambda c}"', from=1-1, to=4-1]
+	\arrow["{G\lambda d}", from=1-3, to=2-3]
+	\arrow["{\pi_2}", from=2-2, to=2-3]
+	\arrow["{\pi_1}"', from=2-2, to=4-1]
+	\arrow["{\phi^G}", from=2-3, to=3-3]
+	\arrow["{\dash \bullet f_2}", from=3-3, to=4-3]
+	\arrow["{f_3 \bullet \dash}"', from=4-1, to=4-3]
+\end{tikzcd}\]
+We just need to ensure that the outer rectangle commutes. We do this by chasing
+the diagram
+% https://q.uiver.app/#q=WzAsMTQsWzAsMCwiQ18xXFx0aW1lcyBDXzIiXSxbMiwxLCJDXzMiXSxbMiwyLCJHKERfMVxcdGltZXMgRF8yKSJdLFsxLDEsIkdEXzFcXHRpbWVzIEdEXzIiXSxbMywwLCIoQ18yIFxcUmlnaHRhcnJvdyBDXzMpIFxcdGltZXMgQ18yIl0sWzAsNiwiR0RfMVxcdGltZXMgQ18yIl0sWzEsNiwiRyhEXzIgXFxSaWdodGFycm93IERfMykgXFx0aW1lcyBDXzIiXSxbMyw2LCIoR0RfMiBcXFJpZ2h0YXJyb3cgR0RfMylcXHRpbWVzIENfMiJdLFszLDUsIihDXzIgXFxSaWdodGFycm93IEdEXzMpXFx0aW1lcyBDXzIiXSxbMyw0LCJHRF8zIl0sWzMsMiwiKENfMiBcXFJpZ2h0YXJyb3cgR0RfMykgXFx0aW1lcyBDXzIiXSxbMiw1LCIoR0RfMiBcXFJpZ2h0YXJyb3cgR0RfMylcXHRpbWVzIEdEXzIiXSxbMSw0LCJHKERfMlxcUmlnaHRhcnJvdyBEXzMpXFx0aW1lcyBHRF8yIl0sWzIsNCwiRygoRF8yXFxSaWdodGFycm93IERfMylcXHRpbWVzIERfMikiXSxbMCwxLCJjIiwxXSxbMCwzLCJmXzFcXHRpbWVzIGZfMiIsMV0sWzMsMiwicF5HIiwyXSxbMCw0LCJcXGxhbWJkYSBjIFxcdGltZXNcXHJpZCJdLFs0LDEsImV2X3tcXGJmIEN9IiwyXSxbMCw1LCJmXzFcXHRpbWVzIFxccmlkIiwyXSxbNSw2LCJHXFxsYW1iZGEgZFxcdGltZXMgXFxyaWQiLDJdLFs2LDcsIntcXHBoaV5HfVxcdGltZXNcXHJpZCIsMl0sWzcsOCwie1xcZGFzaCBcXGJ1bGxldCBmXzJ9IFxcdGltZXMgXFxyaWQiLDJdLFs4LDksImV2X3tcXGJmIEN9IiwyXSxbMSw5LCJmXzMiLDJdLFsyLDksIkdkIiwxXSxbNCwxMCwiZl8zXFxidWxsZXRcXGRhc2ggXFx0aW1lcyBcXHJpZCJdLFsxMCw5LCJldl97XFxiZiBDfSJdLFs1LDMsIlxccmlkIFxcdGltZXMgZl8yIiwxXSxbMTEsOSwiZXZfe1xcYmYgQ30iLDFdLFs3LDExLCJcXHJpZCBcXHRpbWVzIGZfMiIsMV0sWzYsMTIsIlxccmlkXFx0aW1lcyBmXzIiLDFdLFsxMiwxMSwiXFxwaGleR1xcdGltZXNcXHJpZCIsMV0sWzMsMTIsIkdcXGxhbWJkYSBkXFx0aW1lcyBHXFxyaWQiLDFdLFsxMyw5LCJHZXZfe1xcYmYgRH0iLDFdLFsxMiwxMywicF5HIiwxXSxbMiwxMywiRyhcXGxhbWJkYSBkIFxcdGltZXNcXHJpZCkiLDFdXQ==
+\[\begin{tikzcd}
+	{C_1\times C_2} &&& {(C_2 \Rightarrow C_3) \times C_2} \\
+	& {GD_1\times GD_2} & {C_3} \\
+	&& {G(D_1\times D_2)} & {(C_2 \Rightarrow GD_3) \times C_2} \\
+	\\
+	& {G(D_2\Rightarrow D_3)\times GD_2} & {G((D_2\Rightarrow D_3)\times D_2)} & {GD_3} \\
+	&& {(GD_2 \Rightarrow GD_3)\times GD_2} & {(C_2 \Rightarrow GD_3)\times C_2} \\
+	{GD_1\times C_2} & {G(D_2 \Rightarrow D_3) \times C_2} && {(GD_2 \Rightarrow GD_3)\times C_2}
+	\arrow["{\lambda c \times\rid}", from=1-1, to=1-4]
+	\arrow["{f_1\times f_2}"{description}, from=1-1, to=2-2]
+	\arrow["c"{description}, from=1-1, to=2-3]
+	\arrow["{f_1\times \rid}"', from=1-1, to=7-1]
+	\arrow["{ev_{\bf C}}"', from=1-4, to=2-3]
+	\arrow["{f_3\bullet\dash \times \rid}", from=1-4, to=3-4]
+	\arrow["{p^G}"', from=2-2, to=3-3]
+	\arrow["{G\lambda d\times G\rid}"{description}, from=2-2, to=5-2]
+	\arrow["{f_3}"', from=2-3, to=5-4]
+	\arrow["{G(\lambda d \times\rid)}"{description}, from=3-3, to=5-3]
+	\arrow["Gd"{description}, from=3-3, to=5-4]
+	\arrow["{ev_{\bf C}}", from=3-4, to=5-4]
+	\arrow["{p^G}"{description}, from=5-2, to=5-3]
+	\arrow["{\phi^G\times\rid}"{description}, from=5-2, to=6-3]
+	\arrow["{Gev_{\bf D}}"{description}, from=5-3, to=5-4]
+	\arrow["{ev_{\bf C}}"{description}, from=6-3, to=5-4]
+	\arrow["{ev_{\bf C}}"', from=6-4, to=5-4]
+	\arrow["{\rid \times f_2}"{description}, from=7-1, to=2-2]
+	\arrow["{G\lambda d\times \rid}"', from=7-1, to=7-2]
+	\arrow["{\rid\times f_2}"{description}, from=7-2, to=5-2]
+	\arrow["{{\phi^G}\times\rid}"', from=7-2, to=7-4]
+	\arrow["{\rid \times f_2}"{description}, from=7-4, to=6-3]
+	\arrow["{{\dash \bullet f_2} \times \rid}"', from=7-4, to=6-4]
+\end{tikzcd}\]
+and hitting both sides with $\lambda$.
 \subsubsection{Compatibility with Functions}
 We'd like to further require that such a morphism preserves functions appropriately.
 This is a matter of telling $H'$ what it must do on function types in $\C$.
