@@ -2072,6 +2072,24 @@ make a morphism $A' \to A$.
 \subsubsection{Compatibility with Products}
 We'd like to further require that such a morphism preserves products appropriately.
 This is a matter of telling $H'$ what it must do on product types in $\C$.
+A pair is in the relation if both of its components are in the relation.
+
+$H'$ takes a type $C_1 \x C_2$ in $\C$ to some object $(R, D, f : R \to GD)$ in $\D'$.
+If $\theta$ is a strict identity, then, this tells us what $D$ must be: $H(C_1 \x C_2)$.
+So we actually have
+\[H'(C_1 \x C_2) = (R, H(C_1 \x C_2), f : R \to GH(C_1 \x C_2)) : \D'\]
+In the binary relation example,
+\[H'(C_1 \x C_2) = (R, (C_1 \x C_2, C_1 \x C_2), f : R \to (C_1 \x C_2) \x (C_1 \x C_2)) : \D'\]
+I think we want to require $R$ to be $G'(H'C_1 \x H'C_2)$, and specify the map $f$.
+
+\[H'(C_1 \x C_2) = (G'(H'C_1 \x H'C_2), H(C_1 \x C_2), f : G'(H'C_1 \x H'C_2) \to GH(C_1 \x C_2)) : \D'\]
+For this I need $H'$ to be lax cartesian! So I might as well assume $H$ is also.
+Here's what the $f$ part of $H'(C_1 \x C_2)$ must be:
+\[
+\begin{tikzcd}
+  G'(H'C_1 \x H'C_2)\ar[r,"p^{H'}"]&  G'H'(C_1 \x C_2)\ar[r,"\gamma"]& G\partial H'(C_1\x C_2)\ar[r, "\theta",equal]&GH(C_1 \x C_2)
+\end{tikzcd}
+\]
 \subsubsection{Compatibility with Functions}
 We'd like to further require that such a morphism preserves functions appropriately.
 This is a matter of telling $H'$ what it must do on function types in $\C$.
