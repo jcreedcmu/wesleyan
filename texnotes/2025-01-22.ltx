@@ -1938,22 +1938,25 @@ is the exponential desired in $(*)$.
 \section{From Scratch}
 We say $A$ is a {\em half-adjunction} when $A = (\C, \D, H, G, \eta, d)$
 and $\C$ and $\D$ are categories with finite products and $H : \C \to \D$ and $G: \D \to \C$ are functors,
-with natural transformations
+with a unit
 %\[ p^G : G\dash \x G\dash \to G(\dash \x \dash) : \D \x \D \to \C\]
 \[
 \begin{tikzcd}
  \C\ar[d,equal] \ar[r,"H"]&\D\ar[d, "G"]\\
 \C\ar[r,equal] \ar[ur,shorten <>=10pt,Rightarrow, "\eta"]&\C
 \end{tikzcd}
-\qquad
+\]
+and the fact that $G$ is lax cartesian, i.e. there's a 2-cell
+\[
 \begin{tikzcd}
   \D \ar[from=d, "\x"]\ar[r,"G"]&  \C\ar[from=d, "\x",swap]\\
 \D\x\D\ar[r,"G\x G",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "d"]
 \end{tikzcd}\]
-Satisfying some sensible product-compatibility properties like
+satisfying
 \[ G\pi_1 \o d_{D_1D_2} = \pi_1 \qquad  G\pi_2 \o d_{D_1D_2} = \pi_2\]
 \[ G\pair{d_1}{d_2} = d_{D_1D_2} \o \pair{Gd_1}{Gd_2}\]
-If we had the counit and triangle laws, we'd have this $d$ for free. Sometimes we write $F$ for $GH$.
+If we had the counit and triangle laws, we'd have this $d$ for free, specifically as a natural
+isomorphism. Sometimes we write $F$ for $GH$.
 The running example I have in mind is $H = \Delta  : \rset \to \rset^2$ and $G = \_\x\_ : \rset^2 \to \rset$.
 Thus $FA = A \x A$ and $\eta_A : A \to FA$ is $\eta_A(a) = \langle a,a\rangle$.
 
@@ -2066,4 +2069,10 @@ transformation.
  We say $A$ {\em has a relational completion} when we can find $H', \eta', d'$ and a natural {\em isomorphism} $\theta$ (which I will probably sloppily assume is a strict
 commutativity of the diagram characterizing $\theta$) that all collectively
 make a morphism $A' \to A$.
+\subsubsection{Compatibility with Products}
+We'd like to further require that such a morphism preserves products appropriately.
+This is a matter of telling $H'$ what it must do on product types in $\C$.
+\subsubsection{Compatibility with Functions}
+We'd like to further require that such a morphism preserves functions appropriately.
+This is a matter of telling $H'$ what it must do on function types in $\C$.
 \end{document}
