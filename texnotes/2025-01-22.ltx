@@ -1948,9 +1948,12 @@ with natural transformations
 \qquad
 \begin{tikzcd}
   \D \ar[from=d, "\x"]\ar[r,"G"]&  \C\ar[from=d, "\x",swap]\\
-\D\x\D\ar[r,"G\x G",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "p^G"]
+\D\x\D\ar[r,"G\x G",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "d"]
 \end{tikzcd}\]
-If we had the counit and triangle laws, we'd have this $p^G$ for free. Sometimes we write $F$ for $GH$.
+Satisfying some sensible product-compatibility properties like
+\[ G\pi_1 \o d_{D_1D_2} = \pi_1 \qquad  G\pi_2 \o d_{D_1D_2} = \pi_2\]
+\[ G\pair{d_1}{d_2} = d_{D_1D_2} \o \pair{Gd_1}{Gd_2}\]
+If we had the counit and triangle laws, we'd have this $d$ for free. Sometimes we write $F$ for $GH$.
 The running example I have in mind is $H = \Delta  : \rset \to \rset^2$ and $G = \_\x\_ : \rset^2 \to \rset$.
 Thus $FA = A \x A$ and $\eta_A : A \to FA$ is $\eta_A(a) = \langle a,a\rangle$.
 
@@ -1974,7 +1977,7 @@ and 2-cells
 \qquad
 \begin{tikzcd}
   \C' \ar[from=d, "\x"]\ar[r,"\epsilon"]&  \C\ar[from=d, "\x",swap]\\
-\C'\x\C'\ar[r,"\epsilon\x\epsilon",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "p^\epsilon"]
+  \C'\x\C'\ar[r,"\epsilon\x\epsilon",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "p^\epsilon"]
 \end{tikzcd}
 \]
 such that the following diagrams commute:
@@ -1990,8 +1993,8 @@ GH\epsilon C'\ar[r,equal]&GH\epsilon C'
 \epsilon G'D_1' \x \epsilon  G'D_2'\ar[d,"p^\epsilon_{G'D_1',G'D_2'}",swap]\ar[r,equal]
 &\epsilon G'D_1' \x \epsilon  G'D_2'\ar[d,"\gamma_{D_1'} \x \gamma_{D_2'}"]\\
 %
-\epsilon( G'D_1' \x   G'D_2')\ar[d,"\epsilon p^{G'}_{D_1',D_2'}",swap]
-& G\partial D_1' \x G\partial D_2'\ar[d,"p^G_{\partial D_1', \partial D_2'}"]\\
+\epsilon( G'D_1' \x   G'D_2')\ar[d,"\epsilon d'_{D_1',D_2'}",swap]
+& G\partial D_1' \x G\partial D_2'\ar[d,"d_{\partial D_1', \partial D_2'}"]\\
 %
 \epsilon G'(D_1' \x  D_2')\ar[d,"\gamma_{D_1'\x D_2'}",swap]
 & G (\partial D_1' \x \partial D_2')\ar[d,"Gp^\partial_{D_1', D_2'}"]\\
@@ -2000,11 +2003,67 @@ GH\epsilon C'\ar[r,equal]&GH\epsilon C'
 & G\partial (D_1' \x  D_2')\\
 \end{tikzcd}\]
 
-giving us $G', \partial, \gamma$ for free. For the example half-adjunction, $\D'$ is the category of binary
-relations. For a given $A$, and therefore a determined $G'$, we say that a choice of $H' : \C \to \D'$
-and $\eta' : \rid_\C \to G'H'$ and $d' : G'D_1' \x G'D_2' \to G'(D_1' \x D_2')$ together count
-as a half-adjunction $A'=(H',G',\eta',d')$ {\em lying over} $A=(H,G,\eta,d)$ if
-\begin{enumerate}
-\item
-\end{enumerate}
+When we have a half-adjunction $A$, there is a natural way to construct {\em some} of the data for
+another half-adjunction $A'$ and a morphism $A' \to A$. We can ask whether it can be completed.
+Suppose we have $A =(\C, \D, H,G,\eta,d)$. Then set $\C' = \C$ and $\epsilon = \rid_\C$ and $p^\epsilon = \rid_{\x}$. Set $\D'$
+to the comma category $(\rid_C, G)$. Concretely, the objects of $\D$ are tuples
+$(C : \C, D : \D, f : C \to GD)$, and morphisms are tuples $(c : C_1 \to C_2, d : D_1 \to D_2)$ such that
+\[
+\begin{tikzcd}
+C_1\ar[d,"f_1",swap] \ar[r,"c"]&C_2\ar[d,"f_2"]\\
+GD_1 \ar[r,"Gd",swap]&GD_2\\
+\end{tikzcd}
+\]
+We define $G' : \D' \to \C$ by projecting out the $C : \C$ component.
+We define $\partial : \D' \to \D$ by projecting out the $D : \D$ component.
+We define $\gamma$ by projecting out the $f : C \to GD$ component.
+
+\subsection{Defining $p^\partial$}
+We make a digression to show that we can define $p^\partial$. We first need to understand
+what the product structure in $\D'$ is.
+\subsubsection{Products in the Comma Category}
+ Given $(C_1,D_1,f_1)$ and $(C_2,D_2,f_2)$, we claim their
+product is
+\[(C_1\x C_2,D_1 \x D_2, d \o (f_1 \x f_2))\]
+The diagram with projections looks like this:
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQBhAfWIAIAdfngC28XtwBMIAL6l0mXPkIoyxanSat2AcQAiPAUKyi4vPVymz52PASJkJ6hizaIQ2gBT6+gkWP0SAJQyciAYNkpE5BROmq6cPCHWinYoEjE0zlpukklhCrbKyOmOmXE6AXnhKUXRpRouFYnS6jBQAObwRKAAZgBOEMJI0SA4EEhkIIz0AEYwjAAKBZFuWGDYsCBljW49Br7GYnuWof2DEzRjSOkN2SBQXMDepAHSW1Oz80sRqSBrG2wrCAzkNECMrogAMzbO6CNBYRI0aZzRbLX59LDtAAWODyIOGl3GiAALDD4nCESdegNQaTRkSAKxk9jHPE066EpBM27xbQUizvZFfNHKEAY7G4oH4xCTCHcrLk-jwgVS9kyzmIABszLc-OIgs+qJ+ovFOLZ50QNwh2p5Oj15tB0PpSBtCpZiI+KO+NXYpsllGkQA
+\[\begin{tikzcd}
+C_1 \arrow[dd, "f_1"'] & C_1 \times C_2 \arrow[d, "f_1 \times f_2" description] \arrow[l, "\pi_1"'] \arrow[r, "\pi_2"]    & C_2 \arrow[dd, "f_2"] \\[1em]
+                       & GD_1 \times GD_2 \arrow[d, "{d_{D_1,D_2}}" description] \arrow[rd, "\pi_2"] \arrow[ld, "\pi_1"'] &                       \\[3em]
+GD_1                   & G(D_1 \times D_2) \arrow[r, "G\pi_2"'] \arrow[l, "G\pi_1"]                                       & GD_2
+\end{tikzcd}\]
+Given any other $(C, D, f : C \to GD)$ and maps $(c_1, d_1)$ and $(c_2,d_2)$ from this
+object to $f_1$ and $f_2$, we need to define pairing. We claim
+\[ \langle (c_1, d_1), (c_2, d_2) \rangle = (\langle c_1, c_2 \rangle, \langle d_1, d_2 \rangle)\]
+get unique maps $C \to C_1 \x C_2$ and $D \to GD_1\x GD_2$ that commute with projections.
+We stare at this diagram:
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZAFgBoBmAXVJADcBDAGwFcYkQBhAfQEYACADoC8AW3h9uAJhABfUuky58hFGWLU6TVuwDiAEV6DhWMXD76u0uQux4CRMgDYNDFm0QgdACgP8ho8QNJAEpZeRAMW2UiSQoXLXdOXjCbJXsURziaV20PKRSIxTsVZEznbITdIILItJLY8s03KuTrQqj05AAGUi745ryaouiUHqoKgc89WQ0YKABzeCJQADMAJwgRJB6QHAgkHhpGegAjGEYABWH0kCwwbFgQCdyQFcN-E3E3q3D1zYOaHskLEmi8oFxgL5SEEZE8QMczpdripbvcsI82n8togdkDEORnokhGgsMkjqdzlcOijGDAVjgCljtoD9ogyKCiQISZY4QjKcj2GssPMABYMzEbbHsvEAVkJ7G+jMlwJZSDlHN0xNJ0nJiKpdUFwrFSv+iEOu1Z6pynO5OvhFKR1PYdwebAlpvNeMyGo8WrJ9r1Ao8LvRbt+ysQIK98o8Oj9PBN2IJFqQ3utCv9fMdBuDaIx4dNAHZVfiYyAAMaZh364rOvNh1YR4sptllyt2rM1kbwunigvY5t4gAcZZWvOrQZAQtFfcbRZLO3TvoExzA81pfErh3bRjW9DXtPHgaduddiaQI5bacqsfBCd1-JPU6Ns9eEcvsrLOnBHYnT5D+ZztiH6suaS4gEIq7rjA5h3qQsGWEIe4HmwD7ZrWp6hjMMhAA
+\[\begin{tikzcd}
+C \arrow[rrddd, "c_1" description] \arrow[rrrrrrddd, "c_2"] \arrow[ddd, "f"'] \arrow[rrrrddd, "{\langle c_1,c_2 \rangle}" description] &  &                                    &  &                                                                                                                              &  &                        \\
+                                                                                                                                       &  &                                    &  &                                                                                                                              &  &                        \\
+                                                                                                                                       &  &                                    &  &                                                                                                                              &  &                        \\
+GD \arrow[rrddd, "Gd_1"'] \arrow[rrrrrrddd, "Gd_2" description, very near start] \arrow[rrrrd, near end, "{\langle Gd_1, Gd_2\rangle}" description]               &  & C_1 \arrow[ddd, "f_1" description] &  & C_1 \times C_2 \arrow[d, "f_1 \times f_2" description] \arrow[ll, "\pi_1"] \arrow[rr, "\pi_2"']                              &  & C_2 \arrow[ddd, "f_2"] \\[1em]
+                                                                                                                                       &  &                                    &  & GD_1 \times GD_2 \arrow[dd, "{d_{D_1,D_2}}" description, near end] \arrow[rrdd, "\pi_2" description] \arrow[lldd, "\pi_1" description] &  &                        \\
+                                                                                                                                       &  &                                    &  &                                                                                                                              &  &                        \\
+                                                                                                                                       &  & GD_1                               &  & G(D_1 \times D_2) \arrow[rr, "G\pi_2"'] \arrow[ll, "G\pi_1"]                                                                 &  & GD_2
+\end{tikzcd}\]
+and use the postulate
+\[ G\langle d_1, d_2 \rangle = d_{D_1,D_2} \o \langle Gd_1, Gd_2\rangle\]
+to conclude we're good. Extensionality/uniqueness follows because we can compute that pairs of projections
+yield identities.
+
+\subsubsection{Defining $p^\partial$}
+We need:
+\[\begin{tikzcd}
+  \D' \ar[from=d, "\x"]\ar[r,"\partial"]&  \D\ar[from=d, "\x",swap]\\
+\D'\x\D'\ar[r,"\partial\x\partial",swap]&\D\x\D\ar[ul,shorten <>=10pt,Rightarrow, "p^\partial"]
+\end{tikzcd}\]
+If we have our hands on \[ (C_1, D_1, r_1 : C_1 \to GD_1), (C_2, D_2, r_2 : C_2 \to GD_2) : \D' \x \D'\]
+then both routes around this square yield $D_1 \x D_2 : \D$. We can let $p^\partial$ be the identity natural
+transformation.
+\subsection{Relational Completion}
+
+ We say $A$ {\em has a relational completion} when we can find $H', \eta', d'$ and a natural {\em isomorphism} $\theta$ (which I will probably sloppily assume is a strict
+commutativity of the diagram characterizing $\theta$) that all collectively
+make a morphism $A' \to A$.
 \end{document}
