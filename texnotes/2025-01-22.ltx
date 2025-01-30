@@ -2224,4 +2224,143 @@ and hitting both sides with $\lambda$.
 \subsubsection{Compatibility with Functions}
 We'd like to further require that such a morphism preserves functions appropriately.
 This is a matter of telling $H'$ what it must do on function types in $\C$.
+\section{Wait, I'm Simply Preserving Products}
+\subsection{Observation}
+Earlier I required
+\[
+\begin{tikzcd}
+  \D \ar[from=d, "\x"]\ar[r,"G"]&  \C\ar[from=d, "\x",swap]\\
+\D\x\D\ar[r,"G\x G",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "d"]
+\end{tikzcd}\]
+satisfying
+\[ G\pi_1 \o d_{D_1D_2} = \pi_1 \qquad  G\pi_2 \o d_{D_1D_2} = \pi_2\]
+\[ G\pair{d_1}{d_2} = d_{D_1D_2} \o \pair{Gd_1}{Gd_2}\]
+But also I get $\langle G\pi_1, G\pi_2\rangle : G(D_1 \x D_2) \to GD_1 \x GD_2$.
+ The first says
+\[\pair{G\pi_1 \o d_{D_1D_2}}{G\pi_2 \o d_{D_1D_2}} = \pair{G\pi_1,G\pi_2}\o d_{D_1D_2} = \rid\]
+That second requirement says the other round trip is the identity. So I just required
+preservation of finite products.
+\subsection{Consequently:}
+We say $S = (\C, \D, H, G, \eta)$ is a {\em shape} when
+\begin{enumerate}
+\item $\C$ and $\D$ are categories with finite products
+\item $H : \C \to \D$ and $G: \D \to \C$ are functors that preserve finite products
+\item $\eta$ is a `unit of the almost adjunction'
+\begin{tikzcd}
+ \C\ar[d,equal] \ar[r,"H"]&\D\ar[d, "G"]\\
+\C\ar[r,equal] \ar[ur,shorten <>=10pt,Rightarrow, "\eta"]&\C
+\end{tikzcd}
+\end{enumerate}
+When a functor $K$ preserves finite products, we write
+\[p^K : KA \x KB \to K(A \x B) : q^K\]
+for the natural isomorphism that must then exist. (Mnemonic: $p$ut together, ta$q$ue apart)
+
+Sometimes we write $F$ for $GH$. It's an applicative functor.
+The running example I have in mind is $H = \Delta  : \rset \to \rset^2$ and $G = \_\x\_ : \rset^2 \to \rset$.
+Thus $FS = S \x S$ and $\eta_S : S \to FS$ is $\eta_S(a) = \langle a,a\rangle$.
+
+A shape morphism $S' \to S$ i.e.  $(\C', \D', H',G',\eta') \to (\C, \D, H,G,\eta)$ consists of
+ finite-product-preserving functors $L : \D' \to \D$ and $K : \C' \to \C$
+and a natural transformation $\gamma$ and a natural isomorphism $\theta$
+\[\begin{tikzcd}
+  \D' \ar[d, "G'",swap]\ar[r,"L"]&  \D\ar[d, "G"]\\
+\C'\ar[r,"K",swap]\ar[ur,shorten <>=10pt,Rightarrow, "\gamma"]&\C
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \D' \ar[from=d, "H'"]\ar[r,"L"]\ar[dr,shorten <>=10pt,Leftrightarrow, "\theta"]&  \D\ar[from=d, "H",swap]\\
+\C'\ar[r,"K",swap]&\C
+\end{tikzcd}
+\]
+such that the following diagram commutes:
+
+\[\begin{tikzcd}
+	{K C'} & {K G'H'C'} \\
+	{GHK C'} & {GL H' C'}
+	\arrow["{{K\eta'}}", from=1-1, to=1-2]
+	\arrow["{{\eta_{K C'}}}"', from=1-1, to=2-1]
+	\arrow["{{\gamma_{H'C'}}}", from=1-2, to=2-2]
+	\arrow["{{G\theta_{C'}}}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+%% These now simply follow from naturality and product preservation:
+%%
+%% \[
+%% \begin{tikzcd}
+%% K G'D_1' \x K  G'D_2'\ar[d,"p^K_{G'D_1',G'D_2'}",swap]\ar[r,equal]
+%% &K G'D_1' \x K  G'D_2'\ar[d,"\gamma_{D_1'} \x \gamma_{D_2'}"]\\
+%% %
+%% K( G'D_1' \x   G'D_2')\ar[d,"K p^{G'}_{D_1',D_2'}",swap]
+%% & GL D_1' \x GL D_2'\ar[d,"p^G_{L D_1', L D_2'}"]\\
+%% %
+%% K G'(D_1' \x  D_2')\ar[d,"\gamma_{D_1'\x D_2'}",swap]
+%% & G (L D_1' \x L D_2')\ar[d,"Gp^L_{D_1', D_2'}"]\\
+%% %
+%%  GL (D_1' \x  D_2')\ar[r,equal]
+%% & GL (D_1' \x  D_2')\\
+%% \end{tikzcd}
+%% \qquad
+%% \begin{tikzcd}
+%% L H'C_1' \x L  H'C_2'\ar[d,"p^L_{H'C_1',H'C_2'}",swap]\ar[r,equal]
+%% &L H'C_1' \x L  H'C_2'\ar[d,"\theta_{C_1'} \x \theta_{C_2'}"]\\
+%% %
+%% L( H'C_1' \x   H'C_2')\ar[d,"L p^{H'}_{C_1',C_2'}",swap]
+%% & HK C_1' \x HK C_2'\ar[d,"p^H_{K C_1', K C_2'}"]\\
+%% %
+%% L H'(C_1' \x  C_2')\ar[d,"\theta_{C_1'\x C_2'}",swap]
+%% & H (K C_1' \x K C_2')\ar[d,"Hp^K_{C_1', C_2'}"]\\
+%% %
+%%  HK (C_1' \x  C_2')\ar[r,equal]
+%% & HK (C_1' \x  C_2')\\
+%% \end{tikzcd}\]
+
+\subsection{Comma Category}
+If $S$ and a choice of $K : \C' \to \C$ is given to us,
+then there's a very natural thing we might try for $\D'$: the
+comma category $(K, G)$. This gives us $G', L, \gamma$ for free.
+So we say $(S,K)$ has a {\em comma-completion} if there is $H', \theta, \eta'$
+that make $(L, K, \gamma, \theta)$ into a shape morphism
+\[(\C', \D', H',G',\eta') \to (\C, \D, H,G,\eta)\]
+We'll subsequently define {\em nice} shape morphisms and nice comma-completions.
+\subsection{Niceness}
+\subsubsection{Preserving Products}
+Products in the comma category are given by
+\[(C_1', D_1, f_1: KC_1' \to LD_1) \x  (C_2', D_2, f_2 : KC_2' \to LD_2)\]
+\[ = (C_1'\x C_2', D_1\x D_2, p^G \o (f_1\x f_2) \o q^K : K(C_1' \x C_2') \to G(D_1 \x D_2)\]
+% https://q.uiver.app/#q=WzAsOCxbMCwwLCJLQydfMSJdLFsxLDEsIktDJ18xIFxcdGltZXMgS0MnXzIiXSxbMiwwLCJLQydfMiJdLFsxLDIsIkdEXzEgXFx0aW1lcyBHRF8yIl0sWzAsMywiR0RfMSJdLFsxLDMsIkcoRF8xIFxcdGltZXMgRF8yKSJdLFsyLDMsIkdEXzIiXSxbMSwwLCJLKEMnXzEgXFx0aW1lcyBDJ18yKSJdLFswLDQsImZfMSIsMl0sWzEsMywiZl8xIFxcdGltZXMgZl8yIiwxXSxbMSwwLCJcXHBpXzEiLDJdLFsxLDIsIlxccGlfMiJdLFsyLDYsImZfMiJdLFszLDUsInBeRyIsMV0sWzMsNiwiXFxwaV8yIl0sWzMsNCwiXFxwaV8xIiwyXSxbNSw2LCJHXFxwaV8yIiwyXSxbNSw0LCJHXFxwaV8xIl0sWzcsMCwiS1xccGlfMSIsMl0sWzcsMiwiS1xccGlfMiJdLFs3LDEsInFeSyJdXQ==
+\[\begin{tikzcd}[row sep=2.25em]
+	{KC'_1} & {K(C'_1 \times C'_2)} & {KC'_2} \\
+	& {KC'_1 \times KC'_2} \\
+	& {GD_1 \times GD_2} \\
+	{GD_1} & {G(D_1 \times D_2)} & {GD_2}
+	\arrow["{f_1}"', from=1-1, to=4-1]
+	\arrow["{K\pi_1}"', from=1-2, to=1-1]
+	\arrow["{K\pi_2}", from=1-2, to=1-3]
+	\arrow["{q^K}", from=1-2, to=2-2]
+	\arrow["{f_2}", from=1-3, to=4-3]
+	\arrow["{\pi_1}"', from=2-2, to=1-1]
+	\arrow["{\pi_2}", from=2-2, to=1-3]
+	\arrow["{f_1 \times f_2}"{description}, from=2-2, to=3-2]
+	\arrow["{\pi_1}"', from=3-2, to=4-1]
+	\arrow["{p^G}"{description}, from=3-2, to=4-2]
+	\arrow["{\pi_2}", from=3-2, to=4-3]
+	\arrow["{G\pi_1}", from=4-2, to=4-1]
+	\arrow["{G\pi_2}"', from=4-2, to=4-3]
+\end{tikzcd}\]
+Just by being part of a shape, $H'$ already has to preserve products. So that's nice.
+\subsection{Exponentials}
+Let's work out what exponentials are in the comma category.
+% https://q.uiver.app/#q=WzAsNixbMCwwLCJDXFxwYmNrIl0sWzIsMCwiRyhEXzFcXFJpZ2h0YXJyb3cgRF8yKSJdLFsyLDEsIkdEXzEgXFxSaWdodGFycm93IEdEXzIiXSxbMCwyLCJLKEMnXzEgXFxSaWdodGFycm93IEMnXzIpIl0sWzIsMiwiQ18xIFxcUmlnaHRhcnJvdyBHRF8yIl0sWzEsMiwiS0NfMScgXFxSaWdodGFycm93IEtDXzInIl0sWzAsMSwie1xccGlfMn0iXSxbMCwzLCJ7XFxwaV8xfSIsMl0sWzEsMiwie1xccGhpXkd9Il0sWzIsNCwie1xcZGFzaCBcXGJ1bGxldCBmXzF9Il0sWzUsNCwie2ZfMiBcXGJ1bGxldCBcXGRhc2h9IiwyXSxbMyw1LCJcXHBoaV5LIiwyXV0=
+\[\begin{tikzcd}[row sep=2.25em]
+	{C\pbck} && {G(D_1\Rightarrow D_2)} \\
+	&& {GD_1 \Rightarrow GD_2} \\
+	{K(C'_1 \Rightarrow C'_2)} & {KC_1' \Rightarrow KC_2'} & {C_1 \Rightarrow GD_2}
+	\arrow["{{\pi_2}}", from=1-1, to=1-3]
+	\arrow["{{\pi_1}}"', from=1-1, to=3-1]
+	\arrow["{{\phi^G}}", from=1-3, to=2-3]
+	\arrow["{{\dash \bullet f_1}}", from=2-3, to=3-3]
+	\arrow["{\phi^K}"', from=3-1, to=3-2]
+	\arrow["{{f_2 \bullet \dash}}"', from=3-2, to=3-3]
+\end{tikzcd}\]
+Here the generality of $K$ confounds me and I don't know what to do. Time to back out of this
+dead end.
 \end{document}
