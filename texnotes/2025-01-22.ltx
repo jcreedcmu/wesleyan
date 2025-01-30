@@ -1936,46 +1936,69 @@ We claim
 \[(C, (D_1 \imp D_2), \pi_2)\]
 is the exponential desired in $(*)$.
 \section{From Scratch}
-We say $A$ is a {\em half-adjunction over $\C$} when $A = (H, G, \eta, d)$
-and $H : \C \to \D$ and $G: \D \to \C$ are functors,
-with a unit $\eta : \rid_\C \to GH$ and a map to distribute $G$ over products
-\[ d_{D_1D_2} : GD_1 \x GD_2 \to G(D_1 \x D_2)\]
-Surely $d$ should be natural in $D_1$ and $D_2$.
-If we had the counit and triangle laws, we'd have this $d$ for free. Sometimes we write $F$ for $GH$.
+We say $A$ is a {\em half-adjunction} when $A = (\C, \D, H, G, \eta, d)$
+and $\C$ and $\D$ are categories with finite products and $H : \C \to \D$ and $G: \D \to \C$ are functors,
+with natural transformations
+%\[ p^G : G\dash \x G\dash \to G(\dash \x \dash) : \D \x \D \to \C\]
+\[
+\begin{tikzcd}
+ \C\ar[d,equal] \ar[r,"H"]&\D\ar[d, "G"]\\
+\C\ar[r,equal] \ar[ur,shorten <>=10pt,Rightarrow, "\eta"]&\C
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \D \ar[from=d, "\x"]\ar[r,"G"]&  \C\ar[from=d, "\x",swap]\\
+\D\x\D\ar[r,"G\x G",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "p^G"]
+\end{tikzcd}\]
+If we had the counit and triangle laws, we'd have this $p^G$ for free. Sometimes we write $F$ for $GH$.
 The running example I have in mind is $H = \Delta  : \rset \to \rset^2$ and $G = \_\x\_ : \rset^2 \to \rset$.
 Thus $FA = A \x A$ and $\eta_A : A \to FA$ is $\eta_A(a) = \langle a,a\rangle$.
 
-A morphism $A' \to A$ i.e.  $(H',G',\eta',d') \to (H,G,\eta,d)$ consists of a morphism $\partial : \D' \to \D$
+A morphism $A' \to A$ i.e.  $(\C', \D', H',G',\eta',d') \to (\C, \D, H,G,\eta,d)$ consists of
+ functors $\partial : \D' \to \D$ and $\epsilon : \C' \to \C$
 and 2-cells
 \[\begin{tikzcd}
   \D' \ar[d, "G'",swap]\ar[r,"\partial"]&  \D\ar[d, "G"]\\
-\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow, "\gamma"]&\C
+\C'\ar[r,"\epsilon",swap]\ar[ur,shorten <>=10pt,Rightarrow, "\gamma"]&\C
 \end{tikzcd}
 \qquad
 \begin{tikzcd}
   \D' \ar[from=d, "H'"]\ar[r,"\partial"]\ar[dr,shorten <>=10pt,Rightarrow, "\theta"]&  \D\ar[from=d, "H",swap]\\
-\C\ar[r,equal]&\C
+\C'\ar[r,"\epsilon",swap]&\C
 \end{tikzcd}
 \qquad
 \begin{tikzcd}
-  \D' \ar[from=d, "\x"]\ar[r,"\partial"]\ar[dr,shorten <>=10pt,Rightarrow, "\delta"]&  \D\ar[from=d, "\x",swap]\\
-\D'\x\D'\ar[r,"\partial\x\partial",swap]&\D\x\D
+  \D' \ar[from=d, "\x"]\ar[r,"\partial"]&  \D\ar[from=d, "\x",swap]\\
+\D'\x\D'\ar[r,"\partial\x\partial",swap]&\D\x\D\ar[ul,shorten <>=10pt,Rightarrow, "p^\partial"]
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+  \C' \ar[from=d, "\x"]\ar[r,"\epsilon"]&  \C\ar[from=d, "\x",swap]\\
+\C'\x\C'\ar[r,"\epsilon\x\epsilon",swap]&\C\x\C\ar[ul,shorten <>=10pt,Rightarrow, "p^\epsilon"]
 \end{tikzcd}
 \]
 such that the following diagrams commute:
 \[
 \begin{tikzcd}
-C\ar[r,"\eta'"]\ar[d,equal]&G'H'C\ar[r,"\gamma_{H'C}"]&G\partial H'C\ar[r,"G\theta_{C}"]&GHC\ar[d,equal]\\
-C\ar[rrr,"\eta",swap]&&&GHC
+\epsilon C'\ar[d,"\epsilon \eta'",swap]\ar[r,equal]&\epsilon C'\ar[ddd,"\eta_{\epsilon C'}"]\\
+\epsilon G'H'C'\ar[d,"\gamma_{H'C'}",swap]\\
+G\partial H'C'\ar[d,"G\theta_{C}",swap]\\
+GH\epsilon C'\ar[r,equal]&GH\epsilon C'
 \end{tikzcd}
-\]\[
+\qquad
 \begin{tikzcd}
-G'D_1' \x G'D_2'\ar[r,"d'_{D_1'D_2'}"]\ar[d,equal]&G'(D_1'\x D_2')\ar[r,"\gamma_{D_1'\x D_2'}"]&
-G\partial (D_1' \x D_2')\ar[r,"G\delta_{D_1'D_2'}"]&G(\partial D_1' \x \partial D_2')\ar[r,"d_{\partial D_1' \partial D_2'}"]&
-G\partial D_1' \x G\partial D_2'\ar[d,equal]\\
-G'D_1' \x G'D_2'\ar[rrrr,"\gamma_{D_1'} \x \gamma_{D_2'}",swap]&&&&G\partial D_1' \x G\partial D_2'
+\epsilon G'D_1' \x \epsilon  G'D_2'\ar[d,"p^\epsilon_{G'D_1',G'D_2'}",swap]\ar[r,equal]
+&\epsilon G'D_1' \x \epsilon  G'D_2'\ar[d,"\gamma_{D_1'} \x \gamma_{D_2'}"]\\
+%
+\epsilon( G'D_1' \x   G'D_2')\ar[d,"\epsilon p^{G'}_{D_1',D_2'}",swap]
+& G\partial D_1' \x G\partial D_2'\ar[d,"p^G_{\partial D_1', \partial D_2'}"]\\
+%
+\epsilon G'(D_1' \x  D_2')\ar[d,"\gamma_{D_1'\x D_2'}",swap]
+& G (\partial D_1' \x \partial D_2')\ar[d,"Gp^\partial_{D_1', D_2'}"]\\
+%
+ G\partial (D_1' \x  D_2')\ar[r,equal]
+& G\partial (D_1' \x  D_2')\\
 \end{tikzcd}\]
-{\color{red} what about $d$?}
 
 giving us $G', \partial, \gamma$ for free. For the example half-adjunction, $\D'$ is the category of binary
 relations. For a given $A$, and therefore a determined $G'$, we say that a choice of $H' : \C \to \D'$
