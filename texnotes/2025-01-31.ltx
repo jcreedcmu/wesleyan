@@ -530,4 +530,79 @@ of all, this morphism itself is $0$-small, since it's the pair of two $0$-small
 morphisms from $\C$. Second, for any pair of $0$-small morphisms $f, f'$, there
 is a unique quadruple of morphisms completing a pair of independent pullback squares,
 exactly because $m$ is the small object classifier in $\C$.
+
+\subsection{Universes in $(\rid_C, G)$}
+First I need to define the comma construction on categories with a notion of smallness.
+The comma construction requires functors $F : \B\to  \C$ and $G :  \D \to \C$.
+I guess to be a functor between categories-with-smallness requires preservation of smallness.
+I presume I have
+\[\B_0 \subseteq \B_1 \subseteq \cdots \qquad
+\C_0 \subseteq \C_1 \subseteq \cdots \qquad
+\D_0 \subseteq \D_1 \subseteq \cdots\]
+An object of $(F, G)$ is to be a tuple $(B, D, f : FB \to GD \in \C)$.
+A morphism between these looks like
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJGQl8xIl0sWzAsMSwiR0RfMSJdLFsxLDAsIkZCXzIiXSxbMSwxLCJHRF8yIl0sWzAsMSwiZl8xIiwyXSxbMCwyLCJGYiJdLFsxLDMsIkZkIiwyXSxbMiwzLCJmXzIiXV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{FB_1} & {FB_2} \\
+	{GD_1} & {GD_2}
+	\arrow["Fb", from=1-1, to=1-2]
+	\arrow["{f_1}"', from=1-1, to=2-1]
+	\arrow["{f_2}", from=1-2, to=2-2]
+	\arrow["Fd"', from=2-1, to=2-2]
+\end{tikzcd}\]
+I guess I'd say $(b,d)\in (F,G)_i$ if $b \in \B_i$ and $d\in \D_i$.
+This leaves no role for the smallness data in $\C$ to matter, but maybe that's ok.
+Maybe it's not even needed for the construction. Actually, in my case, it's moot
+because one of the functors is the identity functor, so I need it in $\C$ and $\D$
+anyhow.
+
+Thus I'm contemplating
+\[\begin{tikzcd}
+	{\D' = (\rid_\C, G)} && \D = \C \x \C\\
+	\C && \C
+	\arrow["\partial", from=1-1, to=1-3]
+	\arrow["{G'}"', shift right, from=1-1, to=2-1]
+	\arrow["G"', shift right, from=1-3, to=2-3]
+	\arrow["{H'}"', shift right, from=2-1, to=1-1]
+	\arrow["\gamma", shorten <=14pt, shorten >=14pt, Rightarrow, from=2-1, to=1-3]
+	\arrow[equals, from=2-1, to=2-3]
+	\arrow["H"', shift right, from=2-3, to=1-3]
+\end{tikzcd}\]
+for example, where all categories depicted are size-stratified categories in a known way.
+I'm hunting for a description of the level-0 universe in $\D'$. It should react
+by creating pullbacks whenever I have a small morphism between any two objects of
+$\D'$. That is, I'm trying to find a suitable $\E_\star$ and $\U_\star$ to fit in the diagram
+\[\begin{tikzcd}
+	{(C_1,D_1,f_1:C_1\to GD_1)} & {(\E_\star,(\E,\E),\ell:\E_\star \to\E\x\E)} \\
+	{(C_2,D_2,f_2:C_2\to GD_2)} & {(\U_\star,(\U,\U),k:\U_\star\to\U\x\U)}
+	\arrow[from=1-1, to=1-2]
+	\arrow["{(c,d)}"', from=1-1, to=2-1]
+	\arrow["{(m_\star,m\x m)}", from=1-2, to=2-2]
+	\arrow[""{name=0, anchor=center, inner sep=0}, from=2-1, to=2-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=0]
+\end{tikzcd}\]
+Or expanding this out in 3d, I'm hoping that for every $(c,d)$ there are unique fillers
+for the dashed lines in
+% https://q.uiver.app/#q=WzAsOCxbMCwwLCJDXzEiXSxbMywxLCJHRF8xIl0sWzAsMiwiQ18yIl0sWzMsMywiR0RfMiJdLFsyLDAsIlxcRV9cXHN0YXIiXSxbNSwxLCJHSFxcRSJdLFsyLDIsIlxcVV9cXHN0YXIiXSxbNSwzLCJHSFxcVSJdLFswLDEsImZfMSIsMix7ImxhYmVsX3Bvc2l0aW9uIjozMH1dLFsyLDMsImZfMiIsMl0sWzAsMiwiYyIsMl0sWzEsMywiR2QiLDAseyJsYWJlbF9wb3NpdGlvbiI6MzB9XSxbMCw0LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbNCw1LCJcXGVsbCJdLFs0LDYsIm1fXFxzdGFyIiwyLHsibGFiZWxfcG9zaXRpb24iOjcwfV0sWzUsNywiR0htIl0sWzYsNywiayIsMV0sWzMsNywiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzIsNiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzEsNSwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzAsNiwiIiwwLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV0sWzEsNywiIiwwLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{C_1} && {\E_\star} \\
+	&&& {GD_1} && {GH\E} \\
+	{C_2} && {\U_\star} \\
+	&&& {GD_2} && {GH\U}
+	\arrow[dashed, from=1-1, to=1-3]
+	\arrow["{f_1}"'{pos=0.3}, from=1-1, to=2-4]
+	\arrow["c"', from=1-1, to=3-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=3-3]
+	\arrow["\ell", from=1-3, to=2-6]
+	\arrow["{m_\star}"'{pos=0.7}, from=1-3, to=3-3]
+	\arrow[dashed, from=2-4, to=2-6]
+	\arrow["Gd"{pos=0.3}, from=2-4, to=4-4]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-4, to=4-6]
+	\arrow["GHm", from=2-6, to=4-6]
+	\arrow[dashed, from=3-1, to=3-3]
+	\arrow["{f_2}"', from=3-1, to=4-4]
+	\arrow["k"{description}, from=3-3, to=4-6]
+	\arrow[dashed, from=4-4, to=4-6]
+\end{tikzcd}\]
+that result in the indicated pullback squares.
 \end{document}
