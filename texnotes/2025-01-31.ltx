@@ -426,77 +426,13 @@ So then if I note that $\pair \rid !  : GH\U_i \to GH\U_i \x 1 $ then  I'm inter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A Universal Property}
-I keep bemoaning to myself that the universe has no UMP so I can't tell if I'm doing things right,
-but surely I can give it one somehow if I'm careful enough about distinct categories.
-
-Say I have an inclusion functor $\iota : \C \to \D$. A morphism $m : \E \to \U$ in $\D$ is
-called a {\em weak object classifier} for $\C$ if we have two homset mappings
-\[ e : \C(A, B) \to \D(\iota A, \E)\]
-\[ u : \C(A, B) \to \D(\iota B, \U)\]
-such that for any morphism $f : A \to B$ in $\C$, the square
-\[\begin{tikzcd}
-	{\iota A} & {\E} \\
-	{\iota B} & {\U}
-	\arrow["{e(f)}", from=1-1, to=1-2]
-	\arrow["\iota f"', from=1-1, to=2-1]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
-	\arrow["m", from=1-2, to=2-2]
-	\arrow["u(f)"', from=2-1, to=2-2]
-\end{tikzcd}\]
-is a pullback. A weak object classifier morphism
-\[(m : \E \to \U) \to (m' : \E' \to \U')\]
-consists of two morphisms $(e_0, u_0)$ such that
-\[\begin{tikzcd}
-	{\E} & {\E'} \\
-	{\U} & {\U'}
-	\arrow["{e_0}", from=1-1, to=1-2]
-	\arrow["m"', from=1-1, to=2-1]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
-	\arrow["m'", from=1-2, to=2-2]
-	\arrow["u_0"', from=2-1, to=2-2]
-\end{tikzcd}\]
-commutes, and also for every $f : A \to B$, the following two diagrams commute:
-\[
-\begin{tikzcd}
-	& \E \\
-	{\iota A} \\
-	& {\E'}
-	\arrow["{e_0}", from=1-2, to=3-2]
-	\arrow["{e(f)}", from=2-1, to=1-2]
-	\arrow["{e'(f)}"', from=2-1, to=3-2]
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-	& \U \\
-	{\iota B} \\
-	& {\U'}
-	\arrow["{u_0}", from=1-2, to=3-2]
-	\arrow["{u(f)}", from=2-1, to=1-2]
-	\arrow["{u'(f)}"', from=2-1, to=3-2]
-\end{tikzcd}
-\]
-An {\em object classifier for $\C$} is an initial object in the category of weak object classifiers for $\C$.
-
-\subsection{An Exercise}
-\def\fset{\mathsf{FinSet}}
 \def\cset{\mathsf{Set}}
+\def\fset{\mathsf{FinSet}}
 \def\fiber{\mathbf{fiber}}
-To make sure I have the direction of universality correct, let me try to prove the existence of an object
-classifier when I think it should exist. Let $\iota : \fset \to \cset$ be the evident inclusion.
- $\U$ is $\fset$ and $\E = (F : \fset) \x F$. I expect $\pi_1 : \E \to \U$ is an object
-classifier.
+Here's a universal property for universes.
 
-For any map $f : A \to B$ between finite
-sets, I set
-\[u(f) = \lambda x . \fiber_f (x)\]
-\[e(f) = \lambda y . \langle \fiber_f (f(y)), y\rangle\]
-Now suppose that we have $m' : \E' \to \U'$. Oh! Here I'm stuck. What I really want to do
-is apply the pullback-creation property to $m$ itself, but it's not in $\C$.
-\subsection{A Second Attempt}
-Say I have a category $\C$ with a class of
-of morphisms in $\C$, called `small', which is preserved by pullback.
-And probably isos are small, and smallness is preserved by composition.
-I guess I can write $\C_0$ for the subcategory of small morphisms.
+Say I have a category $\C$ with a subcategory $\C_0$ of
+of morphisms considered `small'.
 
 A small morphism $m : \E \to \U$ in $\C_0$ is
 called a {\em small object classifier} if, for
@@ -512,44 +448,12 @@ a unique pair of $e_f, u_f$ that make the diagram
 	\arrow["u_f"', from=2-1, to=2-2]
 \end{tikzcd}\]
 a pullback.
-%% A weak object classifier morphism
-%% \[(m : \E \to \U) \to (m' : \E' \to \U')\]
-%% consists of two morphisms $(e_0, u_0)$ such that
-%% \[\begin{tikzcd}
-%% 	{\E} & {\E'} \\
-%% 	{\U} & {\U'}
-%% 	\arrow["{e_0}", from=1-1, to=1-2]
-%% 	\arrow["m"', from=1-1, to=2-1]
-%% 	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
-%% 	\arrow["m'", from=1-2, to=2-2]
-%% 	\arrow["u_0"', from=2-1, to=2-2]
-%% \end{tikzcd}\]
-%% commutes, and also for every small $f : A \to B$, the following two diagrams commute:
-%% \[
-%% \begin{tikzcd}
-%% 	& \E \\
-%% 	{A} \\
-%% 	& {\E'}
-%% 	\arrow["{e_0}", from=1-2, to=3-2]
-%% 	\arrow["{e(f)}", from=2-1, to=1-2]
-%% 	\arrow["{e'(f)}"', from=2-1, to=3-2]
-%% \end{tikzcd}
-%% \qquad
-%% \begin{tikzcd}
-%% 	& \U \\
-%% 	{B} \\
-%% 	& {\U'}
-%% 	\arrow["{u_0}", from=1-2, to=3-2]
-%% 	\arrow["{u(f)}", from=2-1, to=1-2]
-%% 	\arrow["{u'(f)}"', from=2-1, to=3-2]
-%% \end{tikzcd}
-%% \]
-\subsection{Trying the Exercise Again}
+
+\subsection{Exercise}
 
 We work in $\C = \cset$. A morphism is small if it has finite fibers.
- $\U$ is $\fset$ and $\E = (F : \fset) \x F$. I expect $\pi_1 : \E \to \U$ is an object
-classifier. I notice that $\pi_1$ doesn't have {\em boundedly} finite fibers, but the
-fiber over any point is finite.
+ $\U$ is $\fset$ and $\E = (F : \fset) \x F$. I expect $m = \pi_1 : \E \to \U$ is an object
+classifier.
 
 For any map $f : A \to B$ between finite
 sets, I set
@@ -607,7 +511,23 @@ Combining pullbacks, we see, e.g.
 \end{tikzcd}\]
 And similarly in the other direction.
 By uniqueness in the definition of object classifier, we conclude
-The two classifier are isomorphic.
+the two classifiers are isomorphic.
 
+\subsection{Preservation of Universes}
+Every category $\C$ I'm working with in the parmetricity discussion above
+has subcategories $\C_0 \subseteq \C_1 \subseteq\C_2 \subseteq\cdots$ and
+classifiers $m_i : \E_i \to \U_i \in \C_i$. Notice these $\C_i$ aren't the same thing
+as `the types that are definable in universe level $i$', they're wide subcategories
+whose morphisms have {\em fibers} all that belong in universe level $i$. This is why
+$\U_i \in \C_i$, and not $\C_{i+1}$.
 
+For any set $X$, the functor $G = \prod : \C^X \to \C$ should have
+ $H = \Delta : \C \to \C^X$ as a partner, and $H$ should preserve universes.
+Let's take $X=2$ as an example, and  check that
+\[(m, m) : ( \E_0, \E_0) \to ( \rset_0, \rset_0)\]
+is the $0$-small object classifier for $\C \x \C$. This makes sense. First
+of all, this morphism itself is $0$-small, since it's the pair of two $0$-small
+morphisms from $\C$. Second, for any pair of $0$-small morphisms $f, f'$, there
+is a unique quadruple of morphisms completing a pair of independent pullback squares,
+exactly because $m$ is the small object classifier in $\C$.
 \end{document}
