@@ -41,7 +41,7 @@
 \definecolor{blu}{rgb}{0.1,0.5,1}
 \definecolor{orng}{rgb}{1,0.5,0.3}
 
-\def\El#1{\ulcorner{#1}\urcorner}
+\def\nameof#1{\ulcorner{#1}\urcorner}
 \def\U{\mathsf{U}}
 \def\uu{\mathsf{u}}
 \def\uni{\U}
@@ -341,5 +341,54 @@ I want to say something like
 but $B$ isn't a set, it's a $GH\rset$. I actually need something else to behave like $G$,
 to tell me how to turn a tuple of types back into a type. Can I say anything like
 \[\Sigma\ H\rset\ (\lambda B \to GB \to \rset)\]
-
+? Hmm something about this seems suspicious.
+\subsection{Internalizing $G$}
+If I take $e : \E \to \rset$ and I hit it with the functor $GH$
+I get $GHe : GH\E \to GH\rset$. In my running example, this means
+a thing that lives in $GH\E$ is a pair of elements of any nameable type,
+and the projection $GHe$ tells me which pair of types they came from.
+Now if this map has sufficiently small fibers, which I think it ought to,
+ then there is a pullback diagram
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJHSHtcXG1hdGhjYWwgRX0iXSxbMCwxLCJHSHtcXG1hdGhzZiBVfSJdLFsxLDAsIntcXG1hdGhjYWwgRX0iXSxbMSwxLCJ7XFxtYXRoc2YgVX0iXSxbMCwyLCJlXipnIl0sWzIsMywiZSJdLFsxLDMsImciLDJdLFswLDEsIkdIZSIsMl0sWzAsMywiIiwxLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV1d
+\[\begin{tikzcd}
+	{GH{\mathcal E}} & {{\mathcal E}} \\
+	{GH{\mathsf U}} & {{\mathsf U}}
+	\arrow["{e^*g}", from=1-1, to=1-2]
+	\arrow["GHe"', from=1-1, to=2-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+	\arrow["e", from=1-2, to=2-2]
+	\arrow["g"', from=2-1, to=2-2]
+\end{tikzcd}\]
+And the map $g = \ulcorner{GHe}\urcorner$ should be very useful to me: in the example, it takes a pair of types
+and gives me the {\em name} of the type that consists of all pairs of elements that
+live over that pair of types. In other words, it takes a pair of types and yields their
+product. It is the thing I was calling $G$, the global sections functor, in my previous
+purely type-theory thinking before switching to using more categories.
+\subsection{Being Explicit about Universe Levels}
+Maybe what I actually have is $\C_0\subseteq \C_1\subseteq \ldots$. There exists
+a morphism $e_i : \E_i \to \U_i \in \C_{i+1}$ that is an object classifier for all of $\C_i$.
+This means that for every map $f : A \to B$ in $\C_i$, there is a map $\nameof f : B \to \U_i$
+in $\C_{i+1}$ such that
+\[\begin{tikzcd}
+	{A} & {{\mathcal E_i}} \\
+	{B} & {{\mathsf U_i}}
+	\arrow["{e_i^*\nameof f}", from=1-1, to=1-2]
+	\arrow["f"', from=1-1, to=2-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+	\arrow["e_i", from=1-2, to=2-2]
+	\arrow["\nameof f"', from=2-1, to=2-2]
+\end{tikzcd}\]
+So in particular I'd always know that
+\[\begin{tikzcd}
+	{GH{\mathcal E}_i} & {{\mathcal E}_{i+1}} \\
+	{GH{\mathsf U}_i} & {{\mathsf U}_{i+1}}
+	\arrow["{e_i^*\nameof{GHe_i}}", from=1-1, to=1-2]
+	\arrow["GHe_i"', from=1-1, to=2-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+	\arrow["e_{i+1}", from=1-2, to=2-2]
+	\arrow["\nameof{GHe_i}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+Oh hmm that isn't what I want. I guess it's a nontrivial fact that I need to assume that
+I get this same diagram at the {\em same} level. That amounts to supposing that $GH$
+doesn't somehow blow up the small-fiber-ness of $e$.
 \end{document}
