@@ -605,4 +605,16 @@ for the dashed lines in
 	\arrow[dashed, from=4-4, to=4-6]
 \end{tikzcd}\]
 that result in the indicated pullback squares.
+
+After I stare at this diagram a while I realize that $\U_\star$ must in some sense
+be the type of names of relations. For the binary relation example,
+I can use informal dependent record notation to suggestively explain what's going on.
+The entire rightmost parallelogram is all just record projections.
+\[\begin{array}{ll}
+\U_\star = &\{ A : \rset, B : \rset, R : A \to B \to \rset{\color{white}, a : A, b : B, r : R\ a\ b}\}\\
+\E_\star = &\{ A : \rset, B : \rset, R : A \to B \to \rset, a : A, b : B, r : R\ a\ b\}\\
+GH\U = &\{ A : \rset, B : \rset {\color{white},R : A \to B \to \rset, a : A, b : B, r : R\ a\ b}\}\\
+GH\E = &\{ A : \rset, B : \rset, {\color{white}R : A \to B \to \rset}, a : A, b : B{\color{white}, r : R\ a\ b}\}\\
+\end{array}
+\]
 \end{document}
