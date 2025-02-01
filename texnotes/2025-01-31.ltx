@@ -242,7 +242,7 @@ Thus $FX = S \to X$ and $\eta_X : X \to FX$ is $\eta_X(a) = \lambda s . a$.
 \subsection{Shape Morphisms}
 A shape morphism $S' \to S$ between two shapes over $\C$,
  i.e.  $(\D', H',G',\eta') \to (\D, H,G,\eta)$ consists of
- a finite-product-preserving functor $\partial : \D' \to \D$
+ an almost-everything-preserving functor $\partial : \D' \to \D$
 and a natural transformation $\gamma$
 \[\begin{tikzcd}
   \D' \ar[d, "G'",swap]\ar[r,"\partial"]&  \D\ar[d, "G"]\\
@@ -777,5 +777,26 @@ But this is easy given what we have: we set
 \[c_R = \langle\wt{C_1}, \bar u\rangle : C_1 \to [\E]\]
 This means we can set
 \[c_1 = \langle c_L, c_R \rangle = \langle \langle c_2 \o c, Gd_1 \o f_1 \rangle,\langle\wt{C_1}, \bar u\rangle\rangle\]
+\subsection{Consequences of Parametricity, Take 2}
+Suppose I have a category $\C$ that is $(G,H)$-parametric for some $G : \D \to \C$.
+I suppose I have some structure in $\C$ that is the appropriate realization of
+a polymorphic function
+\[(X : \rset) \to X \to X\]
+I need to invoke the lccc structure. What does the slice $\C/\U$ look like? The morphism
+$m : \E \to \U$ expresses the context with one type variable. So let me think of $m$
+as an object in the slice category over $u$, and contemplate the internal hom, call it
+$\wt{F} = m \imp m : F \to \U$.
 
+So to assume some implementation of the identity type is to assume that I have a section
+$q : \U \to F$ such that $\wt{F} \o q = \rid_\U$. That's all the ingredients I start with.
+I want to derive some fact that amounts to $q$ belonging to some relation.
+
+The first thing I want to do is hit $q$ with $H'$ to obtain $H'q : H'\U \to H'F$.
+I know $H'$ preserves universes and local internal homs, so in fact
+$H'q : \U' \to F'$
+where $\U'$ is the universe of $\D'$ as described above, and $F'$ is the domain
+of the local internal hom $m' \imp m' : F' \to \U'$. We know $(m' \imp m') \o H'q = \rid_{\U'}$.
+
+Suppose I had in mind some closed types $A$ and $B$ and a relation $R \to A \x B$,
+expressed as a morphism $1 \to \U'$.
 \end{document}
