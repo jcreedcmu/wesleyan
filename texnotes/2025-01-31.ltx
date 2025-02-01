@@ -611,10 +611,25 @@ be the type of names of relations. For the binary relation example,
 I can use informal dependent record notation to suggestively explain what's going on.
 The entire rightmost parallelogram is all just record projections.
 \[\begin{array}{ll}
-\U_\star = &\{ A : \rset, B : \rset, R : A \to B \to \rset{\color{white}, a : A, b : B, r : R\ a\ b}\}\\
 \E_\star = &\{ A : \rset, B : \rset, R : A \to B \to \rset, a : A, b : B, r : R\ a\ b\}\\
-GH\U = &\{ A : \rset, B : \rset {\color{white},R : A \to B \to \rset, a : A, b : B, r : R\ a\ b}\}\\
 GH\E = &\{ A : \rset, B : \rset, {\color{white}R : A \to B \to \rset}, a : A, b : B{\color{white}, r : R\ a\ b}\}\\
+\U_\star = &\{ A : \rset, B : \rset, R : A \to B \to \rset{\color{white}, a : A, b : B, r : R\ a\ b}\}\\
+GH\U = &\{ A : \rset, B : \rset {\color{white},R : A \to B \to \rset, a : A, b : B, r : R\ a\ b}\}\\
 \end{array}
 \]
+To get from $GD_2 = A_2 \x B_2$ to $GH\U$, we take as input $\langle a_2, b_2\rangle$
+and look at the fibers along $Gd$ to give us $A \subseteq A_1$ and $B \subseteq B_1$.
+To get from $GD_1 = A_1 \x B_1$ to $GH\E$, we take $Gd$ downstairs, and then take the fibers
+back up to discover that the $\langle a_1, b_1 \rangle$ we started with does live in
+the fiber of its image.
+
+To map $c_2 \in C_2$ to $\U_\star$, we travel along $f_2$, and take fibers up $Gd$ again
+ to find out what our $A, B$ must be. We take the fiber of $c_2$ along $c$ to find out
+what $R$ must be. Every preimage of $c$ really does represent points of $A$ and $B$ that are $R$-related,
+ because $f_1$ maps it back to points of $GD_1$ that are in the fiber of $f_2(c)$.
+
+Finally, to map $c_1 \in C_1$ to $\E_\star$, again our $A$ and $B$ are the
+$Gd$-fibers over $f(c(c_1))$, the $R$ is the fiber of $c$ over $c(c_1)$,
+the $a, b$ come from the element $f_1(c)$, and the $r$ is the element $c_1$
+itself, construed as being in the $c$-fiber of its own image under $c$.
 \end{document}
