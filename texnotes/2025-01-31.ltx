@@ -667,7 +667,47 @@ The evaluation map runs like
 Ok, now the only task is to construct $(A:\U,B:\U, x : A \x B) \to (A : \U, B: \U)$.
 This is $GHm : GH\E \to GH\U$ is $(A: \U, B : \U, a : A, b : B) \to (A: \U, B : \U)$.
 The type that is constantly $\U$ regardless of the $\U \x \U$ context is
-$\pi_2 : \U \x GH\U \to GH\U$. So I think
-\[k : \U_\star \to GH\U =  (GHm : GH\E \to GH\U) \imp (\pi_2 : \U \x GH\U \to GH\U)\]
-And possibly $\E_\star$ is just the pullback of $k$ and $GHm$? That'd be convenient if so.
+$\pi_\U: GH\U \x \U \to GH\U$. So I think
+\[k : \U_\star \to GH\U =  (GHm : GH\E \to GH\U) \imp (\pi_\U :  GH\U \x \U \to GH\U)\]
+Then I think $E_\star$ is constructed like
+% https://q.uiver.app/#q=WzAsOSxbMCwwLCJcXEVfXFxzdGFyIl0sWzIsMCwiR0hcXFVcXHhcXEUiXSxbMiwxLCJHSFxcVVxceFxcVSJdLFswLDIsIlxcYnVsbGV0Il0sWzEsMiwiR0hcXEUiXSxbMCwzLCJcXFVfXFxzdGFyIl0sWzEsMywiR0hcXFUiXSxbMCwxLCJcXGJ1bGxldCJdLFsyLDMsIkdIXFxVIl0sWzAsMV0sWzEsMiwiR0hcXFVcXHggbSJdLFszLDRdLFszLDVdLFs1LDYsImsiLDJdLFs0LDYsIkdIbSJdLFszLDYsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFswLDcsIlxcbGFuZ2xlIG1fXFxzdGFyLFxcZWxsXFxyYW5nbGUiLDJdLFs3LDMsIiIsMix7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMiwiZXYiLDJdLFsyLDgsIlxccGlfVSJdLFs2LDgsIiIsMCx7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMTgsIiIsMix7ImxldmVsIjoxLCJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{\E_\star} && {GH\U\x\E} \\
+	\bullet && {GH\U\x\U} \\
+	\bullet & {GH\E} \\
+	{\U_\star} & {GH\U} & {GH\U}
+	\arrow[from=1-1, to=1-3]
+	\arrow["{\langle m_\star,\ell\rangle}"', from=1-1, to=2-1]
+	\arrow["{GH\U\x m}", from=1-3, to=2-3]
+	\arrow[""{name=0, anchor=center, inner sep=0}, "ev"', from=2-1, to=2-3]
+	\arrow[equals, from=2-1, to=3-1]
+	\arrow["{\pi_U}", from=2-3, to=4-3]
+	\arrow[from=3-1, to=3-2]
+	\arrow[from=3-1, to=4-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=3-1, to=4-2]
+	\arrow["GHm", from=3-2, to=4-2]
+	\arrow["k"', from=4-1, to=4-2]
+	\arrow[equals, from=4-2, to=4-3]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=0]
+\end{tikzcd}\]
+My intuition for what data is present in each object of this diagram is something like
+\[\begin{tikzcd}
+	{\{ABRabr\}} && {\{ABR_0r\}} \\
+	{\{ABRab\}} && {\{ABR_0\}} \\
+	{\{ABRab\}} & {\{ABab\}} \\
+	{\{ABR\}} & {\{AB\}} & {\{AB\}}
+	\arrow[from=1-1, to=1-3]
+	\arrow[from=1-1, to=2-1]
+	\arrow[from=1-3, to=2-3]
+	\arrow[from=2-1, to=2-3]
+	\arrow[equals, from=2-1, to=3-1]
+	\arrow[from=2-3, to=4-3]
+	\arrow[from=3-1, to=3-2]
+	\arrow[from=3-1, to=4-1]
+	\arrow[from=3-2, to=4-2]
+	\arrow[from=4-1, to=4-2]
+	\arrow[equals, from=4-2, to=4-3]
+\end{tikzcd}\]
+where $R : A \to B \to \U$ but simply $R_0 : \U$.
+
 \end{document}
