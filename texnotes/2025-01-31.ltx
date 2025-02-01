@@ -814,19 +814,34 @@ thus we can set
 \[c_2 = \lambda \langle \wt P, \nameof{u}\rangle : \wt{C_2} \to  \wt{GH\E} \imp [\U]\]
 
 
-Now to get $c_1$, we need some pullback pair components. We can start with
-\[\langle c_2 \o c, Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
-\[= \langle (\lambda \langle \wt P, \nameof{u}\rangle) \o c, Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
-and to
-\[= \langle \lambda (\langle \wt P, \nameof{u}\rangle \o (c \x \rid_{\wt{GH\E}})) , Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
-and if we hit this with eval we'd get
-\[ \langle \wt P , \nameof{u} \rangle \o (c \x \rid_{\wt{GH\E}}) \o \langle id_{\wt{C_1}}, Gd_1 \o f_1\rangle : \wt{C_1} \to [\U]\]
+Now to get $c_1$, we need some pullback pair components. We can start with defining
+\[c_L: \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
+\[c_L = \langle c_2 \o c, Gd_1 \o f_1\rangle\]
+\[= \langle (\lambda \langle \wt P, \nameof{u}\rangle) \o c, Gd_1 \o f_1\rangle \]
+\[= \langle \lambda (\langle \wt P, \nameof{u}\rangle \o (c \x \rid_{\wt{GH\E}})) , Gd_1 \o f_1\rangle \]
+Now note that
+\[ev \o c_L = \langle \wt P , \nameof{u} \rangle \o (c \x \rid_{\wt{GH\E}}) \o \langle id_{\wt{C_1}}, Gd_1 \o f_1\rangle : \wt{C_1} \to [\U]\]
 
 \[ = \langle \wt P , \nameof{u} \rangle  \o \langle c, Gd_1 \o f_1\rangle\]
 \[ = \langle \wt P , \nameof{u} \rangle  \o u \]
+\[ = \langle \wt P \o u , \nameof{u} \o u \rangle  \]
+\[ = \langle \wt{C_1}, m \o \bar u \rangle : \wt{C_1} \to [\U]  \]
+where $\bar u$ is the projection from the diagram
 
-
-
+\[\begin{tikzcd}
+	{C_1} & \E \\
+	P & \U
+	\arrow["{\bar u}", from=1-1, to=1-2]
+	\arrow["u"', from=1-1, to=2-1]
+	\arrow["m", from=1-2, to=2-2]
+	\arrow["{\nameof u}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+Therefore our goal is to come up with some $c_R : \wt{C_1} \to [\E]$ such that
+\[[m] \o c_R = ev \o c_L = \langle \wt{C_1}, m \o \bar u\rangle\]
+But this is easy given what we have: we set
+\[c_R = \langle{\wt{C_1}, \bar u\rangle : C_1 \to [\E]\]
+This means we can set
+\[c_1 = \langle c_L, c_R \rangle = \langle \langle c_2 \o c, Gd_1 \o f_1 \rangle,\langle{\wt{C_1}, \bar u\rangle\rangle\]
 %%  Since $k : \U_\star \to GH\U$ is an internal hom, I expect $c_2$ to be an internal lambda. To carry out that
 %% $\lambda$, I need a map in the slice over $GH\U$ that goes $(Gd_2 \o f_2) \x GHm \to \pi_U$.
 %% The pullback of those two maps $(Gd_2 \o f_2)$ and $GHm$ is going to be the composite
