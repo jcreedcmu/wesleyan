@@ -690,7 +690,11 @@ Ok, now the only task is to construct $(A:\U,B:\U, x : A \x B) \to (A : \U, B: \
 This is $GHm : GH\E \to GH\U$ is $(A: \U, B : \U, a : A, b : B) \to (A: \U, B : \U)$.
 The type that is constantly $\U$ regardless of the $\U \x \U$ context is
 $\pi_\U: GH\U \x \U \to GH\U$. So I think
-\[k : \U_\star \to GH\U =  (GHm : GH\E \to GH\U) \imp (\pi_\U :  GH\U \x \U \to GH\U)\]
+
+Define
+\[\pi_\U : GH\U \x U \to GH\U = \pi_1\]
+\[\wt{GH\E} = GHm\]
+\[ \wt{\U_\star} : \U_\star \to \GH\U =  \wt{GH\E} \imp \pi_U\]
 Then I think $E_\star$ is constructed like
 % https://q.uiver.app/#q=WzAsOSxbMCwwLCJcXEVfXFxzdGFyIl0sWzIsMCwiR0hcXFVcXHhcXEUiXSxbMiwxLCJHSFxcVVxceFxcVSJdLFswLDIsIlxcYnVsbGV0Il0sWzEsMiwiR0hcXEUiXSxbMCwzLCJcXFVfXFxzdGFyIl0sWzEsMywiR0hcXFUiXSxbMCwxLCJcXGJ1bGxldCJdLFsyLDMsIkdIXFxVIl0sWzAsMV0sWzEsMiwiR0hcXFVcXHggbSJdLFszLDRdLFszLDVdLFs1LDYsImsiLDJdLFs0LDYsIkdIbSJdLFszLDYsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFswLDcsIlxcbGFuZ2xlIG1fXFxzdGFyLFxcZWxsXFxyYW5nbGUiLDJdLFs3LDMsIiIsMix7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMiwiZXYiLDJdLFsyLDgsIlxccGlfVSJdLFs2LDgsIiIsMCx7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMTgsIiIsMix7ImxldmVsIjoxLCJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
 \[\begin{tikzcd}
@@ -731,6 +735,20 @@ My intuition for what data is present in each object of this diagram is somethin
 	\arrow[equals, from=4-2, to=4-3]
 \end{tikzcd}\]
 where $R : A \to B \to \U$ but simply $R_0 : \U$.
+\subsection{Construction, Take 2}
+Set $\wt{GH\E} = GHm$. Let $[\dash]$ be the functor $\C \to \C/GH\U$ that takes an object $C$ to
+the projection $\pi_1 : GH\U \x C \to GH\U$
+and a morphism $m$ to $\rid_{GH\U} \x m$.
+Then define $\wt{U_\star} = \wt{GH\E} \imp [\U]$ and define $\E_\star$ by the pullback
+\[\begin{tikzcd}
+	{\E_\star} && {[\E]} \\
+	{\widetilde{\U_\star} \x\widetilde{GH\E}} && {[\U]}
+	\arrow[from=1-1, to=1-3]
+	\arrow["{{\langle m_\star,\ell\rangle}}"', from=1-1, to=2-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-3]
+	\arrow["{[m]}", from=1-3, to=2-3]
+	\arrow["ev"', from=2-1, to=2-3]
+\end{tikzcd}\]
 \subsection{Checking Object Classifier Property}
 Suppose we have $c, d, f_1, f_2$ in
 \[\begin{tikzcd}
@@ -750,7 +768,7 @@ Suppose we have $c, d, f_1, f_2$ in
 	\arrow["GHm", from=2-6, to=4-6]
 	\arrow["c_2", dashed, from=3-1, to=3-3]
 	\arrow["{f_2}"', from=3-1, to=4-4]
-	\arrow["k"{description}, from=3-3, to=4-6]
+	\arrow["\wt{\U_\star}"{description}, from=3-3, to=4-6]
 	\arrow["Gd_2"', dashed, from=4-4, to=4-6]
 \end{tikzcd}\]
 How do we construct $c_1, c_2, d_1, d_2$?
@@ -759,90 +777,101 @@ universe in $\D$. We take the name of
 $d$ in the category $\D$ to get unique $d_1, d_2$ yielding a pullback in $\D$. Then I suppose we ask for $G$
 to preserve all finite limits as well, so the pullback diagram is carried to $\C$.
 
-\vskip 1em\hrule\vskip 1em
-For many objects we have canonical known maps down to $GH\U$.
-Specifically:
-\[\wt{GH\E} = GHm\]
+Now define some names for maps in the slice over $GH\U$:
 \[\wt{C_1} = Gd_2 \o f_2 \o c\]
 \[\wt{C_2} = Gd_2 \o f_2 \]
 \[\wt{GD_1} = Gd_2 \o Gd \]
 \[\wt{\E_\star} = GHm \o \ell \]
-So we can reimagine the above diagram in the slice category over $GH\U$.
-% https://q.uiver.app/#q=WzAsNyxbMiwyLCJcXHdpZGV0aWxkZXtDXzF9Il0sWzEsMCwiXFx3aWRldGlsZGV7XFxFX1xcc3Rhcn0iXSxbNCwyLCJcXHdpZGV0aWxkZXtHRF8xfSJdLFs0LDAsIlxcd2lkZXRpbGRle0dIXFxFfSJdLFsxLDQsIlxcd2lkZXRpbGRle0NfMn0iXSxbMCwyLCJcXHdpZGV0aWxkZXtHSFxcRX1cXGltcCBcXHBpX1xcVSJdLFs0LDQsIlxcd2lkZXRpbGRle0dEXzJ9Il0sWzAsMSwiY18xIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzAsMiwie2ZfMX0iLDIseyJsYWJlbF9wb3NpdGlvbiI6MzB9XSxbMCw0LCJjIiwyXSxbMCw1LCIiLDAseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIiwiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMywiXFxlbGwiXSxbMSw1LCJ7bV9cXHN0YXJ9IiwyLHsibGFiZWxfcG9zaXRpb24iOjcwfV0sWzIsMywiR2RfMSIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsyLDYsIkdkIiwwLHsibGFiZWxfcG9zaXRpb24iOjMwfV0sWzQsNSwiY18yIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzQsNiwie2ZfMn0iLDJdXQ==&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+Reimagine the above diagram in that slice category:
+% https://q.uiver.app/#q=WzAsNyxbMSwwLCJcXHdpZGV0aWxkZXtcXEVfXFxzdGFyfSJdLFszLDAsIlxcd2lkZXRpbGRle0dIXFxFfSJdLFswLDIsIlxcd2lkZXRpbGRle0dIXFxFfVxcaW1wIFtcXFVdIl0sWzIsMiwiXFx3aWRldGlsZGV7Q18xfSJdLFs0LDIsIlxcd2lkZXRpbGRle0dEXzF9Il0sWzEsNCwiXFx3aWRldGlsZGV7Q18yfSJdLFszLDQsIlxcd2lkZXRpbGRle0dEXzJ9Il0sWzAsMSwiXFxlbGwiXSxbMCwyLCJ7e21fXFxzdGFyfX0iLDIseyJsYWJlbF9wb3NpdGlvbiI6NzB9XSxbMywwLCJ7Y18xfSIsMCx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFszLDIsIiIsMCx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIiLCJib2R5Ijp7Im5hbWUiOiJub25lIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw0LCJ7e2ZfMX19IiwyLHsibGFiZWxfcG9zaXRpb24iOjMwfV0sWzMsNSwiYyIsMl0sWzQsMSwie0dkXzF9IiwyXSxbNCw2LCJHZCIsMCx7ImxhYmVsX3Bvc2l0aW9uIjozMH1dLFs1LDIsIntjXzJ9IiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzUsNiwie3tmXzJ9fSIsMl1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
 \[\begin{tikzcd}
-	& {\widetilde{\E_\star}} &&& {\widetilde{GH\E}} \\
+	& {\widetilde{\E_\star}} && {\widetilde{GH\E}} \\
 	\\
-	{\widetilde{GH\E}\imp \pi_\U} && {\widetilde{C_1}} && {\widetilde{GD_1}} \\
+	{\widetilde{GH\E}\imp [\U]} && {\widetilde{C_1}} && {\widetilde{GD_1}} \\
 	\\
-	& {\widetilde{C_2}} &&& {\widetilde{GD_2}}
-	\arrow["\ell", from=1-2, to=1-5]
-	\arrow["{{m_\star}}"'{pos=0.7}, from=1-2, to=3-1]
-	\arrow["{c_1}", dashed, from=3-3, to=1-2]
+	& {\widetilde{C_2}} && {\widetilde{GD_2}}
+	\arrow["\ell", from=1-2, to=1-4]
+	\arrow["{{{m_\star}}}"'{pos=0.7}, from=1-2, to=3-1]
+	\arrow["{{c_1}}", dashed, from=3-3, to=1-2]
 	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-135}, draw=none, from=3-3, to=3-1]
-	\arrow["{{f_1}}"'{pos=0.3}, from=3-3, to=3-5]
+	\arrow["{{{f_1}}}"'{pos=0.3}, from=3-3, to=3-5]
 	\arrow["c"', from=3-3, to=5-2]
-	\arrow["{Gd_1}"',  from=3-5, to=1-5]
-	\arrow["Gd"{pos=0.3}, from=3-5, to=5-5]
-	\arrow["{c_2}", dashed, from=5-2, to=3-1]
-	\arrow["{{f_2}}"', from=5-2, to=5-5]
+	\arrow["{{Gd_1}}"', from=3-5, to=1-4]
+	\arrow["Gd"{pos=0.3}, from=3-5, to=5-4]
+	\arrow["{{c_2}}", dashed, from=5-2, to=3-1]
+	\arrow["{{{f_2}}}"', from=5-2, to=5-4]
 \end{tikzcd}\]
 Define $\wt P = \wt{C_2} \x \wt{GH\E}$
 and note there is a map $u = \langle c, Gd_1\o f_1\rangle : \wt{C_1} \to \wt P$.
-Remember that $\wt P$ is an object in the slice category, and $u$ is a morphism in the slice
-category. If we consider the underlying morphism $u : C_1 \to P$, we note this has a name
- $\nameof {u} : P \to \U$. Further, $\wt P : P \to GH\U$. Hence
+Hence also $u : C_1 \to P$. This has a name $\nameof {u} : P \to \U$.
+ Further, $\wt P : P \to GH\U$. Hence
 \[\langle \wt P, \nameof{u}\rangle : P \to GH\U \x \U\]
 and since its first component is just $\wt P$, we find
-\[\langle \wt P, \nameof{u}\rangle : \wt P \to \pi_\U\]
+\[\langle \wt P, \nameof{u}\rangle : \wt P \to [\U]\]
 hence
-\[ \langle \wt P, \nameof{u}\rangle : \wt{C_2} \x \wt{GH\E} \to \pi_\U\]
+\[ \langle \wt P, \nameof{u}\rangle : \wt{C_2} \x \wt{GH\E} \to [\U]\]
 thus we can set
-\[c_2 = \lambda \langle \wt P, \nameof{u}\rangle : \wt{C_2} \to  \wt{GH\E} \imp \pi_\U\]
-\vskip 1em\hrule\vskip 1em
+\[c_2 = \lambda \langle \wt P, \nameof{u}\rangle : \wt{C_2} \to  \wt{GH\E} \imp [\U]\]
 
 
- Since $k : \U_\star \to GH\U$ is an internal hom, I expect $c_2$ to be an internal lambda. To carry out that
-$\lambda$, I need a map in the slice over $GH\U$ that goes $(Gd_2 \o f_2) \x GHm \to \pi_U$.
-The pullback of those two maps $(Gd_2 \o f_2)$ and $GHm$ is going to be the composite
-of two pullback squares:
-\[\begin{tikzcd}
-	{C_1} \\
-	& P & {GD_1} & {GH\E} \\
-	& {C_2} & {GD_2} & {GH\U}
-	\arrow["u"{description}, dashed, from=1-1, to=2-2]
-	\arrow["{f_1}", curve={height=-12pt}, from=1-1, to=2-3]
-	\arrow["c"', curve={height=12pt}, from=1-1, to=3-2]
-	\arrow["{p_1}", from=2-2, to=2-3]
-	\arrow["{p_2}"', from=2-2, to=3-2]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=3-3]
-	\arrow["{Gd_1}", from=2-3, to=2-4]
-	\arrow["Gd"{description}, from=2-3, to=3-3]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-3, to=3-4]
-	\arrow["GHm", from=2-4, to=3-4]
-	\arrow["{{f_2}}"', from=3-2, to=3-3]
-	\arrow["{Gd_2}"', from=3-3, to=3-4]
-\end{tikzcd}\]
-Then $\nameof u : P \to \U$ and $\langle Gd_2 f_2 p_2, \nameof u \rangle : P \to GH\U \x \U$
-and really therefore
-\[\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \x GHm \to \pi_U\]
-and so we can set
-\[c_2 = \lambda\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \to k\]
-Now to get $C_1 \to \E_\star$ we need to come up with some pullback pair components.
-It's easy to come up with
-\[c_2\o c : C_1 \to \U_\star \qquad Gd_1 \o f_1 : C_1 \to GH\E \]
-and based on the fact that we just constructed $c_2$ so that $kc_2 = Gd_2 \o f_2$,
-we can be assured that $k \o (c_2\o c) = GHm \o (Gd_2 \o f_1)$ because both of them
-are equal to $Gd_2 \o f_2 \o c$. Therefore we construct
-\[\langle c_2\o c, Gd_1 \o f_1\rangle : C_1 \to \E'\]
+Now to get $c_1$, we need some pullback pair components. We can start with
+\[\langle c_2 \o c, Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
+This is equal to
+\[\langle (\lambda \langle \wt P, \nameof{u}\rangle) \o c, Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
+and to
+\[\langle \lambda (\langle \wt P, \nameof{u}\rangle \o (c \x \rid_{\wt{GH\E}})) , Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
+\[\langle \lambda (\langle \wt P \o (c \x \rid_{\wt{GH\E}}), \nameof{u} \o (c \x \rid_{\wt{GH\E}})\rangle ) , Gd_1 \o f_1\rangle : \wt{C_1} \to \wt{\U_\star} \x \wt{GH\E}\]
 
 
-By uniqueness, we can push the precomposition of $c$ under the lambda, so this is
-the same as
-\[\langle \lambda \langle Gd_2 \o f_2 \o  p_2 \o c, \nameof u \rangle , Gd_1 \o f_1\rangle : C_1 \to \E'\]
 
-Now we want some map
-\[z : \qquad C_1 \to GH\U \x \E\]
-such that
+
+
+
+%%  Since $k : \U_\star \to GH\U$ is an internal hom, I expect $c_2$ to be an internal lambda. To carry out that
+%% $\lambda$, I need a map in the slice over $GH\U$ that goes $(Gd_2 \o f_2) \x GHm \to \pi_U$.
+%% The pullback of those two maps $(Gd_2 \o f_2)$ and $GHm$ is going to be the composite
+%% of two pullback squares:
+%% \[\begin{tikzcd}
+%% 	{C_1} \\
+%% 	& P & {GD_1} & {GH\E} \\
+%% 	& {C_2} & {GD_2} & {GH\U}
+%% 	\arrow["u"{description}, dashed, from=1-1, to=2-2]
+%% 	\arrow["{f_1}", curve={height=-12pt}, from=1-1, to=2-3]
+%% 	\arrow["c"', curve={height=12pt}, from=1-1, to=3-2]
+%% 	\arrow["{p_1}", from=2-2, to=2-3]
+%% 	\arrow["{p_2}"', from=2-2, to=3-2]
+%% 	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=3-3]
+%% 	\arrow["{Gd_1}", from=2-3, to=2-4]
+%% 	\arrow["Gd"{description}, from=2-3, to=3-3]
+%% 	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-3, to=3-4]
+%% 	\arrow["GHm", from=2-4, to=3-4]
+%% 	\arrow["{{f_2}}"', from=3-2, to=3-3]
+%% 	\arrow["{Gd_2}"', from=3-3, to=3-4]
+%% \end{tikzcd}\]
+%% Then $\nameof u : P \to \U$ and $\langle Gd_2 f_2 p_2, \nameof u \rangle : P \to GH\U \x \U$
+%% and really therefore
+%% \[\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \x GHm \to \pi_U\]
+%% and so we can set
+%% \[c_2 = \lambda\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \to k\]
+%% Now to get $C_1 \to \E_\star$ we need to come up with some pullback pair components.
+%% It's easy to come up with
+%% \[c_2\o c : C_1 \to \U_\star \qquad Gd_1 \o f_1 : C_1 \to GH\E \]
+%% and based on the fact that we just constructed $c_2$ so that $kc_2 = Gd_2 \o f_2$,
+%% we can be assured that $k \o (c_2\o c) = GHm \o (Gd_2 \o f_1)$ because both of them
+%% are equal to $Gd_2 \o f_2 \o c$. Therefore we construct
+%% \[\langle c_2\o c, Gd_1 \o f_1\rangle : C_1 \to \E'\]
+
+
+%% By uniqueness, we can push the precomposition of $c$ under the lambda, so this is
+%% the same as
+%% \[\langle \lambda \langle Gd_2 \o f_2 \o  p_2 \o c, \nameof u \rangle , Gd_1 \o f_1\rangle : C_1 \to \E'\]
+
+%% Now we want some map
+%% \[z : \qquad C_1 \to GH\U \x \E\]
+%% such that
+
+
+
 \subsection{Exercise}
 The typical $\beta$ diagram for exponentials is, for $f : A \x B \to C$ and $M : A \to B$,
 % https://q.uiver.app/#q=WzAsNCxbMCwxLCIgKEJcXGltcCBDKVxceCBCIl0sWzEsMSwiQyJdLFswLDAsIkEiXSxbMSwwLCJBXFx4IEIiXSxbMCwxLCJldiIsMl0sWzIsMCwiXFxsYW5nbGVcXGxhbWJkYSBmLCBNXFxyYW5nbGUiLDJdLFsyLDMsIlxcbGFuZ2xlIFxccmlkLCBNXFxyYW5nbGUiXSxbMywxLCJmIl1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
