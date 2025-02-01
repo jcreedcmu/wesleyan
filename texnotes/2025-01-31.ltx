@@ -17,6 +17,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
+\def\wt{\widetilde}
 \def\tel{\mathsf{T}}
 \def\bdot{\mathrel{\bar\cdot}}
 \def\bodot{\mathrel{\bar\odot}}
@@ -181,6 +182,27 @@ boxrule=0pt,boxsep=0pt,breakable}
 \definecolor{opfibl}{HTML}{DBEDFF}
 \definecolor{greenl}{HTML}{DBEDDB}
 \definecolor{redl}{HTML}{FAE4E4}
+
+% https://tex.stackexchange.com/questions/716631/curved-arrows-from-tikz-cd-do-not-work
+\tikzset{
+  curve/.style={
+    settings={#1},
+    to path={
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes
+    },
+  },
+  settings/.code={%
+    \tikzset{quiver/.cd,#1}%
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}%
+  },
+  quiver/.cd,
+  pos/.initial=0.35,
+  height/.initial=0,
+}
+
 \begin{document}
 
 \def\
@@ -673,8 +695,8 @@ Then I think $E_\star$ is constructed like
 % https://q.uiver.app/#q=WzAsOSxbMCwwLCJcXEVfXFxzdGFyIl0sWzIsMCwiR0hcXFVcXHhcXEUiXSxbMiwxLCJHSFxcVVxceFxcVSJdLFswLDIsIlxcYnVsbGV0Il0sWzEsMiwiR0hcXEUiXSxbMCwzLCJcXFVfXFxzdGFyIl0sWzEsMywiR0hcXFUiXSxbMCwxLCJcXGJ1bGxldCJdLFsyLDMsIkdIXFxVIl0sWzAsMV0sWzEsMiwiR0hcXFVcXHggbSJdLFszLDRdLFszLDVdLFs1LDYsImsiLDJdLFs0LDYsIkdIbSJdLFszLDYsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFswLDcsIlxcbGFuZ2xlIG1fXFxzdGFyLFxcZWxsXFxyYW5nbGUiLDJdLFs3LDMsIiIsMix7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMiwiZXYiLDJdLFsyLDgsIlxccGlfVSJdLFs2LDgsIiIsMCx7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMTgsIiIsMix7ImxldmVsIjoxLCJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
 \[\begin{tikzcd}
 	{\E_\star} && {GH\U\x\E} \\
-	\bullet && {GH\U\x\U} \\
-	\bullet & {GH\E} \\
+	\E' && {GH\U\x\U} \\
+	\E' & {GH\E} \\
 	{\U_\star} & {GH\U} & {GH\U}
 	\arrow[from=1-1, to=1-3]
 	\arrow["{\langle m_\star,\ell\rangle}"', from=1-1, to=2-1]
@@ -737,22 +759,164 @@ universe in $\D$. We take the name of
 $d$ in the category $\D$ to get unique $d_1, d_2$ yielding a pullback in $\D$. Then I suppose we ask for $G$
 to preserve all finite limits as well, so the pullback diagram is carried to $\C$.
 
-Since $\U_\star$ is an internal hom, I expect $c_2$ to be an internal lambda. To carry out that
+\vskip 1em\hrule\vskip 1em
+For many objects we have canonical known maps down to $GH\U$.
+Specifically:
+\[\wt{GH\E} = GHm\]
+\[\wt{C_1} = Gd_2 \o f_2 \o c\]
+\[\wt{C_2} = Gd_2 \o f_2 \]
+\[\wt{GD_1} = Gd_2 \o Gd \]
+\[\wt{\E_\star} = GHm \o \ell \]
+So we can reimagine the above diagram in the slice category over $GH\U$.
+% https://q.uiver.app/#q=WzAsNyxbMiwyLCJcXHdpZGV0aWxkZXtDXzF9Il0sWzEsMCwiXFx3aWRldGlsZGV7XFxFX1xcc3Rhcn0iXSxbNCwyLCJcXHdpZGV0aWxkZXtHRF8xfSJdLFs0LDAsIlxcd2lkZXRpbGRle0dIXFxFfSJdLFsxLDQsIlxcd2lkZXRpbGRle0NfMn0iXSxbMCwyLCJcXHdpZGV0aWxkZXtHSFxcRX1cXGltcCBcXHBpX1xcVSJdLFs0LDQsIlxcd2lkZXRpbGRle0dEXzJ9Il0sWzAsMSwiY18xIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzAsMiwie2ZfMX0iLDIseyJsYWJlbF9wb3NpdGlvbiI6MzB9XSxbMCw0LCJjIiwyXSxbMCw1LCIiLDAseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIiwiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMywiXFxlbGwiXSxbMSw1LCJ7bV9cXHN0YXJ9IiwyLHsibGFiZWxfcG9zaXRpb24iOjcwfV0sWzIsMywiR2RfMSIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsyLDYsIkdkIiwwLHsibGFiZWxfcG9zaXRpb24iOjMwfV0sWzQsNSwiY18yIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzQsNiwie2ZfMn0iLDJdXQ==&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	& {\widetilde{\E_\star}} &&& {\widetilde{GH\E}} \\
+	\\
+	{\widetilde{GH\E}\imp \pi_\U} && {\widetilde{C_1}} && {\widetilde{GD_1}} \\
+	\\
+	& {\widetilde{C_2}} &&& {\widetilde{GD_2}}
+	\arrow["\ell", from=1-2, to=1-5]
+	\arrow["{{m_\star}}"'{pos=0.7}, from=1-2, to=3-1]
+	\arrow["{c_1}", dashed, from=3-3, to=1-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-135}, draw=none, from=3-3, to=3-1]
+	\arrow["{{f_1}}"'{pos=0.3}, from=3-3, to=3-5]
+	\arrow["c"', from=3-3, to=5-2]
+	\arrow["{Gd_1}"',  from=3-5, to=1-5]
+	\arrow["Gd"{pos=0.3}, from=3-5, to=5-5]
+	\arrow["{c_2}", dashed, from=5-2, to=3-1]
+	\arrow["{{f_2}}"', from=5-2, to=5-5]
+\end{tikzcd}\]
+Define $\wt P = \wt{C_2} \x \wt{GH\E}$
+and note there is a map $u = \langle c, Gd_1\o f_1\rangle : \wt{C_1} \to \wt P$.
+Remember that $\wt P$ is an object in the slice category, and $u$ is a morphism in the slice
+category. If we consider the underlying morphism $u : C_1 \to P$, we note this has a name
+ $\nameof {u} : P \to \U$. Further, $\wt P : P \to GH\U$. Hence
+\[\langle \wt P, \nameof{u}\rangle : P \to GH\U \x \U\]
+and since its first component is just $\wt P$, we find
+\[\langle \wt P, \nameof{u}\rangle : \wt P \to \pi_\U\]
+hence
+\[ \langle \wt P, \nameof{u}\rangle : \wt{C_2} \x \wt{GH\E} \to \pi_\U\]
+thus we can set
+\[c_2 = \lambda \langle \wt P, \nameof{u}\rangle : \wt{C_2} \to  \wt{GH\E} \imp \pi_\U\]
+\vskip 1em\hrule\vskip 1em
+
+
+ Since $k : \U_\star \to GH\U$ is an internal hom, I expect $c_2$ to be an internal lambda. To carry out that
 $\lambda$, I need a map in the slice over $GH\U$ that goes $(Gd_2 \o f_2) \x GHm \to \pi_U$.
 The pullback of those two maps $(Gd_2 \o f_2)$ and $GHm$ is going to be the composite
 of two pullback squares:
-% https://q.uiver.app/#q=WzAsNixbMSwwLCJHRF8xIl0sWzIsMCwiR0hcXEUiXSxbMCwxLCJDXzIiXSxbMSwxLCJHRF8yIl0sWzIsMSwiR0hcXFUiXSxbMCwwLCJQIl0sWzAsMSwiR2RfMSJdLFswLDMsIkdkIiwxXSxbMCw0LCIiLDAseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIiwiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiR0htIl0sWzIsMywie2ZfMn0iLDJdLFszLDQsIkdkXzIiLDJdLFs1LDAsInBfMSJdLFs1LDIsInBfMiIsMl0sWzUsMywiIiwxLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F9777f5b407fb5613a8b8143c2666a48fbe6e5a44%2Fquiver-macros.tex
 \[\begin{tikzcd}
-	P & {GD_1} & {GH\E} \\
-	{C_2} & {GD_2} & {GH\U}
-	\arrow["{p_1}", from=1-1, to=1-2]
-	\arrow["{p_2}"', from=1-1, to=2-1]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
-	\arrow["{Gd_1}", from=1-2, to=1-3]
-	\arrow["Gd"{description}, from=1-2, to=2-2]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-2, to=2-3]
-	\arrow["GHm", from=1-3, to=2-3]
-	\arrow["{{f_2}}"', from=2-1, to=2-2]
-	\arrow["{Gd_2}"', from=2-2, to=2-3]
+	{C_1} \\
+	& P & {GD_1} & {GH\E} \\
+	& {C_2} & {GD_2} & {GH\U}
+	\arrow["u"{description}, dashed, from=1-1, to=2-2]
+	\arrow["{f_1}", curve={height=-12pt}, from=1-1, to=2-3]
+	\arrow["c"', curve={height=12pt}, from=1-1, to=3-2]
+	\arrow["{p_1}", from=2-2, to=2-3]
+	\arrow["{p_2}"', from=2-2, to=3-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=3-3]
+	\arrow["{Gd_1}", from=2-3, to=2-4]
+	\arrow["Gd"{description}, from=2-3, to=3-3]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-3, to=3-4]
+	\arrow["GHm", from=2-4, to=3-4]
+	\arrow["{{f_2}}"', from=3-2, to=3-3]
+	\arrow["{Gd_2}"', from=3-3, to=3-4]
+\end{tikzcd}\]
+Then $\nameof u : P \to \U$ and $\langle Gd_2 f_2 p_2, \nameof u \rangle : P \to GH\U \x \U$
+and really therefore
+\[\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \x GHm \to \pi_U\]
+and so we can set
+\[c_2 = \lambda\langle Gd_2 f_2 p_2, \nameof u \rangle : (Gd_2 \o f_2) \to k\]
+Now to get $C_1 \to \E_\star$ we need to come up with some pullback pair components.
+It's easy to come up with
+\[c_2\o c : C_1 \to \U_\star \qquad Gd_1 \o f_1 : C_1 \to GH\E \]
+and based on the fact that we just constructed $c_2$ so that $kc_2 = Gd_2 \o f_2$,
+we can be assured that $k \o (c_2\o c) = GHm \o (Gd_2 \o f_1)$ because both of them
+are equal to $Gd_2 \o f_2 \o c$. Therefore we construct
+\[\langle c_2\o c, Gd_1 \o f_1\rangle : C_1 \to \E'\]
+
+
+By uniqueness, we can push the precomposition of $c$ under the lambda, so this is
+the same as
+\[\langle \lambda \langle Gd_2 \o f_2 \o  p_2 \o c, \nameof u \rangle , Gd_1 \o f_1\rangle : C_1 \to \E'\]
+
+Now we want some map
+\[z : \qquad C_1 \to GH\U \x \E\]
+such that
+\subsection{Exercise}
+The typical $\beta$ diagram for exponentials is, for $f : A \x B \to C$ and $M : A \to B$,
+% https://q.uiver.app/#q=WzAsNCxbMCwxLCIgKEJcXGltcCBDKVxceCBCIl0sWzEsMSwiQyJdLFswLDAsIkEiXSxbMSwwLCJBXFx4IEIiXSxbMCwxLCJldiIsMl0sWzIsMCwiXFxsYW5nbGVcXGxhbWJkYSBmLCBNXFxyYW5nbGUiLDJdLFsyLDMsIlxcbGFuZ2xlIFxccmlkLCBNXFxyYW5nbGUiXSxbMywxLCJmIl1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	A & {A\x B} \\
+	{ (B\imp C)\x B} & C
+	\arrow["{\langle \rid, M\rangle}", from=1-1, to=1-2]
+	\arrow["{\langle\lambda f, M\rangle}"', from=1-1, to=2-1]
+	\arrow["f", from=1-2, to=2-2]
+	\arrow["ev"', from=2-1, to=2-2]
+\end{tikzcd}\]
+If we have a slice category over $D$, and $A : A_0 \to D, B : B_0 \to D, C : C_0 \to D$, this is
+% https://q.uiver.app/#q=WzAsMTAsWzAsMiwiKChCXFxpbXAgQykgXFx4IEIpXzAiXSxbNCwyLCJDXzAiXSxbMCwwLCJBXzAiXSxbNCwwLCIoQSBcXHggQilfMCJdLFsyLDEsIkQiXSxbNiwyLCJBXzAiXSxbNywxLCJCXzAiXSxbNywyLCJEIl0sWzYsMSwiKEFcXHggQilfMCJdLFs1LDAsIkFfMCJdLFswLDEsImV2IiwyXSxbMiwwLCJcXGxhbmdsZVxcbGFtYmRhIGYsIE1cXHJhbmdsZSIsMl0sWzIsMywiXFxsYW5nbGUgXFxyaWQsIE1cXHJhbmdsZSJdLFszLDEsImYiXSxbMiw0LCJBIiwxXSxbMCw0LCIoQlxcaW1wIEMpIFxceCBCIiwxXSxbMSw0LCJDIiwxXSxbMyw0LCJBIFxceCBCIiwxXSxbNSw3LCJBIiwyXSxbNiw3LCJCIl0sWzgsNl0sWzgsNV0sWzksNSwiIiwyLHsiY3VydmUiOjIsImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksNiwiTSIsMCx7ImN1cnZlIjotMn1dLFs5LDgsIlxcbGFuZ2xlXFxyaWQsTVxccmFuZ2xlIiwxXSxbOCw3LCJBXFx4IEIiLDFdLFs4LDcsIiIsMSx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dXQ==&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{A_0} &&&& {(A \x B)_0} & {A_0} \\
+	&& D &&&& {(A\x B)_0} & {B_0} \\
+	{((B\imp C) \x B)_0} &&&& {C_0} && {A_0} & D
+	\arrow["{\langle \rid, M\rangle}", from=1-1, to=1-5]
+	\arrow["A"{description}, from=1-1, to=2-3]
+	\arrow["{\langle\lambda f, M\rangle}"', from=1-1, to=3-1]
+	\arrow["{A \x B}"{description}, from=1-5, to=2-3]
+	\arrow["f", from=1-5, to=3-5]
+	\arrow["{\langle\rid,M\rangle}"{description}, from=1-6, to=2-7]
+	\arrow["M", curve={height=-12pt}, from=1-6, to=2-8]
+	\arrow[curve={height=12pt}, equals, from=1-6, to=3-7]
+	\arrow[from=2-7, to=2-8]
+	\arrow[from=2-7, to=3-7]
+	\arrow["{A\x B}"{description}, from=2-7, to=3-8]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-7, to=3-8]
+	\arrow["B", from=2-8, to=3-8]
+	\arrow["{(B\imp C) \x B}"{description}, from=3-1, to=2-3]
+	\arrow["ev"', from=3-1, to=3-5]
+	\arrow["C"{description}, from=3-5, to=2-3]
+	\arrow["A"', from=3-7, to=3-8]
+\end{tikzcd}\]
+Now precomposition of a lambda with some other morphism works like this.
+If $q : Q \to A$ and $f : A \x B \to C$, then we have
+% https://q.uiver.app/#q=WzAsNSxbMCwwLCJRXFx4IEIiXSxbMSwwLCJBXFx4IEIiXSxbMiwwLCIoQlxcaW1wIEMpIFxceCBCIl0sWzIsMSwiQyJdLFswLDEsIihCXFxpbXAgQylcXHggQiJdLFswLDEsInFcXHggXFxyaWRfQiJdLFsxLDIsIlxcbGFtYmRhIGZcXHggXFxyaWRfQiJdLFsyLDMsImV2Il0sWzAsNCwiXFxsYW1iZGEoZlxcbyhxXFx4IFxccmlkX0IpKSBcXHggXFxyaWRfQiIsMl0sWzQsMywiZXYiLDJdLFsxLDMsImYiLDFdXQ==&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{Q\x B} & {A\x B} & {(B\imp C) \x B} \\
+	{(B\imp C)\x B} && C
+	\arrow["{q\x \rid_B}", from=1-1, to=1-2]
+	\arrow["{\lambda(f\o(q\x \rid_B)) \x \rid_B}"', from=1-1, to=2-1]
+	\arrow["{\lambda f\x \rid_B}", from=1-2, to=1-3]
+	\arrow["f"{description}, from=1-2, to=2-3]
+	\arrow["ev", from=1-3, to=2-3]
+	\arrow["ev"', from=2-1, to=2-3]
+\end{tikzcd}\]
+and therefore
+% https://q.uiver.app/#q=WzAsMyxbMSwwLCJBIl0sWzIsMSwiQyJdLFswLDEsIlEiXSxbMiwxLCJcXGxhbWJkYShmXFxvKHFcXHggXFxyaWRfQikpIiwyXSxbMiwwLCJxICJdLFswLDEsIlxcbGFtYmRhIGYiXV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	& A \\
+	Q && C
+	\arrow["{\lambda f}", from=1-2, to=2-3]
+	\arrow["{q }", from=2-1, to=1-2]
+	\arrow["{\lambda(f\o(q\x \rid_B))}"', from=2-1, to=2-3]
+\end{tikzcd}\]
+In a slice category this looks like
+% https://q.uiver.app/#q=WzAsNixbMCwwLCIoUVxceCBCKV8wIl0sWzIsMCwiKEFcXHggQilfMCJdLFs0LDAsIigoQlxcaW1wIEMpIFxceCBCKV8wIl0sWzQsMywiQ18wIl0sWzAsMywiKChCXFxpbXAgQylcXHggQilfMCJdLFsxLDIsIkQiXSxbMCwxLCJxXFx4IFxccmlkX0IiXSxbMSwyLCJcXGxhbWJkYSBmXFx4IFxccmlkX0IiXSxbMiwzLCJldiJdLFswLDQsIlxcbGFtYmRhKGZcXG8ocVxceCBcXHJpZF9CKSkgXFx4IFxccmlkX0IiLDJdLFs0LDMsImV2IiwyXSxbMSwzLCJmIiwxLHsibGFiZWxfcG9zaXRpb24iOjIwfV0sWzAsNSwiUVxcdGltZXMgQiIsMV0sWzQsNSwiKEJcXGltcCBDKVxceCBCIiwxXSxbMyw1LCJDIiwxXSxbMSw1LCJBXFx4IEIiLDFdLFsyLDUsIihCXFxpbXAgQylcXHggQiIsMSx7ImxhYmVsX3Bvc2l0aW9uIjoyMCwiY3VydmUiOi0zfV1d&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{(Q\x B)_0} && {(A\x B)_0} && {((B\imp C) \x B)_0} \\
+	\\
+	& D \\
+	{((B\imp C)\x B)_0} &&&& {C_0}
+	\arrow["{q\x \rid_B}", from=1-1, to=1-3]
+	\arrow["{Q\times B}"{description}, from=1-1, to=3-2]
+	\arrow["{\lambda(f\o(q\x \rid_B)) \x \rid_B}"', from=1-1, to=4-1]
+	\arrow["{\lambda f\x \rid_B}", from=1-3, to=1-5]
+	\arrow["{A\x B}"{description}, from=1-3, to=3-2]
+	\arrow["f"{description, pos=0.2}, from=1-3, to=4-5]
+	\arrow["{(B\imp C)\x B}"{description, pos=0.2}, curve={height=-18pt}, from=1-5, to=3-2]
+	\arrow["ev", from=1-5, to=4-5]
+	\arrow["{(B\imp C)\x B}"{description}, from=4-1, to=3-2]
+	\arrow["ev"', from=4-1, to=4-5]
+	\arrow["C"{description}, from=4-5, to=3-2]
 \end{tikzcd}\]
 \end{document}
