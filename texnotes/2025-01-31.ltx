@@ -632,4 +632,41 @@ Finally, to map $c_1 \in C_1$ to $\E_\star$, again our $A$ and $B$ are the
 $Gd$-fibers over $f(c(c_1))$, the $R$ is the fiber of $c$ over $c(c_1)$,
 the $a, b$ come from the element $f_1(c)$, and the $r$ is the element $c_1$
 itself, construed as being in the $c$-fiber of its own image under $c$.
+\subsection{Why not Adjunctions?}
+When I set up
+\[\begin{tikzcd}
+  \D' \ar[d, "G'",swap]\ar[r,"\partial"]&  \D\ar[d, "G"]\\
+\C\ar[r,equal]\ar[ur,shorten <>=10pt,Rightarrow, "\gamma"]&\C
+\end{tikzcd}
+\]
+with $\D' = (\rid_\C, G)$, I don't believe that $H'$ is going to be left adjoint
+to $G'$, creating an adjunction between $\D'$ and $\C$. Why? Because $\D'$
+is the category of $G$-ary relations in $\C$, and $G'$ only projects out the
+total space. So given a relation $D' = (R, (A,B), f: R \to A \x B) \in \D'$ and an object $C \in \C$,
+I don't believe there's a homset bijection
+\[\D'(H'C, D') \cong \C(C, R)\]
+because maybe $H'C$ has extra stuff.
+\subsection{Construction}
+I believe the above is the appropriate intuition. What explicitly is $\rset_\star$, as an object of $\C$?
+In the special case of binary relations, I can form $\U \x \U$ no problem. How do I make the Sigma
+type $\Sigma (\U \x \U) (\lambda x . \E(x_1) \x \E(x_2) \to \U)$?
+Whenever I have $a : \Gamma,A \to \Gamma$ and $b : \Gamma,A,B \to \Gamma,A$ the sigma type
+is just the composition $b \o a : \Gamma,\Sigma A B$.
+
+So how do I construct $(A:\U,B:\U,A \x B \to \U) \to (A:\U,B:\U)$? Well, first of all, how do
+I get from $a:\Gamma,A \to \Gamma$ and $b:\Gamma,B \to \Gamma$ to $\Gamma, A \imp B$?
+I guess this should come from the lccc structure on $\C$. The category $\C/\Gamma$ should
+be ccc. Its products are pullbacks. So $a \imp b : \Gamma,A\imp B \to \Gamma$ exists.
+The evaluation map runs like
+\[\begin{tikzcd}
+  \Gamma,A\imp B,A \ar[dr, "ev"]\ar[dd]\pbck\ar[rr]&&  \Gamma,A\imp B\ar[dd, "a\imp b"] \\
+&\Gamma,B \ar[dr, "b"]\\
+\Gamma,A \ar[rr,"a"']&&\Gamma
+\end{tikzcd}
+\]
+Ok, now the only task is to construct $(A:\U,B:\U, x : A \x B) \to (A : \U, B: \U)$.
+This is $GHm : GH\E \to GH\U$ is $(A: \U, B : \U, a : A, b : B) \to (A: \U, B : \U)$.
+The type that is constantly $\U$ regardless of the $\U \x \U$ context is
+$\pi_2 : \U \x GH\U \to GH\U$. So I think
+\[k : \U_\star \to GH\U =  (GHm : GH\E \to GH\U) \imp (\pi_2 : \U \x GH\U \to GH\U)\]
 \end{document}
