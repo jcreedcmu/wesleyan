@@ -213,10 +213,10 @@ boxrule=0pt,boxsep=0pt,breakable}
 \tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
 
 \section{Parametricity and Comma Categories}
-Say $G : \D \to \C$ is a {\em shape over $\C$} when $G$ is a finite-product preserving functor between two categories with finite products. We say $G$ has a {\em partner} when there exists $(H, \eta)$ such that
+Say $G : \D \to \C$ is a {\em shape over $\C$} when $G$ is a finite-limit preserving functor between two categories with finite limits. We say $G$ has a {\em partner} when there exists $(H, \eta)$ such that
 \begin{enumerate}
 \item $H : \C \to \D$ is a functor that `preserves everything I care about'.
-      Probably finite products, coproducts, exponentials, etc.
+      At least finite limits, colimits, exponentials, exponentials in slices, universes.
 \item $\eta$ is a `unit of the almost adjunction'
 \begin{tikzcd}
  \C\ar[d,equal] \ar[r,"H"]&\D\ar[d, "G"]\\
@@ -307,9 +307,8 @@ $(C,D,f)$ to $f$.
 
 
 \subsection{Parametricity}
-A category $\C$ is said to be {\em parametric} when,
-for all shapes $G$ over $\C$, if $G$ has a partner
-then $\L G$ has a partner.
+If $G$ is a shape over $\C$ with a partner $H$, we say $\C$ is {\em $(G,H)$-parametric} when
+ $\L G$ has a partner.
 \subsection{Consequences of Parametricity}
 Suppose I have some parametric category $\C$.
 I consider the binary relation shape $G = \prod : \C^2 \to \C$. Then there
