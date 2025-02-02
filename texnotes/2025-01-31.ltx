@@ -799,4 +799,97 @@ of the local internal hom $m' \imp m' : F' \to \U'$. We know $(m' \imp m') \o H'
 
 Suppose I had in mind some closed types $A$ and $B$ and a relation $R \to A \x B$,
 expressed as a morphism $1 \to \U'$.
+
+\section{Returning to Syntax}
+\def\rtrue{\ \mathsf{true}}
+\def\rbd{\ \mathsf{bd}}
+\def\rrel{\ \mathsf{rel}}
+\def\ci{\bigcirc}
+I can imagine three judgments
+\[\rtrue \leftrightarrow \C \qquad \rbd \leftrightarrow \D \qquad \rrel \leftrightarrow \D'\]
+No matter what judgment I'm on on the right, hypotheses at $\rtrue$ are always allowed.
+They get interpreted via $H$ or $H'$ as appropriate. I can still have $\rrel$ hypotheses
+when judging $\rbd$ on the right; these get interpreted by $\partial$.
+Now $H,G,H',G'$ are unary type operators in the system. Because of the lack of adjunctions,
+maybe there's a breakdown in focusing. We can abbreviate $\ci = GH$ and
+$\ci' = G'H'$. Both of these are modalities at $\rtrue$. I have mirrors of all logical connectives
+at all three judgments.
+
+Let's use $\Gamma$ for $\rtrue$, and $\Omega$ for $\rbd$ and $\Delta$ for $\rrel$.
+In the simply typed case:
+\[\Gamma \prov C \rtrue \qquad\iff\qquad \sem \Gamma \to \sem C \in \C \]
+\[\Gamma; \Delta \prov D' \rrel \qquad\iff\qquad H'\sem \Gamma \x \sem \Delta \to \sem {D'} \in \D'\]
+\[\Gamma; \Delta;\Omega \prov D \rbd \qquad\iff\qquad H\sem \Gamma \x \partial\sem\Delta \x \Omega \to \sem D \in \D\]
+
+So let's see which left and right rules for the connectives $H,G,H',G',\partial$ are sound.
+
+\[
+\begin{prooftree}
+\Gamma \prov C \rtrue
+\justifies
+\Gamma;\cdot;\cdot \prov HC \rbd
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma, C; \Delta; \Omega \prov J
+\justifies
+\Gamma;\Delta;\Omega, HC\rbd \prov J
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+\Gamma \prov C \rtrue
+\justifies
+\Gamma;\cdot \prov H'C \rrel
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma, C; \Delta \prov J
+\justifies
+\Gamma;\Delta, H'C\rbd \prov J
+\end{prooftree}
+\]
+
+These are trivial to justify.
+\[
+\begin{prooftree}
+\Gamma;\cdot;\cdot \prov D \rbd
+\justifies
+\Gamma \prov GD \rtrue
+\end{prooftree}
+\qquad
+{\color{gray}
+\begin{prooftree}
+\Gamma; \Delta ; \Omega, D\rbd\prov J
+\justifies
+\Gamma, GD\rtrue;\Delta;\Omega \prov J
+\end{prooftree}
+}
+\]
+Here we have something more interesting. To justify the $G$-intro rule, we need $\eta$.
+For we have $H\sem \Gamma \to \sem D$ as a morphism in $\D$. We hit it with $G$ to get
+$GH\sem \Gamma \to G\sem D$. Now we can compose with $\eta_{\sem{\Gamma}}$ to get $\sem\Gamma \to \sem{GD}$
+as required.
+
+I can't directly justify the $G$ left rule. I'd need a counit for the adjunction.
+I could give left rules for $G$ that are specific to $\D$'s role as $n$-ary relation. In this case
+\[GD \cong (s : S) \to  \pi_s D\]
+where $\pi_i$ exists as a logical connective operating in the same direction as $G$.
+\[
+\begin{prooftree}
+\Gamma;\cdot;\cdot \prov D \rbd
+\justifies
+\Gamma \prov \pi_s D \rtrue
+\end{prooftree}
+\qquad
+{\color{gray}
+\begin{prooftree}
+\Gamma; \Delta ; \Omega, D\rbd\prov J
+\justifies
+\Gamma, \pi_s D \rtrue;\Delta;\Omega \prov J
+\end{prooftree}
+}
+\]
+But I don't know how to give that an elim rule either!
 \end{document}
