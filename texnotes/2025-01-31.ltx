@@ -24,7 +24,7 @@
 \def\dec{\mathsf{\downarrow}}
 \def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
-\def\bget{\mathop\mathbf{get}}
+\def\bget{\mathop{\mathbf{get}}\nolimits}
 \def\bGet{\mathop\mathbf{Get}}
 \def\dapt#1#2{#1[\![#2]\!]}
 \def\dap#1#2{#1\{#2\}}
@@ -972,4 +972,46 @@ and allegedly
 i.e.
 \[ \prov M\ Y_1\ (\pi_1 ([x_0/x]y)) : Y_1\]
 \[ \prov M\ X\ x_0 : X\]
+\section{Syntax Again}
+
+\[
+\bar s : \bar S \prov M : A
+\over
+ \prov \lambda\bar s. M : (\bar s : \bar S) \to A
+\]
+
+\[A : \U \qquad s : S \prov B : \U \qquad s : S, x : A \prov M : B \over \bar s : \bar S \prov \rho_A (s.B, sx . M, \bar s) : \U\]
+
+\[\rho_A (s.B, sx . M, \iota N) \equiv [N/s]B\]
+
+
+\[N : A
+\over
+\bar s : \bar S \prov [N]\ \bar s : \rho_A (s.B, sx . M, \bar s) \]
+
+\[ \bar s : \bar S \prov N : \rho_A (s.B, sx . M, \bar s)
+\over
+\bget_M \bar s . N : A\]
+
+\[[N_1]\ (\iota N_2) = [N_2/s][N_1/x]M \]
+\[[\bget_M \bar s. N]\ \bar s' \equiv [\bar s'/\bar s]N\]
+\[\bget_M  \bar s. ([N]\ \bar s) \equiv N\]
+
+So given $M : (X : \U) \to X \to X$ and $f : R \to  A \x B$ and $r : R$, I want to
+find an $r' : R$ such that $f\ r' = \langle M\ A\ (\pi_1(f\ r)), M\ B\  (\pi_2(f\ r))$.
+
+We set
+\[\bar X = \rho_R(s.\langle A|B \rangle\ s, sx. \langle \pi_1 (f\ x)|\pi_2 (f\ x)\rangle\ s, \bar s) \]
+\[\bar x =  [r]\ \bar s\]
+And observe
+\[\bar s : \bar S \prov M\ \bar X\ \bar x : \bar X\]
+So
+\[r' = \bget \bar s. M\ \bar X\ \bar x \]
+\[ = \bget \bar s. (M\ (\rho_R(s.\langle A|B \rangle\ s, sx. \langle \pi_1 (f\ x)|\pi_2 (f\ x)\rangle\ s, \bar s))\ ([r]\ \bar s))\]
+is the desired element of $R$. We need a further kind of $\eta$ principle.
+\[[\bget_M \bar s . N/x]M = [\iota s/\bar s]N\]
+from this we deduce
+\[ \langle \pi_1 (f\ r')|\pi_2 (f\ r')\rangle\ s = [\iota s / \bar s](M\ \bar X\ \bar x)\]
+\[ = M\ (\langle A|B \rangle\ s)\ (\langle \pi_1 (f\ r)|\pi_2 (f\ r)\rangle\ s) \]
+Plugging in both values of $s$ and using the $\eta$ principle for pairs, we find the desired equality.
 \end{document}
