@@ -924,19 +924,22 @@ s:S ; x : A \prov M : B \qquad s \not\in A
 \]
 
 \[
-\bar s : \bar S ; \cdot \prov C : \rset
+{\bar s : \bar S ; \cdot \prov A : B
 \over
-\prov [\star/\bar s] C  : \rset
+s : S \prov [s/\bar s] A  : [s/\bar s]B}
+\qquad
+{\bar s : \bar S ; \cdot \prov A : B
+\over
+\prov [\star/\bar s] A  : [\star/\bar s]B}
 \]
 
 \[
 \bar s : \bar S ; \cdot \prov C : \rset \qquad N : [\star/\bar s]C
 \over
-s : S \prov [(s,N)/\bar s] C  : \rset
+s : S \prov [(s,N)/\bar s] C  : [s/\bar s]C
 \]
 
-\[\rho_A (s.B, sx . M, 0) \equiv [0/s]B\]
-\[\rho_A (s.B, sx . M, 1) \equiv [1/s]B\]
+\[\rho_A (s.B, sx . M, s') \equiv [s'/s]B\]
 \[\rho_A (s.B, sx . M, \star) \equiv A\]
 \[\rho_A (s.B, sx . M, (s',N)) \equiv [s'/s][N/x]M\]
 
@@ -945,7 +948,28 @@ I can weaken to \[\bar s : \bar S \prov M : (X : \rset) \to X \to X\]
 Now suppose I have $x : X \prov y : Y_1 \x Y_2$. Then
 \[s:S; x : X \prov \langle \pi_1 y|\pi_2 y\rangle \ s : \langle Y_1|Y_2 \rangle\ s\]
 \[\bar s:\bar S \prov \rho_X(s.\langle Y_1|Y_2 \rangle\ s, sx. \langle \pi_1 y|\pi_2 y\rangle, \bar s) : \rset\]
-Let's say $X_0(\bar s) = \rho_X(s.\langle Y_1|Y_2 \rangle\ s, sx. \langle \pi_1 y|\pi_2 y\rangle, \bar s) $.
+Let's say $\bar X = \rho_X(s.\langle Y_1|Y_2 \rangle\ s, sx. \langle \pi_1 y|\pi_2 y\rangle\ s, \bar s) $.
 Then
-\[\bar s : \bar S \prov M\ X_0(\bar s) : X_0(\bar s) \to  X_0(\bar s)\]
+\[\bar s : \bar S \prov M\ \bar X : \bar X \to  \bar X\]
+How do we inhabit $\rho$-types? Through their $A$-type somehow.
+
+\[
+s:S ; x : A \prov M : B \qquad s \not\in A\qquad \prov N : A
+\over
+\bar s : \bar S \prov [N]_M\ \bar s : \rho_A (s.B, sx . M, \bar s)
+\]
+\[[N]_{sx.M}\ s' \equiv [s'/s][N/x]M\]
+\[[N]_{sx.M}\ \star \equiv N\]
+So if I have $x_0 : X$ which relates $\pi_1([x_0/x]y)$ and $\pi_2([x_0/x]y)$, I can
+form
+\[\bar x = [x_0]_{sx.\langle \pi_1 y|\pi_2 y \rangle\ s}\]
+and now
+\[\bar s : \bar S \prov M\ \bar X\ \bar x :  \bar X\]
+\[ \prov \lambda \bar s. M\ \bar X\ \bar x :  (\bar s : \bar S) \to \bar X\]
+and allegedly
+\[ \prov (\lambda \bar s. M\ \bar X\ \bar x)(0) : [0/\bar s]( \bar X)\]
+\[ \prov (\lambda \bar s. M\ \bar X\ \bar x)(\star) : [\star/\bar s]( \bar X)\]
+i.e.
+\[ \prov M\ Y_1\ (\pi_1 ([x_0/x]y)) : Y_1\]
+\[ \prov M\ X\ x_0 : X\]
 \end{document}
