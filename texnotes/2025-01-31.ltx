@@ -892,4 +892,60 @@ where $\pi_i$ exists as a logical connective operating in the same direction as 
 }
 \]
 But I don't know how to give that an elim rule either!
+
+\subsection{Just Boundaries}
+
+For binary relations, I picture the binary relation judgment as simply introducing
+a new shape variable $s :S$ way off to the left. The $\D$ category's universe
+is really $S \to \U$. The functors back and forth are really $HC = \lambda s . C$ and
+$GD = (s : S) \to D\ s$. So I'm able to interpret any sequent at the $\D$ category,
+which is allowed hypotheses from both $\C$ and $\D$, by hitting all the $\C$ hypotheses
+with weakening, i.e. the functor $H$. I can substitute any constant $0,1:S$ for $s$ to
+go from a $\D$-sequent to a $\C$-sequent. I can have a primitive like
+\[
+[0/s]\Gamma \prov M : [0/s]A \qquad [1/s]\Gamma \prov M' : [1/s]A
+\over
+s:S; \Gamma \prov \langle M|M' \rangle\  s : A
+\]
+with $\langle M|M' \rangle\ 0 \equiv M$ and $\langle M|M' \rangle\ 1 \equiv M'$.
+
+\subsection{Relations}
+
+So I want to be able to introduce some kind of variable $\bar s : \bar S$.
+Then I'd have $\prov M :A $ implies $\prov \lambda \bar s . M : G'H'A$.
+Somehow there is an operation $[\star/\bar s]$ on types over $\bar s$ that yields the relation
+total space type just as $[0/\bar s]$ and $[1/\bar s]$ yield the boundary types.
+
+
+\[
+s:S ; x : A \prov M : B \qquad s \not\in A
+\over
+\bar s : \bar S ; \rho_A (s.B, sx . M, \bar s) : \rset
+\]
+
+\[
+\bar s : \bar S ; \cdot \prov C : \rset
+\over
+\prov [\star/\bar s] C  : \rset
+\]
+
+\[
+\bar s : \bar S ; \cdot \prov C : \rset \qquad N : [\star/\bar s]C
+\over
+s : S \prov [(s,N)/\bar s] C  : \rset
+\]
+
+\[\rho_A (s.B, sx . M, 0) \equiv [0/s]B\]
+\[\rho_A (s.B, sx . M, 1) \equiv [1/s]B\]
+\[\rho_A (s.B, sx . M, \star) \equiv A\]
+\[\rho_A (s.B, sx . M, (s',N)) \equiv [s'/s][N/x]M\]
+
+So I start with \[\prov M : (X : \rset) \to X \to X\]
+I can weaken to \[\bar s : \bar S \prov M : (X : \rset) \to X \to X\]
+Now suppose I have $x : X \prov y : Y_1 \x Y_2$. Then
+\[s:S; x : X \prov \langle \pi_1 y|\pi_2 y\rangle \ s : \langle Y_1|Y_2 \rangle\ s\]
+\[\bar s:\bar S \prov \rho_X(s.\langle Y_1|Y_2 \rangle\ s, sx. \langle \pi_1 y|\pi_2 y\rangle, \bar s) : \rset\]
+Let's say $X_0(\bar s) = \rho_X(s.\langle Y_1|Y_2 \rangle\ s, sx. \langle \pi_1 y|\pi_2 y\rangle, \bar s) $.
+Then
+\[\bar s : \bar S \prov M\ X_0(\bar s) : X_0(\bar s) \to  X_0(\bar s)\]
 \end{document}
