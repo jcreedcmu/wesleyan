@@ -1063,4 +1063,45 @@ a_1 : A_1 & s : S \prov B_2 : \U & s : S, x : A_2 \prov M_2 : B_2\\
 \end{array}
  \over \bungel (a_1,\bar sz.e) : A_2 \]
 
+\subsection{Lighter Syntax}
+This syntax is all very heavy. Is there a lighter way to do it? I know that extracting the `global type' of
+a relation-type can't feel like a substitution, but could it be a single symbol $\Pi$? (This is really the functor $G'$)
+And can I extract the $M$-part of a type by saying something like
+\[
+\bar s: \bar S \prov A : \U \qquad N : S \qquad N' : \Pi \bar s. A
+\over
+\prov N'\bullet \iota N : [\iota N/\bar s]A
+\]
+Then I'm saying something like
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
+x : \Pi\bar s. R_1 \prov f : \Pi \bar s.R_2
+&s : S, y : [s/\bar s]R_1 \prov g : [s/\bar s]R_2
+& f \bullet \iota s \equiv [x \bullet \iota s/y]g
+\end{array}
+ \over \bar s: \bar S;  z : R_1  \prov \bgel(f,g,\bar s, z) :  R_2\]
+
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
+a_1 : \Pi \bar s . R_1
+\multicolumn{3}{c}{
+\bar s : \bar S;  z : R_1 \prov e :  R_2
+}
+\end{array}
+ \over \bar s: \bar S;    \prov \bungel(a_1, \bar s z.e) :  \Pi \bar s . R_2\]
+
+with maybe a $Z$-ary generalization
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
+x : (z : Z) \to \Pi\bar s. R_z \prov f : \Pi \bar s.R_0\\
+s : S, y : (z :Z) \to [s/\bar s]R_z \prov g : [s/\bar s]R_0
+& f \bullet \iota s \equiv [\lambda z . (x\ z) \bullet \iota s/y]g
+\end{array}
+ \over \bar s: \bar S;  w : (z :Z) \to  R_z  \prov \bgel(f,g,\bar s, w) :  R_0\]
+
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
+a : (z : Z) \to  \Pi \bar s . R_z
+\multicolumn{3}{c}{
+\bar s : \bar S;  w : (z :Z) \to R_z \prov e :  R_0
+}
+\end{array}
+ \over \bar s: \bar S;    \prov \bungel(a, \bar s w.e) :  \Pi \bar s . R_0\]
+
 \end{document}
