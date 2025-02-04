@@ -25,6 +25,7 @@
 \def\enc{\mathsf{\uparrow}}
 \def\I{\mathbb{I}}
 \def\bget{\mathop{\mathbf{get}}\nolimits}
+\def\bfget{\mathop{\mathbf{fget}}\nolimits}
 \def\bGet{\mathop\mathbf{Get}}
 \def\dapt#1#2{#1[\![#2]\!]}
 \def\dap#1#2{#1\{#2\}}
@@ -1016,4 +1017,45 @@ from this we deduce
 Plugging in both values of $s$ and using the $\eta$ principle for pairs, we find the desired equality.
 
 {\bf Update}: After playing around with agda, it seems like the ``further $\eta$ principle'' already holds.
+
+\subsection{Gap in the Agda}
+I think I need something in the syntax (and therefore the agda formalism) to tell me how to translate a diagram
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJDXzEiXSxbMSwwLCJDXzIiXSxbMCwxLCJHRF8xIl0sWzEsMSwiR0RfMiJdLFswLDEsImMiXSxbMCwyLCJmXzEiLDJdLFsxLDMsImZfMiJdLFsyLDMsIkdkIiwyXV0=&macro_url=https%3A%2F%2Fgist.githubusercontent.com%2Fjcreedcmu%2F2569f601862d86bd0523220cfd15f2c9%2Fraw%2F27e801532261f2b430d0e7cd890483119d74deb2%2Fquiver-macros.tex
+\[\begin{tikzcd}
+	{C_1} & {C_2} \\
+	{GD_1} & {GD_2}
+	\arrow["c", from=1-1, to=1-2]
+	\arrow["{f_1}"', from=1-1, to=2-1]
+	\arrow["{f_2}", from=1-2, to=2-2]
+	\arrow["Gd"', from=2-1, to=2-2]
+\end{tikzcd}\]
+into a morphism in $\D'$.
+
+\[\begin{array}{c@{\qquad}c@{\qquad}c}
+A_1 : \U & s : S \prov B_1 : \U & s : S, x : A_1 \prov M_1 : B_1\\
+A_2 : \U & s : S \prov B_2 : \U & s : S, x : A_2 \prov M_2 : B_2\\
+x : A_1 \prov f : A_2
+&s : S, y : B_1 \prov g : B_2
+&q: [M_1/y]g \equiv [f/x]M_2
+\end{array}
+ \over \bar s: \bar S;  z : \rho_{A_1} (s.B_1, sx . M_1, \bar s)  \prov \phi(f,g,q, z, \bar s) :  \rho_{A_2} (s.B_2, sx . M_2, \bar s)\]
+
+There might be some kind of $\eta$ principle for this. It might want a generalization
+to multiple $z$ arguments. I really should be {\em characterizing} the morphisms in $\D'$ as being
+exactly the relation homomorphisms somehow, and I don't think I'm fully doing that yet.
+
+Here's a $\beta$ law I expect, anyway: when $N : S$, I should have
+\[\phi(f,g,q, z, \iota N) \equiv [N/s][z/y]g \]
+Also I reckon it should have some interaction with a generalized $\bget$.
+
+\[\def\arraystretch{1.2}
+\begin{array}{c@{\qquad}c@{\qquad}c}
+A_1\ A_2 : \U & s : S \prov B_1 : \U & s : S, x : A_1 \prov M_1 : B_1\\
+a_1 : A_1 & s : S \prov B_2 : \U & s : S, x : A_2 \prov M_2 : B_2\\
+\multicolumn{3}{c}{
+\bar s : \bar S;  z : \rho_{A_1} (s.B_1, sx . M_1, \bar s)  \prov e :  \rho_{A_2} (s.B_2, sx . M_2, \bar s)
+}
+\end{array}
+ \over \bfget  (a_1,\bar sz.e) : A_2 \]
+
 \end{document}
