@@ -1104,4 +1104,39 @@ a : (z : Z) \to  \Pi \bar s . R_z
 \end{array}
  \over \bar s: \bar S;    \prov \bungel(a, \bar s w.e) :  \Pi \bar s . R_0\]
 
+I don't love this, though. I feel like $\bgel$ and $\bungel$ should be associated
+with the gel type $\rho$.
+\subsection{Packaging-Up}
+\def\Rel{\ \mathsf{Rel}}
+
+What if instead I said made a record type
+\[\Rel = \{A : \U, B : S \to \U, M : (s :S)  \to A \to B\ s\}\]
+\[R_1\ R_2 : \Rel \over \hom(R_1, R_2) = \{f_A : R_1.A \to R_2.A,\]
+\[ f_B : (s : S) \to R_1.B\ s \to R_2.B\ s,\]
+\[ q : (s : S) (a : A) \to f_B\ s\ (R_1.M\ s\ a) \equiv R_2.M\ s\ (f_A\ s\ a)\}\]
+and had
+\[ R : \Rel \over \bar s : \bar S \prov \rho (R, \bar s) : \U \]
+
+\[ {N : R.A
+\over
+\bar s : \bar S \prov \bgel_1(N, \bar s) : \rho(R, \bar s)
+}\qquad{
+\bar s \prov N : \rho(R, \bar s)
+\over
+ \bungel_1(\bar s .N) : R.A
+}\]
+
+\[{ h : \hom(R_1, R_2)
+\over
+\bar s : \bar S ; x : \rho (R_1,\bar s)\prov \bgel_2(h, \bar s, x) : \rho(R_2, \bar s)
+}
+\qquad
+{ \bar s; x : \rho(R_1, \bar s) \prov N : \rho(R_2, \bar s)
+\over
+ \bungel_2(\bar s x.N) : \hom(R_1, R_2)
+}\]
+
+Can I select an $R_1$ so that $\bgel_1/\bungel_1$ fall out of $\bgel_2/\bungel_2$?
+I think the terminal relation should do it.
+\[\top = \{ A = \top, B = \lambda s.\top, M : \lambda sa . \star\}\]
 \end{document}
