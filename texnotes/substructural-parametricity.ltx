@@ -171,7 +171,18 @@ and the map $M \mapsto \sem M$ is a bijection.
 \end{theorem}
 
 \begin{proof}
-
+A soundness case.
+\[
+\begin{prooftree}
+\Gamma, x : A_1 \prov M : A_2
+\justifies
+\Gamma \prov \lambda x .M : A_1 \lol A_2
+\end{prooftree}
+\]
+The induction hypothesis gives us
+\[  p : M^\Gamma, \sem\Gamma ( p) , q : M, x : \sem{A_1}(q) \prov \sem M : \sem{A_2}(\bar p \cdot q)\]
+So we output
+\[  p : M^\Gamma, \sem\Gamma ( p) ,  \prov \lambda q  x . \sem M : \sem{A_1 \lol A_2}(\bar p)\]
 \cqed
 \end{proof}
 
