@@ -21,6 +21,7 @@
 \def\ep{\varepsilon}
 \def\wat{{@}}
 \def\sem#1{[\![#1]\!]}
+\def\isem#1{\{\!\{#1\}\!\}}
 \def\cn{{:}}
 \def\rok{\mathrel\mathsf{ok}}
 \def\rtype{\mathrm{type}}
@@ -157,33 +158,59 @@ where $\equiv$ is the identity type in the ambient dependent type theory.
 \section{Results}
 First we want to convince ourselves that this translation is sound and complete.
 \begin{theorem}
-For any closed polymorphic linear term $\prov M : B$, there is a corresponding term $\sem M$ at the translated type, i.e.  $\prov \sem M : \sem B$,
+For any closed polymorphic linear term $\prov t : B$, there is a corresponding term $\sem t$ at the translated type, i.e.  $\prov \sem t : \sem B$,
 and this is a bijection.
 \end{theorem}
 
-To prove this, we must generalize this to open terms
-\begin{theorem}
-For any polymorphic linear term $a : \rtype; \Gamma \prov M : A$, there is a corresponding term
- $\sem M$ at the translated type, i.e.  $\Delta, \sem \Gamma \prov \sem M : \sem A(p)$
+To prove this, we must generalize this to open terms.
+\begin{theorem}[Forward]
+For any polymorphic linear term $a : \rtype; \Gamma \prov t : A$, there is a corresponding term
+ $\sem t$ at the translated type, i.e.
+\[\Delta, p : M^\Gamma, \sem\Gamma ( p),  \prov \sem t : \sem A(p)\]
 where
-\[ \Delta = M : \rtype, \epsilon : M, \_\cdot\_ : M \to M \to M, a : M \to \rtype, p : M\]
-and the map $M \mapsto \sem M$ is a bijection.
+\[ \Delta = M : \rtype, \epsilon : M, \_\cdot\_ : M \to M \to M, a : M \to \rtype\]
 \end{theorem}
-
 \begin{proof}
+
 A soundness case.
 \[
 \begin{prooftree}
-\Gamma, x : A_1 \prov M : A_2
+\Gamma, x : A_1 \prov t : A_2
 \justifies
-\Gamma \prov \lambda x .M : A_1 \lol A_2
+\Gamma \prov \lambda x .t : A_1 \lol A_2
 \end{prooftree}
 \]
 The induction hypothesis gives us
-\[  p : M^\Gamma, \sem\Gamma ( p) , q : M, x : \sem{A_1}(q) \prov \sem M : \sem{A_2}(\bar p \cdot q)\]
+\[  p : M^\Gamma, \sem\Gamma ( p) , q : M, x : \sem{A_1}(q) \prov \sem t : \sem{A_2}(\bar p \cdot q)\]
 So we output
-\[  p : M^\Gamma, \sem\Gamma ( p) ,  \prov \lambda q  x . \sem M : \sem{A_1 \lol A_2}(\bar p)\]
+\[  p : M^\Gamma, \sem\Gamma ( p) ,  \prov \lambda q  x . \sem t : \sem{A_1 \lol A_2}(\bar p)\]
+
 \cqed
 \end{proof}
+
+\begin{theorem}[Backward]
+For any dependent term
+\[\Delta, p : M^\Gamma, \sem\Gamma ( p) \prov  t :  \sem A(p)\]
+ there is a linear term
+$a : \rtype;  \Gamma \prov \isem{t} : A$,
+\end{theorem}
+
+\begin{proof}
+Instantiate the monoid as the free monoid over all the variables in the context.
+Instantiate all monoid variables as themselves.
+Instantiate the $M$-indexed type $a : M \to \rtype$ as follows. Given an $m \in M$, that's a string in the free
+monoid that tells us how many times we get to use the linear variables. If we duplicate any variables, call
+that illegal and set the realization to the empty set. Otherwise, set it to the set of syntactic terms
+in the linear type theory that we can actually build given a filtered version of $\Gamma$.
+
+Now proceed by induction on $A$. If it's a function type, then $\Gamma$ gets bigger but $A$ gets smaller
+and we appeal to induction hypothesis. Then we wrap the result in a syntactic lambda.
+
+If it's a tensor, we have an equation in the free monoid that splits a string.
+
+If it's the base type, the semantics gives us syntactic data by definition and we're done.
+\cqed
+\end{proof}
+
 
 \end{document}
