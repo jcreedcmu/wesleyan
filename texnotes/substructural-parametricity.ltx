@@ -1,0 +1,178 @@
+\documentclass{article}
+\input{theorem}
+\input{prooftree}
+\input{linear}
+
+\def\//{\mathop{/\!\!/}}
+\def\div{\vskip 1em \hrule \vskip 1em}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\bpush{\mathbf{push}}
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\o{\mathrel\comp}
+\def\ups#1{#1^G}
+\def\dns#1{#1^B}
+\def\rsn{\ \mathsf{sn}}
+\def\rx{\mapsto}
+\def\ep{\varepsilon}
+\def\wat{{@}}
+\def\sem#1{[\![#1]\!]}
+\def\cn{{:}}
+\def\rok{\mathrel\mathsf{ok}}
+\def\rtype{\mathrm{type}}
+\def\rset{\mathbf{Set}}
+\def\rrel{\mathbf{Rel}}
+\def\rspan{\mathbf{Sp}}
+\def\b2{\mathbf 2}
+\def\rcat{\mathbf{Cat}}
+\def\rfincat{\mathbf{FinCat}}
+\def\rid{\mathrm{id}}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
+\def\C{\mathbf{C}}
+\def\D{\mathbf{D}}
+\def\J{\mathbf{J}}
+\def\R{\mathbf{R}}
+\def\E{\mathbf{E}}
+\def\F{\mathbf{F}}
+\def\T{\mathbf{T}}
+\def\B{\mathbf{B}}
+\def\M{\mathbf{M}}
+\def\X{\mathbf{X}}
+\def\H{\mathbf{H}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\tri{\triangleright}
+\def\o{\circ}
+\def\rctx{\,\mathrm{ctx}}
+\def\del{\partial}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{opfib}{HTML}{007fff}
+\definecolor{dgreen}{HTML}{005f00}
+\definecolor{mild}{HTML}{cc4444}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\definecolor{block-gray}{gray}{0.85}
+\newtcolorbox{myquote}{colback=block-gray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{mybox}{colframe=blue!50, colback=blue!5, boxrule=0.5pt}
+\title{Substructural Parametricity via Constructive Semantics}
+\begin{document}
+
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+% got this from
+% https://tex.stackexchange.com/questions/169512/tikz-style-arrow-tips-missing-when-using-tikz-cd-crossing-over
+% ???
+\maketitle
+\section{Introduction}
+
+The goal of this note is to write down a thought I had about the work of
+Aberl\'e-Martens-Pfenning on Substructural Parametricity. I think
+there is an alternate way of expressing more or less the same idea,
+but which requires less ``custom'' work in setting up the logical
+relation. I suspect it may also make more easily attainable some of
+the goals which were left by that paper to future work.
+
+\subsection{The Idea}
+
+What we want is to obtain parametricity free-theorems for substructural types.
+For example, the only closed term of the polymorphic type
+\[ ( a : \rtype) \to (a \lol a) \lol (a \lol a) \]
+should be the church numeral 1.
+The idea is to factor this into two steps: first translate substructural types
+into ordinary non-substructural dependent type theory, then apply parametricity
+theorems for the non-substructural dependent type theory.
+For this example, the translation will be
+\[ (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M) (\phi : \mathsf{isMonoid}\ M\ \epsilon\ \_\cdot\_) ( a : M \to \rtype)\]
+\[ (p\ q : M)  (s : (r : M) \to a(r) \to a(p\cdot r)) (z : a(q)) \to a(p\cdot q) \]
+This type has a free theorem, and we can derive from it that it has only one inhabitant,\
+the church numeral 1:
+\[ \lambda M\  \epsilon\ \_\cdot\_\ \phi\ a\ p\ q\ s\ z .\ s\ q\ z\]
+\section{Definitions}
+\subsection{Language}
+Let's have the source language for the translation be a toy linear type theory.
+We'll take as a special case that we mandate one polymorphic type variable quantified out front.
+Inside that we have standard linear type formers.
+\[\hbox{Linearity Types}\ A ::= a \celse  A \lol A \celse A \tensor A \]
+\[\hbox{Quantified Types}\ B ::= (a : \rtype) \to A\]
+\subsection{Translation}
+We translate quantified types like so:
+
+
+\begin{mybox} \noindent % necessary to eliminate vertical space??
+\[\sem{(a : \rtype) \to A} = (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M)  \]
+\[ \qquad\qquad(\phi : \mathsf{isMonoid}\ M\ \epsilon\ \_\cdot\_) ( a : M \to \rtype) (p : M) \to \sem{A}(p)\]
+\end{mybox}
+
+The output of the translation first quantifies over an
+arbitrary monoid in the ambient dependent type theory. We omit the details of the definition of
+\[\mathsf{isMonoid} : (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M) \to \rtype \]
+but the reader can imagine it asserting associativity and unit laws, and commutativity if desired.
+The output of the translation then quantifies over $a : M \to \rtype$, embodying the idea that
+what a linearity type ``really is'' is a type indexed over a monoid. Finally, we quantify
+over an arbitrary resource $p : M$, and translate the type $A$ at the resource $p$.
+
+The translation of linearity types is the content of the resource semantics:
+\begin{mybox} \noindent % necessary to eliminate vertical space??
+\[ \sem {A \lol B}(p) = (q : M) \to \sem A (q) \to \sem B (p \cdot q)\]
+\[ \sem {A_1 \tensor A_2}(p) = (q_1\ q_2 : M) \x (p \equiv q_1 \cdot q_2) \x \sem {A_1}(q_1) \x \sem {A_2}(q_2)\]
+\end{mybox}
+where $\equiv$ is the identity type in the ambient dependent type theory.
+\section{Results}
+First we want to convince ourselves that this translation is sound and complete.
+\begin{theorem}
+For any closed polymorphic linear term $\prov M : B$, there is a corresponding term $\sem M$ at the translated type, i.e.  $\prov \sem M : \sem B$,
+and this is a bijection.
+\end{theorem}
+
+To prove this, we must generalize this to open terms
+\begin{theorem}
+For any polymorphic linear term $a : \rtype; \Gamma \prov M : A$, there is a corresponding term
+ $\sem M$ at the translated type, i.e.  $\Delta, \sem \Gamma \prov \sem M : \sem A(p)$
+where
+\[ \Delta = M : \rtype, \epsilon : M, \_\cdot\_ : M \to M \to M, a : M \to \rtype, p : M\]
+and the map $M \mapsto \sem M$ is a bijection.
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\end{document}
