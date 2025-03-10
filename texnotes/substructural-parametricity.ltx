@@ -3,6 +3,9 @@
 \input{prooftree}
 \input{linear}
 
+\def\pp{\mathtt{p}}
+\def\qq{\mathtt{q}}
+\def\xx{\mathtt{x}}
 \def\//{\mathop{/\!\!/}}
 \def\div{\vskip 1em \hrule \vskip 1em}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
@@ -36,22 +39,14 @@
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\frommaps{\ar[from=uu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
 \def\frommapt{\ar[from=uuu,mapsto,shorten <=2em, shorten >=2em, crossing over]}
-\def\C{\mathbf{C}}
-\def\D{\mathbf{D}}
-\def\J{\mathbf{J}}
-\def\R{\mathbf{R}}
-\def\E{\mathbf{E}}
-\def\F{\mathbf{F}}
-\def\T{\mathbf{T}}
-\def\B{\mathbf{B}}
-\def\M{\mathbf{M}}
-\def\X{\mathbf{X}}
-\def\H{\mathbf{H}}
+\def\W{\mathcal{W}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\tri{\triangleright}
 \def\o{\circ}
 \def\rctx{\,\mathrm{ctx}}
 \def\del{\partial}
+\let\mod=\relax
+\usepackage{amsmath}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \def\also#1{\ \textcolor{blue}{\celse #1}}
 \usepackage{tikz}
@@ -103,28 +98,39 @@ boxrule=0pt,boxsep=0pt,breakable}
 \maketitle
 \section{Introduction}
 
-The goal of this note is to write down a thought I had about the work of
-Aberl\'e-Martens-Pfenning on Substructural Parametricity. I think
-there is an alternate way of expressing more or less the same idea,
-but which requires less ``custom'' work in setting up the logical
-relation. I suspect it may also make more easily attainable some of
-the goals which were left by that paper to future work.
+The goal of this note is to sketch out a thought I had about the work
+of Aberl\'e-Martens-Pfenning on Substructural Parametricity
+\cite{substructuralparametricity}. I think there is a way of factoring
+their result that might make it easier to obtain some of the goals
+which were left by that paper to future work.
 
 \subsection{The Idea}
 
-What we want is to obtain parametricity free-theorems for substructural types.
-For example, the only closed term of the polymorphic type
-\[ ( a : \rtype) \to (a \lol a) \lol (a \lol a) \]
-should be the church numeral 1.
-The idea is to factor this into two steps: first translate substructural types
-into ordinary non-substructural dependent type theory, then apply parametricity
-theorems for the non-substructural dependent type theory.
-For this example, the translation will be
-\[ (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M) (\phi : \mathsf{isMonoid}\ M\ \epsilon\ \_\cdot\_) ( a : M \to \rtype)\]
-\[ (p\ q : M)  (s : (r : M) \to a(r) \to a(p\cdot r)) (z : a(q)) \to a(p\cdot q) \]
+What we want is parametricity free-theorems for substructural types.
+For example, that the only closed term of the polymorphic type
+\[ ( a : \rtype) \to (a \lol a) \lol (a \lol a) \tag{*}\]
+is the church numeral 1,
+\[ \lambda a \ s \ z .\ s\ z\]
+The idea is to factor the project of getting the free theorem for any substructural type
+into two steps: first translate the substructural type
+into ordinary non-substructural dependent type theory, then apply a parametricity
+theorem for the non-substructural dependent type theory (e.g. \cite{dtt-parametricity}).
+
+The claimed advantage of this approach is modularity: we don't need to
+know how substructurality {\em interacts} with parametricity if we
+know how to `compile away' substructurality and then apply the
+unvarying familiar notion of parametricity in ordinary types.
+
+For this example, the translation of $(*)$ will be
+\[ (\W : \rtype) (\epsilon : \W ) (\_\cdot\_ : \W \to \W \to \W) (\phi : \mathsf{isMonoid}\ \W\ \epsilon\ \_\cdot\_) ( a : \W \to \rtype)\]
+\[ (p\ q : \W)  (s : (r : \W) \to a(r) \to a(p\cdot r)) (z : a(q)) \to a(p\cdot q) \tag{**}\]
+This type says that for any monoid $\W$, any type $a$ indexed over $\W$, if we have
+a `successor function' $s$ for the resource-aware type $a$ and a `zero' $z$ in $a$,
+then there is some term of $a$ that uses the combined resources of $s$ and $z$.
+
 This type has a free theorem, and we can derive from it that it has only one inhabitant,\
 the church numeral 1:
-\[ \lambda M\  \epsilon\ \_\cdot\_\ \phi\ a\ p\ q\ s\ z .\ s\ q\ z\]
+\[ \lambda \W\  \epsilon\ \_\cdot\_\ \phi\ a\ p\ q\ s\ z .\ s\ q\ z\]
 \section{Definitions}
 \subsection{Language}
 Let's have the source language for the translation be a toy linear type theory.
@@ -137,80 +143,140 @@ We translate quantified types like so:
 
 
 \begin{mybox} \noindent % necessary to eliminate vertical space??
-\[\sem{(a : \rtype) \to A} = (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M)  \]
-\[ \qquad\qquad(\phi : \mathsf{isMonoid}\ M\ \epsilon\ \_\cdot\_) ( a : M \to \rtype) (p : M) \to \sem{A}(p)\]
+\[\sem{(a : \rtype) \to A} = (\W : \rtype) (\epsilon : \W ) (\_\cdot\_ : \W \to \W \to \W)  \]
+\[ \qquad\qquad(\phi : \mathsf{isMonoid}\ \W\ \epsilon\ \_\cdot\_) ( a : \W \to \rtype) (p : \W) \to \sem{A}(p)\]
 \end{mybox}
 
 The output of the translation first quantifies over an
 arbitrary monoid in the ambient dependent type theory. We omit the details of the definition of
-\[\mathsf{isMonoid} : (M : \rtype) (\epsilon : M ) (\_\cdot\_ : M \to M \to M) \to \rtype \]
+\[\mathsf{isMonoid} : (\W : \rtype) (\epsilon : \W ) (\_\cdot\_ : \W \to \W \to \W) \to \rtype \]
 but the reader can imagine it asserting associativity and unit laws, and commutativity if desired.
-The output of the translation then quantifies over $a : M \to \rtype$, embodying the idea that
+The output of the translation then quantifies over $a : \W \to \rtype$, embodying the idea that
 what a linearity type ``really is'' is a type indexed over a monoid. Finally, we quantify
-over an arbitrary resource $p : M$, and translate the type $A$ at the resource $p$.
+over an arbitrary resource $p : \W$, and translate the type $A$ at the resource $p$.
 
 The translation of linearity types is the content of the resource semantics:
 \begin{mybox} \noindent % necessary to eliminate vertical space??
-\[ \sem {A \lol B}(p) = (q : M) \to \sem A (q) \to \sem B (p \cdot q)\]
-\[ \sem {A_1 \tensor A_2}(p) = (q_1\ q_2 : M) \x (p \equiv q_1 \cdot q_2) \x \sem {A_1}(q_1) \x \sem {A_2}(q_2)\]
+\[ \sem {A \lol B}(p) = (q : \W) \to \sem A (q) \to \sem B (p \cdot q)\]
+\[ \sem {A_1 \tensor A_2}(p) = (q_1\ q_2 : \W) \x (p \equiv q_1 \cdot q_2) \x \sem {A_1}(q_1) \x \sem {A_2}(q_2)\]
 \end{mybox}
 where $\equiv$ is the identity type in the ambient dependent type theory.
-\section{Results}
-First we want to convince ourselves that this translation is sound and complete.
-\begin{theorem}
+\section{Properties}
+\subsection{Adequacy}
+First we want to believe this translation is sound and complete.
+\begin{conjecture}
 For any closed polymorphic linear term $\prov t : B$, there is a corresponding term $\sem t$ at the translated type, i.e.  $\prov \sem t : \sem B$,
 and this is a bijection.
-\end{theorem}
+\end{conjecture}
+I think this probably goes through by applying similar techniques to \cite{syntaxforfree}.
+\subsection{Free Theorem}
+\subsubsection{Relationally}
+Let's consider the free theorem for the type
+\[ (\W : \rtype) (\epsilon : \W ) (\_\cdot\_ : \W \to \W \to \W) (\phi : \mathsf{isMonoid}\ \W\ \epsilon\ \_\cdot\_) ( a : \W \to \rtype)\]
+\[ (p\ q : \W)  (s : (r : \W) \to a(r) \to a(p\cdot r)) (z : a(q)) \to a(p\cdot q) \]
+for parametricity over binary relations.
 
-To prove this, we must generalize this to open terms.
-\begin{theorem}[Forward]
-For any polymorphic linear term $a : \rtype; \Gamma \prov t : A$, there is a corresponding term
- $\sem t$ at the translated type, i.e.
-\[\Delta, p : M^\Gamma, \sem\Gamma ( p),  \prov \sem t : \sem A(p)\]
+Any type argument will become a pair of types with a relation between them, and every other argument will become a pair of related arguments. So we obtain the result that
+if some term $N$ has the above type, then
+\[\begin{array}{l}
+(\W_1\ \W_2 : \rtype)(\_\sim_\W\_ : \W_1\to \W_2 \to \rtype)\\
+(\epsilon_1 : \W_1)(\epsilon_2 : \W_2)(\_ : \epsilon_1 \sim_\W \epsilon_2)\\
+(\_\cdot_1\_ : \W_1 \to \W_1 \to \W_1) (\_\cdot_2\_ : \W_2 \to \W_2 \to \W_2)\\
+(\_ : \mathsf{multRel})\\
+(\phi_1 : \mathsf{isMonoid}\ \W_1\ \epsilon_1\ \_\cdot_1\_)
+(\phi_2 : \mathsf{isMonoid}\ \W_2\ \epsilon_2\ \_\cdot_2\_)\\
+(\_ : \mathsf{isMonoidRel})\\
+(a_1 : \W_1 \to \rtype)(a_2 : \W_2 \to \rtype)\\
+(\_\sim_a\_ : \{m_1 : \W_1\}\{m_2:\W_2\}\{\_: m_1 \sim_\W m_2\} \to a_1\ m_1 \to a_2\ m_2 \to \rtype)\\
+(p_1 : \W_1)(p_2 : \W_2) (\_ : p_1 \sim_\W p_2)\\
+(q_1 : \W_1)(q_2 : \W_2) (\_ : q_1 \sim_\W q_2)\\
+(s_1 : (r_1 : \W_1) \to a_1(r_1) \to a_1(p_1\cdot_1 r_1))\\
+(s_2 : (r_2 : \W_2) \to a_2(r_2) \to a_2(p_2\cdot_2 r_2))\\
+(s_* : \mathsf{succRel})\\
+(z_1 : a_1(q_1)) (z_2 : a_2(q_2)) (z_* : z_1 \sim_a z_2)\\
+\to N\ \W_1\ \epsilon_1\ \_\cdot_1\_\ \phi_1\ a_1\ p_1\ q_1\ s_1\ z_1\\
+\qquad \sim_a N\ \W_2\ \epsilon_2\ \_\cdot_2\_\ \phi_2\ a_2\ p_2\ q_2\ s_2\ z_2\\
+\end{array}\]
 where
-\[ \Delta = M : \rtype, \epsilon : M, \_\cdot\_ : M \to M \to M, a : M \to \rtype\]
-\end{theorem}
+\[\begin{array}{rcl}
+\mathsf{multRel} &=& (m_1\ m_1' : \W_1)(m_2\ m_2' : \W_1)\\
+&&\to m_1 \sim_\W m_2 \to m_1' \sim_\W m_2' \\
+&& \to (m_1\cdot_1 m_1') \sim_\W (m_2 \cdot_2 m_2')\\
+\\
+\mathsf{succRel} &=& (r_1 : \W_1)(r_2 : \W_2)(\_ : r_1 \sim_\W r_2)\\
+&&(x_1 : a_1(r_1))(x_2 : a_2(r_2))(\_ : x_1 \sim_a x_2)\\
+&& \to s_1\ r_1\ x_1 \sim_a s_2\ r_2\ x_2
+\end{array}\]
+\subsubsection{Functionally}
+Let's specialize this to the case where $\_\sim_\W\_$ is actually a functional
+relation, i.e.
+\[p_1 \sim_\W p_2 \iff f_\W(p_1) = p_2 \]
+for some $f_\W : \W_1 \to \W_2$ and likewise $\_\sim_a\_$ is actually a functional
+relation arising from $f_a : a_1(m_1) \to a_2(m_2)$. We then have the result that
+\[\begin{array}{l}
+(\W_1\ \W_2 : \rtype)(f_\W : \W_1\to \W_2)\\
+(\epsilon_1 : \W_1)
+(\_\cdot_1\_ : \W_1 \to \W_1 \to \W_1) (\_\cdot_2\_ : \W_2 \to \W_2 \to \W_2)\\
+(\_ : \mathsf{multRel})\\
+(\phi_1 : \mathsf{isMonoid}\ \W_1\ \epsilon_1\ \_\cdot_1\_)
+(\phi_2 : \mathsf{isMonoid}\ \W_2\ f_\W(\epsilon_1)\ \_\cdot_2\_)\\
+(\_ : \mathsf{isMonoidRel})\\
+(a_1 : \W_1 \to \rtype)(a_2 : \W_2 \to \rtype)\\
+(f_a : \{m_1 : \W_1\} \to a_1\ m_1 \to a_2\ (f_\W(m_1)) )\\
+(p_1 : \W_1) (q_1 : \W_1)\\
+(s_1 : (r_1 : \W_1) \to a_1(r_1) \to a_1(p_1\cdot_1 r_1))\\
+(s_2 : (r_2 : \W_2) \to a_2(r_2) \to a_2(f_\W(p_1)\cdot_2 r_2))\\
+(s_* : \mathsf{succRel})\\
+(z_1 : a_1(q_1)) \\
+\to f_a(N\ \W_1\ \epsilon_1\ \_\cdot_1\_\ \phi_1\ a_1\ p_1\ q_1\ s_1\ z_1) \equiv\\
+\qquad N\ \W_2\ f(\epsilon_1)\ \_\cdot_2\_\ \phi_2\ a_2\ f_\W(p_1)\ f_\W(q_1)\ s_2\ f_\W(z_1)\\
+\end{array}\]
+where
+\[\begin{array}{rcl}
+\mathsf{multRel} &=& (m_1\ m_1' : \W_1)\\
+&& \to f_\W(m_1\cdot_1 m_1') \equiv (f_\W(m_1) \cdot_2 f_\W(m_1'))\\
+\\
+\mathsf{succRel} &=& (r_1 : \W_1)(x_1 : a_1(r_1))\\
+&& \to f_a( s_1\ r_1\ x_1) \equiv s_2\ f_\W(r_1)\ f_s(x_1)
+\end{array}\]
+\subsubsection{Applying the Free Theorem}
+\begin{proposition}
+$N$ is the church numeral 1, i.e.
+for all $\W_2, \epsilon_2, \_\cdot_2\_, \phi_2, a_2, p_2, q_2, s_2, z_2$ of the appropriate types,
+we have
+\[ N\ \W_2\ \epsilon_2\ \_\cdot_2\_\ \phi_2\ a_2\ p_2\ q_2\ s_2\ z_2
+\equiv s_2\ z_2\]
+\end{proposition}
+
 \begin{proof}
-
-A soundness case.
-\[
-\begin{prooftree}
-\Gamma, x : A_1 \prov t : A_2
-\justifies
-\Gamma \prov \lambda x .t : A_1 \lol A_2
-\end{prooftree}
-\]
-The induction hypothesis gives us
-\[  p : M^\Gamma, \sem\Gamma ( p) , q : M, x : \sem{A_1}(q) \prov \sem t : \sem{A_2}(\bar p \cdot q)\]
-So we output
-\[  p : M^\Gamma, \sem\Gamma ( p) ,  \prov \lambda q  x . \sem t : \sem{A_1 \lol A_2}(\bar p)\]
-
+Let $\W_2, \epsilon_2, \_\cdot_2\_, \phi_2, a_2, p_2, q_2, s_2, z_2$ of the appropriate types
+be given.
+We apply the free theorem above and plug in appropriately chosen values
+of $\W_1, \epsilon_1, \_\cdot_1\_, \phi_1, a_1, p_1, q_1, s_1, z_1$.
+\begin{itemize}
+\item $\W_1$ is the free commutative monoid over the alphabet $\{\pp, \qq\}$,
+with $\epsilon_1$ being the empty multiset, and $\_\cdot_1\_$ being multiset union.
+\item $a_1 : \W_1 \to \rtype$ is the type family such that
+$a_1(\pp^n \qq^m)$ is a singleton type if $m =1$, and the empty type otherwise.
+Call the unique inhabitant of $a_1(\pp^n \qq)$ by the name $\xx_{n}$.
+\item $p_1 = \pp$ and $q_1 = \qq$.
+\item The function $s_1 : (r : \W_1) \to a_1(r) \to a_1(\pp r)$ is defined by saying
+\[ s_1\ \pp^n\qq \ \xx_{n} = \xx_{n+1}\]
+\item $z_1$ is $\xx_0$.
+\item $f_\W :\W_1 \to \W_2$ is defined by saying $f_\W(\pp^n \qq^m) = p_2^n q_2^m$.
+\item $f_a : \{m_1 : \W_1\} \to a_1\ m_1 \to a_2\ (f_\W(m_1)) $
+ is defined by saying
+\[f_a(\xx_n) = \overbrace{s_2(\cdots s_2}^{n\hbox{ times}}(z_2))\]
+\end{itemize}
 \cqed
 \end{proof}
 
-\begin{theorem}[Backward]
-For any dependent term
-\[\Delta, p : M^\Gamma, \sem\Gamma ( p) \prov  t :  \sem A(p)\]
- there is a linear term
-$a : \rtype;  \Gamma \prov \isem{t} : A$,
-\end{theorem}
 
-\begin{proof}
-Instantiate the monoid as the free monoid over all the variables in the context.
-Instantiate all monoid variables as themselves.
-Instantiate the $M$-indexed type $a : M \to \rtype$ as follows. Given an $m \in M$, that's a string in the free
-monoid that tells us how many times we get to use the linear variables. If we duplicate any variables, call
-that illegal and set the realization to the empty set. Otherwise, set it to the set of syntactic terms
-in the linear type theory that we can actually build given a filtered version of $\Gamma$.
 
-Now proceed by induction on $A$. If it's a function type, then $\Gamma$ gets bigger but $A$ gets smaller
-and we appeal to induction hypothesis. Then we wrap the result in a syntactic lambda.
 
-If it's a tensor, we have an equation in the free monoid that splits a string.
 
-If it's the base type, the semantics gives us syntactic data by definition and we're done.
-\cqed
-\end{proof}
+\bibliographystyle{alpha}
+\bibliography{../wes}
 
 
 \end{document}
