@@ -139,7 +139,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\A{\mathbf{A}}
 \def\B{\mathbf{B}}
-\def\C{\mathbf{C}}
+\def\C{\mathbb{C}}
 \def\S{\mathbf{S}}
 \def\G{\mathbf{G}}
 \def\D{\mathbf{D}}
@@ -331,7 +331,37 @@ which means --- since we can make a proof $j'$ of
 that
 \[
   \sem { j : \J \prov A\ j}\ [j_\star/j]\ [\bj\ s/j]\ \langle  j'\rangle\  (M\ j_\star)\ (M\ (\bj\ s)) \]
+\vfil\eject
 
+\section{Categories via Parametricity}
+\def\rset{\mathbf{Set}}
 
+Fix a category $\C$. Given a presheaf $P : \rset^{\C^\op}$ and a
+copresheaf $L : \rset^\C$, recall their tensor product $P \otimes L$ (for the
+cartesian tensor product structure on $\rset$)
+ is the coend
+\[ \int^{C\in\C} P(C) \x L(C) \]
+The encoding of a presheaf $P$ as a $\bar\C$ is simply partial
+application of this operation.
+\[ e : \rset^{\C^\op} \to \bar \C
+\qquad
+ e P = \lambda L . P \otimes L \]
+If we only have our hands on a $\bar\C$,
+but we know it came from $e$, then we can recover the object data at an object
+$C_0$ by instantiating
+at the yoneda embedding
+\[y : \C^\op \to \C \to \rset  \qquad yC_0 = \hom(C_0, \dash)\]
+then we calculate
+\[ (e P)(yC_0) = P \otimes \hom(C_0, \dash)\]
+\[ = \int^{C\in\C} P(C) \x \hom(C_0, C) \]
+\[ =  P(C_0)  \]
+To get the morphism data, we need to use parametricity. I think in general,
+given a $\bar \C$, I can extract a functor living in $ \rrel^{\C^\op}$,
+and my hope is that for the particular case of $eP$, the round trip actually lands
+in $\rset^{\C^\op}$.
+
+Let's expand out the coend above as the coequalizer
+\[ \coprod_{f : C \to D \in \C} P(D) \x L(C) \rightrightarrows
+\coprod_{C \in \C} P(C) \x L(C) \to P \otimes L \]
 
 \end{document}
