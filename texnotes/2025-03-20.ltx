@@ -363,5 +363,32 @@ in $\rset^{\C^\op}$.
 Let's expand out the coend above as the coequalizer
 \[ \coprod_{f : C \to D \in \C} P(D) \x L(C) \rightrightarrows
 \coprod_{C \in \C} P(C) \x L(C) \to P \otimes L \]
+So binary relational parametricity applied to any old
+\[ \tau : \bar \C\]
+would let us pick $L_1, L_2 : \rset^\C$ and a relation carrier $M : \rset^\C$ and  natural transformation projections $\pi_i : M \to L_i$. But specifically if we have
+a polymorphic term
+\[ q : (L : \rset^\C) \to P \tensor L\]
+then we find
+\[\sem q : (L_1, L_2, M : \rset^\C) (\pi_i : M \to L_i) \to \sem {P \tensor L}\ (q\ L_1)\ (q\ L_2)\]
+The $L_1$ and $L_2$ we're going to be interested in plugging in will be $yC_0$ and $yD_0$ for
+the endpoints of some fixed morphism $m : D_0 \to C_0 \in \C$.
+Also, since $m : D_0 \to C_0$ leads to $ym : yC_0 \to yD_0$, I'll be plugging in $M = yC_0$ as well,
+which means $\pi_1 = \rid$, and $\pi_2 = ym$. This gives me ``the functional relation''
+for $m$ between $L_1$ and $L_2$. So then by types alone I know that
 
+\[ q\ L_1 = q\ yC_0 : P \otimes yC_0 \cong P(C_0) \]
+\[ q\ L_2 = q\ yD_0 : P \otimes yD_0  \cong P(D_0) \]
+\[ q\ M = q\ yC_0 : P \otimes yC_0 \cong P(C_0) \]
+
+So I know
+\[ q\ L_1 :  \coprod_{f : C \to D \in \C} P(D) \x [C_0,C] \rightrightarrows
+\coprod_{C \in \C} P(C) \x [C_0,C] \to P (C_0) \]
+\[ q\ L_2 :  \coprod_{f : C \to D \in \C} P(D) \x [D_0,C] \rightrightarrows
+\coprod_{C \in \C} P(C) \x [D_0,C] \to P (D_0) \]
+
+and parametricity is telling me that these two values are related according to the
+relation induced by my choice of $L_1, L_2, M, \pi_1, \pi_2$. This feels right.
+It gives me vertical arrows between the $L$'s, saying that I must propagate
+by composition. Then the UMP of the coequalizer tells me how to get from
+$P(C_0)$ tp $P(D_0)$.
 \end{document}
