@@ -391,4 +391,159 @@ relation induced by my choice of $L_1, L_2, M, \pi_1, \pi_2$. This feels right.
 It gives me vertical arrows between the $L$'s, saying that I must propagate
 by composition. Then the UMP of the coequalizer tells me how to get from
 $P(C_0)$ tp $P(D_0)$.
+
+\section{The Grothendieck Move}
+
+I still don't think I can get functor exponential semantics out of
+what's above without some other cleverness. Let's really try to understand
+what happens with unary parametricity first, understood as presheaf semantics
+over the arrow category.
+
+As an example, let's conemplate unary parametricity over
+\[\tau = \forall a . ((a \to a) \to a) \to (a \to a \to a) \to a\]
+If we have $t : \tau$, then parametricity tells us that for any $A : \rset$
+and $\sem A : A \to \rset$, that $t A$ is in `the relation', i.e.
+there is some term
+\[\sem{t\ A} : \sem{((A \to A) \to A) \to (A \to A \to A) \to A}\ (t\ A)  \]
+equiv
+\[\sem{t\ A} : (\ell : (A \to A) \to A) (\sem \ell : \sem{(A \to A) \to A}\ \ell) \to
+ \sem{(A \to A \to A) \to A}\ (t\ A\ \ell)  \]
+equiv
+\[\sem{t\ A} : (\ell : (A \to A) \to A) (\sem \ell : (b : A \to A) (\sem b : \sem{A \to A}\ b) \to \sem{A}\ (\ell\  b)) \]
+\[\to (p : A \to A \to A) (\sem p : \sem{A \to A \to A}\ p) \to \sem{A}\ (t\ A\ \ell\ p)  \]
+equiv
+\[\sem{t\ A} : (\ell : (A \to A) \to A) (\sem \ell : (b : A \to A) (\sem b : (x : A) (\sem x : \sem A\ x) \to \sem{A}\ (b\ x)) \to \sem{A}\ (\ell\  b)) \]
+\[\to (p : A \to A \to A) (\sem p : (x\ y : A) (\sem x : \sem A\ x) (\sem y: \sem A\ y) \to \sem{A}\ (p\ x\ y)) \to \sem{A}\ (t\ A\ \ell\ p)  \]
+Ok let me replace $\sem A$ with $R$ and rename $b$ to $d$:
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (\sem d : (x : A) (\sem x : R\ x) \to R\ (d\ x)) \to R\ (\ell\  d)) \\
+& (p : A \to A \to A) \\
+& (\sem p : (x\ y : A) (\sem x : R\ x) (\sem y: R\ y) \to R\ (p\ x\ y))\\
+& \to R\ (t\ A\ \ell\ p)
+\end{array}\]
+Ok now I want to replace $A : \rset, R : A \to \rset$ with $A\ B : \rset, f : B \to A$.
+The relation $R$ is $R\ a = (b : B) \x f\ b = a$. Let's do this one bit at a time.
+Replace $\sem x : R x$ with $(b : B) (\_ : f\ b = a)$.
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (\sem d : (b : B) \to R\ (d\ (f\ b))) \to R\ (\ell\  d)) \\
+& (p : A \to A \to A) \\
+& (\sem p : (x\ y : A) (\sem x : R\ x) (\sem y: R\ y) \to R\ (p\ x\ y))\\
+& \to R\ (t\ A\ \ell\ p)
+\end{array}\]
+I can do this with the app arguments too.
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (\sem d : (b : B) \to R\ (d\ (f\ b))) \to R\ (\ell\  d)) \\
+& (p : A \to A \to A) \\
+& (\sem p : (x\ y : B)  \to R\ (p\ (f\  x)\ (f\ y)))\\
+& \to R\ (t\ A\ \ell\ p)
+\end{array}\]
+This actually means app breaks up as two functions
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (\sem d : (b : B) \to R\ (d\ (f\ b))) \to R\ (\ell\  d)) \\
+& (p : A \to A \to A) \\
+& (p' : B \to B \to B) \\
+& (\_ : (x\ y : B) \to f\ (p'\ x\ y) \equiv p\ (f\  x)\ (f\ y))\\
+& \to R\ (t\ A\ \ell\ p)
+\end{array}\]
+Let's invent some ad-hoc notation for what's going on with application
+Say
+\[p : \forall n \ge 0. B_n \to B_n \to B_n = \]
+\[\Sigma (p_0 : B_0 \to B_0 \to B_0) (p_1 : B_1 \to B_1 \to B_1) \]
+\[(\_ : (x\ y : B_0) \to f\ (p_0\ x\ y) \equiv p_1\ (f\  x)\ (f\ y))\]
+where I'm identifying $B_0 = B$ and $B_1 = A$. Then I have
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (\sem d : (b : B) \to R\ (d\ (f\ b))) \to R\ (\ell\  d)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+Let's split $\sem d$ now as
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : A \to A) (d_0 : B \to B) (d_\star : (b : B) \to f(d_0\ b)) = d(f\ b)) \to R\ (\ell\  d)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+and reconsider it as
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d_1 : B_1 \to B_1) (d_0 : B_0 \to B_0) (d_\star : (b : B_0) \to f(d_0\ b) = d_1(f\ b)) \to R\ (\ell\  d_1)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+and subsequently as
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& (\sem \ell : (d : \forall n \ge 0 . B_n \to B_n)  \to R\ (\ell\  d_1)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+Let's split $\sem l$ now.
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (A \to A) \to A)\\
+& ( \ell' : (d : \forall n \ge 0 . B_n \to B_n)  \to B) \\
+& ( \ell_\star : (d : \forall n \ge 0 . B_n \to B_n)  \to f (\ell'\ d) = \ell\  d_1)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+Do some renaming:
+\[
+\begin{array}{ll}
+\sem{t \ A} : & (\ell : (B_1 \to B_1) \to B_1)\\
+& ( \ell' : (d : \forall n \ge 0 . B_n \to B_n)  \to B_0) \\
+& ( \ell_\star : (d : \forall n \ge 0 . B_n \to B_n)  \to f (\ell'\ d) = \ell\  d_1)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+Now I can see the equivalence of this to
+\[
+\begin{array}{ll}
+\sem{t \ A} : & ( \ell : (d : \forall n \ge 1 . B_n \to B_n) \to B_1)\\
+& ( \ell' : (d : \forall n \ge 0 . B_n \to B_n)  \to B_0) \\
+& ( \ell_\star : (d : \forall n \ge 0 . B_n \to B_n)  \to f (\ell'\ d) = \ell\  d_1)) \\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell\ p_1)
+\end{array}\]
+So my aim is to compress the first three arguments notationally to
+\[
+\begin{array}{ll}
+\sem{t \ A} : & ( \ell : \forall m \ge 0 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to R\ (t\ A\ \ell_1\ p_1)
+\end{array}\]
+Now I want to split the conclusion. I'm claiming that from $t\ A$ I can derive
+two terms, call them $m_0$ and $m_\star$:
+\[
+\begin{array}{ll}
+m_0 : & ( \ell : \forall m \ge 0 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to B_0\\
+m_\star : & ( \ell : \forall m \ge 0 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
+& (p : \forall n \ge 0. B_n \to B_n \to B_n )\\
+& \to f\ (m_1\ \ell\ p) \equiv t\ B_1\ \ell_1\ p_1
+\end{array}\]
+And anyhow I can also get
+\[
+\begin{array}{ll}
+m_1 : & ( \ell : \forall m \ge 1 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
+& (p : \forall n \ge 1. B_n \to B_n \to B_n )\\
+& \to B_1
+\end{array}
+\]
+because that's just $\lambda \ell p . t\ B_1\ \ell\ p$. So $m_\star$ is just
+asserting compatibility between $m_0$ and $m_1$.
+
 \end{document}
