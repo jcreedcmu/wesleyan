@@ -779,4 +779,61 @@ if $P, Q : \C \to \rset$, then
 \end{prooftree}
 \]
 but this monotonicity is invisible normally.
+
+\subsection{Where is Coherence Needed?}
+
+Let's say I have $t : \all\alpha.(\alpha \to \alpha) \to (\alpha \to \alpha)$
+and I want to apply it to a pair of types $A$, $B$ and a relation $A \leftarrow R \rightarrow B$.
+I'm somehow allowed to prove
+\[ \prov \mathsf{Rel} := \bullet_1 \leftarrow \bullet_0 \rightarrow \bullet_2 : \rcat\]
+\[ \mathcal{R} := \prov A \leftarrow R \rightarrow B : ( \bullet_1 \leftarrow \bullet_0 \rightarrow \bullet_2) \to \rset \]
+\[ \prov \bullet_0 : ( \bullet_1 \leftarrow \bullet_0 \rightarrow \bullet_2)\]
+So if I infer that secretly actually
+\[ t : (\C : \mathsf{\rcat}) ( \alpha : \C \to \rset) (C : \C) \to ((\alpha \imp \alpha) \imp (\alpha \imp \alpha))@ C\]
+Then I can apply things to get
+\[ \prov t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_0 : ((\mathcal{R} \imp \mathcal{R}) \imp (\mathcal{R} \imp \mathcal{R}))@ \bullet_0\]
+Now what is the presheaf $\mathcal{R} \imp \mathcal{R}$? At $\bullet_1$ it consists of functions $A \to A$,
+and at $\bullet_2$ it consists of functions $B\to B$, and at $\bullet_0$ it consists of
+consistent triples $(R\to R)\x (A \to A) \x (B \to B)$.
+Now because of the happy accident that $\bullet_0$ is the initial object of $\mathsf{Rel}$, it distributes over $\imp$.
+
+Likewise we can ask, what's in the presheaf $(\mathcal{R} \imp \mathcal{R}) \imp (\mathcal{R} \imp \mathcal{R})$?
+At $\bullet_1$ it has $(A \to A) \to (A \to A) $.
+At $\bullet_0$ it has consistent triples of
+\begin{itemize}
+\item $(A \to A) \to (A \to A)$
+\item $(B \to B) \to (B \to B)$
+\item maps from the type of consistent triples $(R\to R)\x (A \to A) \x (B \to B)$ to itself
+\end{itemize}
+
+So in short, the type of
+\[ \prov t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_0 : ((\mathcal{R} \imp \mathcal{R}) \imp (\mathcal{R} \imp \mathcal{R}))@ \bullet_0\]
+is ``pair of functions in the relation''. Note that this is different from saying
+\[\textcolor{red}{ \prov t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_0 : (R \to R) \to (R \to R)}\]
+This would permit incoherent maps from $R$ to itself, that don't obey any particular rules of mapping $A \to A$ and $B \to B$.
+
+On the other hand, since $\bullet_1, \bullet_2$ are terminal, we have up to isomorphism
+\[ \prov t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_1 : (A \to A) \to (A \to A)\]
+\[ \prov t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_2 : (B \to B) \to (B \to B)\]
+and we ought to have some functorial transport principle that says (if $f : \bullet_0 \to \bullet_1$ and $g : \bullet_0 \to \bullet_2$)
+\[ \prov t\ \mathsf{Rel}\ \mathcal{R}\ f : ((\mathcal{R} \imp \mathcal{R}) \imp (\mathcal{R} \imp \mathcal{R}))@ \bullet_0\]
+\[\to (A \to A) \to (A \to A)\]
+from a general principle that
+\[
+\begin{prooftree}
+C : \C \prov A : \rset \qquad f : C_1 \to C_2 \in \C \qquad N : [C_1/C]A
+\justifies
+\mathrel\mathbf{trans}_A N \mathrel\mathbf{along} f  : [C_2/C] A
+\end{prooftree}
+\]
+and we want
+\[( t\ \mathsf{Rel}\ \mathcal{R}\ f) ( t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_0)
+\equiv  t\ \mathsf{Rel}\ \mathcal{R}\ \bullet_1\]
+So I think I want to impose
+\[{
+C : \C \prov  M : A
+\over
+\mathrel\mathbf{trans}_A [C_1/C]M \mathrel\mathbf{along} f  \equiv [C_2/C] M
+}\]
+So every use of $C$ must be covariant! No contravariance!
 \end{document}
