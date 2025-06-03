@@ -541,7 +541,7 @@ m_1 : & ( \ell : \forall m \ge 1 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
 because that's just $\lambda \ell p . t\ B_1\ \ell\ p$. So $m_\star$ is just
 asserting compatibility between $m_0$ and $m_1$.
 
-\section{Am I Confused About The Non-Interval Encoding?}
+\section{Am I Confused About The Representable Encoding?}
 Assume we're trying to encode binary relational parametricity.
 
 
@@ -653,6 +653,52 @@ and conclude
 % \[t : (\I : \rset)(\eta : 2 \to \I)(i: \I) \to \mathsf{Gel}\ \I\ \eta\ i\]
 \subsubsection{Representable Encoding}
 ?
+\section{Playing around with Involutions}
+I could assume
+\[\mathbf{module}\ \_\  (M: \rset) (\mu : M \to M) (\_ : \mu \o \mu = \rid)\ \mathbf{where}\]
+and define
+\[\begin{array}{l}
+\mathbf{data}\ \mathsf{Gel}\ (L : \rset) (z : L \to L) (\_ : z \o z = \rid) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{inj_0} : M \to L \to \mathsf{Gel}\\
+\qquad \mathsf{inj_1} : M \to L \to \mathsf{Gel}\\
+\qquad \mathsf{path} : (m : M) (\ell : L) \to \mathsf{inj_0}(m, \ell) = \mathsf{inj_1}(\mu\ m, z\ \ell) \\
+\end{array}
+\]
+We can recover the underlying set of $M$ by setting $L$ to 2 (which is the yoneda embedding of the
+single object of the involution category) with the expected $z$.
+
+\section{What Theorem Am I Hoping For?}
+
+I'm hoping that somehow, given a category $\C$, and a presheaf $P : \C^\op \to \rset$,
+when we encode $P$ as a type {\em in the context} of a copresheaf $L : \C \to \rset$, via
+\[P^\star : (\C \to \rset) \to \rset\]
+\[P^\star(L) =   P \otimes L  \]
+that we could, using parametricity, extract presehaf-semantic information out of terms at types like
+\[(L : \C \to \rset) \to ((P^\star(L) \to P^\star(L)) \to P^\star(L)) \to (P^\star(L) \to P^\star(L)  \to P^\star(L) ) \to P^\star(L) \]
+which would be derivable if we had a polymorphic term
+\[\forall \alpha.  ((\alpha \to \alpha) \to \alpha) \to (\alpha \to \alpha  \to \alpha ) \to \alpha \]
+
+So I suppose a foundational part of this is that, also, given a
+particularly well-behaved function $Q : (\C \to \rset) \to \rset$, I might hope to extract a
+presheaf $Q^\dag$ from it. The object part of this is pretty clear. Given a $Q$ and a $C \in \C$, I can
+consider $Q(yC) : \rset$. This even round-trips correctly, in the ``first do $*$ then do $\dag$'' direction.
+For
+\[P^\star(yC') =  P \otimes yC' = \int^{C\in\C} P(C) \otimes [C',C] = P(C')  \]
+as required. Let's imagine that we have presheaves $P_1, P_2 : \C^\op\to\rset$. Given
+a $L : \C \to \rset$, we can construct
+\[P_1^\star(L) =  \int^{C\in\C} P_1(C) \x L(C)  \]
+\[P_2^\star(L) =  \int^{C\in\C} P_2(C) \x L(C)  \]
+\[P_1^\star(L) \to P_2^\star(L) =  \left(\int^{C\in\C} P_1(C) \x L(C)\right) \to \left(\int^{C\in\C} P_2(C) \x L(C)\right)  \eqno(*)\]
+
+\[(P_1 \imp P_2)^\star(L) =  \int^{C\in\C} (P_1 \imp P_2)(C) \x L(C)  \]
+\[(P_1 \imp P_2)^\star(L) =  \int^{C\in\C} [\rset^{\C^\op}](yC, P_1 \imp P_2) \x L(C)  \]
+\[(P_1 \imp P_2)^\star(L) =  \int^{C\in\C} [\rset^{\C^\op}](yC \x  P_1, P_2) \x L(C)  \eqno(**)\]
+It doesn't seem possible that $(*)$ and $(**)$ would be equal. In fact, let's substitute $yC'$ for the $L$'s in
+each case. We'd be comparing
+
+\[ P_1(C') \to P_2(C') \mathrel{\stackrel ? \equiv} (P_1 \imp P_2)(C') \]
+
+which clearly can't be right. The left side throws away all the functorial cohesion that the right side knows about.
 
 
 \end{document}
