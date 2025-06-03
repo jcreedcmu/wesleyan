@@ -546,4 +546,102 @@ m_1 : & ( \ell : \forall m \ge 1 . ( \forall n \ge m . B_n \to B_n) \to B_m)\\
 because that's just $\lambda \ell p . t\ B_1\ \ell\ p$. So $m_\star$ is just
 asserting compatibility between $m_0$ and $m_1$.
 
+\section{Am I Confused About The Non-Interval Encoding?}
+Assume we're trying to encode binary relational parametricity.
+
+
+
+
+\subsection{Fibered}
+Here we write the flat type $R$ for the total space of the relation.
+Assume we've chosen
+\[\mathbf{module}\ \_\  (A\ B\ R: \rset)(f : R \to A)(g: R\to B)\ \mathbf{where}\]
+
+\subsubsection{Interval Encoding}
+Define
+\[\begin{array}{l}
+\mathbf{data}\ \mathsf{Gel}\ (\I : \rset)(\eta : 2 \to \I) :  (i: \I) \to \rset\ \mathbf{where}\\
+\qquad \mathsf{gel} : (r : R) (i : \I) \to \mathsf{Gel}\ i\\
+\qquad \mathsf{bound_a} : A \to \mathsf{Gel}\ (\eta\ 0)\\
+\qquad \mathsf{bound_b} : B \to \mathsf{Gel}\ (\eta\ 1)\\
+\qquad \mathsf{path_a} : (r: R) \to \mathsf{gel}\ r\ (\eta\ 0) \equiv \mathsf{path_a}\ (f\ r)\\
+\qquad \mathsf{path_b} : (r: R) \to \mathsf{gel}\ r\ (\eta\ 1) \equiv \mathsf{path_b}\ (g\ r)\\
+\end{array}
+\]
+and conclude
+\[
+\begin{array}{lcl}
+ \mathsf{Gel}\ (2+1)\ \binl\ (\binr\ *) &\cong&  R\\
+ \mathsf{Gel}\ 2\ \rid\ 0 &\cong& A\\
+ \mathsf{Gel}\ 2\ \rid\ 1 &\cong& B
+\end{array}
+\]
+\subsubsection{Representable Encoding}
+\[\begin{array}{l}
+\mathbf{data}\ \mathsf{Gel}\ (L^a\ L^b : \rset) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{inj_a} : A \to L^a \to \mathsf{Gel}\\
+\qquad \mathsf{inj_b} : B \to L^b \to \mathsf{Gel}\\
+\qquad \mathsf{mid} : R \to \mathsf{Gel}\\
+\qquad \mathsf{path_a} : (r: R) (\ell : L^a) \to \mathsf{inj_a}\ (f\ r)\ \ell \equiv \mathsf{mid}\ r \\
+\qquad \mathsf{path_b} : (r: R) (\ell : L^b) \to \mathsf{inj_b}\ (g\ r)\ \ell \equiv \mathsf{mid}\ r \\
+\end{array}
+\]
+and conclude
+\[
+\begin{array}{lcl}
+ \mathsf{Gel}\ 0\ 0 &\cong&  R\\
+ \mathsf{Gel}\ 1\ 0 &\cong& A\\
+ \mathsf{Gel}\ 0\ 1 &\cong& B
+\end{array}
+\]
+Parametricity says that if I have
+\[ t :  {(L^a\ L^b : \rset) \to \mathsf{Gel}\ L^a\ L^b}\]
+then there is a $\sem t$ of type
+\[(L^a_1\ L^a_2\ : \rset) (\sem{L^a} : L^a_1 \to L^a_2 \to  \rset) \]
+\[(L^b_1\ L^b_2\ : \rset) (\sem{L^b} : L^b_1 \to L^b_2 \to  \rset) \]
+\[\to \sem{ \mathsf{Gel}\ L^a\ L^b}\ (t\ L^a_1\ L^b_1)\ (t\ L^a_2\ L^b_2) \]
+In particular if I set
+\[(L^a_1 = 0)( L^a_2 = 1) (\sem{L^a} = {! : 0 \to 1}) \]
+\[(L^b_1 = 0)( L^b_2 = 0) (\sem{L^b} = {! : 0 \to 0}) \]
+then I get a guarantee that
+\[\sem{ \mathsf{Gel}\ L^a\ L^b}\ (t\ 0\ 0)\ (t\ 1\ 0) \]
+What does this really mean? It's telling us
+$(t\ 0\ 0)$ and $(t\ 1\ 0)$ are related by the action of (what is in this case) functoriality,
+where we lift some maps to maps between $\mathsf{Gel}$ types. The only
+thing $(t\ 0\ 0)$ can be is a $\mathsf{mid}$ of an $r : R$, and so it is carried
+by this functoriality to the same $\mathsf{mid}\ r$. But $\mathsf{path_a}$ in the type
+$\mathsf{Gel}\ 1\ 0$ guarantees this is the same thing as $\mathsf{inj\_a}\ (f\ r)\ *$.
+So taking into account the isomorphisms above, we're finding out that from
+$t$ we can extract a {\em consistent} interpretation in the span $A \leftarrow R \to B$.
+
+\subsection{Indexed}
+Here we write $R$ as indexed over $A$ and $B$.
+Assume we've chosen
+\[\mathbf{module}\ \_\  (A\ B : \rset)(R: A \to B \to \rset)\ \mathbf{where}\]
+
+\subsubsection{Interval Encoding}
+Define
+\[\begin{array}{l}
+\mathbf{data}\ \mathsf{Gel}\ (\I : \rset)(\eta : 2 \to \I) :  (i: \I) \to \rset\ \mathbf{where}\\
+\qquad \mathsf{gel} : (a:A)(b:B)(r : R\ a\ b) (i : \I) \to \mathsf{Gel}\ i\\
+\qquad \mathsf{bound_a} : (a:A) \to \mathsf{Gel}\ (\eta\ 0)\\
+\qquad \mathsf{bound_b} : (b:B) \to \mathsf{Gel}\ (\eta\ 1)\\
+\qquad \mathsf{path_a} : (a:A)(b:B)(r: R\ a\ b) \to \mathsf{gel}\ a\ b\ r\ (\eta\ 0) \equiv \mathsf{path_a}\ a\\
+\qquad \mathsf{path_b} : (a:A)(b:B)(r: R\ a\ b) \to \mathsf{gel}\ a\ b\ r\ (\eta\ 1) \equiv \mathsf{path_b}\ b\\
+\end{array}
+\]
+and conclude
+\[
+\begin{array}{lcl}
+ \mathsf{Gel}\ (2+1)\ \binl\ (\binr\ *) &\cong& (a:A)(b:B) \x R\ a\ b\\
+ \mathsf{Gel}\ 2\ \rid\ 0 &\cong& A\\
+ \mathsf{Gel}\ 2\ \rid\ 1 &\cong& B
+\end{array}
+\]
+
+% \[t : (\I : \rset)(\eta : 2 \to \I)(i: \I) \to \mathsf{Gel}\ \I\ \eta\ i\]
+\subsubsection{Representable Encoding}
+?
+
+
 \end{document}
