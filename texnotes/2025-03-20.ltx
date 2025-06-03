@@ -17,12 +17,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-\def\wt{\widetilde}
-\def\tel{\mathsf{T}}
-\def\bdot{\mathrel{\bar\cdot}}
-\def\bodot{\mathrel{\bar\odot}}
-\def\dec{\mathsf{\downarrow}}
-\def\enc{\mathsf{\uparrow}}
+\def\sssection#1{\vskip1em \hrule\vskip 0.5em \noindent $\triangleright$ {\bf #1} \vskip0.5em \hrule\vskip 1em }
 \def\I{\mathbb{I}}
 \def\bget{\mathop{\mathbf{get}}\nolimits}
 \def\bGel{\mathop{\mathbf{Gel}}\nolimits}
@@ -594,6 +589,7 @@ and conclude
  \mathsf{Gel}\ 0\ 1 &\cong& B
 \end{array}
 \]
+\sssection{Singleton}
 Parametricity says that if I have
 \[ t :  {(L^a\ L^b : \rset) \to \mathsf{Gel}\ L^a\ L^b}\]
 then there is a $\sem t$ of type
@@ -614,6 +610,21 @@ $\mathsf{Gel}\ 1\ 0$ guarantees this is the same thing as $\mathsf{inj\_a}\ (f\ 
 So taking into account the isomorphisms above, we're finding out that from
 $t$ we can extract a {\em consistent} interpretation in the span $A \leftarrow R \to B$.
 
+\sssection{Function}
+
+What about the case of $\forall\alpha.\alpha \to \alpha$? Then we have a term of type
+\[ t :  {(L^a\ L^b : \rset) \to \mathsf{Gel}\ L^a\ L^b \to \mathsf{Gel}\ L^a\ L^b}\]
+So by instantiation we can get
+\[ t\ 0\ 0 :  R \to R\]
+\[ t\ 1\ 0 :  A \to A\]
+\[ t\ 0\ 1 :  B \to B\]
+and by parametricity we know $\sem{\mathsf{Gel}}\ r\ a \iff f(r) \equiv a$
+and $\sem{\mathsf{Gel}}\ r\ b \iff g(r) \equiv b$, taking shortcuts by identifying
+$t\ 0\ 0$ with $R$. And likewise, if $h : R \to R = t\ 0\ 0 \to t\ 0 \0$ and
+$k : A \to A = t\ 1\ 0 \to t\ 1\ 0$, then $\sem{\mathsf{Gel} \to \mathsf {Gel}}\ h\ k$
+if they map related arguments to related arguments. That is, for any $r$ and $a$,
+if $f(r) \equiv a$, then $h(r)$ is related to $k(a)$, i.e. $f(h(r)) = k(a)$.
+But this is just saying that $f(h(r)) = k(f(r))$.
 \subsection{Indexed}
 Here we write $R$ as indexed over $A$ and $B$.
 Assume we've chosen
