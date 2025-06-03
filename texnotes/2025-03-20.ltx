@@ -700,5 +700,83 @@ each case. We'd be comparing
 
 which clearly can't be right. The left side throws away all the functorial cohesion that the right side knows about.
 
+\section{Quantifying over Categories}
+Let me return to a previous idea and see what extra uniformity
+principles I might need to make it go. Maybe it's not as
+question-begging as I think.
 
+The idea is: why not be explicit about which category we're working in?
+Let $\rset$ (in addition to universe-indexing) be indexed by an expression $C$
+\[\begin{array}{lcr}
+\hbox{Category Expression }C&::=&c \celse \rho(C)
+\end{array}\]
+In fact, let all term and type constructors be indexed by a $C$. For most term
+and type constructors, we require agreement of all components.
+We have a quantifier
+\[
+\begin{prooftree}
+ c \ge C \prov_c  A: \rset
+\justifies
+\prov_C (c  \ge C) \to A : \rset
+\end{prooftree}
+\]
+with terms
+\[
+\begin{prooftree}
+ c \ge C \prov_c  M : A
+\justifies
+\prov_C \lambda c . M : (c  \ge C) \to A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\prov_C  M : (c  \ge C) \to A \qquad C' \ge C
+\justifies
+\prov_C M[C'] : [C'/C]A
+\end{prooftree}
+
+\]
+and we have $C \le \rho(C)$. We can give some reductions specific to the intent that $\rho$
+constructs the category $( \bullet \leftarrow \bullet \rightarrow \bullet) \to \C$ from $\C$.
+We say
+\[\rset_{\rho(C)} \mapsto_\beta \{ A\ B : \rset_C, R : A \to B \to \rset_C \}\]
+\[\begin{array}{l}
+(X \to_{\rho(C)} Y) \mapsto_\beta \{\\
+\qquad A := X.A \to_C Y.A,\\
+\qquad B := X.B \to_C Y.B,\\
+\qquad R\ f_a\ f_b :=  (x_a : X.A) (x_b : X.B) \to \\
+\qquad \qquad X.R\ x_a\ x_b \to Y.R\ (f_a\ x_a)\ (f_b\ x_b)\\
+\}
+\end{array}
+\]
+What does $\lambda x . M : X \to_{\rho(C)} Y$ become?
+Well, what does a term judgment at a $\rho(C)$ type become in general?
+A closed term should be a global section of the presheaf. An open term
+is a natural transformation.
+\[\begin{array}{l}
+(X \to_{\rho(C)} Y) \mapsto_\beta \{\\
+\qquad A := X.A \to_C Y.A,\\
+\qquad B := X.B \to_C Y.B,\\
+\qquad R\ f_a\ f_b :=  (x_a : X.A) (x_b : X.B) \to \\
+\qquad \qquad X.R\ x_a\ x_b \to Y.R\ (f_a\ x_a)\ (f_b\ x_b)\\
+\}
+\end{array}
+\]
+This impedance mismatch is interesting.
+I think what I'm perceiving is that when I write something like
+\[\forall\alpha.(\alpha \to \alpha) \to (\alpha \to \alpha)\]
+I can parse it as if I meant
+\[(\C : \mathsf{\rcat}) ( \alpha : \C \to \rset) (C : \C) \to ((\alpha \imp \alpha) \imp (\alpha \imp \alpha))@ C\]
+where $\imp$ really is carrying out the presheaf exponential with respect to presheaves $\C \to \rset$.
+Also the quantifier $(C : \C)$ probably entails some functorial coherence. But the payoff ought to be that I
+can write my proofs of this type using ordinary term (de)constructors for
+$(\alpha \to \alpha) \to (\alpha \to \alpha)$. Hmm. Actually what's happening is something like
+if $P, Q : \C \to \rset$, then
+\[
+\begin{prooftree}
+\Gamma, D : \C, f : \C[C, D], x : P @ D \prov M : Q @ D
+\justifies
+\Gamma \prov \lambda_f^D x . M :  (P \imp Q) @ C
+\end{prooftree}
+\]
+but this monotonicity is invisible normally.
 \end{document}
