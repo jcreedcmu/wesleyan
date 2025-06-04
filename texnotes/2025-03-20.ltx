@@ -957,8 +957,8 @@ and I thought the latter would just arise by contraction from the former. But no
 
 \subsubsection{Syntax}
 The feeling I'm getting is that for clarity I want to bind variables around the expression in which I use
-presheaf-building operations. Call the binder $\beta$, I guess. Like an example might be
-\[(\C : \rcat) (P\ Q\ R : \C \to \rset) \prov \beta (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1  : (\C \x \C) \to \rset\]
+presheaf-building operations. Call the binder $\omega$, I guess. Like an example might be
+\[(\C : \rcat) (P\ Q\ R : \C \to \rset) \prov \omega (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1  : (\C \x \C) \to \rset\]
 Hm, written out this way it seems just like a $\lambda$, really. The subtle thing to notice
 here is that although this {\em is} a covariant functor $\C \x \C \to \rset$, and although I {\em can}
 compose with the diagonal semantically, I don't get the expected syntactic reduction, if my calculation
@@ -967,5 +967,17 @@ I don't have that
 \[\lambda (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1  : (\C \x \C) \to \rset\]
 ``applied to'' the argument $(c, c) : \C \x \C$ is the same thing as
 \[ (P\ c \to Q\ c) \to R\ c\]
-So that's weird. I don't know how to think about that.
+So that's weird. I don't know how to think about that. Actually let me be more specific.
+If $\omega$ is the binder under which the meaning of $\to$ is actually changed from
+``mere function type constructor'' to ``presheaf exponential'', then what I'm saying is that
+\[\lambda c . (\omega (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1)(c, c)  : \C \to \rset\]
+is not the same object as
+\[ \omega c : \C . (P\ c \to Q\ c) \to R\ c : \C \to \rset\]
+assuming the $\lambda c$ and construction of $(c,c)$ are valid concepts.
+Maybe this makes it less of a surprise.
+
+Maybe $\omega$ is a construct that `knows how to reduce' against the types in its body,
+rather than $\beta$-reduction. Then again, I definitely want to throw the $\omega$-bound
+variables and continue decomposing syntax in its body. That's sort of the whole point.
+So I don't want to eagerly definitionally reduce them.
 \end{document}
