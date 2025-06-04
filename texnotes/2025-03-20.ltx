@@ -823,7 +823,7 @@ from a general principle that
 \begin{prooftree}
 C : \C \prov A : \rset \qquad f : C_1 \to C_2 \in \C \qquad N : [C_1/C]A
 \justifies
-\mathrel\mathbf{trans}_A N \mathrel\mathbf{along} f  : [C_2/C] A
+\mathrel\mathbf{trans}_{C.A} N \mathrel\mathbf{along} f  : [C_2/C] A
 \end{prooftree}
 \]
 and we want
@@ -932,4 +932,26 @@ gives a map from $\alpha_1(D)$ to $\alpha_2(D)$. The thing on the left is strict
 so yeah, I think there is such a natural transformation, and I think it's not an isomorphism.
 
 I'm a little anxious that this means something funny happens with deeper contravariance.
+Suppose I have presheaves $P, Q, R : \C \to \rset$. I suppose I have an element of
+\[ ((\ups P \imp \ups Q) \imp \ups R) (C, C) \eqno(*)\]
+where I'm deliberately leaving unknown which direction each of the $\ups$ is projecting.
+$P, Q, R$ could all be independently $\alpha_1$ or $\alpha_2$. My goal
+is to get an element of
+\[ ((P \imp Q) \imp  R) (C) \eqno(**) \]
+Now an element of $(*)$ is a map from a choice $(f_1, f_2) : (C, C) \to (D_1, D_2)$ to a map
+$(\ups P \imp \ups Q)(D_1, D_2)$ to $\ups R(D_1, D_2)$.
+An element of $(**)$ is a map from a choice of $f : C \to D$ to a map
+$(P \imp  Q)(D)$ to $R(D)$.
+I can pick $f_1 := f$ and $f_2 := f$ and my remaining task is that I have
+a map $(\ups P \imp \ups Q)(D, D)$ to $R(D)$ and I need a map
+$(P \imp  Q)(D)$ to $R(D)$. So I have a $(P \imp  Q)(D)$ and I need a $(\ups P \imp \ups Q)(D, D)$.
+Variance has reversed, and this may now actually be problematic.
+
+What is the nature of the problem, in terms of the ``User Experience'' of the imagined term language?
+It's an expressivity gap. I'd like to be able to say both:
+\begin{enumerate}
+\item For these two type variables, where they might get instantiated in different categories...
+\item For these two type variables, where they are in fact instantiated in the same different categories...
+\end{enumerate}
+and I thought the latter would just arise by contraction from the former. But now I'm not sure that's valid.
 \end{document}
