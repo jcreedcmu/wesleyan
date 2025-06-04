@@ -833,7 +833,103 @@ So I think I want to impose
 \[{
 C : \C \prov  M : A
 \over
-\mathrel\mathbf{trans}_A [C_1/C]M \mathrel\mathbf{along} f  \equiv [C_2/C] M
+\mathrel\mathbf{trans}_{C.A} [C_1/C]M \mathrel\mathbf{along} f  \equiv [C_2/C] M
 }\]
 So every use of $C$ must be covariant! No contravariance!
+
+If $P, Q : \C \to \rset$, then
+\[ (P \imp Q) @ C = (D : \C) (f : \C[C, D]) \to P @ D \to Q @ D\]
+
+\subsection{The Relevance of Polarity and Focusing}
+Negative connectives ought to be the ones that need ``shielding'' by
+quantifiers to ensure monotonicity.
+\subsection{Interpretation}
+If $P, Q : \C \to \rset$ are a covariant
+functors, then the naive interpretation of $(P \imp Q) @ C = P @ C \to Q \to C$
+doesn't work; it isn't monotone. But
+\[ (D : \C) (f : \C[C, D]) \to P @ D \to Q @ D\]
+should be monotone in $C$. For if we have
+\[t : (D : \C) (f : \C[C, D]) \to P @ D \to Q @ D\]
+and $g : C \to C'$, then we can construct a term
+\[t' : (D' : \C) (f' : \C[C', D']) \to P @ D' \to Q @ D'\]
+by setting
+\[t' = \lambda D'\ f'\ p \to t\ D\ (f' \o g)\ p \]
+The obvious problem now however is that $D,D'$ are not consistently covariant.
+\subsection{An Example}
+Let's try building a term of type
+\[ (\C : \mathsf{\rcat}) ( \alpha : \C \to \rset) (C : \C) \to ((\alpha \imp \alpha) \imp (\alpha \imp \alpha))@ C\]
+that represents the church numeral 2.
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\justifies
+ \prov  z : \alpha\ [C_2]
+\]
+\justifies
+ \prov s\ g\ z : \alpha\ [C_2]
+\]
+\justifies
+g : C_2 \leftarrow C_1,  z :   \alpha\ [C_2] \prov s\ g\ (s\ g\ z) : \alpha\ [C_2]
+\]
+\justifies
+f : C_1 \leftarrow C,  s :  \alpha \to \alpha\ [C_1] \prov \lambda g z . s\ g\ (s\ g\ z) :  \alpha \to \alpha\ [C_1]
+\]
+\justifies
+ \C : \mathsf{\rcat}, \alpha : \C \to \rset, C : \C^+\prov \lambda f s . \lambda g z . s\ g\ (s\ g\ z) : (\alpha \to \alpha) \to \alpha \to \alpha\ [C]
+\end{prooftree}
+\]
+What are these lines saying semantically?
+The construction of $s\ g\ z$ at $C_2$ says that:
+
+If $\alpha$ is a covariant presheaf $\C \to \rset$, and
+ we pick a morphism $g : C_1 \to C_2$ and an element
+$s$ of $(\alpha \imp \alpha)(C_1)$ and an element $z$ of
+$(\alpha)(C_2)$, then there will be a determinate element $s\ g\ z$
+of $(\alpha)(C_2)$.
+
+\subsection{Multiple Variables}
+What happens with
+\[\forall\alpha_1, \alpha_2. F(\alpha_1, \alpha_2)\]
+? It should turn into something starting with
+\[(\C_1\ \C_2 :\rcat)(\alpha_1 : \C_1 \to \rset)(\alpha_2 : \C_2 \to \rset)(C_1 : \C_1)(C_2:\C_2)\]
+but in the expression $F$ I need to lift both of $\alpha_1, \alpha_2$ to
+$\ups\alpha_1, \ups\alpha_2: (\C_1 \x \C_2) \to \rset$.
+That's fine, I can do that by projection. Then I have
+\[t : (\C_1\ \C_2 :\rcat)(\alpha_1 : \C_1 \to \rset)(\alpha_2 : \C_2 \to \rset)(C_1 : \C_1)(C_2:\C_2)\]
+\[\to F(\ups\alpha_1, \ups\alpha_2) @ (C_1, C_2)\]
+If I have such a $t$, then I could derive by appropriate substitutions
+\[t : (\C :\rcat)(\alpha_1 : \C \to \rset)(\alpha_2 : \C \to \rset)(C : \C)\]
+\[\to F(\ups\alpha_1, \ups\alpha_2) @ (C, C)\]
+interpreting $\ups\alpha_1, \ups\alpha_2$ in the category $\rset^{\C \x \C}$. By composing with
+the diagonal functor, there is a map $\rset^{\C \x \C} \to \rset^{\C}$. Hmm. What's going on here.
+Given $\alpha_1, \alpha_2 : \C \to \rset$, we can construct for example
+the functor
+ $\ups\alpha_1 \imp \ups\alpha_2 : \C \x \C \to \rset$
+and evaluate at some particular $(C, C)$ to get
+\[ (\ups\alpha_1 \imp \ups\alpha_2)(C, C) : \rset\]
+We could even think of this as a composite with the diagonal to get the functor
+\[ (\ups\alpha_1 \imp \ups\alpha_2) \o \Delta : \C \to \rset\]
+I think I'm posing the question of: is this related to
+\[ (\alpha_1 \imp \alpha_2) : \C \to \rset\]
+I don't necessarily expect an isomorphism, but I'm curious whether there at least exists
+a natural transformation in the direction
+\[\begin{tikzcd}
+ \C\ar[d,equal] \ar[r,"{\Delta}"]&\C \x \C\ar[d, "{\ups\alpha_1 \imp \ups\alpha_2}"]
+\ar[dl,shorten <>=10pt,Rightarrow]\\
+\C\ar[r,"{\alpha_1\imp \alpha_2}"'] &\rset
+\end{tikzcd}\]
+Ok, such a natural transformation would need as data the original thing I was thinking about,
+for each $C$ a map
+\[ (\ups\alpha_1 \imp \ups\alpha_2)(C, C) \to  (\alpha_1 \imp \alpha_2)(C) \]
+On the left, this is going to be a thing that is $\forall (f_1, f_2) : (C, C) \to (D_1, D_2)$
+a map from $\ups\alpha_1(D_1,D_2)$ to  $\ups\alpha_2(D_1,D_2)$ which is to say a map
+$\alpha_1(D_1)$ to $\alpha_2(D_2)$. And on the right, we need something that for all $f : C \to D$
+gives a map from $\alpha_1(D)$ to $\alpha_2(D)$. The thing on the left is strictly more general,
+so yeah, I think there is such a natural transformation, and I think it's not an isomorphism.
+
+I'm a little anxious that this means something funny happens with deeper contravariance.
 \end{document}
