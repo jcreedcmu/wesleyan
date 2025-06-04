@@ -954,4 +954,18 @@ It's an expressivity gap. I'd like to be able to say both:
 \item For these two type variables, where they are in fact instantiated in the same different categories...
 \end{enumerate}
 and I thought the latter would just arise by contraction from the former. But now I'm not sure that's valid.
+
+\subsubsection{Syntax}
+The feeling I'm getting is that for clarity I want to bind variables around the expression in which I use
+presheaf-building operations. Call the binder $\beta$, I guess. Like an example might be
+\[(\C : \rcat) (P\ Q\ R : \C \to \rset) \prov \beta (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1  : (\C \x \C) \to \rset\]
+Hm, written out this way it seems just like a $\lambda$, really. The subtle thing to notice
+here is that although this {\em is} a covariant functor $\C \x \C \to \rset$, and although I {\em can}
+compose with the diagonal semantically, I don't get the expected syntactic reduction, if my calculation
+above is correct.
+I don't have that
+\[\lambda (c_1:\C, c_2 : \C) . (P\ c_1 \to Q\ c_2) \to R\ c_1  : (\C \x \C) \to \rset\]
+``applied to'' the argument $c : \C$ is the same thing as
+\[ (P\ c \to Q\ c) \to R\ c\]
+So that's weird. I don't know how to think about that.
 \end{document}
