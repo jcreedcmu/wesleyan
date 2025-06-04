@@ -1018,4 +1018,34 @@ M+ N : \phi(C)
  (M + N) + P = M + (N + P)
 \end{prooftree}
 \]
+\section{Semantics of Judgments}
+The basic judgment is
+\[ \Gamma \prov M : A \]
+which `means what it means'. $\Gamma$ can only have ordinary type variables.
+I can imagine some extension
+\[ c : \C ; \cdot \prov M : A(c) \]
+where $A$ is a copresheaf over $\C$, a functor $\C \to \rset$.
+$M$ is a global section of this; a consistent choice of an element of $A(c)$
+for each object $c \in \C$, such that restriction preserves the choice.
+I can also imagine
+\[ c : \C ; x_1 : P_1(c), \ldots, x_n : P_n(c) \prov M : A(c) \]
+Here I think $M$ is a natural transformation from $P_1 \x \cdots \x P_n$ to $A$.
+We observe that of course a global section of a copresheaf is the same thing as a
+natural transformation from the constant copresheaf.
+
+But is this the right generalization? What if we are to make an exponential of copresheaves,
+\[ c : \C ; \cdot \prov {?} : (A \imp B)(c) \]
+This should come from something like
+\[ c : \C, d : \C, f : c \to d ;  x : A(d) \prov   M :  B(d) \]
+shouldn't it? Or I could just consider the situation with a concrete object $C$ of $\C$.
+Then a judgment
+\[  \cdot \prov {?} : (A \imp B)(C) \]
+means not a natural transformation, but simply an element of the function space at object $C$.
+And yet this should come from something quantified over an object:
+\[ d : \C, f : C \to d ; x : A(d) \prov M : B(d) \]
+This is directly from yoneda.
+\[ (A \imp B)(C) = \hom(yC, A \imp B) = \hom(yC \x A, B)\]
+So we could even try to package this up as
+\[ z : yC ; x : A(\dns z) \prov M : B(\dns z) \]
+
 \end{document}
