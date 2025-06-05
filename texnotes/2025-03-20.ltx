@@ -1154,5 +1154,16 @@ which expands to
 \end{array}\]
 So we define
 \[\sem{\Gamma.A \to B}_f\ \theta\ z\ D'\ g\ x_0 = z\ D'\ (gf)\ x_0 \]
-
+\subsection{The Universe}
+I should be able to achieve a similar sort of reconciliation with how types behave as types
+and how types behave as elements of the universe. I suspect the content of this reconciliation is
+tantamount to the definition of the Hoffman-Streicher Universe.  As for the object part:
+I take
+\[\sem{\Gamma.A}_C : \sem{\Gamma}_C \to   \rset\]
+and I compare it to the instantiation of
+\[\sem{\Gamma.M}_C : (\theta : \sem{\Gamma}_C) \to  \sem{A}_C\ \theta\]
+at $M := A$ and $A := \rset$, which is
+\[\sem{\Gamma.A}_C : (\theta : \sem{\Gamma}_C) \to  \sem{\rset}_C\ \theta\]
+Hmm that's underwhelming and suspicious. I was expecting some yoneda business. This looks more
+like the constant functor.
 \end{document}
