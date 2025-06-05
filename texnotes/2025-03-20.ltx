@@ -1269,4 +1269,59 @@ Hmm. Let's split the output of $d_B$, then.
 \[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
 \[ \to f\ (t\ B\ \langle \ell_1,  \ell_2\rangle\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1 \eqno(*)\]
 Augh, I'm back to the same difficulty. Am I stuck?
+
+\section{Unary and Binary Parametricity}
+If I have $t : \all \alpha. F(\alpha)$, then unary parametricity says I have
+\[\sem {\alpha.F(\alpha)}^1 : \{A  : \rset\} (R : A  \to \rset) \to  F\ A \to  \rset \]
+\[ \sem t^1 : (A\  : \rset) (R : A  \to \rset) \to \sem {\alpha.F(\alpha)}^1\ R\ (t\ A)\]
+If I have $t : \all \alpha. F(\alpha)$, then binary parametricity says I have
+\[\sem {\alpha.F(\alpha)}^2 : \{A\ B : \rset\} (R : A \to B \to \rset) \to  F\ A \to F\ B \to \rset \]
+\[ \sem t^2 : (A\ B : \rset) (R : A \to B \to \rset) \to \sem {\alpha.F(\alpha)}^2\ R\ (t\ A)\ (t\ B) \]
+In particular I can instantiate
+\[ \lambda A\ R . \sem t^2\ A\ ((x:A)\x R\ x)\ (\lambda a\ b .\ a \equiv \pi_1 b) :\]
+\[ (A : \rset) (R : A \to \rset) \to \sem {\alpha.F(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (t\ A)\ (t\ (x:A) \x R\ x) \]
+Now here I might conjecture that for any $(A : \rset) (R : A \to \rset)$ we have an isomorphism
+\[\sem {\alpha.F(\alpha)}^1\ R\ (t\ A) \cong
+\sem {\alpha.F(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (t\ A)\ (t\ (x:A) \x R\ x) \]
+More generally, I conjecture that if $R : A \to \rset$ and $M : F(A)$, then the following two types are isomorphic:
+\[\sem {\alpha.F(\alpha)}^1\ R\ M \eqno(1) \]
+\[(N :F((x:A) \x R\ x))\x \sem {\alpha.F(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ M\ N \eqno(2)\]
+
+We'd prove this by induction on $F$, I guess. Let's warm up on the easy case of $F(\alpha) = \alpha$.
+Then the type (1) reduces to $R(M)$, and the type (2) reduces to
+\[(N :((x:A) \x R\ x))\x  ( M \equiv \pi_1 N)\]
+which is to say, $R(M)$. Good, that was easy. The implication case is what's more suspect.
+Let's say $F(\alpha) = G(\alpha) \to H(\alpha)$. Then $M : F(A) \to G(A)$. Then (1) becomes
+\[\sem {\alpha.G(\alpha) \to H(\alpha)}^1\ R\ M  \]
+\[= (x : G(A)) (x^* : \sem{\alpha.G(A)}^1\ R\ x) \to \sem {\alpha. H(\alpha)}^1\ R\ (M\ x)  \]
+
+
+
+
+and (2) becomes
+\[(N :G((x:A) \x R\ x) \to H(((x:A) \x R\ x)))\x\]
+\[ \sem {\alpha.G(\alpha) \to H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ M\ N \]
+\[= (N :G(B) \to H(B))\x\]
+\[ (x : G(A)) (y : G(B)) (x^* :  \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y)\]
+\[  \to \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (N\ y) \eqno(\dag)\]
+I can appeal to the induction hypothesis on $G$ and merge $y$ into $x^*$ to get
+\[= (N :G(B) \to H(B))\x\]
+\[ (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^1\ R\ x)\]
+\[  \to \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (N\ (\theta\ x^*)) \]
+where $\theta$ somehow arises out of the i.h. and pulls $G(B) = G ((x: A) \x R\ x)$ from $\sem {\alpha.G(\alpha)}^1\ R\ x$. The i.h. should also tell me of $\theta$ that
+\[\sem{\alpha.G(\alpha)}^2\ (\lambda a\ b.\ a \equiv \pi_1 b)\ x\ (\theta\ x^*)\]
+
+I could instead start with $(\dag)$ and swizzle around the quantifiers to get
+\[= (y : G(B)) \to (N : H(B))\x\]
+\[ (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y)\]
+\[  \to \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ N \]
+but it doesn't seem legitimate, however tempting it is, to then take a step to
+\[= (y : G(B)) (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y) \to \]
+\[(N : H(B))\x \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ N \]
+which would let me use i.h. to get
+\[= (y : G(B)) (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y) \to \]
+\[\sem {\alpha.H(\alpha)}^1\ R\ (M\ x) \]
+and also merge $x*$ and $y$ to get
+\[= (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^1\ R\ x) \to \sem {\alpha.H(\alpha)}^1\ R\ (M\ x) \]
+and this is now equal to (1).
 \end{document}
