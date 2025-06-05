@@ -1352,5 +1352,51 @@ Now recall in the function case, (2) became
 \[  \to \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (\phi\ y))\]
 
 The crux of the difference here is that we would need to show that $\phi$ does not depend on $x$ or $x'$!
+Could I possibly show this by a separate induction? The lemma would be
+\begin{lemma}
+Suppose we have $A : \rset$ and  $R : A \to \rset$ and $G\ H : \rset \to \rset$ and $M : G(A) \to H(A)$. Suppose
+we have a function
+\[ \phi : (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to H((x:A) \x R\ x)\]
+And suppose it satisfies
+\[ (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to  \sem {\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (\phi\ x\ y\ x') \]
+Then in fact $\phi$ doesn't depend on $x$ and $x'$.
+\end{lemma}
+
+\begin{proof}
+Let's think of some special cases. What if $G = \rid$? Then
+\[ \phi : (x : A) (y : (x:A) \x R\ x) (x' :x  \equiv \pi_1 y)\]
+\[ \to H((x:A) \x R\ x)\]
+Then we're already done. All the inputs to $\phi$ are in the data of $y$.
+What if $H = \rid$? Then
+\[ \phi : (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to ((x:A) \x R\ x)\]
+and it satisfies
+\[ (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to  M\ x = \pi_1 (\phi\ x\ y\ x') \]
+This doesn't seem like it helps much. $\phi$'s output's first component is determined by $M$, but that
+doesn't seem to avoid using $x$ necessarily.
+
+But induction on $G$ smells bleak. We have a function
+\[\begin{array}{l}
+ \phi : (f : G_1(A) \to G_2(A)) (g : G_1(B) \to G_2(B)) \\
+\  (r : (x : G_1(A)) (y: G_2(A)) \to \\
+\qquad\sem {\alpha.G_1(\alpha) }^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y \to\\
+\qquad \sem {\alpha. G_2(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (f\ x)\ (g\ y) )\\
+ \to H(B)
+\end{array}
+\]
+and we know that it satisfies
+\[\begin{array}{l}
+ \phi : (f : G_1(A) \to G_2(A)) (g : G_1(B) \to G_2(B)) \\
+\  (r : (x : G_1(A)) (y: G_2(A)) \to \\
+\qquad\sem {\alpha.G_1(\alpha) }^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y \to\\
+\qquad \sem {\alpha. G_2(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (f\ x)\ (g\ y) )\\
+ \to  \sem {\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ f)\ (\phi\ f\ g\ r)
+\end{array}
+\]
+I don't see how to apply the induction hypothesis here.
+\end{proof}
 
 \end{document}
