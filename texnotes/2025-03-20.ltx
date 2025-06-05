@@ -620,7 +620,7 @@ So by instantiation we can get
 \[ t\ 0\ 1 :  B \to B\]
 and by parametricity we know $\sem{\mathsf{Gel}}\ r\ a \iff f(r) \equiv a$
 and $\sem{\mathsf{Gel}}\ r\ b \iff g(r) \equiv b$, taking shortcuts by identifying
-$t\ 0\ 0$ with $R$. And likewise, if $h : R \to R = t\ 0\ 0 \to t\ 0 \0$ and
+$t\ 0\ 0$ with $R$. And likewise, if $h : R \to R = t\ 0\ 0 \to t\ 0 \ 0$ and
 $k : A \to A = t\ 1\ 0 \to t\ 1\ 0$, then $\sem{\mathsf{Gel} \to \mathsf {Gel}}\ h\ k$
 if they map related arguments to related arguments. That is, for any $r$ and $a$,
 if $f(r) \equiv a$, then $h(r)$ is related to $k(a)$, i.e. $f(h(r)) = k(a)$.
@@ -733,7 +733,6 @@ with terms
 \justifies
 \prov_C M[C'] : [C'/C]A
 \end{prooftree}
-
 \]
 and we have $C \le \rho(C)$. We can give some reductions specific to the intent that $\rho$
 constructs the category $( \bullet \leftarrow \bullet \rightarrow \bullet) \to \C$ from $\C$.
@@ -782,7 +781,7 @@ but this monotonicity is invisible normally.
 
 \subsection{Where is Coherence Needed?}
 
-Let's say I have $t : \all\alpha.(\alpha \to \alpha) \to (\alpha \to \alpha)$
+Let's say I have $t : \forall\alpha.(\alpha \to \alpha) \to (\alpha \to \alpha)$
 and I want to apply it to a pair of types $A$, $B$ and a relation $A \leftarrow R \rightarrow B$.
 I'm somehow allowed to prove
 \[ \prov \mathsf{Rel} := \bullet_1 \leftarrow \bullet_0 \rightarrow \bullet_2 : \rcat\]
@@ -1271,10 +1270,10 @@ Hmm. Let's split the output of $d_B$, then.
 Augh, I'm back to the same difficulty. Am I stuck?
 
 \section{Unary and Binary Parametricity}
-If I have $t : \all \alpha. F(\alpha)$, then unary parametricity says I have
+If I have $t : \forall \alpha. F(\alpha)$, then unary parametricity says I have
 \[\sem {\alpha.F(\alpha)}^1 : \{A  : \rset\} (R : A  \to \rset) \to  F\ A \to  \rset \]
 \[ \sem t^1 : (A\  : \rset) (R : A  \to \rset) \to \sem {\alpha.F(\alpha)}^1\ R\ (t\ A)\]
-If I have $t : \all \alpha. F(\alpha)$, then binary parametricity says I have
+If I have $t : \forall \alpha. F(\alpha)$, then binary parametricity says I have
 \[\sem {\alpha.F(\alpha)}^2 : \{A\ B : \rset\} (R : A \to B \to \rset) \to  F\ A \to F\ B \to \rset \]
 \[ \sem t^2 : (A\ B : \rset) (R : A \to B \to \rset) \to \sem {\alpha.F(\alpha)}^2\ R\ (t\ A)\ (t\ B) \]
 In particular I can instantiate
