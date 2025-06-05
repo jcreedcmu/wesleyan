@@ -1048,4 +1048,45 @@ This is directly from yoneda.
 So we could even try to package this up as
 \[ z : yC ; x : A(\dns z) \prov M : B(\dns z) \]
 
+\section{Categories}
+
+Remember that relational parametricity worked like
+\begin{center}
+\begin{tabular}{l}
+If $\Gamma : \rctx$, then $\sem{\Gamma} : \rset$.\\
+If $\Gamma \prov A: \rset$, then $\sem{\Gamma.A} : (\theta : \sem\Gamma) \to (\Delta \to \theta A) \to \rset$.\\
+If $\Gamma \prov M : A$, then $\sem{\Gamma.M} : (\theta : \sem\Gamma) \to \sem{\Gamma.A}\ \theta\ \theta M$.
+\end{tabular}
+\end{center}
+As for universes:
+If $\Gamma \prov \rset: \rset_1$, then $\sem{\Gamma.\rset} : (\theta : \sem\Gamma) \to (\Delta \to  \rset) \to \rset_1$.
+So we infer that in some sense
+\[\sem{\rset}\ \bullet\  A = (\Delta \to  A) \to \rset\]
+The interpretation of $\rset$ requires a $\Delta$-tuple of types $A$; and its interpretation
+is a $\Delta$-ary relation on the endpoints $A$.
+
+How would we generalize this to arbitrary categories?
+\begin{center}
+\begin{tabular}{lll}
+&If $C\in \C\ldots$&If $f : C \to D\in \C\ldots$\\
+\\[-0.9em]\hline\\[-0.9em]
+%%  \textcolor{gray}{If $\cdot \prov A: \rset\ldots$}
+%% &\textcolor{gray}{   $\sem{A}_C :  \rset$}
+%% &\textcolor{gray}{   $\sem{A}_f :  \sem{A}_C \to \sem{A}_D$}\\
+%%  \textcolor{gray}{If $\cdot \prov M :  A\ldots$}
+%% &\textcolor{gray}{   $\sem{M}_C :  \sem{A}_C$}
+%% &\textcolor{gray}{   $\sem{M}_f : \sem{A}_f(\sem{M}_C) \equiv \sem{M}_D$}\\
+If $ \prov \Gamma: \rctx\ldots$&  $\sem{\Gamma}_C :  \rset$&
+  $\sem{\Gamma}_f :  \sem{\Gamma}_C \to \sem{\Gamma}_D$\\
+ If $\Gamma \prov A: \rset\ldots$&  $\sem{\Gamma.A}_C : \sem{\Gamma}_C \to   \rset$&
+  $\sem{\Gamma.A}_f :  (\theta : \sem{\Gamma}_C) \to \sem{\Gamma.A}_C\ \theta $\\
+&&$\qquad\to \sem{\Gamma.A}_D\ (\sem{\Gamma}_f\ \theta)$\\
+If $\Gamma \prov M :  A\ldots$&  $\sem{\Gamma.M}_C : (\theta : \sem{\Gamma}_C) \to  \sem{A}_C\ \theta$&
+  $\sem{M}_f :  (\theta : \sem{\Gamma}_C) $\\
+&&$\ \to \sem{\Gamma.A}_f\ \theta\ (\sem{\Gamma.M}_C\ \theta)$\\
+&&$\ \equiv \sem{\Gamma.M}_D\ (\sem{\Gamma}_f\ \theta)$\\
+\end{tabular}
+\end{center}
+
+
 \end{document}
