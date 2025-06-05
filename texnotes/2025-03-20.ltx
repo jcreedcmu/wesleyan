@@ -1087,6 +1087,13 @@ If $\Gamma \prov M :  A\ldots$&  $\sem{\Gamma.M}_C : (\theta : \sem{\Gamma}_C) \
 &&$\ \equiv \sem{\Gamma.M}_D\ (\sem{\Gamma}_f\ \theta)$\\
 \end{tabular}
 \end{center}
-
-
+These preserve composition. If $g : B \to C$ and $f : C \to D$ in $\C$, then
+\[(\theta : \sem{\Gamma}_{B}) \to \sem{\Gamma}_{fg}\ \theta \equiv \sem{\Gamma}_f\ (\sem{\Gamma}_g\ \theta)  \]
+\[(\theta : \sem{\Gamma}_{B}) (x : \sem{\Gamma.A}_B\ \theta) \to  \sem{\Gamma.A}_{fg}\ \theta\ x \equiv
+\sem{\Gamma.A}_f\ (\sem{\Gamma}_g\ \theta)\ (\sem{\Gamma.A}_g\ \theta\ x)
+\]
+These preserve identities.
+\[(\theta : \sem{\Gamma}_{C}) \to   \sem{\Gamma}_{\rid_C}\ \theta \equiv \theta \]
+\[(\theta : \sem{\Gamma}_{C}) (x : \sem{\Gamma.A}_C\ \theta) \to  \sem{\Gamma.A}_{\rid_C}\ \theta\ x \equiv x
+\]
 \end{document}
