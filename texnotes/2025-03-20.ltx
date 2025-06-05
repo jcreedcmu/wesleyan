@@ -1324,4 +1324,35 @@ which would let me use i.h. to get
 and also merge $x*$ and $y$ to get
 \[= (x : G(A)) (x^* :  \sem {\alpha.G(\alpha)}^1\ R\ x) \to \sem {\alpha.H(\alpha)}^1\ R\ (M\ x) \]
 and this is now equal to (1).
+
+
+\subsection{This is a Mess}
+Can I make any more progress from the (1) side? Take
+\[ (x : G(A)) (x^* : \sem{\alpha.G(\alpha)}^1\ R\ x) \to \sem {\alpha. H(\alpha)}^1\ R\ (M\ x)  \]
+and apply the induction hypothesis to $x^*$.
+
+Recall it is an isomorphism between
+\[\sem {\alpha.F(\alpha)}^1\ R\ M \eqno(1) \]
+\[(N :F((x:A) \x R\ x))\x \sem {\alpha.F(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ M\ N \eqno(2)\]
+
+so we get
+\[ (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to \sem {\alpha. H(\alpha)}^1\ R\ (M\ x)  \]
+and applying the i.h. to the rhs we get
+\[ (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to(N :H((x:A) \x R\ x))\x \sem {\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ N \]
+which we could split as a function
+\[ \phi : (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to H((x:A) \x R\ x)\]
+which satisfies a property
+\[ (x : G(A)) (y : G((x:A) \x R\ x)) (x' : \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y )\]
+\[ \to  \sem {\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (\phi\ x\ y\ x') \]
+
+Now recall in the function case, (2) became
+\[ (\phi :G(B) \to H(B))\x\]
+\[ (x : G(A)) (y : G(B)) (x^* :  \sem {\alpha.G(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ x\ y)\]
+\[  \to \sem{\alpha.H(\alpha)}^2\ (\lambda a\ b .\ a \equiv \pi_1 b)\ (M\ x)\ (\phi\ y))\]
+
+The crux of the difference here is that we would need to show that $\phi$ does not depend on $x$ or $x'$!
+
 \end{document}
