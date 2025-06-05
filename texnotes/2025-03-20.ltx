@@ -1171,4 +1171,102 @@ that the interpretation of types only takes some of the data.
 I might guess that the interpretation of the universe as a type should be
 \[\sem{\Gamma.\rset}_C\ \theta = (k : (D : \C) (f : C \to D) \to \rset) \x \]
 \[ (D\ D' : \C) (f : C \to D) (g : D \to D') \to k\ D\ f = k\ D'\ (gf)\]
+
+\section{Back to Parametricity-via-Parametricity}
+
+If I have a monotone family $\{A_n\st n \in \N\}$ with $f_n : A_n \to A_{n+1}$,
+i.e. a functor $A : \N \to \rset$, and I have a term
+\[t : \forall a . ((a \to a) \to a) \to (a \to a \to a) \to a\]
+Then I can construct
+\[\lambda L . t\ (L \otimes A) : (L : \N^\op \to \rset) \to [L\otimes A/a]( ((a \to a) \to a) \to (a \to a \to a) \to a)\]
+and for any $n \in \N$, there is a presheaf $yn$ that has one inhabitant at every time $\le n$, and none otherwise.
+I observe that find that by yoneda,  $yn \otimes A \cong A\ n$, hence
+\[ t\ (yn \otimes A) :  [A\ n/a]( ((a \to a) \to a) \to (a \to a \to a) \to a)\]
+Each $f_n$ induces a natural transformation $\hat f_n : yn \to y(n+1)$. We can plug these
+into ordinary binary relational parametricity (assuming it is available) iterated over the $\N$ many
+choices of sets inherent in the quantifier $(L : \N^\op \to \rset) $. Naturality means that we satisfy
+the conditions imposed by parametricity that arise from the functoriality of $L$. So, in short,
+we know the pair
+\[\langle t\ (A\ n), t\ (A\ (n+1))\rangle\]
+are in the logical relation induced by the function $f_n$.
+\subsection{Momentarily Forget $\N$}
+Let's go back to the arrow category case. Suppose we have $f : B \to A$ and we assume
+\[t\ B : ((B \to B) \to B) \to (B \to B \to B) \to B)\]
+and
+\[t\ A : ((A \to A) \to A) \to (A \to A \to A) \to A)\]
+are related along the functional relation $f$. Is this the same as unary parametricity?
+The fact of $t\ B \sim t\ A$ means for all
+
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A) \to \ell_B \sim \ell_A \to \]
+\[(a_B : B \to B \to B) (a_A : A \to A \to A) \to a_B \sim a_A \to \]
+\[ f\ (t\ B\ \ell_B\ a_B) = t\ A\ \ell_A\ a_A\]
+Further, this means
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_B : B \to B) (d_A: A \to A) \to d_B \sim d_A \to f(\ell_B\ d_B) = \ell_A\ d_A)\]
+\[(a_B : B \to B \to B) (a_A : A \to A \to A)  \]
+\[(a_\star : (x_B\ y_B : B) (x_A\ y_A: A) \to f(x_B) = x_A \to f(y_B) = y_A \to f(a_B\ x_B\ y_B) = a_A\ x_A\ y_A)\]
+\[\to  f\ (t\ B\ \ell_B\ a_B) = t\ A\ \ell_A\ a_A\]
+and I can massage this to
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_B : B \to B) (d_A: A \to A) (d_\star : f \o d_B = d_A \o f) \to f(\ell_B\ d_B) = \ell_A\ d_A)\]
+\[(a_B : B \to B \to B) (a_A : A \to A \to A)  \]
+\[(a_\star : (x_B\ y_B : B) \to f\ (a_B\ x_B\ y_B) = a_A\ (f\ x_B)\ (f\ y_B))\]
+\[ \to f\ (t\ B\ \ell_B\ a_B) = t\ A\ \ell_A\ a_A\]
+And now what if $B = (x : A) \x R\ x$? I can expand out $a_B = \langle a_1, a_2 \rangle$ to get
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_B : B \to B) (d_A: A \to A) (d_\star : f \o d_B = d_A \o f) \to f(\ell_B\ d_B) = \ell_A\ d_A)\]
+\[(a_1 : (x\ y : A) \to R\ x \to R\ y \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y\ r_x\ r_y)) \]
+\[ (a_A : A \to A \to A)  \]
+\[(a_\star : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to  a_1\ x\ y\ r_x\ r_y = a_A\ x\ y\]
+\[ \to f\ (t\ B\ \ell_B\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1\]
+and then it's apparent that $a_1$ is redundant:
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_B : B \to B) (d_A: A \to A) (d_\star : f \o d_B = d_A \o f) \to f(\ell_B\ d_B) = \ell_A\ d_A)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \ell_B\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1 \eqno(*)\]
+Let's do the same to $\ell_\star$:
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_1 : (x : B) (r : R\ x) \to A) (d_2 : (x : A) (r : R\ x) \to R\ (d_1\ x\ r)) \]
+\[\qquad (d_A: A \to A) (d_\star : (x : A) (r : R\ x) \to  d_1\ x\ r = d_A\ x) \to f(\ell_B\ \langle d_1, d_2\rangle) = \ell_A\ d_A)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \ell_B\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1\]
+and then
+\[(\ell_B : (B \to B) \to B) (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star :  (d_1: A \to A)  (d_2 : (x : A) (r : R\ x) \to R\ (d_1\ x)) \]
+\[\qquad \to f(\ell_B\ \langle d_1, d_2\rangle) = \ell_A\ d_1)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \ell_B\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1\]
+Let's try to expand out $\ell_B$ now.
+\[(\ell_1 : (d_1 : (x:A)(r:R\ x) \to A) (d_2 : (x:A)(r: R\ x) \to R(d_1\ x\ r)) \to A)\]
+\[(\ell_2 : (d_1 : (x:A)(r:R\ x) \to A) (d_2 : (x:A)(r: R\ x) \to R(d_1\ x\ r)) \to R (\ell_1\ d_1\ d_2))\]
+\[ (\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star :  (d_1: A \to A)  (d_2 : (x : A) (r : R\ x) \to R\ (d_1\ x)) \]
+\[\qquad \to \ell_1\ (\lambda x r . d_1\ x)\ d_2 = \ell_A\ d_1)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \ell_B\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1\]
+Hmm... I can't quite wipe out $\ell_1$ at this stage. Maybe I took a wrong turn. Let's backtrack to $(*)$
+and start expanding just the output of $\ell_B$.
+
+\[(\ell_1 : (d : B \to B) \to A) \]
+\[(\ell_2 : (d : B \to B) \to R\ (\ell_1\ d)) \]
+\[(\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_B : B \to B) (d_A: A \to A) (d_\star : f \o d_B = d_A \o f) \to \ell_1\ d_B = \ell_A\ d_A)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \langle \ell_1,  \ell_2\rangle\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1 \eqno(*)\]
+Hmm. Let's split the output of $d_B$, then.
+\[(\ell_1 : (d : B \to B) \to A) \]
+\[(\ell_2 : (d : B \to B) \to R\ (\ell_1\ d)) \]
+\[(\ell_A : (A \to A) \to A)  \]
+\[(\ell_\star : (d_1 : B \to A) (d_2 : (b: B) \to R\ (d_1\ b)) (d_A: A \to A) \]
+\[\qquad (d_\star : d_1 = d_A \o f) \to \ell_1\ \langle d_1, d_2 \rangle = \ell_A\ d_A)\]
+\[(a_1 : A \to A \to A) \]
+\[(a_2 : (x\ y : A) (r_x: R\ x) (r_y : R\ y) \to R\ (a_1\ x\ y)) \]
+\[ \to f\ (t\ B\ \langle \ell_1,  \ell_2\rangle\ \langle a_1, a_2\rangle) = t\ A\ \ell_A\ a_1 \eqno(*)\]
+Augh, I'm back to the same difficulty. Am I stuck?
 \end{document}
