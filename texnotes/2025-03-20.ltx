@@ -1165,5 +1165,10 @@ and I compare it to the instantiation of
 at $M := A$ and $A := \rset$, which is
 \[\sem{\Gamma.A}_C : (\theta : \sem{\Gamma}_C) \to  \sem{\rset}_C\ \theta\]
 Hmm that's underwhelming and suspicious. I was expecting some yoneda business. This looks more
-like the constant functor.
+like the constant functor. I can't tell if this is a dealbreaker yet. Maybe it's ok
+that the interpretation of types only takes some of the data.
+
+I might guess that the interpretation of the universe as a type should be
+\[\sem{\Gamma.\rset}_C\ \theta = (k : (D : \C) (f : C \to D) \to \rset) \x \]
+\[ (D\ D' : \C) (f : C \to D) (g : D \to D') \to k\ D\ f = k\ D'\ (gf)\]
 \end{document}
