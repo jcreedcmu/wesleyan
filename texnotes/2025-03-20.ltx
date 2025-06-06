@@ -1397,5 +1397,68 @@ and we know that it satisfies
 \]
 I don't see how to apply the induction hypothesis here.
 \end{proof}
+\section{The Grothendieck Move, Again}
+I want to work out what the general lemma is here.
+If I have unary parametricity and $t : \forall \alpha . F(\alpha)$, then I find
+that for any $(A : \rset)(R : A \to \rset) $ I have
+\[\sem{\alpha.F(\alpha)}\ (t\ A) \eqno(*)\]
+So fix $A$ and $R$.
+We take $B = (x : A) \x R\ x$. Name $p$ the projection $B \to A$.
+Also give the names $B_0 = B$ and $B_1 = A$.
+Let $\C$ be the arrow category $m : \bullet \to \bullet$.
+
+I squint and I say $F$ (together with $B_0, B_1, p$) determines a functor $F' : \C \to \rset$.
+Its value at $0$ is $F'(0) : \rset$ (which is not necessarily the same as $F(B_0)$),
+its value at $1$ is $F'(1) : \rset$, and therefore $F'(m) : F(0) \to F(1)$.
+
+I want to conclude from (*) that $t\ A = t\ B_1$ is in a global section of $F'$.
+For since $1$ is the terminal object of $\C$, I think actually $F'(1)$
+does happen to be $F(B_1)$. So I'm looking for the existence of a term
+at time $F'(0)$ which transports to $t\ B_1$.
+
+\begin{lemma}
+If $t : \forall \alpha . F(\alpha)$, then there exists a term $t_0 : F'(0)$
+such that $F'(m)(t_0) = t\ B_1$.
+\end{lemma}
+
+\begin{lemma}
+For any $M : F(A)$, there is an isomorphism
+\[\theta :  \sem{F}\ M \to (t_0 : F'(0)) \x (F'(m)(t_0) \equiv M)  \]
+\end{lemma}
+
+\begin{proof}
+By induction on $F$.
+
+\\ $\bullet$ {\bf Base Case}:\\
+If $F(\alpha) = \alpha$, then $F'$ is $p : B_0 \to B_1$. Here $\sem{\alpha.F(\alpha)}$
+is just $R$, so the existence of $M'$ means $R\ M$,
+and the existence of a pair in $B = (x:A)\x R\ x$ projecting to $M$ also means $R\ M$.
+
+\\ $\bullet$ {\bf Function Case}:\\
+Suppose $F(\alpha) = G(\alpha) \to H(\alpha)$.
+In this case $M : G(A) \to H(A)$.
+Let's construct the forward direction of $\theta$ first.
+
+Assume we have $M' : \sem F\ M$, i.e.
+\[M' : (x : G(A)) (x^\star : \sem G\ x) \to \sem H\ (M\ x) \]
+Apply the induction hypothesis to the argument to get
+\[ (x : G(A)) (x_0 : G'(0)) (x^* : G'(m)(x_0) \equiv x) \to \sem H\ (M\ x) \]
+But then we can reduce that equality:
+\[ (x_0 : G'(0))  \to \sem H\ (M\ G'(m)(x_0)) \]
+Apply the induction hypothesis to the return value:
+\[ (x_0 : G'(0))  \to (u_0 : H'(0)) \x (H'(m)(u_0) \equiv M\ G'(m)(x_0)) \]
+This splits as
+\[ \phi : G'(0) \to H'(0) \]
+and
+\[ \psi : (x_0 : G'(0)) \to  H'(m)(\phi\ x_0) \equiv M\ G'(m)(x_0) \]
+Notice that $M$ itself is
+\[ M : G'(1) \to H'(1)\]
+and we ask ourselves: What data is in $(G \to H)'(0)$?
+It's gonna be $G'(0) \to H'(0)$ and $G'(1) \to H'(1)$,
+and some compatibility data. So this feels right.
+\cqed
+\end{proof}
+
+
 
 \end{document}
