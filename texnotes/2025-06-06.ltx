@@ -2,6 +2,13 @@
 \usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
 \input{theorem}
 \input{prooftree}
+\usepackage{hyperref}
+% https://tex.stackexchange.com/a/847
+\hypersetup{
+    colorlinks,
+    urlcolor={blue},
+}
+\usepackage{makecell}
 \usepackage{relsize}
 \usepackage{latexsym}
 \usepackage{amsmath}
@@ -466,4 +473,50 @@ and thence to
 Hmm. That didn't require any sort of transitivity-ish properties that I expected.
 Maybe I have to disrupt the adjunction of $F$ and $U$, but I'm afraid to do that. I thought that
 was required for focusing to work right.
+
+\section{Back to Earlier Token-Passing Translations}
+In \href{http://jcreed.org/papers/linear-modal.pdf}{this paper} I had the following sort of translation:
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $X \wat q$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(q)$\\
+  $\dns N $ & $!(h(q) \lol N \wat q)$\\
+  $\sq N $ & $!(\all q' \ge q . h(q') \lol N \wat q')$\\
+  $ (P_1 \oplus P_2) $ & $(P_1 \wat q ) \oplus (P_2 \wat q )$\\
+  $ (P_1 \otimes P_2) $ & $(P_1 \wat q) \otimes (P_2 \wat q)$\\
+  $n \wat q$ & $n(q)$\\
+  $\ups P $ & $\ups (h(q) \otimes P \wat q)$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat q ) \amp (N_2 \wat q )$\\
+  $ (P \lol N) $ & $(P \wat q) \lol (N \wat q)$\\
+\end{tabular}\]
+
+This translation takes positives to positives and negatives to
+negatives. The source language is assumed to be substructural. How do
+things look if I assume the source language is largely intuitionistic,
+i.e. not substructural? In the target language, I'd have a $U$ that
+dips down into linear to account for the linear token, and conversely
+an $F$ to come back up to unrestricted.
+
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $X \wat q$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(q)$\\
+  $\dns N $ & $\dns U(h(q) \lol N \wat q)$\\
+  $\sq N $ & $\dns U(\all q' \ge q . h(q') \lol N \wat q')$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat q ) \lor (P_2 \wat q )$\\
+  $ (P_1 \x P_2) $ & $(P_1 \wat q) \x (P_2 \wat q)$\\
+  $n \wat q$ & $n(q)$\\
+  $\ups P $ & $\ups (h(q) \otimes F(P \wat q))$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat q ) \amp (N_2 \wat q )$\\
+  $ (P \lol N) $ & $F(P \wat q) \lol (N \wat q)$\\
+\end{tabular}\]
+Here negatives translate to negative linear and positives translate to positive unrestricted.
 \end{document}
