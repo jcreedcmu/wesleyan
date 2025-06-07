@@ -2,6 +2,7 @@
 *.aux
 *.dvi
 *.log
+*.out
 texnotes/**/*.pdf
 .DS_Store
 agda/**/*.agdai
