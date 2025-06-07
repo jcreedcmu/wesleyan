@@ -108,6 +108,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\ii{{\mathbb I}}
 \def\T{\mathbb{T}}
 \def\tw{\mathop\triangleleft}
+\def\tb{\mathop\blacktriangleleft}
 \def\sw#1{^{#1}_{#1}}
 \def\TP{\mathbf{TPre}}
 \def\pp{\textsf{\textbf p}}
@@ -519,15 +520,85 @@ an $F$ to come back up to unrestricted.
   $ (P \lol N) $ & $F(P \wat q) \lol (N \wat q)$\\
 \end{tabular}\]
 Here negatives translate to negative linear and positives translate to positive unrestricted.
-Let's try to pump the rhs of this translation through the familiar cps-y resource-semantics translation.
 
-\def\low#1{#1_0}
-$\dns N$ becomes $\dns U(h(q) \lol N \wat q)$ which becomes
-\[(\dns N) \wat (q,\bar \alpha) = \forall \bar \phi . (U(h(q) \lol N \wat q)) \wat \bar \phi \to \bar \alpha \tw \bar \phi \]
-\[= \forall \bar \phi . (\exists  \phi . U \phi = \bar \phi \land (h(q) \lol N \wat q) \wat \phi) \to \bar\alpha \tw \phi \]
-\[= \forall   \phi . ( (h(q) \lol N \wat q) \wat \phi) \to  \bar\alpha \tw U \phi \]
-\[= \forall   \phi \beta .  (h(q,  \beta)) \to ( N \wat (q,  \phi)) \to \bar\alpha \tw U (\beta \lol \phi) \]
-\[(\dns N) \wat (q,\bar \alpha) = \forall   \phi \beta .  h(q,  \beta) \to ( N \wat (q,  \phi)) \to F\bar\alpha * \beta \tw  \phi \]
-Conjecturally I could incorporate $h$ into $\tw$ and say
-\[(\dns N) \wat (q,\bar \alpha) = \forall   \phi  \to ( N \wat (q,  \phi)) \to F\bar\alpha  \tw_q  \phi \]
+\vfil\eject
+Now let's try to pump the rhs of this translation through the familiar cps-y resource-semantics translation.
+
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat (q,\bar\alpha) / N \wat (q,\phi)$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(q,\bar\alpha)$\\
+  $\dns N $ & $\forall   \phi \beta .  h(q,  \beta) \to ( N \wat (q,  \phi)) \to F\bar\alpha * \beta \tw  \phi$\\
+  $\sq N $ & $\forall   \phi \beta .\all q'\ge q .  h(q',  \beta) \to ( N \wat (q',  \phi)) \to F\bar\alpha * \beta \tw  \phi$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat (q,\bar \alpha) ) \oplus (P_2 \wat (q,\bar \alpha))$\\
+  $ (P_1 \x P_2) $ & $\exists \bar\alpha_1,\bar\alpha_2. (\bar\alpha = \bar\alpha_1\bar\alpha_2) \land (P_1 \wat (q,\bar\alpha_1)) \land (P_2 \wat (q,\bar\alpha_2))$\\
+  $n $ & $n(q, \phi)$\\
+  $\ups P $ & $\all\bar\alpha\beta  . (h(q, \beta)) \to (P \wat (q, \bar\alpha))  \to F\bar\alpha * \beta   \tw \phi$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat (q,\phi) ) \oplus (N_2 \wat (q,\phi) )$\\
+  $ (P \lol N) $ & $\exists \bar\alpha,\phi'. (\phi = F\bar\alpha \lol \phi') \land (P \wat (q,\bar\alpha)) \land (N \wat (q,\phi'))$\\
+\end{tabular}\]
+%% $\ups P$ becomes $\ups (h(q) \otimes F(P \wat q))$ which becomes
+
+%% \[(\ups P) @ (q, \phi) = \all\alpha . (h(q) \otimes F(P \wat q)) \wat \alpha \to \alpha \tw \phi\]
+%% \[ = \all\beta \alpha . (h(q) \wat\beta) \to F(P \wat q) \wat \alpha \to \beta \alpha \tw \phi\]
+%% \[ = \all\beta \bar\alpha . (h(q) \wat\beta) \to (P \wat q) \wat \bar\alpha \to \beta * F\bar\alpha \tw \phi\]
+%% \[ = \all\bar\alpha\beta  . (h(q, \beta)) \to (P \wat (q, \bar\alpha))  \to F\bar\alpha * \beta   \tw \phi\]
+
+%% $\dns N$ becomes $\dns U(h(q) \lol N \wat q)$ which becomes
+%% \[(\dns N) \wat (q,\bar \alpha) = \forall \bar \phi . (U(h(q) \lol N \wat q)) \wat \bar \phi \to \bar \alpha \tw \bar \phi \]
+%% \[= \forall \bar \phi . (\exists  \phi . U \phi = \bar \phi \land (h(q) \lol N \wat q) \wat \phi) \to \bar\alpha \tw \phi \]
+%% \[= \forall   \phi . ( (h(q) \lol N \wat q) \wat \phi) \to  \bar\alpha \tw U \phi \]
+%% \[= \forall   \phi \beta .  (h(q,  \beta)) \to ( N \wat (q,  \phi)) \to \bar\alpha \tw U (\beta \lol \phi) \]
+%% \[(\dns N) \wat (q,\bar \alpha) = \forall   \phi \beta .  h(q,  \beta) \to ( N \wat (q,  \phi)) \to F\bar\alpha * \beta \tw  \phi \]
+
+Now I want to make some substitutions to simplify this:
+\[ \alpha' := (q,\bar \alpha) \]
+\[ \phi' := (q, \phi) \]
+\[ (q,\bar\alpha')  \tb_\sq (q',\phi') := \all \beta \to q' \ge q\to   h(q_2,\beta) \to F\bar \alpha * \beta \tw \phi \]
+\[ (q,\bar\alpha')  \tb (q',\phi') := \all \beta \to q' = q\to   h(q_2,\beta) \to F\bar \alpha * \beta \tw \phi \]
+I claim this translation is equivalent to
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat \bar\alpha' / N \wat \phi'$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(\bar\alpha')$\\
+  $\dns N $ & $\forall   \phi' .   ( N \wat \phi') \to \bar\alpha' \tb  \phi$\\
+  $\sq N $ & $\forall   \phi' . ( N \wat \phi') \to \bar\alpha' \tb_\sq \phi$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat \bar \alpha' ) \oplus (P_2 \wat \bar \alpha')$\\
+  $ (P_1 \x P_2) $ & $\exists \bar\alpha_1',\bar\alpha_2'. (\bar\alpha' = \bar\alpha_1'\bar\alpha_2') \land (P_1 \wat \bar\alpha_1') \land (P_2 \wat \bar\alpha_2')$\\
+  $n $ & $n(\phi')$\\
+  $\ups P $ & $\all\bar\alpha' .   (P \wat \bar\alpha')  \to \bar\alpha'   \tb \phi'$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi' ) \oplus (N_2 \wat \phi' )$\\
+  $ (P \lol N) $ & $\exists \bar\alpha',\phi_0'. (\phi' = F\bar\alpha' \lol \phi_0') \land (P \wat \bar\alpha') \land (N \wat \phi_0')$\\
+\end{tabular}\]
+Now just get rid of all the primes:
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat \bar\alpha / N \wat \phi$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(\bar\alpha)$\\
+  $\dns N $ & $\forall   \phi .   ( N \wat \phi) \to \bar\alpha \tb  \phi$\\
+  $\sq N $ & $\forall   \phi . ( N \wat \phi) \to \bar\alpha \tb_\sq \phi$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat \bar \alpha ) \oplus (P_2 \wat \bar \alpha)$\\
+  $ (P_1 \x P_2) $ & $\exists \bar\alpha_1,\bar\alpha_2. (\bar\alpha = \bar\alpha_1\bar\alpha_2) \land (P_1 \wat \bar\alpha_1) \land (P_2 \wat \bar\alpha_2)$\\
+  $n $ & $n(\phi)$\\
+  $\ups P $ & $\all\bar\alpha .   (P \wat \bar\alpha)  \to \bar\alpha   \tb \phi$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \oplus (N_2 \wat \phi )$\\
+  $ (P \lol N) $ & $\exists \bar\alpha,\phi_0. (\phi = F\bar\alpha \lol \phi_0) \land (P \wat \bar\alpha) \land (N \wat \phi_0)$\\
+\end{tabular}\]
+
+Now I can perhaps do some reasoning that if my source language is nonsubstructural, resources $\alpha$
+don't have any interesting content {\em besides} the kripke world. This means the relation
+$\bar \alpha = \bar\alpha_1\bar\alpha_2$ holds if and only if all three are equal on the nose.
+Also $\phi$...
 \end{document}
