@@ -24,6 +24,7 @@
 \def\bthunk#1{\langle #1 \rangle}
 \def\brun{{!}}
 \def\gets{\leftarrow}
+\def\all{\forall}
 
 \def\bget{\mathop{\mathbf{get}}\nolimits}
 \def\bGel{\mathop{\mathbf{Gel}}\nolimits}
@@ -99,7 +100,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\tt{{\mathsf t}}
 \def\ii{{\mathbb I}}
 \def\T{\mathbb{T}}
-\def\tw{\mathsf{Tw}}
+\def\tw{\mathop\triangleleft}
 \def\sw#1{^{#1}_{#1}}
 \def\TP{\mathbf{TPre}}
 \def\pp{\textsf{\textbf p}}
@@ -242,7 +243,7 @@ and so we also have a proof of
 \[\sq(\sq (A \to A) \to A) \to \sq(A \to A \to A) \to A \]
 which means we also have a proof, for any poset (or, really, category) $W$ of worlds,
 and any world $p \in W$, and any poset-indexed proposition $A : W \to \rset$, of
-\[(\forall (q \ge p) .  (\forall (r \ge q). A\ r \to A\ r) \to A\ q) \to (\forall (q \ge p). A\ q \to A\ q \to A\ q) \to A\ p \]
+\[(\all (q \ge p) .  (\all (r \ge q). A\ r \to A\ r) \to A\ q) \to (\all (q \ge p). A\ q \to A\ q \to A\ q) \to A\ p \]
 
 All of this is an `external' theorem, and we could imagine internalizing it the same way internal parametricity
 internalizes the external parametricity theorem.
@@ -355,4 +356,80 @@ in which case
 \item the let-binder becomes substitution
 \end{enumerate}
 Maybe this spreads the annoyances around more evenly.
+
+\section{Modality}
+
+I want to return to the question of: given the sort of translation like
+\[\begin{tabular}{lcl}
+  $p \wat \alpha$&=&$p(\alpha)$\\
+  $\dns N \wat \alpha$&=&$\all \phi. N \wat \phi \to \alpha \tw \phi$\\
+  $ (P_1 \oplus P_2) \wat \alpha$&=&$(P_1 \wat \alpha) \lor (P_2 \wat \alpha)$\\
+  $ (P_1 \otimes P_2) \wat \alpha$&=&$\exists \alpha_1\alpha_2. (\alpha \le \alpha_1 \otimes \alpha_2) \land (P_1 \wat \alpha_1) \land (P_2 \wat \alpha_2)$\\
+  $n \wat\phi$&=&$n(\phi)$\\
+  $\ups P \wat \phi$&=&$\all \alpha. P \wat \phi \to \alpha \tw \phi$\\
+  $ (N_1 \amp N_2) \wat \phi$&=&$(N_1 \wat \phi) \lor (N_2 \wat \phi)$\\
+  $ (P \to N) \wat \phi$&=&$\exists \alpha\phi'. (\alpha \lol \phi' \le \phi) \land (P \wat \alpha) \land (N \wat \phi')$\\
+\end{tabular}\]
+Is it possible to get a Kripke-ish modal logic out of this by suitable subsitutions for the type of $\alpha$ and $\phi$ and $\le$ and $\tw$?
+Possibly by generalizing to a modal setup with different syntactic classes of propositions, and including like
+\[\begin{tabular}{lcl}
+  $U N \wat \bar \phi$&=&$\exists \phi. (U  \phi \le \bar \phi ) \land  (N \wat  \phi)$\\
+  $F \bar P \wat \alpha $&=&$\exists \bar \alpha. ( \alpha \le F  \bar \alpha) \land  (\bar P \wat \bar  \alpha)$\\
+\end{tabular}\]
+where barred things are at a ``higher'' modal level. The first thing I want to sort out is what interactions are required between $\le$ and $\tw$ and $F$ and $U$ for things to make sense.
+Let's assume that I want Kripke ``reflexivity'' and ``transitivity'', meaning I think the following sequents in the source language should be provable:
+\[\prov \square n \to n  \qquad = \qquad \prov F \dns U  n \to n \]
+\[\prov \square n \to \ups \square \ups \square n \qquad = \qquad \prov F \dns U  n \to \ups F \dns U \ups F \dns U n  \]
+Let's tackle reflexivity first. I start with the goal
+\[  (F \dns U n \to n) \wat \phi \prov 1 \tw \phi \]
+and I'd like to transform it to
+\[  (F \dns U n) \wat \alpha,  n @ \phi \prov 1 \tw (\alpha \lol \phi) \eqno(*)\]
+but wait! what I really got was is
+\[ \alpha \lol \phi' \le \phi ,  (F \dns U n) \wat \alpha,  n @ \phi' \prov 1 \tw \phi \]
+and I'm assuming monotonicity of $\tw$ with respect to $\le$, in the sense that I assume I can manage
+\[
+\begin{prooftree}
+    (F \dns U n) \wat \alpha,  n @ \phi' \prov 1 \tw (\alpha \lol \phi')
+\justifies
+\alpha \lol \phi' \le  \phi,  (F \dns U n) \wat \alpha,  n @ \phi' \prov 1 \tw \phi
+\end{prooftree}
+\]
+and what would suffice for that would be
+\[
+ \alpha \tw \phi_0 \to \phi_0 \le \phi  \to \alpha \tw \phi
+\]
+Similarly, I expect $\tensor$ on the left to be able to asynchronously rewrite the context.
+That would mean I expect to be able to do
+\[
+\begin{prooftree}
+\[
+P_1 \wat \alpha_1, P_2 \wat \alpha_2 \prov \alpha_1 \otimes \alpha_2 \tw \phi
+\justifies
+P_1 \wat \alpha_1, P_2 \wat \alpha_2, \alpha \le \alpha_1 \otimes \alpha_2 \prov \alpha \tw \phi
+\]
+\justifies
+(P_1 \otimes P_2) \wat \alpha \prov \alpha \tw \phi
+\end{prooftree}
+\]
+so I expect monotonicity
+\[ \alpha \le \alpha' \to \alpha' \tw \phi \to \alpha \tw \phi \]
+Ok, so I've documented for myself that I expect $\tw$ and $\le$ to be compatible. What else do I need for
+reflexivity? Transforming $(*)$, I also expect to be able to move $\alpha$ to the left of $\tw$.
+This is part of my basic expectations of $\lol$ and $1$.
+\[  (F \dns U n) \wat \alpha,  n \wat \phi \prov \alpha \tw \phi\]
+Let's expand out $F$.
+\[  \exists  \bar \alpha . (\alpha \le F \bar \alpha) \land ( \dns U n \wat \bar \alpha),  n \wat \phi \prov \alpha \tw \phi\]
+\[  \alpha \le F \bar \alpha,  \dns U n \wat \bar \alpha,  n \wat \phi \prov \alpha \tw \phi\]
+\[   ( \dns U n) \wat \bar \alpha,  n \wat \phi \prov F\bar\alpha \tw \phi\]
+Now it's time to expand the $\dns$. Maybe I should have written it as $\bar \dns$, since it's
+at the higher modal level.
+\[    \all \bar \phi . (U n) \wat \bar \phi \to \bar\alpha\tw\bar\phi,  n \wat \phi \prov F\bar\alpha \tw \phi\]
+I'm thought I unconditionally expected this to be the same as
+\[    \all \bar \phi . (U n) \wat \bar \phi \to \bar\alpha\tw\bar\phi,  n \wat \phi \prov \bar\alpha \tw U\phi\]
+which means I can substitute $U\phi$ for $\bar \phi$ to get
+\[    n \wat \phi \prov    (U n) \wat U \phi \]
+which is
+\[   n \wat \phi  \prov \exists \phi. (U  \phi \le U \phi ) \land  (n \wat  \phi)\]
+Ok! I see this depends on reflexivity of $\le$ between $\bar\phi$. Maybe that's something I could conceivably
+withhold? Seems somewhat promising.
 \end{document}
