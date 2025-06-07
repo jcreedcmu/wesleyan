@@ -488,7 +488,7 @@ In \href{http://jcreed.org/papers/linear-modal.pdf}{this paper} I had the follow
   $\sq N $ & $!(\all q' \ge q . h(q') \lol N \wat q')$\\
   $ (P_1 \oplus P_2) $ & $(P_1 \wat q ) \oplus (P_2 \wat q )$\\
   $ (P_1 \otimes P_2) $ & $(P_1 \wat q) \otimes (P_2 \wat q)$\\
-  $n \wat q$ & $n(q)$\\
+  $n$ & $n(q)$\\
   $\ups P $ & $\ups (h(q) \otimes P \wat q)$\\
   $ (N_1 \amp N_2) $ & $(N_1 \wat q ) \amp (N_2 \wat q )$\\
   $ (P \lol N) $ & $(P \wat q) \lol (N \wat q)$\\
@@ -513,10 +513,21 @@ an $F$ to come back up to unrestricted.
   $\sq N $ & $\dns U(\all q' \ge q . h(q') \lol N \wat q')$\\
   $ (P_1 \lor P_2) $ & $(P_1 \wat q ) \lor (P_2 \wat q )$\\
   $ (P_1 \x P_2) $ & $(P_1 \wat q) \x (P_2 \wat q)$\\
-  $n \wat q$ & $n(q)$\\
+  $n $ & $n(q)$\\
   $\ups P $ & $\ups (h(q) \otimes F(P \wat q))$\\
   $ (N_1 \amp N_2) $ & $(N_1 \wat q ) \amp (N_2 \wat q )$\\
   $ (P \lol N) $ & $F(P \wat q) \lol (N \wat q)$\\
 \end{tabular}\]
 Here negatives translate to negative linear and positives translate to positive unrestricted.
+Let's try to pump the rhs of this translation through the familiar cps-y resource-semantics translation.
+
+\def\low#1{#1_0}
+$\dns N$ becomes $\dns U(h(q) \lol N \wat q)$ which becomes
+\[(\dns N) \wat (q,\bar \alpha) = \forall \bar \phi . (U(h(q) \lol N \wat q)) \wat \bar \phi \to \bar \alpha \tw \bar \phi \]
+\[= \forall \bar \phi . (\exists  \phi . U \phi = \bar \phi \land (h(q) \lol N \wat q) \wat \phi) \to \bar\alpha \tw \phi \]
+\[= \forall   \phi . ( (h(q) \lol N \wat q) \wat \phi) \to  \bar\alpha \tw U \phi \]
+\[= \forall   \phi \beta .  (h(q,  \beta)) \to ( N \wat (q,  \phi)) \to \bar\alpha \tw U (\beta \lol \phi) \]
+\[(\dns N) \wat (q,\bar \alpha) = \forall   \phi \beta .  h(q,  \beta) \to ( N \wat (q,  \phi)) \to F\bar\alpha * \beta \tw  \phi \]
+Conjecturally I could incorporate $h$ into $\tw$ and say
+\[(\dns N) \wat (q,\bar \alpha) = \forall   \phi  \to ( N \wat (q,  \phi)) \to F\bar\alpha  \tw_q  \phi \]
 \end{document}
