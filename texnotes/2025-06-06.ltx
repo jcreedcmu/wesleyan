@@ -453,6 +453,17 @@ It seems like we're still working `at' our current $\phi$ here, so we set $\alph
 which expands to
 \[( \dns U  n) \wat \bar\alpha \prov \exists \bar \alpha'. ( F \bar \alpha \le F  \bar \alpha') \land  ( \dns U \ups F \dns U n \wat \bar  \alpha')\]
 so we can assert reflexivity at $\alpha$ perhaps, and pick $\bar\alpha$ for $\bar\alpha'$, and go to
-\[( \dns U  n) \wat \bar\alpha \prov  (\dns U \ups F \dns U n \wat \bar)  \alpha\]
-
+\[( \dns U  n) \wat \bar\alpha \prov  (\dns U \ups F \dns U n) \wat \bar \alpha\]
+Now I hope there's interesting Kripke-relevant content in this $\dns$ and the forthcoming two $\dns$'s,
+one on the right and then one on the left. Our current concern expands to
+\[( \dns U  n) \wat \bar\alpha \prov \all \bar\phi. (U \ups F \dns U n) \wat \bar\phi \to \bar\alpha \tw \bar\phi\]
+and thence to
+\[( \dns U  n) \wat \bar\alpha, (U \ups F \dns U n) \wat \bar\phi \prov \bar\alpha \tw \bar\phi\]
+\[( \dns U  n) \wat \bar\alpha, ( \ups F \dns U n) \wat \phi \prov \bar\alpha \tw U\phi\]
+\[( \dns U  n) \wat \bar\alpha, ( \ups F \dns U n) \wat \phi \prov F\bar\alpha \tw \phi\]
+\[( \dns U  n) \wat \bar\alpha  \prov(F \dns U n) \wat F\bar\alpha\]
+\[( \dns U  n) \wat \bar\alpha  \prov( \dns U n) \wat \bar\alpha\]
+Hmm. That didn't require any sort of transitivity-ish properties that I expected.
+Maybe I have to disrupt the adjunction of $F$ and $U$, but I'm afraid to do that. I thought that
+was required for focusing to work right.
 \end{document}
