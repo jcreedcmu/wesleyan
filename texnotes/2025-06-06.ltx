@@ -366,7 +366,7 @@ I want to return to the question of: given the sort of translation like
   $ (P_1 \oplus P_2) \wat \alpha$&=&$(P_1 \wat \alpha) \lor (P_2 \wat \alpha)$\\
   $ (P_1 \otimes P_2) \wat \alpha$&=&$\exists \alpha_1\alpha_2. (\alpha \le \alpha_1 \otimes \alpha_2) \land (P_1 \wat \alpha_1) \land (P_2 \wat \alpha_2)$\\
   $n \wat\phi$&=&$n(\phi)$\\
-  $\ups P \wat \phi$&=&$\all \alpha. P \wat \phi \to \alpha \tw \phi$\\
+  $\ups P \wat \phi$&=&$\all \alpha. P \wat \alpha \to \alpha \tw \phi$\\
   $ (N_1 \amp N_2) \wat \phi$&=&$(N_1 \wat \phi) \lor (N_2 \wat \phi)$\\
   $ (P \to N) \wat \phi$&=&$\exists \alpha\phi'. (\alpha \lol \phi' \le \phi) \land (P \wat \alpha) \land (N \wat \phi')$\\
 \end{tabular}\]
@@ -380,6 +380,7 @@ where barred things are at a ``higher'' modal level. The first thing I want to s
 Let's assume that I want Kripke ``reflexivity'' and ``transitivity'', meaning I think the following sequents in the source language should be provable:
 \[\prov \square n \to n  \qquad = \qquad \prov F \dns U  n \to n \]
 \[\prov \square n \to \ups \square \ups \square n \qquad = \qquad \prov F \dns U  n \to \ups F \dns U \ups F \dns U n  \]
+\subsection{Reflexivity}
 Let's tackle reflexivity first. I start with the goal
 \[  (F \dns U n \to n) \wat \phi \prov 1 \tw \phi \]
 and I'd like to transform it to
@@ -429,7 +430,29 @@ I'm thought I unconditionally expected this to be the same as
 which means I can substitute $U\phi$ for $\bar \phi$ to get
 \[    n \wat \phi \prov    (U n) \wat U \phi \]
 which is
-\[   n \wat \phi  \prov \exists \phi. (U  \phi \le U \phi ) \land  (n \wat  \phi)\]
+\[   n \wat \phi  \prov \exists \phi'. (U  \phi' \le U \phi ) \land  (n \wat  \phi')\]
 Ok! I see this depends on reflexivity of $\le$ between $\bar\phi$. Maybe that's something I could conceivably
 withhold? Seems somewhat promising.
+
+
+\subsection{Transitivity}
+We aim to show
+\[ ( F \dns U  n) \wat \alpha, (\ups F \dns U \ups F \dns U n)\wat\phi \prov \alpha \tw \phi  \]
+and unpacking the left gives us
+\[ ( \dns U  n) \wat \bar\alpha, (\ups F \dns U \ups F \dns U n)\wat\phi \prov \bar F\alpha \tw  \phi  \]
+much like before. Thinking of how the modal proof goes: we leave the lhs alone for a bit, and unpack the
+two boxes on the right first. So we don't want to work on the $(\dns U n) \wat\bar\alpha$ yet, but rather
+the other big mess at $\phi$. Expand the $\ups$:
+
+\[( \dns U  n) \wat \bar\alpha, \all \alpha'. (F \dns U \ups F \dns U n) \wat \alpha' \to \alpha' \tw \phi
+\prov F \bar \alpha \tw  \phi
+\]
+It seems like we're still working `at' our current $\phi$ here, so we set $\alpha' = F \bar \alpha$ and go to
+\[( \dns U  n) \wat \bar\alpha\prov (F \dns U \ups F \dns U n) \wat F\bar \alpha\]
+
+which expands to
+\[( \dns U  n) \wat \bar\alpha \prov \exists \bar \alpha'. ( F \bar \alpha \le F  \bar \alpha') \land  ( \dns U \ups F \dns U n \wat \bar  \alpha')\]
+so we can assert reflexivity at $\alpha$ perhaps, and pick $\bar\alpha$ for $\bar\alpha'$, and go to
+\[( \dns U  n) \wat \bar\alpha \prov  (\dns U \ups F \dns U n \wat \bar)  \alpha\]
+
 \end{document}
