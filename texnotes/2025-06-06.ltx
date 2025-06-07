@@ -600,5 +600,25 @@ Now just get rid of all the primes:
 Now I can perhaps do some reasoning that if my source language is nonsubstructural, resources $\alpha$
 don't have any interesting content {\em besides} the kripke world. This means the relation
 $\bar \alpha = \bar\alpha_1\bar\alpha_2$ holds if and only if all three are equal on the nose.
-Also $\phi = F\bar \alpha \lol \phi_0$ should be try if $\phi = \phi_0$ and $\alpha$'s $q$ field matches the other two.
+Also $\phi = F\bar \alpha \lol \phi_0$ should be try if $\phi = \phi_0$ and $\alpha$'s $q$ field matches the other two. Hm. Maybe it is more appropriate to split off the other relation.
+
+So I think I'm imagining a situation somewhat like the following:
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat \alpha / N \wat \phi$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(\alpha)$\\
+  $\dns N $ & $\forall   \phi .   ( N \wat \phi) \to  \alpha \sim \phi \to \alpha \tw  \phi$\\
+  $\sq N $ & $\forall   \phi . ( N \wat \phi) \to \alpha \le \phi \to \alpha \tw \phi$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat  \alpha ) \oplus (P_2 \wat  \alpha)$\\
+  $ (P_1 \x P_2) $ & $ (P_1 \wat \alpha) \land (P_2 \wat \alpha)$\\
+  $n $ & $n(\phi)$\\
+  $\ups P $ & $\all\alpha .   (P \wat \alpha)  \to  \alpha \sim \phi \to\alpha   \tw \phi$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \oplus (N_2 \wat \phi )$\\
+  $ (P \lol N) $ & $\exists\alpha . ( \alpha \sim \phi) \land (P \wat \alpha) \land (N \wat \phi)$\\
+\end{tabular}\]
+And I wonder even if $\tw$ could be demoted to $\#(\phi)$.
 \end{document}
