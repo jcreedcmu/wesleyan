@@ -783,20 +783,21 @@ We should write $\wat_{W, \le}$ but we'll write bare $\wat$ with the subscripts 
 \[   ( P \to N)\wat w = P\wat w \to N \wat w \qquad n \wat w = n(w)\]
 \[ (\dns N)\wat w = ( v:W) \to (v \ge w) \to  N\wat v  \]
 
-We assume the $n : W \to \rset$ that we map atoms to are monotone, i.e. $u \le v$ implies
-a function $n(u) \to n(v)$.
+%% We assume the $n : W \to \rset$ that we map atoms to are monotone, i.e. $u \le v$ implies
+%% a function $n(u) \to n(v)$.
 
 Now we try to prove:
 \begin{lemma}
 For any $\vec u$,
   \begin{itemize}
   \item
+    If $\Gamma;\Omega \prov N$, then $(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov N \wat w$.
+  \item
     If $\Gamma;\Omega \prov Q$, then $(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov Q \wat w$.
   \item
     If $\Gamma \prov [P]$, then $(\dns\Gamma)\wat \vec u, \vec u \le w \prov P \wat w$.
   \item
-    If $\Gamma[N] \prov Q$, then $(\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w$
-    for any $v$.
+    If $\Gamma[N] \prov Q$, then $(\dns\Gamma)\wat \vec u, \vec u \le w, N \wat w \prov Q \wat w$.
   \end{itemize}
 
 \end{lemma}
@@ -846,12 +847,16 @@ So we finish the case by cutting in transitivity of $\le$.
 From our goal we work backwards:
 \[
 \begin{prooftree}
-  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w
+\[
+i.h.
+\justifies
+  (\dns\Gamma)\wat \vec u, \vec u \le w,  N \wat w \prov Q \wat w
+\]
 \justifies
   (\dns\Gamma, \dns N)\wat (\vec u, v), \vec u \le w, v \le w\prov Q \wat w
 \end{prooftree}
 \]
-But that matches the induction hypothesis.
+
 \item[Case:] {$n$L}
 \[
 \begin{prooftree}
@@ -859,8 +864,8 @@ But that matches the induction hypothesis.
 \Gamma[n] \prov n
 \end{prooftree}
 \]
-We need to show $(\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, n(v) \prov n(w)$.
-This follows from the monotonicity assumption on $n$.
+We need to show $(\dns\Gamma)\wat \vec u, \vec u \le w, n(w) \prov n(w)$.
+This follows from the identity rule.
 \item[Case:] {$\to$L}
 We have
 \[
@@ -870,24 +875,46 @@ We have
 \Gamma[P\to N] \prov Q
 \end{prooftree}
 \]
-Working backwards from the goal, we find
+From our goal we work backwards:
 \[
 \begin{prooftree}
 \[
+i.h.
 \justifies
-  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w \prov P \wat v
+  (\dns\Gamma)\wat \vec u, \vec u \le w \prov P \wat w
 \]
 \[
+i.h.
 \justifies
-  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w
+  (\dns\Gamma)\wat \vec u, \vec u \le w,  N \wat w \prov Q \wat w
 \]
 \justifies
-  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, (P \to N) \wat v \prov Q \wat w
+  (\dns\Gamma)\wat \vec u, \vec u \le w,  (P \to N) \wat w \prov Q \wat w
 \end{prooftree}
 \]
 
 
-
+\item[Case:] {$\to$R}
+We have
+\[
+\begin{prooftree}
+\Gamma; \Omega,P\prov N
+\justifies
+\Gamma; \Omega \prov P \to N
+\end{prooftree}
+\]
+From our goal we work backwards:
+\[
+\begin{prooftree}
+\[
+i.h.
+\justifies
+  (\dns\Gamma)\wat \vec u, \vec u \le w,  N \wat w \prov Q \wat w
+\]
+\justifies
+(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov (P \to N) \wat w
+\end{prooftree}
+\]
 
 
 \end{itemize}
