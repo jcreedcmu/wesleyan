@@ -760,4 +760,34 @@ I guess I can see this as a zigzag
 \[\alpha \le \phi, \phi \sim \alpha', \alpha' \le \phi' \prov \alpha \le \phi'\]
 where $\phi \sim \alpha'$ means $\alpha' = \bar\phi$, but it does seem essential for
 the proof of $\sq N \to \sq \sq  N$ that I know $\sim$ is a total relation.
+
+\section{Internal Modal Replacement}
+
+I believe the the following is true:
+\begin{theorem}
+Suppose we have a polarized type $X$ over some free type variables
+$x_1, \ldots, x_n$. Suppose we have a polymorphic term $M$ at the
+polarity-erased type of $\all x_1,\ldots,x_n . X$. Then there is a term at the modalized
+type where we've replaced all $\up$ in $X$ with ``for all future worlds''.
+\end{theorem}
+
+Let me try to make this more concrete. Here's a toy source language with just implication:
+\[\begin{tabular}{rcl}
+  Negatives $N$&$::=$&$ P \to N \celse n$\\
+  Positives $P$&$::=$&$\dns N $\\
+\end{tabular}\]
+Here's the erased language:
+\[\begin{tabular}{rcl}
+  Props $X$&$::=$&$X \to X \celse x$\\
+\end{tabular}\]
+The erasure functions is easy.
+\[  \qquad  ( P \to N)^\circ = P^\circ \to N^\circ \qquad n^\circ = n\]
+\[ (\dns N)^\circ = N^\circ  \]
+Now the modal translation is parameterized over a type $W$ of worlds and a relation
+$\_\le\_ : W \to W \to \rset$ and a world $w$.
+We should write $\wat_{W, \le}$ but we'll write bare $\wat$ with the subscripts implicit.
+\[   ( P \to N)\wat w = P\wat w \to N \wat w \qquad n \wat w = n(w)\]
+\[ (\dns N)\wat w = \forall v \ge w . N\wat v  \]
+
+
 \end{document}
