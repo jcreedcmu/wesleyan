@@ -621,4 +621,143 @@ So I think I'm imagining a situation somewhat like the following:
   $ (P \lol N) $ & $\exists\alpha . ( \alpha \sim \phi) \land (P \wat \alpha) \land (N \wat \phi)$\\
 \end{tabular}\]
 And I wonder even if $\tw$ could be demoted to $\#(\phi)$.
+\subsection{Checking This Is Ok}
+Axioms:
+\begin{enumerate}
+\item If $\alpha \sim \phi$ and $\alpha' \sim \phi$ and $\alpha' \tw \phi$, then $\alpha \tw \phi$.
+\end{enumerate}
+\begin{theorem}
+\[\Delta;\Gamma; \Omega \qquad \mapsto\qquad \sq\Delta\wat\alpha,\dns\Gamma \wat \alpha, \Omega\wat\alpha\]
+\[ \prov N \qquad\iff\qquad  N\wat \phi, \alpha\sim\phi \prov  \alpha\tw\phi\]
+\[ [N] \prov P \qquad\iff\qquad  P \wat\alpha, \alpha\sim\phi \prov  N\wat \phi\]
+\[  \prov [P] \qquad\iff\qquad \prov P \wat\alpha \]
+\end{theorem}
+
+\begin{proof}
+Consider $\lol R$.
+
+\[
+\begin{prooftree}
+\[
+\alpha' \sim \phi, P\wat\alpha',  N\wat \phi \prov  \alpha'\tw\phi
+\justifies
+\alpha' \sim \phi, P\wat\alpha',  N\wat \phi, \alpha\sim\phi \prov  \alpha\tw\phi
+\]
+\justifies
+(P \lol N)\wat \phi, \alpha\sim\phi \prov  \alpha\tw\phi
+\end{prooftree}
+\]
+Consider $\lol L$.
+\[
+\begin{prooftree}
+\[
+\hbox{\color{gray}note: connection to $P'$ through $\phi$ lost here}
+\justifies
+P' \wat\alpha, \alpha\sim\phi \prov P \wat \alpha
+\]
+\[
+\justifies
+P' \wat\alpha, \alpha\sim\phi \prov  N\wat \phi
+\]
+\justifies
+P' \wat\alpha, \alpha\sim\phi \prov  (P \lol N)\wat \phi
+\end{prooftree}
+\]
+Consider $\sq R$.
+\[\begin{prooftree}
+N\wat \phi, \alpha \le \phi   \prov \alpha \tw \phi
+\justifies
+  \prov (\sq N) \wat \alpha
+\end{prooftree}\]
+\cqed
+\end{proof}
+
+
+Try to prove $\sq N \to N$
+\[
+\begin{prooftree}
+\alpha\sim\phi \prov \alpha \le \phi
+\justifies
+\sq N \wat \alpha, N \wat \phi, \alpha \sim \phi \prov \alpha \tw \phi
+\end{prooftree}
+\]
+Try to prove $\sq N \to \sq\sq N$... ah here I seem to want to know the other side
+of the fact that $\alpha \sim \phi$ is a functional relation. Not only do I need single-valuedness,
+as I relied on in $\lol R$, I need totality as well. Because in
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\sq N \wat \alpha, \ups \sq N \wat \phi', \alpha \le \phi' \prov  \alpha\tw\phi'
+\]
+\justifies
+\sq N \wat \alpha \prov \sq \ups \sq N \wat \alpha
+\]
+\justifies
+\sq N \wat \alpha, \ups \sq \ups \sq N \wat \phi, \alpha \sim \phi \prov \alpha \tw \phi
+\end{prooftree}
+\]
+I want to construct a new $\alpha'$ from $\phi'$ to instantiate the $\ups$'s quantifier with.
+
+\subsection{Functional Alphas}
+
+Let $\bar\phi$ be the function that extracts an $\alpha$ out of a $\phi$.
+
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat \alpha / N \wat \phi$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(\alpha)$\\
+  $\dns N $ & $\forall   \phi .   ( N \wat \phi) \to \alpha = \bar\phi \to \# (\phi)$\\
+  $\sq N $ & $\forall   \phi . ( N \wat \phi) \to \alpha \le \phi \to \#( \phi)$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat  \alpha ) \oplus (P_2 \wat  \alpha)$\\
+  $ (P_1 \x P_2) $ & $ (P_1 \wat \alpha) \land (P_2 \wat \alpha)$\\
+  $n $ & $n(\phi)$\\
+  $\ups P $ & $   P \wat \bar\phi  \to \#(\phi)$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \oplus (N_2 \wat \phi )$\\
+  $ (P \lol N) $ & $ (P \wat \bar\phi) \land (N \wat \phi)$\\
+\end{tabular}\]
+Try to prove $\sq N \to N$
+\[
+\begin{prooftree}
+ \prov \bar\phi \le \phi
+\justifies
+\sq N \wat \bar \phi, N \wat \phi \prov \alpha \tw \phi
+\end{prooftree}
+\]
+Ok, $\bar\phi \le \phi$ is `reflexivity'.
+
+Try to prove $\sq N \to \sq\sq N$.
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\bar\phi \le \phi', \bar\phi' \le \phi'' \prov \bar\phi \le \phi''
+\justifies
+\sq N \wat \bar\phi,  \bar\phi \le \phi', \bar\phi' \le \phi'',  N\wat\phi'' \prov \#(\phi'')
+\]
+\justifies
+\sq N \wat \bar\phi,  \bar\phi \le \phi' \prov  \sq N \wat \bar{\phi'}
+\]
+\justifies
+\sq N \wat \bar\phi, \ups \sq N \wat \phi', \bar\phi \le \phi' \prov  \#(\phi')
+\]
+\justifies
+\sq N \wat \bar\phi \prov \sq \ups \sq N \wat \bar\phi
+\]
+\justifies
+\sq N \wat \bar\phi, \ups \sq \ups \sq N \wat \phi \prov \#(\phi)
+\end{prooftree}
+\]
+Ok, $\alpha \le \phi, \bar\phi \le \phi' \prov \alpha \le \phi'$ is `transitivity'.
+I guess I can see this as a zigzag
+\[\alpha \le \phi, \phi \sim \alpha', \alpha' \le \phi' \prov \alpha \le \phi'\]
+where $\phi \sim \alpha'$ means $\alpha' = \bar\phi$, but it does seem essential for
+the proof of $\sq N \to \sq \sq  N$ that I know $\sim$ is a total relation.
 \end{document}
