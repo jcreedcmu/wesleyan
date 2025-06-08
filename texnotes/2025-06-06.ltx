@@ -763,31 +763,134 @@ the proof of $\sq N \to \sq \sq  N$ that I know $\sim$ is a total relation.
 
 \section{Internal Modal Replacement}
 
-I believe the the following is true:
+I believe the the following {\bf external} theorem is true, and I'd like to internalize it:
 \begin{theorem}
-Suppose we have a polarized type $X$ over some free type variables
-$x_1, \ldots, x_n$. Suppose we have a polymorphic term $M$ at the
-polarity-erased type of $\all x_1,\ldots,x_n . X$. Then there is a term at the modalized
-type where we've replaced all $\up$ in $X$ with ``for all future worlds''.
+Suppose we have a polarized type $N$ over some free type variables
+$n_1, \ldots, n_n$. Suppose we have a polymorphic term $M$ at the
+ type  $\all n_1,\ldots,n_n . N$. Then there is a term at the modalized
+type where we've replaced all $\dns$ in $N$ with ``for all future worlds''.
 \end{theorem}
 
-Let me try to make this more concrete. Here's a toy source language with just implication:
+First let's more clearly state and prove this theorem.
+Here's a toy source language with just implication:
 \[\begin{tabular}{rcl}
   Negatives $N$&$::=$&$ P \to N \celse n$\\
   Positives $P$&$::=$&$\dns N $\\
 \end{tabular}\]
-Here's the erased language:
-\[\begin{tabular}{rcl}
-  Props $X$&$::=$&$X \to X \celse x$\\
-\end{tabular}\]
-The erasure functions is easy.
-\[  \qquad  ( P \to N)^\circ = P^\circ \to N^\circ \qquad n^\circ = n\]
-\[ (\dns N)^\circ = N^\circ  \]
-Now the modal translation is parameterized over a type $W$ of worlds and a relation
+The modal translation is parameterized over a type $W$ of worlds and a reflexive, transitive relation
 $\_\le\_ : W \to W \to \rset$ and a world $w$.
 We should write $\wat_{W, \le}$ but we'll write bare $\wat$ with the subscripts implicit.
 \[   ( P \to N)\wat w = P\wat w \to N \wat w \qquad n \wat w = n(w)\]
-\[ (\dns N)\wat w = \forall v \ge w . N\wat v  \]
+\[ (\dns N)\wat w = ( v:W) \to (v \ge w) \to  N\wat v  \]
+
+We assume the $n : W \to \rset$ that we map atoms to are monotone, i.e. $u \le v$ implies
+a function $n(u) \to n(v)$.
+
+Now we try to prove:
+\begin{lemma}
+For any $\vec u$,
+  \begin{itemize}
+  \item
+    If $\Gamma;\Omega \prov Q$, then $(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov Q \wat w$.
+  \item
+    If $\Gamma \prov [P]$, then $(\dns\Gamma)\wat \vec u, \vec u \le w \prov P \wat w$.
+  \item
+    If $\Gamma[N] \prov Q$, then $(\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w$
+    for any $v$.
+  \end{itemize}
+
+\end{lemma}
+
+\begin{proof}
+By induction on the term derivation.
+
+\begin{itemize}
+\item[Case:] {$\dns$L}
+ \[ \begin{prooftree}
+    \Gamma, N;\Omega \prov  Q
+\justifies
+    \Gamma;\Omega, \dns N \prov  Q
+  \end{prooftree}\]
+By the induction hypothesis we get
+\[(\dns\Gamma, \dns N, \Omega)\wat \vec u, \vec u \le w \prov Q \wat w\]
+for any $\vec u$, and the conclusion is
+\[(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w, \dns N \wat w \prov Q \wat w\]
+So this is true by cutting in reflexivity of $\le$.
+
+\item[Case:] {$\dns$R}
+\[ \begin{prooftree}
+    \Gamma;\cdot \prov  N
+\justifies
+    \Gamma\prov[ \dns N ]
+  \end{prooftree}\]
+By the induction hypothesis, we get
+\[\dns\Gamma\wat \vec u, \vec u \le v \prov N \wat v\]
+On the other hand the goal requires
+\[
+\begin{prooftree}
+  \dns\Gamma\wat \vec u, \vec u \le w, w \le v \prov  N \wat v
+\justifies
+  \dns\Gamma\wat \vec u, \vec u \le w \prov (\dns N) \wat w
+\end{prooftree}
+\]
+So we finish the case by cutting in transitivity of $\le$.
+
+\item[Case:] {focus}
+\[
+\begin{prooftree}
+  \Gamma[N] \prov Q
+\justifies
+ \Gamma,N \prov Q
+\end{prooftree}
+\]
+From our goal we work backwards:
+\[
+\begin{prooftree}
+  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w
+\justifies
+  (\dns\Gamma, \dns N)\wat (\vec u, v), \vec u \le w, v \le w\prov Q \wat w
+\end{prooftree}
+\]
+But that matches the induction hypothesis.
+\item[Case:] {$n$L}
+\[
+\begin{prooftree}
+\justifies
+\Gamma[n] \prov n
+\end{prooftree}
+\]
+We need to show $(\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, n(v) \prov n(w)$.
+This follows from the monotonicity assumption on $n$.
+\item[Case:] {$\to$L}
+We have
+\[
+\begin{prooftree}
+\Gamma \prov [P] \qquad \Gamma[N] \prov Q
+\justifies
+\Gamma[P\to N] \prov Q
+\end{prooftree}
+\]
+Working backwards from the goal, we find
+\[
+\begin{prooftree}
+\[
+\justifies
+  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w \prov P \wat v
+\]
+\[
+\justifies
+  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, N \wat v \prov Q \wat w
+\]
+\justifies
+  (\dns\Gamma)\wat \vec u, \vec u \le w, v \le w, (P \to N) \wat v \prov Q \wat w
+\end{prooftree}
+\]
 
 
+
+
+
+\end{itemize}
+\cqed
+\end{proof}
 \end{document}
