@@ -791,9 +791,9 @@ Now we try to prove:
 For any $\vec u$,
   \begin{itemize}
   \item
-    If $\Gamma;\Omega \prov N$, then $(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov N \wat w$.
+    If $\Gamma;\Omega \prov N$, then $(\dns\Gamma)\wat \vec u, \vec u \le w, \Omega \wat w \prov N \wat w$.
   \item
-    If $\Gamma;\Omega \prov Q$, then $(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w \prov Q \wat w$.
+    If $\Gamma;\Omega \prov Q$, then $(\dns\Gamma)\wat \vec u, \vec u \le w , \Omega \wat w \prov Q \wat w$.
   \item
     If $\Gamma \prov [P]$, then $(\dns\Gamma)\wat \vec u, \vec u \le w \prov P \wat w$.
   \item
@@ -812,11 +812,20 @@ By induction on the term derivation.
 \justifies
     \Gamma;\Omega, \dns N \prov  Q
   \end{prooftree}\]
-By the induction hypothesis we get
-\[(\dns\Gamma, \dns N, \Omega)\wat \vec u, \vec u \le w \prov Q \wat w\]
-for any $\vec u$, and the conclusion is
-\[(\dns\Gamma, \Omega)\wat \vec u, \vec u \le w, \dns N \wat w \prov Q \wat w\]
-So this is true by cutting in reflexivity of $\le$.
+We reason by cutting in reflexivity of $\le$:
+\[
+\begin{prooftree}
+\[\justifies w\le w\]
+\[
+i.h.
+\justifies
+(\dns\Gamma, \dns N)\wat \vec u, \vec u \le w, \Omega \wat w \prov Q \wat w
+\]
+\justifies
+(\dns\Gamma)\wat \vec u, \vec u \le w, \Omega \wat w, \dns N \wat w \prov Q \wat w
+\end{prooftree}
+\]
+
 
 \item[Case:] {$\dns$R}
 \[ \begin{prooftree}
