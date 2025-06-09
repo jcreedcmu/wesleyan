@@ -943,8 +943,8 @@ So imagine that propositional atoms are taken to objects that are some suitably 
 
 Following the idea of $\dns$ being translated to a $h(q) \lol$-esque operation, I would translate
 
-\[ (\dns N) \wat (\C, C) = (\D : \rcat)(D : \D)( f : C \to C') \to \]
-\[ \dns (h(\C \x \D, \langle C', D\rangle)\lol N \wat (\C \x \D, \langle C', D\rangle))\]
+\[ (\dns N) \wat (\C, C) = \dns((\D : \rcat)(D : \D)( f : C \to C') \to \]
+\[  h(\C \x \D, \langle C', D\rangle)\lol N \wat (\C \x \D, \langle C', D\rangle))\]
 
 So maybe this is really ``all future worlds'' in the category where
 \begin{enumerate}
@@ -959,4 +959,9 @@ where $g : C' \to C''$ and $h : D \to D'$,
 and the composite would be
 \[(g \o f,E) : (\C, C) \to (\C\x\D\x\E, (C'', D', E))\]
 
+That thought makes me think that this should be reasonably extrapolatable from a system that fixes
+merely a category $\C$ ahead of time, does a simpler object-indexing and modal replacement more like
+\[ (\dns N) \wat  C =  \dns (( f : C \to C') \to h(C')\lol N \wat C')\]
+and --- here is the crucial thing I don't have an idea yet of how to do --- allows the programmer
+more fine-grained control over which object $C$ they're evaluating at.
 \end{document}
