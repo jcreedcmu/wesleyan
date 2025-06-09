@@ -79,6 +79,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
+\def\bu{\bullet}
 \def\J{\mathbb{J}}
 \def\R{\mathcal{R}}
 \def\rpath#1{[#1]}
@@ -964,4 +965,16 @@ merely a category $\C$ ahead of time, does a simpler object-indexing and modal r
 \[ (\dns N) \wat  C =  \dns (( f : C \to C') \to h(C')\lol N \wat C')\]
 and --- here is the crucial thing I don't have an idea yet of how to do --- allows the programmer
 more fine-grained control over which object $C$ they're evaluating at.
+
+The simplest nontrivial example I can think of is the arrow category $\btwo = \bu \to \bu$.
+Are there any examples I can think of of the following form?
+\begin{itemize}
+\item A source-language type $A$.
+\item A target-language term $M : (C : \btwo) \to (A\wat C)$, where $A \wat C$ means replacing all of the
+$\dns$ in $A$ with ``for all future worlds in $\btwo$''.
+\item $\ldots$ such that $M$ is {\em not} in the image of the evident translation of  source-language $M_0 : A$.
+\item $\ldots$ such that there's some plausible additional source-language programming primitive that, if I had it,
+would make $M$ in the image of some source-language term after all
+\end{itemize}
+
 \end{document}
