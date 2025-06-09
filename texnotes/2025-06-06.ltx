@@ -153,9 +153,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\C{\mathbb{C}}
 \def\S{\mathbf{S}}
 \def\G{\mathbf{G}}
-\def\D{\mathbf{D}}
-\def\DD{\mathbb{D}}
-\def\E{\mathcal{E}}
+\def\D{\mathbb{D}}
+\def\E{\mathbb{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
 \def\ltri{{\lhd}}
@@ -929,4 +928,35 @@ i.h.
 \end{itemize}
 \cqed
 \end{proof}
+\section{Stepping Back}
+
+Let me try to state plainly what I hope to be the case: that there is some way
+to design a language which allows the programmer to take a expression that is at a type,
+and lift it to a type that functions `as if' it was in a presheaf category $\rset^\C$ all along,
+for any category $\C$ of their choosing.
+
+I have an instinct to try studying what happens if $\dns$ is translated to a notion
+of ``for all future worlds'' modality that explicitly refers to this idea of ``the current category''.
+
+So imagine that propositional atoms are taken to objects that are some suitably coherent notion of
+\[(\C : \rcat) (C : \C) \to \rset\]
+
+Following the idea of $\dns$ being translated to a $h(q) \lol$-esque operation, I would translate
+
+\[ (\dns N) \wat (\C, C) = (\D : \rcat)(D : \D)( f : C \to C') \to \]
+\[ \dns (h(\C \x \D, \langle C', D\rangle)\lol N \wat (\C \x \D, \langle C', D\rangle))\]
+
+So maybe this is really ``all future worlds'' in the category where
+\begin{enumerate}
+\item an object is a pointed category
+\item whenever we have $f : C \to C' \in \C$ and  $D \in \D$, that counts as a morphism
+$(f,D) : (\C, C) \to (\C\x\D, (C', D))$.
+\end{enumerate}
+Composition would presuppose data
+\[(f,D) : (\C, C) \to (\C\x\D, (C', D))\]
+\[((g \x h),E) : (\C \x \D, (C', D)) \to (\C\x\D\x\E, (C'', D', E))\]
+where $g : C' \to C''$ and $h : D \to D'$,
+and the composite would be
+\[(g \o f,E) : (\C, C) \to (\C\x\D\x\E, (C'', D', E))\]
+
 \end{document}
