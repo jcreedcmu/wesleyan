@@ -947,7 +947,7 @@ Following the idea of $\dns$ being translated to a $h(q) \lol$-esque operation, 
 \[ (\dns N) \wat (\C, C) = \dns((\D : \rcat)(D : \D)( f : C \to C') \to \]
 \[  h(\C \x \D, \langle C', D\rangle)\lol N \wat (\C \x \D, \langle C', D\rangle))\]
 
-So maybe this is really ``all future worlds'' in the category where
+So maybe this is really ``all future worlds'' in the category (let's call it:) $\C^\x$ where
 \begin{enumerate}
 \item an object is a pointed category
 \item whenever we have $f : C \to C' \in \C$ and  $D \in \D$, that counts as a morphism
@@ -977,4 +977,15 @@ $\dns$ in $A$ with ``for all future worlds in $\btwo$''.
 would make $M$ in the image of some source-language term after all
 \end{itemize}
 I think with some weird irony asking for terms not in the image of this translation feels like asking specifically for `non-parametric' terms. Is this `Parametricity via non-parametricity'?
+
+I specifically want to think in terms of the programmer deliberately choosing, given a function,
+to use that function at a more future world on purpose. This seems to mean that they want there to be a uniform
+way of selecting a future world that works regardless of what the current world is. This is a piece
+of good fortune that {\em does} obtain in the category $\C^\x$ above.
+
+\subsection{Transitivity}
+
+I think there's a relationship between the fact that $\dns\ups\dns = \dns$ and $\all y \ge x. \all z \ge y = \all y \ge x$, and the ability to ``peel off'' a quantifier and choose its instantiation.
+
+But how equivalent are two quantifiers to one in the presence of proof-relevance? Not clear.
 \end{document}
