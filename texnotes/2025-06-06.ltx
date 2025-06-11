@@ -1064,4 +1064,46 @@ yields the goal
 which holds by inspection of the focused $\lol L$ rule.
 
 \end{itemize}
+\subsection{Reflecting}
+Ok, I think this works, but I never really engaged with openness much. I guess this is because what I'm doing
+is nearly classical, except all the modalness/intuitionisticness is tied up in the quantifiers in the
+shifts and in $\tw$. I want to collapse this semantics a bit to make it less substructural, and, ideally,
+see how it relates to the asymmetric unfocused semantics.
+
+So let's invent a `context extraction' function $C : X^- \to X^+$, and set $\alpha_1 \otimes \alpha_2 = \alpha$ to $\alpha_1 = \alpha_2 = \alpha$, and set $\alpha_1 \lol \phi_2 = \phi$ to $\phi = \phi_2$ and $C\phi = \alpha_1$.
+Then the multiplicatives are
+
+\[ \sem {P \otimes P} \ni \alpha =  \sem P \ni \alpha \land \sem P\ni \alpha\]
+\[\sem {P \lol N} \ni \phi =  \sem P \ni C\phi \land \sem N\ni \phi\]
+
+Let me meditate on the fact that for every element of $X^+$, i.e. a context $\Gamma = N_1, \ldots, N_n$,
+there is a propositional realization of it as a negative prop, I guess call it
+\[ P_\Gamma = \dns N_1 \otimes \cdots \otimes \dns N_n\]
+and likewise I could define
+\[ N_{\Gamma,Q} = \dns N_1 \lol \cdots \lol \dns N_n \lol \ups Q\]
+and it seems true that
+\[ \Gamma \in \sem{P_\Gamma} \]
+\[ (\Gamma,Q) \in \sem{N_{\Gamma,Q}} \]
+Hmm. Here I get stuck.
+
+\subsection{Deriving}
+
+What if $\alpha \tw \phi$ is $\alpha = |\phi| \to \sharp(\phi)$?
+\[ \sem {P \otimes P} \ni \alpha =  \sem P \ni \alpha \land \sem P\ni \alpha\]
+\[\sem {P \lol N} \ni \phi =  \sem P \ni |\phi| \land \sem N\ni \phi\]
+\[\sem {\ups P} \ni \phi =  \sem P \ni |\phi| \to  \sharp(\phi)\]
+\[\sem {\dns N} \ni \alpha = \all \phi. \sem N \ni \phi \to |\phi| = \alpha \to  \sharp(\phi)\]
+What if we reverse the sense of negatives?
+
+
+$X^+$ and $X^-$ are topological spaces.
+We take positive props to open subsets of $X^+$.
+We take negative props to closed subsets of $X^-$.
+\[ \sem {P \otimes P} \ni \alpha = \sem P \ni \alpha \land \sem P \ni \alpha\]
+\[\sem {P \lol N} \ni \phi = \sem P \ni |\phi| \lor \sem N\ni \phi\]
+\[ \sem {P \oplus P} \ni \alpha = \sem P \ni \alpha \lor \sem P \ni \alpha\]
+\[ \sem {N \amp N} \ni \alpha = \sem N \ni \alpha \land \sem N \ni \alpha\]
+\[\sem {\ups P} \ni \phi = \exists \alpha. \sem P \ni \alpha \land \lnot \alpha \tw \phi\]
+\[\sem {\dns N} \ni \alpha = \all \phi. \sem N \ni \phi \to \alpha \tw \phi\]
+That's the opposite of what I wanted! Oof.
 \end{document}
