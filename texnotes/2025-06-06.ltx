@@ -1106,4 +1106,31 @@ We take negative props to closed subsets of $X^-$.
 \[\sem {\ups P} \ni \phi = \exists \alpha. \sem P \ni \alpha \land \lnot \alpha \tw \phi\]
 \[\sem {\dns N} \ni \alpha = \all \phi. \sem N \ni \phi \to \alpha \tw \phi\]
 That's the opposite of what I wanted! Oof.
+
+\section{Sheaf Semantics}
+
+I'm staring at the summary of Kripke-Joyal semantics in Blechschmidt's thesis. I'm tempted to say
+something like:
+\def\models{\vDash}
+\[
+\begin{array}{lcl}
+U \models^- \all x.N(x) &:\iff&\hbox{ for all $x$, we have $U \models^- N(x)$}\\
+U \models^- \ups P &:\iff&\hbox{ there exists a covering $U = \bigcup_i U_i$ such that for all $i$,
+we have $U_i \models^+ P$}\\
+U \models^+ \exists x.P(x) &:\iff&\hbox{ there exists $x$ such that $U \models^+ P(x)$}\\
+U \models^+ \dns N &:\iff&\hbox{ for all open $V \subseteq U$, we have $V \models^- N$}\\
+U \models^- P \imp N &:\iff&\hbox{ $U \models^+ P$ implies $U \models^- N$}\\
+\end{array}
+\]
+And the two sorts of `monotoniticty' that are meant to be satisfied by these interpretations
+can be read off of the shifts enforcing them:
+\begin{itemize}
+\item[(i)] If there is a covering $U = \bigcup_i U_i$ such that $\all_i.U_i\models^- N$, then I think we can infer $U \models^- N$
+\item[(ii)] If $V \subseteq U$ and $U \models^+ P$, then $V \models^+ P$.
+\end{itemize}
+Let's prove that (i) holds of $\ups P$. Suppose there is a covering $U = \bigcup_i U_i$ such that
+$\all_i.U_i\models^- \ups P$. This means there's a doubly indexed family of open sets
+such that $U_{ij}$ covers $U_i$, and the $U_i$ cover $U$. Well, coverings are definitely transitive
+in Grothendieck topologies, so $U_{ij}$ cover $U$. Moreover, we knew $U_{ij} \models^+ P$ for all $i,j$.
+Therefore we do have $U \models^- \ups P$.
 \end{document}
