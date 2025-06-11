@@ -1111,7 +1111,6 @@ That's the opposite of what I wanted! Oof.
 
 I'm staring at the summary of Kripke-Joyal semantics in Blechschmidt's thesis. I'm tempted to say
 something like:
-\def\models{\vDash}
 \[
 \begin{array}{lcl}
 U \models^- \all x.N(x) &:\iff&\hbox{ for all $x$, we have $U \models^- N(x)$}\\
@@ -1133,4 +1132,18 @@ $\all_i.U_i\models^- \ups P$. This means there's a doubly indexed family of open
 such that $U_{ij}$ covers $U_i$, and the $U_i$ cover $U$. Well, coverings are definitely transitive
 in Grothendieck topologies, so $U_{ij}$ cover $U$. Moreover, we knew $U_{ij} \models^+ P$ for all $i,j$.
 Therefore we do have $U \models^- \ups P$.
+
+Can I defer the choice of branch till the other shift?
+
+
+\[
+\begin{array}{lcl}
+U \models^- \all x.N(x) &:\iff&\hbox{ for all $x$, we have $U \models^- N(x)$}\\
+U \models^- \ups P &:\iff&\hbox{ there exists a covering $U = \bigcup_i U_i$ such that $U_i \models^+ P$}\\
+U_i \models^+ \exists x.P(x) &:\iff&\hbox{ there exists a vector $x_i$ such that $U_i \models^+ P(x_i)$}\\
+U_i \models^+ \dns N &:\iff&\hbox{ for all $U_i$, for all open $V \subseteq U_i$, we have $V \models^- N$}\\
+U \models^- P \imp N &:\iff&\hbox{ $U \models^+ P$ implies $U \models^- N$}\\
+\end{array}
+\]
+
 \end{document}
