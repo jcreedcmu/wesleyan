@@ -988,4 +988,80 @@ of good fortune that {\em does} obtain in the category $\C^\x$ above.
 I think there's a relationship between the fact that $\dns\ups\dns = \dns$ and $\all y \ge x. \all z \ge y = \all y \ge x$, and the ability to ``peel off'' a quantifier and choose its instantiation.
 
 But how equivalent are two quantifiers to one in the presence of proof-relevance? Not clear.
+\section{Focused Topological Semantics}
+\subsection{The Syntax}
+Take focused intuitionistic propositional logic.
+\subsection{The Semantics}
+Suppose $X^+$ and $X^-$ are topological spaces, and some relations on them
+\[\tw : X^+ \to X^- \to \rset\]
+\[\_ \otimes\_ = \_ : X^+ \to X^+ \to X^+   \to \rset\]
+\[\_ \lol\_ = \_ : X^+ \to X^- \to X^-   \to \rset\]
+Suppose we have valuations $\eta^+$ and $\eta^-$ that take positive and negative atoms to open
+subsets of $X^+$ and $X^-$. Then we can interpret the reset of polarized propositional logic like so.
+We take positive props to open subsets of $X^+$.
+We take negative props to open subsets of $X^-$.
+\[ \sem {P \otimes P} \ni \alpha = \exists \alpha_1,\alpha_2 . (\alpha_1 \otimes \alpha_2 = \alpha) \land \sem P \ni \alpha_1 \land \sem P\ni \alpha_2\]
+\[\sem {P \lol N} \ni \phi =  \exists \alpha_1,\phi_2 .(\alpha_1 \lol \phi_2 = \phi) \land \sem P \ni \alpha_1 \land \sem N\ni \phi_2\]
+Now why do these result in open sets? I suppose I need to postulate that $\otimes$ is like
+a `continuous multivalued function $X^+ \to X^+ \x X^+$' in the sense that taking the image
+of an open subset of $X^+ \x X^+$ yields an open subset of $X^+$.
+Similarly for $\lol$.
+
+Additives are easy:
+\[ \sem {P \oplus P} \ni \alpha = \sem P \ni \alpha \lor \sem P \ni \alpha\]
+\[ \sem {N \amp N} \ni \alpha = \sem N \ni \alpha \lor \sem N \ni \alpha\]
+The arbitrary union of open  sets is open. Now for shifts.
+\[\sem {\ups P} \ni \phi = \all \alpha. \sem P \ni \alpha \to \alpha \tw \phi\]
+\[\sem {\dns N} \ni \alpha = \all \phi. \sem N \ni \phi \to \alpha \tw \phi\]
+Huh, so maybe here I can say it's a special property of $\tw$ that these always yield open sets.
+
+\subsection{The Syntactic Model}
+\begin{itemize}
+\item the points of $X^+$ are stable substructural contexts $\Gamma$.
+\item the points of $X^-$ are stable substructural frames $\Gamma'\prov Q$.
+\item the relation $\tw$ is given by provability after concatenation
+\item the relation $\otimes$ is given by equality after concatenation
+\item the relation $\lol$ is given by equality after concatenation
+\item the basic opens of $X^+$ are given by positive props: $U_P = \{ \Gamma \st \Gamma\prov[P]\}$
+\item the basic opens of $X^-$ are given by positive props: $U_N = \{ \Gamma,Q \st \Gamma[N]\prov Q\}$
+\item we provide the valuation $\sem p = U_p = \{ \Gamma \st p \in \Gamma \}$
+\item we provide the valuation $\sem n = U_n = \{ \Gamma,Q \st Q = n \}$
+\end{itemize}
+
+We now aim to show $\sem P = U_P$ and $\sem N = U_N$ generally.
+\begin{itemize}
+\item[Case:]
+\[\sem {\dns N} \ni \alpha = \all \phi. \sem N \ni \phi \to \alpha \tw \phi\]
+yields the goal
+\[\Gamma \prov [\dns N] \ \iff\  \all (\Gamma', Q). (\Gamma' [N] \prov Q) \to \Gamma,\Gamma' \prov Q\]
+or equivalently
+\[\Gamma \prov  N \ \iff\  \all (\Gamma', Q). (\Gamma' [N] \prov Q) \to \Gamma,\Gamma' \prov Q\]
+and I think this is essentially the cut and identity principles. The identity version is a bit trickier.
+To get from right to left we instantiate $\Gamma', Q$ to that which $N$ asynchronously expands to.
+In that case, $\Gamma'[N] \prov Q$ by essentially the identity theorem.
+Therefore we obtain $\Gamma, \Gamma' \prov Q$, and we reconstruct $\Gamma \prov N$ by asynchronous rules.
+\item[Case:]
+\[\sem {\ups P} \ni \phi = \all \alpha. \sem P \ni \alpha \to \alpha \tw \phi\]
+yields the goal
+\[ \Gamma[\ups P] \prov Q\ \iff\ \all \Gamma'. (\Gamma' \prov [P]) \to \Gamma, \Gamma' \prov Q\]
+or equivalently
+\[ \Gamma; P \prov Q\ \iff\ \all \Gamma'. (\Gamma' \prov [P]) \to \Gamma, \Gamma' \prov Q\]
+Similarly this is cut and identity.
+\item[Case:]
+\[ \sem {P \oplus P} \ni \alpha = \sem P \ni \alpha \lor \sem P \ni \alpha\]
+yields the goal
+\[ U_{P \oplus P}  = U_P \cup U_P\]
+which holds by inspection of the focused $\oplus R$ rule.
+\item[Case:]
+\[ \sem {P \otimes P} \ni \alpha = \exists \alpha_1,\alpha_2 . (\alpha_1 \otimes \alpha_2 = \alpha) \land \sem P \ni \alpha_1 \land \sem P\ni \alpha_2\]
+yields the goal
+\[ \Gamma \prov [P \otimes P] \ \iff\  \exists \Gamma_1,\Gamma_2 . (\Gamma_1,\Gamma_2 = \Gamma) \land \Gamma_1 \prov [P] \land  \Gamma_2 \prov [P]\]
+which holds by inspection of the focused $\otimes R$ rule.
+\item[Case:]
+\[\sem {P \lol N} \ni \phi =  \exists \alpha_1,\phi_2 .(\alpha_1 \lol \phi_2 = \phi) \land \sem P \ni \alpha_1 \land \sem N\ni \phi_2\]
+yields the goal
+\[\Gamma[P \lol N] \prov Q \ \iff\   \exists \Gamma_1,\Gamma_2 .(\Gamma_1,\Gamma_2 = \Gamma) \land \Gamma_1\prov[ P] \land \Gamma_2[N] \prov Q\]
+which holds by inspection of the focused $\lol L$ rule.
+
+\end{itemize}
 \end{document}
