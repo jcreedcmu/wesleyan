@@ -33,6 +33,7 @@
 \def\gets{\leftarrow}
 \def\all{\forall}
 
+\def\spec{\mathsf{Spec}}
 \def\bget{\mathop{\mathbf{get}}\nolimits}
 \def\bGel{\mathop{\mathbf{Gel}}\nolimits}
 \def\bgel{\mathop{\mathbf{gel}}\nolimits}
@@ -1148,4 +1149,36 @@ U \models^- P \imp N &:\iff&\hbox{ $U \models^+ P$ implies $U \models^- N$}\\
 
 I'm suspicious of the $U \models^+ P$ in the implication.
 
+\section{Generalizing Rings}
+
+I thought I didn't have much useful leverage figuring out what's special about rings in algebraic geometry,
+but I did have one idea staring at diagram (4.9) in Raskin's notes on functorial geometry. The thing I notice
+is that there is actually a nice abstract way of saying
+\begin{quote}open sets in the Zariski topology are essentially places where functions are nonzero \end{quote}
+What we say in fact is that
+\begin{quote}embeddings of basic open sets $D(f)$ arise as pullbacks of `the universal basic open set'\end{quote}
+where for rings `the universal basic open set is'
+\[
+\begin{tikzcd}
+\Z[x,x^{-1}] \ar[from=r]&  \Z[x]\\
+\spec(\Z[x,x^{-1}]) \ar[r]&  \spec(\Z[x])
+\end{tikzcd}
+\]
+and the pullback I have in mind is
+\[
+\begin{tikzcd}
+D(f)\pbck \ar[r]\ar[d]&\ar[d, "{\spec(f)}"]  \spec(A)\\
+\spec(\Z[x,x^{-1}]) \ar[r]&  \spec(\Z[x])
+\end{tikzcd}
+\]
+So maybe in some sense the morphism $\Z[x] \to \Z[x,x^{-1}]$ is a `choice of topology' for the theory of rings?
+If I think of this as type geometry the shape of this data is
+\[
+\begin{tikzcd}
+\begin{array}{c}(X : \rset) (R : \mathsf{Ring}\ X) \\ (x\ y : X) (\_ : xy \equiv 1)\end{array} \ar[rr]\ar[dr]
+&[-5em]&[-5em]
+\begin{array}{c}(X : \rset) (R : \mathsf{Ring}\ X) \\ (x : X) \end{array} \ar[dl]\\
+&  (X : \rset) (R : \mathsf{Ring}\ X)
+\end{tikzcd}
+\]
 \end{document}
