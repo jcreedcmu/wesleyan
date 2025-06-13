@@ -1181,4 +1181,13 @@ If I think of this as type geometry the shape of this data is
 &  (X : \rset) (R : \mathsf{Ring}\ X)
 \end{tikzcd}
 \]
+
+So as a first stab I'd say a theory of geometry needs
+\begin{itemize}
+\item A type $B$, called the {\em base} (playing the role of $(R : \mathsf{Ring})$)
+\item A subset of maps into $B$ called the {\em affines}, which are the information of which projections are
+special like $((R : \mathsf{Ring}) \x \mathsf{Ring}[A, R]) \to \mathsf{Ring}$.
+\item A map of affines called the {\em basic open embedding}.
+\item Affines are preserved by finite limits. (i.e. the identity on $B$ is the terminal affine, and affines are preserved by pullback)
+\end{itemize}
 \end{document}
