@@ -1190,4 +1190,45 @@ special like $((R : \mathsf{Ring}) \x \mathsf{Ring}[A, R]) \to \mathsf{Ring}$.
 \item A map of affines called the {\em basic open embedding}.
 \item Affines are preserved by finite limits. (i.e. the identity on $B$ is the terminal affine, and affines are preserved by pullback)
 \end{itemize}
+
+\section{Openness}
+In topology, the Sierpinski space classifies open sets.
+\[
+\begin{tikzcd}
+U\pbck \ar[r]\ar[d]&\ar[d]  X\\
+1 \ar[r]& \Omega
+\end{tikzcd}
+\]
+In algebraic geometry, the inclusion of $\spec(\Z[x,x^{-1}])$ in
+$\spec(\Z[x])$ classifies basic opens:
+\[
+\begin{tikzcd}
+R[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  R\\
+\Z[x,x^{-1}] \ar[from=r]& \Z[x]
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\spec(R[f^{-1}])\pbck \ar[r, "D(f)"]\ar[d]&\ar[d, "\spec(f)"]  \spec(R)\\
+\spec(\Z[x,x^{-1}]) \ar[r]& \spec(\Z[x])
+\end{tikzcd}
+\]
+Does anything interesting happen with pointed sets?
+Imagine I have a pointed set $(M, \bu_M)$,
+and I have $m: M$ in mind as well.
+We say $f : M \imp S$ includes $f(\bu_M) \equiv \bu_S$.
+What then is the pullback of this diagram, assuming everything is over $(S:\rset)(\bu_S:S)$?
+\[
+\begin{tikzcd}
+?\pbck \ar[r, "D(f)"]\ar[d]&\ar[d, "y := f(m)"]  (S:\rset)(\bu_S : S)(f : M \imp S)\\
+(S:\rset)(\bu_S\ y : S)(\_ : \bu_S \ne y) \ar[r]& (S:\rset)(\bu_S\ y : S)
+\end{tikzcd}
+\]
+We'll get $(S:\rset)(\bu_S: S)$ for sure.
+On top of that, we get $(y : S)(\_ : \bu_S \ne y)$ from the bottom left,
+and $(f : M \imp S)$ from the top right.
+The projections are such that we learn $y = f(m)$, so we wind up with:
+\[
+(S:\rset)(\bu_S : S)(f : M \imp S)(\_ : \bu_S \ne f(m))\]
+\]
+That's interesting! It doesn't seem obviously ``affine''.
 \end{document}
