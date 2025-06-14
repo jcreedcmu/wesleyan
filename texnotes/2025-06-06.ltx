@@ -151,7 +151,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
 \def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
 \def\A{\mathbf{A}}
-\def\B{\mathbf{B}}
+\def\B{\mathbb{B}}
 \def\C{\mathbb{C}}
 \def\S{\mathbf{S}}
 \def\G{\mathbf{G}}
@@ -1213,22 +1213,53 @@ R[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  R\\
 \end{tikzcd}
 \]
 Does anything interesting happen with pointed sets?
-Imagine I have a pointed set $(M, \bu_M)$,
+Imagine I have a pointed set $(M, 0_M)$,
 and I have $m: M$ in mind as well.
-We say $f : M \imp S$ includes $f(\bu_M) \equiv \bu_S$.
-What then is the pullback of this diagram, assuming everything is over $(S:\rset)(\bu_S:S)$?
+Write $f : M \imp S$ for a pointed set morphism, so it includes the requirement
+that $f(0_M) \equiv 0_S$.
+What then is the pullback of this diagram, assuming everything is over $(S:\rset)(0_S:S)$?
 \[
 \begin{tikzcd}
-?\pbck \ar[r, "D(f)"]\ar[d]&\ar[d, "y := f(m)"]  (S:\rset)(\bu_S : S)(f : M \imp S)\\
-(S:\rset)(\bu_S\ y : S)(\_ : \bu_S \ne y) \ar[r]& (S:\rset)(\bu_S\ y : S)
+?\pbck \ar[r, "D(f)"]\ar[d]&\ar[d, "y := f(m)"]  (S:\rset)(0_S : S)(f : M \imp S)\\
+(S:\rset)(0_S\ y : S)(\_ : y \ne 0_S ) \ar[r]& (S:\rset)(0_S\ y : S)
 \end{tikzcd}
 \]
-We'll get $(S:\rset)(\bu_S: S)$ for sure.
-On top of that, we get $(y : S)(\_ : \bu_S \ne y)$ from the bottom left,
+We'll get $(S:\rset)(0_S: S)$ for sure.
+On top of that, we get $(y : S)(\_ : y \ne 0_S)$ from the bottom left,
 and $(f : M \imp S)$ from the top right.
 The projections are such that we learn $y = f(m)$, so we wind up with:
 \[
-(S:\rset)(\bu_S : S)(f : M \imp S)(\_ : \bu_S \ne f(m))\]
+(S:\rset)(0_S : S)(f : M \imp S)(\_ : f(m) \ne 0_S )\]
 \]
 That's interesting! It doesn't seem obviously ``affine''.
+
+\subsection{Zero-Avoiding Sets}
+Say a zero-avoiding set consists of a cospan $C =  A \to B \leftarrow 1$, whose pullback is empty.
+We think of the image of the 1 to be the ``zero'' element of $B$.
+A zero-avoiding set homomorphism is a homomorphism of cospans. To adjoin an element $x$ to $C$
+to get $C[x]$ means to adjoin an extra element to $B$. But we can also adjoin an ``invertible''
+i.e. ``nonzero'' element, so we say $C[x,x^{-1}]$ means to adjoin an element to $A$ and $B$.
+
+Let $\B$ be the cospan $\emptyset \to \{0\} \leftarrow \{0\}$.
+
+$\B[x]$ means the cospan $\emptyset \to \{x,0\} \leftarrow \{0\}$.
+
+$\B[x,x^{-1}]$ means the cospan $\{x\} \to \{x,0\} \leftarrow \{0\}$.
+
+So if we have $C = A \to B \leftarrow 1$ and we pick $f \in B$, that means there's a canonical map
+$f : \B[x] \to C$. Let
+\[\mathsf{ZAS} = \{ A\ B : \rset, f : A \to B, 0 : B, \_ :(a : A) \to  f(a) \not\equiv 0 \}\]
+\[ \spec(C) = (C' : \mathsf{ZAS}) \to C \imp C'\]
+Then
+\[
+\begin{tikzcd}
+C[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  C\\
+\B[x,x^{-1}] \ar[from=r]& \B[x]
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+\spec(C[f^{-1}])\pbck \ar[r, "D(f)"]\ar[d]&\ar[d, "\spec(f)"]  \spec(C)\\
+\spec(\B[x,x^{-1}]) \ar[r]& \spec(\B[x])
+\end{tikzcd}
+\]
 \end{document}
