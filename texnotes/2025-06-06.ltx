@@ -1309,6 +1309,38 @@ Judgments go like
 \[ (P \rtrue)^\star = P^\star \rtrue \]
 
 
+\subsection{Single Modal $\to$ Semi Indexed}
+Suppose the source language has $\sq = F\dns U$.
+Let's try to make a translation that takes negatives to indexed, but leaves positives alone.
+We have a single type of worlds $p$. We translate positives to positives
+and negatives to negatives.
+\[  (P \imp N)\wat p := P^\star \imp N\wat p \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[ (FP)^\star = P^\star \]
+\[ (\dns N)^\star = \all p . N \wat p\]
+\[ (UN)\wat p = N \wat p\]
+\[  (\ups P) \wat p  := P^\star\]
+
+\subsection{Multimodal $\to$ Indexed}
+Suppose the source language has $\sq = F\dns U$.
+Take negatives to indexed, but leaves positives alone.
+We have a single type of worlds $p$. There's a `strength' predicate $S_d(p)$ indexed by the modality
+poset $D$. We translate positives to positives and negatives to negatives.
+\[  (P \imp N)\wat p := P^\star \imp N\wat p \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[ (FP)^\star = P^\star \]
+\[ (\dns N)^\star = \all p . S_{\bot}(p) \to  N \wat p\]
+\[ (\dns_d N)^\star = \all p . S_d(p) \to  N \wat p\]
+\[ (UN)\wat p = N \wat p\]
+\[  (\ups P) \wat p  := P^\star\]
+If $d_1 \le d_2$ then $S_{d_1}(p) \to S_{d_2}(p)$. That way
+\[\sq_{ d_2} N\prov \sq_{ d_1} N\]
+means
+\[F_{d_2}\dns_{d_2}U_{d_2} N \prov F_{d_1}\dns_{d_1}U_{d_1} N\]
+which gets interpreted as
+\[(F_{d_2}\dns_{d_2}U_{d_2} N)^\star \prov (F_{d_1}\dns_{d_1}U_{d_1} N)^\star\]
+i.e.
+\[\all p. S_{d_2}(p) \to N\wat p \prov \all p. S_{d_1}(p) \to N\wat p\]
+so we need merely $S_{d_1}(p) \to S_{d_2}(p)$ to succeed in this proof.
+
 
 \subsection{Intuitionistic $\to$ Degenerate Intuitionistic Resource Semantics}
 All props translated to positive.
