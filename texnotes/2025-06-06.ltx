@@ -112,7 +112,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\tt{{\mathsf t}}
 \def\ii{{\mathbb I}}
 \def\T{\mathbb{T}}
-\def\tw{\mathop\triangleleft}
+\def\tw{\mathop\triangleleft\nolimits}
 \def\tb{\mathop\blacktriangleleft}
 \def\sw#1{^{#1}_{#1}}
 \def\TP{\mathbf{TPre}}
@@ -1327,10 +1327,11 @@ We have a single type of worlds $p$. There's a `strength' predicate $S_d(p)$ ind
 poset $D$. We translate positives to positives and negatives to negatives.
 \[  (P \imp N)\wat p := P^\star \imp N\wat p \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[ (FP)^\star = P^\star \]
-\[ (\dns N)^\star = \all p . S_{\bot}(p) \to  N \wat p\]
-\[ (\dns_d N)^\star = \all p . S_d(p) \to  N \wat p\]
+%% This isn't necessary if there's no privileged 'truth' judgment:
+% \[ (\dns N)^\star = \dns(\all p . S_{\bot}(p) \to  N \wat p)\]
+\[ (\dns_d N)^\star = \dns(\all p . S_d(p) \to  N \wat p)\]
 \[ (UN)\wat p = N \wat p\]
-\[  (\ups P) \wat p  := P^\star\]
+\[  (\ups P) \wat p  := \ups(P^\star)\]
 If $d_1 \le d_2$ then $S_{d_1}(p) \to S_{d_2}(p)$. That way
 \[\sq_{ d_2} N\prov \sq_{ d_1} N\]
 means
@@ -1412,4 +1413,55 @@ UN \wat \phi_1' , (\alpha_1)^\phi \le \phi_1' \prov  (\alpha_1)^\phi \tw \phi_1'
 \end{prooftree}
 \]
 This seems to entail the existence of some weird positive-negative-to-positive connective?
+
+Let $\alpha \tb \phi$ mean $\alpha \le \phi \to \alpha \tw \phi$.
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\[
+\[
+\justifies
+(F\alpha_1, w) \tb (U\phi', w) \prov  (\alpha_1,u) \tb (U\phi', w)
+\]
+\[
+\justifies
+\prov  (   F \dns U N) \wat (F\alpha_1, w)
+\]
+\justifies
+ (  \ups F \dns U N) \wat (U\phi', w),   (\alpha_1,u) \le (U\phi', w)\prov (\alpha_1,u) \tw (U\phi', w)
+\]
+\justifies
+ (  U\ups F \dns U N) \wat (\phi_1, w),   (\alpha_1,u) \le (\phi_1, w)\prov (\alpha_1,u) \tw (\phi_1, w)
+\]
+\justifies
+ \prov ( \dns U\ups F \dns U N) \wat (\alpha_1,u)
+\]
+\justifies
+ \prov (F \dns U\ups F \dns U N) \wat (F\alpha_1,u)
+\]
+\justifies
+( \dns U N) \wat  (F\alpha_1,u) , (F\alpha_1,u) \le (\phi,v), (\ups F \dns U\ups F \dns U N) \wat (\phi,v)  \prov (F\alpha_1,u) \tw (\phi,v)
+\]
+\justifies
+( F \dns U N) \wat  (\alpha,u) , (\alpha,u) \le (\phi,v), (\ups F \dns U\ups F \dns U N) \wat (\phi,v)  \prov (\alpha,u) \tw (\phi,v)
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\[
+\[
+\justifies
+(F\alpha_1, w) \tw (U\phi', w) \prov  (\alpha_1,u) \tw (U\phi', w)
+\]
+
+
 \end{document}
