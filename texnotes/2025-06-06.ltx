@@ -80,6 +80,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
+\def\iff{\ \Longleftrightarrow\ }
 \def\bu{\bullet}
 \def\J{\mathbb{J}}
 \def\R{\mathcal{R}}
@@ -99,6 +100,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\wat{{@}}
 \def\wwat{\mathbin{\underline\wat}}
 \def\cn{{:}}
+\def\cprov{\mathrel\#}
 \def\dv{{\div}}
 \def\ww{{\mathsf w}}
 \def\base{{\textfrak b}}
@@ -1228,9 +1230,8 @@ We'll get $(S:\rset)(0_S: S)$ for sure.
 On top of that, we get $(y : S)(\_ : y \ne 0_S)$ from the bottom left,
 and $(f : M \imp S)$ from the top right.
 The projections are such that we learn $y = f(m)$, so we wind up with:
-\[
-(S:\rset)(0_S : S)(f : M \imp S)(\_ : f(m) \ne 0_S )\]
-\]
+\[(S:\rset)(0_S : S)(f : M \imp S)(\_ : f(m) \ne 0_S )\]
+
 That's interesting! It doesn't seem obviously ``affine''.
 
 \subsection{Zero-Avoiding Sets}
@@ -1262,4 +1263,44 @@ C[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  C\\
 \spec(\B[x,x^{-1}]) \ar[r]& \spec(\B[x])
 \end{tikzcd}
 \]
+\vfil\eject
+\section{Translations}
+I'd like to get a handle on all the sound, complete, focused translations I know about.
+
+\subsection{Classical $\to$ Intuitionistic}
+All props translated to positive.
+\[  (\lnot P)^\star := P^\star \qquad  (\lnot N )^\star := N^\star \]
+\[  (P \imp N)^\star := P^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (\ups P)^\star := \dns \lnot P^\star \qquad (\dns N)^\star := \dns \lnot N^\star\]
+Judgments go like
+\[ \Gamma\cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov \# \]
+\[ \Gamma[N]\cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov [N^\star] \]
+\[ \Gamma\cprov \Delta[P] \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov [P^\star] \]
+\[ \Gamma\cprov \Delta; N \iff (\dns\Gamma)^\star, (\ups\Delta)^\star; N^\star \prov \# \]
+\[ \Gamma; P \cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star; P^\star \prov \# \]
+\subsection{Classical Modal $\to$ Intuitionistic Modal}
+Additionally:
+\[   (\sq N)^\star := \sq \lnot N^\star\]
+Judgments go like
+\[ N\hbox{ valid} \mapsto \lnot N^\star \hbox{ valid}\]
+
+\subsection{Intuitionistic $\to$ Classical Modal}
+Positive to positive, negative to negative.
+\[  (P \imp N)^\star := P^\star \imp N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square  N^\star\]
+Judgments go like
+\[ \Gamma \prov P \iff \Gamma^\star; \cdot \cprov P \]
+\[ \Gamma [N]\prov P \iff \Gamma^\star; [N] \cprov P \]
+\[ \Gamma \prov [P] \iff \Gamma^\star; \cdot \cprov [P] \]
+
+\subsection{Intuitionistic $\to$ Degenerate Intuitionistic Resource Semantics}
+All props translated to positive.
+\[  (P \imp N)\wat\phi := P^\star \otimes N\wat\phi \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (\ups P)\wat \phi := \dns( P^\star \imp \#(\phi)) \qquad (\dns N)^\star := \dns(\all \phi .  N \wat \phi \to \#(\phi))\]
+Judgments go like
+\[ \Gamma; \Omega \prov P \iff (\dns\Gamma)^\star, \Omega^\star, (\ups P) \wat \phi\prov \#(\phi) \]
+\[ \Gamma; \Omega \prov N \iff (\dns\Gamma)^\star, \Omega^\star,  N \wat \phi\prov \#(\phi) \]
+\[ \Gamma [N]\prov P \iff (\dns\Gamma)^\star, (\ups P) \wat \phi\prov [N\wat\phi] \]
+\[ \Gamma \prov [P] \iff (\dns\Gamma)^\star \wat \phi\prov [P^\star] \]
+
 \end{document}
