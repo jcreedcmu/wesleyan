@@ -1289,11 +1289,24 @@ Let $\bu$ be the extra modality present in the codomain.
 Translate positive to positive, negative to negative.
 \[  (P \imp N)^\star := \lnot P^\star \parr N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square_\bu  N^\star\]
-\[   (\sq_d N)^\star := \square_d  N^\star\]
+\[   (\sq_d N)^\star := \square_{d,\bu}  N^\star\]
 Judgments go like
 \[ \Gamma \prov P \iff \Gamma^\star; \cdot \cprov P \]
 \[ \Gamma [N]\prov P \iff \Gamma^\star; [N] \cprov P \]
 \[ \Gamma \prov [P] \iff \Gamma^\star; \cdot \cprov [P] \]
+
+
+\subsection{Intuitionistic $D$-Modal $\to$ Intuitionistic $(D+1)$-Modal}
+The composition of the previous two.
+Let $\bu$ be the extra modality present in the codomain.
+Translate all to positive.
+\[  (P \imp N)^\star := P^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (\ups P)^\star := \dns\lnot P^\star \qquad (\dns N)^\star := \square_\bu  \lnot N^\star\]
+\[   (\sq_d N)^\star := \square_{d,\bu} \lnot N^\star\]
+Judgments go like
+\[ \Gamma \prov P \iff \lnot \Gamma^\star; \lnot P^\star  \prov \# \]
+\[ \Gamma [N]\prov P \iff \Gamma^\star;\lnot P^\star \prov [N^\star] \]
+\[ \Gamma \prov [P] \iff \Gamma^\star; \cdot \prov [P^\star] \]
 
 \subsection{Intuitionistic $\to$ Degenerate Intuitionistic Resource Semantics}
 All props translated to positive.
