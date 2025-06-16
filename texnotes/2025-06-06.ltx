@@ -80,6 +80,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 boxrule=0pt,boxsep=0pt,breakable}
 
 \input{linear}
+\def\parr{\mathbin{\rotatebox[origin=c]{180}{\&}}}
 \def\iff{\ \Longleftrightarrow\ }
 \def\bu{\bullet}
 \def\J{\mathbb{J}}
@@ -1270,7 +1271,7 @@ Let $D$ be a set of modal `directions'.
 \subsection{Classical $D$-Modal $\to$ Intuitionistic $D$-Modal}
 All props translated to positive.
 \[  (\lnot P)^\star := P^\star \qquad  (\lnot N )^\star := N^\star \]
-\[  (P \imp N)^\star := P^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (N \parr N)^\star := N^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \dns \lnot P^\star \qquad (\dns N)^\star := \dns \lnot N^\star\]
 \[   (\sq_d N)^\star := \sq_d \lnot N^\star\]
 Judgments go like
@@ -1286,7 +1287,7 @@ Judgments go like
 \subsection{Intuitionistic $D$-Modal $\to$ Classical $(D+1)$-Modal}
 Let $\bu$ be the extra modality present in the codomain.
 Translate positive to positive, negative to negative.
-\[  (P \imp N)^\star := P^\star \imp N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
+\[  (P \imp N)^\star := \lnot P^\star \parr N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square_\bu  N^\star\]
 \[   (\sq_d N)^\star := \square_d  N^\star\]
 Judgments go like
