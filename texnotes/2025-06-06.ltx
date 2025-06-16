@@ -1266,28 +1266,29 @@ C[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  C\\
 \vfil\eject
 \section{Translations}
 I'd like to get a handle on all the sound, complete, focused translations I know about.
-
-\subsection{Classical $\to$ Intuitionistic}
+Let $D$ be a set of modal `directions'.
+\subsection{Classical $D$-Modal $\to$ Intuitionistic $D$-Modal}
 All props translated to positive.
 \[  (\lnot P)^\star := P^\star \qquad  (\lnot N )^\star := N^\star \]
 \[  (P \imp N)^\star := P^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \dns \lnot P^\star \qquad (\dns N)^\star := \dns \lnot N^\star\]
+\[   (\sq_d N)^\star := \sq_d \lnot N^\star\]
 Judgments go like
-\[ \Gamma\cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov \# \]
-\[ \Gamma[N]\cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov [N^\star] \]
-\[ \Gamma\cprov \Delta[P] \iff (\dns\Gamma)^\star, (\ups\Delta)^\star \prov [P^\star] \]
-\[ \Gamma\cprov \Delta; N \iff (\dns\Gamma)^\star, (\ups\Delta)^\star; N^\star \prov \# \]
-\[ \Gamma; P \cprov \Delta \iff (\dns\Gamma)^\star, (\ups\Delta)^\star; P^\star \prov \# \]
-\subsection{Classical Modal $\to$ Intuitionistic Modal}
-Additionally:
-\[   (\sq N)^\star := \sq \lnot N^\star\]
-Judgments go like
+\[ \Gamma\cprov \Delta \iff \lnot \Gamma^\star, \lnot \Delta^\star \prov \# \]
+\[ \Gamma[N]\cprov \Delta \iff \lnot\Gamma^\star, \lnot \Delta^\star \prov [N^\star] \]
+\[ \Gamma\cprov \Delta[P] \iff \lnot\Gamma^\star, \lnot \Delta^\star \prov [P^\star] \]
+\[ \Gamma\cprov \Delta; N \iff \lnot\Gamma^\star, \lnot \Delta^\star; N^\star \prov \# \]
+\[ \Gamma; P \cprov \Delta \iff \lnot\Gamma^\star, \lnot \Delta^\star; P^\star \prov \# \]
 \[ N\hbox{ valid} \mapsto \lnot N^\star \hbox{ valid}\]
 
-\subsection{Intuitionistic $\to$ Classical Modal}
-Positive to positive, negative to negative.
+
+
+\subsection{Intuitionistic $D$-Modal $\to$ Classical $(D+1)$-Modal}
+Let $\bu$ be the extra modality present in the codomain.
+Translate positive to positive, negative to negative.
 \[  (P \imp N)^\star := P^\star \imp N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
-\[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square  N^\star\]
+\[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square_\bu  N^\star\]
+\[   (\sq_d N)^\star := \square_d  N^\star\]
 Judgments go like
 \[ \Gamma \prov P \iff \Gamma^\star; \cdot \cprov P \]
 \[ \Gamma [N]\prov P \iff \Gamma^\star; [N] \cprov P \]
