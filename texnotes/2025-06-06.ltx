@@ -1318,4 +1318,11 @@ Judgments go like
 \[ \Gamma [N]\prov P \iff (\dns\Gamma)^\star, (\ups P) \wat \phi\prov [N\wat\phi] \]
 \[ \Gamma \prov [P] \iff (\dns\Gamma)^\star \wat \phi\prov [P^\star] \]
 
+\subsection{Intuitionistic $\to$ Intuitionistic Resource Semantics}
+All props translated to positive.
+\[  (P \lol N)\wat\phi := \exists \phi',\alpha . (\phi = \alpha \lol \phi') \otimes P\wat \alpha \otimes N\wat\phi \]
+\[  (P \otimes P)\wat \alpha := \exists \alpha_1,\alpha_2. (\alpha = \alpha_1 \otimes\alpha_2) \otimes P\wat\alpha_1 \otimes P\wat\alpha_2\]
+\[  (\ups P)\wat \phi := \dns(\forall \alpha. P\wat \alpha \imp \alpha \tw \phi) \]
+\[  (\dns N)\wat \alpha := \dns(\forall \phi. N\wat \phi \imp \alpha \tw \phi) \]
+
 \end{document}
