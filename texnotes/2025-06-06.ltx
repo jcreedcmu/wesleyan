@@ -140,7 +140,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\rcat{\mathbf{Cat}}
 \def\rfam{\mathbf{Fam}}
 \def\binj{\mathbf{inj}}
-\def\rtrue{\mathrel\mathrm{true}}
+\def\rtrue{\ \mathsf{true}}
+\def\rfalse{\ \mathsf{false}}
 \def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
 \def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
 \def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
@@ -1267,33 +1268,46 @@ C[f^{-1}]\pbck \ar[from=r]\ar[from=d]&\ar[from=d, "f"']  C\\
 \vfil\eject
 \section{Translations}
 I'd like to get a handle on all the sound, complete, focused translations I know about.
-Let $D$ be a set of modal `directions'.
+
 \subsection{Classical $D$-Modal $\to$ Intuitionistic $D$-Modal}
+Let $D$ be a poset of modality levels.
 All props translated to positive.
 \[  (\lnot P)^\star := P^\star \qquad  (\lnot N )^\star := N^\star \]
 \[  (N \parr N)^\star := N^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \dns \lnot P^\star \qquad (\dns N)^\star := \dns \lnot N^\star\]
 \[   (\sq_d N)^\star := \sq_d \lnot N^\star\]
+Stable $\Gamma$ can contain $N\rtrue_d$, $N\rtrue$, $P\rfalse$.
+Async $\Omega$ can contain $N\rfalse, P\rtrue$.
+Focus on the $\sq_d$ modality at false clears everything on the left that isn't $\ge d$. Neither
+$\rtrue$ nor $\rfalse$ are $\ge d$.
+Asynchronous decomposition of $\sq_d$ at true creates $\rtrue_d$.
 Judgments go like
-\[ \Gamma\cprov \Delta \iff \lnot \Gamma^\star, \lnot \Delta^\star \prov \# \]
-\[ \Gamma[N]\cprov \Delta \iff \lnot\Gamma^\star, \lnot \Delta^\star \prov [N^\star] \]
-\[ \Gamma\cprov \Delta[P] \iff \lnot\Gamma^\star, \lnot \Delta^\star \prov [P^\star] \]
-\[ \Gamma\cprov \Delta; N \iff \lnot\Gamma^\star, \lnot \Delta^\star; N^\star \prov \# \]
-\[ \Gamma; P \cprov \Delta \iff \lnot\Gamma^\star, \lnot \Delta^\star; P^\star \prov \# \]
-\[ N\hbox{ valid} \mapsto \lnot N^\star \hbox{ valid}\]
 
-
-
+\[ \Gamma; \Omega \cprov \iff \Gamma^\star; \Omega^\star \prov \# \]
+\[ \Gamma[N \rtrue]\cprov\iff \Gamma^\star   \prov [N^\star] \]
+\[ \Gamma[P \rfalse] \cprov  \iff \Gamma^\star   \prov [P^\star] \]
+\[ (N \rtrue)^\star = \lnot N^\star \rtrue\]
+\[ (N \rtrue_d)^\star = \lnot N^\star \rtrue_d\]
+\[ (P \rfalse)^\star = \lnot P^\star \rtrue\]
+\[ (N \rfalse)^\star = N^\star \]
+\[ (P \rtrue)^\star = P^\star \]
 \subsection{Intuitionistic $D$-Modal $\to$ Classical $(D+1)$-Modal}
-Let $\bu$ be the extra modality present in the codomain.
+Let $D$ be a poset of modality levels, with $D+1$ having one extra modality $\bu$ below everything else.
 Translate positive to positive, negative to negative.
 \[  (P \imp N)^\star := \lnot P^\star \parr N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \ups P^\star \qquad (\dns N)^\star := \square_\bu  N^\star\]
-\[   (\sq_d N)^\star := \square_{d,\bu}  N^\star\]
+\[   (\sq_d N)^\star := \square_{d}  N^\star\]
+Stable $\Gamma$ can contain $N\rtrue_d$, $N\rtrue$.
+Async $\Omega$ can contain $P \rtrue$.
 Judgments go like
-\[ \Gamma \prov P \iff \Gamma^\star; \cdot \cprov P \]
-\[ \Gamma [N]\prov P \iff \Gamma^\star; [N] \cprov P \]
-\[ \Gamma \prov [P] \iff \Gamma^\star; \cdot \cprov [P] \]
+\[ \Gamma;\Omega \prov N \iff \Gamma^\star, N^\star \rtrue;\Omega^\star \cprov  \]
+\[ \Gamma;\Omega \prov P \iff \Gamma^\star, P^\star \rfalse;\Omega^\star \cprov  \]
+\[ \Gamma [N]\prov P \iff (\Gamma^\star, P^\star \rtrue)  [N \rtrue] \cprov  \]
+\[ \Gamma \prov [P] \iff \Gamma^\star [P^\star \rfalse ]\cprov  \]
+\[ (N \rtrue)^\star =  N^\star \rtrue_\bu\]
+\[ (N \rtrue_d)^\star =  N^\star \rtrue_d\]
+\[ (P \rtrue)^\star = P^\star \rtrue \]
+
 
 
 \subsection{Intuitionistic $D$-Modal $\to$ Intuitionistic $(D+1)$-Modal}
@@ -1302,7 +1316,7 @@ Let $\bu$ be the extra modality present in the codomain.
 Translate all to positive.
 \[  (P \imp N)^\star := P^\star \otimes N^\star \qquad  (P \otimes P)^\star := P^\star \otimes P^\star\]
 \[  (\ups P)^\star := \dns\lnot P^\star \qquad (\dns N)^\star := \square_\bu  \lnot N^\star\]
-\[   (\sq_d N)^\star := \square_{d,\bu} \lnot N^\star\]
+\[   (\sq_d N)^\star := \square_{d} \lnot N^\star\]
 Judgments go like
 \[ \Gamma \prov P \iff \lnot \Gamma^\star; \lnot P^\star  \prov \# \]
 \[ \Gamma [N]\prov P \iff \Gamma^\star;\lnot P^\star \prov [N^\star] \]
