@@ -1359,4 +1359,57 @@ All props translated to positive.
 \[  (\ups P)\wat \phi := \dns(\forall \alpha. P\wat \alpha \imp \alpha \tw \phi) \]
 \[  (\dns N)\wat \alpha := \dns(\forall \phi. N\wat \phi \imp \alpha \tw \phi) \]
 
+\subsection{Just a Quick Experiment with Transitivity}
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\[
+\[
+\justifies
+(F\alpha_1)^\phi \tw \phi \prov \alpha_1 \tw U\phi
+\]
+\[
+\justifies
+\alpha_1 \le U\phi \prov (F\alpha_1)^\phi \le \phi
+\]
+\[
+\[
+\[
+\[
+\justifies
+N \wat U\phi' , (\alpha_1)^\phi \le U\phi' \prov  (\alpha_1)^\phi \tw U\phi'
+\]
+\justifies
+UN \wat \phi_1' , (\alpha_1)^\phi \le \phi_1' \prov  (\alpha_1)^\phi \tw \phi_1'
+\]
+\justifies
+\prov (  \dns U N) \wat (\alpha_1)^\phi
+\]
+\justifies
+\prov ( F \dns U N) \wat (F\alpha_1)^\phi
+\]
+\justifies
+(  \ups F \dns U N) \wat \phi, \alpha_1 \le U \phi \prov \alpha_1 \tw U\phi
+\]
+\justifies
+(  U\ups F \dns U N) \wat \phi_1, \alpha_1 \le \phi_1 \prov \alpha_1 \tw \phi_1
+\]
+\justifies
+ \prov (  \dns U\ups F \dns U N) \wat \alpha_1
+\]
+\justifies
+ \prov ( F \dns U\ups F \dns U N) \wat F\alpha_1
+\]
+\justifies
+ (\dns U N) \wat \alpha_1, F\alpha_1 \le \phi_0, (\ups F \dns U\ups F \dns U N) \wat \phi_0  \prov F\alpha_1 \tw \phi_0
+\]
+\justifies
+( F \dns U N) \wat \alpha, \alpha \le \phi_0, (\ups F \dns U\ups F \dns U N) \wat \phi_0  \prov \alpha \tw \phi_0
+\end{prooftree}
+\]
+This seems to entail the existence of some weird positive-negative-to-positive connective?
 \end{document}
