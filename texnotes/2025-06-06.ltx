@@ -1451,17 +1451,54 @@ Let $\alpha \tb \phi$ mean $\alpha \le \phi \to \alpha \tw \phi$.
 \end{prooftree}
 \]
 
+Hmm dunno.
+
+\section{Polarized Sheaf Semantics}
+Let's start with the idea that we have a sheaf over a topological space $X$,
+and we want to interpret both positive and negative propositions as collections of open
+sets, with different requirements.
+We write $X \wat U$ for $U$ being in the interpretation of $X$.
 \[
-\begin{prooftree}
-\[
-\[
-\[
-\[
-\[
-\[
-\justifies
-(F\alpha_1, w) \tw (U\phi', w) \prov  (\alpha_1,u) \tw (U\phi', w)
+\begin{array}{lcl}
+(\all x.N(x)) \wat U &:=&\all x.N(x) \wat U}\\
+(\ups P) \wat U &:=&\exists U_i . (U = \bigcup_i U_i) \land (\all i. P \wat U_i)\\
+( P \imp N) \wat U &:=&(P \wat U) \imp (N \wat U)\\
+( P \amp N) \wat U &:=&(N \wat U) \land (N \wat U)\\
+\\[-1em]
+\hline
+\\[-1em]
+(\exists x.P(x)) \wat U &:=&\exists x. P(x)\wat U\\
+(\dns N) \wat U &:=&\all V \subseteq U. (N \wat V)\\
+( P \otimes P) \wat U &:=&(P \wat U) \land (P \wat U)\\
+( P \oplus P) \wat U &:=&(P \wat U) \lor (P \wat U)\\
+\end{array}
 \]
-
-
+The two kinds of monotonicity I expect are:
+\begin{itemize}
+\item[$\hbox{mono}^-$)] If $\all i.N \wat U_i $, then $N \wat \bigcup_i U_i$
+\item[$\hbox{mono}^+$a)] If $P\wat U$ and $V \subseteq U$, then $P \wat V$.
+\item[$\hbox{mono}^+$b)] If $P\wat U_1$ and $P\wat U_2$, then $P \wat (U_1 \cap U_2)$.
+\end{itemize}
+Let's try to prove coverage for the implication case.
+We assume $\forall i. (P \imp N) \wat U_i$, which gives
+$\forall i. (P \wat U_i) \imp  ( N \wat U_i)$. We want to show
+$(P \wat \bigcup_i U_i) \imp (N \wat \bigcup_i U_i)$.
+Well, $P$ is monotone, so $P \wat \bigcup_i U_i$ implies $P \wat U_i$ for every $i$.
+Therefore $N \wat U_i$ for every $i$. Therefore $N \wat \bigcup_i U_i$.
+\subsection{Negating}
+\[
+\begin{array}{lcl}
+(\all x.N(x)) \wat U &:=&\exists x.N(x) \wat U}\\
+(\ups P) \wat U &:=&\all U_i . (\all i . P \wat U_i) \to  (U = \bigcup_i U_i) \to \bot\\
+( P \imp N) \wat U &:=&(P \wat U) \land (N \wat U)\\
+( P \amp N) \wat U &:=&(N \wat U) \lor (N \wat U)\\
+\\[-1em]
+\hline
+\\[-1em]
+(\exists x.P(x)) \wat U &:=&\exists x. P(x)\wat U\\
+(\dns N) \wat U &:=&\all V \subseteq U. (N \wat V) \imp \bot\\
+( P \otimes P) \wat U &:=&(P \wat U) \land (P \wat U)\\
+( P \oplus P) \wat U &:=&(P \wat U) \lor (P \wat U)\\
+\end{array}
+\]
 \end{document}
