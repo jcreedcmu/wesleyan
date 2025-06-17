@@ -1514,4 +1514,18 @@ Therefore $N \wat U_i$ for every $i$. Therefore $N \wat \bigcup_i U_i$.
 \end{tabular}\]
 
 Moral: Neel is right, Focusing is not exactly CBPV, because CBPV doesn't force left async decomp.
+
+\section{Additives as Multiplicatives}
+
+Say $X$ is a set of opens $U$ with an abstract coverage relation
+$U \tw (U_i)_{i\in I} $ that has any number of arguments on the right,
+and one argument on the left. It's meant to capture the idea
+that
+\[ U \subseteq \bigcup_i U_i\]
+We interpret propositions as subsets of opens in $X$. This makes disjunctions
+feel like multiplicative logical connectives!
+\[(\exists i : I. P(i)) \wat U = \exists (U_i)_{i\in I} . (U \tw (U_i)_{i\in I}) \land ( \all i . P(i) \wat U_i )\]
+\[(P_1 \oplus P_2) \wat U = \exists U_1, U_2. (U \tw (U_1, U_2)) \land (P_1 \wat U_1) \land (P_2 \wat U_2)\]
+
+
 \end{document}
