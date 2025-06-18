@@ -422,4 +422,59 @@ which in turn is like saying
 \[(C\in \C) \to FC \to UC \to \rset\]
 which is sort of the most naive way of saying what the type of $\tw$ is; only we
 got categorical `coherence' for free.
+
+What about the other structure? Naively, I need
+\[ {\otimes} : (C : \C) \to FC \to FC \to FC \]
+\[ {\lol} : (C : \C) \to FC \to UC \to UC \]
+with presumably some constraints.
+
+Surely I'll want that
+\[F_f( \alpha \otimes \alpha) \equiv F_f\alpha \otimes F_f \alpha\]
+which is I think telling me that $\otimes$ is straightforwardly a natural transformation
+\[ \otimes : F \x F \to F : \C^\op \to \rset\]
+
+The interaction I had above was
+\[( \alpha \lol_D U_f \phi )\equiv U_f (F_f \alpha \lol_C \phi)\]
+I think this means $\lol$ is a dinatural transformation from
+$F \x U$ to $U$, both considered as functors $\C^\op \x \C \to \rset$.
+Let's unpack that definition. The raw data is just right; for every
+object $C \in \C$ we have a morphism $FC \x UC \to UC$, which is just a set function.
+Then coherence is
+\[
+\begin{tikzcd}
+&[-2em] FC \x UC \ar[r, "\lol"] & UC\ar[dr, "U_f"] \\
+FD \x UC \ar[ur, "F_f"]\ar[dr, "U_f"']&&& UD\\
+&[-2em] FD \x UD \ar[r, "\lol"'] & UD\ar[ur, equal]
+\end{tikzcd}
+\]
+Perfect!
+\subsection{The Semantics}
+Suppose we're given $F : \C^\op\to\rset$ and $U : \C \to \rset$ and $\tw : \int^{C\in\C} FC \x UC \to \rset$
+and natural $\otimes : F \x F \to F$ and dinatural ${\lol} : F \x U \to U$.
+Assume $\alpha \otimes \alpha' \lol \phi \equiv \alpha \lol (\alpha' \lol \phi)$.
+We want to interpret focused multimodal logic into this structure. Every proposition is
+either positive at an object $C$, and interpreted at an element of $FC$, or negative at an object $C$
+and interpreted at an element of $UC$. Interpretation yields a set.
+
+
+Conventions used below: $\alpha \in FC$ and $\phi \in UC$ and $f : C \to D$ and $k : B \to C$.
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat\alpha / N \wat \phi$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(\alpha)$\\
+  $ (P_1 \lor P_2) $ & $(P_1 \wat  \alpha ) \oplus (P_2 \wat  \alpha)$\\
+  $\dns N $ & $\dns\all   \phi :UC .   ( N \wat \phi) \to \alpha \tw  \phi$\\
+  $F_f P $ & $\exists \alpha' : FD . (\alpha = F_f\alpha') \land (P \wat \alpha')$\\
+  $ (P_1 \otimes P_2) $ & $\exists \alpha_1,\alpha_2 : FC. (\alpha = \alpha_1 \otimes \alpha_2) \land (P_1 \wat \alpha_1) \land (P_2 \wat \alpha_2)$\\
+  $n $ & $n(\phi)$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \oplus (N_2 \wat \phi )$\\
+  $\ups P $ & $\dns \all\alpha : FC .   (P \wat \alpha)  \to \alpha   \tw \phi$\\
+  $U_k N $ & $\exists \phi' : UB . (\phi = U_k\phi' ) \land (N \wat \phi')$\\
+  $ (P \lol N) $ & $\exists \alpha : FC,\phi' :UC. (\phi = \alpha \lol \phi') \land (P \wat \alpha) \land (N \wat \phi')$\\
+\end{tabular}\]
+
 \end{document}
