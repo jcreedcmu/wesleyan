@@ -157,6 +157,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\A{\mathbf{A}}
 \def\B{\mathbb{B}}
 \def\C{\mathbb{C}}
+\def\W{\mathbb{W}}
 \def\S{\mathbf{S}}
 \def\G{\mathbf{G}}
 \def\D{\mathbb{D}}
@@ -495,4 +496,39 @@ which is to say
 \[P\wat (\Gamma \prov \_[C]) \iff \Gamma \prov [P[C]] \]
 \[N\wat (\Delta,\_[k] \prov Q[B] ) \iff  \Delta [N[k]] \prov Q[B]  \]
 
+\subsection{Categorifying Just a Bit More}
+I want to catch up with Riley/Licata/Shulman's level generality. I think for that I need
+$F : \C^\op \to \rcat$ and $U : \C \to \rcat$. Resources and frames are not just members of a set,
+but they also can be related to one another by inequality. Alternatively, I can view these
+as categories fibered over, so fibrations $F : \W^+ \to \C$ and $U : \W^- \to \C^\op$. What does $\tw$
+become? Hm, no, I get stuck here.
+\subsection{Absurd Generality}
+Suppose we have an index set of polarities $I$. Then the semantics would
+require categories $\C_i$ for each $i \in I$, and functors $F_i : \C_i \to \rset$.
+Let the syntax of propositions be given by $\bar F_i : \C_i \to \rset$.
+For each $i:I$ and each object $C \in \C_i$, there is a syntactic class of propositions.
+
+There are two families of connectives we can configure, multiplicatives and shifts.
+Suppose we have
+\[  S : \rset \qquad j : S \to I \qquad C : (s : S) \to \C_{j(s)}\qquad i : I\qquad D : \C_i\]
+Let $F_j C$ be an abbreviation for
+\[(s : S) \to F_{j(s)} C_s \]
+If  $R : F_j C \to F_i D \to \rset$ is a relation, then this creates connectives
+\[\boxminus_R, \boxplus_R : \bar F_j C \to \bar F_i D \]
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat x$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(x)$\\
+  $ (P_1 \oplus P_2) $ & $(P_1 \wat  x) \lor (P_2 \wat  x)$\\
+  $\boxminus_R(P) $ & $\dns\all   y :F_jC .   ( P \wat y) \to R(y, x)$\\
+  $\boxplus_R(P) $ & $\exists   y :F_jC .   ( P \wat y) \land  R(y, x)$\\
+\end{tabular}\]
+\subsection{More Absurd Generality}
+I think I've found my way back to my thoughts from 2018! The categorical structure of the $\C_i$ isn't needed,
+because I'm creating the morphisms by declaring relations, even. The distinction
+between polarities and modes disappears. They're all just modes.
 \end{document}
