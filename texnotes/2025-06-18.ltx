@@ -530,5 +530,22 @@ If  $R : F_j C \to F_i D \to \rset$ is a relation, then this creates connectives
 \subsection{More Absurd Generality}
 I think I've found my way back to my thoughts from 2018! The categorical structure of the $\C_i$ isn't needed,
 because I'm creating the morphisms by declaring relations, even. The distinction
-between polarities and modes disappears. They're all just modes.
+between polarities and modes disappears. They're all just modes. And I think by reasoning about sheaf semantics,
+I can make additives effectively multiplicative.
+
+So suppose I have a set $M$ of modes, and some resource sets $F : M \to \rset$.
+Suppose $R : Fm_1 \to Fm_2 \to \rset$ is a relation. Then
+\[ \boxminus_R, \boxminus_R : \bar Fm_1 \to \bar Fm_2 \]
+are connectives.
+\[\begin{tabular}{ll}
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $X $ & $P \wat x$\\
+\\[-0.9em]
+\Xhline{2\arrayrulewidth}
+\\[-0.9em]
+  $p $ & $p(x)$\\
+  $\boxminus_R(P) $ & $\dns\all   y :Fm_1 .   ( P \wat y) \to R(y, x)$\\
+  $\boxplus_R(P) $ & $\exists   y :Fm_1 .   ( P \wat y) \land  R(y, x)$\\
+\end{tabular}\]
 \end{document}
