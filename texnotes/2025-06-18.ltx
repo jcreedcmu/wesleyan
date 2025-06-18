@@ -327,5 +327,21 @@ predicate $h(C, \phi)$ that says we're currently at an object of the category,
 and what's more at a current point $\phi$ of the presheaf.
 
 To be able to focus on $N[f]$ on the left, we certainly have to at least grab a $h(C, \dash)$.
-I'm not yet sure what role the $f$ plays.
+I'm not yet sure what role the $f$ plays. Let's look at what the $U$ semantics might be.
+
+\[ (U_g N) \wat \phi = \exists \phi' . (\phi' = g \phi) \land (N \wat \phi')\]
+I wonder if it's more uniform and easy to understand to make the source language substructural,
+and do the $\tw$ translation. A context shape is a multimorphism. A stable sequent like
+\[ N_1[f_1], N_2[f_2], N_3[f_3] \prov Q[C]\]
+becomes
+\[ \dns N_1 \wat \alpha_1,\dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov  \#(\alpha_1^{f_1}, \alpha_2^{f_2}, \alpha_3^{f_3} \prov \phi)\]
+In this case $\#$ is a predicate that takes a wide span diagram in $\C$ with some decorations.
+Each object $D_i$ not at the apex is decorated with an $\alpha$ associated to $D_i$, and
+the apex, an object $C$ is decorated with a $\phi$ associated to $C$.
+
+Now what are the shifts? To focus on $N_1$, we need to residuate $\alpha_1$. So I end up with something like
+\[ \dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov [N \wat (\sq^{f_1}, \alpha_2^{f_2}, \alpha_3^{f_3} \prov \phi)]\]
+Oho! This is starting to look more sensible. My conclusion is that a $\phi$ can look like a span
+with a missing $\alpha$ at one of the branches. The `default' will be the identity map, I expect.
+Transport therefore knows to compose on a morphism at this chosen branch.
 \end{document}
