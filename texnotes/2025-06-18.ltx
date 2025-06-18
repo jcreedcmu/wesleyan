@@ -288,4 +288,36 @@ With a substitution principles like
  \Delta \o f, \Gamma \prov  Q[C]
 \end{prooftree}
 \]
+The shift rules don't do anything particularly interesting; they're
+\[
+\begin{prooftree}
+\Delta \prov P[D]
+\justifies
+\Delta \prov \ups P[D]
+\end{prooftree}
+%
+\qquad
+\begin{prooftree}
+\Gamma; P[f] \prov Q[C]
+\justifies
+\Gamma [\ups P[f]] \prov Q[C]
+\end{prooftree}
+%
+\qquad
+\begin{prooftree}
+\Delta \prov N[D]
+\justifies
+\Delta \prov [\dns N[D]]
+\end{prooftree}
+%
+\qquad
+\begin{prooftree}
+\Gamma, N[f] \prov Q[C]
+\justifies
+\Gamma; \dns N[f] \prov Q[C]
+\end{prooftree}
+\]
+
+
+I want to give this some kind of semantics in linear logic.
 \end{document}
