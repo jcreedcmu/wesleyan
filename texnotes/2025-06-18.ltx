@@ -112,7 +112,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\tt{{\mathsf t}}
 \def\ii{{\mathbb I}}
 \def\T{\mathbb{T}}
-\def\tw{\mathop\triangleleft\nolimits}
+\def\tw{\mathop\triangleright\nolimits}
 \def\tb{\mathop\blacktriangleleft}
 \def\sw#1{^{#1}_{#1}}
 \def\TP{\mathbf{TPre}}
@@ -274,7 +274,7 @@ D \ar[r, "\Delta"'] & \vec E
 \end{prooftree}
 \]
 
-With a substitution principles like
+With a substitution/cut elimination principles like
 \[
 \begin{prooftree}
  \Delta \prov [P [D]]\qquad \Gamma; P[f] \prov Q[C]
@@ -344,4 +344,78 @@ Now what are the shifts? To focus on $N_1$, we need to residuate $\alpha_1$. So 
 Oho! This is starting to look more sensible. My conclusion is that a $\phi$ can look like a span
 with a missing $\alpha$ at one of the branches. The `default' will be the identity map, I expect.
 Transport therefore knows to compose on a morphism at this chosen branch.
+
+Oh yeah this normalizes out to sensible stuff. $\lol$ is an operation on resources/frames at the same object.
+$\otimes$ is an operation at resources at the same object.
+I can construct a frame expression as
+\[( \sq^{f_1}, \alpha_2^{f_2}, \alpha_3^{f_3} \prov \phi ) \equiv U_{f_1} (F_{f_2}\alpha_2 \otimes F_{f_3} \alpha_3 \lol \phi )\]
+
+\subsection{Laying out the Small Algebra}
+\[\begin{prooftree}
+f : C \to D
+  \justifies
+F_f : \mathsf{Res}(D) \to \mathsf{Res}(C)
+\end{prooftree}
+\qquad
+\begin{prooftree}
+f : C \to D
+  \justifies
+U_f : \mathsf{Frm}(C) \to \mathsf{Frm}(D)
+\end{prooftree}\]
+\[( \alpha \lol_D U_f \phi )\equiv U_f (F_f \alpha \lol_C \phi)\]
+\[( \alpha \tw_D U_f \phi )\iff (F_f \alpha \tw_C \phi)\]
+ A stable sequent like
+\[ N_1[f_1], N_2[f_2], N_3[f_3] \prov Q[C]\]
+becomes
+\[ \dns N_1 \wat \alpha_1,\dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov  F_{f_1} \alpha_1 \otimes F_{f_2} \alpha_2 \otimes F_{f_3} \alpha_3 \tw \phi\]
+Now because
+\[ (\dns N) \wat \alpha := \forall\phi. N \wat \phi \to \alpha \tw \phi \]
+this is equivalently
+\[ (\forall \phi_1 .  N_1 \wat \phi_1 \to \alpha_1 \tw \phi_1) ,\dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov  F_{f_1} \alpha_1 \otimes F_{f_2} \alpha_2 \otimes F_{f_3} \alpha_3 \tw \phi\]
+and we can rearrange the rhs to
+\[ (\forall \phi_1 .  N_1 \wat \phi_1 \to \alpha_1 \tw \phi_1) ,\dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov   \alpha_1  \tw U_{f_1} (F_{f_2} \alpha_2 \otimes F_{f_3} \alpha_3 \lol \phi)\]
+and instantiate $\phi_1 = U_{f_1} (F_{f_2} \alpha_2 \otimes F_{f_3} \alpha_3 \lol \phi)$ to get
+\[ \dns N_2 \wat \alpha_2 , \dns N_3 \wat \alpha_3, \ups Q \wat \phi\prov     N_1 \wat ( U_{f_1}(F_{f_2} \alpha_2 \otimes F_{f_3} \alpha_3 \lol \phi) )\]
+which is how we render the left focus sequent
+\[( N_2[f_2], N_3[f_3] )[N_1[f_1]] \prov Q[C]\]
+
+This all means the synthesized $\lol$ rules are slightly more interesting than I expected.
+\[
+\begin{prooftree}
+\Delta'; P[\rid_D]  \prov N[D]
+\justifies
+\Delta' \prov  P \lol N [D]
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma  \prov [P[D]] \qquad \Delta [N [f]] \prov Q[C]
+\justifies
+(\Gamma \o f , \Delta) [ P \lol N [f]] \prov Q[C]
+\end{prooftree}
+\]
+assuming $f : C \to D$.
+Cut elimination on the bottom gives us the goal
+\[\Delta' \o f, \Gamma \o f , \Delta \prov Q[C]\]
+On the top, we first cut on $P$ to get
+\[\Delta', \Gamma \prov N[D]\]
+then cut that into the other derivation to get
+\[\Delta' \o f, \Gamma \o f , \Delta \prov Q[C]\]
+as required.
+\subsection{More Categorically}
+The type of resources is given by a contravariant functor $F : \C^\op \to \rset$.\\
+The type of frames is given by a covariant functor $U : \C \to \rset$.\\
+Then the relation $\tw$ is a set over the coend
+\[
+\begin{tikzcd}
+\displaystyle\coprod_{f : C \to D} FD \x UC \ar[r, shift left=3pt]\ar[r, shift right=3pt]
+&\displaystyle \coprod_{C\in \C} FC \x UC  \ar[r, ->>]
+&\displaystyle \int^{C\in\C} FC \x UC
+\end{tikzcd}
+\]
+This imposes the adjunctions $F_f \dashv U_f$.
+We're saying $(F_f\alpha,\phi)$ is the same `syntactic gadget' as $(\alpha,U_f\phi)$
+(assuming $\alpha \in FD$ and $\phi \in UC$)
+so $\tw$ can't help but do the same thing to them.
+
+
 \end{document}
