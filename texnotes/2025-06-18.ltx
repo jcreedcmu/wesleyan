@@ -236,7 +236,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
 
 
-\section{Relativity of Truth}
+\section{Modalities}
 Suppose I have a category $\C$, suppose the judgement is structured like this:
 when $N[f] \in \Gamma$ and $\Gamma \prov Q [C]$,
 then $N$ is a $D$-prop and $Q$ is a $C$-prop, and  $f$ is a morphism $C \to D$.
@@ -466,15 +466,33 @@ Conventions used below: $\alpha \in FC$ and $\phi \in UC$ and $f : C \to D$ and 
 \Xhline{2\arrayrulewidth}
 \\[-0.9em]
   $p $ & $p(\alpha)$\\
-  $ (P_1 \lor P_2) $ & $(P_1 \wat  \alpha ) \oplus (P_2 \wat  \alpha)$\\
+  $ (P_1 \oplus P_2) $ & $(P_1 \wat  \alpha ) \lor (P_2 \wat  \alpha)$\\
   $\dns N $ & $\dns\all   \phi :UC .   ( N \wat \phi) \to \alpha \tw  \phi$\\
   $F_f P $ & $\exists \alpha' : FD . (\alpha = F_f\alpha') \land (P \wat \alpha')$\\
   $ (P_1 \otimes P_2) $ & $\exists \alpha_1,\alpha_2 : FC. (\alpha = \alpha_1 \otimes \alpha_2) \land (P_1 \wat \alpha_1) \land (P_2 \wat \alpha_2)$\\
   $n $ & $n(\phi)$\\
-  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \oplus (N_2 \wat \phi )$\\
+  $ (N_1 \amp N_2) $ & $(N_1 \wat \phi ) \lor (N_2 \wat \phi )$\\
   $\ups P $ & $\dns \all\alpha : FC .   (P \wat \alpha)  \to \alpha   \tw \phi$\\
   $U_k N $ & $\exists \phi' : UB . (\phi = U_k\phi' ) \land (N \wat \phi')$\\
   $ (P \lol N) $ & $\exists \alpha : FC,\phi' :UC. (\phi = \alpha \lol \phi') \land (P \wat \alpha) \land (N \wat \phi')$\\
 \end{tabular}\]
+\subsection{A Syntactic Model}
+Let $F(C)$ be contexts terminating at object $C$:
+\[F(C) = \{\Gamma \prov \_[C]\}\]
+Let $U(C)$ be contexts with a hole at object $C$:
+\[U(C) = \{\Delta, \_[k] \prov Q[B] \st k : B \to C\}\]
+Let $\tw$ hold when the fused context is provable:
+\[ (\Gamma \prov \_[C]) \tw (\Delta, \_[k] \prov Q[B]) \iff \Delta, \Gamma \o k \prov Q[B] \]
+The operation $\otimes$ is just context combination. The operation $\lol$ likewise is.
+
+We supply predicates $p(\alpha)$ and $n(\phi)$. They say: $p(\Gamma \prov \_[C])$ iff $\Gamma$ is just the atom $p$, and $n(\Delta, \_[k] \prov Q[B] \st k : B \to C)$ iff $\Delta$ is empty and $Q$ actually
+is the atom $n$.
+
+We prove by induction that
+\[P\wat \alpha \iff \alpha \prov [P] \]
+\[N\wat \phi \iff  [N] \prov \phi \]
+which is to say
+\[P\wat (\Gamma \prov \_[C]) \iff \Gamma \prov [P[C]] \]
+\[N\wat (\Delta,\_[k] \prov Q[B] ) \iff  \Delta [N[k]] \prov Q[B]  \]
 
 \end{document}
