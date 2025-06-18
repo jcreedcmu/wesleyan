@@ -533,10 +533,14 @@ because I'm creating the morphisms by declaring relations, even. The distinction
 between polarities and modes disappears. They're all just modes. And I think by reasoning about sheaf semantics,
 I can make additives effectively multiplicative.
 
-So suppose I have a set $M$ of modes, and some resource sets $F : M \to \rset$.
-Suppose $R : Fm_1 \to Fm_2 \to \rset$ is a relation. Then
+So suppose I have a set $M$ of modes, and some resource sets $F : [M] \to \rset$,
+with $F$ being a monoid homomorphism taking list concatenation to cartesian product.
+Suppose $m_1 \in [M]$ and $m_2 \in M$. We aim to lift to $\bar F : [M] \to \rset$
+also a monoid homomorphism.
+
+Suppose $R : Fm_1 \to Fm_2 \to \rset$ is a relation. Then we generate
 \[ \boxminus_R, \boxminus_R : \bar Fm_1 \to \bar Fm_2 \]
-are connectives.
+as syntactic connectives. The semantics is:
 \[\begin{tabular}{ll}
 \Xhline{2\arrayrulewidth}
 \\[-0.9em]
