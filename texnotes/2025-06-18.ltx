@@ -319,5 +319,13 @@ The shift rules don't do anything particularly interesting; they're
 \]
 
 
-I want to give this some kind of semantics in linear logic.
+I want to give this some kind of semantics in linear logic. I expect to translate positive
+props into unrestricted props, negative props into linear props. For each object
+of the category there is a syntactic class of kripke-world-like things $\phi \in W(C)$.
+Also $W$ is a presheaf of some sort; we can transport along morphisms. There's a ``here''
+predicate $h(C, \phi)$ that says we're currently at an object of the category,
+and what's more at a current point $\phi$ of the presheaf.
+
+To be able to focus on $N[f]$ on the left, we certainly have to at least grab a $h(C, \dash)$.
+I'm not yet sure what role the $f$ plays.
 \end{document}
