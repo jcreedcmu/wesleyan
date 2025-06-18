@@ -237,23 +237,21 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 
 \section{Relativity of Truth}
-Suppose I have a category $\C$, and an invariant that says of
-\[\Gamma, N [f] \prov Q [C]\]
-when $N$ is a $D$-prop and $Q$ is a $C$-prop, then  $f$ is a morphism $C \to D$.
- and rules like
+Suppose I have a category $\C$, suppose the judgement is structured like this:
+when $N[f] \in \Gamma$ and $\Gamma \prov Q [C]$,
+then $N$ is a $D$-prop and $Q$ is a $C$-prop, and  $f$ is a morphism $C \to D$.
+Rules for the adjoint look like
 \[
 \begin{tikzcd}
-C \ar[r, "h"]\ar[d, "f"']& D'\ar[dl, "g" description] \ar[d, "\Delta \o g"]\\
+C \ar[r, "h"]\ar[d, "g\o h"']& D'\ar[dl, "g" description] \ar[d, "\Delta \o g"]\\
 D \ar[r, "\Delta"'] & \vec E
 \end{tikzcd}
 \]
 \[
 \begin{prooftree}
-f = g \o h
-\qquad
 \Gamma[N [h]] \prov Q [C]
 \justifies
-\Gamma[U_{g} N[f]] \prov Q [C]
+\Gamma[U_{g} N[g\o h]] \prov Q [C]
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -262,8 +260,28 @@ f = g \o h
 \Delta \prov U_{g}N [D]
 \end{prooftree}
 \]
-With a substitution principle like
 \[
+\begin{prooftree}
+\Gamma; P [g \o h] \prov Q [C]
+\justifies
+\Gamma; F_{g} P[h] \prov Q [C]
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Delta  \prov [P [D]]
+\justifies
+\Delta \o g \prov [F_{g}P [D']]
+\end{prooftree}
+\]
+
+With a substitution principles like
+\[
+\begin{prooftree}
+ \Delta \prov [P [D]]\qquad \Gamma; P[f] \prov Q[C]
+\justifies
+ \Delta \o f, \Gamma \prov  Q[C]
+\end{prooftree}
+\qquad
 \begin{prooftree}
  \Delta \prov N [D]\qquad \Gamma[N[f]] \prov Q[C]
 \justifies
