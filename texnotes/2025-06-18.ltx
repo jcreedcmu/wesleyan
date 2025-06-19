@@ -27,13 +27,16 @@
 \def\sssection#1{\vskip1em \hrule\vskip 0.5em \noindent $\triangleright$ {\bf #1} \vskip0.5em \hrule\vskip 1em }
 \def\I{\mathbb{I}}
 
-\def\breturn#1{[ #1 ]}
-\def\bthunk#1{\langle #1 \rangle}
-\def\brun{{!}}
+
+
+
 \def\gets{\leftarrow}
 \def\all{\forall}
 
 \def\spec{\mathsf{Spec}}
+\def\breturn{\mathop{\mathbf{return}}\nolimits}
+\def\bthunk{\mathop{\mathbf{thunk}}\nolimits}
+\def\brun{\mathop{\mathbf{run}}\nolimits}
 \def\bget{\mathop{\mathbf{get}}\nolimits}
 \def\bGel{\mathop{\mathbf{Gel}}\nolimits}
 \def\bgel{\mathop{\mathbf{gel}}\nolimits}
@@ -552,4 +555,75 @@ as syntactic connectives. The semantics is:
   $\boxminus_R(P) $ & $\dns\all   y :Fm_1 .   ( P \wat y) \to R(y, x)$\\
   $\boxplus_R(P) $ & $\exists   y :Fm_1 .   ( P \wat y) \land  R(y, x)$\\
 \end{tabular}\]
+\section{Modal Replacement}
+I want to set up a CBPV-like system with a poset worth of value types. Something like
+\[\begin{tabular}{rcl}
+  Computation $N$&$::=$&$ F_d P_d\celse P_d \to_d N $\\
+  Value $P_d$&$::=$&$ U_d N \celse P_d \x P_d \celse P_d + P_d$\\
+\end{tabular}\]
+which in the back of my head I think expands to
+\[\begin{tabular}{rcl}
+  Negative Low $N$&$::=$&$ \ups P\celse P \to N $\\
+  Positive Low $P$&$::=$&$  F_d P_d  $\\
+  Negative High $N_d$&$::=$&$U_d N$\\
+  Positive High $P_d$&$::=$&$ \dns_d N_d \celse P_d \x P_d \celse P_d + P_d$\\
+\end{tabular}\]
+for $d \in D$ belonging to some poset. Write $\sq_d$ as shorthand
+for $F_d \dns_d U_d$. Then I want to pose the question of under
+what circumstances is it sound to promote a term at a type by increasing a bunch of subscripts.
+\[\begin{tabular}{rcl}
+  Contexts $\Gamma$&$::=$&$ \cdot \celse \Gamma, x : P_d $\\
+\end{tabular}\]
+
+\[\begin{prooftree}
+\Gamma, x : P_d \prov  e :  N
+\justifies
+\Gamma \prov \lambda x . e : P_d \to_d N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \prov e : P_d \to N \qquad \Gamma \prov M : P_d
+\justifies
+\Gamma \prov e\ M : N
+\end{prooftree}\]
+
+\[\begin{prooftree}
+\Gamma \prov e : F_d P_d \qquad \Gamma, x : P_d \prov  e' :  N
+\justifies
+\Gamma \prov \blet F_d x = e \bin e' : N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \adjust_d \prov M : P_d
+\justifies
+\Gamma \prov \breturn M : F_d P_d
+\end{prooftree}\]
+
+\[\begin{prooftree}
+\Gamma\adjust_d \prov M : U_d N
+\justifies
+\Gamma \prov \brun_d M : N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma  \prov e : N
+\justifies
+\Gamma \prov \bthunk_d e : U_d N
+\end{prooftree}\]
+
+Suppose the poset $D$ is just $\N$ for simplicity right now.
+\begin{theorem}
+Suppose we have a type $N$ such that all the subscripts anywhere in $N$ are $< n$.
+Suppose all the surface-level subscripts in $\Gamma$ are $\ge n$. If
+$\Gamma \prov e : N$, then there exists $e^+$ with $\Gamma \prov e^+ : N^+$,
+where $N^+$ is $N$ with all the subscripts incremented by 1. This means
+it should be okay to add a primitive
+\[\mathbf{raise} : \sq_{n} N \to \sq_{n} N^+\]
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
 \end{document}
