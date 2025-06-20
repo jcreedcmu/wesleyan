@@ -87,7 +87,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\iff{\ \Longleftrightarrow\ }
 \def\bu{\bullet}
 \def\J{\mathbb{J}}
-\def\R{\mathcal{R}}
+\def\R{\mathbb{R}}
 \def\rpath#1{[#1]}
 \def\rfst{\mathsf{fst}\,}
 \def\rsnd{\mathsf{snd}\,}
@@ -622,8 +622,54 @@ it should be okay to add a primitive
 \end{theorem}
 
 \begin{proof}
-
+?
 \cqed
 \end{proof}
+
+\section{Modular Forms}
+Two things I'd like to understand:
+\begin{enumerate}
+\item
+  Why is it that $SL(2,\Z)$ is related to $(a z + b)/(cz+d)$?
+\item  What makes $\Gamma_0(4)$ work
+  for weight-1/2 forms?
+\end{enumerate}
+There's an obvious map $\R^2 \cong \C$. The group $SL(2,\Z)$ operates natively
+on $\R^2$. For any $M \in SL(2,\Z)$, there's allegedly a commutative diagram
+%% \[
+%% \begin{tikzcd}
+%% (\R^2)^2 \ar[r, equal]\ar[d, "M^2"'] & \C^2\ar[r, "\div"] & \C\ar[d, "{\tau\mapsto {a\tau + b\over c\tau + d}}"] \\
+%% (\R^2)^2 \ar[r, equal] & \C^2\ar[r, "\div"] & \C \\
+%% \end{tikzcd}
+%% \]
+
+%% Let's say we have $(z_0 + z_1i, w_0 +  w_1i)$ at the northern object of this diagram.
+%% Then we get
+%% \[ (a z_0 + b z_1) + (cz_0 + dz_1) i \qquad (a w_0 + b w_1) + (cw_0 + dw_1) i \]
+%% at the southern object. So
+%% \[\tau = z/w = {z_0 + z_1i \over w_0 + w_1 i}\]
+%% and we want to compare
+%% \[ {(a z_0 + b z_1) + (cz_0 + dz_1) i \over (a w_0 + b w_1) + (cw_0 + dw_1) i  } \quad\stackrel{?}{=}\quad {a\tau + b \over c\tau + d}\]
+%% So that's the same question as
+%% \[ {z_0 (a + ci) + z_1 (b + di) \over w_0 (a + ci) + w_1 (b+ di)  } \quad\stackrel{?}{=}\quad
+%% {az + bw \over cz + dw}\]
+%% and therefore
+%% \[ (z_0 (a + ci) + z_1 (b + di))(c(z_0 + z_1i) + d(w_0 + w_1i))  } \quad\stackrel{?}{=}\quad
+%% (w_0 (a + ci) + w_1 (b+ di))(a(z_0 + z_1i) + b(w_0 + w_1i)) \]
+%% I can't see it. Did I do something wrong? Let's take a = 1, b = 1, c = 0, d = 1. This takes $1 \in \C$ to itself
+%% as expected.
+
+%% \[ {( z_0 +  z_1) +  z_1 i \over ( w_0 +  w_1) + w_1  i  } \quad\stackrel{?}{=}\quad {\tau + 1 } = {z + w\over w}
+%% = {(z_0 + w_0) + (z_1 + w_1) i \over w_0 + w_1 i}\]
+%% Ok, yeah, I think I did do something wrong. $M$ is supposed to act {\em on} the pair of vectors.
+
+%% \subsection{Correcting the Mistake}
+%% Now is this diagram actually
+\[
+\begin{tikzcd}
+(\R^2)^2 \ar[r, equal]\ar[d, "M"'] & \C^2\ar[r, "\div"]\ar[d, "{({z\atop w}) \mapsto ({az + bw \atop cz + dw})}" description] & \C\ar[d, "{\tau\mapsto {a\tau + b\over c\tau + d}}"] \\
+(\R^2)^2 \ar[r, equal] & \C^2\ar[r, "\div"] & \C \\
+\end{tikzcd}
+\]
 
 \end{document}
