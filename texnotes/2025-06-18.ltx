@@ -672,4 +672,32 @@ on $\R^2$. For any $M \in SL(2,\Z)$, there's allegedly a commutative diagram
 \end{tikzcd}
 \]
 
+A lattice form of weight $k$ is $f : \C^2 \to \C$ where
+\[f(\lambda z, \lambda w) = \lambda^{-k} f(z, w)\]
+\[f(az + bw, cz + dw) =  f(z, w)\]
+for any $(a\ b; c\ d) \in SL(2, \Z)$.
+This is the same thing as a modular form, a map $h : \C \to \C$ with
+\[ h\left(a\tau + b \over c\tau + d\right)  =  (c\tau + d)^k h(\tau)\]
+
+If we're given a modular $h$, we define. We define $ f(z,w) = w^{-k} h(z/w)$.
+Then we check
+\[ f(\lambda z,\lambda w) = \lambda^{-k} w^{-k} h(\lambda z/\lambda w) = \lambda^{-k} f(z,w)\]
+\[ f(az + bw,cz + dw) = (cz + dw)^{-k} h \left(az + bw\over cz + dw\right)\]
+\[ = (c\tau + d)^{-k} w^{-k} h\left(a\tau + b\over c\tau + d\right) \]
+\[ = (c\tau + d)^{-k} w^{-k} (c\tau + d)^k h(\tau) = f(z,w)\]
+Conversely, if we're given a modular lattice function $f$,
+then we define $h(\tau) = f(\tau, 1)$, and we check
+\[ h\left(a\tau + b \over c\tau + d\right)  = f\left({a\tau + b \over c\tau + d}, 1\right)\]
+\[  = (c\tau + d)^k f\left({a\tau + b}, c\tau + d \right)
+ = (c\tau + d)^k f(\tau, 1) = (c\tau + d)^k h(\tau)\]
+\subsection{The Modular Group}
+The lattice $\Lambda_{(z,w)}$ is the set of points $\{uz + vw \st u, v \in \Z\}$.
+If $M   \in GL(2, \R)$, then $\Lambda_{M(z,w)} = \Lambda_{(z,w)}$ iff $M \in SL(2,\Z)$.
+Let's consider the forward direction.
+We suppose $\Lambda_{M(z,w)} = \Lambda_{(z,w)}$.
+So in particular $z \in \Lambda_{M(z,w)}$ and $w \in \Lambda_{M(z,w)}$,
+so really what we're saying is
+\[z = (u,v)M\left(z \atop w\right)\]
+\[w = (u',v')M\left(z \atop w\right)\]
+I think this is close to invertibility for $M$ by a matrix of integers, so it must have determinant $1$.
 \end{document}
