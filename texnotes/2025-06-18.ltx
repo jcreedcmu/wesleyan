@@ -756,6 +756,35 @@ which means
 \[\lim_{\im (z/w) \to \infty } w^{-k} h( z/ w) = w^{-k} \lim_{\tau \to i \infty} h(\tau)\]
 and we're good.
 \end{itemize}
+\subsection{Some Congruence Subgroups}
+Consider
+\[ SL(2,\Z) \supseteq \Gamma(N) := \left\{\left(\left.\begin{array}{cc}
+ a & b \\ c & d
+\end{array}\right)\right| a,d \equiv 1\land  b,c \equiv 0\pmod N \right\}\]
 
+\[ SL(2,\Z) \supseteq \Gamma_0(N) := \left\{\left(\left.\begin{array}{cc}
+ a & b \\ c & d
+\end{array}\right)\right| c \equiv 0\pmod N \right\}\]
+
+I'm going to take a stab and guess that
+
+\[\Gamma(N) = \{ \gamma \in SL(2,\Z) \st p^N \o \gamma = p^N \}\]
+\[\Gamma_0(N) = \{ \gamma \in SL(2,\Z) \st p_0^N \o \gamma = p_0^N \}\]
+
+
+where
+
+\[ p^N : \Z \x \Z \to \Z/N\Z \x \Z /N\Z \qquad p^N(x,y) = (x \% N, y \% N)\]
+\[ p_0^N : \Z \x \Z \to \Z/N\Z  \qquad p_0^N(x,y) = (y \% N)\]
+
+Ok, let's treat the subscript 0 case first. Suppose
+$\gamma \in \Gamma_0(N)$, so $c \equiv 0 \pmod N$.
+To show is $p_0^N \o  \gamma = p_0^N$. By extensionality, let $z, w \in \Z \x \Z$ be given, we need to show
+\[p_0^N (\gamma(z,w)) = p_0^N(z,w)\]
+\[p_0^N (az + bw, cz + dw) = w \% N\]
+\[ (cz + dw) \% N = w \% N\]
+\[  dw \% N = w \% N\]
+At this point we know $d = \pm 1$, because $ad -bc = ad = 1$. So something went wrong here.
+But surely preservation of $p_0$ determines {\em some} subgroup of $SL(2,\Z)$, doesn't it? Which one is it?
 
 \end{document}
