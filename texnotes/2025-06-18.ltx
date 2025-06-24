@@ -787,4 +787,56 @@ To show is $p_0^N \o  \gamma = p_0^N$. By extensionality, let $z, w \in \Z \x \Z
 At this point we know $d = \pm 1$, because $ad -bc = ad = 1$. So something went wrong here.
 But surely preservation of $p_0$ determines {\em some} subgroup of $SL(2,\Z)$, doesn't it? Which one is it?
 
+\subsubsection{Another Idea}
+
+How about: there are subsets
+\[Z = \{ (z,w) \in  \Z \x \Z \st z \equiv 0 \pmod N \}\]
+\[W = \{ (z,w) \in  \Z \x \Z \st w \equiv 0 \pmod N \}\]
+and we guess
+\[\Gamma(N) = \{ \gamma \in SL(2, \Z) \st \gamma Z = Z \land \gamma W = W \}\]
+\[\Gamma_0(N) = \{ \gamma\in SL(2, \Z)  \st \gamma Z = Z  \}\]
+
+Let's check the $\Gamma_0$ case. Suppose $\gamma \in \Gamma_0(N)$. If $ (z,w) \in Z$, then $z \equiv 0 \pmod N$.
+Then $\gamma (z, w) = (az + cw, bz + dw)$. (I'm actually having the transpose of $\gamma$ act on $\Z \x \Z$ here because I'm thinking of it as `number of copies of $z$' and `number of copies of $w$`)
+To check that that's in $Z$, we'd
+check $az + cw \equiv 0 \pmod N$. But this is true, because $c \equiv 0 \pmod N$.
+Conversely, if $(z,w) \in Z$, then we find by similar reasoning that
+$\gamma^{-1} (z,w) \in  Z$, hence $(z,w) \in \gamma Z$.
+
+Conversely, suppose $\gamma Z = Z$. To show is $\gamma \in \Gamma_0(N)$. Well,
+since $(0,1) \in Z_0$, we know $\gamma(0,1) = (c, d) \in Z_0$. So $c \equiv 0 \pmod N$.
+
+Ok, let's think about $\Gamma(N)$ now. Suppose $\gamma \in \Gamma(N)$. Want to show
+\begin{itemize}
+\item $\gamma Z \subseteq Z$. Let $(z,w) \in Z$ be given. We know $z \equiv 0 \pmod N$.
+So $\gamma (z,w) = (az + cw, bz + dw)$. This is in $Z$ because $az + cw \equiv 0 \pmod N$ because
+we know that $z$ and $c$ are.
+\item $Z \subseteq \gamma Z$. Same as above, but reasoning with $\gamma^{-1}$, relying on the fact
+that $\Gamma(N)$ is actually a group.
+\item $\gamma W \subseteq W$. Let $(z,w) \in W$ be given. We know $w \equiv 0 \pmod N$.
+So $\gamma (z,w) = (az + cw, bz + dw)$. This is in $W$ because $bz + dw \equiv 0 \pmod N$ because
+we know that $b$ and $w$ are.
+\item $W \subseteq \gamma W$. Same as above, but reasoning with $\gamma^{-1}$, relying on the fact
+that $\Gamma(N)$ is actually a group.
+\end{itemize}
+
+Conversely, what if $\gamma$ has $ \gamma Z = Z \land \gamma W = W$. Can we be assured
+that $\gamma \in \Gamma(N)$? We know $(c,d) \in Z$ and $(a,b) \in W$. So we know $b, c \equiv 0 \pmod N$.
+So because the determinant of $\gamma$ is 1, we know $(a,d) \in \{(1,1), (-1,-1)\} \pmod N$.
+Huh, this seems to break in the opposite way from $\Gamma_0$!
+
+Do I want `preserves a subset' for $\Gamma_0(N)$ and `preserves a homomorphism onto $\Z /N\Z$` for $\Gamma(N)$?
+
+\subsection{3d}
+
+What if I ask for a function $f$ on 3d lattices that has
+\[f(\lambda \Lambda) = \lambda^{-k} f(\Lambda)\]
+and
+\[f(M \Lambda) =  f(\Lambda)\]
+for any rotation,
+and it has suitable limits if one or more
+of the generators fly off to infinity?
+I can at least construct an Eisenstein-like series
+that has this property for $k$ even:
+\[ E_{2k} = {\sum_{x \in \Lambda}}' {1\over |x|^{2k} }\]
 \end{document}
