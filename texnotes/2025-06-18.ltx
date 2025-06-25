@@ -825,18 +825,60 @@ that $\gamma \in \Gamma(N)$? We know $(c,d) \in Z$ and $(a,b) \in W$. So we know
 So because the determinant of $\gamma$ is 1, we know $(a,d) \in \{(1,1), (-1,-1)\} \pmod N$.
 Huh, this seems to break in the opposite way from $\Gamma_0$!
 
-Do I want `preserves a subset' for $\Gamma_0(N)$ and `preserves a homomorphism onto $\Z /N\Z$` for $\Gamma(N)$?
+Do I want `preserves a subset' for $\Gamma_0(N)$ and `preserves a homomorphism onto $\Z /N\Z$' for $\Gamma(N)$?
 
-\subsection{3d}
+\subsection{Trying That}
+Claim:
+\[ \Gamma(N) = \{ \gamma \in SL(2, \Z) \st \gamma (1,0) \equiv (1,0) \pmod N \land
+\gamma (0,1) \equiv (0,1) \pmod N \}\]
+Oh yeah that's just dead obviously the same as $\gamma = I \pmod N$.
 
-What if I ask for a function $f$ on 3d lattices that has
-\[f(\lambda \Lambda) = \lambda^{-k} f(\Lambda)\]
-and
-\[f(M \Lambda) =  f(\Lambda)\]
-for any rotation,
-and it has suitable limits if one or more
-of the generators fly off to infinity?
-I can at least construct an Eisenstein-like series
-that has this property for $k$ even:
-\[ E_{2k} = {\sum_{x \in \Lambda}}' {1\over |x|^{2k} }\]
+Here's a picture for $\Gamma(4)$:
+\[\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+  % Define colors for the modulo classes
+  \definecolor{mod0}{RGB}{30,30,64}     % Black
+  \definecolor{mod3}{RGB}{245,170,0}     % Yellow
+  \definecolor{mod2}{RGB}{0,128,255}     % Cyan
+  \definecolor{mod1}{RGB}{255,0,65}   % Magenta
+
+  % Draw axes
+  \draw[->, thick] (-6,0) -- (6,0) node[right] {$x$};
+  \draw[->, thick] (0,-6) -- (0,6) node[above] {$y$};
+
+  % Dot lattice with coloring
+  \foreach \x in {-5,...,5} {
+    \foreach \y in {-5,...,5} {
+      \pgfmathtruncatemacro\modval{mod(40+\x+\y,4)}
+      \ifcase\modval
+        \fill[mod0] (\x,\y) circle (3pt);
+      \or
+        \fill[mod1] (\x,\y) circle (2pt);
+      \or
+        \fill[mod2] (\x,\y) circle (2pt);
+      \or
+        \fill[mod3] (\x,\y) circle (2pt);
+      \fi
+    }
+  }
+\end{tikzpicture}\]
+and here's a picture for $\Gamma_0(4)$:
+\[\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  % Draw axes
+  \draw[->, thick] (-6,0) -- (6,0) node[right] {$x$};
+  \draw[->, thick] (0,-6) -- (0,6) node[above] {$y$};
+
+  % Dot lattice with coloring
+  \foreach \x in {-5,...,5} {
+    \foreach \y in {-5,...,5} {
+      \pgfmathtruncatemacro\modval{mod(40+\y,4)}
+      \ifnum\modval=0
+        \fill[black] (\x,\y) circle (3pt);
+      \else
+        \fill[gray!50!white] (\x,\y) circle (2pt);
+      \fi
+    }
+  }
+\end{tikzpicture}\]
+
 \end{document}
