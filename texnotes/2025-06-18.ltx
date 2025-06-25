@@ -881,4 +881,21 @@ and here's a picture for $\Gamma_0(4)$:
   }
 \end{tikzpicture}\]
 
+\subsection{Understanding Better What's Going On}
+A {\em picture} $p = \langle P, K, \ldots\rangle$
+ in $\R^2$ is a set $P$, a set of colors $K$, and a span map $K \gets P \to \R^2$.
+Two pictures are considered the same if there's an appropriate isomorphism of spans.
+A map $\gamma \in GL(2, \R)$ can be applied to a picture $p$ by composing $\gamma$ on the end
+\[ \begin{tikzcd}K \ar[from=r]& P\ar[r]&  \R^2 \ar[r, "\gamma"] & \R^2 \end{tikzcd}\]
+
+{\bf Claim}: Given the evident picture $p = 1 \gets \Z^2 \to \R^2$, we claim that
+the $\gamma \in GL(2,\R)$ that yield the same picture after composition are exactly
+the subgroup $GL(2, \Z)$.
+
+{\bf Proof}: To be the same picture, we'd need an isomorphism $\theta$ fitting in
+
+\[ \begin{tikzcd}
+\Z^2 \ar[r]\ar[d, "\theta"'] & \R^2 \ar[d, "\gamma"]\\
+\Z^2 \ar[r] & \R^2 \\
+\end{tikzcd}\]
 \end{document}
