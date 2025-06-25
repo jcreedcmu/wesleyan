@@ -898,4 +898,19 @@ the subgroup $GL(2, \Z)$.
 \Z^2 \ar[r]\ar[d, "\theta"'] & \R^2 \ar[d, "\gamma"]\\
 \Z^2 \ar[r] & \R^2 \\
 \end{tikzcd}\]
+So that's gotta be $GL(2, \Z)$ for sure.
+
+What if we have a different picture from the standard inclusion of $\Z^2$ in $\R^2$?
+Something where we have already `baked in' a $\gamma_0 \in GL(2, \R)$? Then we're asking for a
+$\theta$ to fill
+\[ \begin{tikzcd}
+\Z^2 \ar[r]\ar[d, "\theta"'] & \R^2 \ar[r, "\gamma_0"] & \R^2 \ar[d, "\gamma"]\\
+\Z^2 \ar[r] & \R^2 \ar[r, "\gamma_0"'] & \R^2 \\
+\end{tikzcd}\]
+Then we need $\gamma_0^{-1} \gamma \gamma_0 \in GL(2, \Z)$.
+\vskip 1em
+\noindent{\bf Q}: This gives me $GL(2,\Z)$. How could I rule out sign flips? \\
+{\bf A}: Take the set of colors $K$ and multiply on a factor of $\R$, assigning $1$ to every point.
+Let $\gamma$ acting on pictures also act on $K$, by multiplying by the determinant.
+
 \end{document}
