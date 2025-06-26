@@ -925,7 +925,7 @@ When $q$ is near 0, that means the imaginary part of $\tau$ is very large.
 So what is the 0th fourier coefficient? It's when $\tau_0 = r + Ni$ for $N \to \infty$. So
 \[ G_{2k}(r+Ni) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over (mr + mNi+ n)^{2k}}\]
 and we can ignore the contributions when $m \ne 0$, because they'll be vanishingly small. So
-\[ G_{2k}(r+Ni) = {\mathop{\sum\nolimits'}\limits_{n \in \Z^2}} {1\over  n^{2k}} = 2\zeta(2k)\]
+\[ G_{2k}(r+Ni) = {\mathop{\sum\nolimits'}\limits_{n \in \Z}} {1\over  n^{2k}} = 2\zeta(2k)\]
 Ok, what's the first derivative at $q = 0$? We have
 
 \[ g_{2k}(q) = G_{2k}\left(\ln q\over 2\pi i\right )\]
@@ -933,4 +933,58 @@ Ok, what's the first derivative at $q = 0$? We have
 \[ g_{2k}'(e^{2\pi i \tau}) = G_{2k}'(\tau) {1\over 2\pi i e^{2\pi i \tau}}\]
 \[ g_{2k}'(e^{2\pi i \tau}) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over 2k (m\tau + n)^{2k-1}} {1\over 2\pi i e^{2\pi i \tau}}\]
 Hmm. I don't know how to deal with that.
+\subsection{Looking Up The Answer}
+The way Apostol and Borcherds both handle this is essentially by solving the problem first for the 1-d case.
+First remember that
+\[ e^{i\theta} = \cos \theta + i \sin \theta \]
+\[ e^{-i\theta} = \cos \theta - i \sin \theta \]
+hence
+\[ \cos \theta =  {e^{i\theta} + e^{-i\theta}\over 2} \]
+\[ \sin \theta =  {e^{i\theta} - e^{-i\theta}\over 2i} \]
+So we can reason (with the definition $q = e^{2\pi i \tau}$) that
+\[ {\pi \over \tan \pi \tau}  = {\pi \cos \pi \tau \over \sin \pi \tau}\]
+\[  = {\pi \cos \pi \tau \over \sin \pi \tau}\]
+\[  = {\pi i (e^{\pi i \tau} + e^{-\pi i \tau}) \over e^{\pi i \tau} - e^{-\pi i \tau}}\]
+\[  = {-\pi i (1 + e^{2\pi i \tau}) \over 1 - e^{2\pi i \tau}}\]
+\[  = {-\pi i (1 + q) \over 1 - q}\]
+\[  = -\pi i (1 + q) \sum_{r = 0}^\infty q^r\]
+\[  = -\pi i \left(1 + 2\sum_{r = 1}^\infty q^r\right)\]
+A big gap I don't know how to fill yet is proving that also
+\[ {\pi \over \tan \pi \tau} = {1\over \tau} + \sum_{m \in \Z \atop m \ne 0} \left({1\over \tau + m} - {1\over m}\right)\]
+If we had this, then we'd know by transitivity that
+\[ {1\over \tau} + \sum_{m \in \Z \atop m \ne 0} \left({1\over \tau + m} - {1\over m}\right) =  -\pi i \left(1 + 2\sum_{r = 1}^\infty q^r\right)\]
+and differentiating wrt $\tau$ we get
+\[ {-1\over \tau^2} + \sum_{m \in \Z \atop m \ne 0} \left({-1\over (\tau + m)^2} \right) =  -\pi i \left( 2\sum_{r = 1}^\infty 2\pi i rq^{r}\right)\]
+i.e.
+\[  \sum_{m \in \Z } {1\over (\tau + m)^2}  =  -4\pi^2  \sum_{r = 1}^\infty rq^{r}\]
+%% So let's check this on real numbers. If $q^r = e^{2\pi ir \tau} = i \sin (2\pi r \tau) + \cos (2\pi r\tau)$
+%% then let's try summing the cosines maybe.
+%% \[  \sum_{m \in \Z } {1\over (\tau + m)^2}  =  -4\pi^2  \sum_{r = 1}^\infty r \cos (2\pi r \tau)\]
+Unfortunately the fourier decomposition on the right doesn't seem to have good convergence properties
+so I can't easily spot check that I have this right yet.
+
+If I want weight $2k$, I take $2k-2$ more derivatives:
+\[  \sum_{m \in \Z } {(2k-1)!\over (\tau + m)^{2k}}  = \left(d \over d \tau\right)^{2k-2} \left(-4\pi^2  \sum_{r = 1}^\infty rq^{r}\right)\]
+\[  \sum_{m \in \Z } {(2k-1)!\over (\tau + m)^{2k}}  = (2\pi i)^{2k}  \sum_{r = 1}^\infty r^{2k-1}q^{r}\]
+hence
+\[  \sum_{m \in \Z } {1\over (\tau + m)^{2k}}  = {(2\pi i)^{2k}\over (2k-1)!}  \sum_{r = 1}^\infty r^{2k-1}q^{r}\]
+and substituting $n\tau$ for $\tau$,
+\[  \sum_{m \in \Z } {1\over (n\tau + m)^{2k}}  = {(2\pi i)^{2k}\over (2k-1)!}  \sum_{r = 1}^\infty r^{2k-1}q^{nr}\]
+And this lets us conclude that
+\[ G_{2k}(\tau) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over (m\tau + n)^{2k}}\]
+\[ =2\zeta(2k) + 2 \sum_{n \ge  1} \sum_{m \in \Z} {1\over (m\tau + n)^{2k}}\]
+\[ =2\zeta(2k) + 2 \sum_{n \ge  1} {(2\pi i)^{2k}\over (2k-1)!}  \sum_{r = 1}^\infty r^{2k-1}q^{nr}\]
+\[ =2\zeta(2k) + 2  {(2\pi i)^{2k}\over (2k-1)!}  \sum_{n \ge  1} \sum_{r \ge 1 } r^{2k-1}q^{nr}\]
+\[ =2\zeta(2k) + 2  {(2\pi i)^{2k}\over (2k-1)!}   \sum_{r \ge 1 } {r^{2k-1}q^{r}\over 1 - q^r}\]
+The last step we need is to take
+\[ \sum_{r \ge 1} { r^{2k-1} q^r\over 1-q^r} \]
+and figure out what it is in powers of $q$. If we look at particular values of $r$, we get
+\[\begin{array}{ll}
+r=1& 1^{2k-1}(q + q^2 + q^3 + q^4 + \cdots)\\
+r=2& 2^{2k-1}(q^2 + q^4 + q^6 + q^8 + \cdots)\\
+r=3& 3^{2k-1}(q^3 + q^6 + q^9 + q^{12} + \cdots)\\
+\end{array}\]
+So if we care about the $q^n$ coefficient, we're going to get a contribution from every divisor $d$ of $n$,
+and the contribution will be $d^{2k-1}$. Well, this is exactly the definition of $\sigma_{2k-1}(n)$. So
+\[ G_{2k}(\tau)  = 2\zeta(2k) + 2  {(2\pi i)^{2k}\over (2k-1)!}   \sum_{n \ge 1 } \sigma_{2k-1}(n) q^n\]
 \end{document}
