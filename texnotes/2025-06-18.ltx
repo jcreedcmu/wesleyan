@@ -913,4 +913,24 @@ Then we need $\gamma_0^{-1} \gamma \gamma_0 \in GL(2, \Z)$.
 {\bf A}: Take the set of colors $K$ and multiply on a factor of $\R$, assigning $1$ to every point.
 Let $\gamma$ acting on pictures also act on $K$, by multiplying by the determinant.
 
+\section{The Fourier Transform}
+Suppose I have a quasimodular form $h(\tau)$ with $h((a\tau + b) / (c\tau + d)) = (c\tau + d)^k h(\tau)$.
+Maybe even it's specifically
+\[ G_{2k}(\tau) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over (m\tau + n)^{2k}}\]
+Then I want to think of this instead as a function of $q = e^{2\pi i \tau}$. Set
+\[ g_{2k}(e^{2\pi i \tau}) = G_{2k}(\tau )\]
+We care about $g_{2k}(0), g_{2k}'(0), g_{2k}''(0),$ etc.
+When $q$ is near 0, that means the imaginary part of $\tau$ is very large.
+
+So what is the 0th fourier coefficient? It's when $\tau_0 = r + Ni$ for $N \to \infty$. So
+\[ G_{2k}(r+Ni) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over (mr + mNi+ n)^{2k}}\]
+and we can ignore the contributions when $m \ne 0$, because they'll be vanishingly small. So
+\[ G_{2k}(r+Ni) = {\mathop{\sum\nolimits'}\limits_{n \in \Z^2}} {1\over  n^{2k}} = 2\zeta(2k)\]
+Ok, what's the first derivative at $q = 0$? We have
+
+\[ g_{2k}(q) = G_{2k}\left(\ln q\over 2\pi i\right )\]
+\[ g_{2k}'(q) = G_{2k}'\left(\ln q\over 2\pi i\right ) {1\over 2\pi i q}\]
+\[ g_{2k}'(e^{2\pi i \tau}) = G_{2k}'(\tau) {1\over 2\pi i e^{2\pi i \tau}}\]
+\[ g_{2k}'(e^{2\pi i \tau}) = {\mathop{\sum\nolimits'}\limits_{(m,n) \in \Z^2}} {1\over 2k (m\tau + n)^{2k-1}} {1\over 2\pi i e^{2\pi i \tau}}\]
+Hmm. I don't know how to deal with that.
 \end{document}
