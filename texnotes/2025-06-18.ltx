@@ -987,4 +987,25 @@ r=3& 3^{2k-1}(q^3 + q^6 + q^9 + q^{12} + \cdots)\\
 So if we care about the $q^n$ coefficient, we're going to get a contribution from every divisor $d$ of $n$,
 and the contribution will be $d^{2k-1}$. Well, this is exactly the definition of $\sigma_{2k-1}(n)$. So
 \[ G_{2k}(\tau)  = 2\zeta(2k) + 2  {(2\pi i)^{2k}\over (2k-1)!}   \sum_{n \ge 1 } \sigma_{2k-1}(n) q^n\]
+\subsection{Herglotz Trick}
+This is apparently from the ``Proofs from the Book'' Book. I found it at
+\href{https://math.stackexchange.com/questions/581162/how-does-the-herglotz-trick-work}{this page}.
+
+Let
+\[ f(\tau) = {\pi \over \tan \pi \tau} \]
+\[ g(\tau) = {1\over \tau} + \sum_{m \in \Z \atop m \ne 0} \left({1\over \tau + m} - {1\over m}\right)\]
+\[ h(\tau) = f(\tau) - g(\tau)\]
+We notice that all of $f, g, h$ are odd, period-1, continuous away from integers, and satisfy a functional
+equation
+\[f(x/2) + f((x+1)/2) = 2f(x)\]
+Somehow we get to the observation that $h$ can be extended to a continuous-everywhere function.
+I don't yet see how this is, but if $h$ is odd, then $h(0) = 0$.
+
+Now if $h$ is periodic and continuous everywhere, then $|h|$ must have a maximum value.
+Suppose this is $h(x_0) = m$. Then
+\[h(x_0/2) + h((x_0+1)/2) = 2m\]
+But this forces $h(x_0/2) = m$ and $h((x_0+1)/2) = m$, since if either was less than $m$, the other
+would have to be greater than $m$, contradicting maximality.
+Therefore $h(x_0/2^n) = m$, and so $m = 0$ by continuity, and we're done.
+
 \end{document}
