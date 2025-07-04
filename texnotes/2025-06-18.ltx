@@ -1008,4 +1008,84 @@ But this forces $h(x_0/2) = m$ and $h((x_0+1)/2) = m$, since if either was less 
 would have to be greater than $m$, contradicting maximality.
 Therefore $h(x_0/2^n) = m$, and so $m = 0$ by continuity, and we're done.
 
+\section{$q$-exponential}
+
+A combinatorial interpretation of the $q$-exponential function is
+some function with $D_q f(x) = f(x)$. For combinatorial purposes we can relax this to two functions
+$f(x)$ and $g(x)$ with
+\[D_q (f(x) - g(x)) = f(x) - g(x)\]
+so a purely positive comparison can ask for
+\[D_q f(x) + g(x) = f(x) + D_q g(x) \tag{*}\]
+And naturally we expect something like
+\[ f(x) = 1 + x + x^2/[2]_q! + x^3/[3]_3! + \cdots\]
+\[  = 1 + x + x^2/(1+q) + x^3/(1+q)(1+q+q^2) + \cdots\]
+and we're going to try to get at this with lists, via
+\[  = 1 + x + x^2 L(-q) + x^3 L(-q)L(-q-q^2) + \cdots\]
+So if $f(x) = \sum_n c_n x^n$ and $g(x) = \sum_n d_n x^n$ then $(*)$ becomes
+
+\[\sum_n [n]_q c_n x^{n-1} + \sum_n d_n x^{n} = \sum_n c_n x^{n} + \sum_n [n]_q d_n x^{n-1} \]
+\[\sum_n [n+1]_q c_{n+1} x^{n} + \sum_n d_n x^{n} = \sum_n c_n x^{n} + \sum_n [n+1]_q d_{n+1} x^{n} \]
+\[ [n+1]_q c_{n+1}  +  d_n  = c_n  +  [n+1]_q d_{n+1} \]
+
+So we have to think about how the list generating function responds
+to the sign flips involved. $L(-q)$ splits as
+\[ L(-q) = L(q^2) - q L(q^2) \]
+So I think I have
+\[\begin{array}{ll}
+c_0 = 1 & d_0 = 0\\
+c_1 = 1 & d_1 = 0\\
+c_2 = L(q^2) & d_1 = qL(q^2)\\
+\end{array}\]
+and I check
+\[ [2]_q c_{2}  +  d_1  = c_1  +  [2]_q d_{2} \]
+\[ (1+q)L(q^2)    = 1 +  (1+q)qL(q^2) \]
+\[ L(q^2)+qL(q^2)    = 1 + qL(q^2) + q^2L(q^2) \]
+\[ (1 + q^2L(q^2))+qL(q^2)    = 1 + qL(q^2) + q^2L(q^2) \]
+Ok, so if in general
+\[ c_n - d_n = \prod_{m = 1}^{n-1} L(-q-\cdots - q^m)\]
+\[ = \prod_{m = 1}^{n-1}\sum_{k = 0}^\infty (-1)^k (q +\cdots + q^m)^k\]
+\[ = \sum_{v \in \N^{n-1}}  (-1)^{\sum v}  \prod_{m \in 1..|v|} (q +\cdots + q^m)^{v_m}\]
+hence
+\[ c_n =  \sum_{v \in \N^{n-1} \atop \text{$\sum v$ even}}  \prod_{m \in 1..|v|} (q +\cdots + q^m)^{v_m}\]
+\[ d_n =  \sum_{v \in \N^{n-1} \atop \text{$\sum v$ odd}}   \prod_{m \in 1..|v|} (q +\cdots + q^m)^{v_m}\]
+So as expected, $c_2 = 1 + q^2 + q^4 + q^6 + \cdots$ and $d_2 = q + q^3 + q^5 + q^7 + \cdots$. Then $c_3$ and $d_3$ are something I can think of as a 2-d tableau.
+If $r = q + q^2$ then
+\[
+c_3 = \begin{array}{ccccccc}
+1&&q^2&&q^4&&\cdots\\
+&rq&&rq^3&&rq^5&\cdots\\
+r^2&&r^2q^2&&r^2q^4&&\cdots\\
+&r^3q&&r^3q^3&&r^3q^5&\cdots\\
+r^4&&r^4q^2&&r^4q^4&&\cdots\\
+&r^5q&&r^5q^3&&r^5q^5&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\ddots\\
+\end{array}
+\]
+\[
+d_3 = \begin{array}{ccccccc}
+&q&&q^3&&q^5&\cdots\\
+r&&rq^2&&rq^4&&\cdots\\
+&r^2q&&r^2q^3&&r^2q^5&\cdots\\
+r^3&&r^3q^2&&r^3q^4&&\cdots\\
+&r^4q&&r^4q^3&&r^4q^5&\cdots\\
+r^5&&r^5q^2&&r^5q^4&&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\ddots\\
+\end{array}
+\]
+I would like to check that
+\[ [3]_q c_{3}  +  d_2  = c_2  +  [3]_q d_{3} \]
+\[ (1+q+q^2) c_{3}  +  d_2  = c_2  +  (1+q+q^2) d_{3} \]
+But this is fairly easy to check. $1 + q + q^2 = 1 + r$, so
+\[
+(1+r)c_3 = \begin{array}{ccccccc}
+1&&q^2&&q^4&&\cdots\\
+r&rq&rq^2&rq^3&rq^4&rq^5&\cdots\\
+r^2&r^2q&r^2q^2&r^2q^3&r^2q^4&r^2q^5&\cdots\\
+r^3&r^3q&r^3q^2&r^3q^3&r^3q^4&r^3q^5&\cdots\\
+r^4&r^4q&r^4q^2&r^4q^3&r^4q^4&r^4q^5&\cdots\\
+r^5&r^5q&r^5q^2&r^5q^3&r^5q^4&r^5q^5&\cdots\\
+\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\ddots\\
+\end{array}
+\]
+and then we can see that $(1+r)c_3 + d_2 = c_2 + (1+r)d_3 = L(q)L(r)$.
 \end{document}
