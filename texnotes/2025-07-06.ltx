@@ -1,0 +1,408 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{hyperref}
+% https://tex.stackexchange.com/a/847
+\hypersetup{
+    colorlinks,
+    urlcolor={blue},
+}
+\usepackage{makecell}
+\usepackage{relsize}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tcolorbox}
+\usepackage{stackengine}
+\newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
+
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\sssection#1{\vskip1em \hrule\vskip 0.5em \noindent $\triangleright$ {\bf #1} \vskip0.5em \hrule\vskip 1em }
+\def\I{\mathbb{I}}
+
+
+
+
+\def\gets{\leftarrow}
+\def\all{\forall}
+
+\def\spec{\mathsf{Spec}}
+\def\breturn{\mathop{\mathbf{return}}\nolimits}
+\def\bthunk{\mathop{\mathbf{thunk}}\nolimits}
+\def\brun{\mathop{\mathbf{run}}\nolimits}
+\def\bget{\mathop{\mathbf{get}}\nolimits}
+\def\bGel{\mathop{\mathbf{Gel}}\nolimits}
+\def\bgel{\mathop{\mathbf{gel}}\nolimits}
+\def\bgbound{\mathop{\mathbf{gbound}}\nolimits}
+\def\bgpath{\mathop{\mathbf{gpath}}\nolimits}
+\def\bungel{\mathop{\mathbf{ungel}}\nolimits}
+\def\bGet{\mathop\mathbf{Get}}
+\def\dapt#1#2{#1[\![#2]\!]}
+\def\dap#1#2{#1\{#2\}}
+\def\ll{\langle\!\langle}
+\def\rr{\rangle\!\rangle}
+\def\rshape{\ {\mathsf{shape}}}
+\def\rrefl{{\mathsf{refl}}}
+\def\bd{\mathsf{Bd}}
+\def\bdd{\mathsf{Bdd}}
+\def\rset{\mathbf{Set}}
+\def\rid{\mathsf{id}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\prequiv{\dashv\vdash}
+\def\sq{\square}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\nameof#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+
+
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\parr{\mathbin{\rotatebox[origin=c]{180}{\&}}}
+\def\iff{\ \Longleftrightarrow\ }
+\def\bu{\bullet}
+\def\J{\mathbb{J}}
+\def\R{\mathbb{R}}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\cprov{\mathrel\#}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathop\triangleright\nolimits}
+\def\tb{\mathop\blacktriangleleft}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+%\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rtrue{\ \mathsf{true}}
+\def\rfalse{\ \mathsf{false}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\W{\mathbb{W}}
+\def\S{\mathbf{S}}
+\def\G{\mathbf{G}}
+\def\D{\mathbb{D}}
+\def\E{\mathbb{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+
+% https://tex.stackexchange.com/questions/716631/curved-arrows-from-tikz-cd-do-not-work
+\tikzset{
+  curve/.style={
+    settings={#1},
+    to path={
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes
+    },
+  },
+  settings/.code={%
+    \tikzset{quiver/.cd,#1}%
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}%
+  },
+  quiver/.cd,
+  pos/.initial=0.35,
+  height/.initial=0,
+}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
+
+\section{Cotangent}
+
+Can I extract any interesting combinatorial story out of constructing
+a translation-independent function?
+Like, can I even figure out the combinatorial
+relationship between $L(x+2) = 1/(1-(x+2))$
+and $1/(-1-x) = -1 + x - x^2 +x^3 - \cdots$.
+Somehow I think
+\[ L(x+2) = xL(x^2) - L(x^2) \]
+i.e.
+\[L(x^2) + L(x+2) = xL(x^2)  \]
+But the $+2$ is problematic. Can I generalize to $+a$?
+\[ L(x+a) = {1\over 1-(x+a)} = {-1\over (a-1) + x}\]
+Hm, I don't know what to do with that.
+
+How about let's push it in the other direction. What's
+the power series of $f(x) = {1\over (2-x)}$?
+Well $f(x) = 1/2$. Then $f'(x) = {1\over ( 2-x)^2}$.
+Hm. I see the pattern. Well, surely, symbolically, we also have
+\[ f(x) = {1\over 2-x} = {1/2 \over 1 - x/2}\]
+\[ = 2^{-1} + 2^{-2} x + 2^{-3} x^2 + 2^{-4} x^3 + \cdots \]
+Ok, so if
+\[f(x) = 2^{-1} + 2^{-2} x + 2^{-3} x^2 + 2^{-4} x^3 + \cdots \]
+\[g(x) = 1 +  x +  x^2 +  x^3 + \cdots \]
+Can we see in any combinatorial sense that $f(x + 1) = g(x)$? Hmm dunno.
+If I have
+\[f(x) = A^{1} + A^{2} x + A^{3} x^2 + A^{4} x^3 + \cdots \]
+Then $f = A{1 \over 1 - Ax}$ and in some sense $f = {1 \over 1/A - x}$.
+What if $B = 1/ A$? Then maybe $A = 1 / B = L(1-B)$.
+
+\subsection{Summing}
+What about just checking that
+\[ {1\over 1- x} + {1\over -1 -  x} = {2x\over 1- x^2} \]
+?
+This is
+\[ L(x) + L^-(x) - L^+(x) = 2xL(x^2) \]
+
+Well what if we define
+\[A = \prod_{n\ge 1} n \]
+\[A_m = \prod_{n\ge 1, n\ne m} n  \]
+Then we want to do something like
+\[ f(x) = {x\over 1- x^2} + {x\over 4- x^2} + {x\over 9- x^2}+\cdots\]
+then
+\[ f(x) = {x\over 1- x^2} + {x/4\over - (x/2)^2} + {x/9\over 1- (x/3)^2}+\cdots\]
+and maybe we can reason that
+\[ f(A^2 x) =
+ {A_1^2 x\over 1- A^2 A_1^2 x^2} +
+ {A_2^2 x\over 1- A^2 A_2^2 x^2} +
+ {A_3^2 x\over 1- A^2 A_3^2 x^2} + \cdots \]
+\[ = (n : \N) \x A_n^2 x L((A A_n x)^2) \]
+
+\subsection{Shifting}
+Let's take
+\[ f(x) = {1\over 3 - x} \qquad \therefore\  3f(3x) = L(x)\]
+\[ g(x) = {1\over 4 - x} \qquad \therefore\  4g(4x) = L(x) \]
+Then can I prove in some sense that
+\[ g(x+1) = f(x) \]
+?
+Well let's try to evaluate
+\[ 4g(4x+4) = L(x+1) = 3f(3x+3) \]
+Hm. I don't know about that.
+Can I relate anything to solving equations like
+\[ 3 f(x) = 1 + x f(x) \]
+\[ 4 g(x) = 1 + x g(x) \]
+What if I generalize to
+\[ f(x) = {1\over a - x} \qquad   af(x) = 1 + x f(x)\]
+\[ g(x) = {1\over a + b - x} \qquad  (a+b)g(x) = 1 + xg(x) \]
+And I try to extract something like $g(x+b) = f(x)$?
+I could special case even to
+\[ L(x) = {1\over 1 - x} \qquad   L(x) = 1 + x L(x)\]
+\[ g(x) = {1\over 1 + b - x} \qquad  (1+b)g(x) = 1 + xg(x) \]
+And try to extract something like $h := h = L(x)$?
+What if I try to compute
+\[ (1+b)h =  1 +  (x+b)h\]
+then I find that
+\[ h \approx  1 + xh\]
+in the sense that
+\[{\color{gray}bh} + h = {\color{gray}bh} +  1 + xh\]
+and then I can add another collateral thingy and get
+\[{\color{gray}bh + xbh} + h = {\color{gray}bh + xbh} +  1 + x +x^2h\]
+i.e.
+\[{\color{gray}bh(1+x)} + h = {\color{gray}bh(1+x)} +  1 + x +x^2h\]
+and I think I can expand this to
+\[{\color{gray}bhL(x)} + h = {\color{gray}bhL(x)} +  L(x)\]
+But really
+\[ g(x) = {1/(1+b)\over 1 - x/(1+b)} = L(x/(1+b))/(1+b) \]
+So I should be restricting attention to situations where my argument
+and my environment are multiplied by $1+b$. I don't know how to express that nontautologically.
+\subsection{Interleaved Lists}
+
+It's intuitively clear that
+\[L(A+B) = L(A)L( B \x L(A))\]
+Because a list of $A$ or $B$ can be interpreted as a run of $A$s until
+you get to the first $B$, then another run of $A$s until you get to the next
+$B$, etc. This also makes algebraic sense in that
+\[ {1\over 1 - A - B} = {1\over 1- A} {1\over 1- {B \over 1 - A}}\]
+And $L(2)$ is sort of like $-1$ in that
+\[ L(A) = 1 + AL(A) \]
+means
+\[ {\color{gray} L(2)} = {\color{gray} L(2)\, +\, } 1 + L(2) \]
+So I should find if I set $m = L(2)$, then
+\[L(2+B) = L(2)L( B \x L(2))\]
+\[L(2+B) =  m + m^2B + m^3B^2 + m^4B^3 + \cdots\]
+And I want $m$ to behave like $-1$, so I want to get something like
+\[L(2+B) + (1 + B^2 + B^4 + \cdots) =  (B + B^3 + B^5 + \cdots)\]
+So I guess
+\[ L(2 + B) = m + \cdots\]
+becomes
+\[ L(2 + B) + m + 1 = m + \cdots\]
+
+In general, if $X = m + Y$, then $X + m + 1 = m + Y$, because
+$X + m + 1 = (2m + 1) + Y = m + Y$.
+
+I want to prove some theorem like that for $m^2 \approx 1$.
+I know that $m = m + 1 + m$ so
+\[ 1 + {\color{gray}m^2 + m} = m^2 + {\color{gray}m^2 + m}\]
+Hm I'm getting lost in the specifics.
+
+\[L(2) = {1\over 1-2} = {-1\over 1}\]
+\[L(3) = {1\over 1-3} = {-1\over 2}\]
+\[L(4) = {1\over 1-4} = {-1\over 3}\]
+\[L(L(2)) = {1\over (2/1)} = {1/2}\]
+\[L(L(3)) = {1\over (3/2)} = {2/3}\]
+\[L(L(4)) = {1\over (4/3)} = {3/4}\]
+\[L(L(2)) - L(3) = 1\]
+\[L(L(3)) - L(4) = 1\]
+\[L(L(A))  = 1 + L(A + 1) \tag{*}\]
+Oh yeah because
+\[L(A+B) = L(A)L( B \x L(A))\]
+means
+\[L(A+1) = L(A)L(L(A))\]
+and just by list definition
+\[L(L(A))  = 1 + L(A)L^2(A)\]
+So putting those two together gives $(*)$. More generally
+\[ L(B \cdot L(A)) = 1 + B \cdot L(A) \cdot L(B \cdot L(A))\]
+\[ = 1 + B \cdot L(A + B)\]
+\subsection{Difference}
+What's $L(B - A)$? I should find something like
+\[L(B-A) = L(-A)L( B \x L(-A))\]
+\[ = (L_0(A) - L_1(A))L( B \x (L_0(A) - L_1(A)))\]
+Hmm that could get messy due to the nested list of differences.
+What about
+\[L(A - B) = L(A)L( -B \x L(A))\]
+\[ = L(A)L_0( B L(A)) - L(A) L_1(B L(A))\]
+Then we're conjecturing that if $A = B + C$ then
+\[L(C) + L(A) L_1(B L(A)) = L(A)L_0( B L(A))\]
+so
+\[L(C) + L(B + C) L_1(B L(B + C)) = L(B + C)L_0( B L(B + C))\]
+I'm not sure I love that either. Let's revisit
+\[L(B-A) = L(-A)L( B \x L(-A))\]
+\[ = L(-A)(1 + B L(-A) + B^2 L(-A)^2 + B^3 L(-A)^3 + \cdots )\]
+This seems like it's going to be a meaningful two-variable generating function.
+The type $L(-A)$ by itself is the pair of types
+\[\begin{array}{cccccccccc}
+L_0(A)& = &1&&A^2&&A^4&&A^6&\cdots\\
+L_1(A)&=&&A&&A^3&&A^5&&\cdots\\
+\end{array}\]
+And then $L(-A)^2 = (L_0^2 +L_1^2, 2L_0L_1)$
+Ok let's just define $M^+_n$ and $M^-_n$ and $M_n = M^+_n - M^-_n$, so that
+\[L(B-A) = M_1(1 + B M_1 + B^2 M_2 + B^3  M_3 + \cdots )\]
+i.e.
+\[L(B-A)^+ = M_1^+(1 + B M^+_1 + B^2 M^+_2 + B^3  M^+_3 + \cdots ) +
+M_1^-( B M^-_1 + B^2 M^-_2 + B^3  M^-_3 + \cdots )\]
+\[L(B-A)^- = M_1^-(1 + B M^+_1 + B^2 M^+_2 + B^3  M^+_3 + \cdots ) +
+M_1^+( B M^-_1 + B^2 M^-_2 + B^3  M^-_3 + \cdots )\]
+
+\end{document}
