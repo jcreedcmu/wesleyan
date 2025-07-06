@@ -405,4 +405,19 @@ M_1^-( B M^-_1 + B^2 M^-_2 + B^3  M^-_3 + \cdots )\]
 \[L(B-A)^- = M_1^-(1 + B M^+_1 + B^2 M^+_2 + B^3  M^+_3 + \cdots ) +
 M_1^+( B M^-_1 + B^2 M^-_2 + B^3  M^-_3 + \cdots )\]
 
+\subsection{Summing}
+No wait maybe there's nothing invalid about
+\[L(A - B)  = L(A)L_0( B L(A)) - L(A) L_1(B L(A))\]
+after all.
+This is lists of $A+B$ where we're splitting on the parity of the number of $B$s.
+We still have
+\[L(A + B)  = L(A)L( B L(A))\]
+So my cotangent-like function is notionally
+\[ F = \sum_{k\in \Z} L(A + kB) \]
+And therefore actually it's two types
+\[ F^+ = \sum_{k \ge 0} L(A + kB) +  \sum_{k \ge 1} L(A) L_0( kBL(A)) \]
+\[ F^- =  \sum_{k \ge 1} L(A) L_1( kBL(A)) \]
+I could also write these as
+\[ F^- =   L(A) \sum_{k \ge 1} L_1( kBL(A)) \]
+\[ F^+ = L(A) +  L(A) \sum_{k \ge 1}  (L(kBL(A)) + L_0( kBL(A))) \]
 \end{document}
