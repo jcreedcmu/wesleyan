@@ -418,6 +418,44 @@ And therefore actually it's two types
 \[ F^+ = \sum_{k \ge 0} L(A + kB) +  \sum_{k \ge 1} L(A) L_0( kBL(A)) \]
 \[ F^- =  \sum_{k \ge 1} L(A) L_1( kBL(A)) \]
 I could also write these as
-\[ F^- =   L(A) \sum_{k \ge 1} L_1( kBL(A)) \]
-\[ F^+ = L(A) +  L(A) \sum_{k \ge 1}  (L(kBL(A)) + L_0( kBL(A))) \]
+\[ F^-(A) =   L(A) \sum_{k \ge 1} L_1( kBL(A)) \]
+\[ F^+(A) = L(A) +  L(A) \sum_{k \ge 1}  (L(kBL(A)) + L_0( kBL(A))) \]
+
+\subsection{Invariance}
+What I'd like to show is from the definition
+\[ F^-(A) =   L(A) \sum_{k \ge 1} L_1( kBL(A)) \]
+\[ F^+(A) = L(A) +  L(A) \sum_{k \ge 1}  (L(kBL(A)) + L_0( kBL(A))) \]
+I can show that somehow
+\[ \color{red} F^+(A+B) - F^-(A+B) = F^+(A) - F^-(A) \]
+i.e.
+\[ F^+(A+B) +  F^-(A) = F^+(A) +  F^-(A+B)\]
+Reminding myself that the key lemma is
+\[ L(A + B) = L(A) L(B L(A)) \]
+and the intuitions are that
+\[ \color{red} L(A - B)  = L(A) L_0(B L(A)) -  L(A) L_1(B L(A))\]
+\[ \color{red} F^+(A) - F^-(A) = \sum_{k\in \Z} L(A + kB)\]
+\[  F^+(A)  = F^-(A) + \sum_{k \ge 0 } L(A + kB) +\color{red} \sum_{k \ge 1} L(A - kB)\]
+\[  F^+(A)  = F^-(A) + \sum_{k \ge 0 } L(A + kB) +\color{red} \sum_{k \ge 1} \left( L(A) L_0(kB L(A)) -  L(A) L_1(kB L(A))\right)\]
+So yeah we definitely can prove
+\[  F^+(A) + \sum_{k\ge 1} L(A) L_1(kB L(A))  = F^-(A) + \sum_{k \ge 0 } L(A + kB) +\sum_{k \ge 1}  L(A) L_0(kB L(A)) \]
+directly from the definitions of $F^+, F^-$. That's good.
+
+Let's make some auxiliary definitions.
+\[M_k = L(A + kB) \qquad P_k = L(A) L_0(kBL(A)) \qquad Q_k = L(A)L_1(kBL(A))\]
+\[ F^+ = \sum_{k\ge 0} M_k + \sum_{k\ge 1} P_k \]
+\[ F^- =  \sum_{k\ge 1} Q_k \]
+Let's write a postfix superscript $*$ for $[A := A+ B]$.
+We know that $M_k^* = M_{k+1}$. We want to claim that
+\[ \color{red} (P_{k+1} - Q_{k+1})^* = P_{k} - Q_{k} \]
+\[ P_{k+1}^*   + Q_{k} = P_{k} + Q_{k+1}^* \tag{a} \]
+\[ \color{red}  (P_{1} - Q_{1})^* = M_0 \]
+\[ P_{1}^*  = M_0 + Q_{1}^* \tag{b}\]
+Let's investigate $(b)$ first.
+\[ L(A+B) L_0(BL(A+B)) = L(A) + L(A+B)L_1(BL(A+B))\]
+
+
+
+
+
+
 \end{document}
