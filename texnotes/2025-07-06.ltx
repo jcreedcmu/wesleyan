@@ -450,12 +450,46 @@ We know that $M_k^* = M_{k+1}$. We want to claim that
 \[ P_{k+1}^*   + Q_{k} = P_{k} + Q_{k+1}^* \tag{a} \]
 \[ \color{red}  (P_{1} - Q_{1})^* = M_0 \]
 \[ P_{1}^*  = M_0 + Q_{1}^* \tag{b}\]
-Let's investigate $(b)$ first.
-\[ L(A+B) L_0(BL(A+B)) = L(A) + L(A+B)L_1(BL(A+B))\]
+%% Let's investigate $(b)$ first.
+%% \[ L(A+B) L_0(BL(A+B)) = L(A) + L(A+B)L_1(BL(A+B))\]
 
+\subsection{Invariance Take Two}
 
+I think I see it a bit better now. I can describe these types more directly.
+$M_k$ is the type of lists where the items can be $A$ or $kB$,
+$P_k$ is the subset of $M_k$ where there are an even number of $kB$ items.
+$Q_k$ is the subset of $M_k$ where there are an odd number of $kB$ items.
+So $M_k = P_k + Q_k$.
+We can see $P_0 = L(A)$ and $Q_0 = 0$. We want to confirm
+\[ P_{k+1}^*   + Q_{k} = P_{k} + Q_{k+1}^*  \]
+Let's drill in to what these are as power series in $B$, term by term.
 
+What's the $B^0$ term?
+\begin{itemize}
+\item $P_{k+1}^*$ has an even number of $kB$, so zero works. So $[B^0]P_{k+1}^* = 1$
+\item $Q_k$ has an odd number of $kB$, so $[B^0]Q_k = 0$.
+\item $P_{k}$ has an even number of $kB$, so zero works. So $[B^0]P_{k+1} = 1$
+\item $Q_{k+1}^*$ has an odd number of $kB$, so $[B^0]Q^*_{k+1} = 0$.
+\end{itemize}
+There may be any number of $A$s floating around, but we just match them up. Only the $B$s
+matter for this part of the argument. Anyway, we see $1=1$, that's fine.
 
+What's the $B^1$ term?
+\begin{itemize}
+\item $P_{k+1}^*$ has an even number of $kB$, so we have to use a $B$. So $[B^1]P_{k+1}^* = B$
+\item $Q_k$ has an odd number of $kB$, so $[B^1]Q_k = kB$.
+\item $P_{k}$ has an even number of $kB$, so $[B^1]P_{k+1} = 0$
+\item $Q_{k+1}^*$ has an odd number of $kB$, so $[B^1]Q^*_{k+1} = (k+1)B$.
+\end{itemize}
+Okay, $B + kB = (k+1)B$.
 
+What's the $B^2$ term?
+\begin{itemize}
+\item $P_{k+1}^*$ has an even number of $kB$, so $[B^2]P_{k+1}^* = B^2 + (k+1)^2B^2$
+\item $Q_k$ has an odd number of $kB$, so $[B^2]Q_k = 0$.
+\item $P_{k}$ has an even number of $kB$, so $[B^2]P_{k+1} = k^2B^2$
+\item $Q_{k+1}^*$ has an odd number of $kB$, so $[B^2]Q^*_{k+1} = 2(k+1)B$.
+\end{itemize}
+Okay, $(k+1)^2 + 1 = k^2 + 2(k+1)$.
 
 \end{document}
