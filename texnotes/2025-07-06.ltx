@@ -517,7 +517,7 @@ such that
   S \pbck\ar[r, "c"] \ar[d, "d"'] & B \ar[d, "\partial"] \\
   B \ar[r, "\partial"'] & S
 \end{tikzcd}\]
-is a pullback.
+is a pullback. We write $\partial'$ for the unique map $S \to S$.
 
 {\bf Axiom 2}
 
@@ -547,6 +547,20 @@ but I think I might want to demand more at the $E$-level, not sure.
 These $\Delta$ maps create directed cells out of spheres.
 
 {\bf Axiom 3}
+
+Composition is possible ($n=0$ is vertical, greater $n$ are increasingly horizontal)
+If I take the pullback of $c(\partial')^n\partial$ and $d(\partial')^n\partial$,
+then there's a cartesian (i.e. the $h_E$ of it is an iso) map
+from that to $B$.
+
+{\bf Axiom 4}
+
+Identities exist? Not sure what goes here, but similar to $\Delta$.
+
+{\bf Axiom 5}
+
+$S$ and $B$ are univalent. Paths downstairs are the same thing
+as bijections between fibers upstairs.
 
 \vfil\eject
 .
