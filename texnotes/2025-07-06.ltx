@@ -492,4 +492,64 @@ What's the $B^2$ term?
 \end{itemize}
 Okay, $(k+1)^2 + 1 = k^2 + 2(k+1)$.
 
+\section{Spheres}
+I want to axiomatize some types $B$ of balls and spheres $S$
+that are meant to be shapes of arbitrary-dimensional cells.
+They're going to be objects in the category $\mathbf{Poly}(\C)$.
+An object of that category is a morphism $E \to X$ in $\C$.
+The object $X$ is thought of as a type of `codes' and the object
+$E$ is a `total space' fibered over $X$.
+
+A morphism $f_1 : E_1 \to X_1$ to $f_2 : E_2 \to X_2$ is a diagram
+\[\begin{tikzcd}
+  E_1 \ar[from=r, "h_E"'] \ar[dr, "f_1"'] & \ar[r] \ar[d] \pbck \bullet & E_2 \ar[d, "f_2"] \\
+  & X_1 \ar[r, "h_X"'] & X_2
+\end{tikzcd}\]
+which says how codes are mapped, but then contravariantly says how
+the mapped encoded spaces `sit inside' the premapped encoded spaces.
+
+{\bf Axiom 1}
+
+There's a `boundary' morphism $\partial  : B \to S$
+and `domain' and `codomain' morphisms $d, c : S \to B$
+such that
+\[\begin{tikzcd}
+  S \pbck\ar[r, "c"] \ar[d, "d"'] & B \ar[d, "\partial"] \\
+  B \ar[r, "\partial"'] & S
+\end{tikzcd}\]
+is a pullback.
+
+{\bf Axiom 2}
+
+If $S$ is $E_S \to X_S$ and $B$ is $E_B \to X_B$, then there's
+at least a diagram
+
+
+% https://q.uiver.app/#q=WzAsNyxbMCwwLCJFX1MiXSxbMiwwLCJFX0IiXSxbMCwyLCJYX1MiXSxbMiwxLCJYX0IiXSxbNCwwLCJFX1MiXSxbNCwyLCJYX1MiXSxbMywwLCJcXGJ1bGxldCJdLFswLDEsIlxcRGVsdGFfRSIsMV0sWzAsMl0sWzEsM10sWzIsMywiXFxEZWx0YV9YIiwyXSxbNCw1XSxbMyw1LCJcXHBhcnRpYWxfWCIsMl0sWzYsNCwiXFxwYXJ0aWFsX0UiXSxbNiwxXSxbNiwzXSxbNiw1LCIiLDAseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XSxbMiw1LCIiLDEseyJjdXJ2ZSI6MiwibGV2ZWwiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+\[\begin{tikzcd}
+	{E_S} && {E_B} & \bullet & {E_S} \\
+	&& {X_B} \\
+	{X_S} &&&& {X_S}
+	\arrow["{\Delta_E}"{description}, from=1-1, to=1-3]
+	\arrow[from=1-1, to=3-1]
+	\arrow[from=1-3, to=2-3]
+	\arrow[from=1-4, to=1-3]
+	\arrow["{\partial_E}", from=1-4, to=1-5]
+	\arrow[from=1-4, to=2-3]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-4, to=3-5]
+	\arrow[from=1-5, to=3-5]
+	\arrow["{\partial_X}"', from=2-3, to=3-5]
+	\arrow["{\Delta_X}"', from=3-1, to=2-3]
+	\arrow[curve={height=12pt}, equals, from=3-1, to=3-5]
+\end{tikzcd}\]
+
+but I think I might want to demand more at the $E$-level, not sure.
+These $\Delta$ maps create directed cells out of spheres.
+
+{\bf Axiom 3}
+
+\vfil\eject
+.
+\vfil\eject
+.
 \end{document}
