@@ -553,9 +553,31 @@ If I take the pullback of $c(\partial')^n\partial$ and $d(\partial')^n\partial$,
 then there's a cartesian (i.e. the $h_E$ of it is an iso) map
 from that to $B$.
 
+% https://q.uiver.app/#q=WzAsNyxbMSwxLCJcXGJ1bGxldCJdLFsyLDEsIkIiXSxbMSwyLCJCIl0sWzIsMiwiQiJdLFswLDAsIkIiXSxbMCwyLCJCIl0sWzIsMCwiQiJdLFswLDFdLFswLDJdLFsxLDMsImQnIl0sWzIsMywiYyciLDJdLFswLDQsImgiLDFdLFsyLDUsImQnIl0sWzEsNiwiYyciLDJdLFs0LDYsImMnIl0sWzQsNSwiZCciLDJdLFswLDMsIiIsMSx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dXQ==
+\[\begin{tikzcd}
+	B && B \\
+	& \bullet & B \\
+	B & B & B
+	\arrow["{c'}", from=1-1, to=1-3]
+	\arrow["{d'}"', from=1-1, to=3-1]
+	\arrow["\mu"{description}, from=2-2, to=1-1]
+	\arrow[from=2-2, to=2-3]
+	\arrow[from=2-2, to=3-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=3-3]
+	\arrow["{c'}"', from=2-3, to=1-3]
+	\arrow["{d'}", from=2-3, to=3-3]
+	\arrow["{d'}", from=3-2, to=3-1]
+	\arrow["{c'}"', from=3-2, to=3-3]
+\end{tikzcd}\]
+That is, cartesian $\mu$ exists in the above diagram where
+$c' = c(\partial')^n\partial$ and $d' = d(\partial')^n\partial$.
+
 {\bf Axiom 4}
 
-Identities exist? Not sure what goes here, but similar to $\Delta$.
+Identities exist: There is a cartesian morphism $\iota : B \to B$ such that
+$d' \iota = \rid$ and $c' \iota = \rid$.
+The fact that $\iota$ is cartesian but not required to be the identity means
+that it can `bump up the dimension' of a cell while leaving its extension the same.
 
 {\bf Axiom 5}
 
