@@ -588,8 +588,166 @@ Actually, wait, is the definition of their univalence somewhat subtle?
 I think I want to ask for a bijection between cells {\em over} their boundary
 sphere, or likewise a bijection of spheres {\em over} their common boundary cells.
 
-\vfil\eject
-.
-\vfil\eject
-.
+\section{Quantum Toy Model}
+Gwillen asked me to document this thought, so here's my attempt.
+\subsection{Discrete Markov}
+Suppose I have a graph like
+\begin{center}
+\begin{tikzpicture}[x=1pt,y=1pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (100,105);
+  \coordinate (v2) at (243,112);
+  \coordinate (v3) at (183,176.5);
+  \coordinate (v4) at (300,176.5);
+
+  % Draw triangle
+  \draw (v1) -- (v2) -- (v3) -- cycle;
+  \draw (v3) -- (v4);
+
+  % Add dots at vertices
+  \fill (v1) circle (2pt);
+  \fill (v2) circle (2pt);
+  \fill (v3) circle (2pt);
+  \fill (v4) circle (2pt);
+
+  % Add labels to vertices
+  \node[above left]  at (v1) {$v_1$};
+  \node[above right] at (v2) {$v_2$};
+  \node[below left]  at (v3) {$v_3$};
+  \node[below right] at (v4) {$v_4$};
+
+  % Optional: Add edge labels
+  \node[above=3pt]  at ($(v1)!0.5!(v2)$) {$e_{12}$};
+  \node[above left]  at ($(v2)!0.5!(v3)$) {$e_{23}$};
+  \node[below left]   at ($(v3)!0.5!(v1)$) {$e_{13}$};
+  \node[below=3pt]   at ($(v3)!0.5!(v4)$) {$e_{34}$};
+\end{tikzpicture}
+\end{center}
+whose vertices are the set $V = {v_1, v_2, v_3, v_4}$, and whose
+(undirected) edges are labelled by nonnegative real numbers $e_{ij} \ge 0$.
+As a matter of notational convention, we say $e_{ji} = e_{ij}$, so for
+example $e_{21}$ is just another equivalent way of writing $e_{12}$.
+It's not particularly important that $e_{14}$ and $e_{24}$ are zero, but it may be convenient to imagine
+a graph that's somewhat sparse.
+
+We can imagine that this graph is the setting for a dynamical system.
+Suppose there exists a single particle in the universe,
+and at any point in time it lives at one of the vertices $v_i$. During any small interval
+$\Delta t$ of time it has probability of $ e_{ij} \Delta t$ of jumping to vertex $j$.
+
+The probability distribution of the particle's position is a column vector $\vec p(t) = (p_1\ p_2\ p_3\ p_4)^\top$.
+We've said that
+
+\[ p(t + \Delta t) = (1 +  M \Delta t) p(t) \]
+for the symmetric matrix
+\[M = \left(\begin{array}{cccc}
+-e_{12}-e_{13} & e_{12} & e_{13} & 0 \\
+e_{12} & -e_{12}-e_{23} & e_{23} & 0 \\
+
+e_{13} & e_{23} & -e_{13}-e_{23}-e_{34} & e_{34} \\
+0 & 0 & e_{34} & -e_{34} \\
+\end{array}\right) \]
+\subsection{Continuous-Time Markov}
+Therefore
+\[ p( N \Delta t) = (1 +  M \Delta t)^N p(0)  \]
+\[\lim_{N \to \infty} p( N (t/N)) = \lim_{N \to \infty}(1 +  M (t / N))^N p(0)  \]
+\[ p( t) = \lim_{N \to \infty} (1 +  M t / N)^N p(0)  \]
+and we have
+ $p(t) = e^{Mt} p(0)$.
+We could reason through somehow that the probability mass is preserved if $M$ is suitable.
+\subsection{Quantum}
+Now suppose $M$ is skew symmetric, and we have a directed graph like
+
+
+\begin{center}
+\begin{tikzpicture}[x=1pt,y=1pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (100,105);
+  \coordinate (v2) at (243,112);
+  \coordinate (v3) at (183,176.5);
+  \coordinate (v4) at (300,176.5);
+
+  % Add dots at vertices
+  \fill (v1) circle (2pt);
+  \fill (v2) circle (2pt);
+  \fill (v3) circle (2pt);
+  \fill (v4) circle (2pt);
+
+  % Draw triangle
+  \draw[->, shorten >=5pt] (v1) -- (v2);
+  \draw[->, shorten >=5pt] (v2) -- (v3);
+  \draw[->, shorten >=5pt] (v1) -- (v3);
+  \draw[->, shorten >=5pt] (v3) -- (v4);
+
+  % Add labels to vertices
+  \node[above left]  at (v1) {$v_1$};
+  \node[above right] at (v2) {$v_2$};
+  \node[below left]  at (v3) {$v_3$};
+  \node[below right] at (v4) {$v_4$};
+
+  % Optional: Add edge labels
+  \node[above=3pt]  at ($(v1)!0.5!(v2)$) {$e_{12}$};
+  \node[above left]  at ($(v2)!0.5!(v3)$) {$e_{23}$};
+  \node[below left]   at ($(v3)!0.5!(v1)$) {$e_{13}$};
+  \node[below=3pt]   at ($(v3)!0.5!(v4)$) {$e_{34}$};
+\end{tikzpicture}
+\end{center}
+and the matrix I have in mind is
+\[M = \left(\begin{array}{cccc}
+0 & e_{12} & e_{13} & 0 \\
+-e_{12} & 0 & e_{23} & 0 \\
+
+-e_{13} & -e_{23} & 0 & e_{34} \\
+0 & 0 & -e_{34} & 0 \\
+\end{array}\right) \]
+And the dynamics I expect is $p(t + \Delta t) = (1 + M \Delta t) p(t)$,
+so still $p(t) = e^{Mt} p(0)$.
+But now I have $M^\top = -M$, and I wish to show that $\| p(t) \|^2 = \| p(0) \|^2$.
+This is the same as showing $p^\top(t) p(t) = p^\top(0) p(0)$, in other words we can reason
+\[ (e^{Mt} p(0))^\top (e^{Mt} p(0)) =  p(0)^\top (e^{Mt})^\top e^{Mt} p(0)\]
+\[ =  p(0)^\top e^{M^\top t} e^{Mt} p(0)\]
+\[ =  p(0)^\top e^{-M t} e^{Mt} p(0)\]
+\[ = p^\top(0) p(0) \]
+as required.
+
+Is one discrete step unitary? There we're comparing
+\[ ((1 + M \Delta t) p(t))^\top  (1 + M \Delta t) p(t)\]
+against
+\[ p(t)^\top  p(t)\]
+and we see
+\[ ((1 + M \Delta t) p(t))^\top  (1 + M \Delta t) p(t) =
+p(t) ^\top (1 + M \Delta t)^\top    (1 + M \Delta t) p(t)
+\]
+\[ = p(t) ^\top (1 - M \Delta t + M \Delta t + M^\top M \Delta t^2 ) p(t)  \]
+so to first order, ignoring $\Delta t^2$, this is equal to
+$ p^\top(t) p(t) $ as required.
+
+\subsection{From Quantum to Classical}
+We want to `observe the vector in the standard basis' on `every time step'.
+How are we going to do this?
+
+I want some kind of copy operator to some unused qubits, I guess a CNOT like
+\[|00\rangle \langle 00| + |10\rangle\langle 11| +|00\rangle \langle 01| + |10\rangle\langle 10|  \]
+
+
+What if I just have a system with two real states $|0\rangle$ and $|1\rangle$?
+Then I have a single parameter $k$ for how fast they interchange.
+If my initial state is $|0\rangle$ then my state at time $t$ is probably like
+$|0\rangle \cos(kt) + |1\rangle \sin(kt)$.
+We start with
+\[ \psi(0) = |0\rangle \]
+and then after one tick
+\[ \psi(\Delta t) = |0\rangle  + |1\rangle \Delta t\]
+and then we `copy' to the next qubit over to get
+\[ \psi^*(\Delta t) = |00\rangle  + |11\rangle \Delta t\]
+Ah! And now at the next tick we interfere less.
+\[ \psi(2\Delta t) = (|00\rangle + |10\rangle \Delta t)  + (|11\rangle \Delta t - |01\rangle\Delta t^2)\]
+And then we copy again:
+\[ \psi^*(2\Delta t) = (|000\rangle + |110\rangle \Delta t)  + (|111\rangle \Delta t - |001\rangle\Delta t^2)\]
+And then we evolve again:
+\[ \psi(3\Delta t) = (|000\rangle + |100\rangle \Delta t) + (|110\rangle \Delta t - |010\rangle \Delta t^2)  + \]
+\[ (|111\rangle \Delta t - |011\rangle \Delta t^2) - (|001\rangle\Delta t^2 + |101\rangle\Delta t^3)\]
+So what we're accumulating is a sum over binary strings, where we pick up a factor of $\Delta t$ for every change
+of a bit from $0 \to 1$, and a factor of $-\Delta t$ for every change  $1 \to 0$.
+\vfil\eject.\vfil\eject.\vfil\eject.\vfil\eject
 \end{document}
