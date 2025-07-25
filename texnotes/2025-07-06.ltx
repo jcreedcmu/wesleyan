@@ -747,7 +747,123 @@ And then we copy again:
 And then we evolve again:
 \[ \psi(3\Delta t) = (|000\rangle + |100\rangle \Delta t) + (|110\rangle \Delta t - |010\rangle \Delta t^2)  + \]
 \[ (|111\rangle \Delta t - |011\rangle \Delta t^2) - (|001\rangle\Delta t^2 + |101\rangle\Delta t^3)\]
+Regrouping:
+\[ \psi(3\Delta t) = |000\rangle + (|100\rangle + |110\rangle + |111\rangle) \Delta t \]
+\[ - (|010\rangle + |011\rangle + |001\rangle) \Delta t^2   \]
+\[ - (|101\rangle) \Delta t^3 \]
+And we can predict the next one as
+\[ \psi(4\Delta t) = |0000\rangle \]
+\[+ (|1000\rangle + |1100\rangle + |1110\rangle + |1111\rangle) \Delta t \]
+\[ - (|0100\rangle + |0111\rangle + |0110\rangle + |0010\rangle + |0011\rangle + |0001\rangle) \Delta t^2   \]
+\[ - (|1101\rangle + |1011\rangle + |1001\rangle + |1010\rangle ) \Delta t^3 \]
+\[ + (|0101\rangle) \Delta t^4\]
 So what we're accumulating is a sum over binary strings, where we pick up a factor of $\Delta t$ for every change
 of a bit from $0 \to 1$, and a factor of $-\Delta t$ for every change  $1 \to 0$.
+
+So I think I find that the probability of ending up with a $0$ in the leftmost bit
+at time $n \Delta t$ is proportional to
+\[ 1 + {n \choose 2} \Delta t^4 + {n \choose 4} \Delta t^8 + {n \choose 6} \Delta t^{12} + \cdots\]
+and a $1$ is
+\[ {n \choose 1} \Delta t^2 + {n \choose 3} \Delta t^6 + {n \choose 5} \Delta t^{10} + \cdots\]
+so in the limit of large $n$ this is
+\[ \cosh(n\Delta t^2) = 1 + {n^2 \over 2!} \Delta t^4 + {n^4 \over 4!} \Delta t^8 + {n^6 \over 6!} \Delta t^{12} + \cdots\]
+vs.
+\[ \sinh(n\Delta t^2) = {n} \Delta t^2 + {n^3 \over 3!} \Delta t^6 + {n^5\over 5!} \Delta t^{10} + \cdots\]
+So can we let $t = n \Delta t^2$ and have simply $\cosh t$ vs. $\sinh t$? Let's see if it matters.
+The normalized probability of a zero would be
+\[ {{e^{t} + e^{-t}\over 2}  \over {e^{t} + e^{-t}\over 2} + {e^{t} - e^{-t}\over 2}}
+=  {{e^{t} + e^{-t}}  \over (e^{t} + e^{-t}) + (e^{t} - e^{-t})} \]
+\[=  {1 + e^{-2t}}  \over 2} \]
+And probability of $1$ would be
+\[{1 - e^{-2t}}  \over 2} \]
+this does seem as expected.
+
+\subsection{More Generally}
+
+The one-step discrete-quantity dynamics in the quantum case is:
+
+We assume $a \gg b$.
+
+$|0\rangle$ goes to itself at amplitude $a/(a^2 + b^2)$, and to $|1\rangle$ at amplitude
+$b/(a^2 + b^2)$.
+
+$|1\rangle$ goes to itself at amplitude $a/(a^2 + b^2)$, and to $|0\rangle$ at amplitude
+$-b/(a^2 + b^2)$.
+
+The transition to the classical case comes about when ``I have state $|0\rangle$ with probability $p$''
+means I have an ensemble of many states that all observe as $|0\rangle$, whose squared amplitudes
+sum to $p$. The act of observing in the standard basis and then evolving does not admit any
+interference.
+
+We start with $|0\rangle$.
+
+We go to $a|0\rangle + b|1\rangle$. We copy to
+$a|00\rangle + b|11\rangle$.
+
+We go to $a^2|00\rangle + ab|11\rangle + ab|10\rangle + b^2|01\rangle$.
+Copy to $a^2|000\rangle + ab|111\rangle + ab|110\rangle + b^2|001\rangle$.
+
+We go to $a^3|000\rangle + a^2b|111\rangle + a^2b|110\rangle + ab^2|001\rangle + a^2b|100\rangle + ab^2|011\rangle + ab^2|010\rangle + b^3|101\rangle$.
+Copy to $a^3|0000\rangle + a^2b|1111\rangle + a^2b|1110\rangle + ab^2|0001\rangle + a^2b|1100\rangle + ab^2|0011\rangle + ab^2|0010\rangle + b^3|1101\rangle$.
+
+We go to
+\[a^4|0000\rangle + a^3b|1111\rangle + a^3b|1110\rangle + a^2b^2|0001\rangle + a^3b|1100\rangle + a^2b^2|0011\rangle + a^2b^2|0010\rangle + ab^3|1101\rangle +\]
+\[a^3b|1000\rangle + a^2b^2|0111\rangle + a^2b^2|0110\rangle + ab^3|1001\rangle + a^2b^2|0100\rangle + ab^3|1011\rangle + ab^3|1010\rangle + b^4|0101\rangle\]
+and we examine what we have. Reorganizing, it's
+\[\psi(4\hbox{ ticks}) = a^4|0000\rangle + a^3b(|1111\rangle + |1110\rangle + |1100\rangle + |1000\rangle) \]
+\[ + a^2b^2(|0001\rangle + |0011\rangle + |0010\rangle  + |0111\rangle + |0110\rangle + |0100\rangle)\]
+\[ + ab^3(|1001\rangle + |1011\rangle + |1010\rangle + |1101\rangle) + b^4|0101\rangle\]
+
+Oh whoops! I forgot the signs. But they'll be gone after applying the Born rule.
+
+So we have a probability of observing a $0$ after $n$ ticks of
+
+\[{1\over (a^2 + b^2)^n }(a^{2n} + {n \choose 2} a^{2n-4} b^{4} + {n \choose 4} a^{2n-8} b^8 + \cdots )\]
+and a $1$ with probability
+\[{1\over (a^2 + b^2)^n }(a^{2n-2}b^2 + {n \choose 3} a^{2n-6} b^{6} + {n \choose 5} a^{2n-10} b^{10} + \cdots )\]
+
+These are equivalent to
+
+\[{a^{2n}\over (a^2 + b^2)^n }(1 + {n \choose 2} (b/a)^{4} + {n \choose 4} (b/a)^8 + \cdots )\]
+\[{a^{2n}\over (a^2 + b^2)^n }(n(b/a)^2 + {n \choose 3} (b/a)^{6} + {n \choose 5} (b/a)^{10} + \cdots )\]
+
+and if we set $h = (b/a)^2$ to
+
+\[{1\over (1 + h)^n }(1 + {n \choose 2} h^2 + {n \choose 4} h^4 + \cdots )\]
+\[{1\over (1 + h)^n }(nh + {n \choose 3} h^3 + {n \choose 5} h^5 + \cdots )\]
+
+and in the limit of large $n$
+
+\[{1\over (1 + h)^n }(1 + (nh)^2/2! + (nh)^4/4! + \cdots )\]
+\[{1\over (1 + h)^n }(nh + (nh)^3/3! + (nh)^5/5! + \cdots )\]
+
+so if we let $t = nh$ then $h = t/n$ and we get
+
+\[e^{-t} \cosh(t) = (1 + e^{-2t}) / 2\]
+\[e^{-t} \sinh(t) = (1 - e^{-2t}) / 2\]
+
+Contrast this with just doing unitary evolution.
+There we go from $|0\rangle$ to $a|0\rangle + b|1\rangle$
+
+...to $(a^2 - b^2)|0\rangle + 2ab|1\rangle$
+
+...to $(a^3 - 3ab^2)|0\rangle + (3a^2b - b^3)|1\rangle$
+
+...to $(a^4 - 6a^2b^2 + b^4)|0\rangle + (4a^3b - 4ab^3)|1\rangle$
+
+With the normalizing constants we have amplitudes
+
+\[ {1\over (a^2 + b^2)^{n/2} }(a^n - {n\choose 2} a^{n-2}b^2 + {n\choose 4} a^{n-4}b^4 - \cdots )\]
+\[ {1\over (a^2 + b^2)^{n/2} }({n\choose 1} a^{n-1}b^1 - {n\choose 3} a^{n-3}b^3 + \cdots )\]
+
+or equivalently, for $h = b/a$,
+\[ {1\over (1 + h^2)^{n/2} }(1 - {n\choose 2} h^2 + {n\choose 4} h^4 - \cdots )\]
+\[ {1\over (1 + h^2)^{n/2} }({n\choose 1} h - {n\choose 3} h^3 + \cdots )\]
+
+so for large $n$, and $t = nh$,
+\[ {1\over (1 + (t/n)^2)^{n/2} }(1 - t^2 + t^4 - \cdots )\]
+\[ {1\over (1 + (t/n)^2)^{n/2} }(t - t^3 + \cdots )\]
+so in the limit of large $n$, simply
+\[\cos(t), \sin(t)\]
 \vfil\eject.\vfil\eject.\vfil\eject.\vfil\eject
 \end{document}
