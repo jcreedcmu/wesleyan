@@ -865,5 +865,286 @@ so for large $n$, and $t = nh$,
 \[ {1\over (1 + (t/n)^2)^{n/2} }(t - t^3 + \cdots )\]
 so in the limit of large $n$, simply
 \[\cos(t), \sin(t)\]
+
+\subsection{The Line}
+
+Suppose I have locations indexed by $\Z$, and symmetric connections
+between them with amplitude $bi$, and self-connections with
+amplitude $ai$.
+\begin{center}
+\begin{tikzpicture}[x=5pt,y=5pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (10,0);
+  \coordinate (v2) at (20,0);
+  \coordinate (v3) at (30,0);
+  \coordinate (v4) at (40,0);
+  \coordinate (v5) at (50,0);
+
+
+
+  \foreach \i in {1,...,4} {
+    \pgfmathtruncatemacro{\j}{\i + 1}
+    \draw (v\i) -- (v\j) node[midway, below, text=blue] {$b$};
+  }
+  \foreach \i in {1, 2, 3, 4, 5} {
+  \draw (v\i) .. controls +(-45:30pt) and +(-135:30pt) .. (v\i)
+        node[midway, above, text=red] {$a$};
+  \fill (v\i) circle (2pt);
+  }
+
+  \draw ($(v1)+(-5,0)$) -- (v1);
+  \node at ($(v1)+(-7,0)$) {$\cdots$};
+
+  \draw ($(v5)+(5,0)$) -- (v5);
+  \node at ($(v5)+(7,0)$) {$\cdots$};
+
+  \node[above=10pt] at
+
+
+
+
+\end{tikzpicture}
+\end{center}
+\def\aa{\textcolor{red}{a}}
+\def\bb{\textcolor{blue}{b}}
+There's a matrix that looks like
+\[M = \left(\begin{array}{cccccccc}
+\ddots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \\
+\cdots & \aa & \bb & 0 & 0 & 0 & 0 & \cdots\\
+\cdots & \bb & \aa & \bb & 0 & 0 & 0 & \cdots\\
+\cdots & 0 & \bb & \aa & \bb & 0 & 0 & \cdots\\
+\cdots & 0 & 0 & \bb & \aa & \bb & 0 & \cdots\\
+\cdots & 0 & 0 & 0 & \bb & \aa & \bb & \cdots\\
+\cdots & 0 & 0 & 0 & 0 & \bb & \aa & \cdots\\
+ & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots \\
+\end{array}\right) \]
+And push-forward of the state by time $t$ is $e^{iMt}$. So I guess
+the units of $a, b$ are inverse time, or, assuming planck's constant
+is 1, energy. Except the ``length'' of the segments denoted by $b$
+has to come into play somehow. Maybe what I'm calling $b$ is
+actually $b\Delta x$.
+
+Anyway we know that
+\[ \psi(t) = (1 + iMt - M^2 t^2/2! - i M^3 t^3 / 3! + \cdots)\psi(0) \]
+
+So I should be examining eigenvectors of $M$. But I know what they are.
+They're $v_z := x \mapsto z^x$ for $z \in \C$.
+For if the shift operator is $S(f)  = S(f \o (x \mapsto x + 1))$
+then $S(x \mapsto z^{x}) =x \mapsto z^{x+1}$, and
+\[S(v_z) = z v_z\]
+Then I know that $M = aI + bS + bS^{-1}$ and
+\[ M(v_z) = (a + bz + bz^{-1}) v_z\]
+and if I extend this in time, I find that if $\psi(0) = v_z$, then
+\[ \psi(t) = e^{i (a + bz + bz^{-1}) t} v_z \]
+A thing to realize here is that if $z$ is a unit complex number,
+then $z + z^{-1} = z + z^* = 2\mathsf{Re}(z)$ and so is real.
+
+Let's say in fact $z = e^{i\theta}$. Then $z + 1/z = e^{i\theta} + e^{-i\theta} = 2\cos \theta$. This doesn't seem right.
+
+\subsection{The Circle}
+Let's say my state space is finite. It's a circle of size $N$.
+The eigenfunctions should be $\psi_k = x \mapsto e^{2\pi i kx / N}$ for $k \in 0, \ldots, N-1$. The shift operator should give
+\[ S \psi_k = e^{2\pi i k / N} \psi_k =: q^k \psi_k$.
+\[ b(S + S^{-1}) \psi_k = b(q^k + q^{-k}) \psi_k$.
+
+So what's the energy of this momentum? Time evolution of $\psi_k$
+the operator $b S + bS^{-1}$ should be like
+\[ e^{i(b S + bS^{-1})t} \psi_k = e^{i b (q^k + q^{-k}) t} \psi_k\]
+so the energy seems to be $b (q^k + q^{-k})$. But I expect zero energy
+for zero momentum, don't I? Or don't I.
+
+\subsection{The Oriented Line}
+\begin{center}
+\begin{tikzpicture}[x=5pt,y=5pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (10,0);
+  \coordinate (v2) at (20,0);
+  \coordinate (v3) at (30,0);
+  \coordinate (v4) at (40,0);
+  \coordinate (v5) at (50,0);
+
+
+
+  \foreach \i in {1,...,4} {
+    \pgfmathtruncatemacro{\j}{\i + 1}
+    \draw[->, shorten >= 5pt] (v\i) -- (v\j) node[midway, below, text=blue] {$b$};
+  }
+  \foreach \i in {1, 2, 3, 4, 5} {
+  \fill (v\i) circle (2pt);
+  }
+
+  \draw[->, shorten >= 5pt] ($(v1)+(-5,0)$) -- (v1);
+  \node at ($(v1)+(-7,0)$) {$\cdots$};
+
+  \draw ($(v5)+(5,0)$) -- (v5);
+  \node at ($(v5)+(7,0)$) {$\cdots$};
+
+  \node[above=10pt] at
+
+\end{tikzpicture}
+\end{center}
+My matrix is
+\[M = \left(\begin{array}{cccccccc}
+\ddots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \\
+\cdots & 0 & \bb & 0 & 0 & 0 & 0 & \cdots\\
+\cdots & -\bb & 0 & \bb & 0 & 0 & 0 & \cdots\\
+\cdots & 0 & -\bb & 0 & \bb & 0 & 0 & \cdots\\
+\cdots & 0 & 0 & -\bb & 0 & \bb & 0 & \cdots\\
+\cdots & 0 & 0 & 0 & -\bb & 0 & \bb & \cdots\\
+\cdots & 0 & 0 & 0 & 0 & -\bb & 0 & \cdots\\
+ & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots \\
+\end{array}\right) \]
+I imagine some eigenvector $\psi_z = e^{i z x}$ which has
+\[ S\psi_z = e^{iz}\psi_z \qquad S^{-1}\psi_z = e^{-iz} \psi_z\]
+and $M = b(S - S^{-1})$
+and time evolution is $e^{Mt}$.
+We note that
+\[ b(S - S^{-1})\psi_z = b(e^{iz} - e^{-iz}) \psi_z = bi \sin(z) \psi_z\]
+hence
+\[ e^{Mt}\psi_z = e^{bi \sin(z) t}\psi_z\]
+so the energy of momentum $z$ is $b \sin(z)$. This also seems wrong. We get negative energies.
+
+\subsection{The Line, Reconsidered}
+
+What if I manually try to come up with the ground state of the line?
+I know that if I have $x\mapsto i^x$:
+\begin{center}
+\begin{tikzpicture}[x=5pt,y=5pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (10,0);
+  \coordinate (v2) at (20,0);
+  \coordinate (v3) at (30,0);
+  \coordinate (v4) at (40,0);
+  \coordinate (v5) at (50,0);
+
+  \foreach \i in {1,...,4} {
+    \pgfmathtruncatemacro{\j}{\i + 1}
+    \draw (v\i) -- (v\j) node[midway, below, text=blue] {$b$};
+  }
+  \foreach \i in {1, 2, 3, 4, 5} {
+  \fill (v\i) circle (2pt);
+  }
+
+  \node[above] at (v1) {$i$};
+  \node[above] at (v2) {$-1$};
+  \node[above] at (v3) {$-i$};
+  \node[above] at (v4) {$1$};
+  \node[above] at (v5) {$i$};
+
+  \draw ($(v1)+(-5,0)$) -- (v1);
+  \node at ($(v1)+(-7,0)$) {$\cdots$};
+
+  \draw ($(v5)+(5,0)$) -- (v5);
+  \node at ($(v5)+(7,0)$) {$\cdots$};
+
+  \node[above=10pt] at
+
+\end{tikzpicture}
+\end{center}
+this should have energy zero, right?
+This puts $z = e^{i\theta} = i$, so $\theta = \pi / 2$, and indeed
+$\cos(\pi / 2) = 0$. Just as well, $\cos(-\pi / 2) = 0$, so $x\mapsto (-i)^x$
+is also a zero-energy state. And I could add these together, for example,
+to get
+\begin{center}
+\begin{tikzpicture}[x=5pt,y=5pt,yscale=-1,xscale=1]
+  % Define coordinates
+  \coordinate (v1) at (10,0);
+  \coordinate (v2) at (20,0);
+  \coordinate (v3) at (30,0);
+  \coordinate (v4) at (40,0);
+  \coordinate (v5) at (50,0);
+
+  \foreach \i in {1,...,4} {
+    \pgfmathtruncatemacro{\j}{\i + 1}
+    \draw (v\i) -- (v\j) node[midway, below, text=blue] {$b$};
+  }
+  \foreach \i in {1, 2, 3, 4, 5} {
+  \fill (v\i) circle (2pt);
+  }
+
+  \node[above] at (v1) {$0$};
+  \node[above] at (v2) {$-1$};
+  \node[above] at (v3) {$0$};
+  \node[above] at (v4) {$1$};
+  \node[above] at (v5) {$0$};
+
+  \draw ($(v1)+(-5,0)$) -- (v1);
+  \node at ($(v1)+(-7,0)$) {$\cdots$};
+
+  \draw ($(v5)+(5,0)$) -- (v5);
+  \node at ($(v5)+(7,0)$) {$\cdots$};
+
+  \node[above=10pt] at
+
+\end{tikzpicture}
+\end{center}
+\section{Spheres Again}
+\subsection{Checking}
+Confirming that $\mathsf{Poly}(\C)$ composition is associative.
+% https://q.uiver.app/#q=WzAsMTQsWzAsMywiQV8xIl0sWzAsNCwiQV8wIl0sWzEsMiwiQl8xIl0sWzEsNCwiQl8wIl0sWzAsMiwiWF9mIl0sWzIsMSwiQ18xIl0sWzIsNCwiQ18wIl0sWzEsMSwiWF9nIl0sWzMsMCwiRF8xIl0sWzMsNCwiRF8wIl0sWzIsMCwiWF9oIl0sWzEsMCwiWF97aGd9Il0sWzAsMSwiWF97Z2Z9Il0sWzAsMCwiWF97aGdmfSJdLFswLDEsImEiLDJdLFsyLDMsImIiXSxbMSwzLCJmXzAiLDJdLFs0LDAsInhfZiIsMl0sWzQsMiwiZl8xIiwxXSxbNSw2LCJjIl0sWzMsNiwiZ18wIiwyXSxbNywyLCJ4X2ciXSxbNyw1LCJnXzEiLDFdLFs4LDksImQiXSxbMTAsNSwieF9oIl0sWzEwLDgsImhfMSJdLFs2LDksImhfMCIsMl0sWzEzLDExXSxbMTMsMTJdLFsxMiw3XSxbMTIsNF0sWzExLDEwXSxbMTEsN10sWzEzLDcsIiIsMSx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFsxMSw1LCIiLDEseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XSxbMTIsMiwiIiwxLHsic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV0sWzQsMTUsIiIsMSx7ImxldmVsIjoxLCJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XSxbMTAsMjMsIiIsMSx7ImxldmVsIjoxLCJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XSxbNywxOSwiIiwxLHsibGV2ZWwiOjEsInN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dXQ==
+\[\begin{tikzcd}
+	{X_{hgf}} & {X_{hg}} & {X_h} & {D_1} \\
+	{X_{gf}} & {X_g} & {C_1} \\
+	{X_f} & {B_1} \\
+	{A_1} \\
+	{A_0} & {B_0} & {C_0} & {D_0}
+	\arrow[from=1-1, to=1-2]
+	\arrow[from=1-1, to=2-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+	\arrow[from=1-2, to=1-3]
+	\arrow[from=1-2, to=2-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-2, to=2-3]
+	\arrow["{h_1}", from=1-3, to=1-4]
+	\arrow["{x_h}"', from=1-3, to=2-3]
+	\arrow[""{name=0, anchor=center, inner sep=0}, "d", from=1-4, to=5-4]
+	\arrow[from=2-1, to=2-2]
+	\arrow[from=2-1, to=3-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-1, to=3-2]
+	\arrow["{g_1}"{description}, from=2-2, to=2-3]
+	\arrow["{x_g}"', from=2-2, to=3-2]
+	\arrow[""{name=1, anchor=center, inner sep=0}, "c", from=2-3, to=5-3]
+	\arrow["{f_1}"{description}, from=3-1, to=3-2]
+	\arrow["{x_f}"', from=3-1, to=4-1]
+	\arrow[""{name=2, anchor=center, inner sep=0}, "b", from=3-2, to=5-2]
+	\arrow["a"', from=4-1, to=5-1]
+	\arrow["{f_0}"', from=5-1, to=5-2]
+	\arrow["{g_0}"', from=5-2, to=5-3]
+	\arrow["{h_0}"', from=5-3, to=5-4]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-3, to=0]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=3-1, to=2]
+\end{tikzcd}\]
+\subsection{Axiom}
+I'm considering how to strengthen my Axiom 2 above.
+Let me change notation a bit. Let $S$ be $s : S_1 \to S_0$ and $B$ be $b : B_1 \to B_0$.
+My ability to take boundaries of balls is the $\mathsf{Poly}(\C)$ morphism $\partial : B \to S$ that looks like
+% https://q.uiver.app/#q=WzAsNSxbMCwxLCJCXzEiXSxbMCwyLCJCXzAiXSxbMSwwLCJTXzEiXSxbMSwyLCJTXzAiXSxbMCwwLCJYX1xccGFydGlhbCJdLFswLDEsImIiLDJdLFsyLDMsInMiXSxbMSwzLCJcXHBhcnRpYWxfMCIsMl0sWzQsMCwieF9cXHBhcnRpYWwiLDJdLFs0LDIsIlxccGFydGlhbF8xIiwxXSxbNCw2LCIiLDEseyJsZXZlbCI6MSwic3R5bGUiOnsibmFtZSI6ImNvcm5lciJ9fV1d
+\[\begin{tikzcd}
+	{X_\partial} & {S_1} \\
+	{B_1} \\
+	{B_0} & {S_0}
+	\arrow["{\partial_1}", from=1-1, to=1-2]
+	\arrow["{x_\partial}"', from=1-1, to=2-1]
+	\arrow[""{name=0, anchor=center, inner sep=0}, "s", from=1-2, to=3-2]
+	\arrow["b"', from=2-1, to=3-1]
+	\arrow["{\partial_0}"', from=3-1, to=3-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=0]
+\end{tikzcd}\]
+Now I want to ask for some structure that constructs directed cells as balls out of spheres.
+So at a minimum I need to ask for $\Delta_0 : S_0 \to B_0$ that is a section of $\partial_0$.
+And I expect there to be a $\Delta_1$ that completes the following diagram:
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJTXzEiXSxbMCwxLCJTXzAiXSxbMSwwLCJCXzEiXSxbMSwxLCJCXzAiXSxbMCwxLCJzIiwyXSxbMiwzLCJiIl0sWzEsMywiXFxEZWx0YV8wIiwyXSxbMCwyLCJcXERlbHRhXzEiXV0=
+\[\begin{tikzcd}
+	{S_1} & {B_1} \\
+	{S_0} & {B_0}
+	\arrow["{\Delta_1}", from=1-1, to=1-2]
+	\arrow["s"', from=1-1, to=2-1]
+	\arrow["b", from=1-2, to=2-2]
+	\arrow["{\Delta_0}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+But I also want to ask that $x_\partial$, which tells me how every ball's boundary
+sits inside its ball, is compatible with $\Delta_0$ somehow.
+
 \vfil\eject.\vfil\eject.\vfil\eject.\vfil\eject
 \end{document}
