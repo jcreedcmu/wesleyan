@@ -31,6 +31,7 @@
 
 
 \def\gets{\leftarrow}
+\def\dia{\Diamond}
 \def\all{\forall}
 
 \def\spec{\mathsf{Spec}}
@@ -1145,6 +1146,85 @@ And I expect there to be a $\Delta_1$ that completes the following diagram:
 \end{tikzcd}\]
 But I also want to ask that $x_\partial$, which tells me how every ball's boundary
 sits inside its ball, is compatible with $\Delta_0$ somehow.
+\subsection{Different Idea}
 
+Did I think about this before? It seems like I might want to consider a $\lax$-like
+modality that erases directed structure. I might axomatize that any time $\lax A \equiv S^n$,
+then there's some $\Delta A$ such that $A \to \Delta A$ and $\lax \Delta A \equiv 1$.
+
+\[\begin{tikzcd}
+	{A} & {\Delta A} \\
+	{\lax A} & {\lax \Delta A \cong 1}
+	\arrow["{}", from=1-1, to=1-2]
+	\arrow["\eta"', from=1-1, to=2-1]
+	\arrow["!", from=1-2, to=2-2]
+	\arrow["{!}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+Hm actually wait no I don't like that. Just being a sphere isn't enough to tell
+me the direction of the directed cell I'm creating. What I need is more like
+a pushout square with two branches, if I want to have a 2-ish notion of before and after.
+\subsection{Weak Pushouts}
+What if I assume, as a presumed later input to a parametricity theorem, that every
+pair of suitable morphisms has a weak pushout. That is, we can complete the commutative
+square in some way, but it's not necessarily universal.
+The completion
+\[\begin{tikzcd}
+	{\bf 2}  & {1} \\
+	{1} & {0}
+	\arrow["{}", from=1-2, to=1-1]
+	\arrow[""', from=2-1, to=1-1]
+	\arrow["{!}"', from=2-2, to=1-2]
+	\arrow["{!}", from=2-2, to=2-1]
+\end{tikzcd}\]
+gives us that there's some object into which 2 injects. That's the walking arrow.
+Or maybe we are taking a universal filler of the square given some condition on the
+square that feels like a kind of connectedness/truncatedness. I would expect this property
+of commutative squares to be preserved by permutations of the arms.
+
+The reason I want this is because I can imagine two different 1-cells $A$, $B$ both
+lying over the 0-sphere $2$, and then I could construct
+\[\begin{tikzcd}
+	{\alpha}  & {A} \\
+	{B} & {2}
+	\arrow["{}", from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+as the universal `connected' square including the span $A \gets 2 \to B$, whatever
+`connected' means. But I would conclude that
+\[\begin{tikzcd}
+	{\alpha}  & {B} \\
+	{A} & {2}
+	\arrow["{}", from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+is also a connected square. So if I were to independently try to find the universal
+object that completes that square, it'd have to be isomorphic to $\alpha$.
+If connectedness is a property of the map $2 \to \alpha$, then I get the
+preservation of connectedness under swap for free, I think.
+
+\subsection{Equivalences}
+Let's give a better name to this unknown property of commutative squares that feels something like truncatedness: let's call them {\em cohesive} squares.
+We assume there is a universal (specifically initial) cohesive square extending any span.
+So we use this to get
+\[\begin{tikzcd}
+	{\bf 2}  & {1} \\
+	{1} & {0}
+	\arrow["{c}"', from=1-2, to=1-1]
+	\arrow["d", from=2-1, to=1-1]
+	\arrow["{!}"', from=2-2, to=1-2]
+	\arrow["{!}", from=2-2, to=2-1]
+\end{tikzcd}\]
+Two points $a, b : 1 \to X$ are eligible to be seen as equivalent
+if there are maps $e, f : {\bf 2} \to X$ with
+$e d = a$ and $e c = b$ and
+$f d = b$ and $f c = a$. In other words we could have just required $e d = f c$
+and $f d = e c$.
+
+But we also want to require that the compositions of $e, f$ are equivalent to identities.
 \vfil\eject.\vfil\eject.\vfil\eject.\vfil\eject
+
 \end{document}
