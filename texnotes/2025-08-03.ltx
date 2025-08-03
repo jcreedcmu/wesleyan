@@ -250,6 +250,16 @@ call them {\em cohesive} and {\em symmetric cohesive}. We assume
 \item every span has a universal cohesive completion
 \item every span has a universal symmetric cohesive completion
 \end{itemize}
+We should expect (although I'm not sure how best to axiomatize) that
+\[\begin{tikzcd}
+	B & B \\
+	B & A
+	\arrow[equals, from=1-2, to=1-1]
+	\arrow[equals, from=2-1, to=1-1]
+	\arrow["f"', from=2-2, to=1-2]
+	\arrow["f", from=2-2, to=2-1]
+\end{tikzcd}\]
+is the universal symmetric cohesive diagram on the span consisting of two copies of $f$.
 
 First quick lemma I want to check to ensure I have things the right way around.
 The cohesive completion of a span should inject into the symmetric cohesive completion.
@@ -274,4 +284,49 @@ is a unique map $X \to Y$ making everything commute. Ok, that seems correct.
 It might be that `symmetric cohesive' is exactly the property of a
 diagram and its flip being cohesive. Or that might be too weak a condition. Not sure yet.
 
+Ok, now let $ A$ be the cohesive completion of the span $1 \gets 0 \to 1$.
+\[\begin{tikzcd}
+	{ A}  & {1} \\
+	{1} & {0}
+	\arrow["{c}"', from=1-2, to=1-1]
+	\arrow["d", from=2-1, to=1-1]
+	\arrow["{!}"', from=2-2, to=1-2]
+	\arrow["{!}", from=2-2, to=2-1]
+\end{tikzcd}\]
+I can consider the pushout of $ A$ with itself, to make a path consisting of
+two steps. Call this ${ A}_2$, which has domain and codomain points as maps from $1$.
+Or I can just recognize that there are maps $2 \to  A$ and $2 \to { A}_2$ accounting
+for their respective boundaries.
+I can then take the universal symmetric cohesive completion of these two
+\[\begin{tikzcd}
+	{K_2}  & { A} \\
+	{{ A}_2} & {2}
+	\arrow["{}"', from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+and now $K_2$ is an object that represents two morphisms being composed to one.
+More generally, I can take some pushouts of $n$ copies of $ A$, yielding ${ A}_n$.
+Let $K_n$ be the universal symmetric completion
+\[\begin{tikzcd}
+	{K_n}  & { A} \\
+	{{ A}_n} & {2}
+	\arrow["{}"', from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+For a type $C$ to behave like a category, it should be a fibrant object with respect
+to the class of cofibrations $A_n \to K_n$. We should have solutions to lifting problems
+% https://q.uiver.app/#q=WzAsNCxbMCwxLCJLX24iXSxbMSwwLCJDIl0sWzEsMSwiMSIsWzAsMCw1MCwxXV0sWzAsMCwiQV9uIl0sWzMsMV0sWzAsMiwiIiwyLHsiY29sb3VyIjpbMCwwLDUwXX1dLFsxLDIsIiIsMCx7ImNvbG91ciI6WzAsMCw1MF19XSxbMywwXSxbMCwxLCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XV0=
+\[\begin{tikzcd}
+	{A_n} & C \\
+	{K_n} & \textcolor{rgb,255:red,128;green,128;blue,128}{1}
+	\arrow[from=1-1, to=1-2]
+	\arrow[from=1-1, to=2-1]
+	\arrow[color={rgb,255:red,128;green,128;blue,128}, from=1-2, to=2-2]
+	\arrow[dashed, from=2-1, to=1-2]
+	\arrow[color={rgb,255:red,128;green,128;blue,128}, from=2-1, to=2-2]
+\end{tikzcd}\]
 \end{document}
