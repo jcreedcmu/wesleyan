@@ -319,14 +319,107 @@ Let $K_n$ be the universal symmetric completion
 \end{tikzcd}\]
 For a type $C$ to behave like a category, it should be a fibrant object with respect
 to the class of cofibrations $A_n \to K_n$. We should have solutions to lifting problems
-% https://q.uiver.app/#q=WzAsNCxbMCwxLCJLX24iXSxbMSwwLCJDIl0sWzEsMSwiMSIsWzAsMCw1MCwxXV0sWzAsMCwiQV9uIl0sWzMsMV0sWzAsMiwiIiwyLHsiY29sb3VyIjpbMCwwLDUwXX1dLFsxLDIsIiIsMCx7ImNvbG91ciI6WzAsMCw1MF19XSxbMywwXSxbMCwxLCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XV0=
+
 \[\begin{tikzcd}
 	{A_n} & C \\
-	{K_n} & \textcolor{rgb,255:red,128;green,128;blue,128}{1}
+	{K_n} & \textcolor{lgray}{1}
 	\arrow[from=1-1, to=1-2]
-	\arrow[from=1-1, to=2-1]
-	\arrow[color={rgb,255:red,128;green,128;blue,128}, from=1-2, to=2-2]
+	\arrow["{\eta_n}"', from=1-1, to=2-1]
+	\arrow[color={lgray}, from=1-2, to=2-2]
 	\arrow[dashed, from=2-1, to=1-2]
-	\arrow[color={rgb,255:red,128;green,128;blue,128}, from=2-1, to=2-2]
+	\arrow[color={lgray}, from=2-1, to=2-2]
 \end{tikzcd}\]
+It might be that $\eta_0$ and $\eta_2$ suffice to be equivalent to the whole class of cofibrations.
+\subsection{Associativity}
+A type $C$ that is fibrant with respect to $\eta_2$ is a type that in some sense supports
+composition of morphisms. I'd like to show that that composition must be associative. For
+that I think I need to know the property of being a symmetric cohesive commutative square
+somehow interacts well with composition.
+
+\subsubsection{Vertical Composition}
+% https://q.uiver.app/#q=WzAsNyxbMCwyLCJBIl0sWzIsMiwiQiJdLFs0LDIsIkMiXSxbMSwxLCJYIl0sWzMsMSwiWSJdLFsyLDAsIloiXSxbMiwzLCJEIl0sWzYsMV0sWzAsM10sWzEsM10sWzEsNF0sWzIsNF0sWzMsNV0sWzQsNV0sWzYsMCwiIiwyLHsiY3VydmUiOi0yfV0sWzYsMiwiIiwyLHsiY3VydmUiOjJ9XSxbNSwxLCIiLDIseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=
+\[\begin{tikzcd}
+	&& Z \\
+	& X && Y \\
+	A && B && C \\
+	&& D
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none, from=1-3, to=3-3]
+	\arrow[from=2-2, to=1-3]
+	\arrow[from=2-4, to=1-3]
+	\arrow[from=3-1, to=2-2]
+	\arrow[from=3-3, to=2-2]
+	\arrow[from=3-3, to=2-4]
+	\arrow[from=3-5, to=2-4]
+	\arrow[curve={height=-12pt}, from=4-3, to=3-1]
+	\arrow[from=4-3, to=3-3]
+	\arrow[curve={height=12pt}, from=4-3, to=3-5]
+\end{tikzcd}\]
+I think I want to require that if $X$ and $Y$ are both heads of
+symmetric cohesive commutative squares, then $Z$ also is, where $Z$ arises
+by pushout.
+\subsection{Horizontal Composition}
+Suppose we are trying to compose something like
+\[\begin{tikzcd}
+	A & B & C
+	\arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
+	\arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
+	\arrow[""{name=2, anchor=center, inner sep=0}, "h", curve={height=-12pt}, from=1-2, to=1-3]
+	\arrow[""{name=3, anchor=center, inner sep=0}, "k"', curve={height=12pt}, from=1-2, to=1-3]
+	\arrow["\alpha", shorten <=3pt, shorten >=3pt, Leftrightarrow, from=0, to=1]
+	\arrow["\beta", shorten <=3pt, shorten >=3pt, Leftrightarrow, from=2, to=3]
+\end{tikzcd}\]
+I think the appropriate diagram is something like
+% https://q.uiver.app/#q=WzAsMTYsWzEsNywiQSJdLFs0LDcsIkIiXSxbNyw3LCJDIl0sWzEsNiwiQVxcb3BsdXMgQiJdLFs3LDYsIkJcXG9wbHVzIEMiXSxbNCw4LCJEIl0sWzQsNSwiQVxcb3BsdXMgQyJdLFswLDMsImYiXSxbMiw0LCJnIl0sWzYsMywiaCJdLFs4LDQsImsiXSxbMSwxLCJcXGFscGhhIl0sWzcsMSwiXFxiZXRhIl0sWzMsMiwiaFxcY2lyYyBmIl0sWzUsMywia1xcY2lyYyBnIl0sWzQsMCwiXFxiZXRhKlxcYWxwaGEiXSxbNSwxXSxbMCwzXSxbMSwzXSxbMSw0XSxbMiw0XSxbNSwwLCIiLDIseyJjdXJ2ZSI6LTJ9XSxbNSwyLCIiLDIseyJjdXJ2ZSI6Mn1dLFswLDZdLFsyLDZdLFszLDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFs0LDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFs2LDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFszLDddLFszLDhdLFs0LDldLFs0LDEwXSxbNywxMV0sWzgsMTFdLFs5LDEyXSxbMTAsMTJdLFs3LDEzXSxbOSwxM10sWzgsMTRdLFsxMCwxNF0sWzYsMTRdLFs2LDEzXSxbMTMsMTVdLFsxNCwxNV0sWzExLDE1XSxbMTIsMTVdXQ==
+\[\begin{tikzcd}
+	&&&& {\beta*\alpha} \\
+	& \alpha &&&&&& \beta \\
+	&&& {h\circ f} \\
+	f &&&&& {k\circ g} & h \\
+	&& g &&&&&& k \\
+	&&&& {A\oplus C} \\
+	& {A\oplus B} &&&&&& {B\oplus C} \\
+	& A &&& B &&& C \\
+	&&&& D
+	\arrow[from=2-2, to=1-5]
+	\arrow[from=2-8, to=1-5]
+	\arrow[from=3-4, to=1-5]
+	\arrow[from=4-1, to=2-2]
+	\arrow[from=4-1, to=3-4]
+	\arrow[from=4-6, to=1-5]
+	\arrow[from=4-7, to=2-8]
+	\arrow[from=4-7, to=3-4]
+	\arrow[from=5-3, to=2-2]
+	\arrow[from=5-3, to=4-6]
+	\arrow[from=5-9, to=2-8]
+	\arrow[from=5-9, to=4-6]
+	\arrow[from=6-5, to=3-4]
+	\arrow[from=6-5, to=4-6]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none, from=6-5, to=9-5]
+	\arrow[from=7-2, to=4-1]
+	\arrow[from=7-2, to=5-3]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=7-2, to=9-5]
+	\arrow[from=7-8, to=4-7]
+	\arrow[from=7-8, to=5-9]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-90}, draw=none, from=7-8, to=9-5]
+	\arrow[from=8-2, to=6-5]
+	\arrow[from=8-2, to=7-2]
+	\arrow[from=8-5, to=7-2]
+	\arrow[from=8-5, to=7-8]
+	\arrow[from=8-8, to=6-5]
+	\arrow[from=8-8, to=7-8]
+	\arrow[curve={height=-12pt}, from=9-5, to=8-2]
+	\arrow[from=9-5, to=8-5]
+	\arrow[curve={height=12pt}, from=9-5, to=8-8]
+\end{tikzcd}\]
+The assumptions include the following.
+$A\oplus B$ and $A\oplus C$ and $B \oplus C$ are pushouts over $D$.
+$h \o f$ and $k \o g$ are pushouts over $B$.
+The maps $A \oplus C$ into $h\o f$ and $k\o g$ can be constructed from
+the pushout UMP of $A \oplus C$. The object $\beta * \alpha$ is a pushout
+over $\alpha$ and $\beta$ over $B$. The maps from $h \o f$ and $k \o g$ into
+$\beta * \alpha$ can be constructed from pushout UMPs of the two 1-morphism compositions.
+
+Given all of that, we axiomatize `horizontal composition' by asserting that
+if $\alpha$ and $\beta$ are symmetric cohesive over $A \oplus B$ and
+$B \oplus C$ respectively, then $\beta * \alpha$ is symmetric cohesive over $A \oplus C$.
 \end{document}
