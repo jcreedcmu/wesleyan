@@ -242,13 +242,23 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \section{Weak Pushouts}
 
-We suppose the existence of two properties of commutative squares,
-call them {\em cohesive} and {\em symmetric cohesive}. We assume
+We suppose the existence of a property of commutative squares,
+call it {\em cohesive}.
+\[\begin{tikzcd}
+	{X}  & { B} \\
+	{A} & {R}
+	\arrow["{}"', from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+We say `$X$ is cohesive $A \to B$ over $R$' as an abbreviation.
+We say $X$ is symmetric cohesive between $A$ and $B$ if $X$
+is cohesive $A \to B$ and $B \to A$.
+We assume
 \begin{itemize}
-\item if a square is symmetric cohesive, it is also cohesive
-\item if a square is symmetric cohesive, then its `flip' is also symmetric cohesive
-\item every span has a universal cohesive completion
-\item every span has a universal symmetric cohesive completion
+\item every span has a universal (i.e. initial) cohesive completion
+\item every span has a universal (i.e. initial) symmetric cohesive completion
 \end{itemize}
 We should expect (although I'm not sure how best to axiomatize) that
 \[\begin{tikzcd}
@@ -281,8 +291,6 @@ So suppose $XABC$ is cohesive, and $YABC$ is symmetric cohesive. Therefore $YABC
 is also cohesive. But $XABC$ is the universal cohesive completion of $ABC$, so there
 is a unique map $X \to Y$ making everything commute. Ok, that seems correct.
 
-It might be that `symmetric cohesive' is exactly the property of a
-diagram and its flip being cohesive. Or that might be too weak a condition. Not sure yet.
 
 Ok, now let $ A$ be the cohesive completion of the span $1 \gets 0 \to 1$.
 \[\begin{tikzcd}
@@ -333,7 +341,7 @@ It might be that $\eta_0$ and $\eta_2$ suffice to be equivalent to the whole cla
 \subsection{Associativity}
 A type $C$ that is fibrant with respect to $\eta_2$ is a type that in some sense supports
 composition of morphisms. I'd like to show that that composition must be associative. For
-that I think I need to know the property of being a symmetric cohesive commutative square
+that I think I need to know the property of being a cohesive commutative square
 somehow interacts well with composition.
 
 \subsubsection{Vertical Composition}
@@ -354,9 +362,13 @@ somehow interacts well with composition.
 	\arrow[from=4-3, to=3-3]
 	\arrow[curve={height=12pt}, from=4-3, to=3-5]
 \end{tikzcd}\]
-I think I want to require that if $X$ and $Y$ are both heads of
-symmetric cohesive commutative squares, then $Z$ also is, where $Z$ arises
-by pushout.
+I think I want to require that if $X$ is cohesive $A \to B$ and $Y$ is cohesive $B \to C$,
+then $Z$, given by the pushout of $X$ and $Y$ over $B$, is cohesive $A \to C$.
+
+Notice that this also gives me vertical composability of symmetric cohesive squares.
+If $X$ is symmetric cohesive $A = B$ and $Y$ is symmetric cohesive $B = C$, then
+$Z$ is the same pushout regardless of which direction the morphisms go; it is then
+symmetric cohesive $A = C$.
 \subsection{Horizontal Composition}
 Suppose we are trying to compose something like
 \[\begin{tikzcd}
@@ -365,8 +377,8 @@ Suppose we are trying to compose something like
 	\arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
 	\arrow[""{name=2, anchor=center, inner sep=0}, "h", curve={height=-12pt}, from=1-2, to=1-3]
 	\arrow[""{name=3, anchor=center, inner sep=0}, "k"', curve={height=12pt}, from=1-2, to=1-3]
-	\arrow["\alpha", shorten <=3pt, shorten >=3pt, Leftrightarrow, from=0, to=1]
-	\arrow["\beta", shorten <=3pt, shorten >=3pt, Leftrightarrow, from=2, to=3]
+	\arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+	\arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=3]
 \end{tikzcd}\]
 I think the appropriate diagram is something like
 % https://q.uiver.app/#q=WzAsMTYsWzEsNywiQSJdLFs0LDcsIkIiXSxbNyw3LCJDIl0sWzEsNiwiQVxcb3BsdXMgQiJdLFs3LDYsIkJcXG9wbHVzIEMiXSxbNCw4LCJEIl0sWzQsNSwiQVxcb3BsdXMgQyJdLFswLDMsImYiXSxbMiw0LCJnIl0sWzYsMywiaCJdLFs4LDQsImsiXSxbMSwxLCJcXGFscGhhIl0sWzcsMSwiXFxiZXRhIl0sWzMsMiwiaFxcY2lyYyBmIl0sWzUsMywia1xcY2lyYyBnIl0sWzQsMCwiXFxiZXRhKlxcYWxwaGEiXSxbNSwxXSxbMCwzXSxbMSwzXSxbMSw0XSxbMiw0XSxbNSwwLCIiLDIseyJjdXJ2ZSI6LTJ9XSxbNSwyLCIiLDIseyJjdXJ2ZSI6Mn1dLFswLDZdLFsyLDZdLFszLDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFs0LDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFs2LDUsIiIsMix7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dLFszLDddLFszLDhdLFs0LDldLFs0LDEwXSxbNywxMV0sWzgsMTFdLFs5LDEyXSxbMTAsMTJdLFs3LDEzXSxbOSwxM10sWzgsMTRdLFsxMCwxNF0sWzYsMTRdLFs2LDEzXSxbMTMsMTVdLFsxNCwxNV0sWzExLDE1XSxbMTIsMTVdXQ==
@@ -394,13 +406,13 @@ I think the appropriate diagram is something like
 	\arrow[from=5-9, to=4-6]
 	\arrow[from=6-5, to=3-4]
 	\arrow[from=6-5, to=4-6]
-	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none, from=6-5, to=9-5]
+	\arrow["\lrcorner"{anchor=center, pos=0.05, rotate=-45}, draw=none, from=6-5, to=9-5]
 	\arrow[from=7-2, to=4-1]
 	\arrow[from=7-2, to=5-3]
-	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=7-2, to=9-5]
+	\arrow["\lrcorner"{anchor=center, pos=0.05}, draw=none, from=7-2, to=9-5]
 	\arrow[from=7-8, to=4-7]
 	\arrow[from=7-8, to=5-9]
-	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-90}, draw=none, from=7-8, to=9-5]
+	\arrow["\lrcorner"{anchor=center, pos=0.05, rotate=-90}, draw=none, from=7-8, to=9-5]
 	\arrow[from=8-2, to=6-5]
 	\arrow[from=8-2, to=7-2]
 	\arrow[from=8-5, to=7-2]
@@ -410,6 +422,9 @@ I think the appropriate diagram is something like
 	\arrow[curve={height=-12pt}, from=9-5, to=8-2]
 	\arrow[from=9-5, to=8-5]
 	\arrow[curve={height=12pt}, from=9-5, to=8-8]
+   \arrow["\star"{anchor=center, pos=0.05}, draw=none, from=2-2, to=7-2]
+   \arrow["\star"{anchor=center, pos=0.05, color={red}}, draw=none, from=1-5, to=6-5]
+	\arrow["\star"{anchor=center, pos=0.05}, draw=none, from=2-8, to=7-8]
 \end{tikzcd}\]
 The assumptions include the following.
 $A\oplus B$ and $A\oplus C$ and $B \oplus C$ are pushouts over $D$.
@@ -420,6 +435,34 @@ over $\alpha$ and $\beta$ over $B$. The maps from $h \o f$ and $k \o g$ into
 $\beta * \alpha$ can be constructed from pushout UMPs of the two 1-morphism compositions.
 
 Given all of that, we axiomatize `horizontal composition' by asserting that
-if $\alpha$ and $\beta$ are symmetric cohesive over $A \oplus B$ and
-$B \oplus C$ respectively, then $\beta * \alpha$ is symmetric cohesive over $A \oplus C$.
+\begin{itemize}
+\item $\alpha$ is cohesive $f \to g$ over $A \oplus B$,
+\item $\beta$ is cohesive $h \to k$ over $B \oplus C$
+\end{itemize}
+then $\beta * \alpha$ is cohesive $h f \to kg$ over $A \oplus C$.
+\subsection{A Potential Problem}
+I can take the universal cohesive completion of
+\[\begin{tikzcd}
+	{X}  & { 1} \\
+	{{ 1}} & {2}
+	\arrow["{}"', from=1-2, to=1-1]
+	\arrow["", from=2-1, to=1-1]
+	\arrow["{}"', from=2-2, to=1-2]
+	\arrow["{}", from=2-2, to=2-1]
+\end{tikzcd}\]
+And I get something that is like a 2-cell from $\rid$ to itself.
+
+\subsection{Back to Associativity}
+Suppose I have a category $C$ that `supports binary composition of morphisms'.
+This means we can solve lifting problems
+\[\begin{tikzcd}
+	{A_2} & C \\
+	{K_2} & \textcolor{lgray}{1}
+	\arrow[from=1-1, to=1-2]
+	\arrow["{\eta_2}"', from=1-1, to=2-1]
+	\arrow[color={lgray}, from=1-2, to=2-2]
+	\arrow[dashed, from=2-1, to=1-2]
+	\arrow[color={lgray}, from=2-1, to=2-2]
+\end{tikzcd}\]
+
 \end{document}
