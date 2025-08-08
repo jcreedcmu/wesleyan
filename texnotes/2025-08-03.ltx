@@ -473,10 +473,44 @@ and the codomain are like the standard Eckman-Hilton thing
 with two directed cells from the identity to itself,
 then any number of signed twists are allowable.
 
+\section{Trees}
 \subsection{Lax Categories}
 
 There should be some way of getting handle on the definition
 of a category where composition is merely lax, and
 with a corresponding lax associativity etc., and specializations
 of that to reversibility ought to follow.
+
+\subsection{Low-Dimensional Cases}
+
+The type of distinct 1-paths $P_1$ is the same as the type of 2-cells $C_2$.
+It is $\mathsf{List}\ \mathsf{Unit}$. It is $\N$. We can call these $0$-trees.
+The $0$-tree that is the natural number zero has the realization as the unit type.
+The $0$-tree that is the natural number $n$ is the pushout of $n$ copies of
+the walking morphism. We obtain this by applying some abstract morphism-creating
+process to a contractible domain type and a contractible codomain type.
+
+Now we consider the codes of $1$-trees, i.e. $2$-paths $P_2$, i.e.
+$3$-cells $C_3$. This is the familiar type of ordered finite trees, whose
+internal nodes can have any finite arity from $\N$. Neither internal
+nodes nor leaves carry any data. To build the realization of a tree,
+we need realizations of $2$-cells. Even though the codes of $1$-paths
+and $2$-cells are the same type, the previous paragraph described
+realizations of $1$-paths, and realizations of $2$-cells are just a
+bit more. Suppose we have a $1$-path $p \in P_1$. The unique $0$-sphere $S^0$ (which is
+a 2-point set) goes into it. I can also characterize $S^0$ as being an element of
+the $0$-spheres that are made up of two compatible $0$-paths.
+There is also a canonical $1$-path $c \in C_1$ consisting of a single cell.
+We construct a lift of $p$ via
+\[\begin{tikzcd}
+\sem{L_2(p)} & \sem p \\
+	\sem c & S^0
+	\arrow[ from=1-2, to=1-1]
+	\arrow[ from=2-1, to=1-1]
+	\arrow[""', from=2-2, to=1-2]
+	\arrow["", from=2-2, to=2-1]
+\end{tikzcd}\]
+where $L_2 : P_1 \to C_2$ is the name of this function that gives us the cell.
+
+
 \end{document}
