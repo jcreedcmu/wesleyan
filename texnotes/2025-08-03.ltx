@@ -562,5 +562,22 @@ compose with the appropriate element of $C_2$ to get the full realization.
 \subsubsection{3-paths}
 A path in $P_3$ is something like a leaf over a chosen $C_2$, or it's a node, with some
 extra data. That extra data is for starters a choice of an element in $C_3$, whose
-realization we're going to glue to something.
+realization we're going to glue to something. Running out of steam here.
+\subsection{Operads}
+Consider that trees are the free $T$-operad for $T$ being the list monad.
+
+Recall a few things. Let $T$ be a cartesian monad on $\C$. A $T$-multicategory
+is a monoid whose carrier is the span $C_0 \gets C_1 \to TC_0$. It has `operations'
+in $C_1$, and `types' in $C_0$. The span composed monadically with itself tells
+us which pairs of $C_1 \x TC_1$ that are composable. The monoid object tells
+us that composition is associative. A $T$-operad is when $C_0$ is the terminal
+object of $\C$.
+
+So if we take $\C$ to be sets and $C_0$ to be the singleton set, and $T$ is the list
+monad, then the types of operations are just arities. The free $T$-operad has trees
+with $n$ leaves for the arity $n$. Associativity and unit laws means that trees compose
+as expected.
+
+For higher trees, what if the objects $C_0$ are the set of all arities, and
+$TC_0$ is trees? No, I can't make stuff typecheck that way either.
 \end{document}
