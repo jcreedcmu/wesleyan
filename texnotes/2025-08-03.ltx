@@ -497,14 +497,13 @@ nodes nor leaves carry any data. To build the realization of a tree,
 we need realizations of $2$-cells. Even though the codes of $1$-paths
 and $2$-cells are the same type, the previous paragraph described
 realizations of $1$-paths, and realizations of $2$-cells are just a
-bit more. Suppose we have a $1$-path $p \in P_1$. The unique $0$-sphere $S^0$ (which is
-a 2-point set) goes into it. I can also characterize $S^0$ as being an element of
+bit more. Suppose we have a $1$-path $p \in P_1$. The unique $0$-sphere $s \in S_0$ (whose realization is a 2-point set) goes into it. I can also characterize $S^0$ as being an element of
 the $0$-spheres that are made up of two compatible $0$-paths.
 There is also a canonical $1$-path $c \in C_1$ consisting of a single cell.
 We construct a lift of $p$ via
 \[\begin{tikzcd}
-\sem{L_2(p)} & \sem p \\
-	\sem c & S^0
+\sem{L_2(p)}_{C_2} \pbck & \sem p_{P_1} \\
+	\sem c_{C_1} & \sem s_{S_0}
 	\arrow[ from=1-2, to=1-1]
 	\arrow[ from=2-1, to=1-1]
 	\arrow[""', from=2-2, to=1-2]
@@ -512,5 +511,33 @@ We construct a lift of $p$ via
 \end{tikzcd}\]
 where $L_2 : P_1 \to C_2$ is the name of this function that gives us the cell.
 
+Ok, so what's a tree in $P_2$? It's either a leaf or a node with a
+list of children each of which is a tree. It has a domain and codomain
+that are in $P_1$.
 
+Let's remind ourselves that a pullback in $\mathbf{Poly}$ exists that's like
+\[\begin{tikzcd}
+S_{n+1} \pbck & P_{n+1} \\
+	 C_{n+1} & S_n
+	\arrow[ to=1-2, from=1-1]
+	\arrow[ to=2-1, from=1-1]
+	\arrow[""', to=2-2, from=1-2]
+	\arrow["", to=2-2, from=2-1]
+\end{tikzcd}\]
+\begin{center}\includegraphics[scale=0.50]{spheres-2025-08-03.png}\end{center}
+So we can reason that the $C_{n+1} \to S_n$ and $S_{n+1} \to P_{n+1}$ maps
+are both isomorphisms on codes. The content of $C_{n+2}$ is determined
+by some pullback-esque map
+\[\begin{tikzcd}
+C_{n+2} \pbck & P_{n+1} \\
+	 C_{n+1} & S_n
+	\arrow[ to=1-2, from=1-1]
+	\arrow[ to=2-1, from=1-1]
+	\arrow[""', to=2-2, from=1-2]
+	\arrow["", to=2-2, from=2-1]
+\end{tikzcd}\]
+except that's not really a pullback; the upstairs square on realizations isn't
+a pushout, but the `weak pushout' that forms a directed cell. We still
+have that $C_{n+2} \to P_{n+1}$ is an isomorphism on codes. This was
+already guaranteed by composing the other two isomorphisms from earlier.
 \end{document}
