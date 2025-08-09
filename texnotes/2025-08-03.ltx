@@ -540,4 +540,27 @@ except that's not really a pullback; the upstairs square on realizations isn't
 a pushout, but the `weak pushout' that forms a directed cell. We still
 have that $C_{n+2} \to P_{n+1}$ is an isomorphism on codes. This was
 already guaranteed by composing the other two isomorphisms from earlier.
+
+\subsection{Paths}
+
+It remains to explain what exactly paths are.
+\subsubsection{1-paths}
+A 1-path in $P_1$ is a list of unit. We get the realization by gluing together
+many copies of the unique element of $C_1$.
+
+\subsubsection{2-paths}
+Let's generalize spheres and paths a bit. Say $S$ and $P$
+are the spheres and paths whose domain is a single cell, and let $S'$ and $P'$ be the more general
+notion of spheres and paths that allow paths on the domain. Maybe I need this only for one
+level, not hereditarily.
+
+We define the codes of $P_2$ to be the inductive type of trees; either a leaf, or a node that knows
+the list of its children. What's the realization of a node? Well, we have a list of $P_2$ for the children.
+Knowing that I have a boundary map $\partial : P_2 \to S_1$, this is enough information to
+horizontally glue their realizations together, yielding something in $P_2'$. Then I vertically
+compose with the appropriate element of $C_2$ to get the full realization.
+\subsubsection{3-paths}
+A path in $P_3$ is something like a leaf over a chosen $C_2$, or it's a node, with some
+extra data. That extra data is for starters a choice of an element in $C_3$, whose
+realization we're going to glue to something.
 \end{document}
