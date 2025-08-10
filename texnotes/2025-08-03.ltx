@@ -580,4 +580,73 @@ as expected.
 
 For higher trees, what if the objects $C_0$ are the set of all arities, and
 $TC_0$ is trees? No, I can't make stuff typecheck that way either.
+
+\section{Braids}
+
+Going back to the idea of trying to combine parametricity and HoTT to
+get braid groups.
+
+A circle set is a set together with a map from $S^1$.
+Given circle sets $X, Y$, we can define $X \tensor Y$
+by taking the pushout of the carriers of $X$ and $Y$ identifying
+the basepoints of their respective circles, and letting the
+circle of the tensor product be the composition of the two different
+loops. Let $\rightsquigarrow$ be the evident notion of
+circle set homomorphism, where we map carriers and preserve the circle.
+
+The conjecture is that parametric functions of type
+\[ ( X : \mathsf{CSet} )
+\to (\overbrace{X \otimes \cdots \otimes X}^{\textstyle n\hbox{ times}})
+\rightsquigarrow (\overbrace{X \otimes \cdots \otimes X}^{\textstyle n\hbox{ times}})
+\]
+are exactly braids on $n$ strands.
+
+I think I at least understand how to show the degenerate case of one strand,
+which is a good start. We suppose we have a function
+\[ j :  ( X : \mathsf{CSet} )
+\to X \rightsquigarrow X
+\]
+which is the same thing as
+\[ j :  ( X : \mathsf{Set} ) (\eta : S^1 \to X) \to
+(h : X \to X) \x (h \o \eta = \eta)
+\]
+So we can temporarily set aside the homomorphism condition and analyze what
+the first component of $j$, namely
+\[ j_1 :  ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \]
+could possibly be. For it is also a parametric function.
+Its parametricity free theorem says
+\[  ( X_1\ X_2 : \mathsf{Set} ) ({\sim} : X_1 \to X_2 \to \mathsf{Set}) \]
+\[ (\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2) (\_ : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\]
+\[(x_1 : X_1) (x_2 :  X_2) (\_ : x_1 \sim x_2)\]
+\[  \to j_1\ X_1\ \eta_1\ x_1 \sim j_1\ X_2\ \eta_2\ x_2\]
+and if we pick a function $f : X_1 \to X_2 $ to instantiate the relation $\sim$, we get
+\[  ( X_1\ X_2 : \mathsf{Set} ) (f : X_1 \to X_2 ) \]
+\[ (\eta_1 : S^1 \to X_1) (x_1 : X_1) \]
+\[  \to f(j_1\ X_1\ \eta_1\ x_1) = j_1\ X_2\ (f \o \eta_1)\ (f\ x_1)\]
+And then if we pick $X_1 = 1 + S^1$ and say $\eta_1 = \binr$ and $x_1 = \binl *$, we get
+\[  ( X_2 : \mathsf{Set} ) (f : 1 + S^1 \to X_2) \]
+\[  \to f(j_1\ (1 + S^1)\ \binr\ (\binl *)) =  j_1\ X_2\ (f \o \binr)\ (f\ (\binl *))\]
+Now if we say $f$ comes from case analyzing and yielding either $x_2 : X_2$ or $\eta_2 : S^1 \to X_2$ we have
+\[  ( X_2 : \mathsf{Set} ) (x_2 : X_2) (\eta_2 : S^1 \to X_2) \]
+\[  \to (\bcase j_1\ (1 + S^1)\ \binr\ (\binl *) \bof\]
+\[ \binl * \imp x_2 \celse \binr s \imp \eta_2\ s) =  j_1\ X_2\ \eta_2\ x_2\]
+So we discover there are two sorts of functions $j_1\ X_2\ \eta_2\ x_2$ can
+be, depending on what $j_1\ (1 + S^1)\ \binr\ (\binl *)$ evaluates to.
+Either it's just the identity map on $X_2$, or it's a fixed point in the
+loop that lies in $X_2$ via $\eta_2$.
+
+We want to reason that the latter case is impossible, because of the nontriviality
+of $S^1$. That is, specifically because for any $s$, the constant map $\lambda x . s : S^1 \to S^1$ is distinct from the identity map $S^1 \to S^1$.
+So suppose towards a contradiction that there exists $s_0$ such that
+\[ j_1\ (1 + S^1)\ \binr\ (\binl *) = \binr s_0\]
+This means
+\[  ( X_2 : \mathsf{Set} ) (x_2 : X_2) (\eta_2 : S^1 \to X_2) \]
+\[  \to \eta_2\ s_0 =  j_1\ X_2\ \eta_2\ x_2\]
+we can let $X_2 = S^1$ and let $\eta_2 = \rid$, and we get
+\[  (x_2 : S^1) \to  s_0 =  j_1\ S^1\ \rid\ x_2\]
+But recall that we're supposed to have $h \o \eta = \eta$, i.e.
+\[ ( s: S^1) \to h\ (\eta\ s) = \eta\ s\]
+and $h = j_1\ S^1\ \rid$ and $\eta = \rid$ in this case, so
+\[ ( s: S^1) \to \ j_1\ S^1\ \rid\  s =  s\]
+So we find that $j_1\ S^1\ \rid$ is both the constant $s_0$ function, and the identity function, a contradiction.
 \end{document}
