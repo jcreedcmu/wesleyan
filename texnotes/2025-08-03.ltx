@@ -586,13 +586,13 @@ $TC_0$ is trees? No, I can't make stuff typecheck that way either.
 Going back to the idea of trying to combine parametricity and HoTT to
 get braid groups.
 
-A circle set is a set together with a map from $S^1$.
-Given circle sets $X, Y$, we can define $X \tensor Y$
+A circled set is a set together with a map from $S^1$.
+Given circled sets $X, Y$, we can define $X \tensor Y$
 by taking the pushout of the carriers of $X$ and $Y$ identifying
 the basepoints of their respective circles, and letting the
 circle of the tensor product be the composition of the two different
 loops. Let $\rightsquigarrow$ be the evident notion of
-circle set homomorphism, where we map carriers and preserve the circle.
+circled set homomorphism, where we map carriers and preserve the circle.
 
 The conjecture is that parametric functions of type
 \[ ( X : \mathsf{CSet} )
@@ -601,6 +601,7 @@ The conjecture is that parametric functions of type
 \]
 are exactly braids on $n$ strands.
 
+\subsection{Braids on One Strand}
 I think I at least understand how to show the degenerate case of one strand,
 which is a good start. We suppose we have a function
 \[ j :  ( X : \mathsf{CSet} )
@@ -649,4 +650,64 @@ But recall that we're supposed to have $h \o \eta = \eta$, i.e.
 and $h = j_1\ S^1\ \rid$ and $\eta = \rid$ in this case, so
 \[ ( s: S^1) \to \ j_1\ S^1\ \rid\  s =  s\]
 So we find that $j_1\ S^1\ \rid$ is both the constant $s_0$ function, and the identity function, a contradiction.
+
+\subsection{Braids on Two Strands}
+Now let's start thinking about
+\[ ( X : \mathsf{CSet} )
+\to (X \otimes X) \rightsquigarrow (X \otimes X)
+\]
+which is
+\[ m : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X \otimes X) \to X \otimes X\]
+\[ p : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (s : S^1) \to m\ X\ \eta\ (\eta_{X \otimes X} s) = \eta_{X \otimes X} s\]
+My tentative plan is to analyze $m$ in isolation, and then `filter out' the possible
+functions that could satisfy $m$'s type by looking at $p$.
+
+We can further break down $m$ by deconstructing $X \otimes X$ on the left,
+since it's a pushout. That is, having an $m$ as above is equivalent to having
+\[ m_1 : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
+\[ m_2 : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
+together with a path
+\[ ( X : \mathsf{Set} ) (\eta : S^1 \to X)
+ \to m_1\ X\ \eta\ (\eta\ \mathsf{base})
+=  m_2\ X\ \eta\ (\eta\ \mathsf{base})
+\]
+
+\subsubsection{Mapping One Strand into Two}
+So the next thing for me to analyze is what $m_1, m_2$ can possibly be.
+The parametricity free theorem for $m_1$ is like
+\[  ( X_1\ X_2 : \mathsf{Set} ) ({\sim} : X_1 \to X_2 \to \mathsf{Set}) \]
+\[ (\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2) (\_ : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\]
+\[(x_1 : X_1) (x_2 :  X_2) (\_ : x_1 \sim x_2)\]
+\[  \to m_1\ X_1\ \eta_1\ x_1 \sim m_1\ X_2\ \eta_2\ x_2\]
+where that last $\sim$ denotes the implied relation
+of type  $(X_1 \otimes X_1) \to (X_2 \otimes X_2) \to \mathsf{Set}$ that
+arises from the base relation $X_1 \to X_2 \to \mathsf{Set}$. Then functional
+instantiation should give me
+\[  ( X_1\ X_2 : \mathsf{Set} ) (f : X_1 \to X_2 ) \]
+\[ (\eta_1 : S^1 \to X_1) (x_1 : X_1) \]
+\[  \to (f\otimes f)(m_1\ X_1\ \eta_1\ x_1) = m_1\ X_2\ (f \o \eta_1)\ (f\ x_1)\]
+where $f \otimes f$ is the hopefully evident functorial lifing of $f$ to
+$(X_1 \otimes X_1) \to (X_2 \otimes X_2)$. Now comes the time that
+I need to make a clever choice of $X_1$ as some inductive datatype that represents
+the type I hope describes the possible functions.
+
+I'm going to guess that there are three possibilities: send $x$ to the left
+2-cell, send $x$ to the right 2-cell, or send everything to a constant point
+that lies on the two joined circles. So I'm setting $X_1$ to $1 + 1 + S^1 \wedge S^1$.
+Let $W = S^1 \wedge S^1$.
+I think I send $\eta_1$ to $\eta_{W}$, the big loop around the wedge
+of circles. I think I send $x_1$ to $x_{W}$, the basepoint of the wedge
+of circles. So now I have
+\[  (X_2 : \mathsf{Set} ) (f : 1 + 1 + W \to X_2 ) \]
+\[  \to (f\otimes f)(m_1\ (1 + 1 + W)\ \eta_W\ x_W) = m_1\ X_2\ (f \o \eta_W)\ (f\ x_W)\]
+I think I want to quantify over yet another $(X : \mathsf{Set}) (\eta : S^1 \to X) (x : X)$
+and instantiate $X_2 := X \otimes X$ and
+\[ f (\binj_1\ *) = \binl_{X\otimes X} x\]
+\[ f (\binj_2\ *) = \binr_{X\otimes X} x\]
+\[ f (\binj_3 (\binl( s: S^1))) = \binl_{X\otimes X} (\eta\ s)\]
+\[ f (\binj_3 (\binr( s: S^1))) = \binr_{X\otimes X} (\eta\ s)\]
+and then I wind up with
+\[ (X : \mathsf{Set}) (\eta : S^1 \to X) (x : X) \]
+\[ \cdots = m_1\ (X\otimes X)\ (f \o \eta_W)\ (f\ x_W)\]
+No that's not right, I need $m_1$ to be applied to a general $X$. Hmm.
 \end{document}
