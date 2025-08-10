@@ -580,7 +580,95 @@ as expected.
 
 For higher trees, what if the objects $C_0$ are the set of all arities, and
 $TC_0$ is trees? No, I can't make stuff typecheck that way either.
+\subsection{Thinking with Sets}
+Earlier \texttt{rntz} suggested like the following approach.
+Morally, $C_{-1}$ and $T_{-1}$ are 1.
+\[\begin{array}{l}
+\mathbf{data}\ T_{0} :  \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} :  T_{0} \\
+\qquad \mathsf{Node} : T_{0}\to T_{0}
+\end{array}\]
+$C_0$ is the subset of $T_0$ with exactly one node, so the type $1$.
+\[\begin{array}{l}
+\mathbf{data}\ T_{1} : \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} : T_{1} \\
+\qquad \mathsf{Node} : (t : T_{0}) \to (\star \in_0 t \to T_{1}) \to T_{1}\\
+\end{array}\]
+We define an auxiliary
+\[\begin{array}{l}
+\mathbf{data}\ \star \in_0 \_ : (t : T_0) \to \rset\ \mathbf{where}\\
+\qquad \mathsf{here} : (t : T_0) \to \star \in_0 \mathsf{Node}\ t\\
+\qquad \mathsf{next} : (t : T_0) \to \star \in_0 t \to \star \in_0\mathsf{Node}\   t\\
+\end{array}\]
+Define $C_1$ to be the subset of $T_1$ with exactly one ${\mathsf{Node}}$.
+Let's try hypertrees now.
+\[\begin{array}{l}
+\mathbf{data}\ T_{2} : \N \to \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} :  (n : \N) \to T_{2}\ n\\
+\qquad \mathsf{Node} : (t : T_1) \to  ( (n : \N) \to n \in t \to (t : T_{2}\ n) ) \to T_{2}\ (\partial\ t)\\
+\end{array}\]
+\vskip0.5em\hline\vskip0.5em
+What if I index $T_1$ by their boundary?
+\[\begin{array}{l}
+\mathbf{data}\ T_{1} : \N \to \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} : T_{1}\ 1 \\
+\qquad \mathsf{Node} : (t : T_{0})  (k : \star \in_0 t \to (n : \N) \x  T_{1}\ n) \to T_{1}\ (\Sigma_t\  k)\\
+\end{array}\]
+And then what if I try indexing $T_2$ by multiple boundaries?
+\[\begin{array}{l}
+\mathbf{data}\ T_{2} : (n : \N)(t_1 : T_1\ n) \to \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} :  (n : \N) \to T_{2}\ n\ (u\ n)\\
+\qquad \mathsf{Node} : (n : \N) (t_1 : T_1\ n)  (k: (n : \N) \to n \in t_1 \to (t_1' : T_1\ n) \x T_{2}\ n\ t_1') \to T_{2}\ n\ (\Sigma_{n,t_1}\ k)\\
+\end{array}\]
+where $u\ n : T_1\ n$. This is all equivalent to
+\[\begin{array}{l}
+\mathbf{data}\ T_{2} : (t_0 : T_0)(t_1 : T_1\ t_0) \to \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} :  (t_0 : T_0) \to T_{2}\ t_0\ (u\ t_0)\\
+\qquad \mathsf{Node} : (t_0 : T_0) (t_1 : T_1\ t_0)  (k: (t_0 : T_0) \to t_0 \in t_1 \to (t_1' : T_1\ t_0) \x T_{2}\ t_0\ t_1') \to T_{2}\ t_0\ (\Sigma_{t_0,t_1}\ k)\\
+\end{array}\]
 
+This feels like this compresses to, ugh, something like the following, but it's a mess and not quite right
+\[\begin{array}{l}
+\mathbf{data}\ T_{n+1} : U_n \to  \rset\ \bf{where}\\
+\qquad \mathsf{Leaf} :  (t : U_n) \to (\nu\ t \equiv 1) \to T_{n+1}\ t\\
+\qquad \mathsf{Node} : (t : U_n)  (k: (x : \nu\ t) \to  (t' : T_{n+1}) \x \partial\partial t' = \mathsf{get}\ x) \to T_{n+1}
+\end{array}\]
+\[ U_{n+1} = (t : U_n) \x T_{n+1}\ t\]
+
+%% \vskip0.5em\hline\vskip0.5em
+%% \[\begin{array}{l}
+%% \mathbf{data}\ T_{2} : \rset\ \bf{where}\\
+%% \qquad \mathsf{Leaf} :  C_1 \to T_{2}\\
+%% \qquad \mathsf{Node} : (t : T_1) \to  ( (c : C_1) \to c \in t \to (t : T_{2}) \x \partial_1 t = c ) \to T_{2}\\
+%% \end{array}\]
+%% I think the general case looks like
+%% \[\begin{array}{l}
+%% \mathbf{data}\ T_{n+1} : \rset\ \bf{where}\\
+%% \qquad \mathsf{Leaf} :  C_n \to T_{n+1}\\
+%% \qquad \mathsf{Node} : (t : T_n) \to  ( (c : C_n) \to c \in t \to (t : T_{n+1}) \x \partial_n t = c ) \to T_{n+1}\\
+%% \end{array}\]
+
+%% \def\rset{\mathsf{Type}}
+
+%% where $T_n$ is $n$-dimensional trees, $C_n$ is a subtype of $T_n$ that contains the
+%% `singletons' only, and $\partial : T_n \to C_n$ extracts the boundary,
+%% and ${\in} : C_n \to T_n \to \rtype$ is a relation that yields a type with one element for every way that a particular $C_n$ appears in $T_n$.
+
+%% I definitely want $T_0$ to be $\N$ and $C_0$ to be $1$. Can I say
+%% $T_{-1} = 1$ and $C_{-1} = 1$? Then
+
+%% \[\begin{array}{l}
+%% \mathbf{data}\ T_{0} : C_{-1} \to \rset\ \bf{where}\\
+%% \qquad \mathsf{Leaf} : (c : C_{-1}) \to T_{0}\ c\\
+%% \qquad \mathsf{Node} : (t : T_{-1}) \to ((c : C_{-1}) \to c \in t \to T_{0}\ c) \to T_{0}\ (\partial\ t)\\
+%% \end{array}\]
+%% looks correct if I say $\in $ is unit and $\partial$ yields the unique element. I get
+%% zero and successor. $C_0$ consists of the element with one $\mathsf{Node}$. Then trees are
+%% \[\begin{array}{l}
+%% \mathbf{data}\ T_{1} : C_{0} \to \rset\ \bf{where}\\
+%% \qquad \mathsf{Leaf} : (c : C_{0}) \to T_{1}\ c\\
+%% \qquad \mathsf{Node} : (t : T_{0}) \to ((c : C_{0}) \to c \in t \to T_{1}\ c) \to T_{1}\ (\partial\ t)\\
+%% \end{array}\]
 \section{Braids}
 
 Going back to the idea of trying to combine parametricity and HoTT to
