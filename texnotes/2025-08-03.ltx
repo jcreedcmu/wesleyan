@@ -779,23 +779,27 @@ $(X_1 \otimes X_1) \to (X_2 \otimes X_2)$. Now comes the time that
 I need to make a clever choice of $X_1$ as some inductive datatype that represents
 the type I hope describes the possible functions.
 
-I'm going to guess that there are three possibilities: send $x$ to the left
-2-cell, send $x$ to the right 2-cell, or send everything to a constant point
-that lies on the two joined circles. So I'm setting $X_1$ to $1 + 1 + S^1 \wedge S^1$.
-Let $W = S^1 \wedge S^1$.
-I think I send $\eta_1$ to $\eta_{W}$, the big loop around the wedge
-of circles. I think I send $x_1$ to $x_{W}$, the basepoint of the wedge
-of circles. So now I have
-\[  (X_2 : \mathsf{Set} ) (f : 1 + 1 + W \to X_2 ) \]
-\[  \to (f\otimes f)(m_1\ (1 + 1 + W)\ \eta_W\ x_W) = m_1\ X_2\ (f \o \eta_W)\ (f\ x_W)\]
-I think I want to quantify over yet another $(X : \mathsf{Set}) (\eta : S^1 \to X) (x : X)$
-and instantiate $X_2 := X \otimes X$ and
-\[ f (\binj_1\ *) = \binl_{X\otimes X} x\]
-\[ f (\binj_2\ *) = \binr_{X\otimes X} x\]
-\[ f (\binj_3 (\binl( s: S^1))) = \binl_{X\otimes X} (\eta\ s)\]
-\[ f (\binj_3 (\binr( s: S^1))) = \binr_{X\otimes X} (\eta\ s)\]
-and then I wind up with
-\[ (X : \mathsf{Set}) (\eta : S^1 \to X) (x : X) \]
-\[ \cdots = m_1\ (X\otimes X)\ (f \o \eta_W)\ (f\ x_W)\]
-No that's not right, I need $m_1$ to be applied to a general $X$. Hmm.
+Let's try to substitute $S^1 + 1$ again for $X_1$, and $\binl$ for $\eta_1$ and $\binr$ for $x_1$.
+And a case split between $\eta_2$
+and $x_2$ for $f$. We'd get
+\[  (  X_2 : \mathsf{Set} )(\eta_2 : S^1 \to X_2) (x_2 : X_2)  \]
+\[  \to (f\otimes f)(m_1\ (S^1 + 1)\ \binl\ \binr) = m_1\ X_2\ \eta_2\ x_2\]
+for \[ f (x : S^1 + 1) := \bcase x \bof \binl s \imp \eta_2 s \celse \binr \star \imp x_2 \]
+
+Alright, so we learn that the value of $m_1\ (S^1 + 1)\ \binl\ \binr : (S^1 + 1) \otimes (S^1 + 1)$
+determines the values of $m_1$ everywhere. But we can see that
+\[ (S^1 + 1) \otimes (S^1 + 1) = S^1\wedge S^1 + 1 + 1\]
+and we observe that
+\[ f \otimes f  : ((S^1 + 1) \otimes (S^1 + 1)) \to (X_2 \otimes X_2) \]
+I see; the functoriality of $\otimes$ means that we have three sort of maps.
+If we're in one of the copies of $1$ in $S^1 \wedge S^1 + 1 + 1$, then we're doing either
+\[ m_1\ X_2\ \eta_2\ x_2 = \binl x_2 : X_2 \otimes X_2\]
+\[ m_1\ X_2\ \eta_2\ x_2 = \binr x_2 : X_2 \otimes X_2\]
+Otherwise, there exists $s : S^1 \wedge S^1$, and we're doing some kind of constant map into the
+wedge of circles:
+\[ m_1\ X_2\ \eta_2\ x_2 = \bcase s \bof \binl s' \imp \binl (\eta_2\ s') \celse \binr s' \imp \binr (\eta_2\ s') : X_2 \otimes X_2\]
+
+So those are the three things we can do to have a parametric set map of type
+\[ m_1 : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
+Take $x$ to the left $X$, or to the right copy of $X$, or do a constant map into the circles wedged in $X \otimes X$.
 \end{document}
