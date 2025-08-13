@@ -53,7 +53,7 @@
 \def\rrefl{{\mathsf{refl}}}
 \def\bd{\mathsf{Bd}}
 \def\bdd{\mathsf{Bdd}}
-\def\rset{\mathbf{Set}}
+\def\rset{\mathsf{Type}}
 \def\rid{\mathsf{id}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\prequiv{\dashv\vdash}
@@ -802,4 +802,188 @@ wedge of circles:
 So those are the three things we can do to have a parametric set map of type
 \[ m_1 : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
 Take $x$ to the left $X$, or to the right copy of $X$, or do a constant map into the circles wedged in $X \otimes X$.
+
+\section{Opetopes as Data}
+I want first get ahold of a family
+\[T_1 : \{C_0 : \rset\} \{C_1 : C_0 \to C_0 \to \rset\} \to (C_0 \to C_0 \to \rset)\]
+ that describes ``color-compatible lists''. The argument $C_0$ is a set of colors.
+The argument $C_1 : C_0 \to C_0 \to \rset$ is a set of $1$-cells. $T_1$ outputs,
+for a given domain and codomain, the paths that can be composed out of the given $1$-cells. We can do this with
+\[\begin{array}{l}
+\mathbf{data}\ T_1\  \{C_0 : \rset\}\ \{C_1 : C_0 \to C_0 \to \rset\} : (C_0 \to C_0 \to \rset)\ \mathbf{where}\\
+\qquad \mathsf{Leaf}_1 : (c : C_0) \to T_1\ c\ c\\
+\qquad \mathsf{Node}_1: (a\ b\ c : C_0) \to C_1\ a\ b \to T_1\ b\ c \to T_1\ a\ c
+\end{array}\]
+We can imaginine with prefix
+\[\{C_0 : \rset\}\ \{C_1 : C_0 \to C_0 \to \rset\}\ \{a\ b : C_0\} \]
+doing some programming
+\[\begin{array}{l}
+\mathsf{map}_1 : \{C_1' : C_0 \to C_0 \to \rset\}\\
+\qquad (f : (a\ b : C_0) \to C_1\ a\ b \to C_1'\ a\ b)  \to   T_1\ \{C_1\}\ a\ b \to T_1\ \{C_1'\}\ a\ b \\
+\eta_1 :    C_1\ a\ b \to T_1\ \{C_1\}\ a\ b \\
+\mu_1 :   T_1\ \{T_1\ \{C_1\}\}\ a\ b \to T_1\ \{C_1\}\ a\ b\\
+\end{array}\]
+making this a monad in the category $C_0 \to C_0 \to \rset$. With those operations, we could imagine defining a notion of tree
+indexed by 2-cells $C_2$.
+\[\begin{array}{l}
+U_2 :  \{C_0 : \rset\}\ \{C_1 : C_0 \to C_0 \to \rset\}
+\ \{C_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset\} \\
+\qquad\qquad   (c\ c' : C_0)  \to  \rset\\
+U_2\ c\ c' = \{ f : C_1\ c\ c', f' : T_1\ c\ c', t : T_2\ f\ f'\}\\
+\mathbf{data}\ T_2\  \{C_0 : \rset\}\ \{C_1 : C_0 \to C_0 \to \rset\}
+\ \{C_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset\} \\
+\qquad\qquad :  \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf}_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') \to T_2\ f\ (\eta_1\ f)\\
+\qquad \mathsf{Node}_2: \{c\ c' : C_0\} (f : C_1\ c\ c') (\chi : T_1\ U_2\ c\ c') (\phi : C_2\ f\ (\mathsf{map}_1\ .f\ \chi))\\
+\qquad\qquad \to T_2\ f\ (\mu_1(\mathsf{map}_1\ .f'\ \chi))
+\end{array}\]
+Now it's time to stare at this and make some definitions and try to generalize.
+Let's capture at the toplevel telescopes by saying
+\[\begin{array}{rcl}
+S_0 &=& (C_0 : \rset)\\
+S_1 &=& (C_0 : \rset)(C_1 : C_0 \x C_0 \to \rset)\\
+S_2 &=& (C_0 : \rset)(C_1 : C_0 \x C_0 \to \rset)\\
+&&(C_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset)\\
+&\vdots
+\end{array}\]
+Let's now have
+\[\begin{array}{rcl}
+Z_0\ s &=& 1\\
+Z_1\ s &=& (c : s.C_0)(c' : s.C_0) \\
+Z_2\ s &=& (c : s.C_0)(c' : s.C_0)(f : s.C_1\ c\ c') (f' : T_1\ s\ c\ c')\\
+&\vdots
+\end{array}\]
+So that $Z_n : S_{n-1} \to \rset$ and $S_{n} = (s : S_{n-1}) \x (Z_n\ s \to \rset)$.
+But observe that this is nearly like saying
+\[\begin{array}{rcl}
+Z_0\ s &=& (z : Z_{-1}\ \bar s) \x 1\\
+Z_1\ s &=& (z : Z_0\ \bar s) \x (c : s.C_0)(c' : s.C_0) \\
+Z_2\ s &=& (z : Z_1\ \bar s) \x (f : s.C_1\ z) (f' : T_1\ s\ z)\\
+&\vdots
+\end{array}\]
+where $\bar s$ takes the `tail' of $s$. This suggests saying
+\[\begin{array}{lcl}
+W_0\ s\ \_ &=& 1\\
+W_1\ s\ \_ &=& (c : s.C_0) (c' : s.C_0) \\
+W_2\ s\ z &=& (f : s.C_1\ z) (f' : T_1\ s.C_1\ s\ z)\\
+&\vdots
+\end{array}\]
+And here we have $W_n : S_{n-1} \to Z_{n-1} \to \rset$ and $Z_n\ s = (z : Z_{n-1}\ \bar s) \x W_n\ s\ z$.
+
+Let's rename $Z$ to $B$ and summarize what we know at this point.
+\def\head{\mathop\mathsf{hd}}
+\[
+\begin{prooftree}
+e : S_n
+\justifies
+\bar e : S_{n-1}
+\end{prooftree}
+\qquad
+\begin{prooftree}
+e : S_n
+\justifies
+\head e : B_n\  \bar e \to \rset
+\end{prooftree}
+\]
+\[\begin{array}{l}
+S_n : \rset\\
+S_n = (s : S_{n-1}) \x (B_n\ s \to \rset)\\
+\\
+B_n : S_{n-1} \to \rset\\
+B_n\ s = \{b : B_{n-1}\ \bar s, \quad \dom : \head s\ b, \quad \cod : T_{n-1}\   b\}\\
+\end{array}
+\]
+%% We could say
+%% \[T_{n} : (s : S_{n}) \to B_{n}\ \bar s \to \rset\]
+%% or it might be perspicuous to expand this as
+%% \[T_{n} : (s : S_{n-1}) \to (B_n\ s \to \rset) \to (B_{n}\  s \to \rset)\]
+%% because we will want to understand $T_{n}$ as being a monad in $B_n\ s \to \rset$ for any $s : S_{n-1}$.
+
+We more or less want to say
+\[
+\begin{array}{l}
+%% \qquad\qquad \color{gray} \ \{C_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset\} \\
+\mathbf{data}\ T_n\  \{s : S_{n-1}\}\ \{C_n : B_n\ s \to \rset\} :  B_n\ s \to  \rset\ \mathbf{where}\\
+%% \color{gray}\qquad\qquad :  \{c\ c' : C_0\} (f : C_1\ c\ c') (f' : T_1\ c\ c') \to  \rset\ \mathbf{where}\\
+%% \color{gray}\qquad \mathsf{Leaf}_2 : \{c\ c' : C_0\} (f : C_1\ c\ c') \to T_2\ f\ (\eta_1\ f)\\
+\qquad \mathsf{Leaf}_n : (b : B_{n-1}\ \bar s)  (f : \head s\ b) \to T_n\ \{b, f, \eta\ f\}\\
+%% \color{gray}\qquad \mathsf{Node}_2: \{c\ c' : C_0\} (f : C_1\ c\ c') (\chi : T_1\ U_2\ c\ c') (\phi : C_2\ f\ (\mathsf{map}_1\ .f\ \chi))\\
+%% \color{gray}\qquad\qquad \to T_2\ f\ (\mu_1(\mathsf{map}_1\ .f'\ \chi))\\
+\qquad \mathsf{Node}_n: (b : B_{n-1}\ \bar s)  (f : \head s\ b) \\
+\qquad\qquad (\chi : T_{n-1}\ \{\bar s\}\ \{U_n\}\ b) \\
+\qquad\qquad (\phi : C_n\ \{b,f,\mathsf{map}\ \dom\ \chi\}) \\
+\qquad\qquad   \to T_n\ \{b,f, \mu\ (\mathsf{map}\ \cod\ \chi)\}\\
+\\
+U_n:  \{s : S_{n-1}\} \{C_n : B_n\ s \to \rset\} (b : B_{n-1}\ \bar s) \to  \rset\\
+U_n\ b = \{\dom : \head\ s\ b, \quad \cod : T_{n-1}\ b, \quad t : T_n\ \{b, \dom, \cod\}\}\\
+\end{array}\]
+%% We could
+
+%% We hope to abstract $C_n = B_n \to \rset$, so
+%% \[\begin{array}{rcl}
+%% B_0 &=& 1\\
+%% B_1 &=& C_0 \x C_0\\
+%% B_2 &=& (c\ c' : C_0) (f : C_1\ c\ c')(f':T_1\ c\ c') \\
+%% &\vdots
+%% \end{array}\]
+%% This suggests an inductive way of building up $B$ as $B_{n+1} := (b : B_{n}) \x D_{n+1}$.
+%% \[\begin{array}{rcl}
+%% D_0 &=& 1\\
+%% D_1 \_&=& C_0 \x C_0\\
+%% D_2 (c, c')&=& (f : C_1\ c\ c')(f':T_1\ c\ c') \\
+%% &\vdots
+%% \end{array}
+%% \]
+
+\subsection{Zipping}
+
+I went through some other thinking, way in another direction of more extrinsic
+typing. I wanted to do something like
+\[
+\begin{array}{l}
+\mathbf{data}\ T :  \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T\\
+\qquad \mathsf{Node}: (t: T)\ (n : \mathsf{Addr}\ t) \to T
+\end{array}\]
+where $\mathsf Addr\ t$ captures some notion of an address within $t$, naming
+a node inside $t$. However, trying to define this notion of address seems
+to lead quickly to positivity or termination problems. I thought for a while about
+\[
+\begin{array}{l}
+\mathbf{data}\ T :  \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T\\
+\qquad \mathsf{Node}: T \to [T] \to T
+\end{array}\]
+where I simply list all of the subtrees in some traversal order. But then zipping
+up those results across the tree structure in the first $T$ argument becomes a headache.
+I could say that $T_{-1} = \rid$ and then
+\[
+\begin{array}{l}
+\mathbf{data}\ T_0\ (A : \rset) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T_0\ A \\
+\qquad \mathsf{Node}: A  \to T_{-1}\ (T_0\ A) \to T_0\ A
+\end{array}\]
+\[
+\begin{array}{l}
+\mathbf{data}\ T_1\ (A : \rset) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T_1\ A\\
+\qquad \mathsf{Node}: A  \to T_0\ (T_1\ A) \to T_1\ A
+\end{array}\]
+\[
+\begin{array}{l}
+\mathbf{data}\ T_2\ (A : \rset) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T_2\ A\\
+\qquad \mathsf{Node}: A  \to T_1\ (T_2\ A) \to T_2\ A
+\end{array}\]
+so I guess I could try to subsume this with
+\[
+\begin{array}{l}
+\mathbf{data}\ T\ (A : \rset) :   \rset\ \mathbf{where}\\
+\qquad \mathsf{Leaf} : T\ A\\
+\qquad \mathsf{Node}: A  \to T\ (T\ A) \to T\ A
+\end{array}\]
+
+I note that there is a mapping $A \to T\ A$ given by
+ taking $a : A$ to $\mathsf{Node}\ a\ \mathsf{Leaf} : T\ A$.
+Surely this is natural in $A$.
 \end{document}
