@@ -16,6 +16,7 @@
 \usepackage{tikz}
 \usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
 \usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{hobby}
 \usepackage{tcolorbox}
 \usepackage{stackengine}
 \newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
@@ -607,7 +608,9 @@ Let's try hypertrees now.
 \qquad \mathsf{Leaf} :  (n : \N) \to T_{2}\ n\\
 \qquad \mathsf{Node} : (t : T_1) \to  ( (n : \N) \to n \in t \to (t : T_{2}\ n) ) \to T_{2}\ (\partial\ t)\\
 \end{array}\]
-\vskip0.5em\hline\vskip0.5em
+
+\vskip 0.5em \hrule \vskip 0.5em
+
 What if I index $T_1$ by their boundary?
 \[\begin{array}{l}
 \mathbf{data}\ T_{1} : \N \to \rset\ \bf{where}\\
@@ -635,7 +638,7 @@ This feels like this compresses to, ugh, something like the following, but it's 
 \end{array}\]
 \[ U_{n+1} = (t : U_n) \x T_{n+1}\ t\]
 
-%% \vskip0.5em\hline\vskip0.5em
+%% \vskip0.5em\hrule\vskip0.5em
 %% \[\begin{array}{l}
 %% \mathbf{data}\ T_{2} : \rset\ \bf{where}\\
 %% \qquad \mathsf{Leaf} :  C_1 \to T_{2}\\
@@ -776,8 +779,7 @@ instantiation should give me
 \[  \to (f\otimes f)(m_1\ X_1\ \eta_1\ x_1) = m_1\ X_2\ (f \o \eta_1)\ (f\ x_1)\]
 where $f \otimes f$ is the hopefully evident functorial lifing of $f$ to
 $(X_1 \otimes X_1) \to (X_2 \otimes X_2)$. Now comes the time that
-I need to make a clever choice of $X_1$ as some inductive datatype that represents
-the type I hope describes the possible functions.
+I need to make a clever choice of $X_1$.
 
 Let's try to substitute $S^1 + 1$ again for $X_1$, and $\binl$ for $\eta_1$ and $\binr$ for $x_1$.
 And a case split between $\eta_2$
@@ -799,10 +801,78 @@ Otherwise, there exists $s : S^1 \wedge S^1$, and we're doing some kind of const
 wedge of circles:
 \[ m_1\ X_2\ \eta_2\ x_2 = \bcase s \bof \binl s' \imp \binl (\eta_2\ s') \celse \binr s' \imp \binr (\eta_2\ s') : X_2 \otimes X_2\]
 
-So those are the three things we can do to have a parametric set map of type
-\[ m_1 : ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
+\subsection{Reasoning about Paths}
+So we've established there are three things we can do to have a parametric set map of type
+\[ ( X : \mathsf{Set} ) (\eta : S^1 \to X) (x : X) \to X \otimes X\]
 Take $x$ to the left $X$, or to the right copy of $X$, or do a constant map into the circles wedged in $X \otimes X$.
 
+If we have a hom from $X \otimes X$ to itself as a circled type, then we have 3 x 3 possibilities.
+Further considerations below should eventually eliminate all but two of those.
+
+But let's dive in and explicitly consider what else we have. Because the hom preserves the circle, we have
+\[ p : \{ X : \mathsf{Set} \} \{\eta : S^1 \to X\} (s : S^1) \to m\ (\eta_{X \otimes X}\ s) = \eta_{X \otimes X}\ s\]
+which breaks up into preserving the base and the loop of $X \otimes X$:
+\[ p_1 : \{ X : \mathsf{Set} \} \{\eta : S^1 \to X\}  \to m\ (\eta_{X \otimes X}\ \mathsf{base}) = \eta_{X \otimes X}\ \mathsf{base}\]
+\[ p_2 : \{ X : \mathsf{Set} \} \{\eta : S^1 \to X\}  \to \mathsf{ap}_m\  (\mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop}) =_{p_1} \mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop}\]
+Recall that $m : X \otimes X \to X \otimes X$ is the carrier of the hom. Note that
+\[ \mathsf{ap}_m\  (\mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop}):  ( m\ (\eta_{X \otimes X}\ \mathsf{base}) =  m\ (\eta_{X \otimes X}\ \mathsf{base}))\]
+\[\mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop} :  (\eta_{X \otimes X}\ \mathsf{base} =  \eta_{X \otimes X}\ \mathsf{base})\]
+So having a path over $p_1$ is more or less the same as asserting
+\[ p_2 : \{ X : \mathsf{Set} \} \{\eta : S^1 \to X\}  \to \mathsf{ap}_m\  (\mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop}) = p_1 \bullet \mathsf{ap}_{\eta_{X \otimes X}}\ \mathsf{loop} \bullet p_1^{-1}\]
+We want to make some definitions for convenience:
+\[ x = \binl\ (\eta\ \mathsf{base}) \qquad y = \binr\ (\eta\ \mathsf{base})\]
+\[ a = \binl\ (\mathsf{ap}_\eta\ \mathsf{loop}) \qquad c = \binr\ (\mathsf{ap}_\eta\ \mathsf{loop})\]
+\[ b = (x = y)\]
+
+\begin{center}\includegraphics[scale=0.50]{circles.png}\end{center}
+Then we have
+\[ m_1 : X \to X \otimes X \qquad m_2 : X \to X \otimes X \]
+which by parametricity we've constrained to be one of 3 things each, either $\binl$ or $\binr$ or a constant map
+factoring through $\eta_{X\otimes X}$. We know we have
+\[q : m\ x = m\ y\]
+because we're mapping into a pushout. And because the hom preserves the circle, we must have
+\[ p_1 :  m\ x = x\]
+\[ p_2 :  m(a b c b^{-1}) = p_1 a b c b^{-1} p_1^{-1}\]
+where we're omitting $\bullet$ and writing path composition as juxtaposition, and forgetting
+about $\mathsf{ap}_m$ and simply writing $m$.
+
+\subsection{A Digression About Parametricity and Paths}
+
+We should be able to show that a parametric path like
+\[ j : (X : \rset) (\eta : S^1 \to X) \to (\eta\ \mathsf{base} = \eta\ \mathsf{base})\]
+is the same as the loop space of the circle itself. Having $X$ around in the background
+shouldn't make any additional paths.
+So I think parametricity looks like
+\[  (X_1\ X_2 : \rset) ({\sim} : X_1 \to X_2 \to \rset) \]
+\[(\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\]
+\[ \to \mathsf{trans}\ (\eta_*\ \mathsf{base})\ (j\ X_1\ \eta_1) \ (j\ X_2\ \eta_2) = \eta_*\ \mathsf{base}\]
+for the  evident notion of relation transport
+\[\mathsf{trans} : (a \sim b) \to (a = a') \to (b = b') \to (a' \sim b')\]
+that does path induction on the two path arguments.
+
+I guess that I perhaps want to set $X_1$ to $S^1$ and $\eta_1$ to $\rid$. I'd get
+\[  ( X_2 : \rset) ({\sim} : S^1 \to X_2 \to \rset) \]
+\[(\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to  s \sim \eta_2\ s)\]
+\[ \to \mathsf{trans}\ (\eta_*\ \mathsf{base})\ (j\ S^1\ \rid) \ (j\ X_2\ \eta_2) = \eta_*\ \mathsf{base}\]
+
+
+Then perhaps I want to instantiate $a \sim b$ as $\eta_2(a) = b$,
+\[  ( X_2 : \rset)  (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to  \eta_2 s = \eta_2\ s)\]
+\[ \to \mathsf{trans}\ (\eta_*\ \mathsf{base})\ (j\ S^1\ \rid) \ (j\ X_2\ \eta_2) = \eta_*\ \mathsf{base}\]
+
+And I think at this point $\mathsf{trans}$ specializes to equality composition, but because
+the transport is happening at the relation that now incorporates $\eta_2$, we'd wrape the $j\ S^1\ \rid$ in $\eta_2$ and obtain
+
+\[  ( X_2 : \rset)  (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to  \eta_2 s = \eta_2\ s)\]
+\[ (\eta_2\ (j\ S^1\ \rid))^{-1} \bullet \mathsf{ \eta_*\ \mathsf{base}} \bullet (j\ X_2\ \eta_2) = \eta_*\ \mathsf{base}\]
+
+Now I can instantiate  $\eta_*$ as $\lambda s . \rrefl\ (\eta_2 s)$ to get
+\[  ( X_2 : \rset)  (\eta_2 : S^1 \to X_2)  \]
+\[ (\eta_2\ (j\ S^1\ \rid))^{-1} \bullet  \rrefl\ (\eta_2\ \mathsf{\mathsf{base}}) \bullet (j\ X_2\ \eta_2) = \rrefl\ (\eta_2\ \mathsf{\mathsf{base}})\]
+which would mean
+\[ j\ X_2\ \eta_2 = \eta_2\ (j\ S^1\ \rid)\]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Opetopes as Data}
 I want first get ahold of a family
 \[T_1 : \{C_0 : \rset\} \{C_1 : C_0 \to C_0 \to \rset\} \to (C_0 \to C_0 \to \rset)\]
@@ -986,4 +1056,151 @@ so I guess I could try to subsume this with
 I note that there is a mapping $A \to T\ A$ given by
  taking $a : A$ to $\mathsf{Node}\ a\ \mathsf{Leaf} : T\ A$.
 Surely this is natural in $A$.
+
+\section{Parametricity and Braids again}
+
+After thinking about it some more, I didn't really finish the reasoning
+that even the one-braid case is really fully correct. Here's an attempt.
+
+Suppose we have a map
+
+\[ j : (X : \rset) (\eta : S^1 \to X) \to (h : X \to X) \x (h \o \eta \equiv \eta) \]
+Then we want to show that
+\[ j \equiv \lambda X \eta . \langle \rid_{X}, \rrefl_\eta \rangle \]
+which by function extensionality means we need to show, for every $ (X : \rset) (\eta : S^1 \to X)$, that
+\[  j\ X\ \eta \equiv \langle \rid_{X}, \rrefl_\eta \rangle \]
+which by $\Sigma$ extensionality means we need to show that each component is equal.
+Let's quickly remember how that works in general. Let's say we want to show
+$t = u : (x : A) \x M\ x \equiv N\ x$ for some $M, N : A \to B$.
+We need
+\[ p_1 : t.1 \equiv u.1\]
+\[ p_2 : t.2 \equiv_{p_1} u.2\]
+Another way of understanding $p_2$ is as the diagram
+\[\begin{tikzcd}
+M\ t.1&M\ u.1\\
+N\ t.1&N\ u.1\\
+	\arrow["M\ p_1", to=1-2, from=1-1, equals]
+	\arrow["t.2"', to=2-1, from=1-1, equals]
+	\arrow["u.2", to=2-2, from=1-2, equals]
+	\arrow["N\ p_1"', to=2-2, from=2-1, equals]
+\end{tikzcd}\]
+
+So concretely in our case
+\[ p_1 : \pi_1\ (j\ X\ \eta) \equiv \rid_X \]
+\[ p_2 : \pi_2\ (j\ X\ \eta) \equiv_{p_1} \rrefl_\eta \]
+And $p_2$ is really the 2-cell in the diagram
+\[\begin{tikzcd}
+ \pi_1\ (j\ X\ \eta) \o \eta & \eta\\
+	 \eta & \eta
+	\arrow["p_1 \o \eta", to=1-2, from=1-1, equals]
+	\arrow["\pi_2\ (j\ X\ \eta)"', to=2-1, from=1-1, equals]
+	\arrow["\rrefl_\eta", to=2-2, from=1-2, equals]
+	\arrow["\rrefl_\eta"', to=2-2, from=2-1, equals]
+\end{tikzcd}\]
+
+\subsection{Parametricity Principle}
+What is the parametricity principle for $j$? We should have something like
+
+\[j_\star :  (X_1\ X_2 : \rset) ({\sim} : X_1 \to X_2 \to \rset) \]
+\[(\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\]
+\[ \to (j\ X_1\ \eta_1) \sim_{(h : X \to X) \x (h\o \eta \equiv \eta)}(j\ X_2\ \eta_2)\]
+
+Let's check our assumptions on parametricity principles for $\Sigma$ types.
+We say $t \sim_{(x:A) \x B} u$ whenever we have
+a relation for the first component
+\[p_1 : t.1 \sim_A u.1\]
+and also a relation for the second component
+\[p_2 : t.2 \sim_{x:p_1 \prov B} u.2\]
+where we have stashed the evidence of the relation $p_1$ away associated with the variable $x$.
+
+So we can expand our parametricity principle to
+\[\begin{array}{l}
+j_\star :  (X_1\ X_2 : \rset) ({\sim} : X_1 \to X_2 \to \rset) \\
+\qquad(\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\\
+\qquad \to (h_\star : (j\ X_1\ \eta_1).1 \sim_{X \to X} (j\ X_2\ \eta_2).1) \x {}\\
+\qquad  (j\ X_1\ \eta_1).2 \sim_{h_\star : X \to X \prov (h\o \eta \equiv \eta)}(j\ X_2\ \eta_2).2\\
+\end{array}
+\]
+And I think the relation on the second-components that are paths is something like
+\[\begin{tikzcd}
+   (j\ X_1\ \eta_1).1\ (\eta_1\ s) &[3em]    (j\ X_2\ \eta_2).1\ (\eta_2\ s)\\
+	 \eta_1\ s & \eta_2\ s
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow[" (j\ X_1\ \eta_1).2\ s"',  to=2-1, from=1-1, equals]
+	\arrow["(j\ X_2\ \eta_2).2\ s", to=2-2, from=1-2, equals]
+	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+\end{tikzcd}\]
+
+\subsection{Separate Names}
+Alternatively we can break up $j$ and name subcomponents. We assume we have
+
+\[ h : \{X : \rset\} \{\eta : S^1 \to X\} (x : X)\to X \]
+\[ p : \{X : \rset\} \{\eta : S^1 \to X\} (s : S^1) \to  h\ (\eta\ s) \equiv \eta\ s \]
+
+We then want to show that, morally, the sigma of these two is contractible, which amounts to showing
+
+\[ h^= : \{X : \rset\} \{\eta : S^1 \to X\} (x : X) \to h\ x \equiv x \]
+\[ p^= : \{X : \rset\} \{\eta : S^1 \to X\} (s : S^1) \to  \]
+
+\[\begin{tikzcd}
+  h\ (\eta\ s) &[3em] \eta\ s\\
+	 \eta\ s & \eta\ s
+	\arrow["h^=\ (\eta\ s)", to=1-2, from=1-1, equals]
+	\arrow["p\ s"', to=2-1, from=1-1, equals]
+	\arrow["\rrefl_{\eta\ s}", to=2-2, from=1-2, equals]
+	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1, equals]
+\end{tikzcd}\]
+\usetikzlibrary{decorations.pathmorphing}
+Now what we have in addition to $h$ and $p$ is parametricity principles
+\[h_\star :  (X_1\ X_2 : \rset) ({\sim} : X_1 \to X_2 \to \rset) \]
+\[(\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)\]
+\[(x_1 :  X_1) (x_2 :  X_2)  (x_* : x_1 \sim x_2) \]
+\[ \to h\ \{X_1\}\ \{\eta_1\}\ x_1 \sim h\ \{X_2\}\ \{\eta_2\}\ x_2\]
+and
+\[p_\star :  (X_1\ X_2 : \rset) ({\sim} : X_1 \to X_2 \to \rset) \]
+\[(\eta_1 : S^1 \to X_1) (\eta_2 : S^1 \to X_2)  (\eta_* : (s : S^1) \to \eta_1\ s \sim \eta_2\ s)  \]
+\[(s : S^1) \to \]
+\[\begin{tikzcd}
+  h\ \{X_1\}\ \{\eta_1\}\ (\eta_1\ s) &[3em]   h\ \{X_2\}\ \{\eta_2\}\ (\eta_2\ s)\\
+	 \eta_1\ s & \eta_2\ s
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["p\ \{X_1\}\ \{\eta_1\}\ s"',  to=2-1, from=1-1, equals]
+	\arrow["p\ \{X_2\}\ \{\eta_2\}\ s", to=2-2, from=1-2, equals]
+	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+\end{tikzcd}\]
+Now what happens if we hypothesize up $(X : \rset)(\eta: S^1 \to X)(s:S^1)$,
+ and apply $p_*$ to
+\[\begin{array}{l@{\qquad}l@{\qquad}l}
+X_1 := 1 + S^1 & X_2 := X&a \sim b := (\eta\ s|\eta)(a) \equiv b\\
+\eta_1 := \binr & \eta_2 := \eta & \eta_* := \lambda s. \rrefl_{\eta\ s}\\
+&s := s
+\end{array}
+\]
+We get the diagram
+\[\begin{tikzcd}
+  h\ \{1 + S^1\}\ \{\binr\}\ (\binr\ s) &[3em]   h\ \{X\}\ \{\eta\}\ (\eta\ s)\\
+	 \binr\ s & \eta\ s
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["p\ \{1 + S^1\}\ \{\binr\}\ s"',  to=2-1, from=1-1, equals]
+	\arrow["p\ \{X\}\ \{\eta\}\ s", to=2-2, from=1-2, equals]
+	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+\end{tikzcd}\]
+Which, I think substituting the relations would give me
+\[\begin{tikzcd}
+(\eta\ s|\eta)(h\ \{1 + S^1\}\ \{\binr\}\ (\binr\ s)) &[3em]   h\ \{X\}\ \{\eta\}\ (\eta\ s)\\
+	 \eta\ s & \eta\ s
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, equals]
+	\arrow["(\eta\ s|\eta)(p\ \{1 + S^1\}\ \{\binr\}\ s)"',  to=2-1, from=1-1, equals]
+	\arrow["p\ \{X\}\ \{\eta\}\ s", to=2-2, from=1-2, equals]
+	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1,equals]
+\end{tikzcd}\]
+So I'd be completely set if I could only prove
+\[\begin{tikzcd}
+(\eta\ s|\eta)(h\ \{1 + S^1\}\ \{\binr\}\ (\binr\ s)) &[3em]   h\ \{X\}\ \{\eta\}\ (\eta\ s)\\
+	 \eta\ s & \eta\ s
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, equals]
+	\arrow["(\eta\ s|\eta)(p\ \{1 + S^1\}\ \{\binr\}\ s)"',  to=2-1, from=1-1, equals]
+	\arrow["h^=\ (\eta\ s)", to=2-2, from=1-2, equals]
+	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1,equals]
+\end{tikzcd}\]
 \end{document}
