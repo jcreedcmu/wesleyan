@@ -15,7 +15,6 @@
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
-\usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{hobby}
 \usepackage{tcolorbox}
 \usepackage{stackengine}
@@ -1125,10 +1124,10 @@ And I think the relation on the second-components that are paths is something li
 \[\begin{tikzcd}
    (j\ X_1\ \eta_1).1\ (\eta_1\ s) &[3em]    (j\ X_2\ \eta_2).1\ (\eta_2\ s)\\
 	 \eta_1\ s & \eta_2\ s
-	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, squiggly]
 	\arrow[" (j\ X_1\ \eta_1).2\ s"',  to=2-1, from=1-1, equals]
 	\arrow["(j\ X_2\ \eta_2).2\ s", to=2-2, from=1-2, equals]
-	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, squiggly]
 \end{tikzcd}\]
 
 \subsection{Separate Names}
@@ -1163,10 +1162,10 @@ and
 \[\begin{tikzcd}
   h\ \{X_1\}\ \{\eta_1\}\ (\eta_1\ s) &[3em]   h\ \{X_2\}\ \{\eta_2\}\ (\eta_2\ s)\\
 	 \eta_1\ s & \eta_2\ s
-	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, squiggly]
 	\arrow["p\ \{X_1\}\ \{\eta_1\}\ s"',  to=2-1, from=1-1, equals]
 	\arrow["p\ \{X_2\}\ \{\eta_2\}\ s", to=2-2, from=1-2, equals]
-	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["\eta_\star\ s"', to=2-2, from=2-1, -, squiggly]
 \end{tikzcd}\]
 Now what happens if we hypothesize up $(X : \rset)(\eta: S^1 \to X)(s:S^1)$,
  and apply $p_*$ to
@@ -1180,10 +1179,10 @@ We get the diagram
 \[\begin{tikzcd}
   h\ \{1 + S^1\}\ \{\binr\}\ (\binr\ s) &[3em]   h\ \{X\}\ \{\eta\}\ (\eta\ s)\\
 	 \binr\ s & \eta\ s
-	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["h_\star\ (\eta_\star\ s)", to=1-2, from=1-1, -, squiggly]
 	\arrow["p\ \{1 + S^1\}\ \{\binr\}\ s"',  to=2-1, from=1-1, equals]
 	\arrow["p\ \{X\}\ \{\eta\}\ s", to=2-2, from=1-2, equals]
-	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1, -, decorate,decoration={snake,amplitude=0.3mm,segment length=2mm}]
+	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1, -, squiggly]
 \end{tikzcd}\]
 Which, I think substituting the relations would give me
 \[\begin{tikzcd}
