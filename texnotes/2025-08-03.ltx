@@ -1245,8 +1245,7 @@ Consider the equilateral triangle lying in the $xy$ plane defined by
  P_2 = (0\ {\sqrt 3 / 2}\ 0)^\top &
  P_3 = (1/2\ 0\ 0)^\top
 \end{array}\]
-We observe that
-\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_3 = 0 \]
+
 To first order, small rotations by $M$ applied to things already
 in the $xy$ plane only result in $z$ displacements.
 \[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 0 \\ 0 \\ 1/2 \end{array}\right) \]\]
@@ -1265,9 +1264,9 @@ So let's look at second order:
  0& 0& -1 -k^2\\
 \end{array}\right)\]
 and we have
-\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} -1/2 \\ 0 \\ 0 \end{array}\right) \]\]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 1/2 \\ 0 \\ 0 \end{array}\right) \]\]
 \[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} k\sqrt{3} \\ -k^2\sqrt{3}/2 \\ 0 \end{array}\right) \]\]
-\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} 1/2 \\ 0 \\ 0 \end{array}\right) \]\]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} -1/2 \\ 0 \\ 0 \end{array}\right) \]\]
 $P_1$, the left base vertex, moves to the right as expected. $P_3$, the right base vertex moves left as expected.
 If we select $k$ very small, then $P_2$ moves to the right, which is bad. If we select $k$ big enough, the downward $-k^2\sqrt{3}/2$
 dominates the rightward $k\sqrt{3}$ and we stay in the triangle. A tiny translation upwards on the order of $\epsilon^2$ should
