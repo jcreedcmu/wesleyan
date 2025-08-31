@@ -1202,4 +1202,83 @@ So I'd be completely set if I could only prove
 	\arrow["h^=\ (\eta\ s)", to=2-2, from=1-2, equals]
 	\arrow["\rrefl_{\eta\ s}"', to=2-2, from=2-1,equals]
 \end{tikzcd}\]
+
+\section{Triangles}
+Here I'm convincing myself the equilateral triangle is
+locally Rupert, i.e. there are poses that are arbitrarily
+close to the identity that make it Rupert.
+
+Let $c = \cos(\epsilon), s = \sin(\epsilon)$ and
+ $c_k = \cos(k\epsilon), s_k = \sin(k\epsilon)$. Consider
+\[M  = R_y(\epsilon)  R_x(k\epsilon)\]
+\[= \left(\begin{array}{ccc}
+c& 0 &-s \\
+ 0&1&0\\
+ s& 0& c\\
+\end{array}\right) \left(\begin{array}{ccc}
+1& 0&0\\
+ 0&c_k&s_k\\
+ 0& -s_k& c_k\\
+\end{array}\right)\]
+\[ = \left(\begin{array}{ccc}
+c& s s_k&-s  c_k\\
+ 0&c_k&s_k\\
+ s& -cs_k& cc_k\\
+\end{array}\right) \]
+
+We can take the derivative with respect to $\epsilon$:
+\[{\partial M\over \partial\epsilon} = \left(\begin{array}{ccc}
+-s& c s_k + ks c_k&  ks  s_k - c  c_k\\
+ 0&-ks_k&kc_k\\
+ c& ss_k - kcc_k& -sc_k -kcs_k\\
+\end{array}\right)\]
+Setting $\epsilon = 0$ gives
+\[\left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} = \left(\begin{array}{ccc}
+0& 0&  -k\\
+ 0&0&k\\
+ 1&  - k& 0\\
+\end{array}\right)\]
+
+Consider the equilateral triangle lying in the $xy$ plane defined by
+\[\begin{array}{ccc}
+ P_1 = (-1/2\ 0\ 0)^\top &
+ P_2 = (0\ {\sqrt 3 / 2}\ 0)^\top &
+ P_3 = (1/2\ 0\ 0)^\top
+\end{array}\]
+We observe that
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_3 = 0 \]
+To first order, small rotations by $M$ applied to things already
+in the $xy$ plane only result in $z$ displacements.
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 0 \\ 0 \\ 1/2 \end{array}\right) \]\]
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} 0 \\ 0 \\ -k\sqrt{3}/2 \end{array}\right) \]
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} 0\\ 0 \\ -1/2 \end{array}\right) \]\]
+
+So let's look at second order:
+\[{\partial^2 M\over \partial\epsilon^2} = \left(\begin{array}{ccc}
+-c& -s s_k + 2kc c_k  -k^2s s_k&    s  c_k +  2kc  s_k  + k^2s  c_k  \\
+ 0&-k^2c_k&-k^2s_k\\
+ -s& cs_k + 2ksc_k + k^2cs_k& -cc_k +2kss_k -k^2cc_k\\
+\end{array}\right)\]
+\[\left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} = \left(\begin{array}{ccc}
+-1&  2k&  0  \\
+ 0&-k^2&0\\
+ 0& 0& -1 -k^2\\
+\end{array}\right)\]
+and we have
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} -1/2 \\ 0 \\ 0 \end{array}\right) \]\]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} k\sqrt{3} \\ -k^2\sqrt{3}/2 \\ 0 \end{array}\right) \]\]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} 1/2 \\ 0 \\ 0 \end{array}\right) \]\]
+$P_1$, the left base vertex, moves to the right as expected. $P_3$, the right base vertex moves left as expected.
+If we select $k$ very small, then $P_2$ moves to the right, which is bad. If we select $k$ big enough, the downward $-k^2\sqrt{3}/2$
+dominates the rightward $k\sqrt{3}$ and we stay in the triangle. A tiny translation upwards on the order of $\epsilon^2$ should
+make us rupert.
+
+The side of the triangle
+has a slope of $-\sqrt 3$, and the slope of the velocity vector of the top
+vertex is $(-k^2\sqrt 3/2)/(k\sqrt 3) = -k/2$.
+ So we want $k/2$ to be at
+least $\sqrt 3$, so $k$ must be at least $2\sqrt 3 \approx 3.464$. I picked
+k in sage first just by looking at what seemed to work,
+and I ended up picking $k = 4$, which indeed is more than
+$3.464$.
 \end{document}
