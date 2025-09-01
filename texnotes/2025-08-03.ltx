@@ -1341,4 +1341,40 @@ in $\alpha,\beta\gamma$, with not all elements in the cross-product being feasib
 
 If my 2-digram shape had more 2-cells in it, it would have had some internal $\sigma_2$ edges as well.
 \begin{center}\includegraphics[scale=0.50]{images/2025-09-01-pasting2.png}\end{center}
+
+In a regular tree, an operation I might want to do is take a dangling leaf $L$ and graft on another tree $T$.
+For leaf $L$, I delete four flags that constitute a non-codomain $1$-cell, and I take $T$ and split it like
+I do (1b) above. This leaves both of them with 4 dangling $\sigma_1$-edges. We then glue them together.
+
+In a 2-tree, I might want to take a dangling leaf $L$ and graft on another tree $T$.
+For the leaf $L$, I delete all the flags of a 2-cell. This leaves various dangling $\sigma_2$-edges.
+How many depends on the shape of the 2-cell that is the leaf. I know that the flags I deleted
+have the form of a cross-product: because $\sigma_3$ commutes with $\sigma_0,\sigma_1$.
+For the grafted tree $T$, I want to search around $\sigma_0,\sigma_1$, and then break all the nearby
+$\sigma_2$, maybe?
+
+No, I need a less trivial example to be sure I understand what I'm doing.
+
+\subsection{A Less Trivial Example}
+The below diagram is almost making me see how I want it to go.
+Let's reindex so that a 2-tree is a suitable 2-cartographic set.
+Then when I talk about just a ``tree'' I mean a 2-tree, and a 3-tree is a tree-of-trees.
+
+The cell $M$ is an example of a tree. It has faces $\epsilon, \gamma, \phi$.
+Of these $\gamma$ and $\epsilon$ really are nodes of the tree, and $\phi$ is the unique codomain 2-cell.
+
+I can derive a 3-tree from a 2-tree by doubling flags.
+
+I'm going to find that a 3-tree is either a leaf or has a node. A 3-tree with a node can be constructed
+uniquely from a 2-tree $M$ that gives the arity of that node, plus a 3-tree $L_\alpha$ for each domain 2-cell $\alpha$ of $M$.
+
+The flags of the composite structure are:
+\begin{itemize}
+\item A flag $m_x$ for every flag $x\in M$
+\item A flag $n_x$ for every 2-codomain flag $x\in M$
+\item $\cdots$
+\end{itemize}
+\begin{center}\includegraphics[scale=0.50]{images/2025-09-01-pasting3.png}\end{center}
+
+
 \end{document}
