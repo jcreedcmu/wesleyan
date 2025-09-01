@@ -1280,4 +1280,52 @@ least $\sqrt 3$, so $k$ must be at least $2\sqrt 3 \approx 3.464$. I picked
 k in sage first just by looking at what seemed to work,
 and I ended up picking $k = 4$, which indeed is more than
 $3.464$.
+
+\section{Opetopes and Flags}
+
+Suppose I have a cartographic set $X$ under involutions $\sigma_0,\ldots,\sigma_n$.
+
+I could ask for some extra data, some maps $f_{0}, \ldots, f_{n} : X \to 2$.
+The function $f_i$ is interpreted as saying
+whether a flag is attached to an $i$-dimensional cell that is in the domain (0) or codomain (1) of the higher-dimensional cell.
+Here's an example 2-dimensional cartographic set.
+\begin{center}\includegraphics[scale=0.70]{images/2025-09-01-higher.png}\end{center}
+The flag $x = (a,f,\gamma)$ would have $f_0(x) = 0$ because $a$ is in the domain of $f$
+and $f_1(x) = 0$ because $f$ is in the domain of $\gamma$, and $f_2(x) = 1$ because
+$\gamma$ is in the codomain of the implied cell $k$.
+
+We require that every cell has exactly one face that is a domain cell.
+
+These are required to interact with $\sigma$ as follows. We require
+\[f_n(x) \oplus f_{n-1}(x) \oplus f_n(\sigma_n(x)) \oplus f_{n-1}(\sigma_n(x)) = 1\]
+for all $n$, where $\oplus$ means addition mod 2, and $f_{-1}$ conventionally is the constant 0 function.
+
+Let's expand out what this means when we do a $\sigma_n$ flip. When we do such a flip, we're either
+staying within the $n$-domain, or we're passing between $n$-codomain and $n$-domain.
+Let's take for example the flag $x = (a, f, y)$ which has $\vec f(x) = [0,0,1]$. We do a $2$-flip,
+and we wind up at $x = (a, f, \alpha)$. We have gone from the 2-codomain cell $\gamma$ to the 2-domain
+cell $\alpha$. Because of this, the perspective on the input vs. outputness of $f$ does not change.
+So $\vec f (a, f, \alpha) = [0,0,0]$.
+
+Conversely, let's consider the face flip on $\vec f (a, h, \alpha) = [0, 1, 0]$.
+That takes us to $\vec f (a, h, \beta) = [0, 0, 0]$. When $f_2$ doesn't change, $f_1$ does,
+because we are traversing a composition boundary.
+
+When we do a $\sigma_0$, just the leftmost bit flips.
+
+If we have a $X$ with $\sigma_0,\ldots,\sigma_{n}$ and $f_0,\ldots,f_{n}$, then we can construct
+$X \x 2$ with $\sigma_0,\ldots,\sigma_{n}$ acting on $X$ and $\sigma_{n+1}$ flipping $2$.
+We let $f_0,\ldots,f_{n}$ draw from $X$, and $f_{n+1}$ takes the value of $2$.
+This is suspension, which forms $S^{n+1}$ from $S^n$.
+
+I want to think about composition. Here's one thing I can do.
+\begin{center}\includegraphics[scale=0.70]{images/2025-09-01-pasting.png}\end{center}
+In (1a) I have a tree with one unary node. In (1b) I break apart its left and right $\sigma_1$ edges.
+This creates a hole at the bottom. In (2a) I have a tree with one binary node. In (2b) I break both
+$\sigma_1$ walls on the right. This creates a hole ``on the right''. In (3) I glue these two shapes together,
+grafting (1a) onto (2a).
+
+I'm starting to think the important piece of data is simply the unique flag that is a codomain at every dimension.
+In (1a), I take that flag and its $\sigma_0$ partner, and break the $\sigma_1$ bonds adjacent to them.
+In (2a), I take that flag and its $\sigma_2$ partner, and break the $\sigma_1$ bonds adjacent to them.
 \end{document}
