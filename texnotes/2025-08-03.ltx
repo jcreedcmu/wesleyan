@@ -1376,5 +1376,76 @@ The flags of the composite structure are:
 \end{itemize}
 \begin{center}\includegraphics[scale=0.50]{images/2025-09-01-pasting3.png}\end{center}
 
+\subsection{Pasting, Again}
+
+No, my intuition evaporates there a bit. Here are some things I think I know:
+
+\begin{itemize}
+\item A one-node $n$-tree has a flag set isomorphic to $2 \x X$ where $\sigma_n$ acts on the $2$ part.
+\item The boundary of an $n$-tree (which comprises its `domain' and `codomain' in the usual sense) can be found by
+asking for its codomain $n$-cell. That $n$-cell includes $\sigma_0,\ldots,\sigma_{n-1}$ edges
+so it is itself an $n-1$-tree.
+\item Suppose we have an $n$-tree $B$. To be a leaf in $B$ is to be an
+$(n-1)$-cell that is incident to the codomain $n$-cell,
+but which is not itself a codomain $(n-1)$-cell. Pick a leaf $\ell \subseteq B$.
+We'd like to attach an $n$-tree named $A$ at this leaf.
+
+Here's another observation about a leaf: since we have commutativity of nonadjacent flips,
+we know it's structured as $\ell = \ell' \x 2$ with $\sigma_0,\ldots,\sigma_{n-2}$ acting
+on $\ell'$ and $\sigma_n$ acting on $2$. Say the flags of the form $\pair x 0$ are not
+in the codomain $n$-cell, and say those of the form $\pair x 1$ are.
+
+Let $Z_0$ be the codomain $(n-1)$-cell of the codomain $n$-cell of $A$.
+Let $Z_1 = \sigma_{n-1} Z_0$. Note that it is not necessarily {\em all} of the
+non-$(n-1)$-codomain flags of the codomain $n$-cell of $A$.
+
+We ask for bijections $\psi_i : \ell' \x \{i\} \cong Z_i$ to explain how the attachment works.
+These probably need to respect some of the flips as well.
+
+The result of attachment is the set $B \setminus \ell \cup A$. We modify the action of
+$\sigma_{n-1}$ on $B$ and on $A$, and leave everything else alone. We define $\sigma_{n-1}'$
+on $B \setminus \ell \cup A$.
+
+\[\begin{array}{ll}
+\sigma_{n-1}' b = \psi_0(\sigma_{n-1} b) & \hbox{if $b\in B$ and $\sigma_{n-1} b \in \ell' \x \{ 0\}$}\\
+\sigma_{n-1}' b = \psi_1(\sigma_{n-1} b) & \hbox{if $b\in B$ and $\sigma_{n-1} b \in \ell' \x \{ 1\}$}\\
+\sigma_{n-1}' a = \sigma_{n-1}(\psi_{0}^{-1} a)& \hbox{if $a\in Z_0$}\\
+\sigma_{n-1}' a = \sigma_{n-1}(\psi_{1}^{-1} a) & \hbox{if $a\in Z_1$}\\
+\sigma_{n-1}' x = \sigma_{n-1}x & \hbox{otherwise.}
+\end{array}\]
+\end{itemize}
+
+\subsection{A Mere Property}
+
+Up till now I've been thinking in terms of trying to make a definition of cartographic-sets-as-opetopes that involves
+inductively building up the tree structure. What if instead I step back and try to define a mere property that
+characterizes certain cartographic sets as being tree-shaped in a more holistic way?
+
+An $n$-map is as usual a set $X$ of flags and involutions
+$\sigma_0,\ldots,\sigma_n$ which commute appropriately. An $m$-cell of an $n$-map is an equivalence class
+of flags under all involutions except for $\sigma_m$.
+
+An $n$-pretree is an $n$-map equipped with some functions $c_0, \ldots, c_n : X \to 2$ which
+satisfy
+\[c_i(x) \oplus c_{j}(\sigma_i(x)) =  \begin{cases}
+c_i(\sigma_i(x)) \oplus c_{j}(x) + 1 & \hbox{if $j = i-1$;} \\
+1 & \hbox{if $j = i$;} \\
+0 &\hbox{otherwise.}
+\end{cases}\]
+Consider an $m$-cell $C$ and a sub-$(m-1)$-cell $D$ of it.
+To traverse $D$, we are allowed every involution except $\sigma_m$ and $\sigma_{m-1}$.
+This means $c_{m-1}$ is constant on $D$, because we always fall in the `otherwise' case of the above
+definition if we avoid $\sigma_m$ and $\sigma_{m-1}$. Therefore we can abuse notation and write
+of $c_{m-1}(C, D)$.
+
+An $n$-tree is an $n$-pretree such that
+
+\begin{itemize}
+\item Every $m$-cell $C$ has exactly one sub-$(m-1)$-cell $D$ such that  $c_{m-1}(C, D) = 1$.
+\item Every $n$-cell has a unique `path' to the unique $n$-cell $D$  with $c_n(X, D) = 1$.
+\end{itemize}
+
+I need to make the notion of `path' formal. What I have in mind is looking up the codomain $(n-1)$-cell
+and $\sigma_n$-flipping to the next $n$-cell.
 
 \end{document}
