@@ -1626,4 +1626,23 @@ A $n$-map $(X, \sigma)$ equipped with a function $c:X \to S^{[n]}$ is an {\em $n
 \item The subset $\{ x \in X \st c(x)(n) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
 \item For any $m \in 0,\ldots,n$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in E_m$.
 \end{itemize}
+
+\subsection{Stable Opetopes}
+An stable map is a set $X$ with involutions $\sigma_0,\sigma_{-1},\ldots : X \to X$, such that
+$\sigma_i x \ne x$ and if $|i-j| \ge 2$ then $\sigma_i \sigma_j = \sigma_j \sigma_i$.
+An stable map is connected if there is no nontrivial subset of $X$ closed under all of $\sigma_0,\sigma_{-1},\ldots$.
+The {\em children} of a stable map are the maximal subsets of $X$ closed under all of
+$\sigma_{-1},\sigma_{-2},\ldots$. These are connected stable maps if we bump all the $\sigma$s up an index.
+
+Define $S = \{1,-1\}$ and $e_i : S^{\N}$ by
+\[e_{i}( j) : = \begin{cases}-1 & \hbox{if $i=j$;} \\ 1 &\hbox{otherwise.} \end{cases}\]
+We write pointwise multiplication of vectors in $S^{\N}$ as juxtaposition.
+
+A stable map $(X, \sigma)$ equipped with a function $c:X \to S^{\N}$ is a {\em stable opetope} if
+it is either the canonical two-point stable map, or else
+\begin{itemize}
+\item It is connected as a stable map.
+\item Every child of $(X, \sigma)$ equipped with the appropriate index-shift of $c$ is a stable opetope
+\item The subset $\{ x \in X \st c(x)(0) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
+\item For any $m \in \N$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in \{e_m, e_{m+1}\}$.
 \end{document}
