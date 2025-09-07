@@ -1604,4 +1604,26 @@ We build an $n$-map on the flag set $\mathcal B : \bar X + \mathcal X : X + \mat
 \sigma_n (\mathcal X\  x) &=& \mathcal B\ x & (x \in \bar X)\\
 \sigma_n (\mathcal X\  x) &=& \sigma^{C_i}_n\ (\zeta^{-1}_i\ x) & (x \in X_i)\\
 \end{array}\]
+$\cdots$
+\end{itemize}
+\subsection{A More Compact Definition}
+
+An $n$-map is a set $X$ with involutions $\sigma_0,\ldots,\sigma_n : X \to X$, such that
+$\sigma_i x \ne x$ and if $|i-j| \ge 2$ then $\sigma_i \sigma_j = \sigma_j \sigma_i$.
+An $n$-map is connected if there is no nontrivial subset of $X$ closed under all of $\sigma_0,\ldots,\sigma_n$.
+The {\em children} of an $n$-map are the maximal subsets of $X$ closed under all of
+$\sigma_0,\ldots,\sigma_{n-1}$. These are connected $(n-1)$-maps when equipped with $\sigma_0,\ldots,\sigma_{n-1}$.
+
+Define $S = \{1,-1\}$ and $[n] = \{0,\ldots,n\}$ and $e_i : S^{[n]}$ by
+\[e_{i}( j) : = \begin{cases}-1 & \hbox{if $i=j$;} \\ 1 &\hbox{otherwise.} \end{cases}\]
+Let $E_0 = \{e_0\}$ and $E_{m+1} = \{e_m, e_{m+1}\}$.
+We write pointwise multiplication of vectors in $S^{[n]}$ as juxtaposition.
+
+A $n$-map $(X, \sigma)$ equipped with a function $c:X \to S^{[n]}$ is an {\em $n$-opetope} if
+\begin{itemize}
+\item It is connected as an $n$-map.
+\item Every child of $(X, \sigma)$ equipped with the appropriate restriction of $c$ is an $(n-1)$-opetope.
+\item The subset $\{ x \in X \st c(x)(n) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
+\item For any $m \in 0,\ldots,n$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in E_m$.
+\end{itemize}
 \end{document}
