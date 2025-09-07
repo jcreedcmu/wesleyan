@@ -1512,4 +1512,23 @@ I have $\sigma_1$ and $\sigma_2$ flags acting redundantly on a 0-map.
 Here's a 3-dimensional one:
 \begin{center}\includegraphics[scale=0.50]{images/2025-09-06-leaves-2.png}\end{center}
 I have $\sigma_2$ and $\sigma_3$ flags acting redundantly on a 1-map.
+
+\subsection{Attempting Inductive Definition Again}
+
+Here's an attempt at a induction-recursion definition.
+For $n \le 0$, conventionally there is exactly one $n$-opetope.
+For $n > 0$, an $n$-opetope is either
+\begin{itemize}
+\item a leaf, carrying an $(n-2)$-opetope, or
+\item a node, carrying an $(n-1)$-opetope $\bar N$ called its {\em arity}, a finite set $I$ of names of its {\em children},
+for each $i \in I$ an $n$-opetope $C_i$, and some kind of isomorphism connecting them.
+\end{itemize}
+
+Here my thoughts wander towards: what if, instead of a patching
+isomorphism, we simply associate a lower-dimensional opetope to every
+flag of the thing that needs to be covered, and have some
+compatibility requirements among them? Hm, no, that doesn't seem to work, because the single
+big disjoint union of them is needed to express the boundary.
+
+
 \end{document}
