@@ -1577,23 +1577,31 @@ On flags outside this subset, we follow what $\sigma_{n-1}$ in $C_i$ does.
 
 \subsection{Trying With Top-Dimension Flips}
 
-The above feels messy. It glues children together along $\sigma_{n-1}$, but I think I might be able to get away with $\sigma_n$ instead.
+The above feels messy. It glues children together only along $\sigma_{n-1}$. I'm going to try using $\sigma_n$ also.
 
 An $n$-map is as usual a set $X$ with appropriate involutions $\sigma_0,\ldots,\sigma_n$.
 
 An $n$-map may be an $n$-opetope. We give an inductive definition of this as a predicate.
 Via induction-recursion we define alongside it an operation on $n$-opetopes: when $X$ is an $n$-opetope,
-we define the subset $\bar X$ of its
+we define a subset $\bar X$ of its
 flags that are in its {\em codomain}, which together form an $(n-1)$-opetope.
 
 Here's how opetopes are defined.
 \begin{itemize}
 \item An opetope may be a leaf: If $X$ is an $(n-2)$-opetope, then the $n$-map $2 \x X$ is an $n$-opetope,
 where $\sigma_{n}$ and $\sigma_{n-1}$ act by flipping the $2$, and $\sigma_0, \ldots, \sigma_{n-2}$ act on $X$.
-\item An opetope may be a node. Suppose we have finite sets $X, I$ in which we have subsets
-$(C_i \subseteq X \st i \in I)$ and $Y_0, Y_1 \subseteq X$. Assume $Y_0 \cap Y_1 = \emptyset$ and $C_i \cap Y_1$
-has the structure of an $(n-2)$-opetope for every $i$.
-Assume $C_i$ by itself is an $n$-opetope, and $Y_0, Y_1$ are $(n-1)$-opetopes.
-
-
+\item An opetope may be a node. Suppose
+\begin{itemize}
+\item  $(X, \sigma^X)$ is an $(n-1)$ opetope.
+\item $I$ is a finite set.
+\item $(X_i\st i \in I)$ is a partition of $X \setminus \bar X$ into $(n-2)$-opetopes.
+\item For each $i\in I$ there is an $n$-opetope $(C_i, \sigma^{C_i})$.
+\item for each $i\in I$ we have an $(n-2)$-opetope isomorphism $\zeta_i : \bar {\bar {C_i}} \cong X_i$.
+\end{itemize}
+We build an $n$-map on the flag set $\mathcal B : \bar X + \mathcal X : X + \mathcal C : \sum_i C_i\setminus \bar{\bar{C_i}}$.
+\[\begin{array}{lcll}
+\sigma_n (\mathcal B\  x) &=& \mathcal X\ x\\
+\sigma_n (\mathcal X\  x) &=& \mathcal B\ x & (x \in \bar X)\\
+\sigma_n (\mathcal X\  x) &=& \sigma^{C_i}_n\ (\zeta^{-1}_i\ x) & (x \in X_i)\\
+\end{array}\]
 \end{document}
