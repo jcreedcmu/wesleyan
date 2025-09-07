@@ -1515,20 +1515,34 @@ I have $\sigma_2$ and $\sigma_3$ flags acting redundantly on a 1-map.
 
 \subsection{Attempting Inductive Definition Again}
 
-Here's an attempt at a induction-recursion definition.
-For $n \le 0$, conventionally there is exactly one $n$-opetope.
-For $n > 0$, an $n$-opetope is either
+
+An $n$-map is as usual a set $X$ with appropriate involutions $\sigma_0,\ldots,\sigma_n$.
+
+An $n$-map may be an $n$-opetope. We give an inductive definition of this as a predicate.
+Via induction-recursion we define alongside it an operation on $n$-opetopes: when $X$ is an $n$-opetope,
+we define the subset $\bar X$ of its
+flags that are in its {\em codomain}, which together form an $(n-1)$-opetope.
+
+Here's how opetopes are defined.
 \begin{itemize}
-\item a leaf, carrying an $(n-2)$-opetope, or
-\item a node, carrying an $(n-1)$-opetope $\bar N$ called its {\em arity}, a finite set $I$ of names of its {\em children},
-for each $i \in I$ an $n$-opetope $C_i$, and some kind of isomorphism connecting them.
+\item An opetope may be a leaf: If $X$ is an $(n-2)$-opetope, then the $n$-map $2 \x X$ is an $n$-opetope,
+where $\sigma_{n}$ and $\sigma_{n-1}$ act by flipping the $2$, and $\sigma_0, \ldots, \sigma_{n-2}$ act on $X$.
+\item An opetope may be a node. Suppose $N$ is an $(n-1)$ opetope. Suppose $I$ is a finite set, and for each $i\in I$
+an $n$-opetope $C_i$ is given. Suppose there is an isomorphism $\zeta : \bar N + \sum_i \bar {\bar {C_i}} \cong N$
+with the first component being the inclusion $\bar N \subseteq N$. Then the following $n$-map is an $n$-opetope.
+Its flags are $2 \x \bar N + \sum_i C_i$.
+\begin{itemize}
+\item The action of $\sigma_n$ on the left component flips the $2$, and on the right component does whatever
+$\sigma_n$ does in $C_i$.
+\item For the action of $\sigma_{n-1}$, first we observe
+that there is an embedding $2 \x \bar {\bar {C_i}} \subseteq C_i$.
+We take $\bar {\bar {C_i}} \subseteq C_i$ and we hit every flag of it with $\sigma_{n-1}$ to get another copy of itself.
+It remains to be shown that this is always disjoint.
+Given that, there is an embedding
+$2 \x \sum_i \bar {\bar {C_i}} \subseteq \sum_i C_i$. The action of $\sigma_{n-1}$ on flags in $2 \x (\bar N + \sum_i \bar{\bar{C_i}})$
+is given by hitting their right component with $\zeta$, doing $\sigma_{n-1}$ in $N$, then hitting them with $\zeta^{-1}$.
+On flags outside this subset, we follow what $\sigma_{n-1}$ in $C_i$ does.
+\item The action of $\sigma_0,\ldots,\sigma_{n-2}$, we do whatever $\bar N$ or $C_i$ does.
 \end{itemize}
-
-Here my thoughts wander towards: what if, instead of a patching
-isomorphism, we simply associate a lower-dimensional opetope to every
-flag of the thing that needs to be covered, and have some
-compatibility requirements among them? Hm, no, that doesn't seem to work, because the single
-big disjoint union of them is needed to express the boundary.
-
-
+\end{itemize}
 \end{document}
