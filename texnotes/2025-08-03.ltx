@@ -14,6 +14,7 @@
 \usepackage{amsmath}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
 \usetikzlibrary{hobby}
 \usepackage{tcolorbox}
@@ -1248,9 +1249,9 @@ Consider the equilateral triangle lying in the $xy$ plane defined by
 
 To first order, small rotations by $M$ applied to things already
 in the $xy$ plane only result in $z$ displacements.
-\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 0 \\ 0 \\ -1/2 \end{array}\right) \]\]
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 0 \\ 0 \\ -1/2 \end{array}\right) \]
 \[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} 0 \\ 0 \\ -k\sqrt{3}/2 \end{array}\right) \]
-\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} 0\\ 0 \\ 1/2 \end{array}\right) \]\]
+\[ \left.{\partial M\over \partial\epsilon}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} 0\\ 0 \\ 1/2 \end{array}\right) \]
 
 So let's look at second order:
 \[{\partial^2 M\over \partial\epsilon^2} = \left(\begin{array}{ccc}
@@ -1264,9 +1265,9 @@ So let's look at second order:
  0& 0& -1 -k^2\\
 \end{array}\right)\]
 and we have
-\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 1/2 \\ 0 \\ 0 \end{array}\right) \]\]
-\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} k\sqrt{3} \\ -k^2\sqrt{3}/2 \\ 0 \end{array}\right) \]\]
-\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} -1/2 \\ 0 \\ 0 \end{array}\right) \]\]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_1 = \left(\begin{array}{c} 1/2 \\ 0 \\ 0 \end{array}\right) \]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_2 = \left(\begin{array}{c} k\sqrt{3} \\ -k^2\sqrt{3}/2 \\ 0 \end{array}\right) \]
+\[  \left.{\partial^2 M\over \partial\epsilon^2}\right|_{\epsilon=0} P_3 = \left(\begin{array}{c} -1/2 \\ 0 \\ 0 \end{array}\right) \]
 $P_1$, the left base vertex, moves to the right as expected. $P_3$, the right base vertex moves left as expected.
 If we select $k$ very small, then $P_2$ moves to the right, which is bad. If we select $k$ big enough, the downward $-k^2\sqrt{3}/2$
 dominates the rightward $k\sqrt{3}$ and we stay in the triangle. A tiny translation upwards on the order of $\epsilon^2$ should
@@ -1735,12 +1736,12 @@ Then we can come with another structure. The flags are $(X\setminus X') + (Y\set
 We define an involution $\zeta$ by:
 \[\begin{array}{lcll}
 \zeta (\binl\  x) &=& \begin{cases}
-  \sigma (x) &\hbox{if $\sigma(x) \not\in X'$\\
-  \rho(h(\sigma(x))) &\hbox{if $\sigma(x) \in X'$\\
+  \sigma (x) &\hbox{if $\sigma(x) \not\in X'$}\\
+  \rho(h(\sigma(x))) &\hbox{if $\sigma(x) \in X'$}\\
  \end{cases}\\
 \zeta (\binr\  y) &=& \begin{cases}
-  \rho (y) &\hbox{if $\rho(y) \not\in Y'$\\
-  \sigma(h^{-1}(\rho(y))) &\hbox{if $\rho(y) \in Y'$\\
+  \rho (y) &\hbox{if $\rho(y) \not\in Y'$}\\
+  \sigma(h^{-1}(\rho(y))) &\hbox{if $\rho(y) \in Y'$}\\
  \end{cases}\\
 \end{array}\]
 For this we need to show:
