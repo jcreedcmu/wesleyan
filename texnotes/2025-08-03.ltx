@@ -1608,11 +1608,11 @@ $\cdots$
 \end{itemize}
 \subsection{A More Compact Definition}
 
-An $n$-map is a set $X$ with involutions $\sigma_0,\ldots,\sigma_n : X \to X$, such that
+An $n$-map is a set of `flags' $X$ with involutions $\sigma_0,\ldots,\sigma_n : X \to X$, such that
 $\sigma_i x \ne x$ and if $|i-j| \ge 2$ then $\sigma_i \sigma_j = \sigma_j \sigma_i$.
-An $n$-map is connected if there is no nontrivial subset of $X$ closed under all of $\sigma_0,\ldots,\sigma_n$.
-The {\em children} of an $n$-map are the maximal subsets of $X$ closed under all of
-$\sigma_0,\ldots,\sigma_{n-1}$. These are connected $(n-1)$-maps when equipped with $\sigma_0,\ldots,\sigma_{n-1}$.
+An $n$-map is connected if there does not exist a nonempty strict subset of $X$
+that is closed under all of $\sigma_0,\ldots,\sigma_n$.
+A {\em child} of an $n$-map is a nonempty subset of the flags that is a connected $(n-1)$-map under $\sigma_0,\ldots,\sigma_{n-1}$.
 
 Define $S = \{1,-1\}$ and $[n] = \{0,\ldots,n\}$ and $e_i : S^{[n]}$ by
 \[e_{i}( j) : = \begin{cases}-1 & \hbox{if $i=j$;} \\ 1 &\hbox{otherwise.} \end{cases}\]
@@ -1620,12 +1620,12 @@ Let $E_0 = \{e_0\}$ and $E_{m+1} = \{e_m, e_{m+1}\}$.
 We write pointwise multiplication of vectors in $S^{[n]}$ as juxtaposition.
 
 A $n$-map $(X, \sigma)$ equipped with a function $c:X \to S^{[n]}$ is an {\em $n$-opetope} if
-\begin{itemize}
-\item It is connected as an $n$-map.
-\item Every child of $(X, \sigma)$ equipped with the appropriate restriction of $c$ is an $(n-1)$-opetope.
-\item The subset $\{ x \in X \st c(x)(n) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
-\item For any $m \in 0,\ldots,n$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in E_m$.
-\end{itemize}
+\begin{enumerate}
+\item[(A1)] It is connected as an $n$-map.
+\item[(A2)] Every child of $(X, \sigma)$ equipped with the appropriate restriction of $c$ is an $(n-1)$-opetope.
+\item[(A3)] The subset $\{ x \in X \st c(x)(n) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
+\item[(A4)] For any $m \in 0,\ldots,n$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in E_m$.
+\end{enumerate}
 
 \subsection{Stable Opetopes}
 An stable map is a set $X$ with involutions $\sigma_0,\sigma_{-1},\ldots : X \to X$, such that
@@ -1645,4 +1645,157 @@ it is either the canonical two-point stable map, or else
 \item Every child of $(X, \sigma)$ equipped with the appropriate index-shift of $c$ is a stable opetope
 \item The subset $\{ x \in X \st c(x)(0) = -1\} \subseteq X$ is a child of $(X,\sigma)$.
 \item For any $m \in \N$, and any $x\in X$ we have $ c(\sigma_m(x))  c(x) \in \{e_m, e_{m+1}\}$.
+\end{itemize}
+
+\subsection{Reacting to Taichi Uemura}
+I skimmed ``An elementary definition of opetopic sets'' and it looks like a good target for trying to show some kind of bijection.
+
+Suppose I have an $n$-opetope $(X, \sigma, c)$ with the above properties. How would I construct a graded category? I say the
+objects of grade $m$ are $\hat \sigma_m$-connected sets of flags in $X$. I have a single object of grade $n+1$
+for the single connected component that spans the whole graph.
+
+ Call $C_m$ the set of $m$-cells. I want to define the $k$-step morphisms next.
+Suppose we have two cells $d \in C_{m}$ and $d' \in C_{m+k}$. Then we know we can apply any flips in
+\[ \hat \sigma_{m},\hat \sigma_{m+k} = 0,\ldots, m-1,m+1,\ldots, m+k-1, m+k+1, \ldots n\]
+ and stay in $d \cap d'$. So say a $k$-step morphism is a $\hat \sigma_{m},\hat\sigma_{m+k}$-connected component of $d \cap d'$.
+
+Something special happens when we consider 1-step morphisms. Because of axioms about $c$,
+we find that any $\hat \sigma_{m},\hat\sigma_{m+1}$-connected component has the
+property that it has a constant value of $c_m$. For only $\sigma_m$ and $\sigma_{m+1}$ could possibly flip its value.
+So this lets us mark 1-step morphisms as source or target. We have constructed an Uemura preopetopic set $A$
+from my above notion of $n$-opetope.
+
+Let's try checking that this is an Uemura opetope.
+
+\begin{lemma}[O1]
+$A\ \dns^1\ x$ is always finite.
+\end{lemma}
+
+\begin{proof}
+I only consider finite objects from the outset.
+\cqed
+\end{proof}
+
+\begin{lemma}[O2]
+For every object $x : A$ of degree $\ge 1$, there exists a unique target arrow
+into $x$.
+\end{lemma}
+
+\begin{proof}
+We're given $x \in C_{m}$ with $m \ge 1$. %% By (A2) and (A3) we should find that there is a $(\sigma_0,\ldots\sigma_{m-1})$-connected
+%% subset of $x$ which is exactly the $m$-final flags of $x$.
+Let's assume as a lemma that for any $x \in C_{m}$ the subset of $x$ that is $m$-final is $\hat \sigma_m$-connected.
+\cqed
+\end{proof}
+
+\subsection{Local Properties Might Not Suffice}
+
+Actually I realize that I can think of some non-opetopic shapes that satisfy all the axioms I stated above. Might have to
+return to thinking about an inductive definition to characterize them. Here's the example I have in mind:
+
+\begin{center}\includegraphics[scale=0.50]{images/2025-09-11-counterexample.png}\end{center}
+
+It's an awful lot like the standard $g \o f = h$ cell, but we've scrambled around the order of $f$ and $g$ when defining
+the $\sigma_1$ flags' operation on the 2-domain.
+
+\subsection{Inductive Again}
+A (-1)-opetope is a singleton. The unique flag is considered {\em not} to be $(-1)$-terminal.
+
+A 0-opetope is always a node. We take an (-1)-opetope $X_{-1}$, and we double it, letting $\sigma_0$ connect the two copies. One of them is marked as 0-terminal.
+Can we do gluing? We could for every $\sigma_{-2}$-connected subset of $X_{-1}$ that is not $(-1)$-terminal, but there aren't any of those.
+
+A 1-opetope is either a leaf or a node. If it's a leaf, then we take an (-1)-opetope, and then we double it up and let
+$\sigma_0$ and $\sigma_1$ interchange the two copies. Every flag is 1-terminal, and one of the two copies is 0-terminal.
+If it's a node, then we take an $0$-opetope $X_0$, double it, letting $\sigma_1$ connect the two copies, one of the copies is marked as 1-terminal.
+But we can also do gluing: for every $\sigma_{-1}$-connected subset of $X_0$ that is not $0$-terminal we can glue on another 1-opetope.
+But that's saying for every point that is not $0$-terminal we can glue. There's exactly one of those.
+
+A 2-opetope is either a leaf or a node. If it's a leaf, then we take an 0-opetope, and then we double it up and let
+$\sigma_1$ and $\sigma_2$ interchange the two copies. Every flag is 2-terminal, and one of the two copies is 1-terminal.
+If it's a node, then we take an $1$-opetope $X_1$, double it, letting $\sigma_2$ connect the two copies, one of the copies is marked as 2-terminal.
+But we can also do gluing: for every $\sigma_0$-connected subset of $X_1$ that is not $1$-terminal (of which there might be several) we can glue on another 2-opetope.
+This gluing involves isomorphisms of $0$-preopetopes.
+
+\subsection{Incrementally Inductive}
+
+Instead of trying to define a property that is transparently a mere property, I could be less ambitious
+and define a predicate that admits multiple proofs for the same underlying structure. This isn't
+ideal, but it might give a simpler definition, as I only have to attach at one place at a time.
+
+Let's just consider the structure of a set $X$ with an involution $\sigma$.
+
+Suppose I have two such structures $(X,\sigma)$ and $(Y,\rho)$ and
+subsets $X' \subseteq X$ and $Y' \subseteq Y$. Suppose we have a bijection
+$h : X' \cong Y'$. Suppose $h$ preserves the self-maps in the sense that
+\begin{itemize}
+\item  if $x' \in X'$ and $\sigma(x') \in X'$, then $\rho(h(x')) = h(\sigma(x'))$.
+\item  if $y' \in Y'$ and $\rho(y') \in Y'$, then $\sigma(h^{-1}(y')) = h^{-1}(\rho(y'))$.
+\end{itemize}
+Then we can come with another structure. The flags are $(X\setminus X') + (Y\setminus Y')$.
+We define an involution $\zeta$ by:
+\[\begin{array}{lcll}
+\zeta (\binl\  x) &=& \begin{cases}
+  \sigma (x) &\hbox{if $\sigma(x) \not\in X'$\\
+  \rho(h(\sigma(x))) &\hbox{if $\sigma(x) \in X'$\\
+ \end{cases}\\
+\zeta (\binr\  y) &=& \begin{cases}
+  \rho (y) &\hbox{if $\rho(y) \not\in Y'$\\
+  \sigma(h^{-1}(\rho(y))) &\hbox{if $\rho(y) \in Y'$\\
+ \end{cases}\\
+\end{array}\]
+For this we need to show:
+\begin{lemma}\ %
+  \begin{itemize}
+  \item    If $x \not \in X'$ and $\sigma(x) \in X'$ then $\rho(h(\sigma(x))) \not \in Y'$
+  \item    If $y \not \in Y'$ and $\rho(y) \in Y'$ then $\sigma(h^{-1}(\rho(y))) \not \in X'$
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+Suppose towards a contradiction that $\rho(h(\sigma(x))) \in Y'$. By
+typing alone we have $h(\sigma(x)) \in Y'$. Hence substitute $h(\sigma(x))$ for $y'$
+in the assumption about $h$ and we get $\sigma(h^{-1}(h(\sigma(x)))) = h^{-1}(\rho(h(\sigma(x))))$.
+Hence $x = h^{-1}(\rho(h(\sigma(x))))$ and $x \in X'$, contradicting our assumption.
+\cqed
+\end{proof}
+
+\section{Relational Definition}
+An $n$-preopetope is a set $X$ together with symmetric irreflexive binary relations $\sigma_0,\ldots,\sigma_n : X \to X \to \rset$ and unary relations $c_0,\ldots,c_n : X \to \rset$. Being an opetope is defined inductively.
+
+\subsection{Preopetope Constructions}
+\subsubsection{Leaf}
+Given an $n$-preopetope $(X,\sigma,c)$, there exists an $(n+2)$-preopetope
+$\mathsf{leaf}(X,\sigma,c) = (X', \sigma', c')$ where we define first $X' = 2 \x X$. Then we say $\sigma'_i\ (b_1, x_1)\ (b_2, x_2)$
+if $b_1 = b_2$ and $\sigma_i\ x_1\ x_2$, or else $i \in \{n+1,n+2\}$ and $b_1 \ne b_2$ and $x_1 = x_2$.
+We say $c_{n+2}$ holds everywhere, and $c_{n+1}(b,x)$ iff $b = 1$.
+\subsubsection{Node}
+Given an $n$-preopetope $(X,\sigma,c)$, there exists an $(n+1)$-preopetope
+$\mathsf{node}(X,\sigma,c) = (X', \sigma', c')$ where we define first $X' = 2 \x X$. Then we say $\sigma'_i\ (b_1, x_1)\ (b_2, x_2)$
+if $b_1 = b_2$ and $\sigma_i\ x_1\ x_2$, or else $i = n + 1$ and $b_1 \ne b_2$ and $x_1 = x_2$.
+We say $c_{n+1}(b,x)$ iff $b = 1$.
+\subsubsection{Glue}
+Suppose we're given two $n$-preopetopes $(X,\sigma,c)$ and $(Y,\rho,d)$,
+and  subsets $X'\subseteq X$ and $Y \subseteq Y'$ and a bijection $h : X' \to Y'$ such
+that $h$ and $h^{-1}$ both preserve all relations. Then there is an $n$-preopetope
+$\mathsf{glue}(X, Y, h) = (Z, \zeta, e)$ defined by the following.
+We say $Z = (X\setminus X') + (Y \setminus Y')$.
+$e$ is inherited from $c$ and $d$. The binary relation $\zeta$ includes $\sigma$ and $\rho$
+when they hold, and also we assert
+\[{\sigma\ x\ x' \qquad \rho\ (h\ x')\ y \over \zeta\ x\ y}\]
+
+\subsection{Opetopes}
+The property of a preopetope being an opetope is defined inductively
+\begin{enumerate}
+\item A set is a $(-1)$-opetope if it's a singleton.
+\item If $X$ is an opetope, then $\mathsf{leaf}(X)$ is.
+\item If $X$ is an opetope, then $\mathsf{node}(X)$ is.
+\item If $X$ and $Y$ are $n$-opetopes, and
+\[X' = \{ x \in X \st c_{n}(x) \land c_{n-1}(x)\} \qquad
+Y' \subseteq \{ y \in Y \st c_{n}(y) \land \lnot c_{n-1}(y)\}\]
+ and $h$ is a bijection preserving all the relations, then
+$\mathsf{glue}(X, Y, h)$ is an opetope.
+\end{enumerate}
+
+
+
 \end{document}
