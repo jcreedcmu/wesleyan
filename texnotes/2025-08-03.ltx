@@ -1797,6 +1797,60 @@ Y' \subseteq \{ y \in Y \st c_{n}(y) \land \lnot c_{n-1}(y)\}\]
 $\mathsf{glue}(X, Y, h)$ is an opetope.
 \end{enumerate}
 
+\def\bleaf{\mathbf{leaf}}
+\def\bnode{\mathbf{node}}
+\def\bglue{\mathbf{glue}}
+\vfil\eject
+
+\section{Golfing}
+An $n$-preopetope $\O$ is a set $X$ together with  unary relations $C_0,\ldots,C_n \subseteq X$
+and binary relations $\sim_0,\ldots,\sim_n \subseteq X \x X$.
+
+\subsection{Preopetope Constructions}
+\subsubsection{Leaf}
+Given an $n$-preopetope $\O = (X, \sim, C)$, define an $(n+1)$-preopetope $\bleaf(\O) = (X', \sim', C')$ by
+\[X' = X \qquad C'_{i} = \begin{cases} X' & \hbox{if $i = n+1$}\\
+  C_i & \hbox{ otherwise.}\end{cases}
+\qquad
+{ x_1 \sim_i x_2 \over x_1 \sim'_i x_2} \qquad { x_1 \sim_n x_2 \over x_1 \sim'_{n+1} x_2}\]
+
+
+
+\subsubsection{Node}
+Given an $n$-preopetope $\O = (X, \sim, C)$, define an $(n+1)$-preopetope $\bnode(\O) = (X', \sim', C')$ by
+\[X' = 2 \x X \qquad  C_i' = \begin{cases} \{(1,x) \in X' \} & \hbox{if $i = n+1$}\\
+  C_i & \hbox{ otherwise.}\end{cases}
+\qquad
+{ x_1 \sim_i x_2 \over (b, x_1) \sim'_i (b, x_2)}
+\qquad { b_1 \ne b_2 \over (b_1, x) \sim'_{n+1} (b_2, x)}\]
+
+
+
+\subsubsection{Glue}
+Suppose we're given two $n$-preopetopes $\O = (X,\sim,C)$ and $\O' = (X',\sim',C')$,
+and a relation  $h \subseteq  X \x X'$. Suppose there is a bijection $\eta : S \cong S'$ between
+$S \subseteq X$ and $S' \subseteq X'$. Suppose that $\eta$ and its inverse preserve the relations of $\O$ and $\O'$. Write $s \approx s'$ for $h(s) = s'$.
+Then we define an $n$-preopetope $\bglue(\O, \O', h) = (X'', \sim'', C'')$ by
+
+\[X' = (X\setminus S) + (X' \setminus S') \qquad C''_i = C_i \cup C'_i\]
+
+\[{x \sim_i y \over x \sim''_i y} \qquad {x' \sim'_i y' \over x' \sim''_i y'} \qquad
+{x \sim_i s\qquad s \approx s' \qquad s' \sim'_i x' \over x \sim''_i x'}\]
+
+
+
+\subsection{Opetopes}
+The property of a preopetope being an opetope is defined inductively:
+\begin{enumerate}
+\item A set is a $(-1)$-opetope if it's a singleton.
+\item If $X$ is an opetope, then $\bleaf(\bnode(X))$ is.
+\item If $X$ is an opetope, then $\bnode(X)$ is.
+\item If $\O = (X,\sim,C)$ and $\O' = (X',\sim',C')$ are $n$-opetopes, and
+we have a subset $S' \subseteq   C'_n \setminus C'_{n-1} $,
+and $h : (C_{n} \cap C_{n-1}) \cong S'$ is a bijection preserving all the relations, then
+$\bglue(\O, \O', h)$ is an opetope.
+\end{enumerate}
+
 
 
 \end{document}
