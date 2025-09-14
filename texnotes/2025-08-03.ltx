@@ -1853,5 +1853,84 @@ $\bglue(\O, \O', h)$ is an opetope.
 \end{enumerate}
 
 
+\section{Inductive Nongeometric}
+
+Here's another thought.
+We have a typing judgment
+\[ H; C \prov_n M : A \]
+For $M$ being an $n$-opetope expression, $A$ being an $(n-2)$-opetope expression.
+$H$ is a context of ``hot'' inputs which must be immediately addressed in order.
+It's kind of like an asynchronous context $\Omega$.
+$C$ is a list of ``cold'' inputs. Both $H$ and $C$ are lists of $(n-2)$-opetope expressions.
+We write
+\[  C \prov_n M : A \]
+for the case of empty $H$.
+
+
+Let's try to special-case low dimensions.
+The unique $(-1)$-tree expression is $\circ$.
+The unique $0$-tree expression is $\bullet$.
+There are various $1$-tree expressions.
+\[\over  \circ \prov_1 \bleaf : \circ \]
+\[\over  \circ; \cdot  \prov_1 \bnode[\bullet] : \circ \]
+
+There is a general rule
+\[t, H; C_1 \prov_n e_1 : t_1 \qquad  C_2 \prov_n e_2 : t
+\over
+H; C_1, C_2 \prov_n e_1 \oplus e_2 : t_1
+\]
+which means
+\[\circ; \cdot \prov_1 \bnode[\bullet] : \circ \qquad  \circ \prov_1 \bleaf : \circ
+\over
+  \circ \prov_1 \bnode[\bullet] \oplus \bleaf : \circ
+\]
+
+\[\circ; \cdot \prov_1 \bnode[\bullet] : \circ \qquad  \circ \prov_1 (\bnode[\bullet] \oplus \bleaf) : \circ
+\over
+  \circ \prov_{1} \bnode[\bullet] \oplus (\bnode[\bullet] \oplus \bleaf) : \circ
+\]
+Ok so $\bnode[\bullet] \oplus \dash$ is $s$ and $\bleaf$ is $z$.
+So write $\overline 0 = \bleaf$ and $\overline{n+1} = \bnode[\bullet] \oplus \overline n$.
+
+Now we want to build nodes out of these $1$-expressions. We want to type
+$\bnode[\overline n]$ as a $2$-expression. We have a prescient intuition that
+\[\over \bullet \prov_1 \bleaf : \bullet\]
+\[\over \bullet^n; \cdot \prov_1 \bnode[\overline n] : \bullet\]
+I think the general rule is something like
+\[C \prov e : t \qquad e \rightsquigarrow H \over H; \cdot \prov \bnode[e]  : \ups t\]
+where I'm not sure what $\ups$ is yet.
+
+Then I should be able to build things like
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\bullet, \bullet; \cdot \prov \bnode[\overline 2] : t
+\]
+\[
+\vdots
+\justifies
+ C_1 \prov e_1 : \bullet
+\]
+\justifies
+\bullet; C_1 \prov \bnode[\overline 2] \oplus e_1 : t
+\]
+\[
+\vdots
+\justifies
+  C_2 \prov e_2 : \bullet
+\]
+\justifies
+ C_1, C_2 \prov \bnode[\overline 2] \oplus e_1 \oplus e_2 : t
+\end{prooftree}
+\]
+Now let's consider $3$-trees. These have nontrivial codomains, because they're $1$-expressions.
+Let's suppose we have
+\[ C_1, C_2 \prov \bnode[\overline 2] \oplus e_1 \oplus e_2 : t\]
+What can we say about
+\[\bnode[\bnode[\overline 2] \oplus e_1 \oplus e_2]\]
+? Oh no, it seems like I need $C_1, C_2$ to be understood as a $1$-tree. This is getting into territory
+where I need to understand the particular monads involved. Maybe this is a dead-end.
 
 \end{document}
