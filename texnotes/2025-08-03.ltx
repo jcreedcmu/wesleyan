@@ -164,7 +164,6 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\C{\mathbb{C}}
 \def\O{\mathcal{O}}
 \def\W{\mathbb{W}}
-\def\S{\mathbf{S}}
 \def\G{\mathbf{G}}
 \def\D{\mathbb{D}}
 \def\E{\mathbb{E}}
@@ -1933,4 +1932,106 @@ What can we say about
 ? Oh no, it seems like I need $C_1, C_2$ to be understood as a $1$-tree. This is getting into territory
 where I need to understand the particular monads involved. Maybe this is a dead-end.
 
+\section{Types}
+
+Maybe I can carve opetopes out of the type of types in the presence of a modality,
+something like
+\[ (\lax : \rset \to \rset)\ (\eta : \{A : \rset\} \to A \to \lax A) \to \rset \]
+The idea being that $\lax : \rset \to \rset$ is the thing that takes the discrete type
+ $2$ to the cohesive type $\bf 2$. In particular, I'd expect that
+\[\lambda \lax.\lambda \eta. \lax 2\]
+counts as an ``opetopic type''.
+
+Here are some properties we want to define:
+\begin{itemize}
+\item Being an $n$-ball
+\item Being an $n$-sphere
+\item Being an $n$-cell
+\end{itemize}
+
+%% \[\begin{array}{l}
+%% \mathsf{Ball}_n : \rset \to \rset\\
+%% \mathsf{Sphere}_n : \rset \to \rset\\
+%% \mathsf{Cell}_n : \rset \to \rset
+%% \end{array}\]
+\subsection{Spheres}
+An $n$-sphere $s$ is always the pushout of an $n$-ball $b$ and an $n$-cell $c$ with a common boundary.
+The boundary of $0$-balls and $0$-cells is empty, so a $0$-sphere is a doubleton.
+\[\begin{tikzcd}
+	s & b \\
+	c & z
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=2-2]
+	\arrow["b"', from=1-2, to=1-1]
+	\arrow["n", from=2-1, to=1-1]
+	\arrow["\partial"', from=2-2, to=1-2]
+	\arrow["\partial", from=2-2, to=2-1]
+\end{tikzcd}\]
+
+\subsection{Cells}
+A $0$-cell must be the contractible type.
+
+
+An $(n+1)$-cell is the $\lax$ of an $n$-sphere $s$ with $\eta$ giving the boundary:
+\[ \eta : s \to \lax s \]
+
+\subsection{Balls}
+A $0$-ball must be the contractible type. Let's consider  $(n+1)$-balls.
+%% % https://q.uiver.app/#q=WzAsNSxbMSwxLCJTIl0sWzIsMSwiQiJdLFsxLDIsIk4iXSxbMiwyLCJaIl0sWzAsMCwiXFxsYXggUyJdLFswLDMsIiIsMCx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIiLCJib2R5Ijp7Im5hbWUiOiJub25lIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwwLCJiIiwyXSxbMiwwLCJuIl0sWzMsMV0sWzMsMl0sWzAsNCwiXFxwYXJ0aWFsIiwyXV0=
+%% \[\begin{tikzcd}
+%% 	{\lax S} \\
+%% 	& S & B \\
+%% 	& N & Z
+%% 	\arrow["\partial"', from=2-2, to=1-1]
+%% 	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=2-2, to=3-3]
+%% 	\arrow["b"', from=2-3, to=2-2]
+%% 	\arrow["n", from=3-2, to=2-2]
+%% 	\arrow[from=3-3, to=2-3]
+%% 	\arrow[from=3-3, to=3-2]
+%% \end{tikzcd}\]
+%% We know how the codomain $N$ fits into $\lax S$.
+We assume by induction recursion some maps
+\[\begin{array}{l}
+D :  \mathsf{Ball}_n \to \rset \\
+\dom :  \{b : \mathsf{Ball}_n\} \to D\ b \to \mathsf{Cell}_{n-1} \\
+\iota : \{b : \mathsf{Ball}_n\} \to (d : D\ b) \to \dom d \to b\\
+\cod : \{b : \mathsf{Ball}_n\} \to \mathsf{Cell}_{n-1} \\
+j : \{b : \mathsf{Ball}_n\} \to  \cod b \to b\\
+\end{array}\]
+$D$ is a set of domain attachment locations.
+$\dom$ gives their shape.
+$\iota$ says where they fit into $b$.
+$\cod$ gives the shape of the codomain.
+
+For $n = 0$, $D$ is constantly empty, $\dom$ is trivial, $\iota$ is trivial,
+$\cod$ is a contractible type, $j$ is the identity map.
+
+An $(n+1)$-ball may be a leaf, which is to say, an $n$-cell. In this case
+$D$ is a singleton, $\dom$ and $\cod$ are the $n$-cell's carrier, and $\iota\ *$ and $j$ are the identity map.
+
+Alternatively, an $(n+1)$-ball may be a node. We specify a root by picking an $n$-cell $c$
+and an $n$-ball $b$, which really amount to an $n$-sphere $s = (c \oplus_z b)$.
+And the root cell is the $(n+1)$-cell $\lax (c \oplus_z b)$.
+
+We specify children by giving
+\[\chi : D\ b \to \mathsf{Ball}_{n+1}\]
+such that
+\[(d \in D\ b) \to  \dom d =  \cod (\chi\ d)\]
+The carrier of our constructed ball is defined to be the following pushout, which we name $b'$:
+% https://q.uiver.app/#q=WzAsNixbMCwwLCJjJyJdLFsyLDAsIlxcc3VtX3tkIFxcaW4gRFxcIGJ9IFxcY2hpXFwgZCJdLFsxLDIsImIiXSxbMiwxLCJcXHN1bV97ZCBcXGluIERcXCBifSBcXGNvZCAoXFxjaGlcXCBkKSJdLFsyLDIsIlxcc3VtX3tkIFxcaW4gRFxcIGJ9IFxcZG9tIGQiXSxbMCwyLCJcXGxheCAoYywgYikiXSxbMSwwXSxbMywxLCJcXHN1bSBqIiwyXSxbMyw0LCIiLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDIsIlxcc3VtIFxcaW90YSJdLFsyLDVdLFswLDVdLFswLDQsIiIsMCx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIiLCJib2R5Ijp7Im5hbWUiOiJub25lIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+\[\begin{tikzcd}
+	{b'} && {\sum\limits_{d \in D\ b} \chi\ d} \\
+	&& {\sum\limits_{d \in D\ b} \cod (\chi\ d)} \\
+	{\lax (c \oplus_z b)} & b & {\sum\limits_{d \in D\ b} \dom d}
+	\arrow[from=1-1, to=3-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125}, draw=none, from=1-1, to=3-3]
+	\arrow[from=1-3, to=1-1]
+	\arrow["{\sum\limits j}"', from=2-3, to=1-3]
+	\arrow[equals, from=2-3, to=3-3]
+	\arrow[from=3-2, to=3-1]
+	\arrow["{\sum\limits \iota}", from=3-3, to=3-2]
+\end{tikzcd}\]
+
+Now we define $D\ b'$ to be $1 + \sum_{d \in D\ b} D(\chi\ d)$.
+
+\begin{center}\includegraphics[scale=0.30]{images/2025-09-20-shapes.png}\end{center}
 \end{document}
