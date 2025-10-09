@@ -1,0 +1,276 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{hyperref}
+% https://tex.stackexchange.com/a/847
+\hypersetup{
+    colorlinks,
+    urlcolor={blue},
+}
+
+\usepackage{makecell}
+\usepackage{relsize}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{hobby}
+\usepackage{tcolorbox}
+\usepackage{stackengine}
+\newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
+
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\def\sssection#1{\vskip1em \hrule\vskip 0.5em \noindent $\triangleright$ {\bf #1} \vskip0.5em \hrule\vskip 1em }
+\def\I{\mathbb{I}}
+
+
+
+
+\def\gets{\leftarrow}
+\def\dia{\Diamond}
+\def\all{\forall}
+
+\def\spec{\mathsf{Spec}}
+\def\breturn{\mathop{\mathbf{return}}\nolimits}
+\def\bthunk{\mathop{\mathbf{thunk}}\nolimits}
+\def\brun{\mathop{\mathbf{run}}\nolimits}
+\def\bget{\mathop{\mathbf{get}}\nolimits}
+\def\bGel{\mathop{\mathbf{Gel}}\nolimits}
+\def\bgel{\mathop{\mathbf{gel}}\nolimits}
+\def\bgbound{\mathop{\mathbf{gbound}}\nolimits}
+\def\bgpath{\mathop{\mathbf{gpath}}\nolimits}
+\def\bungel{\mathop{\mathbf{ungel}}\nolimits}
+\def\bGet{\mathop\mathbf{Get}}
+\def\dapt#1#2{#1[\![#2]\!]}
+\def\dap#1#2{#1\{#2\}}
+\def\ll{\langle\!\langle}
+\def\rr{\rangle\!\rangle}
+\def\rshape{\ {\mathsf{shape}}}
+\def\rrefl{{\mathsf{refl}}}
+\def\bd{\mathsf{Bd}}
+\def\bdd{\mathsf{Bdd}}
+\def\rset{\mathsf{Type}}
+\def\rid{\mathsf{id}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\prequiv{\dashv\vdash}
+\def\sq{\square}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\nameof#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+
+
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\parr{\mathbin{\rotatebox[origin=c]{180}{\&}}}
+\def\iff{\ \Longleftrightarrow\ }
+\def\bu{\bullet}
+\def\J{\mathbb{J}}
+\def\R{\mathbb{R}}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\cprov{\mathrel\#}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathop\triangleright\nolimits}
+\def\tb{\mathop\blacktriangleleft}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\mathop\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+%\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rtrue{\ \mathsf{true}}
+\def\rfalse{\ \mathsf{false}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\O{\mathcal{O}}
+\def\W{\mathbb{W}}
+\def\G{\mathbf{G}}
+\def\D{\mathbb{D}}
+\def\E{\mathbb{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+
+% https://tex.stackexchange.com/questions/716631/curved-arrows-from-tikz-cd-do-not-work
+\tikzset{
+  curve/.style={
+    settings={#1},
+    to path={
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes
+    },
+  },
+  settings/.code={%
+    \tikzset{quiver/.cd,#1}%
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}%
+  },
+  quiver/.cd,
+  pos/.initial=0.35,
+  height/.initial=0,
+}
+
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
+
+\section{Higher Polynomials}
+
+Let's consider a 0-dimensional polynomial on a set of variables $V$ to be some maps
+\[ V \xleftarrow{f} M \xrightarrow{g} S \xrightarrow{!} 1\]
+This has the variables named by the points of $V$
+as ``inputs'' and has one unique ``output'' variable.
+
+This induces a polynomial functor from $\rset/ V$ to $\rset$:
+\[ \rset / V \xrightarrow{f^*} \rset / M \xrightarrow{\Pi_g} \rset / S \xrightarrow{\Sigma_!} \rset \]
+We can also think of this as a datatype $(V \to \rset) \to \rset$:
+\[\begin{array}{l}
+\textbf{data}\ P\ (\alpha : V \to \rset)\ \textbf{where}\\
+\qquad \mathsf{mk} : (s : S) \x (m : g^{-1}\ s) \to v\ (f\ m)
+\end{array}\]
+This is easily seen to be a functor; $v$ occurs strictly positively.
+We can derive what the morphisms should be from parametricity.
+
+Suppose we had
+\[k : (\alpha : V \to \rset) \to P_\alpha \to P'_\alpha\]
+where
+\[P_\alpha =  ((s : S) \x (m : M) \to g\ m \equiv s \to \alpha\ (f\ m))\]
+\[P'_\alpha =  ((s' : S') \x (m' : M') \to g'\ m' \equiv s' \to \alpha\ (f'\ m'))\]
+ The parametricity theorem gives us relationally
+\[k_\star : (\alpha_1\ \alpha_2: V \to \rset)({\sim} : \{v : V\} \to \alpha_1\ v \to \alpha_2\ v \to \rset)\]
+\[(p_1 : P_{\alpha_1}) (p_2 : P_{\alpha_2}) (p_\star : p_1 \sim_{P} p_2) \to\]
+\[k\ \alpha_1\ p_1 \sim_{P'} k\ \alpha_2\ p_2\]
+and functionally
+\[k_\star : (\alpha_1\ \alpha_2: V \to \rset)({\mathcal F} : \{v : V\} \to \alpha_1\ v \to \alpha_2\ v)\]
+\[(p_1 : P_{\alpha_1}) \to \]
+\[{\mathcal F}\ (k\ \alpha_1\ p_1) =  k\ \alpha_2\ (\mathcal F\ p_1)\]
+
+\end{document}
