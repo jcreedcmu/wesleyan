@@ -273,4 +273,140 @@ and functionally
 \[(p_1 : P_{\alpha_1}) \to \]
 \[{\mathcal F}\ (k\ \alpha_1\ p_1) =  k\ \alpha_2\ (\mathcal F\ p_1)\]
 
+\[\cdots\]
+\section{Spheres in Flag Complexes}
+
+I had a nice insight that the reason that flag complexes
+are ``twoish'' is somehow the same as the fact
+that the zero-dimensional sphere is two points. The reason
+I think this is there's a nice invariant I expect them
+to have the generalizes to other spheres.
+
+One HoTT-like way of thinking about a flag complex
+is a presheaf over a hypercube satisfying some nice properties.
+Let's consider 2-dimensional complexes for an
+example. The hypercube in question is simply a cube.
+The objects in the category are the 8 subsets of the set $\{0,1,2\}$, namely
+$\{\emptyset, 0, 1, 2, 01, 12, 02, 012\}$.
+The morphisms are subset relations. Consider a functor $F$
+from this category to $\rset$. $F_\emptyset$ is the flags.
+$F_{012}$ is the connected components.
+$F_{12}$ is the vertices, $F_{02}$ is the edges, $F_{01}$ is
+the faces. $F_0$ is the flags quotiented out by $\sigma_0$,
+$F_1$ is the flags quotiented out by $\sigma_1$
+$F_2$ is the flags quotiented out by $\sigma_2$.
+
+The fact that ``$\sigma_i$ relates two flags to each other''
+is the fact that $F_{\emptyset \subseteq i} : F_0 \to F_i$ has fibers that
+all look like $S^0$, for $i$ being any dimension in $0,1,2$.
+
+But then consider any square in the cube category
+that includes $\emptyset$, for example
+
+\[\begin{tikzcd}
+F_\emptyset \ar[r]\ar[d] & F_0 \ar[d]\\
+F_1 \ar[r] & F_{01}\\
+\end{tikzcd}\]
+
+We can take the pushout of the diagram without $F_{01}$
+and consider the uniquely determined arrow of that into $F_{01}$,
+the red arrow in this diagram:
+
+% https://q.uiver.app/#q=WzAsNSxbMCwwLCJGX1xcZW1wdHlzZXQiXSxbMSwwLCJGXzAiXSxbMCwxLCJGXzEiXSxbMiwyLCJGX3swMX1cXFxcIl0sWzEsMSwiXFxidWxsZXQiXSxbMCwxXSxbMCwyXSxbMSwzXSxbMiwzXSxbMSw0XSxbMiw0XSxbNCwzLCIiLDEseyJjb2xvdXIiOlswLDYwLDYwXX1dLFs0LDAsIiIsMSx7InN0eWxlIjp7Im5hbWUiOiJjb3JuZXIifX1dXQ==
+\[\begin{tikzcd}
+	{F_\emptyset} & {F_0} \\
+	{F_1} & \bullet \\
+	&& \begin{array}{c} F_{01}\\ \end{array}
+	\arrow[from=1-1, to=1-2]
+	\arrow[from=1-1, to=2-1]
+	\arrow[from=1-2, to=2-2]
+	\arrow[from=1-2, to=3-3]
+	\arrow[from=2-1, to=2-2]
+	\arrow[from=2-1, to=3-3]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+	\arrow[color={rgb,255:red,255;green,0;blue,0}, from=2-2, to=3-3]
+\end{tikzcd}\]
+
+We claim that we want to assert as an axiom that
+the fiber of this red map is everywhere $S^1$. For what's
+going on is the pushout consists of the geometric
+realizations of all the $\sigma_0$ and $\sigma_1$ edges,
+which then form rings. We want to collapse every such
+ring into a point to obtain $F_{01}$.
+
+Likewise consider any cube that contains $\emptyset$, and
+since we're in the $n=2$ case there is only one.
+Let its `apex' be the cube vertex that represents biggest subset,
+suome subset of size 3. There will be a UMP map
+to the apex from the pushout of the cube {\em without} the apex.
+This map should have fiber $S^2$ everwhere.
+
+\section{Types Shaped Like Simplices}
+
+Given types $A$ and $B$ I can form a type, let's
+call it $A \star B$ which is an inductive
+type with constructors $\binl_{A,B} : A \to A \star B$
+and $\binr_{A,B} : B \to A \star B$ and also
+$\mathsf{Q}_{A,B} : (a : A) (b : B) \to \binl a \equiv \binr b$.
+
+Let's consider what happens when we iterate this.
+What's in $(A \star B) \star C$? Well, we could
+define
+\[ t_0 :A \to  (A \star B) \star C \]
+\[ t_0 a = \binl_{A \star B, C} \binl_{A,B} a\]
+and
+\[ t_1 : B \to  (A \star B) \star C \]
+\[ t_1 b = \binl_{A \star B, C} \binr_{A,B} b\]
+and
+\[ t_2 : C \to  (A \star B) \star C \]
+\[ t_2 c = \binr_{A \star B, C} c\]
+and also
+\[ \mathsf{Q}_{0,1} : (a : A) (b : B) \to t_0\ a \equiv t_1\ b\]
+\[ \mathsf{Q}_{0,1} : (a : A) (b : B) \to  \binl_{A \star B, C} \binl_{A,B} a \equiv \binl_{A \star B, C} \binr_{A,B} b\]
+\[ \mathsf{Q}_{0,1}\ a\ b\ i =  \binl_{A \star B, C} (\mathsf{Q}_{A, B}\ a\ b\ i)\]
+and
+\[ \mathsf{Q}_{0,2} : (a : A) (c : C) \to t_0\ a \equiv t_2\ c\]
+\[ \mathsf{Q}_{0,2} : (a : A) (c : C) \to  \binl_{A \star B, C} \binl_{A,B} a \equiv \binr_{A \star B, C} c\]
+\[ \mathsf{Q}_{0,2}\ a\ c = \mathsf{Q}_{A \star B, C}\ (\binl_{A, B}\ a)\ c\]
+and
+\[ \mathsf{Q}_{1,2} : (b : B) (c : C) \to t_1\ b \equiv t_2\ c\]
+\[ \mathsf{Q}_{1,2} : (b : B) (c : C) \to  \binl_{A \star B, C} \binr_{A,B} b \equiv \binr_{A \star B, C} c\]
+\[ \mathsf{Q}_{1,2}\ b\ c = \mathsf{Q}_{A \star B, C}\ (\binr_{A, B}\ b)\ c\]
+and I think I should expect
+\[\mathsf{Q}_{012} : (a: A) (b : B) (c : C) \to \mathsf{Q}_{01}\ a\ b \bullet \mathsf{Q}_{12}\ b\ c \equiv \mathsf{Q}_{02}\ a\ c\]
+Because I should have a diagram like
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJ0XzBcXCBhIl0sWzEsMCwidF8yXFwgYyJdLFswLDEsInRfMVxcIGIiXSxbMSwxLCJ0XzJcXCBjIl0sWzAsMSwie3tcXG1hdGhzZiBRfV97MDJ9XFwgYVxcIGN9Il0sWzAsMiwie3tcXG1hdGhzZiBRfV97MDF9XFwgYVxcIGJ9IiwyXSxbMiwzLCJ7e1xcbWF0aHNmIFF9X3sxMn1cXCBiXFwgY30iLDJdLFsxLDMsIiIsMCx7ImxldmVsIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}
+	{t_0\ a} & {t_2\ c} \\
+	{t_1\ b} & {t_2\ c}
+	\arrow["{{{\mathsf Q}_{02}\ a\ c}}", from=1-1, to=1-2]
+	\arrow["{{{\mathsf Q}_{01}\ a\ b}}"', from=1-1, to=2-1]
+	\arrow[equals, from=1-2, to=2-2]
+	\arrow["{{{\mathsf Q}_{12}\ b\ c}}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+which expands to
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJpbmxfe0EgXFxzdGFyIEIsIEN9IFxcYmlubF97QSxCfSBhIl0sWzEsMCwiXFxiaW5yX3tBIFxcc3RhciBCLCBDfSBjIl0sWzAsMSwiXFxiaW5sX3tBIFxcc3RhciBCLCBDfSBcXGJpbnJfe0EsQn0gYiJdLFsxLDEsIlxcYmlucl97QSBcXHN0YXIgQiwgQ30gYyJdLFswLDEsIntcXG1hdGhzZiBRfV97QVxcc3RhciBCLEN9KFxcYmlubF97QUJ9XFwgYSlcXCBjIl0sWzAsMiwiIFxcbGFtYmRhIGkuXFxiaW5sX3tBIFxcc3RhciBCLCBDfSAoXFxtYXRoc2Z7UX1fe0EgXFxzdGFyIEIsIEN9XFwgYVxcIGJcXCBpKSIsMl0sWzIsMywiIFxcbWF0aHNme1F9X3tBIFxcc3RhciBCLCBDfVxcIChcXGJpbnJfe0EsIEJ9XFwgYilcXCBjIiwyXSxbMSwzLCIiLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	{\binl_{A \star B, C} \binl_{A,B} a} &[7em] {\binr_{A \star B, C} c} \\
+	{\binl_{A \star B, C} \binr_{A,B} b} & {\binr_{A \star B, C} c}
+	\arrow["{{\mathsf Q}_{A\star B,C}(\binl_{AB}\ a)\ c}", from=1-1, to=1-2]
+	\arrow["{ \lambda i.\binl_{A \star B, C} (\mathsf{Q}_{A \star B, C}\ a\ b\ i)}"', from=1-1, to=2-1]
+	\arrow[equals, from=1-2, to=2-2]
+	\arrow["{ \mathsf{Q}_{A \star B, C}\ (\binr_{A, B}\ b)\ c}"', from=2-1, to=2-2]
+\end{tikzcd}\]
+I claim the filler is
+\[i,j \prov  {\mathsf Q}_{A\star B,C}\ ({\mathsf Q}_{A B}\ a\ b\ i)\ c\ j \]
+Let's check this.
+If $j = 0$, then I have
+\[ i \prov \binl ({\mathsf Q}_{A\star B}\ a\ b\ i) \]
+which is the left edge of my diagram, good.
+If $j = 1$, then I have
+\[i \prov \binr\ c\]
+which is my right edge.
+If $i = 0$, then I get
+\[j \prov  {\mathsf Q}_{A\star B,C}\ (\binl\ a)\ c\ j \]
+which is my top edge.
+If $i =1$, then I get
+\[j \prov  {\mathsf Q}_{A\star B,C}\ (\binr\ b)\ c\ j \]
+which is my bottom edge.
 \end{document}
