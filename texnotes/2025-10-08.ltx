@@ -131,7 +131,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
 \def\zem#1{\langle\!\langle#1\rangle\!\rangle}
 \def\col#1{{\mathsf{C}}_{#1}}
-\def\lax{\mathop\bigcirc}
+\def\lax{\bigcirc}
 \def\rjust{\mathsf{just}}
 \def\rcvt{\mathsf{cvt}}
 \def\rtype{\mathsf{type}}
@@ -409,4 +409,88 @@ which is my top edge.
 If $i =1$, then I get
 \[j \prov  {\mathsf Q}_{A\star B,C}\ (\binr\ b)\ c\ j \]
 which is my bottom edge.
+
+\section{Minimal Circuit Thought}
+Consider a logic with modalities $\lax_t$ and $\sq_t$. The $\lax_p$ means `at time $p$ in the past'.
+The $\sq_p$ means `for all times $t$ in the past for any $t$ in the interval $0 \le t \le p$'.
+The contract of a nand gate might be something like the following. $I_i^+$ and $I_i^-$ are
+propositions representing the knowledge that we have high or
+low signals at input $i \in \{0,1\}$. Likewise $O^+$ and $O^-$ are high or low signals at the output.
+We have some parameters $p,q$.
+
+\[ \sq_p \lax_q I^-_0 \imp O^+ \]
+\[ \sq_p \lax_q I^-_1 \imp O^+ \]
+\[ \sq_p \lax_q (I^+_0 \land I^+_1) \imp O^- \]
+
+Let's say we have two nands, with  inputs $I_i^+$, $I_i^-$,  $J_i^+$ and $J_i^-$, with the outputs wired up in such a way that we know
+
+\[ \sq_p \lax_q I^-_0 \imp J_0^+ \eqno(a)\]
+\[ \sq_p \lax_q I^-_1 \imp J_0^+ \eqno(b)\]
+\[ \sq_p \lax_q (I^+_0 \land I^+_1) \imp J_0^- \eqno(c) \]
+\[ \sq_p \lax_q J^-_0 \imp I_0^+ \eqno(d)\]
+\[ \sq_p \lax_q J^-_1 \imp I_0^+ \eqno(e)\]
+\[ \sq_p \lax_q (J^+_0 \land J^+_1) \imp I_0^- \eqno(f)\]
+
+If we wait long enough on $I_1^-$ and $J_1^+$ we should find
+$J_0^+$ and $I_0^-$, right? The first is easy, we have by assumption that
+\[ \sq_p \lax_q I^-_1 \imp J_0^+ \]
+Let's try to prove  $I_0^-$ now. We need
+\[ \sq_p \lax_q (J^+_0 \land J^+_1) \imp I_0^- \]
+i.e.
+\[ \sq_p \lax_q J^+_0 \imp \sq_p \lax_q  J^+_1 \imp I_0^- \]
+Well, we can do some work to our $J_0^+$ assumption to see
+\[ \sq_{2p} \lax_{2q} I^-_1 \imp \sq_p \lax_q J_0^+ \]
+so
+\[ \sq_{2p} \lax_{2q} I^-_1  \imp \sq_p \lax_q  J^+_1 \imp I_0^- \]
+so I think we can weaken to
+\[ \sq_{2p+q} \lax_{q} (I^-_1  \land  J^+_1) \imp I_0^- \]
+because in general
+\[ \sq_{a} X \imp \lax_a X\]
+hence
+\[ \sq_{a+ b} X \imp \sq_b\lax_a X\]
+hence
+\[ \sq_{a+ b}\lax_c X \imp \sq_b\lax_{a+c} X\]
+hence in particular
+\[ \sq_{2p+ q} \lax_{q}X \imp \sq_{2p}\lax_{2q} X\]
+And on the other side it should be pretty clear that
+\[ \sq_{2p+q} \lax_q X \prov \sq_p \lax_q X\]
+just because
+\[ \sq_{a} X \imp  X\]
+So to summarize we have
+\[ \sq_{2p+q} \lax_{q} (I^-_1  \land  J^+_1) \imp (J_0^+ \land I_0^-) \eqno(*)\]
+
+
+I want to prove some sort of `recurrence' that shows the stability of
+$J_1^+ \land J_0^+ \land I_0^-$.
+It should feel something like
+\[ \sq_x \lax_y (J_1^+ \land  J_0^+ \land  I_0^-) \imp  \sq_y (  J_0^+ \land  I_0^-)  \]
+I'm going to be relying on $(f)$ and $(a)$, namely
+\[ \sq_p \lax_q (J^+_0 \land J^+_1) \imp I_0^- \]
+\[ \sq_p \lax_q I^-_0 \imp J_0^+ \]
+which together give me
+\[ \sq_p \lax_q (J^+_0 \land J^+_1 \land I^-_0) \imp (I_0^- \land J_0^+)\]
+and then I can say
+\[ \sq_{p+q} \lax_q (J^+_0 \land J^+_1 \land I^-_0) \imp \sq_q (I_0^- \land J_0^+) \eqno(\star)\]
+
+Here I want to observe an axiom that relates $\sq$ and $\lax$.
+
+\[(\sq_p \lax_q A \land \sq_q A) \Leftrightarrow (\sq_{p+q} A) \eqno(\dagger)\]
+
+What can I derive from
+\[ \sq_{p+100q} \lax_q J^+_1 \land \sq_{p+q} \lax_{100q} (J^+_0 \land I^-_0) \]
+? By $(\dagger)$ this is
+\[(\sq_{p+99q}\lax_{2q} J^+_1 \land \sq_q \lax_q J^+_1) \land \sq_{p+q} \lax_{100q} (J^+_0 \land I^-_0) \]
+\[(\sq_{p+98q}\lax_{3q} J^+_1 \land \sq_q \lax_{2q} J^+_1\land \sq_q \lax_q J^+_1) \land \sq_{p+q} \lax_{100q} (J^+_0 \land I^-_0) \]
+\[(\sq_{p+q}\lax_{100q} J^+_1\land \cdots  \land \sq_q \lax_{2q} J^+_1\land \sq_q \lax_q J^+_1) \land \sq_{p+q} \lax_{100q} (J^+_0 \land I^-_0) \]
+So I have $\lax_{99q}$ applied to the preconditions of $\star$.
+Which means I have $\sq_q \lax_{99q}   (J^+_0 \land I^-_0)$.
+So I actually have $\sq_{p+2q} \lax_{99q}   (J^+_0 \land I^-_0)$.
+But I also have $\sq_{p+2q}\lax_{99q} J^+_1$. So I have the preconditions of $\lax_{98q}(\star)$.
+Which means I have $\sq_q \lax_{98q}   (J^+_0 \land I^-_0)$.
+So I actually have $\sq_{p+3q} \lax_{98q}   (J^+_0 \land I^-_0)$.
+Etc. so inductively I can proceed forward. Ultimately I have
+\[ \sq_{p+ 100q}\lax_q (J_1^+ \land J^+_0 \land I^-_0) \]
+and so I get
+\[ \sq_{q} ( J^+_0 \land I^-_0) \]
+as required.
 \end{document}
