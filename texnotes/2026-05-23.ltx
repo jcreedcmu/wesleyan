@@ -305,8 +305,56 @@ Takes a context, yields a simple context.
 \subsubsection{Lock}
 Takes a simple context, yields a context.
 \[\begin{tabular}{rcl}
- $(\Gamma\simp, x : A\simp)\locking$&$::=$&$\Gamma\simp\locking, x :: A\simp $\\
+ $(\Gamma\simp, x : A\simp)\locking$&$:=$&$\Gamma\simp\locking, x :: A\simp $\\
 \end{tabular}\]
 
+\subsubsection{Rehydrate}
+Takes a simple expression in an erased context and a term of type $H$, and yields
+an expression in the original context.
+
+\[\begin{tabular}{rcp{5cm}}
+$(M\ N)\hyd t \Gamma $&$:=$&$ (M\hyd t \Gamma)\ (N\hyd t \Gamma)$\\
+$(\lambda x . M)\hyd t \Gamma $&$:=$&$ \lambda x . (M\hyd t \Gamma)$\\
+$x\hyd t \Gamma$ &$:=$&
+  $\begin{cases}x\sem t&\hbox{if $x :: A\simp \in \Gamma$;}\\
+ x&\hbox{otherwise.} \end{cases}$ \\
+\end{tabular}\]
+
+\subsection{Lemmas}
+
+\begin{lemma}
+Rehydrating and erasure are inverses.
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+The rehydrating substitution is well-typed.
+\[ \Gamma \prov t : H \qquad \Gamma\erase \prov A\simp : \rtype
+\over
+\Gamma \prov A\simp \hyd t \Gamma : \rtype\]
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+Erasure is well-typed.
+\begin{enumerate}
+\item If $\prov \Gamma \rctx$, then $\prov \Gamma \erase \rctx$.
+\item If $ \Gamma \prov A :\rtype$, then $ \Gamma\erase \prov A\erase :\rtype$.
+\item If $ \Gamma \prov M :A$, then $ \Gamma\erase \prov M\erase : A\erase$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
 
 \end{document}
