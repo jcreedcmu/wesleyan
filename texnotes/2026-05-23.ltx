@@ -522,8 +522,35 @@ We do this by applying
   \label{thead.term.pres}
    If $\Gamma \prov M : A$, then $\Gamma\thead \prov M\thead : A\thead$
 \end{lemma}
-\begin{proof}
-
+\begin{proof}\ %
+\begin{itemize}
+\item[Case:]
+\[
+\begin{prooftree}
+\justifies
+\Gamma, x : A, \Gamma' \prov x : A
+\end{prooftree}
+\]
+After translating we get the obligation of showing
+\[
+\begin{prooftree}
+\justifies
+\Gamma\thead, x :  A\thead, \Gamma'\thead \prov x : A\thead
+\end{prooftree}
+\]
+This is trivial.
+\item[Case:]
+\[
+\begin{prooftree}
+\Gamma \prov t : H\qquad x :: A\simp \in \Gamma
+\justifies
+\Gamma \prov x\sem t : A\simp\hyd t \Gamma
+\end{prooftree}
+\]
+Here we get $\Gamma\thead \prov t\thead : 0$, so we can abort on it. The target
+type is $(A\simp\hyd t \Gamma)\thead$. So we can set
+\[ (x\sem t)\thead = \babort_{(A\simp\hyd t \Gamma)\thead} t\thead\]
+\end{itemize}
 \cqed
 \end{proof}
 \begin{lemma}
