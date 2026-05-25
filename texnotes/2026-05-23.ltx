@@ -237,6 +237,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 \NewDocumentCommand{\unlock}{}{\text{\faicon{unlock}}}
 \NewDocumentCommand{\key}{}{\text{\faicon{key}}}
 \def\erase{^\ominus}
+\def\thead{^\oplus}
+\def\tsub{^\star}
 \def\simp{_\circ}
 \def\locking{^\lock}
 \def\hyd#1#2{[#1 \star #2]}
@@ -279,6 +281,13 @@ boxrule=0pt,boxsep=0pt,breakable}
 \subsubsection{Context Formation}
 \[
 \begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
 \prov \Gamma \rctx \qquad \Gamma\erase \prov A\simp : \rtype
 \justifies
 \prov (\Gamma, x :: A\simp)\rctx
@@ -299,6 +308,7 @@ Takes a context, yields a simple context.
 \[\begin{tabular}{rcl}
  $(\Gamma, x : A)\erase$&$:=$&$\Gamma\erase, x : A\erase $\\
  $(\Gamma, x :: A\simp)\erase$&$:=$&$\Gamma\erase, x : A\simp $\\
+ $H\erase$&$:=$&$1 $\\
  $(x\sem t)\erase$&$:=$&$x $\\
 \end{tabular}\]
 
@@ -323,6 +333,7 @@ $x\hyd t \Gamma$ &$:=$&
 \subsection{Lemmas}
 
 \begin{lemma}
+\label{hyd.erase.inv}
 Rehydrating and erasure are inverses.
 \end{lemma}
 
@@ -332,6 +343,7 @@ Rehydrating and erasure are inverses.
 \end{proof}
 
 \begin{lemma}
+\label{hyd.pres}
 The rehydrating substitution is well-typed.
 \[ \Gamma \prov t : H \qquad \Gamma\erase \prov A\simp : \rtype
 \over
@@ -345,11 +357,178 @@ The rehydrating substitution is well-typed.
 
 \begin{lemma}
 Erasure is well-typed.
+\label{erase.pres}
 \begin{enumerate}
 \item If $\prov \Gamma \rctx$, then $\prov \Gamma \erase \rctx$.
 \item If $ \Gamma \prov A :\rtype$, then $ \Gamma\erase \prov A\erase :\rtype$.
 \item If $ \Gamma \prov M :A$, then $ \Gamma\erase \prov M\erase : A\erase$.
 \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\begin{lemma}
+\label{lock.pres}
+Locking is well-typed. If $\prov \Gamma\simp \rctx$, then $\prov \Gamma\simp \locking \rctx$.
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\subsection{Translation}
+I want to define another map $\dash\thead$ that takes expressions to simple
+expressions, but at the ``head of the arrow'' intsead of how
+$\dash\erase$ is at the ``tail''. I'll need to define a substitution $\Gamma\tsub$ with
+ $\Gamma\thead \prov \Gamma\tsub : \Gamma\erase$.
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)\thead$&$:=$&$\Gamma\thead, x : A\thead $\\
+ $(\Gamma, x :: A\simp)\thead$&$:=$&$\Gamma\thead, x : \Gamma\tsub A\simp $\\
+ $H\thead$&$:=$&$0$\\
+ $(A \to B)\thead$&$:=$&$(f\thead : A\thead \to B\thead) (f\erase : A\erase \to B\erase) \x  $\\
+&& $\quad (x : A\thead) \to B\tsub(f\thead\ x) \equiv f\erase\ (A\tsub(x))$\\
+\end{tabular}\]
+
+\subsubsection{Substitution}
+The general typing rule for substitutions is
+\[
+\begin{prooftree}
+\Delta\simp \prov \theta\simp : \Gamma\simp \qquad \Delta\simp\prov M\simp : \theta\simp A\simp
+\justifies
+\Delta\simp \prov \theta\simp[M\simp /x] : (\Gamma\simp, x : A\simp)
+\end{prooftree}
+\]
+We define here $\Gamma\thead \prov \Gamma\tsub : \Gamma\erase$.
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)\tsub$&$:=$&$\Gamma\tsub[A\tsub(x)/x] $\\
+ $(\Gamma, x :: A\simp)\tsub$&$:=$&$\Gamma\tsub[x/x]$\\
+\end{tabular}\]
+
+\subsection{Proofs about Translation}
+These are mutually inductive.
+\begin{lemma}
+   If $\prov \Gamma \rctx$, then $\prov \Gamma\thead \rctx$
+  \label{thead.ctx.pres}
+\end{lemma}
+\begin{proof}\ %
+  \begin{itemize}
+  \item [Case:]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+By i.h., it remains to show  $\Gamma\thead \prov A\thead  : \rtype$.
+We do this by applying Lemma~\ref{thead.type.pres}.
+
+  \item [Case:]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma\erase \prov A\simp : \rtype
+\justifies
+\prov (\Gamma, x :: A\simp)\rctx
+\end{prooftree}
+\]
+By i.h., it remains to show  $\Gamma\thead \prov \Gamma\tsub A\simp : \rtype$.
+We do this by applying Lemma~\ref{tsub.ctx.pres}.
+
+
+  \end{itemize}
+\cqed
+\end{proof}
+\begin{lemma}
+   If $\prov \Gamma \rctx$, then $\Gamma\thead \prov \Gamma\tsub : \Gamma\erase$
+  \label{tsub.ctx.pres}
+\end{lemma}
+\begin{proof}\ %
+  \begin{itemize}
+  \item [Case:]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+Here we must show  $\Gamma\thead, x : A\thead \prov \Gamma\tsub[A\tsub(x) /x] : (\Gamma\erase, x : A\erase)$.
+We do this by applying
+\[
+\begin{prooftree}
+\[
+  \hbox{i.h.}
+  \justifies
+  \Gamma\thead \prov \Gamma\tsub : \Gamma\erase
+\]
+\[
+  \hbox{Lemma \ref{tsub.type.pres}}
+  \justifies
+  \Gamma\thead, x : A\thead\prov A\tsub(x) : \Gamma\tsub A\erase
+\]
+\justifies
+\Gamma\thead, x : A\thead \prov \Gamma\tsub[A\tsub(x) /x] : (\Gamma\erase, x : A\erase)
+\end{prooftree}
+\]
+  \item [Case:]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma\erase \prov A\simp : \rtype
+\justifies
+\prov (\Gamma, x :: A\simp)\rctx
+\end{prooftree}
+\]
+Here we must show  $\Gamma\thead, x : \Gamma\tsub A\simp \prov \Gamma\tsub[x/x] : (\Gamma\erase, x : A\simp)$.
+We do this by applying
+\[
+\begin{prooftree}
+\[
+  \hbox{i.h.}
+  \justifies
+  \Gamma\thead \prov \Gamma\tsub : \Gamma\erase
+\]
+\[
+  \justifies
+  \Gamma\thead, x : \Gamma\tsub A\simp\prov x : \Gamma\tsub A\simp
+\]
+\justifies
+\Gamma\thead, x : \Gamma\tsub A\simp \prov \Gamma\tsub[x /x] : (\Gamma\erase, x : A\simp)
+\end{prooftree}
+\]
+  \end{itemize}
+\cqed
+\end{proof}
+\begin{lemma}
+   If $\Gamma \prov A : \rtype$, then $\Gamma\thead \prov A\thead : \rtype$
+  \label{thead.type.pres}
+\end{lemma}
+\begin{proof}
+
+\cqed
+\end{proof}
+\begin{lemma}
+  \label{tsub.type.pres}
+   If $\Gamma \prov A : \rtype$ then $\Gamma\thead, x : A\thead \prov A\tsub(x) : \Gamma\tsub A\erase$
+\end{lemma}
+\begin{proof}
+
+\cqed
+\end{proof}
+\begin{lemma}
+  \label{thead.term.pres}
+   If $\Gamma \prov M : A$, then $\Gamma\thead \prov M\thead : A\thead$
+\end{lemma}
+\begin{proof}
+
+\cqed
+\end{proof}
+\begin{lemma}
+  \label{tsub.term.pres}
+   If $\Gamma \prov M : A$, then $\Gamma\thead \prov \Gamma\tsub M\erase = A\tsub (M\thead) : \Gamma\tsub A\erase$
 \end{lemma}
 
 \begin{proof}
