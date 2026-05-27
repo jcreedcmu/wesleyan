@@ -389,7 +389,7 @@ $\dash\erase$ is at the ``tail''. I'll need to define a substitution $\Gamma\tsu
  $(\Gamma, x : A)\thead$&$:=$&$\Gamma\thead, x : A\thead $\\
  $(\Gamma, x :: A\simp)\thead$&$:=$&$\Gamma\thead, x : \Gamma\tsub A\simp $\\
  $H\thead$&$:=$&$0$\\
- $(A \to B)\thead$&$:=$&$(f\thead : A\thead \to B\thead) (f\erase : A\erase \to B\erase) \x  $\\
+ $(A \to B)\thead$&$:=$&$(f\thead : A\thead \to B\thead) (f\erase : \Gamma\tsub A\erase \to \Gamma\tsub B\erase) \x  $\\
 && $\quad (x : A\thead) \to B\tsub(f\thead\ x) \equiv f\erase\ (A\tsub(x))$\\
 \end{tabular}\]
 
@@ -515,6 +515,13 @@ We do this by applying
    If $\Gamma \prov A : \rtype$ then $\Gamma\thead, x : A\thead \prov A\tsub(x) : \Gamma\tsub A\erase$
 \end{lemma}
 \begin{proof}
+Let's consider the function case. We have
+$\Gamma \prov A \to B : \rtype$ and we need to show
+\[\Gamma\thead, x : (A \to B)\thead \prov (A \to B)\tsub(x) : \Gamma\tsub (A \to B)\erase\]
+which is
+\[\Gamma\thead, f\thead : (A\thead \to B\thead), f\erase : (A\erase \to B\erase),\]
+\[p : (x : A\thead) \to B\tsub(f\thead\ x) \equiv f\erase\ (A\tsub(x))\]
+\[ \prov (A \to B)\tsub(f\thead, f\erase, p) : \Gamma\tsub A\erase \to \Gamma\tsub B\erase\]
 
 \cqed
 \end{proof}
