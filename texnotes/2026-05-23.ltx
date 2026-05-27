@@ -519,10 +519,10 @@ Let's consider the function case. We have
 $\Gamma \prov A \to B : \rtype$ and we need to show
 \[\Gamma\thead, x : (A \to B)\thead \prov (A \to B)\tsub(x) : \Gamma\tsub (A \to B)\erase\]
 which is
-\[\Gamma\thead, f\thead : (A\thead \to B\thead), f\erase : (A\erase \to B\erase),\]
+\[\Gamma\thead, f\thead : (A\thead \to B\thead), f\erase : (\Gamma\tsub A\erase \to \Gamma\tsub B\erase),\]
 \[p : (x : A\thead) \to B\tsub(f\thead\ x) \equiv f\erase\ (A\tsub(x))\]
 \[ \prov (A \to B)\tsub(f\thead, f\erase, p) : \Gamma\tsub A\erase \to \Gamma\tsub B\erase\]
-
+So we simply set $(A \to B)\tsub(f\thead, f\erase, p) = f\erase$.
 \cqed
 \end{proof}
 \begin{lemma}
@@ -570,4 +570,30 @@ type is $(A\simp\hyd t \Gamma)\thead$. So we can set
 \cqed
 \end{proof}
 
+\section{An Intuition}
+
+I think of the interval type $\I$ as being substructural, so it's not a $\rtype$ but rather a $W \to \rtype$
+for some unknown type $W$. A `wide' type is indexed over both $w : W$ and $i : \I\ w$. The presheaf exponential
+is realized as the definition of a logical connective taking two wide types and yielding a wide type.
+Let $A, B : (w : W) (i : \I\ w) \to \rtype$ be given. We want to define
+\[ A \to B : (w : W) (i : \I\ w) \to \rtype \]
+somehow. We postulate
+\[0, 1 :  \I\ \star\]
+for some concrete empty world $\star$.
+Let's write $\wat i$ for application to $\star$ and then $i$.
+I want
+\[(A \to B)\wat 0 \equiv (f_0 : A\wat 0 \to B\wat 0)
+(f_1 : A\wat 1 \to B\wat 1) \x (\cdots \equiv \cdots)\]
+\[(A \to B)\wat 1 \equiv A\wat 1 \to B\wat 1 \]
+There's some way in which if I have $f : (w : W) (i : \I\ w) \to \rtype$ then I get
+$\mu f : f\wat 0 \to f\wat 1$.
+
+If I have $A : \rtype$ and $B : \rtype$ and $f : A \to B$, then there should exist
+a wide type $G(A, B, f) : (w : W) (i : \I\ w) \to \rtype$ such that
+$G(A, B, f)\wat 0 = A$ and $G(A, B, f)\wat 1 = B$ and $\mu(G(A, B, f)) = f$.
+
+If I start with $q : (X : \rtype) \to X \to X$ and I'm in a context with $ (w : W) (i : \I\ w)$
+and I investigate
+\[  (w : W) (i : \I\ w) \prov q (G(A, B, f, w, i)) : G(A, B, f, w, i) \to G(A, B, f, w, i) \]
+what do I get?
 \end{document}
