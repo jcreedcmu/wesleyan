@@ -596,4 +596,519 @@ If I start with $q : (X : \rtype) \to X \to X$ and I'm in a context with $ (w : 
 and I investigate
 \[  (w : W) (i : \I\ w) \prov q (G(A, B, f, w, i)) : G(A, B, f, w, i) \to G(A, B, f, w, i) \]
 what do I get?
+
+Let's back off and try to remember parametricity-in-parametricity for unary relations.
+Given $p : A \to  B$ let's make
+\begin{tabbing}
+$\mathbf{data}\ \mathsf{Gel}\ (\I : \rtype) (e : \I) : \I \to \rtype\  \mathbf{where}$\\
+\qquad $\mathsf{apt} : (a : A) (i : \I) \to \mathsf{Gel}\ i$\\
+\qquad $\mathsf{bpt} : (b : B) \to \mathsf{Gel}\ e$\\
+\qquad $\mathsf{path} : (a : A) \to \mathsf{apt}\ a\ e \equiv \mathsf{bpt}\ (p\ a)$
+\end{tabbing}
+If we consider $\mathsf{Gel}\ 2\ \binl\ \binr$ then we can only use $\mathsf{apt}\ a\ \binr$.
+If we consider $\mathsf{Gel}\ 1\ \star\ \star$ then the only thing we can do up to equality
+is $\mathsf{bpt}\ b$.
+
+For $n$-ary:
+Given $p : (s : S) \to A \to  (B\ s)$  let's make
+\begin{tabbing}
+$\mathbf{data}\ \mathsf{Gel}\ (\I : \rtype) (\eta : S \to  \I) : \I \to \rtype\  \mathbf{where}$\\
+\qquad $\mathsf{apt} : (a : A) (i : \I) \to \mathsf{Gel}\ i$\\
+\qquad $\mathsf{bpt} : (s : S) (b : B\ s) \to \mathsf{Gel}\ (\eta\ s)$\\
+\qquad $\mathsf{path} : (a : A) (s : S) \to \mathsf{apt}\ a\ (\eta\ s) \equiv \mathsf{bpt}\ s\ (p\ s\ a)$
+\end{tabbing}
+If we consider $\mathsf{Gel}\ (S+1)\ \binl\ \binr$ then we can only use $\mathsf{apt}\ a\ \binr$.
+If we consider $\mathsf{Gel}\ S\ \rid\ s$ then the only thing we can do up to equality
+is $\mathsf{bpt}\ s\ b$.
+
+Suppose I have a term
+\[ q : (\I : \rtype) (\eta : S \to  \I) (i : \I) \to (\mathsf{Gel}\ \I\ \eta\ i) \to (\mathsf{Gel}\ \I\ \eta\ i)\]
+I can derive from this terms like
+\[ q\ (S + 1)\ \binl\ \binr : A \to A\]
+\[ q\ S\ \rid\ s : (B\ s) \to (B\ s)\]
+
+\vfil\eject
+\section{Fibered Translation}
+
+
+Is it any different if I do the following?
+
+\subsection{Translation}
+Define $\Gamma^*$ which takes a context and yields a context.
+\[ (\Gamma, x : A)^* = (\Gamma^*, x : A^*)\]
+\[ \sem {\Gamma, x : A} = (\sem \Gamma, x : A^*, x' : \sem A (x))\]
+Define $A^*$ which takes a type and yields a type.
+\[ ((a: A) \to B)^* = (a : A^*) \to B^* \]
+Define $\sem A(M)$ which takes a type $A$ and a term of type $A^*$
+and yields a type.
+\[ \sem{(a : A) \to B}(f) = (a : A^*) (a' : \sem A(a))\to  \sem B (f\ a) \]
+
+Define $M^*$ which takes a term and yields a term.
+\[ x^* = x \]
+\[ \sem x = x' \]
+\[ (\lambda x . M)^* = \lambda x . M^* \]
+\[\sem {\lambda x . M} = \lambda x.\lambda x'. \sem M\]
+\[(M\ N)^* = M^*\ N^*\]
+\[\sem{M\ N} = \sem M\ N^*\ \sem N\]
+
+We expect $H^* = 1$ and $\sem H(\star) = 0$
+
+\subsection{Lemmas}
+\begin{lemma}
+If $\prov \Gamma \rctx$, then $\prov \Gamma^* \rctx$.
+\end{lemma}
+
+\begin{proof}
+Cons case depends on type lemmas below.
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+If $\prov \Gamma \rctx$, then $\prov \sem \Gamma \rctx$.
+\end{lemma}
+
+\begin{proof}
+Cons case depends on type lemmas below.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $\Gamma \prov A : \rtype$, then $\Gamma^* \prov A^* : \rtype$.
+\end{lemma}
+
+\begin{proof}
+Pi case is easy.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $\Gamma \prov A : \rtype$, then $\sem \Gamma, x : A^* \prov \sem A(x) : \rtype$.
+\end{lemma}
+
+\begin{proof}
+Suppose we're working with
+\[
+\Gamma, y : B \prov C : \rtype
+\over
+\Gamma \prov (y : B) \to C : \rtype
+\]
+Then we need to show
+\[ \sem \Gamma, x : ((y : B) \to C)^* \prov \sem {(y :B) \to C}(x) : \rtype\]
+i.e.
+\[ \sem \Gamma, x : (y : B^*) \to C^* \prov (y :B^*)(y' : \sem B(y)) \to \sem{C}(x\ y) : \rtype\]
+so we need
+\[ \sem \Gamma, x : (y : B^*) \to C^* \prov B^* : \rtype\]
+\[ \sem \Gamma, x : (y : B^*) \to C^* \prov \sem B(y) : \rtype\]
+\[ \sem \Gamma, x : (y : B^*) \to C^*, y :B^*, y' : \sem B(y) \prov  \sem{C}(x\ y) : \rtype\]
+The first follows by induction on the other lemma. The second follows by induction on this lemma. For the third, we do induction on this lemma on
+\[ \sem {\Gamma, y : B}, z : C^* \prov  \sem{C}(z) : \rtype\]
+which gives us
+\[ \sem {\Gamma}, y :B^*, y' : \sem B(y), z : C^* \prov  \sem{C}(z) : \rtype\]
+then substitute $x\ y$ for $z$.
+\cqed
+\end{proof}
+
+
+\begin{lemma}
+If $\Gamma \prov M : A$, then $\Gamma^* \prov M^* : A^*$.
+\end{lemma}
+
+\begin{proof}
+Easy cases.
+\cqed
+\end{proof}
+
+\begin{lemma}
+If $\Gamma \prov M : A$, then $\sem \Gamma \prov \sem M : \sem A(M^*)$.
+\end{lemma}
+
+\begin{proof}\ %
+  \begin{itemize}
+  \item[Case:] $M = x$. If $x :A \in \Gamma$, then $x' : \sem A(x) \in \sem \Gamma$,
+and indeed $x^* = x$, so that's correct.
+  \item[Case:] $M = \lambda y . M$.
+We know
+\[
+\Gamma, y : B \prov M : C
+\over
+\Gamma \prov \lambda y . M :  (y : B) \to C
+\]
+and we want to show
+\[\sem \Gamma \prov \sem {\lambda y . M} : \sem {(y : B) \to C}(\lambda y . M^*)\]
+which is
+\[\sem \Gamma \prov \sem {\lambda y . M} : (y : B^*)(y' : \sem B(y)) \to
+\sem C((\lambda y . M^*)\ y)\]
+which should be $\beta$-equivalent to
+\[\sem \Gamma \prov \sem {\lambda y . M} : (y : B^*)(y' : \sem B(y)) \to
+\sem C(M^*)\]
+but $\sem {\lambda y . M} = \lambda y.\lambda y'. \sem M$ and
+\[\sem \Gamma, y : B^*, y' : \sem B(y) \prov \sem {M} : \sem C(M^*)\]
+by induction hypothesis, so we're good.
+  \item[Case:] $M\ N$.
+We have $\Gamma \prov M : (y : B) \to C$ and $\Gamma \prov N : B$.
+By i.h. this means
+\[\sem \Gamma \prov \sem {M} : (y : B^*)(y' : \sem B(y)) \to \sem C(M^*\ y)\]
+\[\sem \Gamma \prov \sem {N} :  \sem B(N^*)\]
+This lets us conclude
+\[\sem \Gamma \prov \sem {M}\ N^*\ \sem N : [\sem N/y'][N^*/y] \sem C(M^*\ y)\]
+by compatibility of translation with substitution,
+\[\sem \Gamma \prov \sem {M\ N} : \sem{ [N/y]C}(M^*\ N^*)\]
+  \end{itemize}
+\cqed
+\end{proof}
+
+
+Translating substitutions:
+\[\sem {\theta[N/y]} = \sem \theta[N^*/y][\sem N/ y']\]
+\begin{lemma}[Substitution Typing]\ %
+  \begin{itemize}
+\item If $\Delta \prov \theta : \Gamma$, then $ \Delta^* \prov  \theta^* :  \Gamma^*$
+\item If $\Delta \prov \theta : \Gamma$, then $\sem \Delta \prov \sem \theta : \sem \Gamma$
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+Suppose we have
+\[
+\Delta \prov \theta : \Gamma\qquad \Delta \prov N : \theta B
+\over
+\Delta \prov \theta[N/y] : (\Gamma, y : B)
+\]
+then we construct
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\sem \Delta\prov \sem \theta : \sem \Gamma
+\]
+\[
+\[
+\hbox{i.h.}
+\justifies
+\Delta^* \prov N^* :  \theta^*B^*
+\]
+\justifies
+\sem \Delta \prov N^* : \sem \theta (B^*)
+\]
+\justifies
+\sem \Delta \prov \sem \theta [N^*/y] : (\sem \Gamma, y : B^*)
+\]
+\[
+\hbox{i.h., compat}
+\justifies
+\sem \Delta \prov \sem N : \sem \theta[N^*/y](\sem B(y))
+\]
+\justifies
+\sem \Delta \prov \sem \theta[N^*/y][\sem N/ y'] : (\sem \Gamma, y : B^*, y' : \sem B(y))
+\end{prooftree}
+\]
+\cqed
+\end{proof}
+
+\begin{lemma}[Substitution Compatibility]
+Suppose $\Gamma \prov M : C$
+and $\Delta \prov \theta : \Gamma$.
+Then \[\sem {\theta C}(\theta^*M^*) \equiv \sem \theta ( \sem C(M^*))\]
+\end{lemma}
+
+\begin{corollary}[Substitution Compatibility (1)]
+Suppose $\Gamma, y : B \prov M : C$
+and $\Gamma \prov N : B$.
+Then \[\sem {[N/y]C}([N^*/y]M^*) \equiv [\sem N/y'][N^*/y] \sem C(M^*)\]
+\end{corollary}
+\subsection{New Features}
+
+The whole idea here is that we define a translation that ``doesn't do
+anything interesting'' so that we can try adding features to the
+source language and see if the translation can be extended in such a
+way as to provide a justification and explanation of those new
+features.
+
+So I'd like to add
+
+\[ \Gamma ::= \cdots \celse (\Gamma, x :: A\simp) \]
+with $A\simp$ coming from the target language of the translations, and we
+say
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad  \Gamma^* \prov A\simp : \rtype
+\justifies
+\prov (\Gamma, x :: A\simp) \rctx
+\end{prooftree}
+\]
+
+This is a ``locked'' hypothesis. In translation, we
+set the `relation membership hypothesis' to the type 1, which is the same as dropping it:
+\[ (\Gamma, x :: A\simp)^* = (\Gamma^*, x : A\simp)\]
+\[ \sem {\Gamma, x :: A\simp} = (\sem \Gamma, x : A\simp)\]
+Since we're adding new context formers, we need to establish
+that if
+\[\prov \Gamma \rctx \qquad  \Gamma^* \prov A\simp : \rtype\]
+then
+\[\prov (\Gamma, x :: A\simp)^* \rctx\]
+\[\prov \sem{\Gamma, x :: A\simp} \rctx\]
+which means we need to show
+\[\prov \Gamma^* \rctx \qquad  \Gamma^* \prov A \simp : \rtype\]
+\[\prov \sem{\Gamma} \rctx \qquad \sem{\Gamma} \prov A\simp : \rtype\]
+but we have all the tools to do this.
+
+Next we'd like to think about the operation of creating a fully locked context:
+\[(\Gamma, x : A\simp )\locking = \Gamma\locking, x :: A\simp \]
+And we can show this is suitably inverse to $\dash^*$.
+Let's now talk about type former $\surd$:
+
+\[
+\begin{prooftree}
+(\Gamma^*)\locking \prov A : \rtype
+\justifies
+\Gamma \prov \surd A : \rtype
+\end{prooftree}
+\]
+I have a guess for the interpretation of $\surd$:
+
+\[(\surd{A})^* = (a : A^*) \x \sem A(a)\]
+\[\sem{\surd{A}}(x) = 1\]
+Do these define legitimate types? Well, we know inductively that
+\[((\Gamma^*)\locking)^* \prov A^* : \rtype\]
+which is the same as
+\[\Gamma^*\prov A^* : \rtype\]
+We also know that
+\[\sem{(\Gamma^*)\locking}, a : A^* \prov \sem A(a) : \rtype\]
+and we need to know that
+\[\Gamma^*, a : A^* \prov \sem A(a) : \rtype\]
+This is fine by the following lemma:
+
+\begin{lemma}
+\label{sem.locking.interact}
+$\sem{(\Gamma^*)\locking} = \Gamma^*$
+\end{lemma}
+
+\begin{proof}
+For case $(\Gamma, x:A)$ we can reason
+\[\sem{((\Gamma, x:A)^*)\locking} = \sem{(\Gamma^*, x:A^*)\locking}\]
+\[= \sem{((\Gamma^*)\locking, x::A^*)}\]
+\[= (\sem{(\Gamma^*)\locking}, x:A^*)\]
+\[= (\Gamma^*, x:A^*)\]
+\[= (\Gamma, x:A)^*\]
+For case $(\Gamma, x::A\simp)$ we can reason
+\[\sem{((\Gamma, x::A\simp)^*)\locking} = \sem{(\Gamma^*, x:A\simp)\locking}\]
+\[= \sem{((\Gamma^*)\locking, x::A\simp)}\]
+\[= (\sem{(\Gamma^*)\locking}, x:A\simp)\]
+\[= (\Gamma^*, x:A\simp)\]
+\[= (\Gamma, x::A\simp)^*\]
+\cqed
+\end{proof}
+
+Let's try to show we can interpret the intro rule for $\surd$:
+\[
+\begin{prooftree}
+(\Gamma^*)\locking \prov M : A
+\justifies
+\Gamma \prov \surd M : \surd A
+\end{prooftree}
+\]
+We'd attempt
+\[ (\surd M)^* = \langle M^*, \sem M \rangle \]
+\[ \sem{\surd M} = \star \]
+To show the correctness of the first, we use preservation to get
+\[((\Gamma^*)\locking)^* \prov M^* : A^*\]
+\[\sem{(\Gamma^*)\locking} \prov \sem M : \sem{A}(M^*)\]
+i.e.
+\[\Gamma^* \prov M^* : A^*\]
+\[\Gamma^* \prov \sem M : \sem{A}(M^*)\]
+We must show
+\[ \Gamma^* \prov \langle M^*, \sem M \rangle : (a : A^*) \x \sem A(a) \]
+but we have everything we need to do exactly this.
+
+\subsubsection{The Elim Rule}
+\[
+\begin{prooftree}
+\Gamma, h : H \prov M :\surd A
+\justifies
+\Gamma \prov \hat\lambda h.M : A[\_ / h]
+\end{prooftree}
+\]
+We first have to understand this operation $[\_ / h]$. We {\em will} have
+to define it syntactically directly on the source language for it to be
+a meaningful language, but let's see if we can appreciate what it must
+mean `semantically' first, in the target language.
+
+Having \[\Gamma, h : H \prov M :\surd A\] means we have
+\[\Gamma^* \prov M^* : (a : A^*) \x \sem A (a)\]
+(and a non-useful sequent with $h': 0$)
+
+I suppose we have assumed that $\Gamma, h : H \prov \surd A : \rtype$
+which means
+ $(\Gamma^*)\locking \prov  A : \rtype$ and therefore
+ $\Gamma^*\prov  A^* : \rtype$ and
+ $\Gamma^*, a : A^*\prov  \sem A(a) : \rtype$.
+
+Ok, so it's {\em almost} as if $(\Gamma^*)\locking \prov A : \rtype$ implies
+$\Gamma \prov A : \rtype$. If we can make $A$ in a `more locked' context, then
+we should be able to also make it in a `less locked` context.
+
+So maybe I should define
+\[( \hat \lambda h.M)^* = (M^*).1 \]
+\[ \sem{\hat \lambda h.M} = (M^*).2 \]
+
+and conceivably I could expect to be able to prove a compatibility lemma like:
+
+\begin{lemma}
+\[( A[\_/h])^* = A^* \]
+\[ \sem {A[\_/h]}(x) = \sem{A}(x) \]
+
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\subsubsection{How can $\surd$ use variables}
+
+Suppose $o : \rtype$ and $a : (H \to o) \to \rtype$.
+Then maybe
+\[z : o \prov \surd (a\  (\lambda h . z [h])) : \rtype\]
+?
+This would require
+\[z :: o \prov a\  (\lambda h . z [h]) : \rtype\]
+\[z :: o \prov  \lambda h . z [h] : H \to o\]
+\[z :: o, h : H \prov z [h] \]
+\[z : o^* \prov (\alpha : a\  (\lambda h . z [h])) \x (\sem{a\  (\lambda h . z [h])}(\alpha)): \rtype\]
+
+\subsubsection{Fixing the Theorem}
+
+\begin{theorem}
+If $(\Gamma^*)\locking \prov A : \rtype$,
+then $\Gamma \prov A[\key_\Gamma] : \rtype$.
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+I need to think about what happens to the variable use rule.
+\[
+\begin{prooftree}
+\Gamma \prov t : H \qquad x :: A\simp \in \Gamma
+\justifies
+\Gamma \prov x[t] : A\simp[t/\Gamma]
+\end{prooftree}
+\]
+I need
+\[\Gamma^* \prov (x[t] )^*: (A\simp[t/\Gamma])^*\]
+So I think I just set $(x[t])^* = x$. Erasure erases.
+This should mean rehydrating and erasing is a no-op, so my goal is
+\[\Gamma^* \prov x: A\simp\]
+and I should be good. Then for the relation I need to prove:
+\[\sem\Gamma \prov \sem{x[t]}: \sem{A\simp[t/\Gamma]}(x)\]
+But we have $\sem \Gamma \prov \sem t : 0$,
+so we abort.
+%% So I notice I can definitely make
+%% \[
+%% \begin{prooftree}
+%% \[
+%% \justifies
+%% x : H \to \surd A, h : H \prov x\ h : \surd A
+%% \]
+%% \justifies
+%% x : H \to \surd A \prov \hat\lambda h . x\ h : A[\_/h]
+%% \end{prooftree}
+%% \]
+\subsection{Glue and Fracture}
+Do I have any chance of implementing them?
+
+
+If I have a function $A \to B$ I can make a type:
+\begin{tabbing}
+$\mathbf{data}\ \mathsf{G} : \rtype\  \mathbf{where}$\\
+\qquad $\mathsf{apt} : A \to G$\\
+\qquad $\mathsf{bpt} : (h : H) (b : B) \to G$\\
+\qquad $\mathsf{path} : (h : H) (a : A) \to \mathsf{apt}\ a \equiv \mathsf{bpt}\ h\ (f\ a)$
+\end{tabbing}
+And I want to believe that, assuming $A$ and $B$ are suitably trivial
+(Is $H$-null the right property? Can I show that
+$A \to H \to A$ is an equiv just in case $\surd A \to A$ is?)
+then $\surd G$ is $A$ and $H \to G$ is $B$, and the evident map
+\[ \surd G \to (H \to G)\]
+is the same as $f$.
+
+\subsection{Higher-Dimensional Induction}
+Can I prove
+\[(H \to (A +B)) \to  (H \to A) + (H \to B) \]
+? I'm trying and failing to follow the mitchell riley paper.
+It would help if I understood the adjunction isomorphism
+\[ (H \to A) \to B \over A \to \surd B\]
+for closed types $A$ and $B$. Given $f : A \to \surd B$ I can construct
+\[\lambda k . \lambda h . f\ (k\ h) : (H \to A) \to (H \to \surd B)\]
+\[ k : H \to A, h : H \prov  f\ (k\ h) :  \surd B\]
+\[ k : H \to A \prov  \hat \lambda h. f\ (k\ h) :  B[\key]\]
+
+Ok, that's one half. In the other direction, suppose I have $g : (H \to A) \to B$.
+%% Let's first teach ourselves how to do functoriality of $\surd$.  Imagine $k : A \to B$.
+%% I construct
+%% \[
+%% \begin{prooftree}
+%% \[
+%% \[
+%% \[
+%% \[
+%% \justifies
+%% x :: \surd A, h : H \prov x[h] :   \surd A
+%% \]
+%% \justifies
+%% x :: \surd A \prov \hat\lambda h . x[h] :   A
+%% \]
+%% \justifies
+%% x :: \surd A \prov k\ (\hat\lambda h . x[h]) :   B
+%% \]
+%% \justifies
+%% x : \surd A \prov \surd (k\ (\hat\lambda h . x[h])) :  \surd B
+%% \]
+%% \justifies
+%% \prov \lambda x . \surd (k\ (\hat\lambda h . x[h])) : \surd A \to \surd B
+%% \end{prooftree}
+%% \]
+%% Ok, therefore I can apply functoriality to $g$ and get
+%% \[\prov \lambda x . \surd (g\ (\hat\lambda h . x[h])) : \surd (H \to A) \to \surd B\]
+
+%% I need to compose with unit of the adjunction, $A \to \surd(H \to A) $.
+%% This is simply
+%% \[ \lambda a . \surd (\lambda h . a[h]) \]
+%% so putting this together:
+%% \[a : A \prov  \surd (g\ (\hat\lambda h . (\surd (\lambda h . a[h]))[h])) :  \surd B\]
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+a :: A, h : A \prov a[h] :   A
+\]
+\justifies
+a :: A \prov (\lambda h . a[h]) :   H \to A
+\]
+\justifies
+a :: A \prov  g\ (\lambda h . a[h]) :   B
+\]
+\justifies
+a : A \prov  \surd (g\ (\lambda h . a[h])) :  \surd B
+\end{prooftree}
+\]
+
+Then let's try to build
+\[ (x : A + B) \to \surd ((H \to A) + (H \to B))\]
+as
+\[\lambda x . \bcase x \bof \binl(x_0) \imp \surd(\lambda h . x_0[h])  \celse \cdots\]
+That seems good. So maybe we should try ``borrowing $h$'' right at the start.
+In order to write
+\[(H \to (A +B)) \to  (H \to A) + (H \to B) \]
+we say
+\[ \lambda m : H \to (A + B).\hat \lambda h. \bcase m\ h \bof \]
+\[ \binl(y) \imp \surd (\binl ( \lambda h . y[h]))  \]
+\[ \binr(y) \imp \surd (\binr ( \lambda h . y[h])) \]
 \end{document}
