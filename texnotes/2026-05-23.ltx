@@ -1264,32 +1264,30 @@ Can I prove $A \to \blat A$?
 \[
 \[
 \justifies
-?
+a : A^* \prov a : A^*
+\]
+\[
+\justifies
+a : A^*, a' : \sem A(a) \prov a' : \sem A(a)
 \]
 \justifies
-a \div A^*, a' \div \sem A (a) \prov {?}:  A
+a \div A^*, a' \div \sem A (a) \prov \pair {a} {a'}:  A
 \]
 \justifies
-a : A \prov \blat({?}): \blat A
+a : A \prov \blat(\pair {a} {a'}): \blat A
 \end{prooftree}
 \]
-Do I need something like
+This would work if I had an admissible `pairing principle':
 \[
 \Gamma^* \prov M\simp : A^*
 \qquad
-\Gamma^* \prov N\simp : \sem A(M\simp)
+\sem\Gamma \prov N\simp : \sem A(M\simp)
 \over
 \Gamma \prov \pair {M\simp}{N\simp} : A
 \]
-?
-Is this principle justified? My term principles are:
-
- If $\Gamma \prov M : A$ then $ \Gamma^* \prov M^* : A^*$
-
- If $\Gamma \prov M : A$ then $\sem \Gamma \prov \sem M : \sem A(M^*)$
-
-I might try defining $ (\pair {M\simp}{N\simp} )^* = M\simp$
-and $\sem{ \pair {M\simp}{N\simp} } = N\simp$, which would work nicely.
+We would need compatibility lemmas like
+\[ (\pair {M\simp}{N\simp} )^* = M\simp\]
+\[\sem{ \pair {M\simp}{N\simp} } = N\simp\]
 
 Is this something I could imagine proving by induction on the type?
 Let's think about the function case.
@@ -1303,4 +1301,138 @@ Let's think about the function case.
 Maybe I could say
 \[ \pair {M\simp}{N\simp} \mapsto \lambda a . \pair {M_0\ a^*} {N_0\ a^*\ \sem a} \]
 playing a little fast and loose with what variables mean.
+\subsection{Justifying New Rules}
+We want to convince ourselves that
+\begin{enumerate}
+\item If $\Gamma \prov A : \rtype$, then $\Gamma^*\prov A^* : \rtype^*$ and $\sem \Gamma, x : A^* \prov \sem A(x) : \rtype$.
+\item If $\Gamma \prov M : A$, then $\Gamma^*\prov M^* : A^*$ and $\sem \Gamma \prov \sem M : \sem A(M^*)$.
+\end{enumerate}
+even for new things. We define
+
+\[\begin{tabular}{lcl}
+ $(\surd A)^*$&$:=$&$(a : A^*) \x \sem A(a)$\\
+ $\sem{\surd A}(a, a')$&$:=$&$1$\\
+ $(\blat A)^*$&$:=$&$1$\\
+ $\sem{\blat A}(\star)$&$:=$&$(a : A^*) \x \sem A(a)$\\
+\end{tabular}\]
+Let's carefully consider one rule at a time.
+\subsubsection{$\surd$}
+\[
+{\Gamma\locking \prov A : \rtype
+\over
+\Gamma \prov \surd A : \rtype}
+\]
+Here by the induction hypothesis we have
+\[ \Gamma^* \prov A^* : \rtype \]
+\[\Gamma^*, x : A^* \prov \sem{A}(x) : \rtype\]
+We need
+\[\Gamma^* \prov (x : A^*) \x \sem{A}(x)  : \rtype\]
+\[\sem \Gamma \prov 1 : \rtype\]
+but we have that.
+
+Next case:
+ \[
+{\Gamma\locking \prov M : A
+\over
+\Gamma \prov \surd M : \surd A }
+\]
+Recall $(\surd M)^* = \pair{M^*}{\sem M}$
+and $\sem{\surd M} = \star$.
+By the induction hypothesis we have
+\[\Gamma^* \prov M^* : A^*\]
+\[\Gamma^* \prov \sem M : \sem A(M^*)\]
+We need to show
+\[\Gamma^* \prov \pair{M^*}{\sem M} : (x : A^*) \x \sem A(x)\]
+\[\Gamma^* \prov \star : 1\]
+and we can do that.
+
+Next case:
+\[
+{\Gamma, h : H \prov M : \surd A
+\over
+\Gamma \prov \hat\lambda h .  M : A[\_/h] }
+\]
+Recall that
+\[( \hat \lambda h.M)^* = (M^*).1 \]
+\[ \sem{\hat \lambda h.M} = (M^*).2 \]
+By the induction hypothesis we have
+\[\Gamma^*, h : 1 \prov M^* : (a : A^*) \x \sem A(a)\]
+\[\sem \Gamma, h : 1, h' : 0 \prov \sem M : 1\]
+We need to show
+\[ \Gamma \prov (M^*).1 : (A[\_/h])^* \]
+\[ \Gamma \prov (M^*).2 : \sem {A[\_/h]} ((M^*).1)\]
+So as long as $(A[\_/h])^* = A^*$ and
+$ \sem {A[\_/h]} ((M^*).1) = \sem A ((M^*).1)$ we're good.
+\subsubsection{$\blat$}
+\[
+{\Gamma^\surd \prov A : \rtype
+\over
+\Gamma \prov \blat A : \rtype}
+\]
+The induction hypothesis gives us
+\[{\sem \Gamma} \prov A^* : \rtype\]
+\[\sem \Gamma, x : A^* \prov \sem A(x) : \rtype\]
+and we need to show
+\[\Gamma^* \prov 1 : \rtype\]
+\[\sem \Gamma \prov (a : A^*) \x \sem A(a) : \rtype\]
+Looks good!
+
+Next:
+\[
+{\Gamma^\surd \prov M : A
+\over
+\Gamma \prov \blat M : \blat A }
+\]
+The induction hypothesis gives us
+\[{\sem \Gamma} \prov M^* : A^* \]
+\[\sem \Gamma \prov \sem M : \sem A(M^*) \]
+We define $(\blat M)^* = \star$ and $\sem {\blat M} = \pair{M^*}{\sem M}$ and we establish
+\[\Gamma^* \prov \star : 1 \]
+\[\sem \Gamma \prov \pair{M^*}{\sem M} : (a : A^*) \x \sem A(a) \]
+Easy.
+
+Finally:
+\[
+{\Gamma\locking \prov M : \blat A
+\over
+\Gamma \prov \blat^{-1}M : A[?] }
+\]
+The induction hypothesis gives us
+\[  \Gamma^* \prov M^* : 1 \]
+\[ \Gamma^* \prov \sem M : (a : A^*) \x \sem A(a) \]
+and we need to show something like
+\[ \Gamma^* \prov (\blat^{-1} M)^* : A^*\]
+\[ \sem \Gamma \prov \sem {\blat^{-1} M} : \sem A((\blat^{-1} M)^*)\]
+We simply define
+\[(\blat^{-1} M)^* := \sem M . 1\]
+\[\sem{\blat^{-1} M} := \sem M . 2\]
+\subsection{Higher-Dimensional Induction on $\surd$?}
+Can we now show
+\[ \surd(A + B) \to \surd A + \surd B \]
+? We should be able to get this equivalent to
+\[ (A + B) \to \blat(\surd A + \surd B) \]
+Let's try to first get the adjoint transposition down.
+Suppose we have $f : C \to \blat D$, and we want to make $\surd C \to D$.
+Functoriality gets us
+\[ \lambda c . \surd(f\  (\hat\lambda h . c[h])) :  \surd C \to \surd \blat D \]
+ah and I think I can directly do
+\[ \lambda c . \blat^{-1}(f\  (\hat\lambda h . c[h])) :  \surd C \to D \]
+
+Can we do the unit $A \to \blat \surd A$?
+
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+x \div  A^*,  x' \div \sem A(x) \prov \pair{x}{x'} :  A
+\]
+\justifies
+x \div  A^*,  x' \div \sem A(x) \prov \surd(\pair{x}{x'}) : \surd A
+\]
+\justifies
+x : A \prov \blat(\surd(\pair{x}{x'})) : \blat \surd A
+\end{prooftree}
+\]
+
 \end{document}
