@@ -240,6 +240,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\thead{^\oplus}
 \def\tsub{^\star}
 \def\simp{_\circ}
+\def\blat{\text{\faicon{circle}}}
 \def\locking{^\lock}
 \def\hyd#1#2{[#1 \star #2]}
 \begin{document}
@@ -1150,6 +1151,156 @@ as syntactic operations taking like to like.
 
 \cqed
 \end{proof}
-No hm this is problematic.
+No hm this is problematic. Translating $::$ is confusing. What if I just have, as before, a single context extension
+for diagonal types? I'm going to call it $\div$ to remind myself it's weaker not stronger.
+\[
+{\prov \Gamma \rctx \qquad \Gamma \prov  A : \rtype
+\over
+\prov (\Gamma, x : A) \rctx}
+\qquad
+{\prov \Gamma \rctx \qquad \Gamma^R \prov  A\simp : \rtype
+\over
+\prov (\Gamma, x \div A\simp) \rctx}
+\]
+We have a ``right-oriented'' erasure:
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)^R$&$:=$&$\Gamma^R, x : A^R$\\
+ $(\Gamma, x \div A\simp)^R$&$:=$&$\Gamma^R, x : A\simp$\\
+\end{tabular}\]
+And a ``left-oriented'' erasure:
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)^L$&$:=$&$\Gamma^L, x : A^L$\\
+ $(\Gamma, x \div A\simp)^L$&$:=$&$\Gamma^L, x : A\simp$\\
+\end{tabular}\]
+We have a `diagonal' translation from simple contexts up to regular ones,
+formerly called $\dash\locking$.
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A\simp)^D$&$:=$&$\Gamma^D, x \div A\simp$\\
+\end{tabular}\]
 
+``Lock everything in the context'' is $\Gamma \mapsto (\Gamma^R)^D$.
+``Square root everything in the context'' is $\Gamma \mapsto (\Gamma^L)^D$.
+
+\subsection{Old Notation}
+We could try sharing notation with the intended metatheory.
+
+\[
+{\prov \Gamma \rctx \qquad \Gamma \prov  A : \rtype
+\over
+\prov (\Gamma, x : A) \rctx}
+\qquad
+{\prov \Gamma \rctx \qquad \Gamma^* \prov  A\simp : \rtype
+\over
+\prov (\Gamma, x \div A\simp) \rctx}
+\]
+We have a ``right-oriented'' erasure:
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)^*$&$:=$&$\Gamma^*, x : A^*$\\
+ $(\Gamma, x \div A\simp)^*$&$:=$&$\Gamma^*, x : A\simp$\\
+\end{tabular}\]
+And a ``left-oriented'' erasure:
+\[\begin{tabular}{rcl}
+ $\sem{\Gamma, x : A}$&$:=$&$\sem \Gamma, x : A^*, x' : \sem A(x)$\\
+ $\sem{\Gamma, x \div A\simp}$&$:=$&$\sem \Gamma, x : A\simp$\\
+\end{tabular}\]
+The diagonal translation from simple contexts to wide ones is still:
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A\simp)^D$&$:=$&$\Gamma^D, x \div A\simp$\\
+\end{tabular}\]
+
+We define $\Gamma \locking = (\Gamma^*)^D$.
+
+We define $\Gamma^\surd = (\sem \Gamma)^D$.
+
+Rules for $\surd$:
+
+\[
+{\Gamma\locking \prov A : \rtype
+\over
+\Gamma \prov \surd A : \rtype}
+\qquad
+{\Gamma\locking \prov M : A
+\over
+\Gamma \prov \surd M : \surd A }
+\qquad
+{\Gamma, h : H \prov M : \surd A
+\over
+\Gamma \prov \hat\lambda h .  M : A[\_/h] }
+\]
+Rules for $\blat$:
+\[
+{\Gamma^\surd \prov A : \rtype
+\over
+\Gamma \prov \blat A : \rtype}
+\qquad
+{\Gamma^\surd \prov M : A
+\over
+\Gamma \prov \blat M : \blat A }
+\qquad
+{\Gamma\locking \prov M : \blat A
+\over
+\Gamma \prov \blat^{-1}M : A[?] }
+\]
+
+Can I prove $H \to \blat A$? Yeah:
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+x \div 1, x' \div 0, h : H \prov   \babort(x[h]):  \sqrt A
+\]
+\justifies
+x \div 1, x' \div 0 \prov  \hat\lambda h . \babort(x[h]):  A
+\]
+\justifies
+x : H \prov \blat(\hat\lambda h . \babort(x[h])): \blat A
+\end{prooftree}
+\]
+
+Can I prove $A \to \blat A$?
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+?
+\]
+\justifies
+a \div A^*, a' \div \sem A (a) \prov {?}:  A
+\]
+\justifies
+a : A \prov \blat({?}): \blat A
+\end{prooftree}
+\]
+Do I need something like
+\[
+\Gamma^* \prov M\simp : A^*
+\qquad
+\Gamma^* \prov N\simp : \sem A(M\simp)
+\over
+\Gamma \prov \pair {M\simp}{N\simp} : A
+\]
+?
+Is this principle justified? My term principles are:
+
+ If $\Gamma \prov M : A$ then $ \Gamma^* \prov M^* : A^*$
+
+ If $\Gamma \prov M : A$ then $\sem \Gamma \prov \sem M : \sem A(M^*)$
+
+I might try defining $ (\pair {M\simp}{N\simp} )^* = M\simp$
+and $\sem{ \pair {M\simp}{N\simp} } = N\simp$, which would work nicely.
+
+Is this something I could imagine proving by induction on the type?
+Let's think about the function case.
+\[
+\Gamma^* \prov M\simp : A^* \to B^*
+\qquad
+\Gamma^* \prov N\simp : (a : A^*) (a' : \sem A(a))\to  \sem B (M\simp\ a)
+\over
+\Gamma \prov \pair {M\simp}{N\simp} : A \to B
+\]
+Maybe I could say
+\[ \pair {M\simp}{N\simp} \mapsto \lambda a . \pair {M_0\ a^*} {N_0\ a^*\ \sem a} \]
+playing a little fast and loose with what variables mean.
 \end{document}
