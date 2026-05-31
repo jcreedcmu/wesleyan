@@ -1111,4 +1111,45 @@ we say
 \[ \lambda m : H \to (A + B).\hat \lambda h. \bcase m\ h \bof \]
 \[ \binl(y) \imp \surd (\binl ( \lambda h . y[h]))  \]
 \[ \binr(y) \imp \surd (\binr ( \lambda h . y[h])) \]
+
+\section{Avoiding Distinct Languages}
+Something is making me a little uneasy about having distinct languages for erasure. Can I get away without it?
+I want functors $H \x \dash$ (`erasure', $\dash\erase$) and $H \to \dash$ (`locking', $\dash\locking$, $x \div A$) and
+$\surd$ (`promotion', $\dash\thead$, $x :: A$) to all function
+as syntactic operations taking like to like.
+
+\[
+{\prov \Gamma \rctx \qquad \Gamma \prov  A : \rtype
+\over
+\prov (\Gamma, x : A) \rctx}
+\qquad
+{\prov \Gamma \rctx \qquad \Gamma\erase \prov  A : \rtype
+\over
+\prov (\Gamma, x \div A) \rctx}
+\qquad
+{\prov \Gamma \rctx \qquad \Gamma\locking \prov  A : \rtype
+\over
+\prov (\Gamma, x :: A) \rctx}
+\]
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)\erase$&$:=$&$\Gamma\erase, x : A\erase$\\
+ $(\Gamma, x \div A)\erase$&$:=$&$\Gamma\erase, x : A$\\
+ $(\Gamma, x :: A)\erase$&$:=$&$\Gamma\erase, x : A\erase$\\
+\end{tabular}\]
+
+\begin{lemma}\ %
+  \begin{itemize}
+  \item  If $\prov \Gamma \rctx$, then $\prov \Gamma\erase\rctx$.
+  \item  If $ \Gamma \prov A : \rtype$, then $\Gamma\erase \prov A\erase : \rtype$.
+  \item  If $ \Gamma \prov M : A$, then $\Gamma\erase \prov M\erase : A\erase$.
+  \item   $ (\Gamma\erase)\erase = \Gamma\erase$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+No hm this is problematic.
+
 \end{document}
