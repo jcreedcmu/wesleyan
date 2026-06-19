@@ -165,6 +165,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\E{\mathbb{E}}
 \def\M{\mathbf{M}}
 \def\pair#1#2{\langle#1,#2\rangle}
+\def\mpair#1#2{\langle\!\langle#1,#2\rangle\!\rangle}
 \def\ltri{{\lhd}}
 \def\rtri{{\rhd}}
 \def\tri{\rhd}
@@ -250,40 +251,44 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \maketitle
 
+\def\eblat{\mathcal{E}_\blat}
+\def\iblat{\mathcal{I}_\blat}
+\def\elax{\mathcal{E}_\bigcirc}
+\def\ilax{\mathcal{I}_\bigcirc}
 \section{Language}
-\[\begin{tabular}{rccl}
- Simple Contexts&$\Gamma\simp$&$::=$&$\cdot \celse \Gamma\simp, x : A\simp$\\
- Simple Types&$A\simp$&$::=$&$\cdots  $\\
- Simple Terms&$M\simp$&$::=$&$\cdots  $\\
-\end{tabular}\]
 
+We have various types of hypotheses in the context.
+The pseudo-hypothesis $h$, with no variable name, tracks the single bit of information by its presence or absence
+ of whether we have morally added a hyp of type $H$ yet. We
+let the type $H$ internalize that. The presence of $h$ in the context isn't in any particular place.
+Multiple copies of $h$ in the context automatically coalesce. The exploded context
+ $\emptyset$ is  meant to be like a collapsed context with a $0$ hyp in it.
+
+We don't have any variable constructors like $x[h]$ anymore.
 \[\begin{tabular}{rccl}
-  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A\simp$\\
-  Types&$A$&$::=$&$\cdots \celse H $\\
-  Terms&$M$&$::=$&$\cdots \celse x [ M] $\\
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \emptyset \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A\celse \Gamma, h$\\
+  Types&$A$&$::=$&$\cdots \celse G_A M \celse \lax A \celse \blat A $\\
+  Terms&$M$&$::=$&$\cdots \celse \{M\} \celse \pi_M N \celse \iblat M \celse \eblat M \celse \ilax M \celse \elax M $\\
 \end{tabular}\]
 
 \subsection{Operations}
 \[\begin{tabular}{l}
-If $\Gamma$ is a context, then $\Gamma^*$ is a simple context.\\
-If $A$ is a type, then $A^*$ is a simple type.\\
-If $M$ is a term, then $M^*$ is a simple term.\\
-If $\Gamma$ is a context, then $\sem \Gamma$ is a simple context.\\
-If $A$ is a type, and $M\simp$ is a simple term, then $\sem A(M\simp)$ is a simple type.\\
-If $M$ is a term, then $\sem M$ is a simple term.\\
-If $\Gamma\simp$ is a context, then $\Gamma\simp^+$ is a context.\\
-% If $\Gamma$ is a context, $t$ is a term, $A\simp$ is a simple type, then $A\simp \hyd t \Gamma$ is a type.\\
+If $\Gamma$ is a context, then $ \Gamma^\oplus$ is a context.\\
+If $\Gamma$ is a context, then $\Gamma^\ominus$ is a context.\\
 \end{tabular}\]
 
+\[\begin{tabular}{rcl}
+ $ (\Gamma, x : A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
+ $ (\Gamma, x :: A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
+ $ (\Gamma, x \div A)^\oplus$&$:=$&$(\Gamma^\oplus, x \div A)$\\
+ $ (\Gamma, h)^\oplus$&$:=$&$\emptyset$\\
+\end{tabular}\]
 
-\subsection{Judgments}
-\[\begin{tabular}{rl}
-  Simple Context Formation&$\prov \Gamma\simp \rctx$\\
-  Simple Type Formation&$\Gamma\simp \prov A\simp : \rtype$\\
-  Simple Term Typing&$\Gamma\simp \prov M\simp : A\simp$\\
-  Context Formation&$\prov \Gamma \rctx$\\
-  Type Formation&$\Gamma \prov A : \rtype$\\
-  Term Typing&$\Gamma \prov M : A$\\
+\[\begin{tabular}{rcl}
+ $ (\Gamma, x : A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
+ $ (\Gamma, x :: A)^\ominus$&$:=$&$(\Gamma^\ominus, x :: A)$\\
+ $ (\Gamma, x \div A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
+ $ (\Gamma, h)^\ominus$&$:=$&$\Gamma^\ominus$\\
 \end{tabular}\]
 
 \subsection{Rules}
@@ -298,391 +303,327 @@ If $\Gamma\simp$ is a context, then $\Gamma\simp^+$ is a context.\\
 \]
 \[
 \begin{prooftree}
-\prov \Gamma \rctx \qquad \Gamma^* \prov A\simp : \rtype
+\prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype
 \justifies
-\prov (\Gamma, x :: A\simp)\rctx
+\prov (\Gamma, x :: A)\rctx
 \end{prooftree}
 \]
-\subsubsection{Term Typing}
 \[
 \begin{prooftree}
-\Gamma \prov t : H\qquad x :: A^* \in \Gamma
+\prov \Gamma \rctx \qquad \Gamma, h \prov A : \rtype
 \justifies
-\Gamma \prov x[t] : A
-\end{prooftree}
-\]
-\subsection{Operations}
-
-\subsubsection{Erasure}
-\[\begin{tabular}{rcl}
- $(\Gamma, x : A)^*$&$:=$&$(\Gamma^*, x : A^*) $\\
- $(\Gamma, x :: A\simp)^*$&$:=$&$(\Gamma^*, x : A\simp) $\\
- $((a : A) \to B)^*$&$:=$&$(a : A^*) \to B^*$\\
- $(\lambda a . M)^*$&$:=$&$\lambda a  .  M^*$\\
- $(M\ N)^*$&$:=$&$M^*\ N^*$\\
- $H^*$&$:=$&$1 $\\
- $(x[t])^*$&$:=$&$x $\\
- $x^*$&$:=$&$x $\\
-\end{tabular}\]
-
-\subsubsection{Relational Semantics}
-\[\begin{tabular}{rcl}
- $\sem{\Gamma, x : A}$&$:=$&$(\sem \Gamma, x : A^*, x' : \sem A(x)) $\\
- $\sem{\Gamma, x :: A\simp}$&$:=$&$(\sem \Gamma, x : A\simp )$\\
- $\sem{(a : A) \to B}(f)$&$:=$&$(a : A^*)(a' : \sem A (a)) \to \sem B (f\ a) $\\
- $\sem{\lambda a . M}$&$:=$&$\lambda a.\lambda a' . \sem M$\\
- $\sem{M\ N}$&$:=$&$\sem M\ N^*\ \sem N$\\
- $\sem{H}(\star)$&$:=$&$0 $\\
- $\sem{x[t]}$&$:=$&$\babort(\sem t) $\\
- $\sem{x}$&$:=$&$x' $\\
-\end{tabular}\]
-
-\subsubsection{Promotion}
-\[\begin{tabular}{rcl}
- $(\Gamma\simp, x : A\simp)^+$&$:=$&$(\Gamma\simp^+, x :: A\simp) $\\
-\end{tabular}\]
-
-%% \subsubsection{Rehydrate}
-%% Takes a simple expression in an erased context and a term of type $H$, and yields
-%% an expression in the original context.
-
-%% \[\begin{tabular}{rcp{5cm}}
-%% $(M\simp\ N\simp)\hyd t \Gamma $&$:=$&$ (M\simp\hyd t \Gamma)\ (N\simp\hyd t \Gamma)$\\
-%% $(\lambda x . M\simp)\hyd t \Gamma $&$:=$&$ \lambda x . (M\simp\hyd t \Gamma)$\\
-%% $x\hyd t \Gamma$ &$:=$&
-%%   $\begin{cases}x[t]&\hbox{if $x :: A\simp \in \Gamma$;}\\
-%%  x&\hbox{otherwise.} \end{cases}$ \\
-%% \end{tabular}\]
-
-\subsection{Lemmas}
-
-\begin{lemma}\ %
-\begin{enumerate}
-\item If $\prov \Gamma \rctx$, then $\prov \Gamma ^* \rctx$.
-\item If $ \Gamma \prov A :\rtype$, then $ \Gamma^* \prov A^* :\rtype$.
-\item If $ \Gamma \prov M :A$, then $ \Gamma^* \prov M^* : A^*$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-Let's consider some interesting cases.
-\begin{itemize}
-\item [Case:]
-\[
-\begin{prooftree}
- x : A \in \Gamma
-\justifies
-\Gamma \prov x : A
-\end{prooftree}
-\]
-We must show $\Gamma^* \prov x : A^*$ but this follows from the assumption.
-\item [Case:]
-\[
-\begin{prooftree}
-\Gamma \prov t : H\qquad x :: A^* \in \Gamma
-\justifies
-\Gamma \prov x[t] : A
-\end{prooftree}
-\]
-We must show $\Gamma^* \prov x : A^*$. But $x : A^* \in \Gamma^*$ by assumption,
-so we're done.
-\end{itemize}
-\cqed
-\end{proof}
-
-\begin{lemma}\ %
-\begin{enumerate}
-\item If $\prov \Gamma \rctx$, then $\prov \sem\Gamma  \rctx$.
-\item If $ \Gamma \prov A :\rtype$, then $ \sem\Gamma, x : A^* \prov \sem A(x) :\rtype$.
-\item If $ \Gamma \prov M :A$, then $ \sem\Gamma \prov \sem M : \sem A(M^*)$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-Let's consider some interesting cases.
-\begin{itemize}
-\item [Case:]
-\[
-\begin{prooftree}
- x : A \in \Gamma
-\justifies
-\Gamma \prov x : A
-\end{prooftree}
-\]
-We must show $\sem \Gamma \prov x' : \sem A (x)$. But $x : A \in \Gamma$
-guarantees $x' : \sem A (x) \in \sem \Gamma$.
-\item [Case:]
-\[
-\begin{prooftree}
-\Gamma \prov t : H\qquad x :: A^* \in \Gamma
-\justifies
-\Gamma \prov x[t] : A
-\end{prooftree}
-\]
-We must show $\sem \Gamma \prov \babort(\sem t) : \sem A(x)$.
-But the induction hypothesis guarantees $\sem \Gamma \prov \sem t : 0$
-so the abort succeeds.
-\end{itemize}
-\cqed
-\end{proof}
-
-\begin{lemma}
-$(\Gamma_0)^{+*} = \Gamma_0$
-\end{lemma}
-
-
-\begin{lemma}
- If $\prov \Gamma_0 \rctx$, then $\prov \Gamma\simp^+  \rctx$.
-\end{lemma}
-
-\section{Extensions}
-\subsection{The Amazing Right Adjoint}
-\[\begin{tabular}{rccl}
-  Types&$A$&$::=$&$\cdots \celse \surd A $\\
-  Terms&$M$&$::=$&$\cdots \celse \surd M \celse \had \lambda . M $\\
-\end{tabular}\]
-\[
-\begin{prooftree}
-\Gamma^{*+} \prov A : \rtype
-\justifies
-\Gamma \prov \surd A : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\Gamma^{*+} \prov M : A
-\justifies
-\Gamma \prov \surd M : \surd A
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\Gamma, h : H \prov M : \surd A
-\justifies
-\Gamma \prov \hat \lambda h . M : A[\Gamma, h : H][\star/h]
+\prov (\Gamma, x \div A)\rctx
 \end{prooftree}
 \]
 
-We need a new substitution principle:
-\[\begin{tabular}{rcp{5cm}}
-$(x[t]) [\Gamma]$ &$:=$&
-  $\begin{cases}x[t]&\hbox{if $x :: A\simp \in \Gamma$;}\\
- x&\hbox{otherwise.} \end{cases}$ \\
-\end{tabular}\]
-
-\begin{lemma}\ %
-  \begin{itemize}
-  \item If $\prov \Gamma^{*+}, \Delta \rctx$ then $\prov \Gamma, \Delta[\Gamma] \rctx$.
-  \item If $\Gamma^{*+}, \Delta \prov A : \rtype$ then $\Gamma, \Delta[\Gamma] \prov A[\Gamma] : \rtype$.
-  \item If $\Gamma^{*+}, \Delta \prov M : A$ then $\Gamma, \Delta[\Gamma] \prov M[\Gamma] : A[\Gamma]$.
-  \end{itemize}
-\end{lemma}
-
-\begin{proof}
-Let's consider the variable cases.
-\begin{itemize}
-\item [Case:]
-\[
-\begin{prooftree}
-\Gamma^{*+}, \Delta \prov t : H\qquad x :: A^* \in \Gamma^{*+}
-\justifies
-\Gamma^{*+}, \Delta \prov x[t] : A
-\end{prooftree}
-\]
-We must show $\Gamma, \Delta[\Gamma] \prov x[t] : A[\Gamma]$.
-\item [Case:]
-\[
-\begin{prooftree}
-\Gamma^{*+}, \Delta \prov t : H\qquad x :: A^* \in \Delta
-\justifies
-\Gamma^{*+}, \Delta \prov x[t] : A
-\end{prooftree}
-\]
-\end{itemize}
-\cqed
-\end{proof}
-
-\subsection{Top-Down}
-
-I'd like to have some functional notion of internalized parametricity in this language.
-How would it look? I'd have a function $f : A \to B$, where I can assume as much
-diagonalness of $A$ and $B$ as I like. Either that $A \to (H \to A)$ is an equivalence,
-or $\sqrt A \to A$ is an equivalence, or both, and the same for $B$.
-
-I assume I have some term $q : (X : \rtype) \to X \to X$. I compute
-$q\ (\mathsf{Glue}\ f) : (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)$.
-I expect to find
-\[\lambda h . q\ (\mathsf{Glue}\ f) : H \to (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f) \cong B \to B\]
-\[\surd (q\ (\mathsf{Glue}\ f)) : \surd  ((\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)) \cong  A \to A\]
-Or wait... can I say something in general about how $\surd$ distributes over arrows like
-
- \[\surd(A \to B) \cong (g : (H \to A) \to (H \to B)) (f : (a : \surd A) \to \surd B) \x {}\]
-\[ (a : \surd A) (h : H) \to g\ (\lambda \_ . \hat \lambda \_. a)\ h \equiv \hat\lambda \_ . f\ a\]
-
-Ok, suppose I have $k : \surd(A \to B)$. I can easily make $(H \to A) \to (H \to B)$.
-\[ \lambda m : H \to A. \lambda h. (\hat \lambda \_ . k)\ (m\ h)\]
-I should also be able to make $\surd A \to \surd B$:
-\[ \lambda a : \surd A. \surd ((\hat\lambda h . k[h]) (\hat\lambda h . a[h]))\]
-What are these two expressions if I carry out the appropriate substitutions? Are they equal?
-\[  (\hat \lambda \_ . k)\ (\hat\lambda \_ . a)\]
-\[ \hat\lambda\_. \surd ((\hat\lambda h . k[h]) (\hat\lambda h . a[h]))\]
-
-Let's recall what I really want to show: if I have $a : A$
-I want to know $f\ (q\ A\ a) = q\ B\ (f\ a)$.
-
-For this I want to look for some relationship between, for example,
-
-\[ \lambda h . q\ (\mathsf{Glue}\ f) : H \to (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)\]
-and
-\[ q\ B : B \to B\]
-Let's try to concretely say
-\[ \mathsf{Glue}\ f := \{ \alpha : \blat A, \beta : B, p : \eta_\blat\ \beta = \mathsf{map}_\blat\ f\ \alpha\} \]
-Let's try to establish that $H \to \mathsf{Glue}\ f \cong B$.
-Let's consider $B \to H \to \mathsf{Glue}\ f$ first.
-$H \to \blat A$ should behave like $1$. We're good there.
-In the reverse direction, let's try to show
-\[ (H \to \mathsf{Glue}\ f) \to B\]
-Under the assumption that $B \cong H \to B$, we can just do congruence on a projection.
-
-\section{Different Syntax}
-
-What if I do this:
-\subsection{Language}
-We have basic syntax $\Gamma\simp, A\simp, M\simp$
-with all the usual typing rules.
-
-We introduce some `wide' syntax
-\[\begin{tabular}{rccl}
-  Wide Contexts&$ \Gamma$&$::=$&$\cdot \celse \Gamma, x : A $\\
-  Wide Variables&$ x$&$::=$&$ (x^*,\sem x) $\\
-  Wide Types&$ A$&$::=$&$ (A\simp, x^*.A'\simp) $\\
-  Wide Terms&$ M$&$::=$&$ (M\simp, M'\simp)$\\
-\end{tabular}\]
-Every wide type is a pair of basic types, the second
-with one extra bound variable, ranging over basic terms.
-
-Every wide term is a pair of basic terms.
-
-A `wide variable' is a pair of basic variables. We always
-name the basic variables consistently in such a way that
-they can be related to one another and to the wide
-variable they came from.
-
-The programme is that we will introduce new wide type and term
-constructors as {\em admissible rules} derived from the more fundamental rules defined
-below.
-
-\subsection{Typing Rules}
-\subsubsection{Context Formation}
-\[
-\begin{prooftree}
-\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
-\justifies
-\prov (\Gamma, x : A)\rctx
-\end{prooftree}
-\]
 \subsubsection{Type Formation}
 \[
 \begin{prooftree}
-\Gamma^* \prov A^*: \rtype \qquad \sem \Gamma, x^* : A^* \prov \sem A(x^*) : \rtype
+\Gamma^\ominus \prov A : \rtype \qquad \Gamma, h \prov M : A
 \justifies
-\Gamma \prov A : \rtype
+\Gamma \prov G_A M : \rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+ \Gamma^\oplus \prov  A : \rtype
+\justifies
+\Gamma \prov  \blat A : \rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+ \Gamma, h \prov  A : \rtype
+\justifies
+\Gamma \prov  \lax A : \rtype
 \end{prooftree}
 \]
 \subsubsection{Term Typing}
+
 \[
 \begin{prooftree}
-\Gamma^* \prov M^*: A^* \qquad \sem \Gamma \prov \sem M : \sem A(M^*)
+x : A \in  \Gamma
 \justifies
-\Gamma \prov M : A
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x :: A \in  \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x \div A \in  \Gamma \qquad h \in \Gamma
+\justifies
+\Gamma \prov x : A
 \end{prooftree}
 \]
-\subsection{Operations}
-\subsubsection{Erasure}
-We define an operation $\dash^*$ that takes wide (contexts, types, terms) to simple (contexts, types, terms).
-\[\begin{tabular}{rcl}
- $(\Gamma, x : A)^*$&$:=$&$(\Gamma^*, x^* : A^*) $\\
- $( A\simp, x^*.A'\simp)^*$&$:=$&$A\simp $\\
- $(M\simp, M'\simp)^*$&$:=$&$M\simp $\\
-\end{tabular}\]
-
-\subsubsection{Interpretation}
-We define an operation $\sem \dash$ that takes wide (contexts, terms) to simple (contexts, terms).
-We define an operation $\sem \dash(\dash)$ that takes a wide type and a simple term to a simple type.
-\[\begin{tabular}{rcl}
- $\sem{\Gamma, x : A}$&$:=$&$(\sem \Gamma, x^* : A^*, \sem x : \sem A(x^*)) $\\
- $\sem {( A\simp, x^*.A'\simp)}(M\simp)$&$:=$&$[M\simp/x^*]A'\simp $\\
- $\sem {(M\simp, M'\simp)}$&$:=$&$M'\simp $\\
-\end{tabular}\]
-
-
-\subsection{Lemmas}
-\begin{lemma}[Extensionality] For any $A$, $M$, we have
-\[ A = (A^*, x^*. \sem A(x^*))\]
-\[ M = (M^*, \sem M)\]
-\end{lemma}
-
-\begin{proof}
-Any $A$ must be of the form $(A\simp, y^*.A'\simp)$, so by unfolding definitions, we need to check
-\[ (A\simp, y^*.A'\simp) = (A\simp, x^*.  [x^*/y^*]A'\simp)\]
-which is reflexivity up to $\alpha$-equivalence.
-
-Any $M$ must be of the form $(M\simp, M'\simp)$, so by unfolding definitions, we need to check
-\[(M\simp, M'\simp) = (M\simp, M'\simp)\]
-which is reflexivity.
-\cqed
-\end{proof}
-
-\begin{lemma} The rule
-\[\begin{prooftree}x :A \in \Gamma \justifies \Gamma \prov x : A\end{prooftree}\]
-is admissible.
-\end{lemma}
-
-
-\begin{proof}
-By assumption, we know $x^* : A^* \in \Gamma^*$. Hence $\Gamma^* \prov x^* : A^*$.
-By assumption, we know $x^* : A^*, \sem x : \sem A(x^*) \in \sem \Gamma$.
-Hence $\sem \Gamma \prov \sem x : \sem A(x^*)$.
-These two facts together mean
-\[\Gamma \prov (x^*, \sem x) : (A^*, x^*.\sem A(x^*))\]
-in other words, $\Gamma \prov x : A$.
-\cqed
-\end{proof}
-
-\subsection{Pi}
-We make the definitions
-\[\begin{tabular}{rcl}
-$ (x:A) \to B $&$:=$&$((x^*:A^*) \to B^*, f^*.(x^*:A^*) \to (\sem x : \sem A(x^*)) \to \sem B(f^*\ x^*)$\\
- $\lambda x . M $&$:=$&$(\lambda x^*.M^*, \lambda x^* .\lambda \sem x . \sem M)$\\
- $M\ N $&$:=$&$(M^*\ N^*, \sem M\ N^*\ \sem N)$\\
-\end{tabular}\]
-
-
-\begin{lemma} The rule
-\[\begin{prooftree}\Gamma \prov A : \rtype \qquad \Gamma, x : A \prov B : \rtype
+\[
+\begin{prooftree}
+ \Gamma^\ominus \prov M : A
 \justifies
-\Gamma \prov (x : A) \to B : \rtype
+\Gamma \prov \{M\}  : G_A M
+\end{prooftree}
+\qquad
+\begin{prooftree}
+  \Gamma, h \prov M : A\qquad \Gamma, h \prov N : G_A M
+\justifies
+\Gamma \prov \pi_M N  : A
 \end{prooftree}
 \]
-is admissible.
+\[
+\begin{prooftree}
+ \Gamma^\oplus \prov M : A
+\justifies
+\Gamma \prov \iblat M  : \blat A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma^\ominus \prov M : \blat A
+\justifies
+\Gamma \prov \eblat M  : A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+ \Gamma, h \prov M : A
+\justifies
+\Gamma \prov \ilax M  : \lax A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma \prov M : \lax A\qquad h \in \Gamma
+\justifies
+\Gamma \prov \elax M  : A
+\end{prooftree}
+\]
+\subsection{Weakening}
+We let there be a poset on hypotheses and contexts generated by the following:
+
+\begin{itemize}
+\item $x :: A \le x : A \le x \div A$
+\item $\Gamma, h \le \Gamma$
+\item $(x \div A, h) \le (x : A, h)$
+\item If $\Gamma \le \Gamma'$ and $\Delta \le \Delta'$ then $\Gamma,\Delta \le \Gamma',\Delta'$.
+\end{itemize}
+
+The general weakening theorem is:
+\begin{lemma}
+If $\Delta \le \Gamma$ and $\Gamma \prov J$, then $\Delta \prov J$.
 \end{lemma}
 
-
 \begin{proof}
-The $\dash^*$ reasoning is easy. For $\sem \dash$, we know
-\[\sem \Gamma, x^* : A^* \prov \sem A(x^*) : \rtype \]
-\[ \sem \Gamma, x^* : A^*, \sem x : \sem A(x^*), y^* : B^*  \prov \sem B (y^*): \rtype\eqno(*)\]
-
-We need
-\[\sem \Gamma, f^* : (x^*:A^*) \to B^* \prov (x^*:A^*) \to (\sem x : \sem A(x^*)) \to \sem B(f^*\ x^*) : \rtype\]
-and therefore we need
-\[\sem \Gamma \prov A^* : \rtype\]
-\[\sem \Gamma, x^*:A^* \prov \sem A(x^*)  : \rtype\]
-\[\sem \Gamma, f^* : (x^*:A^*) \to B^*, x^*:A^*, \sem x : \sem A(x^*) \prov \sem B(f^*\ x^*) : \rtype\]
-We have the first by assumption (on the $\dash^*$ part)
-We have the second by assumption (on the $\sem\dash$ part)
-And finally we have the third by substitution of $f^*\ x^*$ for $y^*$ in $(*)$.
 
 \cqed
 \end{proof}
+
+\subsection{Computation}
+
+
+\subsubsection{$G_A M$}
+When $h$ is in the context, $\pi_M N$ reduces to $M$. Also:
+Also:
+\[\pi_M \{ M \} \mapsto_\beta M \qquad N \mapsto_\eta \{ \pi_M N \}\]
+
+To see that $\beta$ is well-typed, stare at
+\[
+\begin{prooftree}
+\Gamma, h \prov M : A
+\qquad
+\[
+ \Gamma^\ominus \prov M :  A
+\justifies
+ \Gamma, h \prov \{ M\} : G_A M
+\]
+\justifies
+\Gamma \prov  \pi_M \{ M \} : A
+\end{prooftree}
+\]
+and use weakening on $ \Gamma^\ominus \prov M :  A$.
+
+To see that $\eta$ is well-typed, assume
+$\Gamma\prov M : A$ and  $\Gamma \prov N : G_A M$,
+weaken to
+$\Gamma^\ominus, h\prov M : A$ and $ \Gamma^\ominus, h \prov N : G_A M$ and construct
+\[
+\begin{prooftree}
+\[
+  \Gamma^\ominus, h \prov M : A\qquad \Gamma^\ominus, h \prov N : G_A M
+\justifies
+\Gamma^\ominus \prov \pi_M N  : A
+\]
+\justifies
+\Gamma \prov \{\pi_M N\}  : G_A (\pi_M N)
+\end{prooftree}
+\]
+noting that $\pi_M N$ is definitionally equal to $M$ in the context $G_A(\dash)$, which has an $h$.
+
+
+
+\subsubsection{$\blat$}
+\[\eblat \iblat M \mapsto_\beta M \qquad M \mapsto_\eta \iblat \eblat M\]
+
+To see that $\beta$ is well-typed, stare at
+\[
+\begin{prooftree}
+\[
+ \Gamma^{\ominus\oplus} \prov M :  A
+\justifies
+ \Gamma^{\ominus} \prov \iblat M : \blat A
+\]
+\justifies
+\Gamma \prov  \eblat \iblat M  : A
+\end{prooftree}
+\]
+and use weakening.
+
+
+To see that $\eta$ is well-typed, assume $\Gamma \prov M : \blat A$,
+weaken to
+$ \Gamma^{\oplus\ominus} \prov M : \blat A$ and construct
+\[
+\begin{prooftree}
+\[
+ \Gamma^{\oplus\ominus} \prov M : \blat A
+\justifies
+ \Gamma^\oplus \prov \eblat M : A
+\]
+\justifies
+\Gamma \prov \iblat \eblat M  : \blat A
+\end{prooftree}
+\]
+
+\subsection{Magic Pairing}
+\[
+\begin{prooftree}
+\Gamma, h\prov M : A\qquad  \Gamma^\oplus \prov N : A\qquad
+ \Gamma^\oplus, h \prov M \equiv N : A
+\justifies
+\Gamma \prov \mpair{M}{N}  : A
+\end{prooftree}
+\]
+These maybe compute like so:
+\[
+\begin{prooftree}
+h \in \Gamma
+\using \beta_1 \justifies
+\Gamma \prov \pair M N \equiv M
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma\equiv  \Gamma^\oplus
+\using \beta_2\justifies
+\Gamma \prov \pair M N \equiv N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \prov  M : A
+\using \eta\justifies
+ \pair M M \equiv M
+\end{prooftree}
+\]
+\subsection{Function Type Isomorphism}
+I want to define an isomorphism
+\[ f : \lax(A \to B) \prov G_{A \to B}(\elax f) \cong (a : \lax A) (a' : G_A(\elax a)) \to G_{B}((\elax f)\ (\elax a))\]
+
+\[ \mathsf{fore} : (f : \lax(A \to B))(f' : G_{A \to B}(\elax f))(a : \lax A) (a' : G_A(\elax a)) \to G_{B}((\elax f)\ (\elax a))\]
+\[ \mathsf{fore}\ f\ f'\ a\ a' = \{(\pi f')\ (\pi a')\}\]
+
+We can typecheck $\mathsf{fore}$:
+
+\[
+\begin{prooftree}
+\[
+\[
+\cdots, h \prov f' : G_{A \to B}(\elax f)
+\justifies
+\cdots \prov \pi_{\elax(f)} f' : A \to B
+\]
+\[
+\cdots, h \prov a' : G_{A}(\elax a)
+\justifies
+\cdots \prov \pi_{\elax(a)} a' : A
+\]
+\justifies
+f\div, f'\div, a\div, a'\div \prov (\pi_{\elax(f)} f')\ (\pi_{\elax(a)} a') : B
+\]
+\justifies
+f, f', a, a' \prov \{(\pi_{\elax(f)} f')\ (\pi_{\elax(a)} a')\} : G_{B}((\elax f)\ (\elax a))
+\end{prooftree}
+\]
+noting that the argument to $G_{A \to B}$ has an $h$ in it, so we can reduce the $\pi$s to their subscripts.
+
+\[ \mathsf{back} : (f : \lax(A \to B)) (k : (a : \lax A) (a' : G_A(\elax a)) \to G_{B}((\elax f)\ (\elax a))) \to  G_{A \to B}(\elax f)\]
+\[ \mathsf{back}\ f\ k = \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax \bar a)\ \{\bar a\})}\} \]
+
+We can typecheck $\mathsf{back}$:
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\[
+\justifies
+\cdots, h  \prov   \elax f : A \to B
+\]
+\justifies
+\cdots, h  \prov   {(\elax f)\ \bar a} : B
+\]
+\[
+\[
+\cdots, h \prov   \{\bar a\} :  G_A(\elax \ilax \bar a)
+\justifies
+\cdots, h  \prov   k\ (\ilax \bar a)\ \{\bar a\} : G_{B}((\elax f)\ (\elax \ilax \bar a))
+\]
+\justifies
+\cdots, \bar a :: A  \prov   {\pi_{(\elax f)\  \bar a}{(k\ (\ilax \bar a)\ \{\bar a\})} : B
+\]
+\qquad
+\cdots, \bar a :: A, h \prov (\elax f)\  \bar a \equiv \pi_{(\elax f)\  \bar a} \cdots
+\justifies
+f \div \cdots, k \div \cdots, \bar a : A  \prov   \mpair{(\elax f)\ \bar a}{\pi_{(\elax f)\  \bar a} (k\ (\ilax \bar a)\ \{\bar a\})} : B
+\]
+\justifies
+f \div \cdots, k \div \cdots \prov  \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax \bar a)\ \{\bar a\})} : A \to B
+\]
+\justifies
+f : \cdots, k : \cdots \prov \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax \bar a)\ \{\bar a\})}\}  :   G_{A \to B}(\elax f)
+\end{prooftree}
+\]
+noting that the argument to $G_{A \to B}$ has an $h$ in it, so we can reduce:
+\[\lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax \bar a)\ \{\bar a\})} \mapsto \lambda \bar a . {(\elax f)\ \bar a} \equiv \elax f\]
+
+
+Let's check the roundtrips.
+
+\[\mathsf{fore}\ f\ (\mathsf{back}\ f\ k)\ a\ a'\]
+\[ = \{(\pi_{\elax(f)} (\mathsf{back}\ f\ k))\ (\pi_{\elax(a)} a')\} \]
+\[= \{((\lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax \bar a)\ \{\bar a\})})\ (\pi_{\elax(a)} a')\} \]
+\[= \{\mpair{(\elax f)\ \bar a}{\pi(k\ (\ilax (\pi_{\elax(a)} a'))\ \{\pi_{\elax(a)} a'\})}\} \]
+inside $G$-introduction we have a flat context, so we can take the second component of the magic pair:
+\[= \{{\pi(k\ (\ilax (\pi_{\elax(a)} a'))\ \{\pi_{\elax(a)} a'\})} \} \]
+\[= k\ (\ilax (\pi_{\elax(a)} a'))\ \{\pi_{\elax(a)} a'\} \]
+\[= k\ (\ilax (\pi_{\elax(a)} a'))\ a' \]
+inside the $\ilax$ we have $h$, so the $\pi$ reduces:
+\[= k\ (\ilax \elax a)\ a' \]
+\[= k\ a\ a' \]
+so \[(\mathsf{fore}\ f) \o (\mathsf{back}\ f)$ is the identity. Let's check the converse:
+
+\[\mathsf{back}\ f\ (\lambda a \ a'. \mathsf{fore}\ f\ f'\ a\ a')\]
+\[= \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(\mathsf{fore}\ f\ f'\ (\ilax \bar a)\ \{\bar a\})}\}\]
+\[= \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi \{(\pi f')\ (\pi  \{\bar a\})\}  }\}\]
+\[= \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi \{(\pi f')\  \bar a\}  }\}\]
+\[= \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{(\pi f')\  \bar a  }\}\]
+Superficially, this seems stuck, but I think because $\bar a$ doesn't need to be strong where it's used, I can
+commute the $\lambda$ and the magic pairing:
+\[= \{  \mpair{\lambda \bar a .(\elax f)\ \bar a}{\lambda \bar a .(\pi f')\  \bar a  }\}\]
+this lets me take the second component
+\[= \{  {\lambda \bar a .(\pi f')\  \bar a  }\} = \{  {\pi f'  }\} = f' \]
+\subsection{Universe Isomorphism}
+I want to define an isomorphism
+
+\[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  (\elax A \to \rtype )\]
 
 
 \end{document}

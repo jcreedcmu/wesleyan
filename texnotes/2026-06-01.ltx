@@ -1,0 +1,1083 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{hyperref}
+% https://tex.stackexchange.com/a/847
+\hypersetup{
+    colorlinks,
+    urlcolor={blue},
+}
+
+\usepackage{makecell}
+\usepackage{relsize}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{hobby}
+\usepackage{tcolorbox}
+\usepackage{stackengine}
+\newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
+
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+
+\def\gets{\leftarrow}
+\def\dia{\Diamond}
+\def\all{\forall}
+
+\def\spec{\mathsf{Spec}}
+\def\breturn{\mathop{\mathbf{return}}\nolimits}
+\def\bthunk{\mathop{\mathbf{thunk}}\nolimits}
+\def\brun{\mathop{\mathbf{run}}\nolimits}
+\def\bget{\mathop{\mathbf{get}}\nolimits}
+\def\bGel{\mathop{\mathbf{Gel}}\nolimits}
+\def\bgel{\mathop{\mathbf{gel}}\nolimits}
+\def\bgbound{\mathop{\mathbf{gbound}}\nolimits}
+\def\bgpath{\mathop{\mathbf{gpath}}\nolimits}
+\def\bungel{\mathop{\mathbf{ungel}}\nolimits}
+\def\bGet{\mathop\mathbf{Get}}
+\def\dapt#1#2{#1[\![#2]\!]}
+\def\dap#1#2{#1\{#2\}}
+\def\ll{\langle\!\langle}
+\def\rr{\rangle\!\rangle}
+\def\rshape{\ {\mathsf{shape}}}
+\def\rrefl{{\mathsf{refl}}}
+\def\bd{\mathsf{Bd}}
+\def\bdd{\mathsf{Bdd}}
+\def\rset{\mathsf{Type}}
+\def\rid{\mathsf{id}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\prequiv{\dashv\vdash}
+\def\sq{\square}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\nameof#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+
+
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\parr{\mathbin{\rotatebox[origin=c]{180}{\&}}}
+\def\iff{\ \Longleftrightarrow\ }
+\def\bu{\bullet}
+\def\J{\mathbb{J}}
+\def\R{\mathbb{R}}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\cprov{\mathrel\#}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathop\triangleright\nolimits}
+\def\tb{\mathop\blacktriangleleft}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+%\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rtrue{\ \mathsf{true}}
+\def\rfalse{\ \mathsf{false}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\O{\mathcal{O}}
+\def\W{\mathbb{W}}
+\def\G{\mathbf{G}}
+\def\D{\mathbb{D}}
+\def\E{\mathbb{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+
+% https://tex.stackexchange.com/questions/716631/curved-arrows-from-tikz-cd-do-not-work
+\tikzset{
+  curve/.style={
+    settings={#1},
+    to path={
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes
+    },
+  },
+  settings/.code={%
+    \tikzset{quiver/.cd,#1}%
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}%
+  },
+  quiver/.cd,
+  pos/.initial=0.35,
+  height/.initial=0,
+}
+\usepackage{fontawesome}
+\NewDocumentCommand{\lock}{}{\text{\faLock}}
+\NewDocumentCommand{\unlock}{}{\text{\faicon{unlock}}}
+\NewDocumentCommand{\key}{}{\text{\faicon{key}}}
+\def\erase{^\ominus}
+\def\thead{^\oplus}
+\def\tsub{^\star}
+\def\simp{_\circ}
+\def\blat{\text{\faicon{circle}}}
+\def\locking{^\lock}
+\def\hyd#1#2{[#1 \star #2]}
+\title{A Type Theory for a Proof-Irrelevant Tiny Object}
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
+
+\maketitle
+
+\section{Language}
+\[\begin{tabular}{rccl}
+ Simple Contexts&$\Gamma\simp$&$::=$&$\cdot \celse \Gamma\simp, x : A\simp$\\
+ Simple Types&$A\simp$&$::=$&$\cdots  $\\
+ Simple Terms&$M\simp$&$::=$&$\cdots  $\\
+\end{tabular}\]
+
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A\simp$\\
+  Types&$A$&$::=$&$\cdots \celse H $\\
+  Terms&$M$&$::=$&$\cdots \celse x [ M] $\\
+\end{tabular}\]
+
+\subsection{Operations}
+\[\begin{tabular}{l}
+If $\Gamma$ is a context, then $\Gamma^*$ is a simple context.\\
+If $A$ is a type, then $A^*$ is a simple type.\\
+If $M$ is a term, then $M^*$ is a simple term.\\
+If $\Gamma$ is a context, then $\sem \Gamma$ is a simple context.\\
+If $A$ is a type, and $M\simp$ is a simple term, then $\sem A(M\simp)$ is a simple type.\\
+If $M$ is a term, then $\sem M$ is a simple term.\\
+If $\Gamma\simp$ is a context, then $\Gamma\simp^+$ is a context.\\
+% If $\Gamma$ is a context, $t$ is a term, $A\simp$ is a simple type, then $A\simp \hyd t \Gamma$ is a type.\\
+\end{tabular}\]
+
+
+\subsection{Judgments}
+\[\begin{tabular}{rl}
+  Simple Context Formation&$\prov \Gamma\simp \rctx$\\
+  Simple Type Formation&$\Gamma\simp \prov A\simp : \rtype$\\
+  Simple Term Typing&$\Gamma\simp \prov M\simp : A\simp$\\
+  Context Formation&$\prov \Gamma \rctx$\\
+  Type Formation&$\Gamma \prov A : \rtype$\\
+  Term Typing&$\Gamma \prov M : A$\\
+\end{tabular}\]
+
+\subsection{Rules}
+
+\subsubsection{Context Formation}
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma^* \prov A\simp : \rtype
+\justifies
+\prov (\Gamma, x :: A\simp)\rctx
+\end{prooftree}
+\]
+\subsubsection{Term Typing}
+\[
+\begin{prooftree}
+\Gamma \prov t : H\qquad x :: A^* \in \Gamma
+\justifies
+\Gamma \prov x[t] : A
+\end{prooftree}
+\]
+\subsection{Operations}
+
+\subsubsection{Erasure}
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)^*$&$:=$&$(\Gamma^*, x : A^*) $\\
+ $(\Gamma, x :: A\simp)^*$&$:=$&$(\Gamma^*, x : A\simp) $\\
+ $((a : A) \to B)^*$&$:=$&$(a : A^*) \to B^*$\\
+ $(\lambda a . M)^*$&$:=$&$\lambda a  .  M^*$\\
+ $(M\ N)^*$&$:=$&$M^*\ N^*$\\
+ $H^*$&$:=$&$1 $\\
+ $(x[t])^*$&$:=$&$x $\\
+ $x^*$&$:=$&$x $\\
+\end{tabular}\]
+
+\subsubsection{Relational Semantics}
+\[\begin{tabular}{rcl}
+ $\sem{\Gamma, x : A}$&$:=$&$(\sem \Gamma, x : A^*, x' : \sem A(x)) $\\
+ $\sem{\Gamma, x :: A\simp}$&$:=$&$(\sem \Gamma, x : A\simp )$\\
+ $\sem{(a : A) \to B}(f)$&$:=$&$(a : A^*)(a' : \sem A (a)) \to \sem B (f\ a) $\\
+ $\sem{\lambda a . M}$&$:=$&$\lambda a.\lambda a' . \sem M$\\
+ $\sem{M\ N}$&$:=$&$\sem M\ N^*\ \sem N$\\
+ $\sem{H}(\star)$&$:=$&$0 $\\
+ $\sem{x[t]}$&$:=$&$\babort(\sem t) $\\
+ $\sem{x}$&$:=$&$x' $\\
+\end{tabular}\]
+
+\subsubsection{Promotion}
+\[\begin{tabular}{rcl}
+ $(\Gamma\simp, x : A\simp)^+$&$:=$&$(\Gamma\simp^+, x :: A\simp) $\\
+\end{tabular}\]
+
+%% \subsubsection{Rehydrate}
+%% Takes a simple expression in an erased context and a term of type $H$, and yields
+%% an expression in the original context.
+
+%% \[\begin{tabular}{rcp{5cm}}
+%% $(M\simp\ N\simp)\hyd t \Gamma $&$:=$&$ (M\simp\hyd t \Gamma)\ (N\simp\hyd t \Gamma)$\\
+%% $(\lambda x . M\simp)\hyd t \Gamma $&$:=$&$ \lambda x . (M\simp\hyd t \Gamma)$\\
+%% $x\hyd t \Gamma$ &$:=$&
+%%   $\begin{cases}x[t]&\hbox{if $x :: A\simp \in \Gamma$;}\\
+%%  x&\hbox{otherwise.} \end{cases}$ \\
+%% \end{tabular}\]
+
+\subsection{Lemmas}
+
+\begin{lemma}\ %
+\begin{enumerate}
+\item If $\prov \Gamma \rctx$, then $\prov \Gamma ^* \rctx$.
+\item If $ \Gamma \prov A :\rtype$, then $ \Gamma^* \prov A^* :\rtype$.
+\item If $ \Gamma \prov M :A$, then $ \Gamma^* \prov M^* : A^*$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Let's consider some interesting cases.
+\begin{itemize}
+\item [Case:]
+\[
+\begin{prooftree}
+ x : A \in \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\]
+We must show $\Gamma^* \prov x : A^*$ but this follows from the assumption.
+\item [Case:]
+\[
+\begin{prooftree}
+\Gamma \prov t : H\qquad x :: A^* \in \Gamma
+\justifies
+\Gamma \prov x[t] : A
+\end{prooftree}
+\]
+We must show $\Gamma^* \prov x : A^*$. But $x : A^* \in \Gamma^*$ by assumption,
+so we're done.
+\end{itemize}
+\cqed
+\end{proof}
+
+\begin{lemma}\ %
+\begin{enumerate}
+\item If $\prov \Gamma \rctx$, then $\prov \sem\Gamma  \rctx$.
+\item If $ \Gamma \prov A :\rtype$, then $ \sem\Gamma, x : A^* \prov \sem A(x) :\rtype$.
+\item If $ \Gamma \prov M :A$, then $ \sem\Gamma \prov \sem M : \sem A(M^*)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Let's consider some interesting cases.
+\begin{itemize}
+\item [Case:]
+\[
+\begin{prooftree}
+ x : A \in \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\]
+We must show $\sem \Gamma \prov x' : \sem A (x)$. But $x : A \in \Gamma$
+guarantees $x' : \sem A (x) \in \sem \Gamma$.
+\item [Case:]
+\[
+\begin{prooftree}
+\Gamma \prov t : H\qquad x :: A^* \in \Gamma
+\justifies
+\Gamma \prov x[t] : A
+\end{prooftree}
+\]
+We must show $\sem \Gamma \prov \babort(\sem t) : \sem A(x)$.
+But the induction hypothesis guarantees $\sem \Gamma \prov \sem t : 0$
+so the abort succeeds.
+\end{itemize}
+\cqed
+\end{proof}
+
+\begin{lemma}
+$(\Gamma_0)^{+*} = \Gamma_0$
+\end{lemma}
+
+
+\begin{lemma}
+ If $\prov \Gamma_0 \rctx$, then $\prov \Gamma\simp^+  \rctx$.
+\end{lemma}
+
+\section{Extensions}
+\subsection{The Amazing Right Adjoint}
+\[\begin{tabular}{rccl}
+  Types&$A$&$::=$&$\cdots \celse \surd A $\\
+  Terms&$M$&$::=$&$\cdots \celse \surd M \celse \had \lambda . M $\\
+\end{tabular}\]
+\[
+\begin{prooftree}
+\Gamma^{*+} \prov A : \rtype
+\justifies
+\Gamma \prov \surd A : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma^{*+} \prov M : A
+\justifies
+\Gamma \prov \surd M : \surd A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma, h : H \prov M : \surd A
+\justifies
+\Gamma \prov \hat \lambda h . M : A[\Gamma, h : H][\star/h]
+\end{prooftree}
+\]
+
+We need a new substitution principle:
+\[\begin{tabular}{rcp{5cm}}
+$(x[t]) [\Gamma]$ &$:=$&
+  $\begin{cases}x[t]&\hbox{if $x :: A\simp \in \Gamma$;}\\
+ x&\hbox{otherwise.} \end{cases}$ \\
+\end{tabular}\]
+
+\begin{lemma}\ %
+  \begin{itemize}
+  \item If $\prov \Gamma^{*+}, \Delta \rctx$ then $\prov \Gamma, \Delta[\Gamma] \rctx$.
+  \item If $\Gamma^{*+}, \Delta \prov A : \rtype$ then $\Gamma, \Delta[\Gamma] \prov A[\Gamma] : \rtype$.
+  \item If $\Gamma^{*+}, \Delta \prov M : A$ then $\Gamma, \Delta[\Gamma] \prov M[\Gamma] : A[\Gamma]$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+Let's consider the variable cases.
+\begin{itemize}
+\item [Case:]
+\[
+\begin{prooftree}
+\Gamma^{*+}, \Delta \prov t : H\qquad x :: A^* \in \Gamma^{*+}
+\justifies
+\Gamma^{*+}, \Delta \prov x[t] : A
+\end{prooftree}
+\]
+We must show $\Gamma, \Delta[\Gamma] \prov x[t] : A[\Gamma]$.
+\item [Case:]
+\[
+\begin{prooftree}
+\Gamma^{*+}, \Delta \prov t : H\qquad x :: A^* \in \Delta
+\justifies
+\Gamma^{*+}, \Delta \prov x[t] : A
+\end{prooftree}
+\]
+\end{itemize}
+\cqed
+\end{proof}
+
+
+\section{Different Syntax}
+
+What if I do this:
+\subsection{Language}
+We have basic syntax $\Gamma\simp, A\simp, M\simp$
+with all the usual typing rules.
+
+We introduce some `wide' syntax
+\[\begin{tabular}{rccl}
+  Wide Contexts&$ \Gamma$&$::=$&$\cdot \celse \Gamma, x : A $\\
+  Wide Variables&$ x$&$::=$&$ (x^*,\sem x) $\\
+  Wide Types&$ A$&$::=$&$ (A\simp, x^*.A'\simp) $\\
+  Wide Terms&$ M$&$::=$&$ (M\simp, M'\simp)$\\
+\end{tabular}\]
+Every wide type is a pair of basic types, the second
+with one extra bound variable, ranging over basic terms.
+
+Every wide term is a pair of basic terms.
+
+A `wide variable' is a pair of basic variables. We always
+name the basic variables consistently in such a way that
+they can be related to one another and to the wide
+variable they came from.
+
+The programme is that we will introduce new wide type and term
+constructors as {\em admissible rules} derived from the more fundamental rules defined
+below.
+
+\subsection{Typing Rules}
+\subsubsection{Context Formation}
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+\subsubsection{Type Formation}
+\[
+\begin{prooftree}
+\Gamma^* \prov A^*: \rtype \qquad \sem \Gamma, x^* : A^* \prov \sem A(x^*) : \rtype
+\justifies
+\Gamma \prov A : \rtype
+\end{prooftree}
+\]
+\subsubsection{Term Typing}
+\[
+\begin{prooftree}
+\Gamma^* \prov M^*: A^* \qquad \sem \Gamma \prov \sem M : \sem A(M^*)
+\justifies
+\Gamma \prov M : A
+\end{prooftree}
+\]
+\subsection{Operations}
+\subsubsection{Erasure}
+We define an operation $\dash^*$ that takes wide (contexts, types, terms) to simple (contexts, types, terms).
+\[\begin{tabular}{rcl}
+ $(\Gamma, x : A)^*$&$:=$&$(\Gamma^*, x^* : A^*) $\\
+ $( A\simp, x^*.A'\simp)^*$&$:=$&$A\simp $\\
+ $(M\simp, M'\simp)^*$&$:=$&$M\simp $\\
+\end{tabular}\]
+
+\subsubsection{Interpretation}
+We define an operation $\sem \dash$ that takes wide (contexts, terms) to simple (contexts, terms).
+We define an operation $\sem \dash(\dash)$ that takes a wide type and a simple term to a simple type.
+\[\begin{tabular}{rcl}
+ $\sem{\Gamma, x : A}$&$:=$&$(\sem \Gamma, x^* : A^*, \sem x : \sem A(x^*)) $\\
+ $\sem {( A\simp, x^*.A'\simp)}(M\simp)$&$:=$&$[M\simp/x^*]A'\simp $\\
+ $\sem {(M\simp, M'\simp)}$&$:=$&$M'\simp $\\
+\end{tabular}\]
+
+
+\subsection{Lemmas}
+\begin{lemma}[Extensionality] For any $A$, $M$, we have
+\[ A = (A^*, x^*. \sem A(x^*))\]
+\[ M = (M^*, \sem M)\]
+\end{lemma}
+
+\begin{proof}
+Any $A$ must be of the form $(A\simp, y^*.A'\simp)$, so by unfolding definitions, we need to check
+\[ (A\simp, y^*.A'\simp) = (A\simp, x^*.  [x^*/y^*]A'\simp)\]
+which is reflexivity up to $\alpha$-equivalence.
+
+Any $M$ must be of the form $(M\simp, M'\simp)$, so by unfolding definitions, we need to check
+\[(M\simp, M'\simp) = (M\simp, M'\simp)\]
+which is reflexivity.
+\cqed
+\end{proof}
+
+\begin{lemma} The rule
+\[\begin{prooftree}x :A \in \Gamma \justifies \Gamma \prov x : A\end{prooftree}\]
+is admissible.
+\end{lemma}
+
+
+\begin{proof}
+By assumption, we know $x^* : A^* \in \Gamma^*$. Hence $\Gamma^* \prov x^* : A^*$.
+By assumption, we know $x^* : A^*, \sem x : \sem A(x^*) \in \sem \Gamma$.
+Hence $\sem \Gamma \prov \sem x : \sem A(x^*)$.
+These two facts together mean
+\[\Gamma \prov (x^*, \sem x) : (A^*, x^*.\sem A(x^*))\]
+in other words, $\Gamma \prov x : A$.
+\cqed
+\end{proof}
+
+\subsection{Pi}
+We make the definitions
+\[\begin{tabular}{rcl}
+$ (x:A) \to B $&$:=$&$((x^*:A^*) \to B^*, f^*.(x^*:A^*) \to (\sem x : \sem A(x^*)) \to \sem B(f^*\ x^*)$\\
+ $\lambda x . M $&$:=$&$(\lambda x^*.M^*, \lambda x^* .\lambda \sem x . \sem M)$\\
+ $M\ N $&$:=$&$(M^*\ N^*, \sem M\ N^*\ \sem N)$\\
+\end{tabular}\]
+
+
+\begin{lemma} The rule
+\[\begin{prooftree}\Gamma \prov A : \rtype \qquad \Gamma, x : A \prov B : \rtype
+\justifies
+\Gamma \prov (x : A) \to B : \rtype
+\end{prooftree}
+\]
+is admissible.
+\end{lemma}
+
+
+\begin{proof}
+The $\dash^*$ reasoning is easy. For $\sem \dash$, we know
+\[\sem \Gamma, x^* : A^* \prov \sem A(x^*) : \rtype \]
+\[ \sem \Gamma, x^* : A^*, \sem x : \sem A(x^*), y^* : B^*  \prov \sem B (y^*): \rtype\eqno(*)\]
+
+We need
+\[\sem \Gamma, f^* : (x^*:A^*) \to B^* \prov (x^*:A^*) \to (\sem x : \sem A(x^*)) \to \sem B(f^*\ x^*) : \rtype\]
+and therefore we need
+\[\sem \Gamma \prov A^* : \rtype\]
+\[\sem \Gamma, x^*:A^* \prov \sem A(x^*)  : \rtype\]
+\[\sem \Gamma, f^* : (x^*:A^*) \to B^*, x^*:A^*, \sem x : \sem A(x^*) \prov \sem B(f^*\ x^*) : \rtype\]
+We have the first by assumption (on the $\dash^*$ part)
+We have the second by assumption (on the $\sem\dash$ part)
+And finally we have the third by substitution of $f^*\ x^*$ for $y^*$ in $(*)$.
+
+\cqed
+\end{proof}
+
+\subsection{Top-Down}
+
+I'd like to have some functional notion of internalized parametricity in this language.
+How would it look? I'd have a function $f : A \to B$, where I can assume as much
+diagonalness of $A$ and $B$ as I like. Either that $A \to (H \to A)$ is an equivalence,
+or $\sqrt A \to A$ is an equivalence, or both, and the same for $B$.
+
+I assume I have some wide term $q : (X : \rtype) \to X \to X$.
+By all of the above, assuming
+\[ \rtype^* = \rtype\]
+\[ \sem \rtype (A) = A \to \rtype\]
+I know this has to take the form of two simple terms
+\[q^* : (X^* : \rtype) \to X^* \to X^* \]
+\[ \sem q : (X^* : \rtype) (\sem X : X^* \to \rtype) (x^* : X^*) (\sem x : \sem X(x^*) \to
+\sem X(q^*\ X^*\ x^*) \]
+\subsubsection{Gluing}
+I have two approaches to gluing, one a limit, one a colimit.
+To glue $f : A \to B$ assuming $A$ and $B$ are flat (meaning invariant under
+$H \to \dash$ and $\surd$), either we colimit the evident arrow
+\[A \leftarrow (H \x A) \to (H \x B)\eqno (*)\]
+or we limit the evident arrow
+\[ B \to \blat B \leftarrow \blat A \eqno(**)\]
+
+Let's try the first, because $H \x \dash$ seems easier to deal with than $\blat$.
+\begin{tabbing}
+$\mathbf{datatype}\ G: \rtype \ \mathbf{where}$\\
+$\qquad \mathsf{inja} : (a : A) \to G $\\
+$\qquad \mathsf{injb} : (h : H)(b : B)  \to G $\\
+$\qquad \mathsf{p} : (h : H)(a : A)  \to \mathsf{inja}\ a \equiv \mathsf{injb}\ h\ (f\ a)$\\
+\end{tabbing}
+Now let's consider what $G^*$ and $\sem G$ are.
+Let's consider the recursion principle
+
+\[ (C : \rtype) (\mathsf{inja} : A \to C) (\mathsf{injb} : H \to B \to C)\]
+\[ (\mathsf{p} : (h : H) (a : A) \to  \mathsf{inja}\ a \equiv \mathsf{injb}\ h\ (f\ a))\]
+\[ (g : G) \to C\]
+If I hit this function type with $\dash ^*$ I get
+\[ (C^* : \rtype) (\mathsf{inja^*} : A^* \to C^*) (\mathsf{injb^*} : 1 \to B^* \to C^*)\]
+\[ (\mathsf{p^*} : (h^* : 1) (a^* : A^*) \to  \mathsf{inja^*}\ a^* \equiv \mathsf{injb^*}\ h^*\ (f^*\ a^*))\]
+\[ (g^* : G^*) \to C^*\]
+So this is the datatype
+\begin{tabbing}
+$\mathbf{datatype}\ G^*: \rtype \ \mathbf{where}$\\
+$\qquad \mathsf{inja^*} : (a^* : A^*) \to G^* $\\
+$\qquad \mathsf{injb^*} : (h^* : 1)(b^* : B^*)  \to G^* $\\
+$\qquad \mathsf{p^*} : (h^* : 1)(a^* : A^*)  \to \mathsf{inja^*}\ a^* \equiv \mathsf{injb^*}\ h^*\ (f^*\ a^*)$\\
+\end{tabbing}
+and we can notice that $G^*$ is iso to $B^*$. In one direction we inject $\mathsf{inja}$,
+and in the other we case analyze and apply $f^*$ when needed.
+We can use $\mathsf{p}$ to see one of the roundtrips.
+
+What's $\sem\dash$ of the recursion principle?
+\[r . (C^* : \rtype) (\sem C : C^*\to \rtype)\]
+\[(\mathsf{inja^*} : A^* \to C^*)(\sem {\mathsf{inja}} : (a^* : A^*) \to \sem A(a^*) \to \sem C(\mathsf{inja^*}\ a^*))\]
+\[ (\mathsf{injb^*} : 1 \to B^* \to C^*)
+(\sem {\mathsf{injb}} : (h^* : 1)(\sem h : 0)(b^* : B^*) \to \sem B(b^*) \to \sem C(\mathsf{injb^*}\ h^*\ a^*))\]
+\[ (\mathsf{p^*} : (h^* : 1) (a^* : A^*) \to  \mathsf{inja^*}\ a^* \equiv \mathsf{injb^*}\ h^*\ (f^*\ a^*))\]
+\[ (\mathsf{\sem p} : (h^* : 1) (\sem h : 0) (a^* : A^*) \to \sem A(a^*) \to  {?})\]
+\[ (g^* : G^*)(\sem g : \sem G(g)) \to \sem C(r\ C^*\ \mathsf{inja^*}\ \mathsf{injb^*}\ \mathsf{p^*}\ g^*)\]
+Regardless of how I fill in the $?$, this is the same as
+\[r . (C^* : \rtype) (\sem C : C^*\to \rtype)\]
+\[(\mathsf{inja^*} : A^* \to C^*)(\sem {\mathsf{inja}} : (a^* : A^*) \to \sem A(a^*) \to \sem C(\mathsf{inja^*}\ a^*))\]
+\[ (\mathsf{injb^*} : 1 \to B^* \to C^*) \]
+\[ (\mathsf{p^*} : (h^* : 1) (a^* : A^*) \to  \mathsf{inja^*}\ a^* \equiv \mathsf{injb^*}\ h^*\ (f^*\ a^*))\]
+\[ (g^* : G^*)(\sem g : \sem G(g)) \to \sem C(r\ C^*\ \mathsf{inja^*}\ \mathsf{injb^*}\ \mathsf{p^*}\ g^*)\]
+
+Let's think about $\sem G(g)$ for some $g : G^*$.
+\begin{tabbing}
+$ \sem G :  (g : G^*) \to  \rtype $\\
+$ \sem G\ (\mathsf{inja}\ a) = \sem A(a) $\\
+$ \sem G\ (\mathsf{injb}\ h\ b) = \sem H(h) \x \sem B(b) $\\
+$ \sem G\ (\mathsf{p}\ h\ a) = {?} $\\
+\end{tabbing}
+%% I'm having a hard time seeing how this reduces to $A^*$, but I know it ought to.
+
+%% What's the record approach?
+%% \begin{tabbing}
+%% $\mathbf{datatype}\ \blat A: \rtype \ \mathbf{where}$\\
+%% $\qquad \eta : (a : A) \to \blat A $\\
+%% $\qquad \chi : (h : H) \to \blat A$\\
+%% $\qquad \mathsf{q} : (h : H)(a : A)  \to \eta\ a\equiv \chi\ h$\\
+%% $\mathbf{record}\ G: \rtype \ \mathbf{where}$\\
+%% $\qquad \mathsf{fa} : \blat A  $\\
+%% $\qquad \mathsf{fb} : B $\\
+%% $\qquad \mathsf{p} : \mathsf{map}\blat\ f\ fa \equiv \eta\ fb$\\
+%% \end{tabbing}
+
+\subsubsection{Fracture}
+We fracture by taking $\surd \dash$ and $H \to \dash$ and observing $\surd A \to H \to A$.
+Both these functors should preserve colimits and limits. So if we hit $(*)$ with them we get
+\[\underrightarrow{\lim}\ \surd A \leftarrow \surd (H \x A) \to \surd (H \x B)\]
+\[= \underrightarrow{\lim}\ A \leftarrow  0 \to 0\]
+\[=  A \]
+\[\underrightarrow{\lim}\ (H \to  A) \leftarrow (H \to  (H \x A)) \to (H \to  (H \x B))\]
+\[= \underrightarrow{\lim}\ A \leftarrow  A \to B\]
+\[=  B \]
+
+\subsubsection{?}
+ I compute
+$q\ (\mathsf{Glue}\ f) : (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)$.
+I expect to find
+\[\lambda h . q\ (\mathsf{Glue}\ f) : H \to (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f) \cong B \to B\]
+\[\surd (q\ (\mathsf{Glue}\ f)) : \surd  ((\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)) \cong  A \to A\]
+Or wait... can I say something in general about how $\surd$ distributes over arrows like
+
+ \[\surd(A \to B) \cong (g : (H \to A) \to (H \to B)) (f : (a : \surd A) \to \surd B) \x {}\]
+\[ (a : \surd A) (h : H) \to g\ (\lambda \_ . \hat \lambda \_. a)\ h \equiv \hat\lambda \_ . f\ a\]
+
+Ok, suppose I have $k : \surd(A \to B)$. I can easily make $(H \to A) \to (H \to B)$.
+\[ \lambda m : H \to A. \lambda h. (\hat \lambda \_ . k)\ (m\ h)\]
+I should also be able to make $\surd A \to \surd B$:
+\[ \lambda a : \surd A. \surd ((\hat\lambda h . k[h]) (\hat\lambda h . a[h]))\]
+What are these two expressions if I carry out the appropriate substitutions? Are they equal?
+\[  (\hat \lambda \_ . k)\ (\hat\lambda \_ . a)\]
+\[ \hat\lambda\_. \surd ((\hat\lambda h . k[h]) (\hat\lambda h . a[h]))\]
+
+Let's recall what I really want to show: if I have $a : A$
+I want to know $f\ (q\ A\ a) = q\ B\ (f\ a)$.
+
+For this I want to look for some relationship between, for example,
+
+\[ \lambda h . q\ (\mathsf{Glue}\ f) : H \to (\mathsf{Glue}\ f) \to (\mathsf{Glue}\ f)\]
+and
+\[ q\ B : B \to B\]
+Let's try to concretely say
+\[ \mathsf{Glue}\ f := \{ \alpha : \blat A, \beta : B, p : \eta_\blat\ \beta = \mathsf{map}_\blat\ f\ \alpha\} \]
+Let's try to establish that $H \to \mathsf{Glue}\ f \cong B$.
+Let's consider $B \to H \to \mathsf{Glue}\ f$ first.
+$H \to \blat A$ should behave like $1$. We're good there.
+In the reverse direction, let's try to show
+\[ (H \to \mathsf{Glue}\ f) \to B\]
+Under the assumption that $B \cong H \to B$, we can just do congruence on a projection.
+
+\section{Richer Contexts}
+\def\doll{\$}
+It seems to go cleanly if I allow a lot of stuff in $\Gamma$. The pseudo-hypothesis
+$h$, with no variable name, tracks the single bit of information by its presence or absence
+ of whether we have morally added a hyp of type $H$ yet. We
+let the type $H$ internalize that. The presence of $h$ in the context isn't in any particular place.
+Multiple copies of $h$ in the context automatically coalesce. I'm going to punt on deciding
+exactly how $\emptyset$ works, but it's meant to be like a collapsed context with a $0$ hyp in it.
+
+We don't have any variable constructors like $x[h]$ anymore.
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \emptyset \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A\celse \Gamma, h$\\
+  Types&$A$&$::=$&$\cdots \celse H \celse \surd A \celse \blat A $\\
+  Terms&$M$&$::=$&$\cdots \celse x \celse \surd M \celse \doll M \celse \blat M \celse \epsilon M
+\celse \blet \star = M \bin N \celse \star $\\
+\end{tabular}\]
+
+\subsection{Operations}
+\[\begin{tabular}{l}
+If $\Gamma$ is a context, then $\surd \Gamma$ is a context.\\
+If $\Gamma$ is a context, then $\lock \Gamma$ is a context.\\
+\end{tabular}\]
+
+\[\begin{tabular}{rcl}
+ $\surd (\Gamma, x : A)$&$:=$&$(\surd\Gamma, x :: A)$\\
+ $\surd (\Gamma, x :: A)$&$:=$&$(\surd\Gamma, x :: A)$\\
+ $\surd (\Gamma, x \div A)$&$:=$&$(\surd\Gamma, x \div A)$\\
+ $\surd (\Gamma, h)$&$:=$&$\emptyset$\\
+\end{tabular}\]
+
+\[\begin{tabular}{rcl}
+ $\lock (\Gamma, x : A)$&$:=$&$(\lock\Gamma, x \div A)$\\
+ $\lock (\Gamma, x :: A)$&$:=$&$(\lock\Gamma, x :: A)$\\
+ $\lock (\Gamma, x \div A)$&$:=$&$(\lock\Gamma, x \div A)$\\
+ $\lock (\Gamma, h)$&$:=$&$\lock\Gamma$\\
+\end{tabular}\]
+
+\subsection{Rules}
+
+\subsubsection{Context Formation}
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \lock\Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x :: A)\rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma, h \prov A : \rtype
+\justifies
+\prov (\Gamma, x \div A)\rctx
+\end{prooftree}
+\]
+
+\subsubsection{Term Typing}
+\[
+\begin{prooftree}
+h \in \Gamma
+\justifies
+\Gamma \prov \star : H
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \prov M : H\qquad \Gamma, h \prov N : A
+\justifies
+\Gamma \prov \blet \star = M \bin N : A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+x : A \in  \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x :: A \in  \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x \div A \in  \Gamma \qquad h \in \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\lock \Gamma \prov M : A
+\justifies
+\Gamma \prov \surd M  : \surd A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma, h \prov M : \surd A
+\justifies
+\Gamma \prov \doll M  : A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\surd \Gamma \prov M : A
+\justifies
+\Gamma \prov \blat M  : \blat A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \lock\Gamma \prov M : \blat A
+\justifies
+\Gamma \prov \epsilon M  : A
+\end{prooftree}
+\]
+\subsection{Weakening}
+We let there be a poset on hypotheses and contexts generated by the following:
+
+\begin{itemize}
+\item $x :: A \le x : A \le x \div A$
+\item $\Gamma, h \le \Gamma$
+\item $(x \div A, h) \le (x : A, h)$
+\item If $\Gamma \le \Gamma'$ and $\Delta \le \Delta'$ then $\Gamma,\Delta \le \Gamma',\Delta'$.
+\end{itemize}
+
+The general weakening theorem is:
+\begin{lemma}
+If $\Delta \le \Gamma$ and $\Gamma \prov J$, then $\Delta \prov J$.
+\end{lemma}
+
+\begin{proof}
+
+\cqed
+\end{proof}
+
+\subsection{Computation}
+\subsubsection{$H$}
+\[\blet \star = \star \bin M \mapsto_\beta M \qquad M \mapsto_\eta \blet \star = M \bin \star\]
+To see that $\beta$ is well-typed, stare at
+\[
+\begin{prooftree}
+\[
+h \in \Gamma
+\justifies
+\Gamma \prov \star : H
+\]
+\Gamma,h \prov M : A
+\justifies
+\Gamma \prov \blet \star = \star \bin M : A
+\end{prooftree}
+\]
+and reason that $\Gamma,h = \Gamma$ since already $h \in \Gamma$, hence
+we have $\Gamma \prov M : A$.
+
+To see that $\eta$ is well-typed, assume $\Gamma \prov M : H$, and construct
+\[
+\begin{prooftree}
+\Gamma \prov M : H
+\[
+\[
+\justifies
+h \in \Gamma, h
+\]
+\justifies
+\Gamma,h \prov \star : H
+\]
+\justifies
+\Gamma \prov \blet \star = M \bin \star : H
+\end{prooftree}
+\]
+
+
+\subsubsection{$\sqrt}
+\[\doll \surd M \mapsto_\beta M \qquad M \mapsto_\eta \surd \doll M\]
+
+To see that $\beta$ is well-typed, stare at
+\[
+\begin{prooftree}
+\[
+\lock \Gamma \prov M :  A
+\justifies
+ \Gamma, h \prov \surd M : \surd A
+\]
+\justifies
+\Gamma \prov  \doll \surd M  : A
+\end{prooftree}
+\]
+and use weakening.
+
+To see that $\eta$ is well-typed, assume $\Gamma \prov M : \surd A$,
+weaken to
+$\lock \Gamma, h \prov M : \surd A$ and construct
+\[
+\begin{prooftree}
+\[
+\lock \Gamma, h \prov M : \surd A
+\justifies
+\lock \Gamma \prov \doll M : A
+\]
+\justifies
+\Gamma \prov \surd \doll M  : \surd A
+\end{prooftree}
+\]
+
+\subsubsection{$\blat$}
+\[\epsilon \blat M \mapsto_\beta M \qquad M \mapsto_\eta \blat \epsilon M\]
+
+To see that $\beta$ is well-typed, stare at
+\[
+\begin{prooftree}
+\[
+\surd\lock \Gamma \prov M :  A
+\justifies
+\lock \Gamma \prov \blat M : \blat A
+\]
+\justifies
+\Gamma \prov  \epsilon \blat M  : A
+\end{prooftree}
+\]
+and use weakening.
+
+
+To see that $\eta$ is well-typed, assume $\Gamma \prov M : \blat A$,
+weaken to
+$\lock \surd \Gamma \prov M : \blat A$ and construct
+\[
+\begin{prooftree}
+\[
+\lock \surd \Gamma \prov M : \blat A
+\justifies
+\surd \Gamma \prov \epsilon M : A
+\]
+\justifies
+\Gamma \prov \blat \epsilon M  : \blat A
+\end{prooftree}
+\]
+
+\subsection{The Pairing}
+\[
+\begin{prooftree}
+\Gamma, h\prov M : A\qquad \surd \Gamma \prov N : A\qquad
+\surd \Gamma, h \prov M \equiv N : A
+\justifies
+\Gamma \prov \langle M, N \rangle : A
+\end{prooftree}
+\]
+These maybe compute like so:
+\[
+\begin{prooftree}
+h \in \Gamma
+\using \beta_1 \justifies
+\Gamma \prov \pair M N \equiv M
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma\equiv \surd \Gamma
+\using \beta_2\justifies
+\Gamma \prov \pair M N \equiv N
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \prov  M : A
+\using \eta\justifies
+ \pair M M \equiv M
+\end{prooftree}
+\]
+\subsection{Highlevel}
+I'd like to see that $\surd(A \to B)$ can be made from
+$f : (H \to A) \to (H \to B)$ and $g : \surd A \to \surd B$ and
+\[ p : (m : \surd A) \to \lambda h . \doll (g\ m) \equiv f\ (\lambda h . \doll m)\]
+
+I unpack the $\surd$ and now I have a context with
+$f \div (H \to A) \to (H \to B)$ and $g \div \surd A \to \surd B$ and $a : A$ and
+\[ p \div (m : \surd A) \to \lambda h . \doll (g\ m) \equiv f\ (\lambda h . \doll m)\]
+and I need to make $B$. I try to use pairing.
+On the $\surd \Gamma$ branch I make
+\[ \doll (g\ \surd a) \]
+ On the $\Gamma, h$ branch I make
+\[ f\ (\lambda h. a)\ \star\]
+I need to show these are equal in my current context with a $\surd$ and with an $h$.
+I have $a :: A$ and also a regular
+\[ p : (m : \surd A) \to \lambda h . \doll (g\ m) \equiv f\ (\lambda h . \doll m)\]
+So I investigate $p \surd a$ and I get
+\[  \lambda h . \doll (g\ \surd a) \equiv f\ (\lambda h . \doll (\surd a))\]
+and by beta reduction and application to $\surd \Gamma, h \prov \star : H$ this is
+\[   \doll (g\ \surd a) \equiv f\ (\lambda h .  a)\ \star\]
+as required.
+
+\subsubsection{Dependent}
+Let's conjecture that $\surd((a : A) \to B(a))$ is iso to
+\[f : (a : H \to A) (h : H) \to B(a\ h)\]
+\[g : (a : \surd A) \to  \surd B(\doll a )\]
+\[ p : (m : \surd A) \to \lambda h . \doll (g\ m) \equiv f\ (\lambda h . \doll m)\]
+
+\subsubsection{Universe}
+Let's also conjecture that $\surd \rtype$ is isomorphic to
+\[ (A : H \to \rtype) \x (h : H) (b : A\ h) \to \rtype \]
+
+\end{document}
