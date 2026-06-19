@@ -253,6 +253,8 @@ boxrule=0pt,boxsep=0pt,breakable}
 
 \def\eblat{\mathcal{E}_\blat}
 \def\iblat{\mathcal{I}_\blat}
+\def\esurd{\mathcal{E}_\surd}
+\def\isurd{\mathcal{I}_\surd}
 \def\elax{\mathcal{E}_\bigcirc}
 \def\ilax{\mathcal{I}_\bigcirc}
 \section{Language}
@@ -625,5 +627,11 @@ I want to define an isomorphism
 
 \[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  (\elax A \to \rtype )\]
 
+And I think I want to somehow adapt my previous definition
+\[\mathsf{fore} : \surd \rtype \to  \lax((A : \rtype) \x (A \to \rtype))\]
+\[\mathsf{fore}\ C = \ilax \pair{\esurd C} {\lambda a. (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a}
 
+\[\mathsf{back} : \lax((A : \rtype) \x (A \to \rtype)) \to \surd\rtype\]
+\[back\ z = \isurd ((y : \lax((\elax z).1)) \x \blat \lax(((\elax\ z).2) (\elax y)))\]
+but I am not sure how yet.
 \end{document}
