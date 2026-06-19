@@ -622,18 +622,7 @@ commute the $\lambda$ and the magic pairing:
 \[= \{  \mpair{\lambda \bar a .(\elax f)\ \bar a}{\lambda \bar a .(\pi f')\  \bar a  }\}\]
 this lets me take the second component
 \[= \{  {\lambda \bar a .(\pi f')\  \bar a  }\} = \{  {\pi f'  }\} = f' \]
-\subsection{Universe Isomorphism}
-I want to define an isomorphism
 
-\[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  \lax (\elax A \to \rtype )\]
-
-And I think I want to somehow adapt my previous definition
-\[\mathsf{fore} : \surd \rtype \to  \lax((A : \rtype) \x (A \to \rtype))\]
-\[\mathsf{fore}\ C = \ilax \pair{\esurd C} {\lambda a. (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a}\]
-
-\[\mathsf{back} : \lax((A : \rtype) \x (A \to \rtype)) \to \surd\rtype\]
-\[\mathsf{back}\ z = \isurd ((y : \lax((\elax z).1)) \x \blat \lax(((\elax\ z).2) (\elax y)))\]
-but I am not sure how yet.
 \subsection{Specializing Magic Pairing?}
 I want to revisit the $G$ type former.
 \[
@@ -659,7 +648,7 @@ I want to revisit the $G$ type former.
 
 
 Semantically we say
-\[ (G_A M)^* = \sem A (M) \qquad \sem {G_A M}(\_) = 1 \]
+\[ (G_A M)^* = \sem A (M^*) \qquad \sem {G_A M}(\_) = 1 \]
 \[ (\{M\})^* = \sem M \qquad \sem{\{M\}} = \langle\rangle \]
 \[ (\mpair M N)^* = M^* \qquad  \sem {\mpair M N} = N^* \]
 and then
@@ -730,5 +719,118 @@ Let's check the roundtrips:
 %% \[ =  \lambda \bar a^* .\lambda \sem{\bar a} .(   \{\mpair{\elax f} {f'}\ \bar a\}  )^*  \]
 %% \[ =  \lambda \bar a^* .\lambda \sem{\bar a} .   \sem{\mpair{\elax f} {f'}\ \bar a}    \]
 %% \[ =  \lambda \bar a^* .\lambda \sem{\bar a} .   {f'}^*\ \bar a^*\ \sem {\bar a}   = {f'}^* \]
+
+\subsection{Universe Isomorphism}
+I want to define an isomorphism
+
+\[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  \lax (\elax A \to \rtype )\]
+
+And I think I want to somehow adapt my previous attempt
+\[\mathsf{fore} : \surd \rtype \to  \lax((A : \rtype) \x (A \to \rtype))\]
+\[\mathsf{fore}\ C = \ilax \pair{\esurd C} {\lambda a. (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a}\]
+
+\[\mathsf{back} : \lax((A : \rtype) \x (A \to \rtype)) \to \surd\rtype\]
+\[\mathsf{back}\ z = \isurd ((y : \lax((\elax z).1)) \x \blat \lax(((\elax\ z).2) (\elax y)))\]
+but I am not sure how yet. Let's try to do this as mechanically as possible. Two tasks: rewrite this as
+\[\mathsf{fore} : \surd \rtype \to  (A : \lax \rtype) \x \lax (\elax A \to \rtype)\]
+\[\mathsf{fore}\ C =  \pair{\ilax\esurd C} {\ilax(\lambda (a : \esurd C).  (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a)}\]
+
+\[\mathsf{back} : ((A : \lax\rtype) \x \lax (\elax A \to \rtype)) \to \surd\rtype\]
+\[\mathsf{back}\ z = \isurd ((y : \lax(\elax (z.1))) \x \blat \lax((\elax\ (z.2))\ (\elax y)))\]
+
+Now let's write the isomorphism
+between $\surd A$ and $(a : \lax A) \x G_A (\elax a)$.
+\[\mathsf{fore_A} : (x : \lax A) \x G_A (\elax x) \to \surd A \]
+\[\mathsf{fore_A}\ z = \isurd \mpair {\elax z.1} {z.2}\]
+
+\[\mathsf{back_A} : \surd A \to (x : \lax A) \x G_A (\elax x) \]
+\[\mathsf{back_A}\ m = \pair {\ilax \esurd m} {\{ \esurd m\}}\]
+
+I observe $ \mathsf{back'}\o \mathsf{fore'}$ looks like
+\[\pair {\ilax \esurd \isurd \mpair {\elax z.1} {z.2}} {\{ \esurd \isurd \mpair {\elax z.1} {z.2}\}} \]
+\[= \pair {\ilax  \mpair {\elax z.1} {z.2}} {\{  \mpair {\elax z.1} {z.2}\}} \]
+\[= \pair {z.1}{ z.2}\]
+and $ \mathsf{fore'}\o \mathsf{back'}$ looks like
+\[ = \isurd \mpair {\elax (\pair {\ilax \esurd m} {\{ \esurd m\}}).1} {(\pair {\ilax \esurd m} {\{ \esurd m\}}).2}\]
+\[ = \isurd \mpair {\elax {\ilax \esurd m}} {  {\{ \esurd m\}}  }\]
+\[ = \isurd  \esurd m \]
+\[ = m \]
+Now let's try to compute:
+\[\mathsf{back_\rtype} \o \mathsf{back} : (A : \lax\rtype) \x \lax (\elax A \to \rtype) \to (A : \lax \rtype) \x G_\rtype (\elax A) \]
+\[ \mathsf{back_\rtype} \o \mathsf{back}\ z \]
+\[= \pair {\ilax \esurd (\mathsf{back}\ z)} {\{ \esurd (\mathsf{back}\ z)\}} \]
+\[= \pair {\ilax ((y : \lax(\elax (z.1))) \x \blat \lax((\elax\ (z.2))\ (\elax y)))} {\{ ((y : \lax(\elax (z.1))) \x \blat \lax((\elax\ (z.2))\ (\elax y)))\}} \]
+and
+\[\mathsf{fore} \o \mathsf{fore_\rtype} : (A : \lax \rtype) \x G_\rtype (\elax A) \to (A : \lax\rtype) \x \lax (\elax A \to \rtype) \]
+\[(\mathsf{fore} \o \mathsf{fore_\rtype})\ z\]
+\[ = \pair{\ilax\esurd (\mathsf{fore_\rtype}\ z)} {\ilax(\lambda (a : \esurd (\mathsf{fore_\rtype}\ z)).  (a' : \surd (\esurd\ (\mathsf{fore_\rtype}\ z))) \x (\esurd a') \equiv a)}\]
+\[ = \pair{\ilax \mpair {\elax z.1} {z.2}} {\ilax(\lambda (a : \mpair {\elax z.1} {z.2}).  (a' : \surd (\mpair {\elax z.1} {z.2})) \x (\esurd a') \equiv a)}\]
+\[ = \pair{z.1} {\ilax(\lambda (a : \mpair {\elax z.1} {z.2}).  (a' : \surd (\mpair {\elax z.1} {z.2})) \x (\esurd a') \equiv a)}\]
+\[ = \pair{z.1} {\ilax(\lambda (a : \elax z.1).  (a' : \surd (\mpair {\elax z.1} {z.2})) \x (\esurd a') \equiv a)}\]
+
+So I'll want something that works for any $\lax \rtype$. I conjecture at least:
+\[\mathsf{fore}_1 : (A : \lax\rtype) \to G_\rtype (\elax A) \to \lax( \elax A \to \rtype)\]
+\[\mathsf{fore}_1\ A\ g = \ilax(\lambda (a : \elax A).  (a' : \surd \mpair {\elax A} {g}) \x (\esurd a') \equiv a) \]
+but wait I don't want to use $\surd$. So let's use $\mathsf{fore}_A$ to rewrite $a'$:
+\[\mathsf{fore}_2 : (A : \lax\rtype) \to G_\rtype (\elax A) \to \lax( \elax A \to \rtype)\]
+\[\mathsf{fore}_2\ A\ g = \ilax(\lambda (a : \elax A).  (a_1 : \lax \mpair {\elax A} {g})(a_2 : G_{\mpair {\elax A} {g}}(\elax a_1)) \x (\esurd (\isurd \mpair {\elax a_1} {a_2})) \equiv a) \]
+\[ = \ilax(\lambda (a : \elax A).  (a_1 : \lax \mpair {\elax A} {g})(a_2 : G_{\mpair {\elax A} {g}}(\elax a_1)) \x ( \mpair {\elax a_1} {a_2}) \equiv a) \]
+\[ = \ilax(\lambda (a : \elax A).  (a_1 : \lax (\elax A))(a_2 : G_{\mpair {\elax A} {g}}(\elax a_1)) \x ( \mpair {\elax a_1} {a_2}) \equiv a) \]
+\[ = \ilax(\lambda (a : \elax A).  (a_1 : \lax (\elax A))(a_2 : G_{\mpair {\elax A} {g}}(\elax a_1)) \x ( \elax a_1) \equiv a) \]
+\[ =?\quad \ilax(\lambda (a : \elax A).    G_{\mpair {\elax A} {g}}(a)) \]
+
+I like this possibility a lot! It's nice and clean. Does it typecheck?
+
+\[
+\begin{prooftree}
+\[
+\[
+\[
+\justifies
+\cdots, h \prov  \elax A : \rtype
+\]
+\[
+\justifies
+\cdots, h \prov  g :  G_{\rtype}(\elax A)
+\]
+\justifies
+A \div \lax\rtype, g \div G_{\rtype}(\elax A) \prov  \mpair {\elax A} {g} : \rtype
+\]
+\[
+\justifies
+h, a : \elax A \prov    a : \mpair {\elax A} {g}
+\]
+\justifies
+A : \lax\rtype, g : G_{\rtype}(\elax A), h, a : \elax A \prov    G_{\mpair {\elax A} {g}}(a) :  \rtype
+\]
+\justifies
+A : \lax\rtype, g : G_{\rtype}(\elax A) \prov \ilax(\lambda (a : \elax A).    G_{\mpair {\elax A} {g}}(a)) : \lax(\elax A \to \rtype)
+\end{prooftree}
+\]
+
+Ok, let's check the semantics
+\[ ((A : \lax\rtype) \to G_\rtype (\elax A) \to \lax( \elax A \to \rtype))^* \]
+\[ = (A* : \rtype) \to \sem{\rtype} (A*) \to  (A* \to \rtype)\]
+\[ = (A* : \rtype) \to (A* \to \rtype) \to  (A* \to \rtype)\]
+\[(\mathsf{fore}_2\ A\ g)^* = (\ilax(\lambda (a : \elax A).    G_{\mpair {\elax A} {g}}(a)) )^*\]
+\[= \lambda (a^* :  A^*).    (G_{\mpair {\elax A} {g}}(a)) )^*\]
+\[= \lambda (a^* :  A^*).   \sem{\mpair {\elax A} {g}}(a^*)\]
+\[= \lambda (a^* :  A^*).   g^*(a^*) = g^*\]
+
+So I want to somehow implement
+\[\mathsf{fore}_3 : (A : \lax\rtype) \to  \lax( \elax A \to \rtype) \to  G_\rtype (\elax A) \]
+so I try
+\[
+\begin{prooftree}
+\[
+\justifies
+A \div  \lax\rtype,  R \div  \lax( \elax A \to \rtype) \prov  B : \rtype
+\]
+\justifies
+A : \lax\rtype,  R : \lax( \elax A \to \rtype) \prov  \{ B\} :  G_\rtype (\elax A)
+\end{prooftree}
+\]
+
+
 
 \end{document}
