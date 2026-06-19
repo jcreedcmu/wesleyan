@@ -579,7 +579,7 @@ We can typecheck $\mathsf{back}$:
 \cdots, h  \prov   k\ (\ilax \bar a)\ \{\bar a\} : G_{B}((\elax f)\ (\elax \ilax \bar a))
 \]
 \justifies
-\cdots, \bar a :: A  \prov   {\pi_{(\elax f)\  \bar a}{(k\ (\ilax \bar a)\ \{\bar a\})} : B
+\cdots, \bar a :: A  \prov   {\pi_{(\elax f)\  \bar a}{(k\ (\ilax \bar a)\ \{\bar a\})}} : B
 \]
 \qquad
 \cdots, \bar a :: A, h \prov (\elax f)\  \bar a \equiv \pi_{(\elax f)\  \bar a} \cdots
@@ -610,7 +610,7 @@ inside $G$-introduction we have a flat context, so we can take the second compon
 inside the $\ilax$ we have $h$, so the $\pi$ reduces:
 \[= k\ (\ilax \elax a)\ a' \]
 \[= k\ a\ a' \]
-so \[(\mathsf{fore}\ f) \o (\mathsf{back}\ f)$ is the identity. Let's check the converse:
+so \[(\mathsf{fore}\ f) \o (\mathsf{back}\ f)\] is the identity. Let's check the converse:
 
 \[\mathsf{back}\ f\ (\lambda a \ a'. \mathsf{fore}\ f\ f'\ a\ a')\]
 \[= \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{\pi(\mathsf{fore}\ f\ f'\ (\ilax \bar a)\ \{\bar a\})}\}\]
@@ -625,13 +625,58 @@ this lets me take the second component
 \subsection{Universe Isomorphism}
 I want to define an isomorphism
 
-\[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  (\elax A \to \rtype )\]
+\[ A :  \lax \rtype \prov G_{\rtype}(\elax A) \cong  \lax (\elax A \to \rtype )\]
 
 And I think I want to somehow adapt my previous definition
 \[\mathsf{fore} : \surd \rtype \to  \lax((A : \rtype) \x (A \to \rtype))\]
-\[\mathsf{fore}\ C = \ilax \pair{\esurd C} {\lambda a. (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a}
+\[\mathsf{fore}\ C = \ilax \pair{\esurd C} {\lambda a. (a' : \surd (\esurd\ C)) \x (\esurd a') \equiv a}\]
 
 \[\mathsf{back} : \lax((A : \rtype) \x (A \to \rtype)) \to \surd\rtype\]
-\[back\ z = \isurd ((y : \lax((\elax z).1)) \x \blat \lax(((\elax\ z).2) (\elax y)))\]
+\[\mathsf{back}\ z = \isurd ((y : \lax((\elax z).1)) \x \blat \lax(((\elax\ z).2) (\elax y)))\]
 but I am not sure how yet.
+\subsection{Specializing Magic Pairing?}
+What if we generalize the elim rule for $G$ just a little bit:
+\[\begin{prooftree}
+\Gamma, h\prov M : A\qquad  \Gamma^\oplus, h \prov N : G_A M
+\justifies
+\Gamma \prov \mpair{M}{N}  : A
+\end{prooftree}
+\]
+Have
+\[  \Gamma^* \prov M^* : A^* \]
+\[ \sem \Gamma \prov N^* : \sem A (M^*) \]
+\[ (\mpair M N)^* = M^* \]
+\[ \sem {\mpair M N} = N^* \]
+and then
+\[ \mpair M {\{N\}} \mapsto_\beta N \]
+\[ N  \mapsto_\eta \{\mpair M N \}\]
+and I guess we still also expect $h$ being in the context to trigger first-component reduction, like
+\[ \ilax (\mpair M N) \mapsto_h \ilax M \]
+
+We could write
+\[ \mathsf{fore} : (f : \lax(A \to B))(f' : G_{A \to B}(\elax f))(a : \lax A) (a' : G_A(\elax a)) \to G_{B}((\elax f)\ (\elax a))\]
+\[ \mathsf{fore}\ f\ f'\ a\ a' = \{\mpair{\elax f} {f'}\ \mpair{\elax a}{a'}\}\]
+\[ \mathsf{back} : (f : \lax(A \to B)) (k : (a : \lax A) (a' : G_A(\elax a)) \to G_{B}((\elax f)\ (\elax a))) \to  G_{A \to B}(\elax f)\]
+\[ \mathsf{back}\ f\ k = \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{k\ (\ilax \bar a)\ \{\bar a\}}\} \]
+I think the typechecking is probably still good, let's check roundtrips:
+\[\mathsf{fore}\ f\ (\mathsf{back}\ f\ k)\ a\ a'\]
+\[ =  \{\mpair{\elax f} {\mathsf{back}\ f\ k}\ \mpair{\elax a}{a'}\} \]
+\[ =  \{(\lambda \bar a . \mpair{(\elax f)\ \bar a}{k\ (\ilax \bar a)\ \{\bar a\}})\ \mpair{\elax a}{a'}\} \]
+\[ =  \{ \mpair{(\elax f)\ \bar a}{k\ (\ilax (\mpair{\elax a}{a'}))\ \{\mpair{\elax a}{a'}\}}\} \]
+\[ =_\eta  \{ \mpair{(\elax f)\ \bar a}{k\ (\ilax (\mpair{\elax a}{a'}))\ a'}\} \]
+\[ =_\eta  k\ (\ilax (\mpair{\elax a}{a'}))\ a' \]
+\[ =_h  k\ (\ilax (\elax a))\ a' \]
+\[ =  k\ a\ a' \]
+
+\[\mathsf{back}\ f\ (\lambda a \ a'. \mathsf{fore}\ f\ f'\ a\ a')\]
+\[=  \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{(\lambda a \ a'. \mathsf{fore}\ f\ f'\ a\ a')\ (\ilax \bar a)\ \{\bar a\}}\} \]
+\[=  \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{ \mathsf{fore}\ f\ f'\ (\ilax \bar a)\ \{\bar a\} }\} \]
+\[=  \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{ \{\mpair{\elax f} {f'}\ \mpair{\elax (\ilax \bar a)}{\{\bar a\}}\} }\} \]
+\[=_\beta  \{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{ \{\mpair{\elax f} {f'}\ \bar a\} }\} \]
+but here I'm stuck, hmm. Semantics of this is
+\[ (\{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{ \{\mpair{\elax f} {f'}\ \bar a\} }\})^*  \]
+\[ =  \sem{ \lambda \bar a . \mpair{(\elax f)\ \bar a}{ \{\mpair{\elax f} {f'}\ \bar a\} } }  \]
+\[ =  \lambda \bar a^* .\lambda \sem{\bar a} .\sem{  \mpair{(\elax f)\ \bar a}{ \{\mpair{\elax f} {f'}\ \bar a\} } }  \]
+\[ =  \lambda \bar a^* .\lambda \sem{\bar a} .\sem{   \{\mpair{\elax f} {f'}\ \bar a\}  }  \]
+This smells like a type error.
 \end{document}
