@@ -1,0 +1,618 @@
+\documentclass{article}
+\usepackage[tmargin=0.15in, bmargin=0.15in]{geometry}
+\input{theorem}
+\input{prooftree}
+\usepackage{hyperref}
+% https://tex.stackexchange.com/a/847
+\hypersetup{
+    colorlinks,
+    urlcolor={blue},
+}
+
+\usepackage{makecell}
+\usepackage{relsize}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{calc,arrows,cd,decorations.pathreplacing}
+\usetikzlibrary{hobby}
+\usepackage{tcolorbox}
+\usepackage{stackengine}
+\newcommand\oast{\stackMath\mathbin{\stackinset{c}{0ex}{c}{0ex}{\ast}{\bigcirc}}}
+
+\tcbuselibrary{breakable}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+
+\def\gets{\leftarrow}
+\def\dia{\Diamond}
+\def\all{\forall}
+
+\def\spec{\mathsf{Spec}}
+\def\breturn{\mathop{\mathbf{return}}\nolimits}
+\def\bthunk{\mathop{\mathbf{thunk}}\nolimits}
+\def\brun{\mathop{\mathbf{run}}\nolimits}
+\def\bget{\mathop{\mathbf{get}}\nolimits}
+\def\bGel{\mathop{\mathbf{Gel}}\nolimits}
+\def\bgel{\mathop{\mathbf{gel}}\nolimits}
+\def\bgbound{\mathop{\mathbf{gbound}}\nolimits}
+\def\bgpath{\mathop{\mathbf{gpath}}\nolimits}
+\def\bungel{\mathop{\mathbf{ungel}}\nolimits}
+\def\bGet{\mathop\mathbf{Get}}
+\def\dapt#1#2{#1[\![#2]\!]}
+\def\dap#1#2{#1\{#2\}}
+\def\ll{\langle\!\langle}
+\def\rr{\rangle\!\rangle}
+\def\rshape{\ {\mathsf{shape}}}
+\def\rrefl{{\mathsf{refl}}}
+\def\bd{\mathsf{Bd}}
+\def\bdd{\mathsf{Bdd}}
+\def\rset{\mathsf{Type}}
+\def\rid{\mathsf{id}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\prequiv{\dashv\vdash}
+\def\sq{\square}
+
+\definecolor{blu}{rgb}{0.1,0.5,1}
+\definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\nameof#1{\ulcorner{#1}\urcorner}
+\def\U{\mathsf{U}}
+\def\uu{\mathsf{u}}
+\def\uni{\U}
+
+
+
+\definecolor{lred}{rgb}{0.95,0.8,0.8}
+\definecolor{cyan}{rgb}{0.80,0.95,0.95}
+\definecolor{lorange}{rgb}{0.95,0.90,0.80}
+\definecolor{bluegray}{rgb}{0.6,0.6,0.85}
+\definecolor{lgray}{gray}{0.8}
+\newtcolorbox{declbox}{colframe=lred,colback=lred,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{thmbox}{colframe=cyan,colback=cyan,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{defnbox}{colframe=lorange,colback=lorange,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+\newtcolorbox{tangentbox}{colframe=lgray,colback=lgray,grow to right by=-10mm,grow to left by=-10mm,
+boxrule=0pt,boxsep=0pt,breakable}
+
+\input{linear}
+\def\parr{\mathbin{\rotatebox[origin=c]{180}{\&}}}
+\def\iff{\ \Longleftrightarrow\ }
+\def\bu{\bullet}
+\def\J{\mathbb{J}}
+\def\R{\mathbb{R}}
+\def\rpath#1{[#1]}
+\def\rfst{\mathsf{fst}\,}
+\def\rsnd{\mathsf{snd}\,}
+\def\bunfold{\mathbf{unfold}}
+\def\bfold{\mathbf{fold}}
+\def\susp#1{\langle {#1} \rangle}
+\def\ssusp#1{\langle\!\langle {#1} \rangle\!\rangle}
+\def\dto{\mathrel{\dot\to}}
+\def\dns{{\downarrow}}
+\def\ups{{\uparrow}}
+\def\sprov{\Vdash}
+\def\signat{{\color{red}\Sigma}}
+\def\ep#1{\underline{#1}}
+\def\wat{{@}}
+\def\wwat{\mathbin{\underline\wat}}
+\def\cn{{:}}
+\def\cprov{\mathrel\#}
+\def\dv{{\div}}
+\def\ww{{\mathsf w}}
+\def\base{{\textfrak b}}
+
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\munit{I}
+\def\tt{{\mathsf t}}
+\def\ii{{\mathbb I}}
+\def\T{\mathbb{T}}
+\def\tw{\mathop\triangleright\nolimits}
+\def\tb{\mathop\blacktriangleleft}
+\def\sw#1{^{#1}_{#1}}
+\def\TP{\mathbf{TPre}}
+\def\pp{\textsf{\textbf p}}
+\def\nn{{\mathsf n}}
+\def\PP{\textsf{\textbf P}}
+\def\NN{\textsf{\textbf N}}
+\def\zz{{\mathsf z}}
+\def\sem#1{[\![#1]\!]}
+\def\tsem#1#2{[\![#1;#2]\!]}
+\def\usem#1{\lceil\!\!\lceil{#1}\rceil\!\!\rceil}
+\def\zem#1{\langle\!\langle#1\rangle\!\rangle}
+\def\col#1{{\mathsf{C}}_{#1}}
+\def\lax{\bigcirc}
+\def\rjust{\mathsf{just}}
+\def\rcvt{\mathsf{cvt}}
+\def\rtype{\mathsf{type}}
+\def\rdtype{\mathsf{disc}}
+\def\rkind{\mathsf{kind}}
+\def\rmode{\mathsf{mode}}
+\def\rprel{\mathbf{Prel}}
+\def\rrfam{\mathbf{Rfam}}
+%\def\rset{\mathbf{Set}}
+\def\rfinset{\mathbf{FinSet}}
+\def\rrel{\mathbf{Rel}}
+\def\rcat{\mathbf{Cat}}
+\def\rfam{\mathbf{Fam}}
+\def\binj{\mathbf{inj}}
+\def\rtrue{\ \mathsf{true}}
+\def\rfalse{\ \mathsf{false}}
+\def\pbck{\ar[dr, phantom, pos=0, "\lrcorner"]}
+\def\bpbck{\ar[ddrr, phantom, pos=0, "\lrcorner"]}
+\def\erule#1#2{\begin{prooftree}#1\justifies #2\end{prooftree}}
+\def\lpar{\bindnasrepma}
+\def\lamp{\binampersand}
+\def\btwo{\mathbf{2}}
+\def\bone{\mathbf{1}}
+
+\def\FinSet{\mathbf{FinSet}}
+\def\x{\times}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\def\mapt{\ar[ddd,mapsto,shorten <=2em, shorten >=2em]}
+\def\A{\mathbf{A}}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\O{\mathcal{O}}
+\def\W{\mathbb{W}}
+\def\G{\mathbf{G}}
+\def\D{\mathbb{D}}
+\def\E{\mathbb{E}}
+\def\M{\mathbf{M}}
+\def\pair#1#2{\langle#1,#2\rangle}
+\def\mpair#1#2{\langle\!\langle#1,#2\rangle\!\rangle}
+\def\epair#1#2{#1 \triangleright #2}
+\def\ltri{{\lhd}}
+\def\rtri{{\rhd}}
+\def\tri{\rhd}
+\def\cc{\mathsf{c}}
+\def\dd{\mathsf{d}}
+\def\o{\circ}
+\def\rctx{\,\mathsf{ctx}}
+\def\rdctx{\,\mathsf{dctx}}
+\def\del{\partial}
+\def\also#1{\ \textcolor{blue}{\celse #1}}
+\newcounter{nodemaker}
+\setcounter{nodemaker}{0}
+\def\twocell#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift left=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift right=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\twocellswap#1#2{%
+  \global\edef\mynodeone{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \global\edef\mynodetwo{twocell\arabic{nodemaker}}%
+  \stepcounter{nodemaker}%
+  \ar[#1,phantom,shift right=3,""{name=\mynodeone}]%
+  \ar[#1,phantom,shift left=3,""'{name=\mynodetwo}]%
+  \ar[Rightarrow,#2,from=\mynodeone,to=\mynodetwo]%
+}
+\def\maps{\ar[dd,mapsto,shorten <=2em, shorten >=2em]}
+\author{Jason Reed}
+\definecolor{fib}{HTML}{ff7f00}
+\definecolor{green}{HTML}{007f00}
+\definecolor{red}{HTML}{df3f3f}
+\definecolor{opfib}{HTML}{007fff}
+
+% For lightening colors I used
+% http://trycolors.com/ 6 parts white to 1 part color
+\definecolor{opfibl}{HTML}{DBEDFF}
+\definecolor{greenl}{HTML}{DBEDDB}
+\definecolor{redl}{HTML}{FAE4E4}
+
+% https://tex.stackexchange.com/questions/716631/curved-arrows-from-tikz-cd-do-not-work
+\tikzset{
+  curve/.style={
+    settings={#1},
+    to path={
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes
+    },
+  },
+  settings/.code={%
+    \tikzset{quiver/.cd,#1}%
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}%
+  },
+  quiver/.cd,
+  pos/.initial=0.35,
+  height/.initial=0,
+}
+\usepackage{fontawesome}
+\NewDocumentCommand{\lock}{}{\text{\faLock}}
+\NewDocumentCommand{\unlock}{}{\text{\faicon{unlock}}}
+\NewDocumentCommand{\key}{}{\text{\faicon{key}}}
+\def\erase{^\ominus}
+\def\thead{^\oplus}
+\def\tsub{^\star}
+\def\simp{_\circ}
+\def\blat{\text{\faicon{circle}}}
+\def\locking{^\lock}
+\def\hyd#1#2{[#1 \star #2]}
+\title{A Modal Type Theory with Internal Parametricity }
+\begin{document}
+
+\def\
+\tikzset{
+   commutative diagrams/.cd,
+   arrow style=tikz,
+   diagrams={>=stealth}}
+\tikzset{shorten <>/.style={shorten >=#1,shorten <=#1}}
+
+\maketitle
+
+\def\eblat{\mathcal{E}_\blat}
+\def\iblat{\mathcal{I}_\blat}
+\def\esurd{\mathcal{E}_\surd}
+\def\isurd{\mathcal{I}_\surd}
+\def\elax{\mathcal{E}_\bigcirc}
+\def\ilax{\mathcal{I}_\bigcirc}
+\def\pp#1#2{[#1 \in #2]}
+\def\gg{\mathsf{G}}
+\section{Introduction}
+The purpose of this note is to describe a small modal type theory in which we can do a little bit of internalized
+parametricity. It is not a goal to do iterated internalized parametricity. It {\em is} a goal to have the type system
+in some sense ``tell us itself'' what parametricity means for each type in it. That is, we aim to set up judgments
+and types and intro and elim rules in such a way that various type isomorphisms arise as emergent facts.
+So instead of {\em defining} that a value $f : A \to B$ ``belongs to the logical relation'' at type $A \to B$ if and
+only if for every $a : A$ which belongs to the relation at type $A$ we have that $f\ a$ belongs to the relation
+at type $B$, we are able to construct this as a term internally in the system.
+
+We avoid introducing an explicit interval object. We avoid introducing any computational principles
+that are divorced from any particular logical-connective/type-former.
+
+One pervasive intuition that is helpful to lean on is that we are, in this theory,
+``programming in the presheaf category $\rtype^{\bf 2}$'', where $\bf 2$ is the category
+with two objects and one trivial morphism.
+
+\section{Language}
+
+
+The type theory is modal, and we have several sorts of variables in the context.
+Variables may be ordinary $x : A$, strong $x :: A$, or weak $x \div A$.
+There is also a pseudo-variable $\star$, with no variable name.
+ The `explosion' context
+ $\emptyset$ can be thought of as if it were any context with a $0$ variable in it; it is intrinsically contradictory.
+
+
+\[\begin{tabular}{rccl}
+  Contexts&$\Gamma$&$::=$&$\cdot \celse \emptyset \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A\celse \Gamma, \star$\\
+  Types&$A$&$::=$&$\cdots \celse \lax A \celse \surd A \celse \blat A  \celse \pp M A\celse \gg (x : A) . B $\\
+  Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
+&&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
+\end{tabular}\]
+
+\subsection{Operations}
+We define two operations on contexts, {\em promotion} $\dash^\oplus$, and ${\em demotion}$ $\dash^\ominus$.
+Both operations take a context and produce a context. The main action of interest is on ordinary variables:
+promotion turns them into strong variables, demotion turns them into weak variables. Promotion `explodes'
+if it encounters $\star$, whereas demotion simply deletes it.
+\[\begin{tabular}{rcl}
+ $ (\Gamma, x : A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
+ $ (\Gamma, x :: A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
+ $ (\Gamma, x \div A)^\oplus$&$:=$&$(\Gamma^\oplus, x \div A)$\\
+ $ (\Gamma, \star)^\oplus$&$:=$&$\emptyset$\\
+ $ (\emptyset)^\oplus$&$:=$&$\emptyset$\\
+ $ (\cdot)^\oplus$&$:=$&$\cdot$\\
+\end{tabular}
+\qquad
+\begin{tabular}{rcl}
+ $ (\Gamma, x : A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
+ $ (\Gamma, x :: A)^\ominus$&$:=$&$(\Gamma^\ominus, x :: A)$\\
+ $ (\Gamma, x \div A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
+ $ (\Gamma, \star)^\ominus$&$:=$&$\Gamma^\ominus$\\
+ $ (\emptyset)^\ominus$&$:=$&$\emptyset$\\
+ $ (\cdot)^\ominus$&$:=$&$\cdot$\\
+\end{tabular}\]
+
+\subsection{Semantics}
+Syntactically, we define some operations $\dash^*$ and $\sem\dash$ and $\tsem\dash\dash$ so that:
+
+\begin{tabular}{l}
+If $\Gamma$ is a context, then ${\Gamma}^*$ is a context.\\
+If $A$ is a type, then ${A}^*$ is a type.\\
+If $M$ is a term, then ${M}^*$ is a term.
+If $\Gamma$ is a context, then $\sem{\Gamma}$ is a context.\\
+If $A$ is a type and $M^*$ is a term, then $\tsem A {M^*}$ is a type.\\
+If $M$ is a term, then $\sem{M}$ is a term.
+\end{tabular}
+
+Furthermore we wish to prove that these operations preserve typing:
+
+\begin{tabular}{l}
+If $\prov \Gamma\rctx$, then $\prov {\Gamma}^*\rctx$.\\
+If $\Gamma \prov A : \rtype$, then $\Gamma^* \prov A^* : \rtype$.\\
+If $\Gamma \prov M : A$, then $\Gamma^* \prov M^* : {A}^*$.\\
+If $\prov \Gamma\rctx$, then $\prov \sem{\Gamma}\rctx$.\\
+If $\Gamma \prov A : \rtype$, then $\sem \Gamma, x : A^* \prov \tsem A x : \rtype$.\\
+If $\Gamma \prov M : A$, then $\sem\Gamma \prov \sem M : \tsem A {M^*}$\\
+\end{tabular}
+\subsection{Rules}
+
+\subsubsection{Context Formation}
+These are the rules for well-formed contexts. The type of a strong variable
+is typed in the demotion of the context to its left. The type of a weak variable
+is typed in the context to its left augmented with a $\star$.
+\[
+\begin{prooftree}
+\justifies
+\prov \cdot \rctx
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\justifies
+\prov \emptyset \rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
+\justifies
+\prov (\Gamma, x : A)\rctx
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype
+\justifies
+\prov (\Gamma, x :: A)\rctx
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\prov \Gamma \rctx \qquad \Gamma, \star \prov A : \rtype
+\justifies
+\prov (\Gamma, x \div A)\rctx
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\prov \Gamma \rctx
+\justifies
+\prov (\Gamma, \star )\rctx
+\end{prooftree}
+\]
+
+Semantics:
+\[\begin{array}{rcl}
+(\Gamma, x : A)^* &=& (\Gamma^*, x^* : A^*)\\
+(\Gamma, x :: A)^* &=& (\Gamma^*, x^* : A^*, \sem x : \tsem A {M^*})\\
+(\Gamma, x \div A)^* &=& (\Gamma^*, x^* : A^*)\\
+(\Gamma, \star)^* &=& \Gamma^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\sem{\Gamma, x : A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
+\sem{\Gamma, x :: A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
+\sem{\Gamma, x \div A} &=& (\sem\Gamma, x^* : A^*)\\
+\sem{\Gamma, \star} &=& \alpha : 0\\
+\end{array}\]
+\subsubsection{Variable Rules}
+We can use strong or ordinary variables whenever they are in the context.
+Weak variables require that a $\star$ is present in the context for them to be used;
+$\star$ acts like a key that unlocks them. Weak variables are essentially the locked
+part of the context in the sense of MTT.
+
+One might reasonably ask why it is that strong and ordinary variables appear to behave identically here;
+the answer is that the difference between them lies in how they respond to demotion. Strong variables
+remain strong after demotion, but ordinary variables do not.
+\[
+\begin{prooftree}
+x : A \in  \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x :: A \in  \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+x \div A \in  \Gamma \qquad \star \in \Gamma
+\justifies
+\Gamma \prov x : A
+\end{prooftree}
+\]
+\subsection{Type Formers}
+\subsubsection{The Fiber Type}
+The type $\pp M A$ represents the `fiber over $M$ in the map in the arrow category' or
+`the proofs that $M$ belongs to the logical relation'
+or `the proofs that $M$ is a good, special, nice, parametric element of the type $A$'.
+\[
+\begin{prooftree}
+\Gamma^\ominus \prov A : \rtype \quad \Gamma, \star \prov M : A
+\justifies
+\Gamma \prov \pp M A : \rtype
+\end{prooftree}
+\quad
+\begin{prooftree}
+\Gamma^\ominus \prov M : A
+\justifies
+\Gamma \prov \{M\} : \pp M A : \rtype
+\end{prooftree}
+\quad
+\begin{prooftree}
+\Gamma,\star \prov M : A \quad \Gamma^\oplus, \star \prov N : \pp M A
+\justifies
+\Gamma \prov \epair M N : A
+\end{prooftree}
+\]
+
+Semantics:
+\[\begin{array}{rcl}
+{\pp M A}^* &=& \tsem A {M^*}\\
+\{M\}^* &=& \sem M\\
+(\epair M N)^* &=& M^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\pp M A}\_ &=& 1\\
+\{M\}^* &=& \langle\rangle\\
+\sem{\epair M N} &=& N^*\\
+\end{array}\]
+\subsubsection{The Open Modality}
+The modality $\lax$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
+any function $f : A \to B$ and returns the identity $B \to B$. To apply $\lax$ is to `move to unique the future world'
+or `go downstairs' if we think of $A$ lying above $B$, and to forget everything we knew about the upstairs data.
+\[
+\begin{prooftree}
+ \Gamma, \star \prov  A : \rtype
+\justifies
+\Gamma \prov  \lax A : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma, \star \prov M : A
+\justifies
+\Gamma \prov \ilax M  : \lax A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma \prov M : \lax A\qquad \star \in \Gamma
+\justifies
+\Gamma \prov \elax M  : A
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+{(\lax A)}^* &=&  A^*\\
+(\ilax M)^* &=& M^*\\
+(\elax M)^* &=& M^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\lax A}\_ &=& 1\\
+\sem{\ilax M} &=& \langle\rangle\\
+\sem{\elax M} &=& \babort(\alpha)\\
+\end{array}\]
+
+\subsubsection{The Square Root Modality}
+The modality $\surd$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
+any function $f : A \to B$ and returns the identity $A \to A$. To apply $\surd$ is to `retreat to the past world'
+or `go upstairs', i.e. replace the data `downstairs' with the points that were formerly available upstairs.
+\[
+\begin{prooftree}
+\Gamma^\ominus \prov A : \rtype
+\justifies
+\Gamma \prov \surd A : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma^\ominus \prov M : A
+\justifies
+\Gamma \prov \isurd M  : \surd A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma, \star \prov M : \surd A
+\justifies
+\Gamma \prov \esurd M  : A
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+{(\surd A)}^* &=&  (x : A^*) \x \tsem A x\\
+(\isurd M)^* &=& \pair {M^*} {\sem M}\\
+(\esurd M)^* &=& (M^*).1\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\surd A}\_ &=& 1\\
+\sem{\isurd M} &=& \langle\rangle\\
+\sem{\esurd M} &=& (M^*).2\\
+\end{array}\]
+
+\subsubsection{The Closed Modality}
+The modality $\blat$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
+any function $f : A \to B$ and returns the unique map $A \to 1$. To apply $\blat$ is to destroy all distinctions
+we formerly made `downstairs', while retaining all `upstairs' data.
+\[
+\begin{prooftree}
+ \Gamma^\oplus \prov  A : \rtype
+\justifies
+\Gamma \prov  \blat A : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma^\oplus \prov M : A
+\justifies
+\Gamma \prov \iblat M  : \blat A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma^\ominus \prov M : \blat A
+\justifies
+\Gamma \prov \eblat M  : A
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+{(\blat A)}^* &=& 1\\
+(\iblat M)^* &=& \langle\rangle\\
+(\eblat M)^* &=& \sem M.1\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\blat A}\_ &=&  (x : A^*) \x \tsem A x\\
+\sem{\iblat M} &=& \pair {M^*} {\sem M}\\
+\sem{\eblat M} &=& \sem M.2\\
+\end{array}\]
+
+\subsubsection{The Glue Type}
+The glue type takes specifications of a `downstairs' and `upstairs' type and glues them together.
+\[
+\begin{prooftree}
+\Gamma, \star \prov A : \rtype \qquad \Gamma^\oplus, \star, x : A\prov B : \rtype
+\justifies
+\Gamma \prov  \gg(x : A) . B : \rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\Gamma, \star \prov M : A  \qquad \Gamma^\oplus, \star \prov N : [M/x]B
+\justifies
+\Gamma \prov  \mpair M N : \gg(x : A) . B : \rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\Gamma \prov  M : \gg(x : A) . B
+\justifies
+\Gamma, \star \prov M.1 : A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\Gamma \prov  M : \gg(x : A) . B
+\justifies
+  \Gamma^\oplus, \star\prov M.2 : [M.1/x]B
+\end{prooftree}
+\]
+
+Semantics:
+\[\begin{array}{rcl}
+{( \gg(x : A) . B)}^* &=& A^*\\
+\mpair M N ^* &=& M^*\\
+(M.1)^* &=&  M^*\\
+(M.2)^* &=& \sem M\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{ \gg(x : A) . B} {M^*} &=&  [M^*/x^*]B^*\\
+\sem{ \mpair M N } &=& N^*\\
+\sem{M.1} &=& \babort(\alpha)\\
+\sem{M.2} &=& \babort(\alpha)\\
+\end{array}\]
+
+\end{document}
