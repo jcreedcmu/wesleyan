@@ -288,9 +288,13 @@ There is also a pseudo-variable $\star$, with no variable name.
 
 
 \[\begin{tabular}{rccl}
-  Contexts&$\Gamma$&$::=$&$\cdot \celse \emptyset \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A\celse \Gamma, \star$\\
-  Types&$A$&$::=$&$\cdots \celse \lax A \celse \surd A \celse \blat A  \celse \pp M A\celse \gg (x : A) . B $\\
+  Contexts&$\Gamma$&$::=$&$\cdot  \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A$\\
+  Low Contexts&$\bar\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A $\\
+  Types&$A$&$::=$&$\cdots \celse D \bar A   \celse \pp {\bar M} A\celse \gg (x : \bar A) . \bar B $\\
+  Low Types&$\bar A$&$::=$&$\cdots \celse \lax A \celse \surd A $\\
   Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
+&&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
+Low  Terms&$\bar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
 &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
 \end{tabular}\]
 
