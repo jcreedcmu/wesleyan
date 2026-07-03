@@ -26,7 +26,7 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-
+\def\gar#1{{\textcolor{blu}#1}}
 \def\gets{\leftarrow}
 \def\dia{\Diamond}
 \def\all{\forall}
@@ -241,6 +241,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\blat{\text{\faicon{circle}}}
 \def\locking{^\lock}
 \def\hyd#1#2{[#1 \star #2]}
+\def\bprov{\Vdash}
 \title{A Modal Type Theory with Internal Parametricity }
 \begin{document}
 
@@ -289,13 +290,15 @@ There is also a pseudo-variable $\star$, with no variable name.
 
 \[\begin{tabular}{rccl}
   Contexts&$\Gamma$&$::=$&$\cdot  \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A$\\
-  Low Contexts&$\bar\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A $\\
-  Types&$A$&$::=$&$\cdots \celse D \bar A   \celse \pp {\bar M} A\celse \gg (x : \bar A) . \bar B $\\
-  Low Types&$\bar A$&$::=$&$\cdots \celse \lax A \celse \surd A $\\
-  Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
-&&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
-Low  Terms&$\bar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
-&&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
+  Low Contexts&$\gar\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A $\\
+  Types&$A$&$::=$&$\cdots \celse D \gar A  \celse \gg (x : \gar A) . \gar B $\\
+  Low Types&$\gar A$&$::=$&$\cdots  \celse \pp {\gar M} A \celse \lax A \celse \surd A $\\
+%%   Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
+%% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
+%% Low  Terms&$\gar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
+%% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
+Terms&$M$&$::=$&$\cdots \celse \epair{\gar M}{\gar N} $\\
+Low  Terms&$\gar M$&$::=$&$\cdots \celse \{  M \}  $\\
 \end{tabular}\]
 
 \subsection{Operations}
@@ -429,51 +432,58 @@ x \div A \in  \Gamma \qquad \star \in \Gamma
 \Gamma \prov x : A
 \end{prooftree}
 \]
+\subsection{New Operations}
+\par \noindent $\Gamma^Z$ takes an $\Gamma$ and produces an $\gar \Gamma$
+\par \noindent $A^Z$ takes an $A$ and produces an $\gar A$
+\par \noindent $M^Z$ takes an $M$ and produces an $\gar M$
+\par \noindent $\gar \Gamma^\ominus$ takes a $\gar \Gamma$ and produces a $\Gamma$
+\par \noindent $ \Gamma^\oplus$ takes a $ \Gamma$ and produces a $\gar \Gamma$
+\par \noindent If $\bprov \gar \Gamma  \rctx$ then $\prov \gar \Gamma^\ominus \rctx$
+\par \noindent If $\gar \Gamma^\ominus \prov A : \rtype$ then $\gar \Gamma \bprov A^Z : \rtype$
+\par \noindent $\Gamma = \gar\Gamma ^\ominus$
+\par \noindent $(\Gamma^Z)^* = \Gamma^*, (A^Z)^* = A^*, (M^Z)^* = M^*$
+\par \noindent $(\gar \Gamma^\ominus)^* = \gar \Gamma^*$
+\par \noindent $\sem {\gar \Gamma^\ominus} = \gar \Gamma^*$
+\par \noindent $( \Gamma^\oplus)^* = \sem \Gamma$
+
 \subsection{Type Formers}
+
+
 \subsubsection{The Fiber Type}
 The type $\pp M A$ represents the `fiber over $M$ in the map in the arrow category' or
 `the proofs that $M$ belongs to the logical relation'
 or `the proofs that $M$ is a good, special, nice, parametric element of the type $A$'.
 \[
 \begin{prooftree}
-\Gamma^\ominus \prov A : \rtype \quad \Gamma, \star \prov M : A
+\gar \Gamma^\ominus \prov A : \rtype \quad \gar \Gamma \bprov \gar M : A^Z
 \justifies
-\Gamma \prov \pp M A : \rtype
+\gar \Gamma \bprov \pp {\gar M} A : \rtype
 \end{prooftree}
 \quad
 \begin{prooftree}
-\Gamma^\ominus \prov M : A
+{\gar \Gamma}^\ominus \prov M : A
 \justifies
-\Gamma \prov \{M\} : \pp M A
+\gar \Gamma \prov \{M\} : \pp {M^Z} A
 \end{prooftree}
 \quad
 \begin{prooftree}
-\Gamma,\star \prov M : A \quad \Gamma^\oplus, \star \prov N : \pp M A
+\Gamma^Z \bprov \gar M : A^Z \quad \Gamma^\oplus \bprov \gar N : \pp {\gar M} A
 \justifies
-\Gamma \prov \epair M N : A
+\Gamma \prov \epair {\gar M} {\gar N} : A
 \end{prooftree}
 \]
-We can also think of the introduction type as something like
-\[\begin{prooftree}
-\Gamma^\ominus \prov M : A \qquad \Gamma, \star \prov M \equiv N
-\justifies
-\Gamma \prov \{M\} : \pp N A
-\end{prooftree}
-\]
-because $M$ can be weakened to the context $\Gamma, \star$, and more definitional
-equalities hold under $\star$.
 
 Semantics:
 \[\begin{array}{rcl}
-{\pp M A}^* &=& \tsem A {M^*}\\
+{\pp {\gar M} A}^* &=& \tsem A {\gar M^*}\\
 \{M\}^* &=& \sem M\\
-(\epair M N)^* &=& M^*\\
+(\epair {\gar M} {\gar N})^* &=& {\gar M}^*\\
 \end{array}
 \qquad
 \begin{array}{rcl}
-\tsem{\pp M A}\_ &=& 1\\
-\{M\}^* &=& \langle\rangle\\
-\sem{\epair M N} &=& N^*\\
+\\
+\\
+\sem{\epair {\gar M}{\gar N}} &=& {\gar N}^*\\
 \end{array}\]
 \subsubsection{The Open Modality}
 The modality $\lax$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
@@ -481,9 +491,9 @@ any function $f : A \to B$ and returns the identity $B \to B$. To apply $\lax$ i
 or `go downstairs' if we think of $A$ lying above $B$, and to forget everything we knew about the upstairs data.
 \[
 \begin{prooftree}
- \Gamma, \star \prov  A : \rtype
+\gar \Gamma^J \prov  A : \rtype
 \justifies
-\Gamma \prov  \lax A : \rtype
+\gar\Gamma \bprov  \lax A : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -506,8 +516,8 @@ Semantics:
 \end{array}
 \qquad
 \begin{array}{rcl}
-\tsem{\lax A}\_ &=& 1\\
-\sem{\ilax M} &=& \langle\rangle\\
+\\
+\\
 \sem{\elax M} &=& \babort(\alpha)\\
 \end{array}\]
 
