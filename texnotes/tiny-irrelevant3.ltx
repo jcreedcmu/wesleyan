@@ -303,7 +303,7 @@ Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \n
 % \celse \wid \gg (x : \nar A) . \nar B
 $\\
   Narrow Types&$\nar A$&$::=$&$\cdots
-%  \celse \pp {\nar M} {\wid A}
+  \celse \pp {\nar M} {\wid A}
   \celse \surd \wid A
 $\\
 Wide  Terms&$\wid M$&$::=$&$\cdots
@@ -756,22 +756,23 @@ we need to invoke Lemma~\ref{erase.star.eq.star}.
 
 
 \subsubsection{The Fiber Type}
-The type $\pp M A$ represents the `fiber over $M$ in the map in the arrow category' or
+The type $\pp {\nar M} {\wid A}$ represents the `fiber over $M$ in the map in the arrow category' or
 `the proofs that $M$ belongs to the logical relation'
 or `the proofs that $M$ is a good, special, nice, parametric element of the type $A$'.
 \[
 \begin{prooftree}
-\nar \Gamma^\ominus \prov A : \rtype \quad \nar \Gamma \nprov \nar M : A^Z
+\ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
 \justifies
-\nar \Gamma \nprov \pp {\nar M} A : \rtype
+\nar \Gamma \nprov \pp {\nar M} {\wid A} : \rtype
 \end{prooftree}
 \quad
 \begin{prooftree}
-{\nar \Gamma}^\ominus \prov M : A
+\ups {\nar \Gamma} \wprov \wid M : \wid A
 \justifies
-\nar \Gamma \prov \{M\} : \pp {M^Z} A
+\nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
 \end{prooftree}
 \quad
+\hbox{\textcolor{red} {FIXME}}
 \begin{prooftree}
 \Gamma^Z \nprov \nar M : A^Z \quad \Gamma^\oplus \nprov \nar N : \pp {\nar M} A
 \justifies
@@ -781,8 +782,8 @@ or `the proofs that $M$ is a good, special, nice, parametric element of the type
 
 Semantics:
 \[\begin{array}{rcl}
-{\pp {\nar M} A}^* &=& \tsem A {\nar M^*}\\
-\{M\}^* &=& \sem M\\
+{\pp {\nar M} {\wid A}}^* &=& \tsem {\wid A} {\nar M^*}\\
+\{\wid M\}^* &=& \sem {\wid M}\\
 (\epair {\nar M} {\nar N})^* &=& {\nar M}^*\\
 \end{array}
 \qquad
@@ -833,21 +834,21 @@ any function $f : A \to B$ and returns the identity $A \to A$. To apply $\surd$ 
 or `go upstairs', i.e. replace the data `downstairs' with the points that were formerly available upstairs.
 \[
 \begin{prooftree}
-\ups \nar \Gamma \prov \wid A : \rtype
+\ups \nar \Gamma \wprov \wid A : \rtype
 \justifies
-\nar \Gamma \prov \surd \wid A : \rtype
+\nar \Gamma \nprov \surd \wid A : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
- \ups\nar \Gamma \prov \wid M : \wid A
+ \ups\nar \Gamma \wprov \wid M : \wid A
 \justifies
-\nar \Gamma \prov \isurd \wid M  : \surd \wid A
+\nar \Gamma \nprov \isurd \wid M  : \surd \wid A
 \end{prooftree}
 \qquad
 \begin{prooftree}
-\demote{\wid \Gamma} \prov \nar M : \surd \wid A
+\demote{\wid \Gamma} \nprov \nar M : \surd \wid A
 \justifies
-\wid\Gamma \prov \esurd \nar M  : \wid A
+\wid\Gamma \wprov \esurd \nar M  : \wid A
 \end{prooftree}
 \]
 Semantics:
@@ -859,7 +860,7 @@ Semantics:
 \]
 Let's check Lemmas~\ref{semantic.soundness.type}
 and~\ref{semantic.soundness.term}.
-If we've derived $\nar \Gamma \prov \surd \wid A : \rtype$ then we're supposed to show
+If we've derived $\nar \Gamma \nprov \surd \wid A : \rtype$ then we're supposed to show
 \[\nar \Gamma^* \prov (\surd \wid A)^* : \rtype\]
 which is
 \[\nar \Gamma^* \prov (x : \wid A^*) \x \tsem {\wid A} x : \rtype\]
@@ -868,7 +869,7 @@ so we need
 \[\nar \Gamma^*, x : \wid A^* \prov \tsem {\wid A} x : \rtype\]
 and we get these from the premise, using Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
 
-Likewise if we've derived $\nar \Gamma \prov \isurd \wid M  : \surd \wid A$, then we're supposed to show
+Likewise if we've derived $\nar \Gamma \nprov \isurd \wid M  : \surd \wid A$, then we're supposed to show
 \[\nar \Gamma^* \prov (\isurd \wid M)^*  : (\surd \wid A)^*\]
 which is
 \[\nar \Gamma^* \prov \pair {\wid M^*} {\sem {\wid M}}  : (x : \wid A^*) \x \tsem {\wid A} x\]
@@ -877,7 +878,7 @@ which requires
 \[\nar \Gamma^* \prov  {\sem {\wid M}}  :  \tsem {\wid A} {\wid M^*}\]
 which again is just what the premise delivers, via Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
 
-Finally, if we've derived $\wid\Gamma \prov \esurd \nar M  : \wid A$ then we need to show
+Finally, if we've derived $\wid\Gamma \wprov \esurd \nar M  : \wid A$ then we need to show
 \[\wid\Gamma^* \prov (\esurd \nar M)^*  : \wid A^*\]
 \[\sem{\wid\Gamma} \prov \sem{\esurd \nar M}  : \tsem{\wid A}{ (\esurd \nar M)^*}\]
 in other words
