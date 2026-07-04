@@ -299,14 +299,19 @@ Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \n
 \[\begin{tabular}{rccl}
  Wide Contexts&$\wid \Gamma$&$::=$&$\cdot  \celse \wid\Gamma, x :: \wid A \celse \wid\Gamma, x \div \nar A  \celse \wid \Gamma, x : \wid A$\\
   Narrow Contexts&$\nar\Gamma$&$::=$&$\cdot \celse \nar \Gamma, x :: \wid A\celse \nar \Gamma, x \div \nar A  $\\
-  Wide Types&$\wid A$&$::=$&$\cdots   \celse \wid \gg (x : \nar A) . \nar B $\\
-  Narrow Types&$\nar A$&$::=$&$\cdots  \celse \pp {\nar M} {\wid A}  $\\
-%%   Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
-%% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
-%% Narrow  Terms&$\nar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
-%% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
-Wide  Terms&$\wid M$&$::=$&$\cdots \celse \epair{\nar M}{\nar N} $\\
-Narrow  Terms&$\nar M$&$::=$&$\cdots \celse \{ \wid  M \}  $\\
+  Wide Types&$\wid A$&$::=$&$\cdots
+% \celse \wid \gg (x : \nar A) . \nar B
+$\\
+  Narrow Types&$\nar A$&$::=$&$\cdots
+%  \celse \pp {\nar M} {\wid A}
+  \celse \surd \wid A
+$\\
+Wide  Terms&$\wid M$&$::=$&$\cdots
+\celse \esurd \nar M
+$\\
+Narrow  Terms&$\nar M$&$::=$&$\cdots
+\celse \isurd \wid M
+$\\
 \end{tabular}\]
 
 \subsection{Semantics}
@@ -690,6 +695,10 @@ We know
 \nprov ({\nar\Gamma}, x \div \nar A)\rctx
 \end{prooftree}
 \]
+and therefore
+\[\prov \nar\Gamma^* \rctx \qquad \nar\Gamma^* \prov \nar A^*:\rtype \]
+which is enough to show
+\[\prov ({\nar\Gamma}^*, x^* : {\nar A}^*) \rctx\]
 \item
 We know
 \[
@@ -699,6 +708,13 @@ We know
 \nprov ({\nar\Gamma}, x :: \wid A)\rctx
 \end{prooftree}
 \]
+and therefore
+\[\prov \nar\Gamma^* \rctx \]
+\[ (\ups\nar\Gamma)^* \prov \wid A^*:\rtype \qquad \sem{\ups\nar\Gamma}, x^* : \wid A^* \prov \tsem{\wid A}{x^*} \]
+Using Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star} we get
+\[ \nar\Gamma^* \prov \wid A^*:\rtype \qquad \nar\Gamma^*, x^* : \wid A^* \prov \tsem{\wid A}{x^*} \]
+which is enough to show
+\[\prov ({\nar\Gamma}^*, x^* : {\wid A}^*, \sem x : \tsem {\wid A} {x^*}) \rctx\]
 \end{itemize}
 \cqed
 \end{proof}
@@ -817,36 +833,59 @@ any function $f : A \to B$ and returns the identity $A \to A$. To apply $\surd$ 
 or `go upstairs', i.e. replace the data `downstairs' with the points that were formerly available upstairs.
 \[
 \begin{prooftree}
-\Gamma^\ominus \prov A : \rtype
+\ups \nar \Gamma \prov \wid A : \rtype
 \justifies
-\Gamma \prov \surd A : \rtype
+\nar \Gamma \prov \surd \wid A : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
- \Gamma^\ominus \prov M : A
+ \ups\nar \Gamma \prov \wid M : \wid A
 \justifies
-\Gamma \prov \isurd M  : \surd A
+\nar \Gamma \prov \isurd \wid M  : \surd \wid A
 \end{prooftree}
 \qquad
 \begin{prooftree}
- \Gamma, \star \prov M : \surd A
+\demote{\wid \Gamma} \prov \nar M : \surd \wid A
 \justifies
-\Gamma \prov \esurd M  : A
+\wid\Gamma \prov \esurd \nar M  : \wid A
 \end{prooftree}
 \]
 Semantics:
-\[\begin{array}{rcl}
-{(\surd A)}^* &=&  (x : \wid A^*) \x \tsem A x\\
-(\isurd M)^* &=& \pair {M^*} {\sem M}\\
-(\esurd M)^* &=& (M^*).1\\
+\[\begin{array}{rcl@{\qquad}rcl}
+{(\surd \wid A)}^* &=&  (x : \wid A^*) \x \tsem {\wid A} x\\
+(\isurd \wid M)^* &=& \pair {\wid M^*} {\sem {\wid M}}\\
+(\esurd \nar M)^* &=& (\nar M^*).1 & \sem{\esurd \nar M} &=& (\nar M^*).2\\\\
 \end{array}
-\qquad
-\begin{array}{rcl}
-\tsem{\surd A}\_ &=& 1\\
-\sem{\isurd M} &=& \langle\rangle\\
-\sem{\esurd M} &=& (M^*).2\\
-\end{array}\]
+\]
+Let's check Lemmas~\ref{semantic.soundness.type}
+and~\ref{semantic.soundness.term}.
+If we've derived $\nar \Gamma \prov \surd \wid A : \rtype$ then we're supposed to show
+\[\nar \Gamma^* \prov (\surd \wid A)^* : \rtype\]
+which is
+\[\nar \Gamma^* \prov (x : \wid A^*) \x \tsem {\wid A} x : \rtype\]
+so we need
+\[\nar \Gamma^* \prov (x : \wid A^*) : \rtype\]
+\[\nar \Gamma^*, x : \wid A^* \prov \tsem {\wid A} x : \rtype\]
+and we get these from the premise, using Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
 
+Likewise if we've derived $\nar \Gamma \prov \isurd \wid M  : \surd \wid A$, then we're supposed to show
+\[\nar \Gamma^* \prov (\isurd \wid M)^*  : (\surd \wid A)^*\]
+which is
+\[\nar \Gamma^* \prov \pair {\wid M^*} {\sem {\wid M}}  : (x : \wid A^*) \x \tsem {\wid A} x\]
+which requires
+\[\nar \Gamma^* \prov  {\wid M^*}   : \wid A^*\]
+\[\nar \Gamma^* \prov  {\sem {\wid M}}  :  \tsem {\wid A} {\wid M^*}\]
+which again is just what the premise delivers, via Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
+
+Finally, if we've derived $\wid\Gamma \prov \esurd \nar M  : \wid A$ then we need to show
+\[\wid\Gamma^* \prov (\esurd \nar M)^*  : \wid A^*\]
+\[\sem{\wid\Gamma} \prov \sem{\esurd \nar M}  : \tsem{\wid A}{ (\esurd \nar M)^*}\]
+in other words
+\[\wid\Gamma^* \prov ( \nar M^*).1  : \wid A^*\]
+\[\sem{\wid\Gamma} \prov (\nar M^*).2  : \tsem{\wid A}{ ( \nar M^*).1}\]
+The premise gives us
+\[(\demote{\wid \Gamma})^* \prov \nar M^* :  (x : \wid A^*) \x \tsem {\wid A} x\]
+which is just what we need (using Lemma~\ref{semantic.weakening}, Lemma~\ref{demote.star.eq.star})
 \subsubsection{The Closed Modality}
 The modality $\blat$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
 any function $f : A \to B$ and returns the unique map $A \to 1$. To apply $\blat$ is to destroy all distinctions
