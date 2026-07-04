@@ -26,7 +26,6 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-\def\gar#1{{\textcolor{blu}#1}}
 \def\gets{\leftarrow}
 \def\dia{\Diamond}
 \def\all{\forall}
@@ -58,6 +57,9 @@
 
 \definecolor{blu}{rgb}{0.1,0.5,1}
 \definecolor{orng}{rgb}{1,0.5,0.3}
+
+\def\nar#1{{\textcolor{blu}{#1}}}
+\def\wid#1{{\textcolor{orng}{#1}}}
 
 \def\nameof#1{\ulcorner{#1}\urcorner}
 \def\U{\mathsf{U}}
@@ -234,7 +236,11 @@ boxrule=0pt,boxsep=0pt,breakable}
 \NewDocumentCommand{\lock}{}{\text{\faLock}}
 \NewDocumentCommand{\unlock}{}{\text{\faicon{unlock}}}
 \NewDocumentCommand{\key}{}{\text{\faicon{key}}}
-\def\erase{^\ominus}
+
+
+\def\erase#1{|#1|}
+\def\demote#1{{#1}^\ominus}
+
 \def\thead{^\oplus}
 \def\tsub{^\star}
 \def\simp{_\circ}
@@ -261,7 +267,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\elax{\mathcal{E}_\bigcirc}
 \def\ilax{\mathcal{I}_\bigcirc}
 \def\pp#1#2{[#1 \in #2]}
-\def\gg{\mathsf{G}}
+\def\gg{\textbf{\textsf{G}}}
 \section{Introduction}
 The purpose of this note is to describe a small modal type theory in which we can do a little bit of internalized
 parametricity. It is not a goal to do iterated internalized parametricity. It {\em is} a goal to have the type system
@@ -281,70 +287,97 @@ with two objects and one trivial morphism.
 \section{Language}
 
 
-The type theory is modal, and we have several sorts of variables in the context.
-Variables may be ordinary $x : A$, strong $x :: A$, or weak $x \div A$.
-There is also a pseudo-variable $\star$, with no variable name.
- The `explosion' context
- $\emptyset$ can be thought of as if it were any context with a $0$ variable in it; it is intrinsically contradictory.
+The type theory is modal and has two levels. There is the $\wid{\hbox{wide}}$ level and the $\nar{\hbox{narrow}}$ level.
+In both levels, we have several sorts of variables in the context.
+Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \nar A$.
+
 
 
 \[\begin{tabular}{rccl}
-  Contexts&$\Gamma$&$::=$&$\cdot  \celse \Gamma, x : A \celse \Gamma, x :: A \celse \Gamma, x \div A$\\
-  Low Contexts&$\gar\Gamma$&$::=$&$\cdot \celse \Gamma, x : A \celse \Gamma, x :: A $\\
-  Types&$A$&$::=$&$\cdots \celse D \gar A  \celse \gg (x : \gar A) . \gar B $\\
-  Low Types&$\gar A$&$::=$&$\cdots  \celse \pp {\gar M} A \celse \lax A \celse \surd A $\\
+ Wide Contexts&$\wid \Gamma$&$::=$&$\cdot  \celse \wid\Gamma, x :: \wid A \celse \wid\Gamma, x \div \nar A  \celse \wid \Gamma, x : \wid A$\\
+  Narrow Contexts&$\nar\Gamma$&$::=$&$\cdot \celse \nar \Gamma, x :: \wid A\celse \nar \Gamma, x \div \nar A  $\\
+  Wide Types&$\wid A$&$::=$&$\cdots   \celse \wid \gg (x : \nar A) . \nar B $\\
+  Narrow Types&$\nar A$&$::=$&$\cdots  \celse \pp {\nar M} {\wid A}  $\\
 %%   Terms&$M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
 %% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
-%% Low  Terms&$\gar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
+%% Narrow  Terms&$\nar M$&$::=$&$\cdots \celse  \ilax M \celse \elax M \celse \isurd M \celse \esurd M \celse \iblat M \celse \eblat M$\\
 %% &&&$\qquad \{M\} \celse \epair M N \celse \mpair M N \celse M.1 \celse M.2  $\\
-Terms&$M$&$::=$&$\cdots \celse \epair{\gar M}{\gar N} $\\
-Low  Terms&$\gar M$&$::=$&$\cdots \celse \{  M \}  $\\
+Wide  Terms&$\wid M$&$::=$&$\cdots \celse \epair{\nar M}{\nar N} $\\
+Narrow  Terms&$\nar M$&$::=$&$\cdots \celse \{ \wid  M \}  $\\
 \end{tabular}\]
 
-\subsection{Operations}
-We define two operations on contexts, {\em promotion} $\dash^\oplus$, and ${\em demotion}$ $\dash^\ominus$.
-Both operations take a context and produce a context. The main action of interest is on ordinary variables:
-promotion turns them into strong variables, demotion turns them into weak variables. Promotion `explodes'
-if it encounters $\star$, whereas demotion simply deletes it.
-\[\begin{tabular}{rcl}
- $ (\Gamma, x : A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
- $ (\Gamma, x :: A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: A)$\\
- $ (\Gamma, x \div A)^\oplus$&$:=$&$(\Gamma^\oplus, x \div A)$\\
- $ (\Gamma, \star)^\oplus$&$:=$&$\emptyset$\\
- $ (\emptyset)^\oplus$&$:=$&$\emptyset$\\
- $ (\cdot)^\oplus$&$:=$&$\cdot$\\
-\end{tabular}
-\qquad
+Narrow contexts are a subset of wide contexts, and we allow silently using a narrow context where a wide context is needed.
+
+\subsection{Erasure}
+Erasure $|\dash|$ takes a wide type or term and turns it into a narrow type or term.
+
+\begin{lemma}
+\label{erase.type}
+If $\wid \Gamma \prov \wid A : \rtype$, then
+ $\demote{\wid \Gamma} \prov \erase{\wid A} : \rtype$.
+\end{lemma}
+
+\begin{lemma}
+\label{erase.term}
+If $\wid \Gamma \prov \wid M : \wid A$, then
+ $\demote{\wid \Gamma} \prov \erase{\wid M} : \erase{\wid A} $.
+\end{lemma}
+
+
+%% Promotion
+%% \[\begin{tabular}{rcl}
+%%  $ (\Gamma, x : \wid A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: \wid A)$\\
+%%  $ (\Gamma, x :: \wid A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: \wid A)$\\
+%%  $ (\Gamma, x \div \nar A)^\oplus$&$:=$&$(\Gamma^\oplus, x \div \nar A)$\\
+%%  $ (\Gamma, \star)^\oplus$&$:=$&$\emptyset$\\
+%%  $ (\emptyset)^\oplus$&$:=$&$\emptyset$\\
+%%  $ (\cdot)^\oplus$&$:=$&$\cdot$\\
+%% \end{tabular}
+%% \]
+
+\subsection{Demotion}
+We define an operation $\dash^\ominus$ which takes a wide context to a narrow context.
+Demotion turns normal variables into weak variables and leaves other variables alone.
+
+
+\[
 \begin{tabular}{rcl}
- $ (\Gamma, x : A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
- $ (\Gamma, x :: A)^\ominus$&$:=$&$(\Gamma^\ominus, x :: A)$\\
- $ (\Gamma, x \div A)^\ominus$&$:=$&$(\Gamma^\ominus, x \div A)$\\
- $ (\Gamma, \star)^\ominus$&$:=$&$\Gamma^\ominus$\\
- $ (\emptyset)^\ominus$&$:=$&$\emptyset$\\
+ $ (\wid\Gamma, x : \wid A)^\ominus$&$:=$&$(\wid\Gamma^\ominus, x \div \erase{\wid A})$\\
+ $ (\wid\Gamma, x :: \wid A)^\ominus$&$:=$&$(\wid\Gamma^\ominus, x :: \wid A)$\\
+ $ (\wid\Gamma, x \div \nar A)^\ominus$&$:=$&$(\wid\Gamma^\ominus, x \div \nar A)$\\
  $ (\cdot)^\ominus$&$:=$&$\cdot$\\
 \end{tabular}\]
 
+
 \subsection{Semantics}
-Syntactically, we define some operations $\dash^*$ and $\sem\dash$ and $\tsem\dash\dash$ so that:
+We imagine the target language of our `semantics' to be ordinary dependent type theory
+with no exotic contexts or types or terms.
+We define operations $\dash^*$ and $\sem\dash$ and $\tsem\dash\dash$ so that syntactically:
 
 \begin{tabular}{l}
-If $\Gamma$ is a context, then ${\Gamma}^*$ is a context.\\
-If $A$ is a type, then ${A}^*$ is a type.\\
-If $M$ is a term, then ${M}^*$ is a term.
-If $\Gamma$ is a context, then $\sem{\Gamma}$ is a context.\\
-If $A$ is a type and $M^*$ is a term, then $\tsem A {M^*}$ is a type.\\
-If $M$ is a term, then $\sem{M}$ is a term.
+If $\wid \Gamma$ is a wide context, then ${\wid \Gamma}^*$ is a context.\\
+If $\wid A$ is a wide type, then ${\wid A}^*$ is a type.\\
+If $\wid M$ is a wide term, then ${\wid M}^*$ is a term.
+If $\wid \Gamma$ is a wide context, then $\sem{\wid \Gamma}$ is a context.\\
+If $\wid A$ is a wid type and $M$ is a term, then $\tsem {\wid A} {M}$ is a type.\\
+If $\wid M$ is a wide term, then $\sem{\wid M}$ is a term.\\
+If $\nar \Gamma$ is a narrow context, then ${\nar \Gamma}^*$ is a context.\\
+If $\nar A$ is a narrow type, then ${\nar A}^*$ is a type.\\
+If $\nar M$ is a narrow term, then ${\nar M}^*$ is a term.
 \end{tabular}
 
 Furthermore we wish to prove that these operations preserve typing:
 
 \begin{tabular}{l}
-If $\prov \Gamma\rctx$, then $\prov {\Gamma}^*\rctx$.\\
-If $\Gamma \prov A : \rtype$, then $\Gamma^* \prov A^* : \rtype$.\\
-If $\Gamma \prov M : A$, then $\Gamma^* \prov M^* : {A}^*$.\\
-If $\prov \Gamma\rctx$, then $\prov \sem{\Gamma}\rctx$.\\
-If $\Gamma \prov A : \rtype$, then $\sem \Gamma, x : A^* \prov \tsem A x : \rtype$.\\
-If $\Gamma \prov M : A$, then $\sem\Gamma \prov \sem M : \tsem A {M^*}$\\
+If $\prov {\wid\Gamma}\rctx$, then $\prov {{\wid\Gamma}}^*\rctx$.\\
+If ${\wid\Gamma} \prov {\wid A} : \rtype$, then ${\wid\Gamma}^* \prov {\wid A}^* : \rtype$.\\
+If ${\wid\Gamma} \prov {\wid M} : {\wid A}$, then ${\wid\Gamma}^* \prov {\wid M}^* : {{\wid A}}^*$.\\
+If $\prov {\wid\Gamma}\rctx$, then $\prov \sem{{\wid\Gamma}}\rctx$.\\
+If ${\wid\Gamma} \prov {\wid A} : \rtype$, then $\sem {\wid\Gamma}, x : \wid {\wid A}^* \prov \tsem {\wid A} x : \rtype$.\\
+If ${\wid\Gamma} \prov {\wid M} : {\wid A}$, then $\sem{\wid\Gamma} \prov \sem {\wid M} : \tsem {\wid A} {\wid M^*}$\\
+If $\prov {\nar\Gamma}\rctx$, then $\prov {{\nar\Gamma}}^*\rctx$.\\
+If ${\nar\Gamma} \prov {\nar A} : \rtype$, then ${\nar\Gamma}^* \prov {\nar A}^* : \rtype$.\\
+If ${\nar\Gamma} \prov {\nar M} : {\nar A}$, then ${\nar\Gamma}^* \prov {\nar M}^* : {{\nar A}}^*$.\\
 \end{tabular}
 \subsection{Rules}
 
@@ -367,20 +400,20 @@ is typed in the context to its left augmented with a $\star$.
 \begin{prooftree}
 \prov \Gamma \rctx \qquad \Gamma \prov A : \rtype
 \justifies
-\prov (\Gamma, x : A)\rctx
+\prov (\Gamma, x : \wid A)\rctx
 \end{prooftree}
 \qquad
 \begin{prooftree}
 \prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype
 \justifies
-\prov (\Gamma, x :: A)\rctx
+\prov (\Gamma, x :: \wid A)\rctx
 \end{prooftree}
 \]
 \[
 \begin{prooftree}
 \prov \Gamma \rctx \qquad \Gamma, \star \prov A : \rtype
 \justifies
-\prov (\Gamma, x \div A)\rctx
+\prov (\Gamma, x \div \nar A)\rctx
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -392,16 +425,16 @@ is typed in the context to its left augmented with a $\star$.
 
 Semantics:
 \[\begin{array}{rcl}
-(\Gamma, x : A)^* &=& (\Gamma^*, x^* : A^*)\\
-(\Gamma, x :: A)^* &=& (\Gamma^*, x^* : A^*, \sem x : \tsem A {M^*})\\
-(\Gamma, x \div A)^* &=& (\Gamma^*, x^* : A^*)\\
+(\Gamma, x : \wid A)^* &=& (\Gamma^*, x^* : A^*)\\
+(\Gamma, x :: \wid A)^* &=& (\Gamma^*, x^* : A^*, \sem x : \tsem A {M^*})\\
+(\Gamma, x \div \nar A)^* &=& (\Gamma^*, x^* : A^*)\\
 (\Gamma, \star)^* &=& \Gamma^*\\
 \end{array}
 \qquad
 \begin{array}{rcl}
-\sem{\Gamma, x : A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
-\sem{\Gamma, x :: A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
-\sem{\Gamma, x \div A} &=& (\sem\Gamma, x^* : A^*)\\
+\sem{\Gamma, x : \wid A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
+\sem{\Gamma, x :: \wid A} &=& (\sem\Gamma, x^* : A^*, \sem x : \tsem A {M^*})\\
+\sem{\Gamma, x \div \nar A} &=& (\sem\Gamma, x^* : A^*)\\
 \sem{\Gamma, \star} &=& \alpha : 0\\
 \end{array}\]
 \subsubsection{Variable Rules}
@@ -415,35 +448,35 @@ the answer is that the difference between them lies in how they respond to demot
 remain strong after demotion, but ordinary variables do not.
 \[
 \begin{prooftree}
-x : A \in  \Gamma
+x : \wid A \in  \Gamma
 \justifies
-\Gamma \prov x : A
+\Gamma \prov x : \wid A
 \end{prooftree}
 \qquad
 \begin{prooftree}
-x :: A \in  \Gamma
+x :: \wid A \in  \Gamma
 \justifies
-\Gamma \prov x : A
+\Gamma \prov x : \wid A
 \end{prooftree}
 \qquad
 \begin{prooftree}
-x \div A \in  \Gamma \qquad \star \in \Gamma
+x \div \nar A \in  \Gamma \qquad \star \in \Gamma
 \justifies
-\Gamma \prov x : A
+\Gamma \prov x : \wid A
 \end{prooftree}
 \]
 \subsection{New Operations}
-\par \noindent $\Gamma^Z$ takes an $\Gamma$ and produces an $\gar \Gamma$
-\par \noindent $A^Z$ takes an $A$ and produces an $\gar A$
-\par \noindent $M^Z$ takes an $M$ and produces an $\gar M$
-\par \noindent $\gar \Gamma^\ominus$ takes a $\gar \Gamma$ and produces a $\Gamma$
-\par \noindent $ \Gamma^\oplus$ takes a $ \Gamma$ and produces a $\gar \Gamma$
-\par \noindent If $\bprov \gar \Gamma  \rctx$ then $\prov \gar \Gamma^\ominus \rctx$
-\par \noindent If $\gar \Gamma^\ominus \prov A : \rtype$ then $\gar \Gamma \bprov A^Z : \rtype$
-\par \noindent $\Gamma = \gar\Gamma ^\ominus$
+\par \noindent $\Gamma^Z$ takes an $\Gamma$ and produces an $\nar \Gamma$
+\par \noindent $A^Z$ takes an $A$ and produces an $\nar A$
+\par \noindent $M^Z$ takes an $M$ and produces an $\nar M$
+\par \noindent $\nar \Gamma^\ominus$ takes a $\nar \Gamma$ and produces a $\Gamma$
+\par \noindent $ \Gamma^\oplus$ takes a $ \Gamma$ and produces a $\nar \Gamma$
+\par \noindent If $\bprov \nar \Gamma  \rctx$ then $\prov \nar \Gamma^\ominus \rctx$
+\par \noindent If $\nar \Gamma^\ominus \prov A : \rtype$ then $\nar \Gamma \bprov A^Z : \rtype$
+\par \noindent $\Gamma = \nar\Gamma ^\ominus$
 \par \noindent $(\Gamma^Z)^* = \Gamma^*, (A^Z)^* = A^*, (M^Z)^* = M^*$
-\par \noindent $(\gar \Gamma^\ominus)^* = \gar \Gamma^*$
-\par \noindent $\sem {\gar \Gamma^\ominus} = \gar \Gamma^*$
+\par \noindent $(\nar \Gamma^\ominus)^* = \nar \Gamma^*$
+\par \noindent $\sem {\nar \Gamma^\ominus} = \nar \Gamma^*$
 \par \noindent $( \Gamma^\oplus)^* = \sem \Gamma$
 
 \subsection{Type Formers}
@@ -455,35 +488,35 @@ The type $\pp M A$ represents the `fiber over $M$ in the map in the arrow catego
 or `the proofs that $M$ is a good, special, nice, parametric element of the type $A$'.
 \[
 \begin{prooftree}
-\gar \Gamma^\ominus \prov A : \rtype \quad \gar \Gamma \bprov \gar M : A^Z
+\nar \Gamma^\ominus \prov A : \rtype \quad \nar \Gamma \bprov \nar M : A^Z
 \justifies
-\gar \Gamma \bprov \pp {\gar M} A : \rtype
+\nar \Gamma \bprov \pp {\nar M} A : \rtype
 \end{prooftree}
 \quad
 \begin{prooftree}
-{\gar \Gamma}^\ominus \prov M : A
+{\nar \Gamma}^\ominus \prov M : A
 \justifies
-\gar \Gamma \prov \{M\} : \pp {M^Z} A
+\nar \Gamma \prov \{M\} : \pp {M^Z} A
 \end{prooftree}
 \quad
 \begin{prooftree}
-\Gamma^Z \bprov \gar M : A^Z \quad \Gamma^\oplus \bprov \gar N : \pp {\gar M} A
+\Gamma^Z \bprov \nar M : A^Z \quad \Gamma^\oplus \bprov \nar N : \pp {\nar M} A
 \justifies
-\Gamma \prov \epair {\gar M} {\gar N} : A
+\Gamma \prov \epair {\nar M} {\nar N} : A
 \end{prooftree}
 \]
 
 Semantics:
 \[\begin{array}{rcl}
-{\pp {\gar M} A}^* &=& \tsem A {\gar M^*}\\
+{\pp {\nar M} A}^* &=& \tsem A {\nar M^*}\\
 \{M\}^* &=& \sem M\\
-(\epair {\gar M} {\gar N})^* &=& {\gar M}^*\\
+(\epair {\nar M} {\nar N})^* &=& {\nar M}^*\\
 \end{array}
 \qquad
 \begin{array}{rcl}
 \\
 \\
-\sem{\epair {\gar M}{\gar N}} &=& {\gar N}^*\\
+\sem{\epair {\nar M}{\nar N}} &=& {\nar N}^*\\
 \end{array}\]
 \subsubsection{The Open Modality}
 The modality $\lax$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
@@ -491,9 +524,9 @@ any function $f : A \to B$ and returns the identity $B \to B$. To apply $\lax$ i
 or `go downstairs' if we think of $A$ lying above $B$, and to forget everything we knew about the upstairs data.
 \[
 \begin{prooftree}
-\gar \Gamma^J \prov  A : \rtype
+\nar \Gamma^J \prov  A : \rtype
 \justifies
-\gar\Gamma \bprov  \lax A : \rtype
+\nar\Gamma \bprov  \lax A : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -546,7 +579,7 @@ or `go upstairs', i.e. replace the data `downstairs' with the points that were f
 \]
 Semantics:
 \[\begin{array}{rcl}
-{(\surd A)}^* &=&  (x : A^*) \x \tsem A x\\
+{(\surd A)}^* &=&  (x : \wid A^*) \x \tsem A x\\
 (\isurd M)^* &=& \pair {M^*} {\sem M}\\
 (\esurd M)^* &=& (M^*).1\\
 \end{array}
@@ -588,7 +621,7 @@ Semantics:
 \end{array}
 \qquad
 \begin{array}{rcl}
-\tsem{\blat A}\_ &=&  (x : A^*) \x \tsem A x\\
+\tsem{\blat A}\_ &=&  (x : \wid A^*) \x \tsem A x\\
 \sem{\iblat M} &=& \pair {M^*} {\sem M}\\
 \sem{\eblat M} &=& \sem M.2\\
 \end{array}\]
@@ -597,27 +630,27 @@ Semantics:
 The glue type takes specifications of a `downstairs' and `upstairs' type and glues them together.
 \[
 \begin{prooftree}
-\Gamma, \star \prov A : \rtype \qquad \Gamma^\oplus, \star, x : A\prov B : \rtype
+\Gamma, \star \prov A : \rtype \qquad \Gamma^\oplus, \star, x : \wid A\prov B : \rtype
 \justifies
-\Gamma \prov  \gg(x : A) . B : \rtype
+\Gamma \prov  \gg(x : \wid A) . B : \rtype
 \end{prooftree}
 \]
 \[
 \begin{prooftree}
 \Gamma, \star \prov M : A  \qquad \Gamma^\oplus, \star \prov N : [M/x]B
 \justifies
-\Gamma \prov  \mpair M N : \gg(x : A) . B : \rtype
+\Gamma \prov  \mpair M N : \gg(x : \wid A) . B : \rtype
 \end{prooftree}
 \]
 \[
 \begin{prooftree}
-\Gamma \prov  M : \gg(x : A) . B
+\Gamma \prov  M : \gg(x : \wid A) . B
 \justifies
 \Gamma, \star \prov M.1 : A
 \end{prooftree}
 \qquad
 \begin{prooftree}
-\Gamma \prov  M : \gg(x : A) . B
+\Gamma \prov  M : \gg(x : \wid A) . B
 \justifies
   \Gamma^\oplus, \star\prov M.2 : [M.1/x]B
 \end{prooftree}
@@ -625,14 +658,14 @@ The glue type takes specifications of a `downstairs' and `upstairs' type and glu
 
 Semantics:
 \[\begin{array}{rcl}
-{( \gg(x : A) . B)}^* &=& A^*\\
+{( \gg(x : \wid A) . B)}^* &=& A^*\\
 \mpair M N ^* &=& M^*\\
 (M.1)^* &=&  M^*\\
 (M.2)^* &=& \sem M\\
 \end{array}
 \qquad
 \begin{array}{rcl}
-\tsem{ \gg(x : A) . B} {M^*} &=&  [M^*/x^*]B^*\\
+\tsem{ \gg(x : \wid A) . B} {M^*} &=&  [M^*/x^*]B^*\\
 \sem{ \mpair M N } &=& N^*\\
 \sem{M.1} &=& \babort(\alpha)\\
 \sem{M.2} &=& \babort(\alpha)\\
@@ -654,7 +687,7 @@ Explicitly, here is the construction:
 Let's typecheck these. Make some abbreviations
 \[\Gamma_1 = (\Gamma^\ominus, f' \div \pp f {A \to B}, a \div  A, a' \div \pp { a} A) \]
 \[\Gamma_2 = ( \Gamma^\ominus, k \div (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B)\]
-\[\Gamma_3 = (\Gamma_2, x :: A, \star)\]
+\[\Gamma_3 = (\Gamma_2, x :: \wid A, \star)\]
 and see
 \[
 \begin{prooftree}
@@ -702,7 +735,7 @@ and then
 \]
 \[
 \justifies
-\Gamma_3 \prov  x : A
+\Gamma_3 \prov  x : \wid A
 \]
 \justifies
 \Gamma_3 \prov  {k\ x} : \pp x A \to  \pp {f\ x} B
@@ -727,19 +760,19 @@ can be inserted into
 \[
 \[
 \justifies
-\Gamma_2, x : A, \star \prov f : A \to B
+\Gamma_2, x : \wid A, \star \prov f : A \to B
 \]
 \[
 \justifies
-\Gamma_2, x : A, \star \prov x : A
+\Gamma_2, x : \wid A, \star \prov x : \wid A
 \]
 \justifies
-\Gamma_2, x : A, \star \prov f\ x : B
+\Gamma_2, x : \wid A, \star \prov f\ x : B
 \]
 \qquad
 {\vdots \atop \Gamma_3 \prov  {k\ x\ \{x\}} : \pp {f\ x} B}
 \justifies
-\Gamma_2, x : A \prov \epair {f\ x} {k\ x\ \{x\}} : B
+\Gamma_2, x : \wid A \prov \epair {f\ x} {k\ x\ \{x\}} : B
 \]
 \justifies
 \Gamma_2 \prov \lambda x . (\epair {f\ x} {k\ x\ \{x\}}) : A \to B
@@ -754,10 +787,10 @@ checking as a side condition that
 \subsection{The Dependent Function Type}
 This is very similar to the non-dependent case. The difference is we must substitute into $B$.
 If
-\[ \prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype \qquad \Gamma^\ominus, x : A \prov B : \rtype \qquad
-\Gamma, \star \prov f : (x : A) \to B\]
+\[ \prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype \qquad \Gamma^\ominus, x : \wid A \prov B : \rtype \qquad
+\Gamma, \star \prov f : (x : \wid A) \to B\]
 then there exists an explicit isomorphism
-\[\Gamma \prov \pp f {(x : A) \to B}  \cong (a :  A) (a' : \pp { a} A) \to \pp {f\ a} {[\epair a {a'} / x]B} \]
+\[\Gamma \prov \pp f {(x : \wid A) \to B}  \cong (a :  A) (a' : \pp { a} A) \to \pp {f\ a} {[\epair a {a'} / x]B} \]
 
 \subsection{The Universe}
 \subsection{Parametricity for the Identity}
