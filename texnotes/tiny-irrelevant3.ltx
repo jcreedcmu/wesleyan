@@ -269,6 +269,9 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\isurd{\mathcal{I}_\surd}
 \def\elax{\mathcal{E}_\bigcirc}
 \def\ilax{\mathcal{I}_\bigcirc}
+\def\idia{\mathcal{I}_\dia}
+\def\edia{\mathcal{E}_\dia}
+
 \def\pp#1#2{[#1 \in #2]}
 \def\gg{\textbf{\textsf{G}}}
 \section{Introduction}
@@ -301,6 +304,7 @@ Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \n
   Narrow Contexts&$\nar\Gamma$&$::=$&$\cdot \celse \nar \Gamma, x :: \wid A\celse \nar \Gamma, x \div \nar A  $\\
   Wide Types&$\wid A$&$::=$&$\cdots
 % \celse \wid \gg (x : \nar A) . \nar B
+  \celse \dia {\nar A}
 $\\
   Narrow Types&$\nar A$&$::=$&$\cdots
   \celse \pp {\nar M} {\wid A}
@@ -756,9 +760,6 @@ we need to invoke Lemma~\ref{erase.star.eq.star}.
 
 
 \subsubsection{The Fiber Type}
-The type $\pp {\nar M} {\wid A}$ represents the `fiber over $M$ in the map in the arrow category' or
-`the proofs that $M$ belongs to the logical relation'
-or `the proofs that $M$ is a good, special, nice, parametric element of the type $A$'.
 \[
 \begin{prooftree}
 \ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
@@ -772,7 +773,7 @@ or `the proofs that $M$ is a good, special, nice, parametric element of the type
 \nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
 \end{prooftree}
 \quad
-\hbox{\textcolor{red} {FIXME}}
+\hbox{\textcolor{red} {FIXME}} \quad
 \begin{prooftree}
 \Gamma^Z \nprov \nar M : A^Z \quad \Gamma^\oplus \nprov \nar N : \pp {\nar M} A
 \justifies
@@ -792,15 +793,45 @@ Semantics:
 \\
 \sem{\epair {\nar M}{\nar N}} &=& {\nar N}^*\\
 \end{array}\]
-\subsubsection{The Open Modality}
-The modality $\lax$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
-any function $f : A \to B$ and returns the identity $B \to B$. To apply $\lax$ is to `move to unique the future world'
-or `go downstairs' if we think of $A$ lying above $B$, and to forget everything we knew about the upstairs data.
+\subsubsection{The Diagonal Modality}
 \[
 \begin{prooftree}
-\nar \Gamma^J \prov  A : \rtype
+\demote{\wid \Gamma} \nprov  \nar A : \rtype
 \justifies
-\nar\Gamma \nprov  \lax A : \rtype
+\wid\Gamma \wprov  \dia \nar A : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \demote{\wid\Gamma}\nprov \nar M : \nar A
+\justifies
+\wid \Gamma \wprov \idia \nar M  : \dia \nar A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+ \Gamma \prov M : \dia A\qquad \star \in \Gamma
+\justifies
+\Gamma \prov \edia M  : A
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+{(\dia \nar A)}^* &=&  \nar A^*\\
+(\idia \nar M)^* &=& \nar M^*\\
+(\edia M)^* &=& M^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\dia \nar A}\_ &=& 1\\
+\sem{\idia \nar M} &=& \langle\rangle\\
+\sem{\edia M} &=& \babort(\alpha)\\
+\end{array}\]
+
+\subsubsection{The Open Modality}
+\[
+\begin{prooftree}
+\demote{\wid \Gamma} \nprov  \nar A : \rtype
+\justifies
+\wid\Gamma \wprov  \lax \nar A : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -817,14 +848,14 @@ or `go downstairs' if we think of $A$ lying above $B$, and to forget everything 
 \]
 Semantics:
 \[\begin{array}{rcl}
-{(\lax A)}^* &=&  A^*\\
+{(\lax \nar A)}^* &=&  \nar A^*\\
 (\ilax M)^* &=& M^*\\
 (\elax M)^* &=& M^*\\
 \end{array}
 \qquad
 \begin{array}{rcl}
-\\
-\\
+\tsem{\lax \nar A}\_ &=& 1\\
+\sem{\ilax M} &=& \langle\rangle\\
 \sem{\elax M} &=& \babort(\alpha)\\
 \end{array}\]
 
