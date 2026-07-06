@@ -1163,79 +1163,77 @@ If
 then there exists an explicit isomorphism
 \[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {\wid B} \]
 Explicitly, here is the construction:
-\[ \Gamma \prov \mathsf{fore} : (f' : \pp f {A \to B}) (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B \]
-\[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair f {f'})\ (\epair { a} {a'})\}\]
-\[ \Gamma \prov \mathsf{back} : (k : (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B) \to \pp f {A \to B} \]
-\[\mathsf{back} = \lambda k. \{\lambda x . (\epair {f\ x} {k\ x\ \{x\}})\}\]
+\[ \Gamma \prov \mathsf{fore} : (f' : \pp {\nar f} {\wid A \to \wid B}) (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \]
+\[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair {\nar f} {f'})\ (\epair { a} {a'})\}\]
+\[ \Gamma \prov \mathsf{back} : (k : (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B}) \to \pp {\nar f} {\wid A \to \wid B} \]
+\[\mathsf{back} = \lambda k. \{\lambda x . (\epair {{\nar f}\ x} {k\ x\ \{x\}})\}\]
 Let's typecheck these. Make some abbreviations
-\[\Gamma_1 = (\Gamma^\ominus, f' \div \pp f {A \to B}, a \div  A, a' \div \pp { a} A) \]
-\[\Gamma_2 = ( \Gamma^\ominus, k \div (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B)\]
-\[\Gamma_3 = (\Gamma_2, x :: \wid A, \star)\]
-and see
+\[\nar \Gamma_1 = (\nar \Gamma, f' \div \pp {\nar f} {\wid A \to \wid B}, a \div \erase{\wid A}, a' \div \pp {  a} {\wid A})\]
+\[\nar \Gamma_2 = (\nar\Gamma, k \div (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B})\]
+\[\nar \Gamma_3 = (\nar\Gamma_2, x :: \wid A)\]
+For $\mathsf{fore}$, we can just prove
 \[
 \begin{prooftree}
 \[
 \[
 \[
 \justifies
-\Gamma_1, \star \prov f  :  A \to B
+\nar\Gamma_1 \nprov {\nar f}  : \erase{\wid A \to \wid B}
 \]
 \[
 \justifies
-\Gamma_1, \star \prov f' :  \pp f {A \to B}
+\nar\Gamma_1 \nprov f' :  \pp {\nar f} {\wid A \to \wid B}
 \]
 \justifies
-\Gamma_1 \prov \epair f {f'} :  A \to B
-\]
-\[
-\[
-\justifies
-\Gamma_1, \star \prov { a}  :  A
+\ups \nar\Gamma_1 \wprov \epair {\nar f} {f'} :  {\wid A \to \wid B}
 \]
 \[
+\[
 \justifies
-\Gamma_1, \star \prov a' :  \pp { a} A
+\nar\Gamma_1 \nprov { a}  :  \erase{\wid A}
+\]
+\[
+\justifies
+\nar\Gamma_1 \nprov a' :  \pp { a} {\wid A}
 \]
 \justifies
-\Gamma_1 \prov \epair { a} {a'} :  A
+\ups \nar\Gamma_1 \wprov \epair { a} {a'} :  \wid A
 \]
 \justifies
-\Gamma_1 \prov (\epair f {f'})\ (\epair { a} {a'}) :  B
+\ups \nar\Gamma_1 \wprov (\epair {\nar f} {f'})\ (\epair { a} {a'}) :  \wid B
 \]
 \justifies
-\Gamma, f' : \pp f {A \to B}, a :  A, a' : \pp { a} A \prov \{(\epair f {f'})\ (\epair { a} {a'})\} : \pp {f\ a} B
+\nar \Gamma, f' \div \pp {\nar f} {\wid A \to \wid B}, a \div \erase{\wid A}, a' \div \pp {  a} {\wid A} \nprov \{(\epair {\nar f} {f'})\ (\epair { a} {a'})\} : \pp {\nar f\ a} {\wid B}
 \end{prooftree}
 \]
-checking as a side condition that
-\[ (\epair f {f'})\ (\epair { a} {a'})\equiv_\star f\ a\]
-and then
+For $\mathsf{back}$, we can take
 \[
 \begin{prooftree}
 \[
 \[
 \justifies
-\Gamma_3 \prov  k : (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B
+\nar\Gamma_3 \nprov  k : (a : \erase{\wid A}) (a' : \pp { a}{\wid A}) \to \pp {\nar f\ a}{\wid B}
 \]
 \[
 \justifies
-\Gamma_3 \prov  x : \wid A
+\nar\Gamma_3 \nprov  x : \erase{\wid A}
 \]
 \justifies
-\Gamma_3 \prov  {k\ x} : \pp x A \to  \pp {f\ x} B
+\nar\Gamma_3 \nprov  {k\ x} : \pp x{\wid A} \to  \pp {\nar f\ x}{\wid B}
 \]
 \[
 \[
 \justifies
-\Gamma_3 \prov  x :  A
+\ups \nar\Gamma_3 \wprov  x : {\wid A}
 \]
 \justifies
-\Gamma_3 \prov  {\{x\}} : \pp x A
+\nar\Gamma_3 \nprov  {\{x\}} : \pp x{\wid A}
 \]
 \justifies
-\Gamma_3 \prov  {k\ x\ \{x\}} : \pp {f\ x} B
+\nar\Gamma_3 \nprov  {k\ x\ \{x\}} : \pp {\nar f\ x}{\wid B}
 \end{prooftree}
 \]
-can be inserted into
+and insert it into
 \[
 \begin{prooftree}
 \[
@@ -1243,29 +1241,28 @@ can be inserted into
 \[
 \[
 \justifies
-\Gamma_2, x : \wid A, \star \prov f : A \to B
+\nar\Gamma_2 \nprov f : \erase{\wid A \to \wid B}
 \]
 \[
 \justifies
-\Gamma_2, x : \wid A, \star \prov x : \wid A
+\nar\Gamma_2, x \div \erase{\wid A} \nprov x : \erase{\wid A}
 \]
 \justifies
-\Gamma_2, x : \wid A, \star \prov f\ x : B
+\nar\Gamma_2, x \div \erase{\wid A} \nprov \nar f\ x : \erase{\wid B}
 \]
 \qquad
-{\vdots \atop \Gamma_3 \prov  {k\ x\ \{x\}} : \pp {f\ x} B}
+\[\vdots \justifies \nar\Gamma_2, x :: \wid A \nprov  {k\ x\ \{x\}} : \pp {\nar f\ x} {\wid B}\]
 \justifies
-\Gamma_2, x : \wid A \prov \epair {f\ x} {k\ x\ \{x\}} : B
+\ups \nar\Gamma_2, x : \wid A \wprov \epair {\nar f\ x} {k\ x\ \{x\}} : \wid B
 \]
 \justifies
-\Gamma_2 \prov \lambda x . (\epair {f\ x} {k\ x\ \{x\}}) : A \to B
+\ups \nar\Gamma_2 \wprov \lambda x . (\epair {\nar f\ x} {k\ x\ \{x\}}) : \wid A \to \wid B
 \]
 \justifies
-\Gamma, k : (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B) \prov \{\lambda x . (\epair {f\ x} {k\ x\ \{x\}})\} : \pp f {A \to B}
+\nar\Gamma, k \div (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \nprov \{\lambda x . (\epair {\nar f\ x} {k\ x\ \{x\}})\} : \pp {\nar f} {\wid A \to \wid B}
 \end{prooftree}
 \]
-checking as a side condition that
-\[ \lambda x . (\epair {f\ x} {k\ x\ \{x\}}) \equiv_\star f\]
+
 
 \subsection{The Dependent Function Type}
 This is very similar to the non-dependent case. The difference is we must substitute into $B$.
