@@ -1360,13 +1360,62 @@ at type $\pp {\nar A} {\wid \rtype}$ so $\eta$-expand both sides to
 but the right-hand side $\beta$-reduces, so we get the equivalent equation
 \[ \epair {\nar A} p = \gg(x : \nar A). \pp {x} {\epair {\nar A} p}\]
 
-Let's use univalence and demonstrate these are isomorphic. In the context $\nar \Gamma_1$, we define
+Let's use univalence and demonstrate these are isomorphic.
+Let's abbreviate
+
+\[\nar\Gamma_3 = (\nar \Gamma, p \div \pp {\nar A} {\wid \rtype})\]
+\[\nar\Gamma_4 = (\nar \Gamma_3,  w ::  \gg(x : \nar A). \pp {x} {\epair {\nar A} p})\]
+
+In the context $\nar \Gamma_3$, we define
 \[\begin{array}{l}
  \mathsf{fore_2} :\epair {\nar A} p \to \gg(x : \nar A). \pp {x} {\epair {\nar A} p} \\
  \mathsf{fore_2} = \lambda z . \bgel(z, \{z\}) \\
  \mathsf{back_2} : ( \gg(x : \nar A). \pp {x} {\epair {\nar A} p} )\to \epair {\nar A} p\\
  \mathsf{back_2} = \lambda w . (\epair w {\bungel(w)})\\
 \end{array}\]
+
+Let's typecheck these.
+
+$\mathsf{fore_2}$:
+\[
+\begin{prooftree}
+\[
+\justifies
+ \nar \Gamma_3, z \div  {\nar A}  \nprov  z :  \nar A
+\]
+\[
+\[
+\justifies
+ \ups \nar \Gamma_3, z :: \epair {\nar A} p \wprov   z :  \epair {\nar A} p
+\]
+\justifies
+ \nar \Gamma_3, z :: \epair {\nar A} p \nprov   \{z\} :  \pp {z} {\epair {\nar A} p}
+\]
+\justifies
+\ups \nar \Gamma_3, z : \epair {\nar A} p \wprov  \bgel(z, \{z\}) : \gg(x : \nar A). \pp {x} {\epair {\nar A} p}
+\end{prooftree}
+\]
+
+$\mathsf{back_2}$:
+\[
+\begin{prooftree}
+\[
+\justifies
+ \nar \Gamma_3, w \div  \nar A \nprov w  :  \nar A
+\]
+\[
+\[
+\justifies
+ \ups \nar \Gamma_4 \wprov w : \gg(x : \nar A). \pp {x} {\epair {\nar A} p}
+\]
+\justifies
+ \nar \Gamma_4 \nprov \bungel(w) :  \pp {w} {\epair {\nar A} p}
+\]
+\justifies
+\ups \nar \Gamma_3, w : \gg(x : \nar A). \pp {x} {\epair {\nar A} p} \wprov \epair w {\bungel(w)} :  \epair {\nar A} p
+\end{prooftree}
+\]
+
 
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
