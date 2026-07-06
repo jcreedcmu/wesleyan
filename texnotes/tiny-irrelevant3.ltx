@@ -384,15 +384,12 @@ $\erase{\lambda x.\wid M}$&$=$&$\lambda x.\erase{\wid M}$\\
 $\erase x$&$=$&$x$ \\
 $\erase{\gg(x : \nar A).\nar B}$&$=$&$\nar A$\\
 $\erase{\bgel(\nar M, \nar N)}$&$=$&$\nar M$\\
-$\erase{\epair{\nar M}{\nar N}}$&$=$&$\nar M$\\[1ex]
+$\erase{\epair{\nar M}{\nar N}}$&$=$&$\nar M$\\
+$\erase{\wid\rtype}$&$=$&$\nar \rtype$\\
 \end{tabular}
 \]
 
-\[
-\begin{tabular}{rcl}
- $ \erase{\dia \nar A}$&$:=$&$\nar A$\\
-\end{tabular}
-\]
+
 
 \begin{lemma}
 \label{erase.type}
@@ -869,9 +866,9 @@ we need to invoke Lemma~\ref{erase.star.eq.star}.
 \subsection{The Fiber Type}
 \[
 \begin{prooftree}
-\ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
+\ups\nar \Gamma \wprov \wid A : \wid\rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
 \justifies
-\nar \Gamma \nprov \pp {\nar M} {\wid A} : \rtype
+\nar \Gamma \nprov \pp {\nar M} {\wid A} : \nar\rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -939,10 +936,10 @@ and this is exactly what we need.
 \subsection{The Glue Type}
 \[
 \begin{prooftree}
-\demote{\wid\Gamma} \nprov \nar A : \rtype \qquad
-\promote{\wid\Gamma}, x \div \nar A \nprov \nar B : \rtype
+\demote{\wid\Gamma} \nprov \nar A : \nar\rtype \qquad
+\promote{\wid\Gamma}, x \div \nar A \nprov \nar B : \nar\rtype
 \justifies
-\wid\Gamma \wprov \gg(x : \nar A).\nar B : \rtype
+\wid\Gamma \wprov \gg(x : \nar A).\nar B : \wid\rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
@@ -1163,9 +1160,9 @@ If
 then there exists an explicit isomorphism
 \[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {\wid B} \]
 Explicitly, here is the construction:
-\[ \Gamma \prov \mathsf{fore} : (f' : \pp {\nar f} {\wid A \to \wid B}) (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \]
+\[ \nar \Gamma \prov \mathsf{fore} : (f' : \pp {\nar f} {\wid A \to \wid B}) (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \]
 \[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair {\nar f} {f'})\ (\epair { a} {a'})\}\]
-\[ \Gamma \prov \mathsf{back} : (k : (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B}) \to \pp {\nar f} {\wid A \to \wid B} \]
+\[\nar \Gamma \prov \mathsf{back} : (k : (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B}) \to \pp {\nar f} {\wid A \to \wid B} \]
 \[\mathsf{back} = \lambda k. \{\lambda x . (\epair {{\nar f}\ x} {k\ x\ \{x\}})\}\]
 Let's typecheck these. Make some abbreviations
 \[\nar \Gamma_1 = (\nar \Gamma, f' \div \pp {\nar f} {\wid A \to \wid B}, a \div \erase{\wid A}, a' \div \pp {  a} {\wid A})\]
@@ -1267,12 +1264,41 @@ and insert it into
 \subsection{The Dependent Function Type}
 This is very similar to the non-dependent case. The difference is we must substitute into $B$.
 If
-\[ \prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype \qquad \Gamma^\ominus, x : \wid A \prov B : \rtype \qquad
-\Gamma, \star \prov f : (x : \wid A) \to B\]
+\[ \nprov \nar \Gamma \rctx \qquad \ups \nar\Gamma \wprov \wid A : \rtype \qquad \ups \nar\Gamma, x : \wid A \wprov \wid B : \rtype \qquad
+\nar \Gamma \nprov \nar f : \erase{(x : \wid A) \to \wid B}\]
 then there exists an explicit isomorphism
-\[\Gamma \prov \pp f {(x : \wid A) \to B}  \cong (a :  A) (a' : \pp { a} A) \to \pp {f\ a} {[\epair a {a'} / x]B} \]
+\[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {[\epair a {a'}/x]\wid B} \]
 
 \subsection{The Universe}
+For any type
+\[\nar \Gamma \nprov \nar A : \rtype \]
+we aim to show
+\[\nar\Gamma \nprov \pp {\nar A} {\wid \rtype} \cong (\nar A \to \nar \rtype)\]
+The maps are
+\[\begin{array}{l}
+ \mathsf{fore} : (p : \pp {\nar A} {\wid \rtype}) \to (\nar A \to \nar \rtype)\\
+ \mathsf{fore} = \lambda p . \lambda a . \pp {a} {\epair {\nar A} p}\\
+ \mathsf{back} : (R : \nar A \to \rtype) \to  \pp {\nar A} {\wid \rtype}\\
+ \mathsf{back} = \lambda R . \{ \gg (x : \nar A). R\ x\}
+\end{array}\]
+Let's check that these are well-typed. First $\mathsf{fore}$.
+Let's abbreviate
+\[\nar\Gamma_1 = (\nar \Gamma, p \div \pp {\nar A} {\wid \rtype}, a \div \nar A)\]
+\[
+\begin{prooftree}
+\[
+\justifies
+\ups \nar \Gamma_1\wprov \epair{\nar A} p : \wid \rtype
+\]
+\[
+\justifies
+\nar \Gamma_1\nprov a : \nar A
+\]
+\justifies
+\nar \Gamma_1\nprov \pp {a} {\epair {\nar A} p} : \nar \rtype
+\end{prooftree}
+\]
+
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
 
