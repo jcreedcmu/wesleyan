@@ -251,6 +251,13 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\locking{^\lock}
 \def\hyd#1#2{[#1 \star #2]}
 
+%% ---- a few new macros: add to preamble ----
+\def\promote#1{{#1}^\oplus}
+\def\wU{\wid{\U}}
+\def\nU{\nar{\U}}
+\def\El{\mathsf{El}\,}
+\def\Set{\mathbf{Set}}
+
 \title{A Modal Type Theory with Internal Parametricity }
 \begin{document}
 
@@ -304,18 +311,19 @@ Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \n
  Wide Contexts&$\wid \Gamma$&$::=$&$\cdot  \celse \wid\Gamma, x :: \wid A \celse \wid\Gamma, x \div \nar A  \celse \wid \Gamma, x : \wid A$\\
   Narrow Contexts&$\nar\Gamma$&$::=$&$\cdot \celse \nar \Gamma, x :: \wid A\celse \nar \Gamma, x \div \nar A  $\\
   Wide Types&$\wid A$&$::=$&$\cdots
-% \celse \wid \gg (x : \nar A) . \nar B
-  \celse \dia {\nar A}
+ \celse \wid \gg (x : \nar A) . \nar B
+%  \celse \dia {\nar A}
 $\\
   Narrow Types&$\nar A$&$::=$&$\cdots
   \celse \pp {\nar M} {\wid A}
-  \celse \surd \wid A
 $\\
 Wide  Terms&$\wid M$&$::=$&$\cdots
-\celse \esurd \nar M
+\celse \epair{\nar M }{\nar N}
+\celse \bgel(\nar M, \nar P)
 $\\
 Narrow  Terms&$\nar M$&$::=$&$\cdots
-\celse \isurd \wid M
+\celse \{ \wid M \}
+\celse \bungel(\wid M)
 $\\
 \end{tabular}\]
 
@@ -370,8 +378,6 @@ Erasure $|\dash|$ takes a wide type or term and turns it into a narrow type or t
 \[
 \begin{tabular}{rcl}
  $ \erase{\dia \nar A}$&$:=$&$\nar A$\\
- $ \erase{\idia \nar M}$&$:=$&$\nar M$\\
- $ \erase{\esurd \nar M}$&$:=$&$\textcolor{red}{???}$\\
 \end{tabular}
 \]
 
@@ -450,22 +456,19 @@ then we construct (using Lemma~\ref{include.demote.eq.orig})
 \cqed
 \end{proof}
 
-\subsection{Demotion}
-We define an operation $\dash^\ominus$ which takes a wide context to a narrow context.
+\subsection{Promotion and Demotion}
+
+We define operations $\promote\dash$ and $\demote\dash$, both of which take a wide context to a narrow context.
 Demotion turns normal variables into weak variables and leaves other variables alone.
-%% Promotion
-%% \[\begin{tabular}{rcl}
-%%  $ (\Gamma, x : \wid A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: \wid A)$\\
-%%  $ (\Gamma, x :: \wid A)^\oplus$&$:=$&$(\Gamma^\oplus, x :: \wid A)$\\
-%%  $ (\Gamma, x \div \nar A)^\oplus$&$:=$&$(\Gamma^\oplus, x \div \nar A)$\\
-%%  $ (\Gamma, \star)^\oplus$&$:=$&$\emptyset$\\
-%%  $ (\emptyset)^\oplus$&$:=$&$\emptyset$\\
-%%  $ (\cdot)^\oplus$&$:=$&$\cdot$\\
-%% \end{tabular}
-%% \]
+Promotion turns normal variables into strong variables and leaves other variables alone.
 
-
-\[
+\[\begin{tabular}{rcl}
+ $ \promote{(\wid\Gamma, x : \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
+ $ \promote{(\wid\Gamma, x :: \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
+ $ \promote{(\wid\Gamma, x \div \nar A)}$&$:=$&$(\promote{\wid\Gamma}, x \div \nar A)$\\
+ $ \promote{(\cdot)}$&$:=$&$\cdot$\\
+\end{tabular}
+\qquad
 \begin{tabular}{rcl}
  $ (\wid\Gamma, x : \wid A)^\ominus$&$:=$&$(\wid\Gamma^\ominus, x \div \erase{\wid A})$\\
  $ (\wid\Gamma, x :: \wid A)^\ominus$&$:=$&$(\wid\Gamma^\ominus, x :: \wid A)$\\
@@ -476,6 +479,11 @@ Demotion turns normal variables into weak variables and leaves other variables a
 \begin{lemma}
 \label{include.demote.eq.orig}
 $\demote{(\ups\nar\Gamma)} = \nar\Gamma$
+\end{lemma}
+
+\begin{lemma}
+\label{include.promote.eq.orig}
+$\promote{(\ups\nar\Gamma)} = \nar\Gamma$
 \end{lemma}
 
 
@@ -610,6 +618,17 @@ Semantics:
 \end{array}
 \]
 
+\begin{lemma}[Wide Weakening]
+\label{promotion}
+If $\wid\Gamma \wprov J$, then $\ups(\promote{\wid\Gamma}) \wprov J$.
+\end{lemma}
+
+
+\begin{lemma}[Narrow Weakening]
+\label{shift}
+If $\demote{\wid\Gamma} \nprov J$, then $\promote{\wid\Gamma} \nprov J$.
+\end{lemma}
+
 
 \begin{lemma}
 \label{semantic.weakening}
@@ -632,6 +651,11 @@ $(\ups \nar \Gamma)^* = \nar \Gamma^*$
 \begin{lemma}
 \label{demote.star.eq.star}
 $(\demote{\wid \Gamma})^* = \wid \Gamma^*$
+\end{lemma}
+
+\begin{lemma}
+\label{promote.star.eq.brackets}
+$(\promote{\wid \Gamma})^* = \sem{ \wid \Gamma}$
 \end{lemma}
 
 \begin{proof}
@@ -768,29 +792,46 @@ we need to invoke Lemma~\ref{erase.star.eq.star}.
 \subsection{Type Formers}
 
 
-\subsubsection{The Fiber Type}
+\subsection{The Fiber Type}
 \[
 \begin{prooftree}
 \ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
 \justifies
 \nar \Gamma \nprov \pp {\nar M} {\wid A} : \rtype
 \end{prooftree}
-\quad
+\qquad
 \begin{prooftree}
 \ups {\nar \Gamma} \wprov \wid M : \wid A
 \justifies
 \nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
 \end{prooftree}
-\quad
-\hbox{\textcolor{red} {FIXME}} \quad
+\qquad
 \begin{prooftree}
-\Gamma^Z \nprov \nar M : A^Z \quad \Gamma^\oplus \nprov \nar N : \pp {\nar M} A
+\demote{\wid\Gamma} \nprov \nar M : \erase{\wid A} \quad
+\promote{\wid\Gamma} \nprov \nar N : \pp{\nar M}{\wid A}
 \justifies
-\Gamma \prov \epair {\nar M} {\nar N} : A
+\wid\Gamma \wprov \epair{\nar M}{\nar N} : \wid A
 \end{prooftree}
 \]
+In the elimination rule, $\wid A$ is a type over $\wid\Gamma$; the second premise
+is well-formed because we can transport $\wid A$ to $\ups(\promote{\wid\Gamma})$ by
+Lemma~\ref{promotion} and transport $\nar M$ to $\promote{\wid\Gamma}$ by Lemma~\ref{shift}.
 
-Semantics:
+
+Definitional equality works like: if $\nar \Gamma \nprov \nar N : \pp{\nar M}{\wid A}$ then
+\[
+  \nar N \equiv_\eta \{\epair{\nar M}{\nar N}\}
+\]
+and in general
+\[
+\epair{\nar M}{\{\wid N\}} \equiv_\beta \wid N
+\]
+Erasure on the elim form works like:
+\[
+\erase{\epair{\nar M}{\nar N}} = \nar M
+\]
+
+\noindent {\bf Semantics}:
 \[\begin{array}{rcl}
 {\pp {\nar M} {\wid A}}^* &=& \tsem {\wid A} {\nar M^*}\\
 \{\wid M\}^* &=& \sem {\wid M}\\
@@ -802,158 +843,28 @@ Semantics:
 \\
 \sem{\epair {\nar M}{\nar N}} &=& {\nar N}^*\\
 \end{array}\]
-\subsubsection{The Diagonal Modality}
-\[
-\begin{prooftree}
-\demote{\wid \Gamma} \nprov  \nar A : \rtype
-\justifies
-\wid\Gamma \wprov  \dia \nar A : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \demote{\wid\Gamma}\nprov \nar M : \nar A
-\justifies
-\wid \Gamma \wprov \idia \nar M  : \dia \nar A
-\end{prooftree}
-\]
-Semantics:
-\[\begin{array}{rcl}
-{(\dia \nar A)}^* &=&  \nar A^*\\
-(\idia \nar M)^* &=& \nar M^*\\
-\end{array}
-\qquad
-\begin{array}{rcl}
-\tsem{\dia \nar A}\_ &=& 1\\
-\sem{\idia \nar M} &=& \langle\rangle\\
-\end{array}\]
 
-\subsubsection{The Open Modality}
-\[
-\begin{prooftree}
-\demote{\wid \Gamma} \nprov  \nar A : \rtype
-\justifies
-\wid\Gamma \wprov  \lax \nar A : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \Gamma, \star \prov M : A
-\justifies
-\Gamma \prov \ilax M  : \lax A
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \Gamma \prov M : \lax A\qquad \star \in \Gamma
-\justifies
-\Gamma \prov \elax M  : A
-\end{prooftree}
-\]
-Semantics:
-\[\begin{array}{rcl}
-{(\lax \nar A)}^* &=&  \nar A^*\\
-(\ilax M)^* &=& M^*\\
-(\elax M)^* &=& M^*\\
-\end{array}
-\qquad
-\begin{array}{rcl}
-\tsem{\lax \nar A}\_ &=& 1\\
-\sem{\ilax M} &=& \langle\rangle\\
-\sem{\elax M} &=& \babort(\alpha)\\
-\end{array}\]
+Let's check that these are semantically sound.
+In the formation rule, we know
+\[\sem{\ups\nar\Gamma}, x : \wid A^* \prov \tsem{\wid A}{x} : \rtype\]
+\[\nar\Gamma^* \prov \nar M^* : \erase{\wid A}^*\]
+Lemma~\ref{erase.star.eq.star} and Lemma~\ref{include.brackets.eq.star} says these are
+\[\nar\Gamma^*, x : \wid A^* \prov \tsem{\wid A}{x} : \rtype\]
+\[\nar\Gamma^* \prov \nar M^* : \wid A^*\]
+So substitute:
+\[\nar\Gamma^* \prov \tsem{\wid A}{\nar M^*} : \rtype\]
 
-\subsubsection{The Square Root Modality}
-The modality $\surd$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
-any function $f : A \to B$ and returns the identity $A \to A$. To apply $\surd$ is to `retreat to the past world'
-or `go upstairs', i.e. replace the data `downstairs' with the points that were formerly available upstairs.
-\[
-\begin{prooftree}
-\ups \nar \Gamma \wprov \wid A : \rtype
-\justifies
-\nar \Gamma \nprov \surd \wid A : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \ups\nar \Gamma \wprov \wid M : \wid A
-\justifies
-\nar \Gamma \nprov \isurd \wid M  : \surd \wid A
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\demote{\wid \Gamma} \nprov \nar M : \surd \wid A
-\justifies
-\wid\Gamma \wprov \esurd \nar M  : \wid A
-\end{prooftree}
-\]
-Semantics:
-\[\begin{array}{rcl@{\qquad}rcl}
-{(\surd \wid A)}^* &=&  (x : \wid A^*) \x \tsem {\wid A} x\\
-(\isurd \wid M)^* &=& \pair {\wid M^*} {\sem {\wid M}}\\
-(\esurd \nar M)^* &=& (\nar M^*).1 & \sem{\esurd \nar M} &=& (\nar M^*).2\\\\
-\end{array}
-\]
-Let's check Lemmas~\ref{semantic.soundness.type}
-and~\ref{semantic.soundness.term}.
-If we've derived $\nar \Gamma \nprov \surd \wid A : \rtype$ then we're supposed to show
-\[\nar \Gamma^* \prov (\surd \wid A)^* : \rtype\]
-which is
-\[\nar \Gamma^* \prov (x : \wid A^*) \x \tsem {\wid A} x : \rtype\]
-so we need
-\[\nar \Gamma^* \prov (x : \wid A^*) : \rtype\]
-\[\nar \Gamma^*, x : \wid A^* \prov \tsem {\wid A} x : \rtype\]
-and we get these from the premise, using Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
+For introduction, we must show
+\[\nar \Gamma^* \prov \{\wid M\}^* : {\pp  {\erase{\wid M}} {\wid A}}^*\]
+so
+\[\nar \Gamma^* \prov \sem{\wid M} : \tsem{\wid A}{\wid M^*}\]
+but this is exactly what we get out of the premise.
 
-Likewise if we've derived $\nar \Gamma \nprov \isurd \wid M  : \surd \wid A$, then we're supposed to show
-\[\nar \Gamma^* \prov (\isurd \wid M)^*  : (\surd \wid A)^*\]
-which is
-\[\nar \Gamma^* \prov \pair {\wid M^*} {\sem {\wid M}}  : (x : \wid A^*) \x \tsem {\wid A} x\]
-which requires
-\[\nar \Gamma^* \prov  {\wid M^*}   : \wid A^*\]
-\[\nar \Gamma^* \prov  {\sem {\wid M}}  :  \tsem {\wid A} {\wid M^*}\]
-which again is just what the premise delivers, via Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
-
-Finally, if we've derived $\wid\Gamma \wprov \esurd \nar M  : \wid A$ then we need to show
-\[\wid\Gamma^* \prov (\esurd \nar M)^*  : \wid A^*\]
-\[\sem{\wid\Gamma} \prov \sem{\esurd \nar M}  : \tsem{\wid A}{ (\esurd \nar M)^*}\]
-in other words
-\[\wid\Gamma^* \prov ( \nar M^*).1  : \wid A^*\]
-\[\sem{\wid\Gamma} \prov (\nar M^*).2  : \tsem{\wid A}{ ( \nar M^*).1}\]
-The premise gives us
-\[(\demote{\wid \Gamma})^* \prov \nar M^* :  (x : \wid A^*) \x \tsem {\wid A} x\]
-which is just what we need (using Lemma~\ref{semantic.weakening}, Lemma~\ref{demote.star.eq.star})
-\subsubsection{The Closed Modality}
-The modality $\blat$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
-any function $f : A \to B$ and returns the unique map $A \to 1$. To apply $\blat$ is to destroy all distinctions
-we formerly made `downstairs', while retaining all `upstairs' data.
-\[
-\begin{prooftree}
- \Gamma^\oplus \prov  A : \rtype
-\justifies
-\Gamma \prov  \blat A : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \Gamma^\oplus \prov M : A
-\justifies
-\Gamma \prov \iblat M  : \blat A
-\end{prooftree}
-\qquad
-\begin{prooftree}
- \Gamma^\ominus \prov M : \blat A
-\justifies
-\Gamma \prov \eblat M  : A
-\end{prooftree}
-\]
-Semantics:
-\[\begin{array}{rcl}
-{(\blat A)}^* &=& 1\\
-(\iblat M)^* &=& \langle\rangle\\
-(\eblat M)^* &=& \sem M.1\\
-\end{array}
-\qquad
-\begin{array}{rcl}
-\tsem{\blat A}\_ &=&  (x : \wid A^*) \x \tsem A x\\
-\sem{\iblat M} &=& \pair {M^*} {\sem M}\\
-\sem{\eblat M} &=& \sem M.2\\
-\end{array}\]
+For elimination, we get from the premises (by Lemmas~\ref{demote.star.eq.star} and~\ref{promote.star.eq.brackets})
+that
+\[\wid\Gamma^* \prov \nar M^* : \wid A^* \]
+\[\sem{\wid\Gamma} \prov \nar N^* : \tsem{\wid A}{\nar M^*}\]
+and this is exactly what we need.
 
 \subsubsection{The Glue Type}
 The glue type takes specifications of a `downstairs' and `upstairs' type and glues them together.
@@ -999,6 +910,161 @@ Semantics:
 \sem{M.1} &=& \babort(\alpha)\\
 \sem{M.2} &=& \babort(\alpha)\\
 \end{array}\]
+
+
+%% \subsubsection{The Diagonal Modality}
+%% \[
+%% \begin{prooftree}
+%% \demote{\wid \Gamma} \nprov  \nar A : \rtype
+%% \justifies
+%% \wid\Gamma \wprov  \dia \nar A : \rtype
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \demote{\wid\Gamma}\nprov \nar M : \nar A
+%% \justifies
+%% \wid \Gamma \wprov \idia \nar M  : \dia \nar A
+%% \end{prooftree}
+%% \]
+%% Semantics:
+%% \[\begin{array}{rcl}
+%% {(\dia \nar A)}^* &=&  \nar A^*\\
+%% (\idia \nar M)^* &=& \nar M^*\\
+%% \end{array}
+%% \qquad
+%% \begin{array}{rcl}
+%% \tsem{\dia \nar A}\_ &=& 1\\
+%% \sem{\idia \nar M} &=& \langle\rangle\\
+%% \end{array}\]
+
+%% \subsubsection{The Open Modality}
+%% \[
+%% \begin{prooftree}
+%% \demote{\wid \Gamma} \nprov  \nar A : \rtype
+%% \justifies
+%% \wid\Gamma \wprov  \lax \nar A : \rtype
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \Gamma, \star \prov M : A
+%% \justifies
+%% \Gamma \prov \ilax M  : \lax A
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \Gamma \prov M : \lax A\qquad \star \in \Gamma
+%% \justifies
+%% \Gamma \prov \elax M  : A
+%% \end{prooftree}
+%% \]
+%% Semantics:
+%% \[\begin{array}{rcl}
+%% {(\lax \nar A)}^* &=&  \nar A^*\\
+%% (\ilax M)^* &=& M^*\\
+%% (\elax M)^* &=& M^*\\
+%% \end{array}
+%% \qquad
+%% \begin{array}{rcl}
+%% \tsem{\lax \nar A}\_ &=& 1\\
+%% \sem{\ilax M} &=& \langle\rangle\\
+%% \sem{\elax M} &=& \babort(\alpha)\\
+%% \end{array}\]
+
+%% \subsubsection{The Square Root Modality}
+%% The modality $\surd$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
+%% any function $f : A \to B$ and returns the identity $A \to A$. To apply $\surd$ is to `retreat to the past world'
+%% or `go upstairs', i.e. replace the data `downstairs' with the points that were formerly available upstairs.
+%% \[
+%% \begin{prooftree}
+%% \ups \nar \Gamma \wprov \wid A : \rtype
+%% \justifies
+%% \nar \Gamma \nprov \surd \wid A : \rtype
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \ups\nar \Gamma \wprov \wid M : \wid A
+%% \justifies
+%% \nar \Gamma \nprov \isurd \wid M  : \surd \wid A
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%% \demote{\wid \Gamma} \nprov \nar M : \surd \wid A
+%% \justifies
+%% \wid\Gamma \wprov \esurd \nar M  : \wid A
+%% \end{prooftree}
+%% \]
+%% Semantics:
+%% \[\begin{array}{rcl@{\qquad}rcl}
+%% {(\surd \wid A)}^* &=&  (x : \wid A^*) \x \tsem {\wid A} x\\
+%% (\isurd \wid M)^* &=& \pair {\wid M^*} {\sem {\wid M}}\\
+%% (\esurd \nar M)^* &=& (\nar M^*).1 & \sem{\esurd \nar M} &=& (\nar M^*).2\\\\
+%% \end{array}
+%% \]
+%% Let's check Lemmas~\ref{semantic.soundness.type}
+%% and~\ref{semantic.soundness.term}.
+%% If we've derived $\nar \Gamma \nprov \surd \wid A : \rtype$ then we're supposed to show
+%% \[\nar \Gamma^* \prov (\surd \wid A)^* : \rtype\]
+%% which is
+%% \[\nar \Gamma^* \prov (x : \wid A^*) \x \tsem {\wid A} x : \rtype\]
+%% so we need
+%% \[\nar \Gamma^* \prov (x : \wid A^*) : \rtype\]
+%% \[\nar \Gamma^*, x : \wid A^* \prov \tsem {\wid A} x : \rtype\]
+%% and we get these from the premise, using Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
+
+%% Likewise if we've derived $\nar \Gamma \nprov \isurd \wid M  : \surd \wid A$, then we're supposed to show
+%% \[\nar \Gamma^* \prov (\isurd \wid M)^*  : (\surd \wid A)^*\]
+%% which is
+%% \[\nar \Gamma^* \prov \pair {\wid M^*} {\sem {\wid M}}  : (x : \wid A^*) \x \tsem {\wid A} x\]
+%% which requires
+%% \[\nar \Gamma^* \prov  {\wid M^*}   : \wid A^*\]
+%% \[\nar \Gamma^* \prov  {\sem {\wid M}}  :  \tsem {\wid A} {\wid M^*}\]
+%% which again is just what the premise delivers, via Lemmas~\ref{include.brackets.eq.star} and~\ref{include.star.eq.star}.
+
+%% Finally, if we've derived $\wid\Gamma \wprov \esurd \nar M  : \wid A$ then we need to show
+%% \[\wid\Gamma^* \prov (\esurd \nar M)^*  : \wid A^*\]
+%% \[\sem{\wid\Gamma} \prov \sem{\esurd \nar M}  : \tsem{\wid A}{ (\esurd \nar M)^*}\]
+%% in other words
+%% \[\wid\Gamma^* \prov ( \nar M^*).1  : \wid A^*\]
+%% \[\sem{\wid\Gamma} \prov (\nar M^*).2  : \tsem{\wid A}{ ( \nar M^*).1}\]
+%% The premise gives us
+%% \[(\demote{\wid \Gamma})^* \prov \nar M^* :  (x : \wid A^*) \x \tsem {\wid A} x\]
+%% which is just what we need (using Lemma~\ref{semantic.weakening}, Lemma~\ref{demote.star.eq.star})
+%% \subsubsection{The Closed Modality}
+%% The modality $\blat$ can be thought of as the functor from $\rtype^{\bf 2}$ to itself that takes
+%% any function $f : A \to B$ and returns the unique map $A \to 1$. To apply $\blat$ is to destroy all distinctions
+%% we formerly made `downstairs', while retaining all `upstairs' data.
+%% \[
+%% \begin{prooftree}
+%%  \Gamma^\oplus \prov  A : \rtype
+%% \justifies
+%% \Gamma \prov  \blat A : \rtype
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \Gamma^\oplus \prov M : A
+%% \justifies
+%% \Gamma \prov \iblat M  : \blat A
+%% \end{prooftree}
+%% \qquad
+%% \begin{prooftree}
+%%  \Gamma^\ominus \prov M : \blat A
+%% \justifies
+%% \Gamma \prov \eblat M  : A
+%% \end{prooftree}
+%% \]
+%% Semantics:
+%% \[\begin{array}{rcl}
+%% {(\blat A)}^* &=& 1\\
+%% (\iblat M)^* &=& \langle\rangle\\
+%% (\eblat M)^* &=& \sem M.1\\
+%% \end{array}
+%% \qquad
+%% \begin{array}{rcl}
+%% \tsem{\blat A}\_ &=&  (x : \wid A^*) \x \tsem A x\\
+%% \sem{\iblat M} &=& \pair {M^*} {\sem M}\\
+%% \sem{\eblat M} &=& \sem M.2\\
+%% \end{array}\]
+
 
 \section{Interesting Theorems}
 
@@ -1124,41 +1190,19 @@ then there exists an explicit isomorphism
 \subsection{The Universe}
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
-\section{From the Robot}
-%% ---- a few new macros: add to preamble ----
-\def\promote#1{{#1}^\oplus}
-\def\sat#1{{#1}^\circledast}
-\def\wU{\wid{\U}}
-\def\nU{\nar{\U}}
-\def\El{\mathsf{El}\,}
-\def\Set{\mathbf{Set}}
 
-\section{Structural Operations}
+\section{From The Robot}
+
 
 \subsection{Promotion and Saturation}
-Promotion $\promote{\dash}$ strengthens ordinary variables and leaves the rest alone:
-\[\begin{tabular}{rcl}
- $ \promote{(\wid\Gamma, x : \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
- $ \promote{(\wid\Gamma, x :: \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
- $ \promote{(\wid\Gamma, x \div \nar A)}$&$:=$&$(\promote{\wid\Gamma}, x \div \nar A)$\\
- $ \promote{(\cdot)}$&$:=$&$\cdot$\\
-\end{tabular}\]
-Saturation is demotion of promotion, $\sat{\wid\Gamma} := \demote{(\promote{\wid\Gamma})}$,
-a narrow context. Explicitly:
-\[\begin{tabular}{rcl}
- $ \sat{(\wid\Gamma, x : \wid A)}$&$:=$&$(\sat{\wid\Gamma}, x :: \wid A)$\\
- $ \sat{(\wid\Gamma, x :: \wid A)}$&$:=$&$(\sat{\wid\Gamma}, x :: \wid A)$\\
- $ \sat{(\wid\Gamma, x \div \nar A)}$&$:=$&$(\sat{\wid\Gamma}, x \div \nar A)$\\
- $ \sat{(\cdot)}$&$:=$&$\cdot$\\
-\end{tabular}\]
 
 \begin{lemma}[Saturation Realizes the Upstairs Stage]
 \label{sat.star.eq.brackets}
-$(\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$.
+$(\promote{\wid\Gamma})^* = \sem{\wid\Gamma}$.
 \end{lemma}
 \begin{proof}
 Induction on $\wid\Gamma$. The ordinary-variable case:
-$(\sat{(\wid\Gamma,x:\wid A)})^* = ((\sat{\wid\Gamma})^*, x^* : \wid A^*, \sem x : \tsem{\wid A}{x^*})
+$(\promote{(\wid\Gamma,x:\wid A)})^* = ((\promote{\wid\Gamma})^*, x^* : \wid A^*, \sem x : \tsem{\wid A}{x^*})
 = (\sem{\wid\Gamma}, x^* : \wid A^*, \sem x : \tsem{\wid A}{x^*}) = \sem{\wid\Gamma, x : \wid A}$.
 The other cases are analogous.
 \cqed
@@ -1166,35 +1210,10 @@ The other cases are analogous.
 
 \noindent Together with Lemma~\ref{demote.star.eq.star} this gives the slogan:
 {\em a narrow premise over $\demote{\wid\Gamma}$ supplies data at stage $\wid\Gamma^*$,
-and a narrow premise over $\sat{\wid\Gamma}$ supplies data at stage $\sem{\wid\Gamma}$.}
+and a narrow premise over $\promote{\wid\Gamma}$ supplies data at stage $\sem{\wid\Gamma}$.}
 Every wide judgment demands exactly one piece of data at each stage, so the rules
 below systematically ask for the $\dash^*$ half in $\demote{\wid\Gamma}$ and the
-$\sem\dash$ half in $\sat{\wid\Gamma}$.
-
-\begin{lemma}[Promotion]
-\label{promotion}
-If $\wid\Gamma \wprov J$, then $\ups(\sat{\wid\Gamma}) \wprov J$.
-\end{lemma}
-\begin{proof}[Proof sketch]
-Syntactically, every use of an ordinary variable becomes a use of a strong
-variable, which the variable rules permit. Semantically, $J^*$ must be transported from
-$\wid\Gamma^*$ to $(\ups(\sat{\wid\Gamma}))^* = (\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$,
-which is weakening (Lemma~\ref{semantic.weakening}); and $\sem J$ lives over
-$\sem{\ups(\sat{\wid\Gamma})} = (\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$, unchanged.
-\cqed
-\end{proof}
-
-\begin{lemma}[Shift]
-\label{shift}
-If $\demote{\wid\Gamma} \nprov J$, then $\sat{\wid\Gamma} \nprov J$.
-\end{lemma}
-\begin{proof}[Proof sketch]
-A weak hypothesis $x \div \erase{\wid A}$ is fulfilled by the strong hypothesis
-$x :: \wid A$, via the strong-variable rule in the narrow judgment and
-Lemma~\ref{erase.star.eq.star}. Semantically: weakening along
-$\wid\Gamma^* \subseteq \sem{\wid\Gamma}$.
-\cqed
-\end{proof}
+$\sem\dash$ half in $\promote{\wid\Gamma}$.
 
 \begin{lemma}[Substitution]
 \label{substitution}
@@ -1206,7 +1225,7 @@ $\sem{J[\wid N/x]} = \sem J\,[\wid N^*/x^*][\sem{\wid N}/\sem x]$.
 \item If $\nar\Gamma \nprov \nar N : \nar A$ and $J$ is over $\nar\Gamma, x \div \nar A$, then
 $(J[\nar N/x])^* = J^*[\nar N^*/x^*]$.
 \item Substitution against a strong variable $x :: \wid A$ arises via saturation
-(note $\sat{(\wid\Gamma, x : \wid A)} = \sat{\wid\Gamma}, x :: \wid A$) and
+(note $\promote{(\wid\Gamma, x : \wid A)} = \promote{\wid\Gamma}, x :: \wid A$) and
 substitutes both components:
 $(J[\wid N/x])^* = J^*[\wid N^*/x^*][\sem{\wid N}/\sem x]$.
 This is syntactically innocuous because narrow syntax reaches $\sem x$ only
@@ -1216,71 +1235,6 @@ through $\{x\}$, and $\{x\}[\wid N/x] = \{\wid N\}$ with $\{\wid N\}^* = \sem{\w
 
 \section{Type Formers, Revised}
 
-\subsection{The Fiber Type}
-\[
-\begin{prooftree}
-\ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
-\justifies
-\nar \Gamma \nprov \pp {\nar M} {\wid A} : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\ups {\nar \Gamma} \wprov \wid M : \wid A
-\justifies
-\nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\demote{\wid\Gamma} \nprov \nar M : \erase{\wid A} \quad
-\sat{\wid\Gamma} \nprov \nar N : \pp{\nar M}{\wid A}
-\justifies
-\wid\Gamma \wprov \epair{\nar M}{\nar N} : \wid A
-\end{prooftree}
-\]
-In the elimination rule, $\wid A$ is a type over $\wid\Gamma$; the second premise
-is well-formed because $\wid A$ transports to $\ups(\sat{\wid\Gamma})$ by
-Lemma~\ref{promotion} and $\nar M$ to $\sat{\wid\Gamma}$ by Lemma~\ref{shift}.
-
-\noindent Semantics:
-\[\begin{array}{rcl}
-{\pp {\nar M} {\wid A}}^* &=& \tsem {\wid A} {\nar M^*}\\
-\{\wid M\}^* &=& \sem {\wid M}\\
-(\epair {\nar M} {\nar N})^* &=& {\nar M}^*\\
-\end{array}
-\qquad
-\begin{array}{rcl}
-\\
-\\
-\sem{\epair {\nar M}{\nar N}} &=& {\nar N}^*\\
-\end{array}\]
-Definitional equations and erasure:
-\[
-\{\epair{\nar M}{\nar N}\} \equiv \nar N
-\qquad
-\epair{\erase{\wid P}}{\{\wid P\}} \equiv \wid P
-\qquad
-\erase{\epair{\nar M}{\nar N}} = \nar M
-\]
-The last clause is the new home of the old rule
-``$\epair M N \equiv M$ in the presence of $\star$.''
-
-Soundness. Formation: the first premise gives
-$\sem{\ups\nar\Gamma}, m : \wid A^* \prov \tsem{\wid A}{m} : \rtype$
-with $\sem{\ups\nar\Gamma} = \nar\Gamma^*$
-(Lemma~\ref{include.brackets.eq.star}); substitute
-$m := \nar M^* : \erase{\wid A}^* = \wid A^*$ (Lemma~\ref{erase.star.eq.star}).
-Introduction: $\{\wid M\}^* = \sem{\wid M} : \tsem{\wid A}{\wid M^*}
-= \tsem{\wid A}{\erase{\wid M}^*} = \pp{\erase{\wid M}}{\wid A}^*$.
-Elimination: $(\epair MN)^* = \nar M^*$ typechecks over
-$(\demote{\wid\Gamma})^* = \wid\Gamma^*$ at $\wid A^*$
-(Lemma~\ref{demote.star.eq.star});
-$\sem{\epair MN} = \nar N^*$ typechecks over
-$(\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$
-(Lemma~\ref{sat.star.eq.brackets})
-at $\pp{\nar M}{\wid A}^* = \tsem{\wid A}{\nar M^*}
-= \tsem{\wid A}{(\epair MN)^*}$.
-Both $\beta$ and $\eta$ hold semantically on the nose: both sides of $\eta$
-translate to the pair $(\wid P^*, \sem{\wid P})$.
 
 \subsection{The Glue Type}
 All the input data is narrow. The first projection is erasure itself, so only
@@ -1288,14 +1242,14 @@ the second projection is a primitive eliminator.
 \[
 \begin{prooftree}
 \demote{\wid\Gamma} \nprov \nar N : \rtype \qquad
-\sat{\wid\Gamma}, x \div \nar N \nprov \nar B : \rtype
+\promote{\wid\Gamma}, x \div \nar N \nprov \nar B : \rtype
 \justifies
 \wid\Gamma \wprov \gg(x \div \nar N).\nar B : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
 \demote{\wid\Gamma} \nprov \nar M : \nar N \qquad
-\sat{\wid\Gamma} \nprov \nar P : [\nar M/x]\nar B
+\promote{\wid\Gamma} \nprov \nar P : [\nar M/x]\nar B
 \justifies
 \wid\Gamma \wprov \bgel(\nar M, \nar P) : \gg(x \div \nar N).\nar B
 \end{prooftree}
@@ -1339,7 +1293,7 @@ $[\wid M^*/x]\nar B^* = ([\erase{\wid M}/x]\nar B)^*$ by
 Lemmas~\ref{erase.star.eq.star} and~\ref{substitution}.
 
 Note that there is deliberately no projection rule for a glue term in a
-{\em general} wide context: one first passes to $\sat{\wid\Gamma}$ by
+{\em general} wide context: one first passes to $\promote{\wid\Gamma}$ by
 Lemma~\ref{promotion}. This is exactly the point at which the old semantics
 was forced to say $\babort(\alpha)$; here the offending rule simply does not
 exist, and nothing needs aborting.
@@ -1350,7 +1304,7 @@ Everything else is notation.
 \dia \nar N &:=& \gg(x \div \nar N).\bone
 & \hbox{derived intro is the old $\idia$ rule; derived ``elim'' is $\erase\dash$}\\
 \U\nar S &:=& \gg(\_ \div \bone).\nar S
-& \hbox{intro from $\sat{\wid\Gamma} \nprov \nar P : \nar S$; elim is $.2$}\\
+& \hbox{intro from $\promote{\wid\Gamma} \nprov \nar P : \nar S$; elim is $.2$}\\
 \surd \wid A &:=& \Sigma(x \div \erase{\wid A}).\pp{x}{\wid A}
 & \hbox{a narrow $\Sigma$}\\
 \isurd \wid M &:=& (\erase{\wid M}, \{\wid M\})\\
@@ -1360,7 +1314,7 @@ Everything else is notation.
 \lax \wid A &:=& \dia\,\erase{\wid A}\\
 \blat \wid A &:=& \U(\surd \wid A)\\
 \end{array}\]
-The old $\iblat$ derives with its premise over $\ups(\sat{\wid\Gamma})$ ---
+The old $\iblat$ derives with its premise over $\ups(\promote{\wid\Gamma})$ ---
 the promoted context --- and the old $\eblat$ derives only in saturated
 contexts, as it must: its $\dash^*$ clause consumed $\sem\dash$-data of the
 premise, an information flow available only when $\wid\Gamma^* = \sem{\wid\Gamma}$.
