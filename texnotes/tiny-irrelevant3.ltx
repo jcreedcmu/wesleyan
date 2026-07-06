@@ -269,8 +269,9 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\isurd{\mathcal{I}_\surd}
 \def\elax{\mathcal{E}_\bigcirc}
 \def\ilax{\mathcal{I}_\bigcirc}
-\def\idia{\mathcal{I}_\dia}
-\def\edia{\mathcal{E}_\dia}
+\def\dia{\Delta}
+\def\idia{\mathcal{I}_\Delta}
+\def\edia{\mathcal{E}_\Delta}
 
 \def\pp#1#2{[#1 \in #2]}
 \def\gg{\textbf{\textsf{G}}}
@@ -365,6 +366,14 @@ Distributed throughout various sections.
 
 \subsection{Erasure}
 Erasure $|\dash|$ takes a wide type or term and turns it into a narrow type or term.
+
+\[
+\begin{tabular}{rcl}
+ $ \erase{\dia \nar A}$&$:=$&$\nar A$\\
+ $ \erase{\idia \nar M}$&$:=$&$\nar M$\\
+ $ \erase{\esurd \nar M}$&$:=$&$\textcolor{red}{???}$\\
+\end{tabular}
+\]
 
 \begin{lemma}
 \label{erase.type}
@@ -806,24 +815,16 @@ Semantics:
 \justifies
 \wid \Gamma \wprov \idia \nar M  : \dia \nar A
 \end{prooftree}
-\qquad
-\begin{prooftree}
- \Gamma \prov M : \dia A\qquad \star \in \Gamma
-\justifies
-\Gamma \prov \edia M  : A
-\end{prooftree}
 \]
 Semantics:
 \[\begin{array}{rcl}
 {(\dia \nar A)}^* &=&  \nar A^*\\
 (\idia \nar M)^* &=& \nar M^*\\
-(\edia M)^* &=& M^*\\
 \end{array}
 \qquad
 \begin{array}{rcl}
 \tsem{\dia \nar A}\_ &=& 1\\
 \sem{\idia \nar M} &=& \langle\rangle\\
-\sem{\edia M} &=& \babort(\alpha)\\
 \end{array}\]
 
 \subsubsection{The Open Modality}
