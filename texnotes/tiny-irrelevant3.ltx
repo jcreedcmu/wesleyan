@@ -1158,10 +1158,10 @@ which is exactly what we need to show.
 
 \subsection{The Nondependent Function Type}
 If
-\[ \prov \Gamma \rctx \qquad \Gamma^\ominus \prov A : \rtype \qquad \Gamma^\ominus \prov B : \rtype \qquad
-\Gamma, \star \prov f : A \to B\]
+\[ \nprov \nar \Gamma \rctx \qquad \ups \nar\Gamma \wprov \wid A : \rtype \qquad \ups \nar\Gamma \wprov \wid B : \rtype \qquad
+\nar \Gamma \nprov \nar f : \erase{\wid A \to \wid B}\]
 then there exists an explicit isomorphism
-\[\Gamma \prov \pp f {A \to B}  \cong (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B \]
+\[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {\wid B} \]
 Explicitly, here is the construction:
 \[ \Gamma \prov \mathsf{fore} : (f' : \pp f {A \to B}) (a :  A) (a' : \pp { a} A) \to \pp {f\ a} B \]
 \[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair f {f'})\ (\epair { a} {a'})\}\]
