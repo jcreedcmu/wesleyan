@@ -281,7 +281,7 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\edia{\mathcal{E}_\Delta}
 
 \def\pp#1#2{[#1 \in #2]}
-\def\gg{\textbf{\textsf{G}}}
+\def\gg{\wid{\textbf{\textsf{G}}}}
 \section{Introduction}
 The purpose of this note is to describe a small modal type theory in which we can do a little bit of internalized
 parametricity. It is not a goal to do iterated internalized parametricity. It {\em is} a goal to have the type system
@@ -311,7 +311,7 @@ Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \n
  Wide Contexts&$\wid \Gamma$&$::=$&$\cdot  \celse \wid\Gamma, x :: \wid A \celse \wid\Gamma, x \div \nar A  \celse \wid \Gamma, x : \wid A$\\
   Narrow Contexts&$\nar\Gamma$&$::=$&$\cdot \celse \nar \Gamma, x :: \wid A\celse \nar \Gamma, x \div \nar A  $\\
   Wide Types&$\wid A$&$::=$&$\cdots
- \celse \wid \gg (x : \nar A) . \nar B
+ \celse \gg (x : \nar A) . \nar B
 %  \celse \dia {\nar A}
 $\\
   Narrow Types&$\nar A$&$::=$&$\cdots
@@ -789,8 +789,6 @@ For the semantics we must check cases of \ref{semantic.soundness.term}. This is 
 we need to invoke Lemma~\ref{erase.star.eq.star}.
 
 
-\subsection{Type Formers}
-
 
 \subsection{The Fiber Type}
 \[
@@ -831,7 +829,7 @@ Erasure on the elim form works like:
 \erase{\epair{\nar M}{\nar N}} = \nar M
 \]
 
-\noindent {\bf Semantics}:
+\subsubsection{Semantics}
 \[\begin{array}{rcl}
 {\pp {\nar M} {\wid A}}^* &=& \tsem {\wid A} {\nar M^*}\\
 \{\wid M\}^* &=& \sem {\wid M}\\
@@ -866,50 +864,67 @@ that
 \[\sem{\wid\Gamma} \prov \nar N^* : \tsem{\wid A}{\nar M^*}\]
 and this is exactly what we need.
 
-\subsubsection{The Glue Type}
-The glue type takes specifications of a `downstairs' and `upstairs' type and glues them together.
+\subsection{The Glue Type}
 \[
 \begin{prooftree}
-\Gamma, \star \prov A : \rtype \qquad \Gamma^\oplus, \star, x : \wid A\prov B : \rtype
+\demote{\wid\Gamma} \nprov \nar A : \rtype \qquad
+\promote{\wid\Gamma}, x \div \nar A \nprov \nar B : \rtype
 \justifies
-\Gamma \prov  \gg(x : \wid A) . B : \rtype
-\end{prooftree}
-\]
-\[
-\begin{prooftree}
-\Gamma, \star \prov M : A  \qquad \Gamma^\oplus, \star \prov N : [M/x]B
-\justifies
-\Gamma \prov  \mpair M N : \gg(x : \wid A) . B : \rtype
-\end{prooftree}
-\]
-\[
-\begin{prooftree}
-\Gamma \prov  M : \gg(x : \wid A) . B
-\justifies
-\Gamma, \star \prov M.1 : A
+\wid\Gamma \wprov \gg(x \div \nar A).\nar B : \rtype
 \end{prooftree}
 \qquad
 \begin{prooftree}
-\Gamma \prov  M : \gg(x : \wid A) . B
+\demote{\wid\Gamma} \nprov \nar M : \nar A \qquad
+\promote{\wid\Gamma} \nprov \nar N : [\nar M/x]\nar B
 \justifies
-  \Gamma^\oplus, \star\prov M.2 : [M.1/x]B
+\wid\Gamma \wprov \bgel(\nar M, \nar N) : \gg(x \div \nar A).\nar B
 \end{prooftree}
 \]
-
-Semantics:
+\[
+\begin{prooftree}
+\ups\nar\Gamma \wprov \wid M : \gg(x \div \nar A).\nar B
+\justifies
+\nar\Gamma \nprov \bungel \wid M : [\erase{\wid M}/x]\nar B
+\end{prooftree}
+\]
+\subsubsection{Semantics}
 \[\begin{array}{rcl}
-{( \gg(x : \wid A) . B)}^* &=& A^*\\
-\mpair M N ^* &=& M^*\\
-(M.1)^* &=&  M^*\\
-(M.2)^* &=& \sem M\\
+(\gg(x \div \nar A).\nar B)^* &=& \nar A^*\\
+\bgel(\nar M,\nar N)^* &=& \nar M^*\\
+(\bungel \wid M)^* &=& \sem{\wid M}\\
 \end{array}
 \qquad
 \begin{array}{rcl}
-\tsem{ \gg(x : \wid A) . B} {M^*} &=&  [M^*/x^*]B^*\\
-\sem{ \mpair M N } &=& N^*\\
-\sem{M.1} &=& \babort(\alpha)\\
-\sem{M.2} &=& \babort(\alpha)\\
+\tsem{\gg(x \div \nar A).\nar B}{M} &=& [M/x]\nar B^*\\
+\sem{\bgel(\nar M,\nar N)} &=& \nar N^*\\
+\\
 \end{array}\]
+Definitional equations and erasure:
+\[
+\bgel(\nar M,\nar N).2 \equiv \nar N
+\qquad
+\bgel(\erase{\wid M}, \wid M.2) \equiv \wid M
+\qquad
+\erase{\gg(x \div \nar A).\nar B} = \nar A
+\qquad
+\erase{\bgel(\nar M,\nar N)} = \nar M
+\]
+The two erasure clauses replace the old $\star$-conditional reductions
+$\gg(x{:}A).B \equiv_\star A$ and $\mpair MN \equiv_\star M$.
+
+Soundness of $.2$: the premise yields
+$\sem{\wid M} : \tsem{\gg(x \div \nar N).\nar B}{\wid M^*} = [\wid M^*/x]\nar B^*$
+over $\sem{\ups\nar\Gamma} = \nar\Gamma^*$, and
+$[\wid M^*/x]\nar B^* = ([\erase{\wid M}/x]\nar B)^*$ by
+Lemmas~\ref{erase.star.eq.star} and~\ref{substitution}.
+
+Note that there is deliberately no projection rule for a glue term in a
+{\em general} wide context: one first passes to $\promote{\wid\Gamma}$ by
+Lemma~\ref{promotion}. This is exactly the point at which the old semantics
+was forced to say $\babort(\alpha)$; here the offending rule simply does not
+exist, and nothing needs aborting.
+
+
 
 
 %% \subsubsection{The Diagonal Modality}
@@ -1236,67 +1251,6 @@ through $\{x\}$, and $\{x\}[\wid N/x] = \{\wid N\}$ with $\{\wid N\}^* = \sem{\w
 \section{Type Formers, Revised}
 
 
-\subsection{The Glue Type}
-All the input data is narrow. The first projection is erasure itself, so only
-the second projection is a primitive eliminator.
-\[
-\begin{prooftree}
-\demote{\wid\Gamma} \nprov \nar N : \rtype \qquad
-\promote{\wid\Gamma}, x \div \nar N \nprov \nar B : \rtype
-\justifies
-\wid\Gamma \wprov \gg(x \div \nar N).\nar B : \rtype
-\end{prooftree}
-\qquad
-\begin{prooftree}
-\demote{\wid\Gamma} \nprov \nar M : \nar N \qquad
-\promote{\wid\Gamma} \nprov \nar P : [\nar M/x]\nar B
-\justifies
-\wid\Gamma \wprov \bgel(\nar M, \nar P) : \gg(x \div \nar N).\nar B
-\end{prooftree}
-\]
-\[
-\begin{prooftree}
-\ups\nar\Gamma \wprov \wid M : \gg(x \div \nar N).\nar B
-\justifies
-\nar\Gamma \nprov \wid M.2 : [\erase{\wid M}/x]\nar B
-\end{prooftree}
-\]
-Semantics:
-\[\begin{array}{rcl}
-(\gg(x \div \nar N).\nar B)^* &=& \nar N^*\\
-\bgel(\nar M,\nar P)^* &=& \nar M^*\\
-(\wid M.2)^* &=& \sem{\wid M}\\
-\end{array}
-\qquad
-\begin{array}{rcl}
-\tsem{\gg(x \div \nar N).\nar B}{m} &=& [m/x]\nar B^*\\
-\sem{\bgel(\nar M,\nar P)} &=& \nar P^*\\
-\\
-\end{array}\]
-Definitional equations and erasure:
-\[
-\bgel(\nar M,\nar P).2 \equiv \nar P
-\qquad
-\bgel(\erase{\wid M}, \wid M.2) \equiv \wid M
-\qquad
-\erase{\gg(x \div \nar N).\nar B} = \nar N
-\qquad
-\erase{\bgel(\nar M,\nar P)} = \nar M
-\]
-The two erasure clauses replace the old $\star$-conditional reductions
-$\gg(x{:}A).B \equiv_\star A$ and $\mpair MN \equiv_\star M$.
-
-Soundness of $.2$: the premise yields
-$\sem{\wid M} : \tsem{\gg(x \div \nar N).\nar B}{\wid M^*} = [\wid M^*/x]\nar B^*$
-over $\sem{\ups\nar\Gamma} = \nar\Gamma^*$, and
-$[\wid M^*/x]\nar B^* = ([\erase{\wid M}/x]\nar B)^*$ by
-Lemmas~\ref{erase.star.eq.star} and~\ref{substitution}.
-
-Note that there is deliberately no projection rule for a glue term in a
-{\em general} wide context: one first passes to $\promote{\wid\Gamma}$ by
-Lemma~\ref{promotion}. This is exactly the point at which the old semantics
-was forced to say $\babort(\alpha)$; here the offending rule simply does not
-exist, and nothing needs aborting.
 
 \subsection{Derived Connectives}
 Everything else is notation.
