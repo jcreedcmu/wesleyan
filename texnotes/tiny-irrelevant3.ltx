@@ -1124,5 +1124,355 @@ then there exists an explicit isomorphism
 \subsection{The Universe}
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
+\section{From the Robot}
+%% ---- a few new macros: add to preamble ----
+\def\promote#1{{#1}^\oplus}
+\def\sat#1{{#1}^\circledast}
+\def\wU{\wid{\U}}
+\def\nU{\nar{\U}}
+\def\El{\mathsf{El}\,}
+\def\Set{\mathbf{Set}}
+
+\section{Structural Operations}
+
+\subsection{Promotion and Saturation}
+Promotion $\promote{\dash}$ strengthens ordinary variables and leaves the rest alone:
+\[\begin{tabular}{rcl}
+ $ \promote{(\wid\Gamma, x : \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
+ $ \promote{(\wid\Gamma, x :: \wid A)}$&$:=$&$(\promote{\wid\Gamma}, x :: \wid A)$\\
+ $ \promote{(\wid\Gamma, x \div \nar A)}$&$:=$&$(\promote{\wid\Gamma}, x \div \nar A)$\\
+ $ \promote{(\cdot)}$&$:=$&$\cdot$\\
+\end{tabular}\]
+Saturation is demotion of promotion, $\sat{\wid\Gamma} := \demote{(\promote{\wid\Gamma})}$,
+a narrow context. Explicitly:
+\[\begin{tabular}{rcl}
+ $ \sat{(\wid\Gamma, x : \wid A)}$&$:=$&$(\sat{\wid\Gamma}, x :: \wid A)$\\
+ $ \sat{(\wid\Gamma, x :: \wid A)}$&$:=$&$(\sat{\wid\Gamma}, x :: \wid A)$\\
+ $ \sat{(\wid\Gamma, x \div \nar A)}$&$:=$&$(\sat{\wid\Gamma}, x \div \nar A)$\\
+ $ \sat{(\cdot)}$&$:=$&$\cdot$\\
+\end{tabular}\]
+
+\begin{lemma}[Saturation Realizes the Upstairs Stage]
+\label{sat.star.eq.brackets}
+$(\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$.
+\end{lemma}
+\begin{proof}
+Induction on $\wid\Gamma$. The ordinary-variable case:
+$(\sat{(\wid\Gamma,x:\wid A)})^* = ((\sat{\wid\Gamma})^*, x^* : \wid A^*, \sem x : \tsem{\wid A}{x^*})
+= (\sem{\wid\Gamma}, x^* : \wid A^*, \sem x : \tsem{\wid A}{x^*}) = \sem{\wid\Gamma, x : \wid A}$.
+The other cases are analogous.
+\cqed
+\end{proof}
+
+\noindent Together with Lemma~\ref{demote.star.eq.star} this gives the slogan:
+{\em a narrow premise over $\demote{\wid\Gamma}$ supplies data at stage $\wid\Gamma^*$,
+and a narrow premise over $\sat{\wid\Gamma}$ supplies data at stage $\sem{\wid\Gamma}$.}
+Every wide judgment demands exactly one piece of data at each stage, so the rules
+below systematically ask for the $\dash^*$ half in $\demote{\wid\Gamma}$ and the
+$\sem\dash$ half in $\sat{\wid\Gamma}$.
+
+\begin{lemma}[Promotion]
+\label{promotion}
+If $\wid\Gamma \wprov J$, then $\ups(\sat{\wid\Gamma}) \wprov J$.
+\end{lemma}
+\begin{proof}[Proof sketch]
+Syntactically, every use of an ordinary variable becomes a use of a strong
+variable, which the variable rules permit. Semantically, $J^*$ must be transported from
+$\wid\Gamma^*$ to $(\ups(\sat{\wid\Gamma}))^* = (\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$,
+which is weakening (Lemma~\ref{semantic.weakening}); and $\sem J$ lives over
+$\sem{\ups(\sat{\wid\Gamma})} = (\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$, unchanged.
+\cqed
+\end{proof}
+
+\begin{lemma}[Shift]
+\label{shift}
+If $\demote{\wid\Gamma} \nprov J$, then $\sat{\wid\Gamma} \nprov J$.
+\end{lemma}
+\begin{proof}[Proof sketch]
+A weak hypothesis $x \div \erase{\wid A}$ is fulfilled by the strong hypothesis
+$x :: \wid A$, via the strong-variable rule in the narrow judgment and
+Lemma~\ref{erase.star.eq.star}. Semantically: weakening along
+$\wid\Gamma^* \subseteq \sem{\wid\Gamma}$.
+\cqed
+\end{proof}
+
+\begin{lemma}[Substitution]
+\label{substitution}
+\begin{enumerate}[noitemsep]
+\item If $\wid\Gamma \wprov \wid N : \wid A$ and $J$ is a judgment over
+$\wid\Gamma, x : \wid A$, then
+$(J[\wid N/x])^* = J^*[\wid N^*/x^*]$ and
+$\sem{J[\wid N/x]} = \sem J\,[\wid N^*/x^*][\sem{\wid N}/\sem x]$.
+\item If $\nar\Gamma \nprov \nar N : \nar A$ and $J$ is over $\nar\Gamma, x \div \nar A$, then
+$(J[\nar N/x])^* = J^*[\nar N^*/x^*]$.
+\item Substitution against a strong variable $x :: \wid A$ arises via saturation
+(note $\sat{(\wid\Gamma, x : \wid A)} = \sat{\wid\Gamma}, x :: \wid A$) and
+substitutes both components:
+$(J[\wid N/x])^* = J^*[\wid N^*/x^*][\sem{\wid N}/\sem x]$.
+This is syntactically innocuous because narrow syntax reaches $\sem x$ only
+through $\{x\}$, and $\{x\}[\wid N/x] = \{\wid N\}$ with $\{\wid N\}^* = \sem{\wid N}$.
+\end{enumerate}
+\end{lemma}
+
+\section{Type Formers, Revised}
+
+\subsection{The Fiber Type}
+\[
+\begin{prooftree}
+\ups\nar \Gamma \wprov \wid A : \rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
+\justifies
+\nar \Gamma \nprov \pp {\nar M} {\wid A} : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\ups {\nar \Gamma} \wprov \wid M : \wid A
+\justifies
+\nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M : \erase{\wid A} \quad
+\sat{\wid\Gamma} \nprov \nar N : \pp{\nar M}{\wid A}
+\justifies
+\wid\Gamma \wprov \epair{\nar M}{\nar N} : \wid A
+\end{prooftree}
+\]
+In the elimination rule, $\wid A$ is a type over $\wid\Gamma$; the second premise
+is well-formed because $\wid A$ transports to $\ups(\sat{\wid\Gamma})$ by
+Lemma~\ref{promotion} and $\nar M$ to $\sat{\wid\Gamma}$ by Lemma~\ref{shift}.
+
+\noindent Semantics:
+\[\begin{array}{rcl}
+{\pp {\nar M} {\wid A}}^* &=& \tsem {\wid A} {\nar M^*}\\
+\{\wid M\}^* &=& \sem {\wid M}\\
+(\epair {\nar M} {\nar N})^* &=& {\nar M}^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\\
+\\
+\sem{\epair {\nar M}{\nar N}} &=& {\nar N}^*\\
+\end{array}\]
+Definitional equations and erasure:
+\[
+\{\epair{\nar M}{\nar N}\} \equiv \nar N
+\qquad
+\epair{\erase{\wid P}}{\{\wid P\}} \equiv \wid P
+\qquad
+\erase{\epair{\nar M}{\nar N}} = \nar M
+\]
+The last clause is the new home of the old rule
+``$\epair M N \equiv M$ in the presence of $\star$.''
+
+Soundness. Formation: the first premise gives
+$\sem{\ups\nar\Gamma}, m : \wid A^* \prov \tsem{\wid A}{m} : \rtype$
+with $\sem{\ups\nar\Gamma} = \nar\Gamma^*$
+(Lemma~\ref{include.brackets.eq.star}); substitute
+$m := \nar M^* : \erase{\wid A}^* = \wid A^*$ (Lemma~\ref{erase.star.eq.star}).
+Introduction: $\{\wid M\}^* = \sem{\wid M} : \tsem{\wid A}{\wid M^*}
+= \tsem{\wid A}{\erase{\wid M}^*} = \pp{\erase{\wid M}}{\wid A}^*$.
+Elimination: $(\epair MN)^* = \nar M^*$ typechecks over
+$(\demote{\wid\Gamma})^* = \wid\Gamma^*$ at $\wid A^*$
+(Lemma~\ref{demote.star.eq.star});
+$\sem{\epair MN} = \nar N^*$ typechecks over
+$(\sat{\wid\Gamma})^* = \sem{\wid\Gamma}$
+(Lemma~\ref{sat.star.eq.brackets})
+at $\pp{\nar M}{\wid A}^* = \tsem{\wid A}{\nar M^*}
+= \tsem{\wid A}{(\epair MN)^*}$.
+Both $\beta$ and $\eta$ hold semantically on the nose: both sides of $\eta$
+translate to the pair $(\wid P^*, \sem{\wid P})$.
+
+\subsection{The Glue Type}
+All the input data is narrow. The first projection is erasure itself, so only
+the second projection is a primitive eliminator.
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar N : \rtype \qquad
+\sat{\wid\Gamma}, x \div \nar N \nprov \nar B : \rtype
+\justifies
+\wid\Gamma \wprov \gg(x \div \nar N).\nar B : \rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M : \nar N \qquad
+\sat{\wid\Gamma} \nprov \nar P : [\nar M/x]\nar B
+\justifies
+\wid\Gamma \wprov \bgel(\nar M, \nar P) : \gg(x \div \nar N).\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar\Gamma \wprov \wid M : \gg(x \div \nar N).\nar B
+\justifies
+\nar\Gamma \nprov \wid M.2 : [\erase{\wid M}/x]\nar B
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+(\gg(x \div \nar N).\nar B)^* &=& \nar N^*\\
+\bgel(\nar M,\nar P)^* &=& \nar M^*\\
+(\wid M.2)^* &=& \sem{\wid M}\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{\gg(x \div \nar N).\nar B}{m} &=& [m/x]\nar B^*\\
+\sem{\bgel(\nar M,\nar P)} &=& \nar P^*\\
+\\
+\end{array}\]
+Definitional equations and erasure:
+\[
+\bgel(\nar M,\nar P).2 \equiv \nar P
+\qquad
+\bgel(\erase{\wid M}, \wid M.2) \equiv \wid M
+\qquad
+\erase{\gg(x \div \nar N).\nar B} = \nar N
+\qquad
+\erase{\bgel(\nar M,\nar P)} = \nar M
+\]
+The two erasure clauses replace the old $\star$-conditional reductions
+$\gg(x{:}A).B \equiv_\star A$ and $\mpair MN \equiv_\star M$.
+
+Soundness of $.2$: the premise yields
+$\sem{\wid M} : \tsem{\gg(x \div \nar N).\nar B}{\wid M^*} = [\wid M^*/x]\nar B^*$
+over $\sem{\ups\nar\Gamma} = \nar\Gamma^*$, and
+$[\wid M^*/x]\nar B^* = ([\erase{\wid M}/x]\nar B)^*$ by
+Lemmas~\ref{erase.star.eq.star} and~\ref{substitution}.
+
+Note that there is deliberately no projection rule for a glue term in a
+{\em general} wide context: one first passes to $\sat{\wid\Gamma}$ by
+Lemma~\ref{promotion}. This is exactly the point at which the old semantics
+was forced to say $\babort(\alpha)$; here the offending rule simply does not
+exist, and nothing needs aborting.
+
+\subsection{Derived Connectives}
+Everything else is notation.
+\[\begin{array}{rcl@{\qquad}l}
+\dia \nar N &:=& \gg(x \div \nar N).\bone
+& \hbox{derived intro is the old $\idia$ rule; derived ``elim'' is $\erase\dash$}\\
+\U\nar S &:=& \gg(\_ \div \bone).\nar S
+& \hbox{intro from $\sat{\wid\Gamma} \nprov \nar P : \nar S$; elim is $.2$}\\
+\surd \wid A &:=& \Sigma(x \div \erase{\wid A}).\pp{x}{\wid A}
+& \hbox{a narrow $\Sigma$}\\
+\isurd \wid M &:=& (\erase{\wid M}, \{\wid M\})\\
+\esurd \nar M &:=& \epair{\rfst\nar M}{\rsnd\nar M}
+& \hbox{whence } \erase{\esurd\nar M} = \rfst\nar M
+  \hbox{ (the former {\textcolor{red}{???}})}\\
+\lax \wid A &:=& \dia\,\erase{\wid A}\\
+\blat \wid A &:=& \U(\surd \wid A)\\
+\end{array}\]
+The old $\iblat$ derives with its premise over $\ups(\sat{\wid\Gamma})$ ---
+the promoted context --- and the old $\eblat$ derives only in saturated
+contexts, as it must: its $\dash^*$ clause consumed $\sem\dash$-data of the
+premise, an information flow available only when $\wid\Gamma^* = \sem{\wid\Gamma}$.
+
+\begin{thmbox}
+\begin{theorem}[Fracture]
+For $\wid\Gamma \wprov \wid A : \rtype$,
+\[\wid\Gamma \wprov \wid A \;\cong\; \gg(x \div \erase{\wid A}).\pp{x}{\wid A}\]
+witnessed by $\lambda a.\,\bgel(\erase a, \{a\})$ and
+$\lambda g.\,\epair{\erase g}{g.2}$, mutually inverse by the $\beta\eta$ laws
+above. Every wide type is the gluing of its erasure with its own
+logical-relation family.
+\end{theorem}
+\end{thmbox}
+
+\subsection{Wide $\Pi$ and the Universes}
+The mode-uniform connectives ($\Pi$, $\Sigma$, $\mathrm{Id}$, universes) have
+homomorphic erasure; we record $\Pi$ and $\U$, the two the theorems need.
+\[
+\begin{prooftree}
+\wid\Gamma, x : \wid A \wprov \wid M : \wid B
+\justifies
+\wid\Gamma \wprov \lambda x.\wid M : (x : \wid A) \to \wid B
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\wid\Gamma \wprov \wid M : (x : \wid A) \to \wid B \quad
+\wid\Gamma \wprov \wid N : \wid A
+\justifies
+\wid\Gamma \wprov \wid M\ \wid N : [\wid N/x]\wid B
+\end{prooftree}
+\]
+Semantics:
+\[\begin{array}{rcl}
+((x : \wid A) \to \wid B)^* &=& (x^* : \wid A^*) \to \wid B^*\\
+(\lambda x.\wid M)^* &=& \lambda x^*.\,\wid M^*\\
+(\wid M\ \wid N)^* &=& \wid M^*\ \wid N^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\tsem{(x : \wid A) \to \wid B}{f} &=&
+  (x^* : \wid A^*)(\sem x : \tsem{\wid A}{x^*}) \to \tsem{\wid B}{f\,x^*}\\
+\sem{\lambda x.\wid M} &=& \lambda x^*.\lambda \sem x.\,\sem{\wid M}\\
+\sem{\wid M\ \wid N} &=& \sem{\wid M}\ \wid N^*\ \sem{\wid N}\\
+\end{array}\]
+Well-typedness of the $\lambda$ clauses is carried entirely by the asymmetry
+between the two context-semantics clauses for an ordinary variable:
+$\sem{\wid\Gamma, x : \wid A}$ contains both $x^*$ and $\sem x$, while
+$(\wid\Gamma, x : \wid A)^*$ contains only $x^*$. That asymmetry is the
+abstraction theorem.
+
+Universes ($\El$ decodes):
+\[\begin{array}{rcl@{\qquad}rcl}
+\wU^* &=& \Set & \tsem{\wU}{X} &=& X \to \Set\\
+(\El \wid M)^* &=& \wid M^* & \tsem{\El \wid M}{x} &=& \sem{\wid M}\ x\\
+\nU^* &=& \Set & (\El \nar M)^* &=& \nar M^*\\
+\end{array}\]
+
+\subsection{Erasure, Collected}
+\[
+\begin{tabular}{rcl@{\qquad}l}
+$\erase{(x : \wid A) \to \wid B}$&$=$&$(x \div \erase{\wid A}) \to \erase{\wid B}$
+& homomorphic ($R$ is logical)\\
+$\erase{\Sigma(x : \wid A).\wid B}$&$=$&$\Sigma(x \div \erase{\wid A}).\erase{\wid B}$\\
+$\erase{\mathrm{Id}_{\wid A}(\wid M, \wid N)}$&$=$&$\mathrm{Id}_{\erase{\wid A}}(\erase{\wid M}, \erase{\wid N})$\\
+$\erase{\wU}$&$=$&$\nU$ \qquad $\erase{\El\wid M} = \El\erase{\wid M}$\\
+$\erase{\lambda x.\wid M}$&$=$&$\lambda x.\erase{\wid M}$
+\qquad $\erase{\wid M\ \wid N} = \erase{\wid M}\ \erase{\wid N}$\\
+$\erase x$&$=$&$x$ & (ordinary and strong variables)\\[1ex]
+$\erase{\gg(x \div \nar N).\nar B}$&$=$&$\nar N$
+& computing ($RD \cong \mathrm{id}$)\\
+$\erase{\bgel(\nar M, \nar P)}$&$=$&$\nar M$\\
+$\erase{\epair{\nar M}{\nar N}}$&$=$&$\nar M$\\[1ex]
+$\erase{\dia\nar N}$&$=$&$\nar N$
+& derived: $\erase{\gg(x \div \nar N).\bone}$\\
+$\erase{\U\nar S}$&$=$&$\bone$
+& derived ($R\U \cong \bone$)\\
+$\erase{\esurd \nar M}$&$=$&$\rfst\nar M$
+& derived\\
+\end{tabular}
+\]
+
+\begin{lemma}[Erasure--Substitution]
+$\erase{\wid M[\wid N/x]} = \erase{\wid M}[\erase{\wid N}/x]$, and
+$\erase{\wid M[\nar N/x]} = \erase{\wid M}[\nar N/x]$ for weak $x$.
+\end{lemma}
+
+\noindent With these clauses, the old side conditions of the form
+$\dash \equiv_\star \dash$ disappear as a separate judgment. For instance,
+in the function-type theorem, the condition
+$\lambda x.(\epair{f\,x}{k\,x\,\{x\}}) \equiv_\star f$ becomes the computation
+\[
+\erase{\lambda x.\,\epair{f\,x}{k\,x\,\{x\}}}
+= \lambda x.\,\erase f\ x \;\equiv_\eta\; \erase f
+\]
+inside the ordinary (context-insensitive) equational theory of the narrow level.
+Likewise the theorems shed their $\lax$-wrappers when stated natively: for
+$\nar\Gamma \nprov \nar A : \rtype$, the universe theorem reads
+\[
+\nar\Gamma \nprov \pp{\nar A}{\wU} \;\cong\; (\nar A \to \nU)
+\]
+and both sides have {\em definitionally equal} translations:
+$\pp{\nar A}{\wU}^* = \tsem{\wU}{\nar A^*} = \nar A^* \to \Set
+= ((\nar A \to \nU))^*$. Similarly for
+$\demote{\wid\Gamma} \nprov \nar A, \nar B : \rtype$ and
+$\demote{\wid\Gamma} \nprov f \div \nar A \to \nar B$:
+\[
+\pp{f}{\dia\nar A \to \dia\nar B}
+\;\cong\;
+(a \div \nar A)(a' \div \pp{a}{\dia\nar A}) \to \pp{f\,a}{\dia\nar B}
+\]
+with $\mathsf{fore}$ and $\mathsf{back}$ exactly as in the notes, now with
+the side conditions discharged by the erasure table.
 
 \end{document}
