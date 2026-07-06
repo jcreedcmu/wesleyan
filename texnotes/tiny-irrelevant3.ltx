@@ -1271,22 +1271,32 @@ then there exists an explicit isomorphism
 
 \subsection{The Universe}
 For any type
-\[\nar \Gamma \nprov \nar A : \rtype \]
+\[\nar \Gamma \nprov \nar A : \nar\rtype \]
 we aim to show
 \[\nar\Gamma \nprov \pp {\nar A} {\wid \rtype} \cong (\nar A \to \nar \rtype)\]
 The maps are
 \[\begin{array}{l}
  \mathsf{fore} : (p : \pp {\nar A} {\wid \rtype}) \to (\nar A \to \nar \rtype)\\
  \mathsf{fore} = \lambda p . \lambda a . \pp {a} {\epair {\nar A} p}\\
- \mathsf{back} : (R : \nar A \to \rtype) \to  \pp {\nar A} {\wid \rtype}\\
+ \mathsf{back} : (R : \nar A \to \nar\rtype) \to  \pp {\nar A} {\wid \rtype}\\
  \mathsf{back} = \lambda R . \{ \gg (x : \nar A). R\ x\}
 \end{array}\]
-Let's check that these are well-typed. First $\mathsf{fore}$.
+Let's check that these are well-typed.
 Let's abbreviate
 \[\nar\Gamma_1 = (\nar \Gamma, p \div \pp {\nar A} {\wid \rtype}, a \div \nar A)\]
+\[\nar\Gamma_2 = (\nar \Gamma, R \div \nar A \to \nar \rtype)\]
+Then we can prove $\mathsf{fore}$:
 \[
 \begin{prooftree}
 \[
+\[
+\justifies
+ \nar \Gamma_1\nprov {\nar A}  : \nar \rtype
+\]
+\[
+\justifies
+ \nar \Gamma_1\nprov  p : \pp {\nar A} {\wid \rtype}
+\]
 \justifies
 \ups \nar \Gamma_1\wprov \epair{\nar A} p : \wid \rtype
 \]
@@ -1298,6 +1308,65 @@ Let's abbreviate
 \nar \Gamma_1\nprov \pp {a} {\epair {\nar A} p} : \nar \rtype
 \end{prooftree}
 \]
+and $\mathsf{back}$:
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\nar\Gamma_2 \nprov \nar A : \nar\rtype
+\]
+\[
+\justifies
+\nar\Gamma_2, x \div \nar A \nprov R\ x : \nar\rtype
+\]
+\justifies
+\ups \nar\Gamma_2 \wprov   \gg (x : \nar A). R\ x :  \wid \rtype
+\]
+\justifies
+\nar\Gamma_2 \nprov  \{ \gg (x : \nar A). R\ x\} :  \pp {\nar A} {\wid \rtype}
+\end{prooftree}
+\]
+
+Now we want to check they're identities in both directions.
+\subsubsection{First Zigzag}
+We want to check that $\mathsf{fore} \o \mathsf{back}$ is the identity.
+\[\begin{array}{rcl}
+\mathsf{fore}\ (\mathsf{back}\ R) &=& \mathsf{fore} (\{ \gg (x : \nar A). R\ x\})\\
+ &=&  \lambda a . \pp {a} {\epair {\nar A} \{ \gg (x : \nar A). R\ x\}} \\
+ &\equiv_\beta&  \lambda a . \pp {a} {  \gg (x : \nar A). R\ x} \\
+\end{array}\]
+If this is to be equal to $R$, by extensionality we can check whether for all $a : \nar A$ we have
+\[ R\ a = \pp {a} {  \gg (x : \nar A). R\ x} \]
+Let's use univalence and demonstrate these are isomorphic. In the context $\nar \Gamma_2, a \div \nar A$, we define
+\[\begin{array}{l}
+ \mathsf{fore_1} : R\ a \to \pp {a} {  \gg (x : \nar A). R\ x}\\
+ \mathsf{fore_1} = \lambda z . \{ \bgel(a, z)\} \\
+ \mathsf{back_1} :  \pp {a} {  \gg (x : \nar A). R\ x} \to R\ a\\
+ \mathsf{back_1} = \lambda w . \bungel(\epair a w)\\
+\end{array}\]
+\subsubsection{Second Zigzag}
+We want to check that $\mathsf{back} \o \mathsf{fore}$ is the identity.
+\[\begin{array}{rcl}
+\mathsf{back}\ (\mathsf{fore}\ p) &=&  \mathsf{back}\ (\lambda a . \pp {a} {\epair {\nar A} p})\\
+&=&   \{ \gg (x : \nar A). (\lambda a . \pp {a} {\epair {\nar A} p})\ x\}\\
+&=&   \{ \gg (x : \nar A).  \pp {x} {\epair {\nar A} p}\}\\
+\end{array}\]
+
+Now we want to show
+\[p = \{ \gg (x : \nar A).  \pp {x} {\epair {\nar A} p}\}\]
+at type $\pp {\nar A} {\wid \rtype}$ so $\eta$-expand both sides to
+\[\epair {\nar A} p = \epair {\nar A} {\{ \gg (x : \nar A).  \pp {x} {\epair {\nar A} p}\}}\]
+but the right-hand side $\beta$-reduces, so we get the equivalent equation
+\[ \epair {\nar A} p = \gg(x : \nar A). \pp {x} {\epair {\nar A} p}\]
+
+Let's use univalence and demonstrate these are isomorphic. In the context $\nar \Gamma_1$, we define
+\[\begin{array}{l}
+ \mathsf{fore_2} :\epair {\nar A} p \to \gg(x : \nar A). \pp {x} {\epair {\nar A} p} \\
+ \mathsf{fore_2} = \lambda z . \bgel(z, \{z\}) \\
+ \mathsf{back_2} : ( \gg(x : \nar A). \pp {x} {\epair {\nar A} p} )\to \epair {\nar A} p\\
+ \mathsf{back_2} = \lambda w . (\epair w {\bungel(w)})\\
+\end{array}\]
 
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
