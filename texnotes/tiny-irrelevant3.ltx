@@ -1150,6 +1150,62 @@ which is exactly what we need to show.
 %% \sem{\eblat M} &=& \sem M.2\\
 %% \end{array}\]
 
+\subsection{The Erasure Type}
+\[
+\begin{prooftree}
+\ups{\nar\Gamma} \wprov \wid A : \wid \rtype
+\justifies
+\nar\Gamma \nprov E \wid A : \nar\rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\ups{\nar\Gamma} \wprov \wid M : \wid A
+\justifies
+\nar\Gamma \nprov \mathbf{erase}(\wid M) : E\wid A
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\demote {\wid\Gamma} \nprov \nar M : E \wid A \qquad \wid \Gamma, x \div \erase{\wid A}\wprov \wid N : \wid B
+\justifies
+\wid\Gamma \wprov \blet \mathbf{erase}(x) =\nar M \bin \wid N : \wid B
+\end{prooftree}
+\]
+Definitional equality works like this. If $\nar\Gamma \nprov \nar M : E \wid A$, then
+\[
+ \nar M \equiv_\eta \textcolor{red}{???}
+\]
+and in general
+\[
+( \blet \mathbf{erase}(x) = \mathbf{erase}(\wid M) \bin \wid N)
+\equiv_\beta [|\wid M|/x]\wid N
+\]
+Semantics:
+\[\begin{array}{rcl}
+{(E \wid A)}^* &=& {\wid A}^*\\
+(\mathbf{erase}(\wid M))^* &=& {\wid M}^*\\
+(\blet \mathbf{erase}(x) =\nar M \bin \wid N)^* &=& [\nar M^*/x^*]\wid N^*\\
+\end{array}
+\qquad
+\begin{array}{rcl}
+\\
+\\
+\sem{\blet \mathbf{erase}(x) =\nar M \bin \wid N} &=& [\nar M^*/x^*]\sem{\wid N} \\
+\end{array}\]
+
+\section{Substitution}
+
+\begin{theorem}[Substitution]\ %
+  \begin{enumerate}
+  \item If $\wid \Gamma \wprov \wid M : \wid A$ and $\wid \Gamma, x : A, \wid \Gamma' \wprov  J$, then
+$\wid \Gamma, [\wid M/x]\wid\Gamma' \wprov [\wid M/x] J$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+
+\cqed
+\end{proof}
 
 \section{Interesting Theorems}
 
@@ -1157,9 +1213,9 @@ which is exactly what we need to show.
 If
 \[ \nprov \nar \Gamma \rctx \qquad \ups \nar\Gamma \wprov \wid A : \rtype \qquad \ups \nar\Gamma \wprov \wid B : \rtype \qquad
 \nar \Gamma \nprov \nar f : \erase{\wid A \to \wid B}\]
-then there exists an explicit isomorphism
+then there exists an isomorphism
 \[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {\wid B} \]
-Explicitly, here is the construction:
+Here is the construction:
 \[ \nar \Gamma \prov \mathsf{fore} : (f' : \pp {\nar f} {\wid A \to \wid B}) (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \]
 \[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair {\nar f} {f'})\ (\epair { a} {a'})\}\]
 \[\nar \Gamma \prov \mathsf{back} : (k : (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B}) \to \pp {\nar f} {\wid A \to \wid B} \]
@@ -1266,8 +1322,11 @@ This is very similar to the non-dependent case. The difference is we must substi
 If
 \[ \nprov \nar \Gamma \rctx \qquad \ups \nar\Gamma \wprov \wid A : \rtype \qquad \ups \nar\Gamma, x : \wid A \wprov \wid B : \rtype \qquad
 \nar \Gamma \nprov \nar f : \erase{(x : \wid A) \to \wid B}\]
-then there exists an explicit isomorphism
-\[\nar \Gamma \nprov \pp {\nar f} {\wid A \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {[\epair a {a'}/x]\wid B} \]
+then there exists an isomorphism
+\[\nar \Gamma \nprov \pp {\nar f} {(x : \wid A) \to \wid B}  \cong ( a :  \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\  a} {[(\epair a {a'})/x]\wid B} \]
+Here is the construction:
+\[ \nar \Gamma \prov \mathsf{fore} : (f' : \pp {\nar f} {(x : \wid A) \to \wid B}) (a : \erase{\wid A}) (a' : \pp {  a} {\wid A}) \to \pp {\nar f\ a} {\wid B} \]
+\[\mathsf{fore} = \lambda f'.\lambda a.\lambda a'.  \{(\epair {\nar f} {f'})\ (\epair { a} {a'})\}\]
 
 \subsection{The Universe}
 For any type
@@ -1416,6 +1475,27 @@ $\mathsf{back_2}$:
 \end{prooftree}
 \]
 
+Let's check that these compose to the identity.
+The composite $\mathsf{fore}_2 \o \mathsf{back}_2$ is
+\[ (\lambda z . \bgel(z, \{z\})) \o ( \lambda w . (\epair w {\bungel(w)}))\]
+\[\equiv_\beta  \lambda w . \bgel(w, \{\epair w {\bungel(w)}\}) \]
+\[\equiv_\eta  \lambda w . \bgel(w,  {\bungel(w)}) \]
+\[\equiv_\eta  \lambda w . w \]
+
+Something we need to be very careful about here is the substitution theorem: otherwise we would be substituting wide terms for narrow terms. The expression $\epair w {\bungel(w)}$ must be erased when it's substituted for the first $z$.
+
+The composite $\mathsf{back}_2 \o \mathsf{fore}_2$ is
+\[ ( \lambda w . (\epair w {\bungel(w)})) \o (\lambda z . \bgel(z, \{z\})) \]
+\[= \lambda z . \epair {\textcolor{red}{\bgel(z, \{z\})}} {\bungel(\bgel(z, \{z\}))}  \]
+\[\equiv_\beta \lambda z . \epair {\textcolor{red}{\bgel(z, \{z\})}} { \{z\}}  \]
+\[\equiv_\beta \lambda z . z  \]
+
+Oops, that's wrong! I need to be careful in the same way. What should happen actually is:
+
+\[ ( \lambda w . (\epair w {\bungel(w)})) \o (\lambda z . \bgel(z, \{z\})) \]
+\[= \lambda z . \epair z {\bungel(\bgel(z, \{z\}))}  \]
+\[\equiv_\beta \lambda z . \epair z { \{z\}}  \]
+\[\equiv_\beta \lambda z . z  \]
 
 \subsection{Parametricity for the Identity}
 \subsection{Parametricity for Natural Numbers}
