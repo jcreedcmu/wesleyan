@@ -2546,14 +2546,24 @@ we can then construct
  y \div  \erase{\wid A} \prov [\lambda t . \key^t(y)/x]\wid M : \wid B
 \]
 \justifies
- y :  \wid A \prov \isurd \wid M : \surd \wid B
+ y :  \wid A \prov \isurd ( [\lambda t . \key^t(y)/x]\wid M): \surd \wid B
 \end{prooftree}
 \]
 
 and conversely if we have a
 \[ y :  \wid A \prov \wid N : \surd \wid B\]
 then we can construct
-\[ x : \T \to \wid A \prov \wid M : \wid B\]
+\[
+\begin{prooftree}
+\[
+\justifies
+ x : \T \to \wid A, t : \T \prov [x\ t/y]\wid N : \surd \wid B
+\]
+\justifies
+ x : \T \to \wid A \prov \esurd(t. [x\ t/y]\wid N) : \wid B
+\end{prooftree}
+\]
+
 
 %%\[
 %% \begin{prooftree}
