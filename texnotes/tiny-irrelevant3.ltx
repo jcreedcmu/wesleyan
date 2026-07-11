@@ -2411,6 +2411,94 @@ which is exactly what we need to show.
 \cqed
 \end{proof}
 
+\subsection{The Amazing Right Adjoint}
+\def\TT{\mathbb{T}}
+Define
+\[\T = \gg(x\div 1).0\]
+\[\surd \wid A = \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1\]
+\[\isurd \wid M = \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle)\]
+We can justify some derived rules
+\[
+\begin{prooftree}
+\rdemote{\wid\Gamma} \wprov \wid A : \wid\rtype
+\justifies
+\wid\Gamma \wprov \surd \wid A : \wid\rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\rdemote{\wid\Gamma} \wprov \wid M : \wid A
+\justifies
+\wid\Gamma \wprov \isurd \wid M : \surd \wid A
+\end{prooftree}
+\]
+via
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\demote{\wid\Gamma} \nprov  \erase {\wid A} : \nar\rtype
+\]
+\[
+\rdemote{\wid\Gamma} \wprov \wid A : \wid\rtype
+\qquad
+\[
+\justifies
+\demote{\wid\Gamma}, \nar a \div \erase{\wid A} \nprov  \nar a : \erase{\wid A}
+\]
+\justifies
+\demote{\wid\Gamma}, \nar a \div \erase{\wid A} \nprov \pp {\nar a} {\wid A} : \nar\rtype
+\]
+\justifies
+\demote{\wid\Gamma} \nprov ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A}) : \nar\rtype
+\]
+\[\justifies \promote{\wid\Gamma} \nprov  1 : \nar\rtype\]
+\justifies
+\wid\Gamma \wprov \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1 : \wid\rtype
+\end{prooftree}
+\]
+and
+\[
+\begin{prooftree}
+\[
+\[
+\justifies
+\demote{\wid\Gamma} \nprov \erase{\wid M} : \erase {\wid A}
+\]
+\[
+\rdemote{\wid\Gamma} \wprov \wid M : \wid A
+\justifies
+\demote{\wid\Gamma} \nprov  \{\wid M\} : \pp {\erase {\wid M}} {\wid A}
+\]
+\justifies
+\demote{\wid\Gamma} \nprov \langle \erase{\wid M}, \{\wid M\}\rangle : ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})
+\]
+\[
+\justifies
+\promote{\wid\Gamma} \nprov \langle\rangle : 1
+\]
+\justifies
+\wid\Gamma \wprov \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle) : \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1
+\end{prooftree}
+\]
+
+
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M : \nar A \qquad
+\promote{\wid\Gamma} \nprov \nar N : [\nar M/_{\div}x]\nar B
+\justifies
+\wid\Gamma \wprov \bgel(\nar M, \nar N) : \gg(x : \nar A).\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar\Gamma \wprov \wid M : \gg(x : \nar A).\nar B
+\justifies
+\nar\Gamma \nprov \bungel \wid M : [\erase{\wid M}/_{\div}x]\nar B
+\end{prooftree}
+\]
+
 
 \subsection{Derived Connectives}
 \[\begin{array}{rcl@{\qquad}l}
