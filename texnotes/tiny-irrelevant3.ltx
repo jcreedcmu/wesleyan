@@ -287,25 +287,37 @@ boxrule=0pt,boxsep=0pt,breakable}
 \def\pp#1#2{[#1 \in #2]}
 \def\gg{\wid{\textbf{\textsf{G}}}}
 \section{Introduction}
-The purpose of this note is to describe a small modal type theory in which we can do a little bit of internalized
-parametricity. It is not a goal to do iterated internalized parametricity. It {\em is} a goal to have the type system
-in some sense ``tell us itself'' what parametricity means for each type in it. That is, we aim to set up judgments
-and types and intro and elim rules in such a way that various type isomorphisms arise as emergent facts.
-So instead of {\em defining} that a value $f : A \to B$ ``belongs to the logical relation'' at type $A \to B$ if and
-only if for every $a : A$ which belongs to the relation at type $A$ we have that $f\ a$ belongs to the relation
-at type $B$, we are able to construct this as a term internally in the system.
+The purpose of this note is to describe a small modal type theory with internalized parametricity.
+Internalized parametricity means we should have {\em internal} witnesses of ``free theorems''. For example,
+if we have a polymorphic function
+\[ q : (X : \rtype) \to X \to X \]
+then there should be a proof, in the type theory itself, that $q$ is the identity function.
 
-We avoid introducing an explicit interval object. We avoid introducing any computational principles
-that are divorced from any particular logical-connective/type-former.
+There are lots of other type theories for internalized parametricity. This might even be a special case of one of the existing ones.
+Some considerations that intentionally constrain this one:
+\begin{itemize}
+\item It avoids an explicit interval type.
+\item It does not require cubical primitives.
+\item It does not handle iterated internalized parametricity.
+\item It does not definitionally `bake in' the meaning of parametricity for each type former. Instead,
+the fact that a function belongs to the relation if it preserves related things is a {\em theorem} of the system.
+\item The syntax is split into two {\em levels}, called $\wid{\hbox{wide}}$ and $\nar{\hbox{narrow}}$.
+Wide things are things `equipped with parametricity data', and narrow things are those without.
+\item The theory is modal; Hypotheses in the context may exist at various modes.
+\item There are only two novel type constructors compared to normal dependent type theory.
+\end{itemize}
 
-One pervasive intuition that is helpful to lean on is that we are, in this theory,
-``programming in the presheaf category $\rtype^{\bf 2}$'', where $\bf 2$ is the category
-with two objects and one trivial morphism.
 
 \section{Language}
 
 
-The type theory is modal and has two levels. There is the $\wid{\hbox{wide}}$ level and the $\nar{\hbox{narrow}}$ level.
+%% The type theory is modal and has two levels, called $\wid{\hbox{wide}}$ and $\nar{\hbox{narrow}}$.
+
+%% One pervasive intuition that is helpful to lean on is that we are, in this theory,
+%% ``programming in the presheaf category $\rtype^{\bf 2}$'', where $\bf 2$ is the category
+%% with two objects and one trivial morphism.
+
+
 In both levels, we have several sorts of variables in the context.
 Variables may be ordinary $x : \wid A$, strong $x :: \wid A$, or weak $x \div \nar A$.
 
@@ -533,6 +545,84 @@ and in general
 \bungel(\bgel(\nar M,\nar N)) \equiv_\beta \nar N
 \]
 
+\section{Better Substitution}
+\def\wsub#1{[#1]_{\wid \bullet}}
+\def\nsub#1{[#1]_{\nar \bullet}}
+
+We make definitions like
+\[\nsub{\wid P/x} \pp{\nar M}{\wid A} = \pp{\wsub{\wid P/x}\nar M} {\wsub{\wid P/x}\wid A}\]
+\[\wsub{\wid P/x} (\epair{\nar M}{\nar N}) = \epair{\nsub{\erase{\wid P}/x}\nar M}{\nsub{\wid P/x}\nar N}\]
+
+\begin{lemma}
+\[\nsub{\erase{\wid P}/x}\erase{\wid A}  = \erase{\wsub{\wid P/x}\wid A} \]
+\end{lemma}
+
+
+
+\begin{theorem}[Substitution Theorem]\ %
+  \begin{enumerate}
+  \item $\wid \Gamma \wprov \wid M : \wid A$ and $\wid \Gamma, x : \wid A \wprov  \wid J$, then $\wid \Gamma \wprov \wsub{\wid M/x}\wid J$.
+  \item $\demote{\wid \Gamma} \nprov \nar M : \nar A$ and $\wid \Gamma, x \div \nar A \wprov  \wid J$,
+then $\wid \Gamma \wprov \wsub{\nar M/x}\wid J$.
+  \item $\rdemote{\wid \Gamma} \wprov \wid M : \wid A$ and $\wid \Gamma, x :: \wid A \wprov  \wid J$,
+then $\wid \Gamma \wprov \wsub{\wid M/x}\wid J$.
+  \item ${\nar \Gamma} \nprov \nar M : \nar A$ and $\nar \Gamma, x \div \nar A \nprov  \nar J$,
+then $\nar \Gamma \nprov \nsub{\nar M/x}\nar J$.
+  \item $\ups{\nar \Gamma} \wprov \wid M : \wid A$ and $\nar \Gamma, x :: \wid A \nprov  \nar J$,
+then $\nar \Gamma \nprov \nsub{\wid M/x}\nar J$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}\ %
+  \begin{itemize}
+  \item
+\[\begin{prooftree}
+\ups\nar \Gamma, x :: \wid B \wprov \wid A : \wid\rtype \quad \nar \Gamma, x :: \wid B \nprov \nar M : \erase {\wid A}
+\justifies
+\nar \Gamma, x :: \wid B \nprov \pp {\nar M} {\wid A} : \nar\rtype
+\end{prooftree}\]
+I.h. gives us
+\[\ups\nar \Gamma \wprov \wsub{\wid P/x} \wid A : \wid\rtype \quad \nar \Gamma \nprov \nsub{\wid P/x}\nar M : \nsub{\wid P/x}\erase {\wid A}\]
+so we derive (using previous lemma)
+\[\begin{prooftree}
+\ups\nar \Gamma \wprov \wsub{\wid P/x} \wid A : \wid\rtype \quad \nar \Gamma \nprov \nsub{\wid P/x}\nar M : \erase {\wsub{\wid P/x} \wid A}
+\justifies
+\nar \Gamma \nprov \pp {\nsub{\wid P/x}\nar M} {\wsub{\wid P/x} \wid A} : \nar\rtype
+\end{prooftree}\]
+
+
+\item
+\[\begin{prooftree}
+\demote{\wid\Gamma}, x \div \erase{\wid B} \nprov \nar M : \erase{\wid A} \quad
+\promote{\wid\Gamma}, x :: \wid B \nprov \nar N : \pp{\nar M}{\wid A}
+\justifies
+\wid\Gamma, x : \wid B \wprov \epair{\nar M}{\nar N} : \wid A
+\end{prooftree}\]
+We suppose $\wid \Gamma \prov \wid P : \wid B$. Therefore
+We suppose $\demote{\wid \Gamma} \prov \erase{\wid P} : \erase{\wid B}$ by some lemma,
+and $\promote{\wid \Gamma} \prov \wid P : \wid B$ by weakening. Therefore
+By i.h. we have
+\[\demote{\wid\Gamma} \nprov  \nsub{\erase{\wid P}/x}\nar M :  \nsub{\erase{\wid P}/x}\erase{\wid A} \qquad
+\promote{\wid\Gamma} \nprov \nsub{\wid P/x} \nar N : \nsub{\wid P/x} \pp{\nar M}{\wid A}\]
+
+Now we want to derive
+\[\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nsub{\erase{\wid P}/x}\nar M : \erase{\wsub{\wid P/x}\wid A} \quad
+\promote{\wid\Gamma} \nprov \nsub{\wid P/x}\nar  N : \pp{\nsub{\erase{\wid P}/x}\nar M}{\wsub{\wid P/x}\wid A}
+\justifies
+\wid\Gamma \wprov \epair{\nsub{\erase{\wid P}/x}\nar M}{\nsub{\wid P/x}\nar N} : \wsub{\wid P/x}\wid A
+\end{prooftree}\]
+But to do this we must see
+\[\nsub{\wid P/x} \pp{\nar M}{\wid A} = \pp{\nsub{\erase{\wid P}/x}\nar M}{\wsub{\wid P/x}\wid A}\]
+We \textcolor{red}{XXX NEED SOME KIND OF LEMMA} to show us that since
+\[\demote{\wid\Gamma}, x \div \erase{\wid B} \nprov \nar M : \erase{\wid A} \]
+we can infer
+\[\nsub{\erase{\wid P}/x}\nar M \equiv \nsub{\wid P/x}\nar M\]
+
+  \end{itemize}
+\end{proof}
+
+
 
 
 \section{Substitution}
@@ -600,7 +690,6 @@ and in general
   \nar\theta (\nar \Gamma, x :: \wid A) &=&   (\nar\theta\nar \Gamma, x :: (\ups{\nar\theta})\wid A)\\
 
 \end{array}
-
 \]
 
 
@@ -685,12 +774,14 @@ If $\demote{\wid\Gamma} \nprov J$, then $\promote{\wid\Gamma} \nprov J$.
 
 \begin{lemma}
 \label{include.demote.eq.orig}
-$\demote{(\ups\nar\Gamma)} = \nar\Gamma$
+$\demote{(\ups\nar\Gamma)} = \nar\Gamma$ and
+$\demote{(\ups\nar\theta)} = \nar\theta$.
 \end{lemma}
 
 \begin{lemma}
 \label{include.promote.eq.orig}
-$\promote{(\ups\nar\Gamma)} = \nar\Gamma$
+$\promote{(\ups\nar\Gamma)} = \nar\Gamma$ and
+$\promote{(\ups\nar\theta)} = \nar\theta$.
 \end{lemma}
 
 
@@ -1501,10 +1592,9 @@ Lemma~\ref{demotion.weakening} and Lemma~\ref{promotion.weakening} to do
 \end{proof}
 
 
-
 \begin{lemma}
-\label{demotion.substitution.commute}
-\[\rdemote{\wid\theta}\rdemote{\wid\Gamma} = \rdemote{(\wid\theta \wid\Gamma)}\]
+\label{demotion.erase.compat}
+$ \demote{\wid\theta}|\wid A| = \erase{\wid\theta\wid A}$ and $ \demote{\wid\theta}|\wid M| = \erase{\wid\theta\wid M}$.
 \end{lemma}
 
 \begin{proof}
@@ -1512,18 +1602,127 @@ Lemma~\ref{demotion.weakening} and Lemma~\ref{promotion.weakening} to do
 \cqed
 \end{proof}
 
+\begin{lemma}\ %
+\label{operation.substitution.commute}
+\begin{itemize}
+\item $\demote{\wid\theta}\demote{\wid\Gamma} = \demote{(\wid\theta \wid\Gamma)}$
+\item $(\ups {\nar\theta})(\ups {\nar\Gamma}) = \ups{(\nar\theta \nar\Gamma)}$
+\end{itemize}
+
+\end{lemma}
+
+\begin{proof}
+\textcolor{red}{XXX THIS PROOF NO LONGER VALID}
+Case split by how we construct the context.
+  \begin{itemize}
+  \item $ ({\wid\Gamma}, x : \wid A)$.
+Our goal is to show
+\[\rdemote{\wid\theta}\rdemote{({\wid\Gamma}, x : \wid A)} = \rdemote{(\wid\theta ({\wid\Gamma}, x : \wid A))}\]
+which by definitions and Lemma~\ref{include.demote.eq.orig} is
+\[(\rdemote{\wid\theta}\rdemote{\wid\Gamma}, x  \div \demote{\wid\theta}|\wid A|) = (\rdemote{(\wid\theta {\wid\Gamma})}, x \div \erase{\wid\theta\wid A})\]
+By induction hypothesis and Lemma~\ref{demotion.erase.compat}, this is so.
+\item
+$ ({\wid\Gamma}, x \div \nar A)$.
+Our goal is to show
+\[\rdemote{\wid\theta}\rdemote{({\wid\Gamma}, x \div \nar A)} = \rdemote{(\wid\theta ({\wid\Gamma}, x \div \nar A))}\]
+which by definitions and Lemma~\ref{include.demote.eq.orig} is
+\[ (\rdemote{\wid\theta}\rdemote{\wid\Gamma}, x \div \demote{\wid\theta}\nar A) = (\rdemote{(\wid \theta {\wid\Gamma})}, x \div \demote{\wid\theta}\nar A)}\]
+By the induction hypothesis, this is so.
+\item $({\wid\Gamma}, x :: \wid A)$.
+Our goal is to show
+\[\rdemote{\wid\theta}\rdemote{({\wid\Gamma}, x :: \wid A)} = \rdemote{(\wid\theta ({\wid\Gamma}, x :: \wid A))}\]
+which by definitions and Lemma~\ref{include.demote.eq.orig} is
+\[(\rdemote{\wid\theta}\rdemote{\wid\Gamma}, x :: \rdemote{\wid\theta}\wid A) =  (\rdemote{(\wid\theta{\wid\Gamma})}, x :: \rdemote{\wid\theta}\wid A)\]
+By the induction hypothesis, this is so.
+  \end{itemize}
+\cqed
+\end{proof}
+
 \begin{theorem}[Substitution Theorem]\ %
   \begin{enumerate}
-  \item If $\wid \Gamma \wprov \wid \theta : \wid \Delta$ and $\wid \Delta \wprov  \wid J$, then
-$\wid \Gamma\wprov \wid \theta \wid J$.
-  \item If $\nar \Gamma \nprov \nar \theta : \nar \Delta$ and $\nar \Delta \nprov  \nar J$, then
-$\nar \Gamma\nprov \nar \theta \nar J$.
+  \item If $\wid \Delta \wprov \wid \theta : \wid \Gamma$ and $\wid \Gamma \wprov  \wid J$, then
+$\wid \Delta\wprov \wid \theta \wid J$.
+  \item If $\nar \Delta \nprov \nar \theta : \nar \Gamma$ and $\nar \Gamma \nprov  \nar J$, then
+$\nar \Delta\nprov \nar \theta \nar J$.
   \end{enumerate}
 \end{theorem}
 
-\begin{proof}
-Let's check the case of
-\[  \wid\theta (\wid \Gamma, x :: \wid A) &=&   (\wid\theta\wid \Gamma, x :: \rdemote{\wid\theta}\wid A)\]
+\begin{proof}\ %
+  \begin{itemize}
+\item Consider the case of
+\[
+\begin{prooftree}
+\ups\nar \Gamma \wprov \wid A : \wid\rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
+\justifies
+\nar \Gamma \nprov \pp {\nar M} {\wid A} : \nar\rtype
+\end{prooftree}
+\]
+We suppose $\nar \Delta \nprov \nar \theta : \nar \Gamma$.
+By
+Lemma~\ref{substitution.modification} we have
+\[\ups{\nar\Delta}  \wprov \ups{\nar\theta} : \ups{\nar\Gamma}\]
+Now apply the induction hypothesis to get
+\[\ups\nar \Delta \wprov (\ups{\nar\theta})  \wid A : \wid\rtype \qquad \nar \Delta \nprov {\nar\theta} \nar M : \nar \theta \erase {\wid A}\]
+
+Now thanks to Lemmas~\ref{demotion.erase.compat} and~\ref{include.demote.eq.orig}, we can derive
+\[
+\begin{prooftree}
+\ups\nar \Gamma \wprov (\ups\nar\theta)\wid A : \wid\rtype \quad \nar \Gamma \nprov \nar\theta\nar M : \erase {(\ups\nar\theta)\wid A}
+\justifies
+\nar \Gamma \nprov \pp {\nar\theta\nar M} {(\ups\nar\theta)\wid A} : \nar\rtype
+\end{prooftree}
+\]
+\item Consider the case of
+\[\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M : \erase{\wid A} \quad
+\promote{\wid\Gamma} \nprov \nar N : \pp{\nar M}{\wid A}
+\justifies
+\wid\Gamma \wprov \epair{\nar M}{\nar N} : \wid A
+\end{prooftree}\]
+We suppose $\wid \Delta \wprov \wid \theta : \wid \Gamma$. By
+Lemma~\ref{substitution.modification} we have
+\[\demote{\wid\Delta}  \nprov \demote{\wid\theta} : \demote{\wid\Gamma}\qquad
+\promote{\wid\Delta}  \nprov \promote{\wid\theta} : \promote{\wid\Gamma}\]
+Now apply the induction hypothesis to get
+\[\demote{\wid\Delta} \nprov  \demote{\wid\theta}\nar M :  \demote{\wid\theta}\erase{\wid A} \qquad
+\promote{\wid\Delta} \nprov \promote{\wid\theta} \nar N :\promote{\wid\theta} \pp{\nar M}{\wid A}\]
+
+Now we can derive
+\[\begin{prooftree}
+\demote{\wid\Delta} \nprov \demote{\wid\theta}\nar M : \erase{\wid \theta\wid A} \quad
+\promote{\wid\Delta} \nprov \promote{\wid\theta}\nar N : \pp{\demote{\wid\theta}\nar M}{\wid \theta\wid A}
+\justifies
+\wid\Delta \wprov \epair{ \demote{\wid\theta}\nar M}{\promote{\wid\theta}\nar N} : {\wid\theta}\wid A
+\end{prooftree}\]
+\textcolor{red}{CONFUSED HERE}
+  \item
+\textcolor{red}{XXX this is structurally correct but I need to account for contextual context validity,
+and swap $\Gamma$ and $\Delta$}
+Consider the case of
+\[  \wid\theta (\wid \Gamma, x \div \nar A) =   (\wid\theta\wid \Gamma, x \div \demote{\wid\theta}\nar A)\]
+We have
+\[\wid \Delta \wprov \wid \theta : \wid \Delta'\]
+\[\begin{prooftree}
+\wid \Delta'\wprov {\wid\Gamma} \rctx \qquad \wid \Delta',\demote {\wid \Gamma} \nprov \nar A : \rtype
+\justifies
+\wid \Delta' \wprov ({\wid\Gamma}, x \div \nar A)\rctx
+\end{prooftree}\]
+and we want to show
+\[\wid \Delta \wprov (\wid\theta\wid \Gamma, x \div \demote{\wid\theta}\nar A) \rctx\]
+We apply Lemma~\ref{substitution.modification} to get
+\[\demote{\wid\Delta}  \nprov \demote{\wid\theta} : \demote{\wid\Delta'}\]
+and then apply the induction hypothesis to get
+\[  \demote{\wid\Delta} , \demote{\wid\theta}\demote{\wid\Gamma} \nprov \demote{\wid\theta} \nar A : \rtype\]
+and by Lemma~\ref{operation.substitution.commute} we have
+\[
+\begin{prooftree}
+\wid \Delta \wprov {\wid \theta\wid \Gamma} \rctx \qquad \demote{\wid \Delta}, \demote {(\wid \theta\wid \Gamma)} \nprov \demote{\wid\theta} \nar A : \rtype
+\justifies
+\wid \Delta \wprov ({\wid \theta\wid \Gamma}, x \div \demote{\wid\theta} \nar A)\rctx
+\end{prooftree}
+\]
+  \item Consider the case of
+\[  \wid\theta (\wid \Gamma, x :: \wid A) =   (\wid\theta\wid \Gamma, x :: \rdemote{\wid\theta}\wid A)\]
 We have
 \[\wid \Delta \wprov \wid \theta : \wid \Delta'\]
 \[
@@ -1536,10 +1735,10 @@ We have
 and we want to show
 \[\wid \Delta \wprov (\wid \theta {\wid\Gamma}, x :: \rdemote{\wid \theta}\wid A)\rctx\]
 We apply Lemma~\ref{substitution.modification} to get
-\[\rdemote{\wid\Delta}  \wprov \rdemote{\wid\theta} : \rdemote{\wid\Delta'}\]
+\[\rdemote{\wid\Delta}  \nprov \rdemote{\wid\theta} : \rdemote{\wid\Delta'}\]
 and then apply the induction hypothesis to get
-\[  \rdemote{\wid\Delta} , \rdemote{\wid\theta}\rdemote{\wid\Gamma} \wprov \rdemote{\wid\theta} \wid A : \rtype\]
-and by Lemma~\ref{demotion.substitution.commute} we have
+\[  \rdemote{\wid\Delta} , \rdemote{\wid\theta}\rdemote{\wid\Gamma} \nprov \rdemote{\wid\theta} \wid A : \rtype\]
+and by Lemma~\ref{operation.substitution.commute} we have
 \[
 \begin{prooftree}
 \wid \Delta \wprov {\wid \theta \wid\Gamma} \rctx \qquad \rdemote{\wid \Delta} , \rdemote{(\wid \theta \wid\Gamma)} \wprov \rdemote{\wid \theta}\wid A : \rtype
@@ -1547,6 +1746,8 @@ and by Lemma~\ref{demotion.substitution.commute} we have
 \wid \Delta  \wprov ({\wid \theta \wid\Gamma}, x :: \rdemote{\wid \theta}\wid A)\rctx
 \end{prooftree}
 \]
+
+  \end{itemize}
 \cqed
 \end{proof}
 
