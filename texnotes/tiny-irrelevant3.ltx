@@ -2412,11 +2412,13 @@ which is exactly what we need to show.
 \end{proof}
 
 \subsection{The Amazing Right Adjoint}
+\subsubsection{Definitions}
 \def\TT{\mathbb{T}}
 Define
 \[\T = \gg(x\div 1).0\]
 \[\surd \wid A = \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1\]
 \[\isurd \wid M = \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle)\]
+\[\esurd (t.\wid M) = \epair{[\langle\rangle/t] |\wid M|.1}{[\langle\rangle/t]|\wid M|.2}\]
 We can justify some derived rules
 \[
 \begin{prooftree}
@@ -2429,6 +2431,12 @@ We can justify some derived rules
 \rdemote{\wid\Gamma} \wprov \wid M : \wid A
 \justifies
 \wid\Gamma \wprov \isurd \wid M : \surd \wid A
+\end{prooftree}
+\qquad
+\begin{prooftree}
+{\wid\Gamma}, t : \TT \wprov \wid M : \surd \wid A
+\justifies
+\wid\Gamma \wprov \esurd(t. \wid M) : \wid A
 \end{prooftree}
 \]
 via
@@ -2481,23 +2489,87 @@ and
 \wid\Gamma \wprov \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle) : \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1
 \end{prooftree}
 \]
-
-
+and
 \[
 \begin{prooftree}
-\demote{\wid\Gamma} \nprov \nar M : \nar A \qquad
-\promote{\wid\Gamma} \nprov \nar N : [\nar M/_{\div}x]\nar B
+\[
 \justifies
-\wid\Gamma \wprov \bgel(\nar M, \nar N) : \gg(x : \nar A).\nar B
-\end{prooftree}
+\demote{\wid\Gamma} \nprov [\langle\rangle/t] |\wid M|.1 : \erase{\wid A}
 \]
 \[
-\begin{prooftree}
-\ups\nar\Gamma \wprov \wid M : \gg(x : \nar A).\nar B
 \justifies
-\nar\Gamma \nprov \bungel \wid M : [\erase{\wid M}/_{\div}x]\nar B
+\promote{\wid\Gamma} \nprov [\langle\rangle/t]|\wid M|.2 : \pp{ [\langle\rangle/t]|\wid M|.1}{\wid A}
+\]
+\justifies
+\wid\Gamma \wprov \epair{[\langle\rangle/t] |\wid M|.1}{[\langle\rangle/t]|\wid M|.2} : \wid A
 \end{prooftree}
 \]
+\subsubsection{Adjunction}
+Observe that
+\[
+\begin{prooftree}
+\[
+\justifies
+y \div \erase{\wid A}, t \div 1 \nprov y : \erase{\wid A}
+\]
+\[
+\[
+\[
+\justifies
+y \div \erase{\wid A}, t :: \T \wprov t : \gg(x\div 1).0
+\]
+\justifies
+y \div \erase{\wid A}, t :: \T \nprov \bungel(t) : 0
+\]
+\justifies
+y \div \erase{\wid A}, t :: \T \nprov \babort(\bungel(t)) : \pp y {\wid A}
+\]
+\justifies
+y \div \erase{\wid A}, t : \T \wprov \epair {y} {\babort(\bungel(t))} : \wid A
+\end{prooftree}
+\]
+So let's define $\key^t(y) = \epair {y} {\babort(\bungel(t))}$ so that we have
+\[
+\begin{prooftree}
+\justifies
+y \div \erase{\wid A}, t : \T \wprov \key^t(y) : \wid A
+\end{prooftree}
+\]
+
+Suppose we have
+\[ x : \T \to \wid A \prov \wid M : \wid B\]
+we can then construct
+\[
+\begin{prooftree}
+\[
+\justifies
+ y \div  \erase{\wid A} \prov [\lambda t . \key^t(y)/x]\wid M : \wid B
+\]
+\justifies
+ y :  \wid A \prov \isurd \wid M : \surd \wid B
+\end{prooftree}
+\]
+
+and conversely if we have a
+\[ y :  \wid A \prov \wid N : \surd \wid B\]
+then we can construct
+\[ x : \T \to \wid A \prov \wid M : \wid B\]
+
+%%\[
+%% \begin{prooftree}
+%% \demote{\wid\Gamma} \nprov \nar M : \nar A \qquad
+%% \promote{\wid\Gamma} \nprov \nar N : [\nar M/_{\div}x]\nar B
+%% \justifies
+%% \wid\Gamma \wprov \bgel(\nar M, \nar N) : \gg(x : \nar A).\nar B
+%% \end{prooftree}
+%% \]
+%% \[
+%% \begin{prooftree}
+%% \ups\nar\Gamma \wprov \wid M : \gg(x : \nar A).\nar B
+%% \justifies
+%% \nar\Gamma \nprov \bungel \wid M : [\erase{\wid M}/_{\div}x]\nar B
+%% \end{prooftree}
+%% \]
 
 
 \subsection{Derived Connectives}
