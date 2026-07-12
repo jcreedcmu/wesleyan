@@ -2598,13 +2598,31 @@ Here's the round trip for $\wid N$:
 %% \[\isurd \wid M = \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle)\]
 %% \[\esurd (t.\wid M) = \epair{[\langle\rangle/t] |\wid M|.1}{[\langle\rangle/t]|\wid M|.2}\]
 
-\subsection{Derived Connectives}
+\section{Chain of Adjoints}
 \[\begin{array}{rcl@{\qquad}l}
-\surd \wid A &:=& (x : \erase{\wid A}) \x \pp{x}{\wid A}\\
-\isurd \wid M &:=& (\erase{\wid M}, \{\wid M\})\\
-\esurd \nar M &:=& \epair{\rfst\nar M}{\rsnd\nar M}\\
-\lax \wid A &:=& \gg(x : \erase{\wid A}).\bone \\
-\blat \wid A &:=&  \gg(\_ : \bone).\surd \wid A\\
-\end{array}\]
+\wid \T &:=& \gg(x \div 1) . 0\\
+\wid Z \nar B &:=& \gg(x \div \nar B) . 0\\
+\nar R \wid A &:=& | \wid  A|\\
+\wid D \nar B &:=& \gg(x \div \nar B) . 1\\
+\nar L \wid A &:=& (\nar a : | \wid  A|) \x \pp {\nar a} {\wid A}\\
+\wid U \nar B &:=& \gg(x \div 1) . \nar B\\
+\end{array}
+\begin{array}{rcl@{\qquad}l}
+\wid \T \x \dash &=& \wid Z \o \nar R \\
+ \wid \T \to \dash = \lax &=& \wid D \o \nar R \\
+\surd &=& \wid D \o \nar L \\
+ \blat &=& \wid U \o \nar L
+\end{array}
+\]
+\[\wid Z \dashv \nar R \dashv \wid D \dashv \nar L \dashv \wid U\]
+\[\wid \T \x \dash\dashv \lax \dashv \surd \dashv \blat\]
+If $x : \wid Z \nar B \prov \wid M : \wid A$ then $y \div \nar B \prov [y/x]|\wid M| : \nar R \wid A$.\\
+If $y \div \nar B \prov \nar N : \nar R \wid A$ then $x : \wid Z \nar B \prov \epair{[x/y]\nar N}{\babort(\bungel(x))} : \wid A$.\\
+If $y \div \nar R \wid A \prov \nar N : \nar B$ then $x : \wid A \prov \bgel([x/y]\nar N, \langle\rangle) : \wid D \nar B$.\\
+If $x : \wid A \prov \wid M : \wid D \nar B$ then $y \div \nar R \wid A \prov [y/x]\erase{\wid M} : \nar B$.\\
+If $x : \wid D \nar B \prov \wid M : \wid A$ then $y \div \nar B \prov \pair{[y/x]\erase{\wid M}}{\{[\bgel(y,\langle\rangle)/x]\wid M\}} : \nar L \wid A$.\\
+If $y \div \nar B \prov \nar N : \nar L \wid A$ then $x : \wid D \nar B \prov \epair{([x/y]\nar N).1}{([x/y]\nar N).2} : \wid A$.\\
+If $y \div \nar L \wid A \prov \nar N : \nar B$ then $x : \wid A \prov \bgel(\langle\rangle, [\pair{x}{\{x\}}/y] \nar N) : \wid U \nar B$.\\
+If $x : \wid A \prov \wid M : \wid U \nar B$ then $y \div \nar L \wid A \prov \bungel ([\epair{y.1}{y.2}/x]\wid M) : \nar B$.\\
 
 \end{document}
