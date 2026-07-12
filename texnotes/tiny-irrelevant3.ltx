@@ -2582,6 +2582,17 @@ Here's the round trip for $\wid M$:
 \[\equiv_{\beta}^{\pp{x\ t}{\wid A}}   [\lambda t . x\ t/x]\wid M  \]
 \[\equiv_{\eta}^{\T \to \wid A}    [x/x]\wid M   \]
 
+Here's the round trip for $\wid N$:
+\[\wid N  :=   \bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ [\lambda t . \epair{y}{\babort(\bungel(t))}/x]\wid M\}\rangle, \langle\rangle) \]
+\[ = \bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ [\lambda t . \epair{y}{\babort(\bungel(t))}/x](\epair{ |[x\ \langle\rangle/y]\wid N|.1}{|[x\ \langle\rangle/y]\wid N|.2})\}\rangle, \langle\rangle) \]
+\[ = \bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ (\epair{ |[y/y]\wid N|.1}{|[y/y]\wid N|.2})\}\rangle, \langle\rangle) \]
+\[ = \bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ \epair{ |\wid N|.1}{|\wid N|.2}\}\rangle, \langle\rangle) \]
+\[ = \bgel(\langle  [\lambda t . y/x]\erase{\wid M},  {|\wid N|.2}\rangle, \langle\rangle) \]
+\[ = \bgel(\langle  \erase{\wid N}.1,  {|\wid N|.2}\rangle, \langle\rangle) \]
+\[ = \bgel(\erase{\wid N}, \langle\rangle) \]
+\[ = \bgel(|\wid N|, \bungel (\wid N)) \]
+\[ = \wid N \]
+
 %% \[\T = \gg(x\div 1).0\]
 %% \[\surd \wid A = \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1\]
 %% \[\isurd \wid M = \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle)\]
