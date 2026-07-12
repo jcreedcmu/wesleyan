@@ -2564,23 +2564,28 @@ then we can construct
 \end{prooftree}
 \]
 
+Let's try round trips. Let's first expand out
+\[\wid M  :=  \esurd(t. [x\ t/y]\wid N)\]
+\[\wid N  :=   \isurd ( [\lambda t . \key^t(y)/x]\wid M)\]
+to
+\[\wid M  :=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{|[x\ \langle\rangle/y]\wid N|.2}   \]
+\[\wid N  :=   \bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ [\lambda t . \epair{y}{\babort(\bungel(t))}/x]\wid M\}\rangle, \langle\rangle) \]
 
-%%\[
-%% \begin{prooftree}
-%% \demote{\wid\Gamma} \nprov \nar M : \nar A \qquad
-%% \promote{\wid\Gamma} \nprov \nar N : [\nar M/_{\div}x]\nar B
-%% \justifies
-%% \wid\Gamma \wprov \bgel(\nar M, \nar N) : \gg(x : \nar A).\nar B
-%% \end{prooftree}
-%% \]
-%% \[
-%% \begin{prooftree}
-%% \ups\nar\Gamma \wprov \wid M : \gg(x : \nar A).\nar B
-%% \justifies
-%% \nar\Gamma \nprov \bungel \wid M : [\erase{\wid M}/_{\div}x]\nar B
-%% \end{prooftree}
-%% \]
+Here's the round trip for $\wid M$:
+\[\wid M  :=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{|[x\ \langle\rangle/y]\wid N|.2}   \]
+\[=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{|[x\ \langle\rangle/y](\bgel(\langle  [\lambda t . y/x]\erase{\wid M}, \{ [\lambda t . \epair{y}{\babort(\bungel(t))}/x]\wid M\}\rangle, \langle\rangle))|.2}   \]
+\[=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{|(\bgel(\langle  [\lambda t . (x\ \langle\rangle)/x]\erase{\wid M}, \{ [\lambda t . \epair{x\ \langle\rangle}{\babort(\bungel(t))}/x]\wid M\}\rangle, \langle\rangle))|.2}   \]
+\[=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{(\langle  [\lambda t . (x\ \langle\rangle)/x]\erase{\wid M}, \{ [\lambda t . \epair{x\ \langle\rangle}{\babort(\bungel(t))}/x]\wid M\}\rangle).2}   \]
+\[=  \epair{ |[x\ \langle\rangle/y]\wid N|.1}{ \{ [\lambda t . \epair{x\ \langle\rangle}{\babort(\bungel(t))}/x]\wid M\}}   \]
+\[\equiv_{\eta}    [\lambda t . \epair{x\ \langle\rangle}{\babort(\bungel(t))}/x]\wid M  \]
+\[\equiv_{\eta}^0   [\lambda t . \epair{x\ \langle\rangle}{\{x\ t\}}/x]\wid M  \]
+\[\equiv_{\beta}^{\pp{x\ t}{\wid A}}   [\lambda t . x\ t/x]\wid M  \]
+\[\equiv_{\eta}^{\T \to \wid A}    [x/x]\wid M   \]
 
+%% \[\T = \gg(x\div 1).0\]
+%% \[\surd \wid A = \gg(x\div ((\nar a\div \erase {\wid A}) \x \pp {\nar a} {\wid A})).1\]
+%% \[\isurd \wid M = \bgel(\langle \erase{\wid M}, \{\wid M\}\rangle, \langle\rangle)\]
+%% \[\esurd (t.\wid M) = \epair{[\langle\rangle/t] |\wid M|.1}{[\langle\rangle/t]|\wid M|.2}\]
 
 \subsection{Derived Connectives}
 \[\begin{array}{rcl@{\qquad}l}
