@@ -2653,4 +2653,115 @@ If $y \div \nar B \prov \nar N : \nar L \wid A$ then $x : \wid D \nar B \prov \e
 If $y \div \nar L \wid A \prov \nar N : \nar B$ then $x : \wid A \prov \bglue(\langle\rangle, [\pair{x}{\{x\}}/y] \nar N) : \wid U \nar B$.\\
 If $x : \wid A \prov \wid M : \wid U \nar B$ then $y \div \nar L \wid A \prov \bunglue ([\epair{y.1}{y.2}/x]\wid M) : \nar B$.\\
 
+\section{Binary Parametricity}
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar A : \nar\rtype \qquad
+\promote{\wid\Gamma}, x_1 \div \nar A, x_2 \div \nar A \nprov \nar B : \nar\rtype
+\justifies
+\wid\Gamma \wprov \gg(x_1, x_2 \div \nar A).\nar B : \wid\rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M_1 : \nar A \qquad
+\demote{\wid\Gamma} \nprov \nar M_2 : \nar A \qquad
+\promote{\wid\Gamma} \nprov \nar N : [\nar M_1/x_1][\nar M_2/x_2]\nar B
+\justifies
+\wid\Gamma \wprov \bglue(\nar M_1, \nar M_2, \nar N) : \gg(x : \nar A).\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar\Gamma \wprov \wid M : \gg(x : \nar A).\nar B
+\justifies
+\nar\Gamma \nprov \bunglue \wid M : [\erase{\wid M}_1/x_1][\erase{\wid M}_2/x_2]\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar \Gamma \wprov \wid A : \wid\rtype \quad \nar \Gamma \nprov \nar M : \erase {\wid A}
+\justifies
+\nar \Gamma \nprov \pp {\nar M} {\wid A} : \nar\rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\ups {\nar \Gamma} \wprov \wid M : \wid A
+\justifies
+\nar \Gamma \nprov \{\wid M\} : \pp  {\erase{\wid M}} {\wid A}
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \nar M : \erase{\wid A} \quad
+\promote{\wid\Gamma} \nprov \nar N : \pp{\nar M}{\wid A}
+\justifies
+\wid\Gamma \wprov \epair{\nar M}{\nar N} : \wid A
+\end{prooftree}
+\]
+\vfil\eject
+\section{$n$-ary Parametricity}
+It seems at first like I can almost get binary parametricity from unary but it doesn't seem to work out.
+Let's say I have $\wid f :: (\wid X : \wid \rtype) \to \wid X \to \wid X$ and I want the binary parametricity
+property that
+\[(\nar X_1\ \nar X_2 : \nar \rtype) (\nar X_* : \nar X_1 \x \nar X_2 \to \nar \rtype)\]
+\[(\nar x_1 : \nar X_1) (\nar x_2 : \nar X_2) (\nar x_* : \nar X_*( \nar x_1, \nar x_2))\]
+\[\to \nar X_* (\wid f\ \nar X_1\ \nar x_1, \wid f\ \nar X_2\ \nar x_2)\]
+We could try to define
+\[\wid Y = \gg(x: \nar X_1 \x \nar X_2).\nar  X_*(x)\]
+and observe
+\[\wid f\ \wid Y : \wid Y \to \wid Y\]
+and
+\[\wid f\ \wid Y\ (\bglue((\nar x_1, \nar x_2), \nar x_* )) : \wid Y \]
+and
+\[\bunglue(\wid f\ \wid Y\ (\bglue((\nar x_1, \nar x_2), \nar x_* ))) :  \]
+\[\nar X_*( \erase{\wid f\ \wid Y\ (\bglue((\nar x_1, \nar x_2), \nar x_* ))}) \]
+so
+\[\bunglue(\wid f\ \wid Y\ (\bglue((\nar x_1, \nar x_2), \nar x_* ))) :  \]
+\[\nar X_*( \wid f\ (\nar X_1 \x \nar X_2)\ (\nar x_1, \nar x_2)) \]
+but this isn't what we asked for!
+\subsection{Glue and Fiber}
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \vec{\nar A} : \nar\rtype \qquad
+\promote{\wid\Gamma}, \vec x \div \vec{\nar A} \nprov \nar B : \nar\rtype
+\justifies
+\wid\Gamma \wprov \gg(\vec x \div \vec{\nar A}).\nar B : \wid\rtype
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \vec{\nar M} : \vec{\nar A} \qquad
+\promote{\wid\Gamma} \nprov \nar N : [\vec{\nar M}/\vec x]\nar B
+\justifies
+\wid\Gamma \wprov \bglue(\vec{\nar M}, \nar N) : \gg(\vec x : \vec{\nar A}).\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar\Gamma \wprov \wid M : \gg(\vec x : \vec{\nar A}).\nar B
+\justifies
+\nar\Gamma \nprov \bunglue \wid M : [\overrightarrow{\erase{\wid M}}/\vec x]\nar B
+\end{prooftree}
+\]
+\[
+\begin{prooftree}
+\ups\nar \Gamma \wprov \wid A : \wid\rtype \quad \nar \Gamma \nprov \vec{\nar M} : \vec{\erase {\wid A}}
+\justifies
+\nar \Gamma \nprov \pp {\vec{\nar M}} {\wid A} : \nar\rtype
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\ups {\nar \Gamma} \wprov \wid M : \wid A
+\justifies
+\nar \Gamma \nprov \{\wid M\} : \pp  {\vec{\erase{\wid M}}} {\wid A}
+\end{prooftree}
+\qquad
+\begin{prooftree}
+\demote{\wid\Gamma} \nprov \vec{\nar M} : \vec{\erase{\wid A}} \quad
+\promote{\wid\Gamma} \nprov \nar N : \pp{\vec{\nar M}}{\wid A}
+\justifies
+\wid\Gamma \wprov \epair{\vec{\nar M}}{\nar N} : \wid A
+\end{prooftree}
+\]
+
 \end{document}
